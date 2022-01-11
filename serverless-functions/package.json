@@ -1,0 +1,29 @@
+{
+  "name": "custom-flex-extensions-serverless",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "tsc --noEmit",
+    "start": "twilio-run --functions-folder dist/functions --assets-folder dist/assets",
+    "deploy": "twilio-run deploy --functions-folder dist/functions --assets-folder dist/assets",
+    "build": "tsc && npm run build:copy-assets",
+    "build:copy-assets": "copyfiles src/assets/* src/assets/**/* --up 2 --exclude **/*.ts dist/assets/",
+    "prestart": "npm run build",
+    "predeploy": "npm run build"
+  },
+  "dependencies": {
+    "@twilio-labs/serverless-runtime-types": "^1.1",
+    "lodash": "^4.17.20",
+    "twilio": "^3.65.0",
+    "twilio-flex-token-validator": "^1.5.4"
+  },
+  "devDependencies": {
+    "axios": "^0.21.1",
+    "copyfiles": "^2.2.0",
+    "twilio-run": "^2.6.0",
+    "typescript": "^3.8"
+  },
+  "engines": {
+    "node": "10"
+  }
+}

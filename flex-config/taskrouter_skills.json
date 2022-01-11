@@ -1,0 +1,92 @@
+[
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Carriers",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Lenders",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Renewals",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Operator",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Manager",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Supervisors ",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Bind Processing",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Pre-Requote",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Requote",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Retention",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Spanish",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Servicing",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Pre-Bind Sales",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "Rewrite",
+        "maximum": null
+    },
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "SpanishSpeaker",
+        "maximum": null
+    }
+]

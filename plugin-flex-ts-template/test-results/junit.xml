@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="6" failures="0" errors="0" time="3.003">
+  <testsuite name="utils/common/ApiService" errors="0" failures="0" skipped="0" timestamp="2022-01-11T06:57:12" time="1.443" tests="3">
+    <testcase classname="utils/common/ApiService should provide access to the Flex Manager instance" name="utils/common/ApiService should provide access to the Flex Manager instance" time="0.002">
+    </testcase>
+    <testcase classname="utils/common/ApiService should provide access to the configured serverless domain" name="utils/common/ApiService should provide access to the configured serverless domain" time="0">
+    </testcase>
+    <testcase classname="utils/common/ApiService should build encoded params into a string to use as the body for serverless reqeusts" name="utils/common/ApiService should build encoded params into a string to use as the body for serverless reqeusts" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="flex-hooks/jsclient-event-listeners/worker-client/reservationCreated" errors="0" failures="0" skipped="0" timestamp="2022-01-11T06:57:12" time="1.453" tests="1">
+    <testcase classname="flex-hooks/jsclient-event-listeners/worker-client/reservationCreated should not auto-accept tasks when channel is not voice" name="flex-hooks/jsclient-event-listeners/worker-client/reservationCreated should not auto-accept tasks when channel is not voice" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="sdk-clients/SyncClient" errors="0" failures="0" skipped="0" timestamp="2022-01-11T06:57:12" time="1.684" tests="2">
+    <testcase classname="sdk-clients/SyncClient should create a SyncClient instance" name="sdk-clients/SyncClient should create a SyncClient instance" time="0.002">
+    </testcase>
+    <testcase classname="sdk-clients/SyncClient getAllSyncMapItems should load and return all of paginated data" name="sdk-clients/SyncClient getAllSyncMapItems should load and return all of paginated data" time="0.002">
+    </testcase>
+  </testsuite>
+</testsuites>
