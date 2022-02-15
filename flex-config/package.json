@@ -1,0 +1,19 @@
+{
+  "name": "flex-configuration",
+  "version": "1.0.0",
+  "description": "CLI tool for merging new data into Flex configuration",
+  "main": "index.js",
+  "scripts": {
+    "dev:deploy-configuration": "node index.js --env=dev.env --taskrouter_skills=taskrouter_skills.json --ui_attributes=dev.ui_attributes.json",
+    "test:deploy-configuration": "node index.js --env=test.env --taskrouter_skills=taskrouter_skills.json --ui_attributes=test.ui_attributes.json",
+    "qa:deploy-configuration": "node index.js --env=qa.env --taskrouter_skills=taskrouter_skills.json --ui_attributes=qa.ui_attributes.json",
+    "prod:deploy-configuration": "node index.js --env=prod.env --taskrouter_skills=taskrouter_skills.json --ui_attributes=prod.ui_attributes.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "dotenv": "^8.2.0",
+    "yargs": "^16.2.0"
+  }
+}
