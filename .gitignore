@@ -61,7 +61,6 @@ typings/
 .next
 
 # Flex related ignore
-appConfig.js
 pluginsService.js
 build/
 
@@ -136,4 +135,11 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+#jest
+test-results/
+
+# serverless
+.twilio-functions
+.twiliodeployinfo
 
