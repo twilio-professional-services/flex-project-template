@@ -1,35 +1,4 @@
 {
   "serverless_functions_domain": "",
-  "custom_data": {},
-  "warmTransfers": {
-    "enabled": true
-  },
-  "notifications": {
-    "browser": true
-  },
-  "version_compatibility": "yes",
-  "colorTheme": {
-    "light": true,
-    "baseName": "FlexLight",
-    "preset": {
-      "id": "light-blue",
-      "name": "Light Blue"
-    },
-    "overrides": {
-      "MainHeader": {
-        "Container": {
-          "background": "#233659"
-        }
-      },
-      "SideNav": {
-        "Button": {
-          "background": "#4F5E7A"
-        },
-        "Container": {
-          "background": "#4F5E7A"
-        }
-      }
-    }
-  },
-  "version_message": ""
+  "custom_data": {}
 }
