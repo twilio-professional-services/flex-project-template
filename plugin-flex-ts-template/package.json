@@ -26,6 +26,7 @@
     "@babel/preset-typescript": "^7.12.1",
     "@twilio/flex-ui": "1.29.1",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
+    "@typescript-eslint/parser": "^5.0.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^8.12.0",
