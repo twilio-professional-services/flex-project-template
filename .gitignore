@@ -143,3 +143,6 @@ test-results/
 .twilio-functions
 .twiliodeployinfo
 
+# vscode
+.vscode
+

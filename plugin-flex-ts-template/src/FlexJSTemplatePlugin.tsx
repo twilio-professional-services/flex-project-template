@@ -35,9 +35,9 @@ export default class FlexJSTemplatePlugin extends FlexPlugin {
       CustomizeFlexActions,
       CustomizeFlexComponents,
       CreateSdkClientInstances,
-      TeamFilters
+      TeamFilters,
     ];
 
-    initializers.forEach(initializer => initializer(flex, manager));
+    initializers.forEach((initializer) => initializer(flex, manager));
   }
 }
