@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { FlexPlugin } from 'flex-plugin';
+import { FlexPlugin } from '@twilio/flex-plugin';
 
 import AddReducers from './flex-hooks/redux';
 import ConfigureFlexStrings from './flex-hooks/strings';
@@ -11,9 +11,9 @@ import RegisterJSClientEventListeners from './flex-hooks/jsclient-event-listener
 import CreateSdkClientInstances from './flex-hooks/sdk-clients';
 import TeamFilters from './flex-hooks/teams-filters/TeamFilters';
 
-const PLUGIN_NAME = 'FlexJSTemplatePlugin';
+const PLUGIN_NAME = 'FlexTSTemplatePlugin';
 
-export default class FlexJSTemplatePlugin extends FlexPlugin {
+export default class FlexTSTemplatePlugin extends FlexPlugin {
   constructor() {
     super(PLUGIN_NAME);
   }
