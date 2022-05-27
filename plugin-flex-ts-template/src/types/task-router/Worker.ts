@@ -35,6 +35,9 @@ export interface WorkerAttributes {
     skills: string[];
   };
 
+  //caller-id feature
+  selectedCallerId: string;
+
   // Flex insights references the following elements
   email: string;
   full_name: string;

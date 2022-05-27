@@ -16,4 +16,3 @@ function replaceKickParticipant(flex: typeof Flex, manager: Flex.Manager) {
 function afterKickParticipant(flex: typeof Flex, manager: Flex.Manager) {
 }
 
-// Export these "private" functions so we can test each in isolation

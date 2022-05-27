@@ -1,9 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
 import { connect, ConnectedProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux';
-import { Actions } from '../../states/OutboundCallerIDSelector';
+import { Actions } from '../../flex-hooks/states/OutboundCallerIDSelector';
 import OutboundCallerIDSelectorComponent from './OutboundCallerIDSelectorComponent';
-import { AppState, reduxNamespace } from '../../states'
+import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
 
 const mapStateToProps = (state: AppState) => {
   const { isFetchingPhoneNumbers, fetchingPhoneNumbersFailed, phoneNumbers, isUpdatingAttributes, updatingAttributesFailed, selectedCallerId } = state[reduxNamespace].outboundCallerIdSelector;

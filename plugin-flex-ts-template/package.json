@@ -12,8 +12,9 @@
     "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
-    "@types/jest": "^26.0.20",
+    "@twilio/flex-dev-utils": "^5.0.6",
     "@twilio/flex-plugin-scripts": "5.0.6",
+    "@types/jest": "^26.0.20",
     "lodash": "^4.17.20",
     "react": "16.5.2",
     "react-dom": "16.5.2",
@@ -39,10 +40,10 @@
     "jest-junit": "12.0.0",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.34",
-    "typescript": "^3",
     "react-test-renderer": "16.5.2",
     "twilio": "3.76.0",
-    "twilio-cli": "^3.2.1"
+    "twilio-cli": "^3.2.1",
+    "typescript": "^3"
   },
   "jest": {
     "clearMocks": true,

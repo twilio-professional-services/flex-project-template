@@ -15,5 +15,3 @@ function replaceCompleteTask(flex: typeof Flex, manager: Flex.Manager) {
 
 function afterCompleteTask(flex: typeof Flex, manager: Flex.Manager) {
 }
-
-// Export these "private" functions so we can test each in isolation

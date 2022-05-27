@@ -1,8 +1,8 @@
-import { Action } from '../index';
+import { Action } from '../../../../../flex-hooks/states'
 import { OutboundCallerIDSelectorState, FETCH_PHONE_NUMBERS, SET_CALLER_ID } from './types';
-import { ListPhoneNumbersResponse } from '../../utils/PhoneNumber/PhoneNumberService';
+import { ListPhoneNumbersResponse } from '../../../../../utils/serverless/PhoneNumbers/PhoneNumberService';
 import initialState from './initialState';
-import Worker from '../../types/task-router/Worker';
+import Worker from '../../../../../types/task-router/Worker';
 
 // Reducer
 export default function (state = initialState, action: Action): OutboundCallerIDSelectorState {

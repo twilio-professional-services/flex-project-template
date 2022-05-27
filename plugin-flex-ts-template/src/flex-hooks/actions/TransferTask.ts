@@ -15,5 +15,3 @@ function replaceTransferTask(flex: typeof Flex, manager: Flex.Manager) {
 
 function afterTransferTask(flex: typeof Flex, manager: Flex.Manager) {
 }
-
-// Export these "private" functions so we can test each in isolation

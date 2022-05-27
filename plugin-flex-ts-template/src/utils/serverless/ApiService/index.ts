@@ -16,7 +16,8 @@ export default abstract class ApiService {
 
   constructor() {
     const { serverless_functions_domain } = this.manager.serviceConfiguration.ui_attributes as UIAttributes;
-    this.serverlessDomain = serverless_functions_domain;
+    //this.serverlessDomain = serverless_functions_domain;
+    this.serverlessDomain = 'jhunter-twilio.ngrok.io'
   }
 
   protected buildBody(encodedParams: EncodedParams): string {

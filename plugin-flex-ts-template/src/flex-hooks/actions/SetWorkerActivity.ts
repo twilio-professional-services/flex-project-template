@@ -15,5 +15,3 @@ function replaceSetWorkerActivity(flex: typeof Flex, manager: Flex.Manager) {
 
 function afterSetWorkerActivity(flex: typeof Flex, manager: Flex.Manager) {
 }
-
-// Export these "private" functions so we can test each in isolation

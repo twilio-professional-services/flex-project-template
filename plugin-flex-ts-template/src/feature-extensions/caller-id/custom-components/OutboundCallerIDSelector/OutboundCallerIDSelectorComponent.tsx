@@ -1,8 +1,8 @@
-import * as Flex from '@twilio/flex-ui';
 import React from 'react';
 import MenuItem from "@material-ui/core/MenuItem";
 import { StyledSelect, Caption } from './OutboundCallerIDSelectorStyles';
 import { ContainerProps } from './OutboundCallerIDSelectorContainer'
+import { PhoneNumberItem } from '../../../../utils/serverless/PhoneNumbers/PhoneNumberService';
 
 export interface OwnProps {
 
@@ -46,7 +46,7 @@ export default class OutboundCallerIDSelectorComponent extends React.Component<P
           onChange={(e) => this.props.setCallerId(e.target.value)}
         >
           {disableHint}
-          {this.props.phoneNumbers.map((element) => (
+          {this.props.phoneNumbers.map((element: PhoneNumberItem) => (
             <MenuItem key={element.phoneNumber} value={element.phoneNumber}>
               {element.friendlyName}
             </MenuItem>

@@ -1,4 +1,4 @@
-import { Action } from '../../../flex-hooks/states/';
+import { Action } from '../../../../../flex-hooks/states'
 import PhoneNumberService from '../../../../../utils/serverless/PhoneNumbers/PhoneNumberService';
 import { FETCH_PHONE_NUMBERS, SET_CALLER_ID } from './types';
 import { Manager } from '@twilio/flex-ui';

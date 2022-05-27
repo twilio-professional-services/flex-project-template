@@ -15,5 +15,3 @@ function replaceHoldParticipant(flex: typeof Flex, manager: Flex.Manager) {
 
 function afterHoldParticipant(flex: typeof Flex, manager: Flex.Manager) {
 }
-
-// Export these "private" functions so we can test each in isolation
