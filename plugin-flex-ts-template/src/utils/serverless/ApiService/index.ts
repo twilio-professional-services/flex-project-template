@@ -1,11 +1,13 @@
 import * as Flex from '@twilio/flex-ui';
 import { EncodedParams } from '../../../types/serverless';
 import { UIAttributes } from '../../../types/manager/ServiceConfiguration';
+import { random }  from 'lodash'
 
 
 function delay<T>(ms: number, result?: T) {
   return new Promise(resolve => setTimeout(() => resolve(result), ms));
 }
+
 
 export default abstract class ApiService {
 
@@ -44,10 +46,7 @@ export default abstract class ApiService {
           // Generic retry when calls return a 'too many requests' response
           // request is delayed by a random number which grows with the number of retries
           if (error.status === 429 && attempts < 10) {
-            const min = Math.ceil(100);
-            const max = Math.floor(750);
-            const waitForRetry = Math.floor(Math.random() * (max - min + 1) + min) * (attempts + 1);
-            await delay(waitForRetry);
+            await delay(random(100, 750) + (attempts * 100));
             return await this.fetchJsonWithReject<T>(url, config, attempts + 1);
           }
           return error.json().then((response: any) => {
