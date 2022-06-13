@@ -4,7 +4,7 @@ const snooze = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 
 /* 
-   this function servers as a possible solution for salesforce click to dial
+   this function serves as a possible solution for salesforce click to dial
    where the provided intregration https://www.twilio.com/docs/flex/admin-guide/integrations/salesforce is used but more data is desired on the call object
 
    this may be redundent in the future where the provided integration propogates
