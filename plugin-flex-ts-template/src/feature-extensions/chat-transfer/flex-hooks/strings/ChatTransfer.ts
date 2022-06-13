@@ -1,7 +1,7 @@
 // Export the template names as an enum for better maintainability when accessing them elsewhere
 export enum StringTemplates {
-  FailedToSumitTransfer = 'StripeFailedToSumitTransferNotification',
-  FailedToUpdateTaskAttributes = 'StripeFailedToUpdateTaskAttributesForChatTransferNotification'
+  FailedToSumitTransfer = 'PSFailedToSumitTransferNotification',
+  FailedToUpdateTaskAttributes = 'PSFailedToUpdateTaskAttributesForChatTransferNotification'
 }
 
 export default {
