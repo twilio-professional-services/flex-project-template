@@ -1,0 +1,3 @@
+import CustomQueueTransferDirectory from './CustomQueueTransferDirectoryContainer';
+
+export default CustomQueueTransferDirectory;
