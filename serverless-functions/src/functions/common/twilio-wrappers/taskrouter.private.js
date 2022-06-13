@@ -307,13 +307,13 @@ exports.createTask = async function createTask (parameters) {
 
     if(!isNumber(attempts))
         throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-    if(!isString(scriptName))
+    if(!isString(scriptName) || scriptName.length == 0)
         throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
     if(!isObject(context))
         throw "Invalid parameters object passed. Parameters must contain context object";
-    if(!isString(workflowSid))
+    if(!isString(workflowSid) || workflowSid.length == 0)
         throw "Invalid parameters object passed. Parameters must contain workflowSid string"
-    if(!isString(taskChannel))
+    if(!isString(taskChannel) || taskChannel.length == 0)
         throw "Invalid parameters object passed. Parameters must contain taskChannel string"
     if(!isObject(attributes))
         throw "Invalid parameters object passed. Parameters must contain attributes object"
@@ -377,7 +377,6 @@ exports.getQueues = async function getQueues(parameters) {
 
     try {
 
-      throw {message: "test", response: {status: 429}}
         const client = context.getTwilioClient();
         const queues = await client.taskrouter
             .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)

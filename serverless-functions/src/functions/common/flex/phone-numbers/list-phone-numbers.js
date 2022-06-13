@@ -1,7 +1,7 @@
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 const PhoneNumberOpertions = require(Runtime.getFunctions()['functions/common/twilio-wrappers/phone-numbers'].path);
 
-exports.handler = TokenValidator(async function (context, event, callback) {
+exports.handler = TokenValidator(async function listPhoneNumbers(context, event, callback) {
 
   const scriptName = arguments.callee.name;
 	const response = new Twilio.Response();

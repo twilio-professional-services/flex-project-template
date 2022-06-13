@@ -35,6 +35,9 @@ export interface WorkerAttributes {
     skills: string[];
   };
 
+  // used to overide name seen on webchat
+  public_identity: string;
+
   //caller-id feature
   selectedCallerId: string;
 

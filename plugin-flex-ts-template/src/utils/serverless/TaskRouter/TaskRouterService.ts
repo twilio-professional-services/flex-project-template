@@ -1,11 +1,22 @@
 import ApiService from '../ApiService';
 import { EncodedParams } from '../../../types/serverless';
 
+export interface Queue {
+  targetWorkers: string,
+  friendlyName: string,
+  sid: string,
+}
+
 interface UpdateTaskAttributesResponse {
 	success: boolean;
 }
 
-let queues = null as null | Array<any>;
+interface GetQueuesResponse {
+  success: boolean,
+  queues: Array<Queue>
+}
+
+let queues = null as null | Array<Queue>;
 
 class TaskRouterService extends ApiService {
 
@@ -18,11 +29,12 @@ class TaskRouterService extends ApiService {
 
 	// does a one time fetch for queues per session
 	// since queue configuration seldom changes
-	async getQueues(): Promise<Array<any>> {
+	async getQueues(force?: boolean): Promise<Array<Queue> | null> {
 
-		if(queues) return queues
+		if(queues && !force) return queues
 
-		queues = await this.#getQueues();
+		const response = await this.#getQueues();
+    if(response.success) queues = response.queues;
 		return queues;
 	}
 
@@ -35,7 +47,7 @@ class TaskRouterService extends ApiService {
 		};
 
 		return this.fetchJsonWithReject<UpdateTaskAttributesResponse>(
-			`https://${this.serverlessDomain}/functions/flex/task/update-attributes`,
+			`https://${this.serverlessDomain}/functions/common/flex/taskrouter/update-task-attributes`,
 			{
 				method: 'post',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -48,22 +60,21 @@ class TaskRouterService extends ApiService {
 		});
 	};
 
-	#getQueues = (): Promise<Array<any>> => {
+	#getQueues = (): Promise<GetQueuesResponse> => {
 
 		const encodedParams: EncodedParams = {
 			Token: encodeURIComponent(this.manager.user.token)
 		};
 
-		return this.fetchJsonWithReject<any>(
-			`https://${this.serverlessDomain}/functions/flex/queues/list-queues`,
+		return this.fetchJsonWithReject<GetQueuesResponse>(
+			`https://${this.serverlessDomain}/functions/common/flex/taskrouter/get-queues`,
 			{
 				method: 'post',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: this.buildBody(encodedParams)
 			}
-		).then((response): any => {
-			const { queues } = response;
-			return queues;
+		).then((response): GetQueuesResponse => {
+			return response;
 		});
 	};
 

@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import { applySelectedCallerIdForDialedNumbers } from '../../feature-extensions/caller-id/flex-hooks/actions/StartOutboundCall'
+import { abortSalesforceClickToDialMissingCaseId } from '../../feature-extensions/salesforce-click-to-dial/flex-hooks/actions/StartOutboundCall'
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
     beforeStartOutboundCall(flex, manager);
@@ -9,6 +10,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
 
 function beforeStartOutboundCall(flex: typeof Flex, manager: Flex.Manager) {
   applySelectedCallerIdForDialedNumbers(flex, manager);
+  abortSalesforceClickToDialMissingCaseId(flex, manager);
 }
 
 // Avoid using replace hook if possible

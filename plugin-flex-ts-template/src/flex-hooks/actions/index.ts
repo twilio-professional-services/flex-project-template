@@ -11,6 +11,7 @@ import SetWorkerActivity from './SetWorkerActivity';
 import StartOutboundCall from './StartOutboundCall';
 import TransferTask from './TransferTask';
 import UnholdParticipant from './UnholdParticipant';
+import WrapupTask from './WrapupTask';
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   AcceptTask(flex, manager);
@@ -25,4 +26,5 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   StartOutboundCall(flex, manager);
   TransferTask(flex, manager);
   UnholdParticipant(flex, manager);
+  WrapupTask(flex, manager);
 }

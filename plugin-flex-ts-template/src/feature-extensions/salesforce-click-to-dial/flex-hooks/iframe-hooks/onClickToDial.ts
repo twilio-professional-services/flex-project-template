@@ -2,7 +2,19 @@ import * as Flex from '@twilio/flex-ui';
 
 const snooze = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export default (flex: typeof Flex, manager: Flex.Manager) => {
+
+/* 
+   this function servers as a possible solution for salesforce click to dial
+   where the provided intregration https://www.twilio.com/docs/flex/admin-guide/integrations/salesforce is used but more data is desired on the call object
+
+   this may be redundent in the future where the provided integration propogates
+   the salesforce object data appropriately but in the interim this function 
+   can be used to capture the same post event the OOTB solution does but applies
+   the extra data to task attributes.  For this to work, the original StartOutboundCall action thats invoked with the OOTB integration needs to be
+   suppressed.
+*/
+ 
+export function addSalesforceDataToOutboundCall (flex: typeof Flex, manager: Flex.Manager): void {
 
   window.addEventListener('message', async (event) => {
 
@@ -36,5 +48,4 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
     });
 
   });
-
 }

@@ -50,7 +50,7 @@
  *                                            requests to sync
  */
 
-exports.handler = function(context, event, callback) {
+exports.handler = function refreshStats (context, event, callback) {
     const client = context.getTwilioClient();
     const syncService = client.sync.services(context.TWILIO_FLEX_SYNC_SID);
     const response = new Twilio.Response();
