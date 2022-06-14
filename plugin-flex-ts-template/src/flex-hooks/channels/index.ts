@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
-import Voice from './Voice';
+import { createCallbackChannel } from '../../feature-library/callbacks/flex-hooks/channels/Callback'
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
-  Voice(flex, manager);
+  createCallbackChannel(flex, manager);
 };

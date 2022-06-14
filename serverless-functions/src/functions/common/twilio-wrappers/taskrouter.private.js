@@ -337,7 +337,8 @@ exports.createTask = async function createTask (parameters) {
 
         
         return { 
-            success: true, 
+            success: true,
+            taskSid: task.sid,
             task: { 
                 ...task, 
                 attributes: JSON.parse(task.attributes) 
