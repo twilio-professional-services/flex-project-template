@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { interceptTransferredChatTasks } from '../../feature-extensions/chat-transfer/flex-hooks/actions/CompleteTask'
+import { interceptTransferredChatTasks } from '../../feature-library/chat-transfer/flex-hooks/actions/CompleteTask'
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   beforeCompleteTask(flex, manager);

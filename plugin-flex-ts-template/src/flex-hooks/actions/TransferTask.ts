@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { transferOverrideForChatTasks } from '../../feature-extensions/chat-transfer/flex-hooks/actions/TransferTask'
+import { transferOverrideForChatTasks } from '../../feature-library/chat-transfer/flex-hooks/actions/TransferTask'
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   //beforeTransferTask(flex, manager);

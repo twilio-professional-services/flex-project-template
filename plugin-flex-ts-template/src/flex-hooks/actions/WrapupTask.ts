@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import {removeChannelSidAndLeaveChatForChatTransfer, announceOnChannelWhenLeaving } from '../../feature-extensions/chat-transfer/flex-hooks/actions/WrapupTask'
+import {removeChannelSidAndLeaveChatForChatTransfer, announceOnChannelWhenLeaving } from '../../feature-library/chat-transfer/flex-hooks/actions/WrapupTask'
 
 export interface EventPayload {
   task?: Flex.ITask;

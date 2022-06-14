@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { combineReducers, Action as ReduxAction } from 'redux';
-import { OutboundCallerIDSelectorState, OutboundCallerIDSelectorReducer } from '../../feature-extensions/caller-id/flex-hooks/states/OutboundCallerIDSelector';
-import {CustomQueueTransferDirectoryState, CustomQueueTransferDirectoryReducer} from '../../feature-extensions/override-queue-transfer-directory/flex-hooks/states/CustomQueueTransferDirectory'
+import { OutboundCallerIDSelectorState, OutboundCallerIDSelectorReducer } from '../../feature-library/caller-id/flex-hooks/states/OutboundCallerIDSelector';
+import {CustomQueueTransferDirectoryState, CustomQueueTransferDirectoryReducer} from '../../feature-library/override-queue-transfer-directory/flex-hooks/states/CustomQueueTransferDirectory'
 
 // Register your redux store under a unique namespace
 export const reduxNamespace = 'custom';
