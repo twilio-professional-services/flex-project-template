@@ -1,0 +1,34 @@
+name: flex_deploy_dev
+
+on:
+  # Run on merge to main
+  push:
+    branches:
+      - main
+      - reorganize_structure
+
+  # Enable running this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  ENVIRONMENT: ps template
+  TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+  TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+  TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: setup node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: npm install and deploy
+        working-directory: flex-config
+        run: |
+          npm install
+          npm run deploy:dev
