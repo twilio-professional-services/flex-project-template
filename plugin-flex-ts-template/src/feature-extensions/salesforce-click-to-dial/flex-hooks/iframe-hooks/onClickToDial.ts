@@ -26,9 +26,9 @@ export function addSalesforceDataToOutboundCall (flex: typeof Flex, manager: Fle
      * If the status of an agent is not 'Outbound Ready' when making an outbound
      * call from Salesforce change the status to 'Outbound Ready'
      */
-    if (manager.store.getState().flex.worker.activity.name !== 'Outbound Ready') {
+    if (manager.store.getState().flex.worker.activity.name !== 'Available') {
       await Flex.Actions.invokeAction("SetActivity", {
-        activityName: "Outbound Ready",
+        activityName: "Available",
         options: {
           rejectPendingReservations: false
         }
