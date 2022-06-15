@@ -1,4 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
+import { UIAttributes } from 'types/manager/ServiceConfiguration';
+
+const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { enabled } = custom_data.features.salesforce_click_to_dial;
 
 /* 
    this function servers as a possible solution for salesforce click to dial
@@ -13,6 +17,8 @@ import * as Flex from '@twilio/flex-ui';
 
 export function abortSalesforceClickToDialMissingCaseId(flex: typeof Flex, manager: Flex.Manager) {
 
+  if(!enabled) return;
+  
   flex.Actions.addListener('beforeStartOutboundCall', async (payload, abortFunction) => {
     if (payload.taskAttributes?.origin === 'SFDC' && !payload.taskAttributes?.case_id) {
       console.warn('Cannot perform an outbound call from salesforce without a case_id on the task_attributes...');

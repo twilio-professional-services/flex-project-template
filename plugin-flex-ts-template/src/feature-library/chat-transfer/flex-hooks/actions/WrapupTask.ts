@@ -4,6 +4,11 @@ import { getWorkerFriendlyName }  from '../../utils/serverless/ChatTransferServi
 import TaskService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import ProgrammableChatService from '../../../../utils/serverless/ProgrammableChat/ProgrammableChatService';
 
+import { UIAttributes } from 'types/manager/ServiceConfiguration';
+
+const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { enabled } = custom_data.features.chat_transfer;
+
 
 export interface MessageAttributes {
   senderInfo: {type: string, name: string},
@@ -11,6 +16,9 @@ export interface MessageAttributes {
 }
 
 export const announceOnChannelWhenLeaving = async (flex: typeof Flex, manager: Flex.Manager) => {
+
+  if(!enabled) return;
+
   Flex.Actions.addListener('beforeWrapupTask', async (payload, abortFunction) => {
 
     // ensure reference to task and we are wrapping up a chat task
@@ -37,6 +45,9 @@ export const announceOnChannelWhenLeaving = async (flex: typeof Flex, manager: F
 // deactivating the chat if the channel janitor is turned on
 // https://www.twilio.com/docs/flex/developer/messaging/manage-flows#channel-janitor
 export const removeChannelSidAndLeaveChatForChatTransfer = async (flex: typeof Flex, manager: Flex.Manager) => {
+
+  if(!enabled) return;
+
   Flex.Actions.addListener('beforeWrapupTask', async (payload, abortFunction) => {
 
     const task = payload.task || TaskHelper.getTaskByTaskSid(payload.sid || "");
@@ -73,6 +84,9 @@ export const removeChannelSidAndLeaveChatForChatTransfer = async (flex: typeof F
 // for a given chat task, mark the task sid
 // on the associated chat channel attributes as complete
 const notifyChatChannelTaskComplete = async (task: Flex.ITask, manager: Flex.Manager) => {
+
+  if(!enabled) return;
+  
   const { channelSid } = task.attributes;
   const chatChannel = await manager.chatClient.getChannelBySid(channelSid);
   const chatAttributes = chatChannel.attributes as any;

@@ -1,4 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
+import { UIAttributes } from 'types/manager/ServiceConfiguration';
+
+const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { enabled } = custom_data.features.salesforce_click_to_dial;
+
 
 const snooze = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -16,6 +21,8 @@ const snooze = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
  
 export function addSalesforceDataToOutboundCall (flex: typeof Flex, manager: Flex.Manager): void {
 
+  if(!enabled) return;
+  
   window.addEventListener('message', async (event) => {
 
     const { apiType, methodName, response } = event.data;
