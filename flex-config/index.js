@@ -1,69 +1,111 @@
-const yargs = require('yargs');
-const dotenv = require('dotenv');
-const path = require('path');
 const axios = require('axios');
-const lodash = require('lodash');
+const dotenv = require('dotenv');
 
-const argv = yargs
-  .option('env', {
-    description: 'Relative path for file containing environment variables',
-    type: 'string'
-  })
-  .option('taskrouter_skills', {
-    description: 'Relative path for file containing taskrouter_skills array',
-    type: 'string'
-  })
-  .option('ui_attributes', {
-    description: 'Relative path for file containing ui_attributes object',
-    type: 'string'
-  })
-  .argv;
+const uiAttributesDev = require('./dev.ui_attributes.json');
+const uiAttributesTest = require('./test.ui_attributes.json');
+const uiAttributesQa = require('./qa.ui_attributes.json');
+const uiAttributesProd = require('./prod.ui_attributes.json');
+const taskrouter_skills = require('./taskrouter_skills.json');
 
-if (argv.env && argv.ui_attributes && argv.taskrouter_skills) {
-  dotenv.config({
-    path: path.resolve(process.cwd(), argv.env)
+dotenv.config();
+
+const uiAttributesEnvMap = {
+  dev: uiAttributesDev,
+  test: uiAttributesTest,
+  qa: uiAttributesQa,
+  prod: uiAttributesProd,
+};
+
+;(async () => {
+  [
+    'ENVIRONMENT',
+    'TWILIO_ACCOUNT_SID',
+    'TWILIO_API_KEY',
+    'TWILIO_API_SECRET',
+  ].forEach(requiredEnvVar => {
+    if (!process.env[requiredEnvVar]) {
+      throw new Error(`Missing env var "${requiredEnvVar}"`);
+    }
   });
-  deployConfigurationData();
-}
 
-async function deployConfigurationData() {
+  const {
+    ENVIRONMENT,
+    TWILIO_ACCOUNT_SID,
+    TWILIO_API_KEY,
+    TWILIO_API_SECRET,
+  } = process.env;
+
+  deployConfigurationData({
+    auth: {
+      TWILIO_ACCOUNT_SID,
+      TWILIO_API_KEY,
+      TWILIO_API_SECRET,
+    },
+    environment: ENVIRONMENT,
+  });
+})();
+
+Array.prototype.unique = function() {
+  var a = this.concat();
+  for(var i=0; i<a.length; ++i) {
+      for(var j=i+1; j<a.length; ++j) {
+          if(a[i].name === a[j].name)
+              a.splice(j--, 1);
+      }
+  }
+
+  return a;
+};
+
+async function deployConfigurationData({ auth, environment }) {
   try {
-    const ui_attributes = require(path.resolve(process.cwd(), argv.ui_attributes));
-    const taskrouter_skills = require(path.resolve(process.cwd(), argv.taskrouter_skills));
-    const currentConfigration = (await getConfiguration()).ui_attributes;
-    const merged_ui_attributes = lodash.merge({}, currentConfigration, ui_attributes)
-    const updatedConfiguration = await setConfiguration({
-      ui_attributes: merged_ui_attributes,
-      taskrouter_skills
+    const uiAttributes = uiAttributesEnvMap[environment];
+
+    console.log('Getting current configuration...');
+    const { ui_attributes: uiAttributesCurrent, taskrouter_skills: tr_current } = await getConfiguration({ auth });
+    console.log('Merging current configuraton with new configuration...');
+    const uiAttributesMerged = {...uiAttributesCurrent, ...uiAttributes};
+    const trskillsMerged = tr_current.concat(taskrouter_skills).unique();
+
+    console.log('Updating configuration...');
+    const configurationUpdated = await setConfiguration({
+      auth,
+      configurationChanges: {
+        ui_attributes: uiAttributesMerged,
+        taskrouter_skills: trskillsMerged
+      },
     });
-    console.log(updatedConfiguration);
+
+    console.log('Configuration updated to:');
+    console.log(configurationUpdated);
   } catch (error) {
-    console.log(error);
+    console.log('Auth', error.config?.auth);
+    console.log('Data', error.response?.data);
   }
 }
 
-async function getConfiguration() {
+async function getConfiguration({ auth }) {
   return axios({
     method: 'get',
     url: 'https://flex-api.twilio.com/v1/Configuration',
     auth: {
-      username: process.env.TWILIO_ACCOUNT_SID,
-      password: process.env.TWILIO_AUTH_TOKEN
-    }
+      username: auth.TWILIO_API_KEY,
+      password: auth.TWILIO_API_SECRET,
+    },
   }).then(response => response.data);
 }
 
-async function setConfiguration(configuration) {
+async function setConfiguration({ auth, configurationChanges }) {
   return axios({
     method: 'post',
     url: 'https://flex-api.twilio.com/v1/Configuration',
     auth: {
-      username: process.env.TWILIO_ACCOUNT_SID,
-      password: process.env.TWILIO_AUTH_TOKEN
+      username: auth.TWILIO_API_KEY,
+      password: auth.TWILIO_API_SECRET,
     },
     data: {
-      ...configuration,
-      account_sid: process.env.TWILIO_ACCOUNT_SID
-    }
+      ...configurationChanges,
+      account_sid: auth.TWILIO_ACCOUNT_SID,
+    },
   }).then(response => response.data);
 }

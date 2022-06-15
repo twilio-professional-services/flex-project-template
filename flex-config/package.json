@@ -4,17 +4,15 @@
   "description": "CLI tool for merging new data into Flex configuration",
   "main": "index.js",
   "scripts": {
-    "dev:deploy-configuration": "node index.js --env=dev.env --taskrouter_skills=taskrouter_skills.json --ui_attributes=dev.ui_attributes.json",
-    "test:deploy-configuration": "node index.js --env=test.env --taskrouter_skills=taskrouter_skills.json --ui_attributes=test.ui_attributes.json",
-    "qa:deploy-configuration": "node index.js --env=qa.env --taskrouter_skills=taskrouter_skills.json --ui_attributes=qa.ui_attributes.json",
-    "prod:deploy-configuration": "node index.js --env=prod.env --taskrouter_skills=taskrouter_skills.json --ui_attributes=prod.ui_attributes.json"
+    "deploy:dev": "ENVIRONMENT=dev node index.js",
+    "deploy:test": "ENVIRONMENT=test node index.js",
+    "deploy:qa": "ENVIRONMENT=qa node index.js",
+    "deploy:prod": "ENVIRONMENT=prod node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.21.0",
-    "dotenv": "^8.2.0",
-    "yargs": "^16.2.0",
-    "lodash": "^4.17.20"
+    "axios": "0.26.0",
+    "dotenv": "16.0.0"
   }
 }
