@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { AppState, reduxNamespace } from '../src/states';
+import { AppState, reduxNamespace } from '../src/flex-hooks/states';
 import { mergeWith, unset } from 'lodash';
 
 // NOTE: Not sure a great way to "set" the Flex redux store value

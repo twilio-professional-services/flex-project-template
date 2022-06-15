@@ -35,6 +35,12 @@ export interface WorkerAttributes {
     skills: string[];
   };
 
+  // used to overide name seen on webchat
+  public_identity: string;
+
+  //caller-id feature
+  selectedCallerId: string;
+
   // Flex insights references the following elements
   email: string;
   full_name: string;

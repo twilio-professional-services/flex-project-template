@@ -16,6 +16,8 @@ import WorkerCanvas from './WorkerCanvas';
 import WorkersDataTable from './WorkersDataTable';
 import WorkerDirectory from './WorkerDirectory';
 import NoTaskCanvas from './NoTaskCanvas';
+import OutboundDialerPanel from './OutboundDialerPanel';
+import TaskInfoPanel from './TaskInfoPanel';
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   AgentDesktopView(flex, manager);
@@ -35,4 +37,6 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   WorkerCanvas(flex, manager);
   WorkersDataTable(flex, manager);
   WorkerDirectory(flex, manager);
+  OutboundDialerPanel(flex, manager);
+  TaskInfoPanel(flex, manager);
 }

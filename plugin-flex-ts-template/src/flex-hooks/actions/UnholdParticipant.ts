@@ -15,5 +15,3 @@ function replaceUnholdParticipant(flex: typeof Flex, manager: Flex.Manager) {
 
 function afterUnholdParticipant(flex: typeof Flex, manager: Flex.Manager) {
 }
-
-// Export these "private" functions so we can test each in isolation

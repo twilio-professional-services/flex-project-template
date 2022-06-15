@@ -3,27 +3,32 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "tsc --noEmit",
-    "start": "twilio-run --functions-folder dist/functions --assets-folder dist/assets",
-    "deploy": "twilio-run deploy --functions-folder dist/functions --assets-folder dist/assets",
-    "build": "tsc && npm run build:copy-assets",
-    "build:copy-assets": "copyfiles src/assets/* src/assets/**/* --up 2 --exclude **/*.ts dist/assets/",
-    "prestart": "npm run build",
-    "predeploy": "npm run build"
+    "test": "echo 'Tests to come'; exit 1",
+    "start": "twilio serverless:start",
+    "deploy": "twilio serverless:deploy --override-existing-project --env \".env.$TWILIO_PROFILE\" --no-assets --runtime node14",
+    "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v2",
+    "deploy:dev": "TWILIO_PROFILE=dev npm run deploy",
+    "deploy:test": "TWILIO_PROFILE=test npm run deploy",
+    "deploy:qa": "TWILIO_PROFILE=qa npm run deploy",
+    "deploy:prod": "TWILIO_PROFILE=prod npm run deploy",
+    "x-old-predeploy": "[[ -z \"${TWILIO_PROFILE}\" ]] && (echo \"TWILIO_PROFILE must be set\"; exit 1) || exit 0",
+    "x-old-deploy": "twilio serverless:deploy --override-existing-project -p \"$TWILIO_PROFILE\" --env \".env.$TWILIO_PROFILE\" --no-assets"
   },
   "dependencies": {
     "@twilio-labs/serverless-runtime-types": "^1.1",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "twilio": "^3.65.0",
     "twilio-flex-token-validator": "^1.5.4"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.182",
     "axios": "^0.21.1",
     "copyfiles": "^2.2.0",
-    "twilio-run": "^2.6.0",
+    "twilio-cli": "2.33.0",
+    "twilio-run": "3.4.1",
     "typescript": "^3.8"
   },
   "engines": {
-    "node": "10"
+    "node": "14"
   }
 }

@@ -36,6 +36,18 @@ export interface TaskAttributes {
   accountNumber?: string;
   targetSkill?: string;
   priority?: string;
+  autoClose?: boolean;
+  parentTask?: string;
+  taskType?: string;
+
+  // feature-library/callback
+  callBackData: {
+    numberToCall?: string;
+    numberToCallFrom?: string;
+    attempts?: number;
+    mainTimeZone?: string;
+    utcDateTimeReceived?: Date;
+  },
 
   // Flex Insights typically referenced elements
   conversations?: {

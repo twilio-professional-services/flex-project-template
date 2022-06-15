@@ -3,7 +3,7 @@
     "baseUrl": "src",
     "rootDir": ".",
     "outDir": "build",
-    "target": "es5",
+    "target": "esnext",
     "lib": [
       "dom",
       "dom.iterable",

@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import reducers, { reduxNamespace } from '../../states';
+import reducers, { reduxNamespace } from '../states';
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   if (!manager.store.addReducer) {

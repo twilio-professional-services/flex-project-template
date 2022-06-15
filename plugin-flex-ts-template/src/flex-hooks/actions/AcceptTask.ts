@@ -15,5 +15,3 @@ function replaceAcceptTask(flex: typeof Flex, manager: Flex.Manager) {
 
 function afterAcceptTask(flex: typeof Flex, manager: Flex.Manager) {
 }
-
-// Export these "private" functions so we can test each in isolation

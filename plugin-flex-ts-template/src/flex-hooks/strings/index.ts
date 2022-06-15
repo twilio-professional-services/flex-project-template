@@ -1,12 +1,12 @@
 import * as Flex from '@twilio/flex-ui';
-import TaskList from './TaskList';
-import BrowserPop from './BrowserPop';
+import ChatTransfer from '../../feature-library/chat-transfer/flex-hooks/strings/ChatTransfer'
+import Callback from '../../feature-library/callbacks/flex-hooks/strings/Callback'
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   manager.strings = {
     // -v- Add custom strings here -v-
-    ...TaskList,
-    ...BrowserPop,
+    ...ChatTransfer,
+    ...Callback,
     // -^---------------------------^-
 
     ...manager.strings,

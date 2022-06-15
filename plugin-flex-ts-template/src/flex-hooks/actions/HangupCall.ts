@@ -16,4 +16,3 @@ function replaceHangupCall(flex: typeof Flex, manager: Flex.Manager) {
 function afterHangupCall(flex: typeof Flex, manager: Flex.Manager) {
 }
 
-// Export these "private" functions so we can test each in isolation

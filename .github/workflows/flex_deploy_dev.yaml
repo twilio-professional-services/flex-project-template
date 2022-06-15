@@ -1,0 +1,48 @@
+name: flex_deploy_dev
+
+on:
+  # Run on merge to main
+  push:
+    branches:
+      - main
+
+  # Enable running this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  ENVIRONMENT: ps template
+  TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+  TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+  TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: setup node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: deploy flex config
+        working-directory: flex-config
+        run: |
+          npm install
+          npm run deploy:dev
+
+      - name: deploy serverless
+        working-directory: serverless-functions
+        run: |
+          npm install
+          npm run install-serverless-plugin
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET }} npm run deploy:dev
+
+      - name: deploy and release flex-plugin
+        working-directory: plugin-flex-ts-template
+        run: |
+          npm install
+          npm run install-flex-plugin
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }} TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }} npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }} TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }} npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
