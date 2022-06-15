@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { connect, ConnectedProps } from 'react-redux'
 import { bindActionCreators, Dispatch } from 'redux';
-import { Actions } from '../../flex-hooks/states/Callback';
+import { Actions } from '../../flex-hooks/states/callback';
 import CallbackComponent from './CallbackComponent';
 
 
