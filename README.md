@@ -24,7 +24,7 @@ It also provides
   - copy .env.dev to .env
 3. in the new .env file 
   - add **ACCOUNT_SID=<YOUR_TWILIO_ACCOUNT_SID> AUTH_TOKEN=<YOUR_TWILIO_AUTH_TOKEN>**
-4 review the SIDs in the file and reference the appropriate ones from your own account.  If using callback or chat transfer, setup a taskrouter workflow for these first. For testing purposes the default "Assign to anyone" workflow can be used for callback but the chat transfer will need setup following the example in **twilio-proserv-flex-project-template/plugin-flex-ts-template/src/feature-library/chat-transfer/example-taskrouter-workflow.json** where each possible queue has its own filter with a single agent transfer filter at the top.
+4. review the SIDs in the file and reference the appropriate ones from your own account.  If using callback or chat transfer, setup a taskrouter workflow for these first. For testing purposes the default "Assign to anyone" workflow can be used for callback but the chat transfer will need setup following the example in **twilio-proserv-flex-project-template/plugin-flex-ts-template/src/feature-library/chat-transfer/example-taskrouter-workflow.json** where each possible queue has its own filter with a single agent transfer filter at the top.
   > standard SIDs <br>
   > &nbsp;TWILIO_FLEX_WORKSPACE_SID=<br>
   > &nbsp;TWILIO_FLEX_SYNC_SID= <br>
