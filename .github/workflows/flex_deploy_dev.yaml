@@ -11,9 +11,9 @@ on:
 
 env:
   ENVIRONMENT: ps template
-  TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-  TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-  TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+  TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID_DEV }}
+  TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_DEV }}
+  TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_DEV }}
 
 jobs:
   run:
@@ -37,12 +37,12 @@ jobs:
         run: |
           npm install
           npm run install-serverless-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET }} npm run deploy:dev
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy:dev
 
       - name: deploy and release flex-plugin
         working-directory: plugin-flex-ts-template
         run: |
           npm install
           npm run install-flex-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }} TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }} npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }} TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }} npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN_DEV }} npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN_DEV }} npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
