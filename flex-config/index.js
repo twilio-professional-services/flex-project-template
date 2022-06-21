@@ -1,10 +1,10 @@
 const axios = require('axios');
 const dotenv = require('dotenv');
 
-const uiAttributesDev = require('./dev.ui_attributes.json');
-const uiAttributesTest = require('./test.ui_attributes.json');
-const uiAttributesQa = require('./qa.ui_attributes.json');
-const uiAttributesProd = require('./prod.ui_attributes.json');
+const uiAttributesDev = require('./ui_attributes.dev.json');
+const uiAttributesTest = require('./ui_attributes.test.json');
+const uiAttributesQa = require('./ui_attributes.qa.json');
+const uiAttributesProd = require('./ui_attributes.prod.json');
 const taskrouter_skills = require('./taskrouter_skills.json');
 
 dotenv.config();

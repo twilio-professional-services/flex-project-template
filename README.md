@@ -33,7 +33,7 @@ It also provides
   > &nbsp;TWILIO_FLEX_CALLBACK_WORKFLOW_SID= <br>
   > &nbsp;TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID= <br>
 5. ensuring your twilio cli profile is set to the right account run: **twilio serverless:deploy**
-6. Take the domain name for the given serverless deploy and it to **twilio-proserv-flex-project-template/flex-config/dev.ui_attributes.json** and decide what features to enable.
+6. Take the domain name for the given serverless deploy and it to **twilio-proserv-flex-project-template/flex-config/ui_attributes.dev.json** and decide what features to enable.
 7. On your twilio account create an API key and secret
 8. Create a .env file in **twilio-proserv-flex-project-template/flex-config/**
 9. Add to the .env file
