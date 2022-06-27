@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import CustomUserControlsComponent from '../../custom-components/custom-user-controls'
+import CustomUserControlsContainer from '../../custom-components/custom-user-controls'
 import { NotificationIds } from '../notifications/ActivitySkillFilter'
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
@@ -17,7 +17,7 @@ export function replaceUserControls(flex: typeof Flex, manager: Flex.Manager) {
   
   flex.MainHeader.Content.remove('user-controls');
   flex.MainHeader.Content.add(
-    <CustomUserControlsComponent key="custom-user-controls" />,
+    <CustomUserControlsContainer key="custom-user-controls" />,
       {
         sortOrder: 2,
         align: 'end'

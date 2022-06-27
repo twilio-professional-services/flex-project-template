@@ -20,7 +20,7 @@ class AgentActivities {
 	this.manager = Flex.Manager.getInstance();
 
 	// the supporting configuration for this utility is expected to be set 
-	// as a custom element on the ui_attribites of the flex configuration
+	// as a custom element on the ui_attributes of the flex configuration
 	// see README for more details
 	const { rules } = custom_data.features.activity_skill_filter;
 	this.config = rules;

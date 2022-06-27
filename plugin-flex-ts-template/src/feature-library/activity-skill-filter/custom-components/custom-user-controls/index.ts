@@ -1,3 +1,3 @@
-import CustomUserControlsComponent from './CustomUserControlsComponent';
+import CustomUserControlsContainer from './CustomUserControlsContainer';
 
-export default CustomUserControlsComponent;
+export default CustomUserControlsContainer;
