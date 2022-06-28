@@ -5,7 +5,7 @@ This is a plugin for Twilio Flex that provides a configuration feature for Worke
 - they can be ordered
 - visibility of activities can be filtered by worker skills
 
-# Known issue
+## Known issue
 
 On older Twilio Flex accounts a TaskRouter Activity of "Reserved" may be present.  This Activity is automatically hidden by the Flex UI and breaks the logic of the plugin.  In this scenario it is advised you remove any TaskQueue references to the "Reserved" activity (which will likely be the activity to use when task is assigned on the TaskQueue and as such isn't actually used by Flex) and then delete the "Reserved" Activity.
 
