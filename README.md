@@ -4,7 +4,7 @@ This repository is a template for starting new flex projects and provides
 
 - a pattern for distributed development
 - a means to configure the plugin per twilio account
-- a means to couple serverlress functions with the plugin
+- a means to couple serverless functions with the plugin
 - an example github actions for CI/CD setup
 
 It also provides
@@ -12,7 +12,7 @@ It also provides
 - a pattern for calling serverless functions with retry handling
 - a pattern for serverless functions to also handle their own retries
 - utilities for common operations performed from flex (such as updating task attributes safely)
-- a foundation to aggregrate future work
+- a foundation to aggregate future work
 - a library of features and examples that can be used to demonstrate development patterns
 
 
@@ -43,3 +43,8 @@ It also provides
 10. execute *npm install* and *npm run deploy:dev*
 11. from **twilio-proserv-flex-project-template/plugin-flex-ts-template**
   - run *npm install* and *twilio flex:plugins:start*
+
+
+## Feature library
+
+- [Activity Skill Filter](blob/main/plugin-flex-ts-template/src/feature-library/activity-skill-filter/README.md)
