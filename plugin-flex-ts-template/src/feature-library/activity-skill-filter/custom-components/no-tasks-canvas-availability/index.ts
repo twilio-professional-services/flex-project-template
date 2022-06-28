@@ -1,0 +1,3 @@
+import NoTasksCanvasAvailabilityComponent from './NoTasksCanvasAvailabilityComponent';
+
+export default NoTasksCanvasAvailabilityComponent;
