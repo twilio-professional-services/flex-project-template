@@ -47,4 +47,4 @@ It also provides
 
 ## Feature library
 
-- [Activity Skill Filter](blob/main/plugin-flex-ts-template/src/feature-library/activity-skill-filter/README.md)
+- [Activity Skill Filter](plugin-flex-ts-template/src/feature-library/activity-skill-filter/README.md)
