@@ -23,14 +23,14 @@ In your `ui_attributes.{environment}.json` file, enable the "activity_skill_filt
 
 ```
 "activity_skill_filter": {
-	"enabled": true, // controls whether this feature is enabled
-	"filter_teams_view": true, // controls whether this feature affects the Teams view
-	"rules": {
-		"<ACTIVITY_SID>": {
-			"required_skill": "skill_name", // name of skill required to allow this activity, or null to allow all workers
-			"sort_order": order // zero-based integer
-		}
-	}
+  "enabled": true, // controls whether this feature is enabled
+  "filter_teams_view": true, // controls whether this feature affects the Teams view
+  "rules": {
+    "<ACTIVITY_SID>": {
+      "required_skill": "skill_name", // name of skill required to allow this activity, or null to allow all workers
+      "sort_order": order // zero-based integer
+    }
+  }
 }
 ```
 
@@ -38,22 +38,22 @@ As an example:
 
 ```
 "activity_skill_filter": {
-	"enabled": true,
-	"filter_teams_view": true,
-	"rules": {
-		"WA845ba1c86cb933b0806deabb39784c66": {
-			"required_skill": null,
-			"sort_order": 0
-		},
-		"WA6af363ff8880786f37c453bfa297dca1": {
-			"required_skill": null,
-			"sort_order": 1
-		},
-		"WAeee0165b5d13a7d246401dc7771c04f0": {
-			"required_skill": "Retention",
-			"sort_order": 2
-		}
-	}
+  "enabled": true,
+  "filter_teams_view": true,
+  "rules": {
+    "WA845ba1c86cb933b0806deabb39784c66": {
+      "required_skill": null,
+      "sort_order": 0
+    },
+    "WA6af363ff8880786f37c453bfa297dca1": {
+      "required_skill": null,
+      "sort_order": 1
+    },
+    "WAeee0165b5d13a7d246401dc7771c04f0": {
+      "required_skill": "Retention",
+      "sort_order": 2
+    }
+  }
 }
 ```
 
