@@ -6,6 +6,7 @@ import { ChatTransferNotification } from '../../flex-hooks/notifications/ChatTra
 import { TransferOptions } from '../../flex-hooks/actions/TransferTask'
 import ApiService from '../../../../utils/serverless/ApiService';
 import TaskService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
+import { WorkerAttributes } from 'types/task-router/Worker';
 
 export interface CreateTransferTaskResponse {
   success: boolean,
@@ -167,8 +168,9 @@ class ChatTransferService extends ApiService {
 
   #createTransferTask = (task: Flex.ITask, transferTargetSid: string, queueName: string): Promise<CreateTransferTaskResponse> => {
 
-    const { attributes } = task
+    const { attributes } = task;
     const manager = Flex.Manager.getInstance();
+    const  { contact_uri }  = manager.workerClient.attributes as WorkerAttributes;
 
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(manager.user.token),
@@ -176,7 +178,7 @@ class ChatTransferService extends ApiService {
       jsonAttributes: encodeURIComponent(JSON.stringify(attributes)),
       transferTargetSid: encodeURIComponent(transferTargetSid),
       transferQueueName: encodeURIComponent(queueName),
-      ignoreWorkerContactUri: encodeURIComponent(manager.workerClient.attributes.contact_uri),
+      ignoreWorkerContactUri: encodeURIComponent(contact_uri),
     };
 
     return this.fetchJsonWithReject<CreateTransferTaskResponse>(
