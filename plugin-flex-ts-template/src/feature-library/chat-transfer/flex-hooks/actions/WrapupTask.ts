@@ -5,6 +5,7 @@ import TaskService from '../../../../utils/serverless/TaskRouter/TaskRouterServi
 import ProgrammableChatService from '../../../../utils/serverless/ProgrammableChat/ProgrammableChatService';
 
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { Worker } from 'types/task-router';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
 const { enabled } = custom_data.features.chat_transfer;
@@ -30,7 +31,7 @@ export const announceOnChannelWhenLeaving = async (flex: typeof Flex, manager: F
     if (channelSid) {
       await Flex.Actions.invokeAction('SendMessage', {
         channelSid,
-        body: `${getWorkerFriendlyName(manager.workerClient)} left the channel`,
+        body: `${getWorkerFriendlyName(manager.workerClient as unknown as Worker)} left the channel`,
         messageAttributes: { notification: true }
       });
     }

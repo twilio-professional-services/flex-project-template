@@ -34,7 +34,7 @@ export default class OutboundCallerIDSelectorComponent extends React.Component<P
 
 
     return (
-      <div>
+      <>
         <Caption
           key="callerid-select-caption"
           className="Twilio-OutboundDialerPanel-QueueSelect-Caption"
@@ -52,7 +52,7 @@ export default class OutboundCallerIDSelectorComponent extends React.Component<P
             </MenuItem>
           ))}
         </StyledSelect>
-      </div>
+      </>
     );
   }
 }

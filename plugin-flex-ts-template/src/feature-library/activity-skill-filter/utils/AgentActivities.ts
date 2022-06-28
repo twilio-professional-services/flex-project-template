@@ -52,7 +52,7 @@ class AgentActivities {
 	  }
 	  // return the element with all previous results into one array
 	  return [...results, cssConfig];
-	}, []);
+	}, [] as Array<ActivityCssConfig>);
   }
 
 
@@ -69,7 +69,7 @@ class AgentActivities {
 	  skills = agentRouting.skills || [];
 	}
 	
-	const eligibleSkills = Array.from(activities.values()).reduce((results, activity) => {
+	const eligibleSkills = Array.from(activities.values()).reduce((results: any, activity) => {
 	  const activityRule = this.config[activity.sid];
 	  if (activityRule) {
 		const { required_skill, sort_order } = activityRule;
