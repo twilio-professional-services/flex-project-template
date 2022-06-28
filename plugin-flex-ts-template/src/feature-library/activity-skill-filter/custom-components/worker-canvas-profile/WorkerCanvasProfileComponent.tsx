@@ -3,7 +3,6 @@ import React, { ChangeEvent } from 'react';
 import { FormControl, Select, MenuItem, WithStyles } from '@material-ui/core'
 import { ContentWrapper, AvatarWrapper, Availability, AgentName, FormControlWrapper, styles } from './WorkerCanvasProfileStyles';
 import AgentActivities from '../../utils/AgentActivities';
-import { WorkerCanvasProps } from '@twilio/flex-ui/src/components/WorkerCanvas';
 
 export interface OwnProps extends WithStyles<typeof styles> {
 	worker?: Flex.IWorker

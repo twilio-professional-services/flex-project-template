@@ -4,6 +4,7 @@
     "features": {
       "activity_skill_filter": {
         "enabled": true,
+        "filter_teams_view": true,
         "rules": {
           "WA845ba1c86cb933b0806deabb39784c66": {
             "required_skill": null,

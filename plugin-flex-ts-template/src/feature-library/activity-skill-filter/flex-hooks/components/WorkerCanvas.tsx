@@ -3,11 +3,11 @@ import WorkerCanvasProfileContainer from '../../custom-components/worker-canvas-
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled, rules } = custom_data.features.activity_skill_filter;
+const { enabled, filter_teams_view, rules } = custom_data.features.activity_skill_filter;
 
 export function replaceWorkerCanvasProfile(flex: typeof Flex, manager: Flex.Manager) {
   
-  if (!enabled || !rules) return;
+  if (!enabled || !filter_teams_view || !rules) return;
   
   flex.WorkerCanvas.Content.remove('profile');
   flex.WorkerCanvas.Content.add(

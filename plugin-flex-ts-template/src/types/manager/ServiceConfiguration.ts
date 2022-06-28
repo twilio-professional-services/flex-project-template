@@ -19,6 +19,7 @@ export interface UIAttributes extends FlexUIAttributes {
     features: {
       activity_skill_filter: {
         enabled: boolean,
+        filter_teams_view: boolean,
         rules: ActivitySkillFilterRules
       },
       callbacks: {
