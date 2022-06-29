@@ -9,7 +9,7 @@ This is a simple little tool that should help deploy Flex configuration settings
 5. Create/Edit a single `taskrouter_skills.json` file
     - Used for every environment to deploy a common set of skills
 6. Create/Edit a `{stageNameHere}.ui_attributes.json` matching file
-    - Currently only `dev.ui_attributes.json`, `test.ui_attributes.json`, `qa.ui_attributes.json`, and `prod.ui_attributes.json` are recognized
+    - Currently only `ui_attributes.dev.json`, `ui_attributes.test.json`, `ui_attributes.qa.json`, and `ui_attributes.prod.json` are recognized
 7. Run `npm run deploy:{env}` to update the Flex configuration
     - Currently `dev:deploy`, `test:deploy`, `qa:deploy`, and `prod:deploy` are the only ones configured
 

@@ -4,7 +4,7 @@ This repository is a template for starting new flex projects and provides
 
 - a pattern for distributed development
 - a means to configure the plugin per twilio account
-- a means to couple serverlress functions with the plugin
+- a means to couple serverless functions with the plugin
 - an example github actions for CI/CD setup
 
 It also provides
@@ -12,7 +12,7 @@ It also provides
 - a pattern for calling serverless functions with retry handling
 - a pattern for serverless functions to also handle their own retries
 - utilities for common operations performed from flex (such as updating task attributes safely)
-- a foundation to aggregrate future work
+- a foundation to aggregate future work
 - a library of features and examples that can be used to demonstrate development patterns
 
 
@@ -33,7 +33,7 @@ It also provides
   > &nbsp;TWILIO_FLEX_CALLBACK_WORKFLOW_SID= <br>
   > &nbsp;TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID= <br>
 5. ensuring your twilio cli profile is set to the right account run: **twilio serverless:deploy**
-6. Take the domain name for the given serverless deploy and it to **twilio-proserv-flex-project-template/flex-config/dev.ui_attributes.json** and decide what features to enable.
+6. Take the domain name for the given serverless deploy and it to **twilio-proserv-flex-project-template/flex-config/ui_attributes.dev.json** and decide what features to enable.
 7. On your twilio account create an API key and secret
 8. Create a .env file in **twilio-proserv-flex-project-template/flex-config/**
 9. Add to the .env file
@@ -43,3 +43,8 @@ It also provides
 10. execute *npm install* and *npm run deploy:dev*
 11. from **twilio-proserv-flex-project-template/plugin-flex-ts-template**
   - run *npm install* and *twilio flex:plugins:start*
+
+
+## Feature library
+
+- [Activity Skill Filter](plugin-flex-ts-template/src/feature-library/activity-skill-filter/README.md)

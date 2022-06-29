@@ -22,7 +22,7 @@ export default class CallbackComponent extends React.Component<Props> {
     const timeReceived = moment(callBackData?.utcDateTimeReceived);
     const localTz = moment.tz.guess();
     const localTimeShort = timeReceived.tz(localTz).format('MM-D-YYYY, h:mm:ss a z');
-    const serverTimeShort = timeReceived.tz(callBackData?.mainTimeZone || "").format('MM-D-YYYY, h:mm:ss a z');
+    const serverTimeShort = timeReceived.tz(callBackData?.mainTimeZone || localTz).format('MM-D-YYYY, h:mm:ss a z');
 
     return (
         <span className="Twilio">

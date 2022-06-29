@@ -15,7 +15,7 @@ import ViewCollection from './ViewCollection';
 import WorkerCanvas from './WorkerCanvas';
 import WorkersDataTable from './WorkersDataTable';
 import WorkerDirectory from './WorkerDirectory';
-import NoTaskCanvas from './NoTaskCanvas';
+import NoTasksCanvas from './NoTasksCanvas';
 import OutboundDialerPanel from './OutboundDialerPanel';
 import TaskInfoPanel from './TaskInfoPanel';
 
@@ -24,7 +24,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   CallCanvasActions(flex, manager);
   CRMContainer(flex, manager);
   MainHeader(flex, manager);
-  NoTaskCanvas(flex, manager);
+  NoTasksCanvas(flex, manager);
   ParticipantCanvas(flex, manager);
   QueueStats(flex, manager);
   SideNav(flex, manager);

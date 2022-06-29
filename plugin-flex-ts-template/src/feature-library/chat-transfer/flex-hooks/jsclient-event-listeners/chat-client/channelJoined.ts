@@ -1,8 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
-
 import { getWorkerFriendlyName } from '../../../utils/serverless/ChatTransferService';
-
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { Worker } from 'types/task-router';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
 const { enabled } = custom_data.features.chat_transfer;
@@ -17,7 +16,7 @@ export function announceOnChannelWhenJoined(flex: typeof Flex, manager: Flex.Man
   manager.chatClient.on('channelJoined', (channel) => {
     Flex.Actions.invokeAction('SendMessage', {
       channelSid: channel.sid,
-      body: `${getWorkerFriendlyName(manager.workerClient)} joined the channel`,
+      body: `${getWorkerFriendlyName(manager.workerClient as unknown as Worker)} joined the channel`,
       messageAttributes: { notification: true }
     });
   });
