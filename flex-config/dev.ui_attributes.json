@@ -18,7 +18,10 @@
         "enabled": true
       },
       "salesforce_click_to_dial": {
-        "enabled": false
+        "enabled": true
+      },
+      "scrollable_activities": {
+        "enabled": true
       }
     }
   }
