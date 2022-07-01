@@ -40,7 +40,10 @@ export interface UIAttributes extends FlexUIAttributes {
       salesforce_click_to_dial: {
         enabled: boolean
       },
-      scrollable_activities: {
+      scrollable_activities: {        
+        enabled: boolean
+      },
+      supervisor_barge_coach: {
         enabled: boolean
       }
     }

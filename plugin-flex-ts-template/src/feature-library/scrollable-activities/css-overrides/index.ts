@@ -7,7 +7,7 @@ const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attri
 const { enabled } = custom_data.features.scrollable_activities;
 
 export default () => {
-  if( enabled === false ) return;
+  if( !enabled ) return;
   injectGlobal`
     .Twilio-Menu.Twilio-UserControls-AccountMenu {
       overflow-y: scroll;
