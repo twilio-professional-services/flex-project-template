@@ -6,8 +6,7 @@ import { ContainerProps } from './SupervisorPrivateModeButtonContainer'
 import { ButtonContainer, buttonStyle, buttonStyleActive } from './SupervisorPrivateModeButtonStyles';
 
 // Used for Sync Docs
-//FIXME: Need to leverage new way of calling Sync, worry about this after redux/functions are working properly
-//import { SyncDoc } from '../services/Sync'
+import { SyncDoc } from '../../utils/sync/Sync'
 
 export interface OwnProps {
   task?: Flex.ITask;
@@ -27,31 +26,29 @@ export default class SupervisorPrivateToggle extends React.Component<Props> {
     const conference = task && task.conference;
     const conferenceSID = conference && conference.conferenceSid;
 
-    //FIXME: Update to new Sync Service
-    // if (coachingStatusPanel) {
-    //   this.props.setBargeCoachStatus({ 
-    //     coachingStatusPanel: false, 
-    //   });
-    //   // Updating the Sync Doc to reflect that we are no longer coaching and back into Monitoring
-    //   SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, "is Monitoring", "remove");
-    // } else {
-    //   this.props.setBargeCoachStatus({ 
-    //     coachingStatusPanel: true, 
-    //   });
-    //   // Updating the Sync Doc based on coaching status only if coaching is true
-    //   // The Agent will pull this back within their Sync Doc to update the UI
-    //   if(coaching) {
-    //     // Updating the Sync Doc to reflect that we are now coaching the agent
-    //     SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, "is Coaching", "add");
-    //   }
-    // }
+    if (coachingStatusPanel) {
+      this.props.setBargeCoachStatus({ 
+        coachingStatusPanel: false, 
+      });
+      // Updating the Sync Doc to reflect that we are no longer coaching and back into Monitoring
+      SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, "is Monitoring", "remove");
+    } else {
+      this.props.setBargeCoachStatus({ 
+        coachingStatusPanel: true, 
+      });
+      // Updating the Sync Doc based on coaching status only if coaching is true
+      // The Agent will pull this back within their Sync Doc to update the UI
+      if(coaching) {
+        // Updating the Sync Doc to reflect that we are now coaching the agent
+        SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, "is Coaching", "add");
+      }
+    }
   }
 
   // Render the Supervisor Private Mode Button to toggle if the supervisor wishes to remain private when
   // coaching the agent
   render() {
     const coachingStatusPanel = this.props.coachingStatusPanel;
-    //FIXME: Not sure why this is the only part of my app that requires this, review other components and you'll see it isn't required
     const task: any = this.props.task;
 
     const isLiveCall = TaskHelper.isLiveCall(task);

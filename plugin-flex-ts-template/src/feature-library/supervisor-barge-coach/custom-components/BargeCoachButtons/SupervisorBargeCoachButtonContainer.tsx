@@ -8,9 +8,10 @@ import SupervisorBargeCoachButton, { Props } from './SupervisorBargeCoachButtonC
 const mapStateToProps = (state: AppState) => {
     // Getting the Supervisor's workerSID so we can use it later, the Agent's workerSID (stickyWorker) we are monitoring
     // This is specific to coaching to ensure we are unmuting the correct worker, if there are multiple agents on the call
-    const myWorkerSID: string = state?.flex?.worker?.worker?.sid || "";
+    const myWorkerSID: string = state?.flex?.worker?.worker?.sid;
     const agentWorkerSID: string = state?.flex?.supervisor?.stickyWorker?.worker?.sid || "";
-    const supervisorFN: string = state?.flex?.worker?.attributes?.full_name || "";
+    const supervisorFN: string = state?.flex?.worker?.attributes?.full_name;
+
     console.log(`sticky worker = ${agentWorkerSID}`);
   
     // Also pulling back the states from the redux store as we will use those later

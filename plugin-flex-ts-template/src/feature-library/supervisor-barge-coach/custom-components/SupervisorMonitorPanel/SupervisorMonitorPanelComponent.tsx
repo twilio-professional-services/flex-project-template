@@ -5,8 +5,7 @@ import { ContainerProps } from './SupervisorMonitorPanelContainer'
 import { StatusView } from './SupervisorMonitorPanelStyles';
 
 // Used for Sync Docs
-//FIXME: Need to leverage new way of calling Sync, worry about this after redux/functions are working properly
-//import { SyncDoc } from '../services/Sync'
+import { SyncDoc } from '../../utils/sync/Sync'
 
 export interface OwnProps {
   task: Flex.ITask;
@@ -32,8 +31,6 @@ export default class  SupervisorMonitorPanel extends React.Component<Props> {
  }
 
  syncUpdates() {
-    //FIXME: Remove - this is for testing only
-    console.error(`Within Supervisor Monitor Panel syncSubscribed = ${this.#syncSubscribed}`);
 
     if (this.#syncSubscribed != true) {
       this.#syncSubscribed = true;
@@ -47,23 +44,23 @@ export default class  SupervisorMonitorPanel extends React.Component<Props> {
       // if we are being coached, if we are, render that in the UI
       // otherwise leave it blank
       const mySyncDoc = `syncDoc.${agentWorkerSID}`;
-      //FIXME: Fix to move to new Sync Services
-      // SyncDoc.getSyncDoc(mySyncDoc)
-      // .then(doc => {
-      //   // We are subscribing to Sync Doc updates here and logging anytime that happens
-      //   doc.on("updated", updatedDoc => {
-      //     if (doc.value.data.supervisors != null) {
-      //       supervisorArray = [...doc.value.data.supervisors];
-      //     } else {
-      //       supervisorArray = [];
-      //     }
+      SyncDoc.getSyncDoc(mySyncDoc)
+      .then(doc => {
+        // We are subscribing to Sync Doc updates here and logging anytime that happens
+        doc.on("updated", (updatedDoc: any) => {
+          if (doc.value.data.supervisors != null) {
+            supervisorArray = [...doc.value.data.supervisors];
+            console.log(updatedDoc);
+          } else {
+            supervisorArray = [];
+          }
 
-      //     // Set Supervisor's name that is coaching into props
-      //     this.props.setBargeCoachStatus({ 
-      //       supervisorArray: supervisorArray
-      //     });
-      //   })
-      // });
+          // Set Supervisor's name that is coaching into props
+          this.props.setBargeCoachStatus({ 
+            supervisorArray: supervisorArray
+          });
+        })
+      });
     }
     
    return;

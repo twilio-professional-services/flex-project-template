@@ -8,8 +8,7 @@ import BargeCoachService from '../../utils/serverless/BargeCoachService';
 import { ButtonContainer, buttonStyle, buttonStyleActive } from './SupervisorBargeCoachButtonStyles';
 
 // Used for Sync Docs
-//FIXME: Need to leverage new way of calling Sync, worry about this after redux/functions are working properly
-//import { SyncDoc } from '../services/Sync'
+import { SyncDoc } from '../../utils/sync/Sync'
 
 export interface OwnProps {
   task?: Flex.ITask;
@@ -132,7 +131,7 @@ export default class SupervisorBargeCoachButton extends React.Component<Props> {
         barge: false
       });
       // Updating the Sync Doc to reflect that we are no longer coaching and back into Monitoring
-     //FIXME:SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, "is Monitoring", "remove");
+      SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSid, this.props.supervisorFN, "is Monitoring", "remove");
 
     } else {
       BargeCoachService.updateParticipantBargeCoach(conferenceSid, participantSid, agentSid, false, true);
@@ -147,7 +146,7 @@ export default class SupervisorBargeCoachButton extends React.Component<Props> {
       const coachingStatusPanel = this.props.coachingStatusPanel;
       if (coachingStatusPanel) {
         // Updating the Sync Doc to reflect that we are now coaching the agent
-      //FIXME:SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSID, this.props.supervisorFN, "is Coaching", "add");
+      SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSid, this.props.supervisorFN, "is Coaching", "add");
       }
     }
   }

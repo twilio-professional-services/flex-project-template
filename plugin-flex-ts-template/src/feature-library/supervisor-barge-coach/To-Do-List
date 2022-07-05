@@ -1,7 +1,10 @@
 // Summary Notes:
-Another great day of coding!  We got the redux/props working properly along with a listener!  We needed to create a new standard action listern which was very straight forward.  We have another listener to register but that will be part of the advanced feature clean up.  Up next will be introducing the function into the code to get it to actually work!
+Migrated Sync service, added to util/sync folder - I have all advanced features on now.  First test did not render anything in the UI on the agent side.  Need to see why, confirm sync is updated, agent is subscribing but maybe a react/render issue?  That's what is up next!
 
 What's Done:
+-Added an advantaged feature flag to flex-config the extra add-ons
+-Update Package version to match Jared's latest updates
+-Confirm refresh/cache clean up for button state is working properly
 -Work on merging Function code (and merged it from two functions to one :))
 -Test simple barge/coach where redux update the icons properly (with a listerner!)
 -We've registered Redux properly!
@@ -14,13 +17,10 @@ What's Done:
 
 Whats Next:
 -Work on Sync
--Confirm refresh/cache clean up for button state is working properly
 -Work on Coaching Panel, Supervisor Privacy Panel
--Update Package version to match Jared's latest updates
-
-
 
 // Future Features
+-Possibly add a refresh util to detect refresh and recover (instead of being in the Task.OverviewCanvas file)
 -Possibly enable/disable advanced features via feature flag (IE coaching panel, private panel, and supervisors monitoring panel)
 --I've done this via the flex-hooks/components folder within the barge coach feature directory, but this may need to be moved, will consult with jared on that
 
@@ -42,3 +42,5 @@ DEVELOPMENT NOTES:
 -One roadblock was forgetting the connector in my container component file, I've fixed this but making a note for the future
 -Functions
     -Need to get clarity on how best to leverage functions, should it start as a custom feature util and possibly migrate to a standard function util?
+-Feature Enable
+    -If you get undefined when reading the "enabled" feature flag within your own feather, make sure you have the dev - prod ui attributes set properly and you ran the npm run deploy:dev command unde flex-configs directory

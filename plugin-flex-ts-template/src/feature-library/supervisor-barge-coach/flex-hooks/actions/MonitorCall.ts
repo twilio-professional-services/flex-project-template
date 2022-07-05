@@ -15,14 +15,9 @@ export interface EventPayload {
 export const enableBargeCoachButtonsUponMonitor = async (flex: typeof Flex, manager: Flex.Manager) => {
 
     if(!enabled) return;
-
-    //FIXME: For Testing Only remove later
-    console.warn(`I'm in the Monitor Call Listener`);
     // Listening for supervisor to monitor the call to enable the
     // barge and coach buttons, as well as reset their muted/coaching states
     Flex.Actions.addListener('afterMonitorCall', (payload) => {
-        //FIXME: For Testing Only remove later
-        console.warn(`Monitor button triggered, enable the Coach and Barge-In Buttons`);
 
         console.log(`Monitor button triggered, enable the Coach and Barge-In Buttons`);
         manager.store.dispatch(BargeCoachStatusAction.setBargeCoachStatus({ 
@@ -38,7 +33,6 @@ export const enableBargeCoachButtonsUponMonitor = async (flex: typeof Flex, mana
 export const disableBargeCoachButtonsUponMonitor = async (flex: typeof Flex, manager: Flex.Manager) => {
 
     if(!enabled) return;
-
     // Listening for supervisor to click to unmonitor the call to disable the
     // barge and coach buttons, as well as reset their muted/coaching states
     Flex.Actions.addListener('afterStopMonitoringCall', (payload) => {

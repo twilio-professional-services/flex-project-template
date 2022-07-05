@@ -10,7 +10,7 @@ const mapStateToProps = (state: AppState) => {
     const agentWorkerSID = state?.flex?.supervisor?.stickyWorker?.worker?.sid;
     const supervisorFN = state?.flex?.worker?.attributes?.full_name;
   
-    const reduxStore = state?.['custom'].supervisorBargeCoach;
+    const reduxStore = state[reduxNamespace].supervisorBargeCoach;
     const coaching = reduxStore.coaching;
     const coachingStatusPanel = reduxStore.coachingStatusPanel
   

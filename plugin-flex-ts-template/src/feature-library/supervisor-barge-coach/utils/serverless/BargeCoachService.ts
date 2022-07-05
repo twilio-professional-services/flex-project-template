@@ -25,14 +25,12 @@ class BargeCoachService extends ApiService {
       // Update Conference Participant with the appropriate Muted and Coaching status
       const { success } = await this.#updateParticipantBargeCoach(conferenceSid, participantSid, agentSid, muted, coaching);
       if (success) {
-          //FIXME: Update to .log once done testing
-          console.warn(`Successfully updated Conference:${conferenceSid} for Participant:${participantSid} - Muted Status = ${muted}`);
-          console.warn(`Coaching Status is ${coaching} for Agent: ${agentSid}`);
+          console.log(`Successfully updated Conference:${conferenceSid} for Participant:${participantSid} - Muted Status = ${muted}`);
+          console.log(`Coaching Status is ${coaching} for Agent: ${agentSid}`);
       }
       else if(!success) {
-          //FIXME: Update to .error once done testing
-          console.warn(`Failed to updated Conference:${conferenceSid} for Participant:${participantSid} - Muted Status = ${muted}`);
-          console.warn(`Coaching Status is ${coaching} for Agent: ${agentSid}`);
+          console.log(`Failed to updated Conference:${conferenceSid} for Participant:${participantSid} - Muted Status = ${muted}`);
+          console.log(`Coaching Status is ${coaching} for Agent: ${agentSid}`);
       }
       return success;
     } catch (error) {

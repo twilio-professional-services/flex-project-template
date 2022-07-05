@@ -11,7 +11,7 @@ const mapStateToProps = (state: AppState) => {
   
     // Also pulling back the states from the redux store as we will use those later
     // to manipulate the buttons
-    const reduxStore = state?.['custom'].supervisorBargeCoach;
+    const reduxStore = state[reduxNamespace].supervisorBargeCoach;
     const supervisorArray = reduxStore.supervisorArray;
     
     return {

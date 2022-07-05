@@ -24,7 +24,8 @@
         "enabled": true
       },
       "supervisor_barge_coach": {
-        "enabled": false
+        "enabled": false,
+        "advanced_features_enabled": false
       }
     }
   }

@@ -21,6 +21,10 @@
         "enabled": false
       },
       "supervisor_barge_coach": {
+        "enabled": true,
+        "advanced_features_enabled": true
+      },
+      "scrollable_activities": {        
         "enabled": false
       }
     }
