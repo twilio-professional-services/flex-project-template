@@ -1,16 +1,17 @@
-import { Manager } from '@twilio/flex-ui';
+import * as Flex from '@twilio/flex-ui';
 import { Actions as BargeCoachStatusAction, } from '../../flex-hooks/states/SupervisorBargeCoach';
-import { initialState } from '../../flex-hooks/states/SupervisorBargeCoach';
-//FIXME: Fix sync later
-//import { SyncDoc } from '../services/Sync'
+import { UIAttributes } from 'types/manager/ServiceConfiguration';
+// Import to get Sync Doc updates
+import { SyncDoc } from '../../utils/sync/Sync'
 
-const manager = Manager.getInstance();
+const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { agent_coaching_panel } = custom_data.features.supervisor_barge_coach;
 
-// If coachingStatusPanel is true (enabled), proceed
-// otherwise we will not subscribe to the Sync Doc
-// You can toggle this at ../states/BargeCoachState
-const coachingStatusPanel = initialState.coachingStatusPanel;
-if (coachingStatusPanel) {  
+export const cleanStateAndSyncUponAgentHangUp = async (flex: typeof Flex, manager: Flex.Manager) => {
+
+    // If agent_coaching_panel feature is true proceed, otherwise we will not subscribe to the Sync Doc
+    if (!agent_coaching_panel) return;
+
     // Listening for agent to hang up the call so we can clear the Sync Doc
     // for the CoachStatePanel feature
     manager.workerClient.on("reservationCreated", (reservation: any) => {
@@ -27,9 +28,8 @@ if (coachingStatusPanel) {
                 const agentWorkerSID = manager.store.getState().flex?.worker?.worker?.sid;;
                 const agentSyncDoc = `syncDoc.${agentWorkerSID}`;
                 // Let's clear the Sync Document and also close/end our subscription to the Document
-                //FIXME: Fix Sync later
-                // SyncDoc.clearSyncDoc(agentSyncDoc);
-                // SyncDoc.closeSyncDoc(agentSyncDoc);
+                SyncDoc.clearSyncDoc(agentSyncDoc);
+                SyncDoc.closeSyncDoc(agentSyncDoc);
         });    
     });
 }

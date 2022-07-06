@@ -42,7 +42,8 @@ export interface UIAttributes extends FlexUIAttributes {
       },
       supervisor_barge_coach: {
         enabled: boolean,
-        advanced_features_enabled: boolean
+        agent_coaching_panel: boolean,
+        supervisor_monitor_panel: boolean
       },
       scrollable_activities: {        
         enabled: boolean

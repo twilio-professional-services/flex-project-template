@@ -22,7 +22,8 @@
       },
       "supervisor_barge_coach": {
         "enabled": true,
-        "advanced_features_enabled": true
+        "agent_coaching_panel": true,
+        "supervisor_monitor_panel:": false
       },
       "scrollable_activities": {        
         "enabled": false

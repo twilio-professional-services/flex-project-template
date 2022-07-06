@@ -56,8 +56,9 @@ class SyncDocClass {
 				supervisorsArray.splice(removeSupervisorIndex, 1);
 				}
 				// Update the Sync Doc with the new supervisorsArray
-				this.updateSyncDoc(docToUpdate, supervisorsArray);          
+				this.updateSyncDoc(docToUpdate, supervisorsArray);       
 			}
+			
 		});
 	}
 

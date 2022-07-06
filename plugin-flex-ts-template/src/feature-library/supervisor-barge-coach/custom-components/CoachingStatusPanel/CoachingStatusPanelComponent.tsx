@@ -16,10 +16,9 @@ export type Props = ContainerProps & OwnProps;
 export default class CoachingStatusPanel extends React.Component<Props> {
 
   // Use to validate if we have subscribed to sync updates or not
-  #syncSubscribed = false;
+  #syncSubscribed: boolean = false;
 
   syncUpdates() {
-
     if (this.#syncSubscribed != true) {
       
       const myWorkerSID = this.props.myWorkerSID;

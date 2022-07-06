@@ -10,11 +10,9 @@ import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButton
 
 // Advancted Barge Coach Features
 import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateModeButton'
-import SupervisorMonitorPanel from '../../custom-components/SupervisorMonitorPanel'
-import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel'
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled, advanced_features_enabled } = custom_data.features.supervisor_barge_coach;
+const { enabled, agent_coaching_panel } = custom_data.features.supervisor_barge_coach;
 
 
 export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.Manager) {
@@ -25,7 +23,7 @@ export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.
   // Add the Barge-in and Coach Option
   flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorBargeCoachButton key="bargecoach-buttons" />);
 
-        // we will lose the stickyWorker attribute that we use for agentWorkerSID (see \components\SupervisorBargeCoachButton.js for reference)
+  // we will lose the stickyWorker attribute that we use for agentWorkerSID (see \components\SupervisorBargeCoachButton.js for reference)
   // We need to invoke an action to trigger this again, so it populates the stickyWorker for us 
   const agentWorkerSID = manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
   const teamViewPath = localStorage.getItem('teamViewPath');
@@ -60,21 +58,7 @@ export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.
     }
   }
 
-  if(!advanced_features_enabled) {
-    console.warn('Advanced Supervisor Barge Coach Features Disabled');
-    return;
-  } else {
-    console.warn('Advanced Supervisor Barge Coach Features Eanbled');
-   
-    // Add the Supervisor Private Mode Toggle
-    flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorPrivateToggle key="supervisorprviate-button" />);
-    // Add the Supervisor Monitor Panel
-    flex.Supervisor.TaskCanvasTabs.Content.add(<SupervisorMonitorPanel title= "Supervisors Engaged" icon="Supervisor" key="supervisoronitorpanel" />);
-    
-    // Adding Coaching Status Panel to notify the agent who is Coaching them
-    flex.CallCanvas.Content.add(
-      <CoachingStatusPanel key="coaching-status-panel"> </CoachingStatusPanel>, {
-        sortOrder: -1
-    });
-  }
+  if(!agent_coaching_panel) return;
+  // Add the Supervisor Private Mode Toggle
+  flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorPrivateToggle key="supervisorprviate-button" />);
 }
