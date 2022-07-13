@@ -11,7 +11,7 @@ export default () => {
   injectGlobal`
     .Twilio-Menu.Twilio-UserControls-AccountMenu {
       overflow-y: scroll;
-      height: 90vh;
+      max-height: 90vh;
     }
   `;
 };
