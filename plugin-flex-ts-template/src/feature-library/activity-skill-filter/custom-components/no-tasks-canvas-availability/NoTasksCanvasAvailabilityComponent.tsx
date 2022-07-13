@@ -19,7 +19,7 @@ function NoTasksCanvasAvailabilityComponent(props: NoTasksCanvasChildrenProps) {
 	return (
 		<FormControlWrapper>
 			<FormControl fullWidth>
-				<Select value={worker.activity.sid} onChange={handleChange}>
+				<Select value={worker.activity.sid} onChange={handleChange} renderValue={() => <>{worker?.activity.name}</>}>
 					{activities.map(activity => (
 						<MenuItem key={activity.sid} value={activity.sid}>
 							{activity.name}
