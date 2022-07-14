@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { Action } from '../../../../../flex-hooks/states'
 import CallbackService from '../../../utils/callback/CallbackService'
-import { INITIATE_CALLBACK } from './types';
+import { INITIATE_CALLBACK, REQUEUE_CALLBACK } from './types';
 
 
 // Provide task to "pending" action as payload
@@ -14,6 +14,16 @@ class Actions {
       type: INITIATE_CALLBACK,
       payload: {
         promise: CallbackService.callCustomerBack(task, 0),
+        data: task
+      }
+    };
+  };
+  
+  public static requeueCallback = (task: Flex.ITask): Action => {
+    return {
+      type: REQUEUE_CALLBACK,
+      payload: {
+        promise: CallbackService.requeueCallback(task),
         data: task
       }
     };

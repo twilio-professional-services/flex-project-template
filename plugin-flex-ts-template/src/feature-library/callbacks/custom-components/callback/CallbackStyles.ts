@@ -10,7 +10,7 @@ export default {
   },
   cbButton: {
     width: '100%',
-    marginBottom: '5px',
+    marginBottom: '10px',
     fontSize: '10pt',
   },
   textCenter: {

@@ -6,7 +6,8 @@ import CallbackComponent from './CallbackComponent';
 
 
 const mapDispatchToProps = (dispatch: Dispatch<Flex.ITask>) => ({
-  startCall: bindActionCreators(Actions.callCustomer, dispatch)
+  startCall: bindActionCreators(Actions.callCustomer, dispatch),
+  requeueCallback: bindActionCreators(Actions.requeueCallback, dispatch)
 });
 
 const connector = connect(undefined, mapDispatchToProps);

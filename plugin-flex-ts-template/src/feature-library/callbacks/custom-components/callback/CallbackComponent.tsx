@@ -9,6 +9,7 @@ import Icon from '@material-ui/core/Icon';
 import styles from './CallbackStyles';
 import { TaskAttributes } from 'types/task-router/Task';
 import { ContainerProps } from './CallbackContainer'
+import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
 export interface OwnProps {
   task: Flex.ITask;
@@ -18,11 +19,14 @@ export type Props = ContainerProps & OwnProps;
 
 export default class CallbackComponent extends React.Component<Props> {
   render() {
+    const taskStatus = this.props.task?.taskStatus
     const { callBackData } = this.props.task?.attributes as TaskAttributes
     const timeReceived = moment(callBackData?.utcDateTimeReceived);
     const localTz = moment.tz.guess();
     const localTimeShort = timeReceived.tz(localTz).format('MM-D-YYYY, h:mm:ss a z');
     const serverTimeShort = timeReceived.tz(callBackData?.mainTimeZone || localTz).format('MM-D-YYYY, h:mm:ss a z');
+    const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+    const { allow_requeue, max_attempts } = custom_data.features.callbacks;
 
     return (
         <span className="Twilio">
@@ -67,6 +71,7 @@ export default class CallbackComponent extends React.Component<Props> {
             <li>&nbsp;</li>
           </ul>
           <Button
+            disabled={taskStatus !== 'assigned'}
             style={styles.cbButton}
             variant="contained"
             color="primary"
@@ -74,6 +79,17 @@ export default class CallbackComponent extends React.Component<Props> {
           >
             Place Call Now ( {callBackData?.numberToCall} )
           </Button>
+          {
+            allow_requeue && (!callBackData.attempts || callBackData.attempts < max_attempts) &&
+            <Button
+              disabled={taskStatus !== 'assigned'}
+              style={styles.cbButton}
+              variant="contained"
+              onClick={async () => this.props.requeueCallback(this.props.task)}
+            >
+              Retry Later
+            </Button>
+          }
         </span>
     );
   }
