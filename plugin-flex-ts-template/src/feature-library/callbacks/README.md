@@ -32,3 +32,16 @@ Once you have decided which workflow you are using, you simply reference it in t
 
 the variable that you need to make sure is set is
 >TWILIO_FLEX_CALLBACK_WORKFLOW_SID=WW....
+
+# how does it work?
+
+The feature works be registering a custom flex channel.  This channel is a presentation only layer, on top of the taskrouter channel, which remains voice.
+
+when the channel is registered, it renders custom components based on the task attribute; _taskType: callbck_
+
+there are two associated serverless functions called _create-callback_
+
+the only difference between these functions is one is intended to be called from flex, the other from anywhere else but typically studio.  The difference is the security model for each function but both do the same thing, taking in task attributes and generating a new callback task.  The flex interface is intended for use, should you wish to introduce a re-queueing feature.
+
+
+__
