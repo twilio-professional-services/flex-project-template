@@ -1,21 +1,12 @@
 export default {
-  itemWrapper: {
-    width: '100%',
-  },
-  itemBold: { fontWeight: 'bold' },
-  item: {
-    width: 100,
-  },
-  itemDetail: {
-  },
   cbButton: {
     width: '100%',
     marginBottom: '10px',
     fontSize: '10pt',
   },
-  textCenter: {
-    textAlign: 'center',
-    color: 'blue',
+  info: {
+    verticalAlign: 'middle',
+    fontSize: '13px',
+    margin: '0 5px'
   },
-  info: { top: '3px' },
 };

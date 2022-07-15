@@ -5,11 +5,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Actions } from '../../flex-hooks/states/callback';
 import CallbackComponent from './CallbackComponent';
 
-const mapStateToProps = (state: AppState) => {
-  return {
-    ...state[reduxNamespace].callback
-  };
-};
+const mapStateToProps = (state: AppState) => ({
+  isCompletingCallbackAction: state[reduxNamespace].callback.isCompletingCallbackAction, 
+  isRequeueingCallbackAction: state[reduxNamespace].callback.isRequeueingCallbackAction
+});
 
 const mapDispatchToProps = (dispatch: Dispatch<Flex.ITask>) => ({
   startCall: bindActionCreators(Actions.callCustomer, dispatch),

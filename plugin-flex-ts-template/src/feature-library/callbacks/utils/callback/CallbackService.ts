@@ -85,31 +85,30 @@ class CallbackService extends ApiService {
   }
   
   async requeueCallback(task: Flex.ITask): Promise<Flex.ITask> {
-    let request: CreateCallbackRequest = {
-      numberToCall: task.attributes.callBackData.numberToCall,
-      numberToCallFrom: task.attributes.callBackData.numberToCallFrom,
-      flexFlowSid: task.attributes.flow_execution_sid,
-      workflowSid: task.workflowSid,
-      timeout: task.timeout,
-      priority: task.priority,
-      attempts: task.attributes.callBackData.attempts + 1,
-      conversation_id: task.sid,
-      message: task.attributes.message,
-      utcDateTimeReceived: task.attributes.callBackData.utcDateTimeReceived
-    }
-    
     try {
+      let request: CreateCallbackRequest = {
+        numberToCall: task.attributes.callBackData.numberToCall,
+        numberToCallFrom: task.attributes.callBackData.numberToCallFrom,
+        flexFlowSid: task.attributes.flow_execution_sid,
+        workflowSid: task.workflowSid,
+        timeout: task.timeout,
+        priority: task.priority,
+        attempts: task.attributes.callBackData.attempts ? Number(task.attributes.callBackData.attempts) + 1 : 1,
+        conversation_id: task.taskSid,
+        message: task.attributes.message,
+        utcDateTimeReceived: task.attributes.callBackData.utcDateTimeReceived ? task.attributes.callBackData.utcDateTimeReceived : new Date()
+      }
+      
       let response = await this.#createCallback(request);
       
       if (response.success) {
         await Flex.Actions.invokeAction("WrapupTask", { task });
       }
-      
-      return task;
     } catch (error) {
       console.log('Unable to requeue callback', error);
-      return Promise.reject(task);
     }
+    
+    return task;
   }
   
   #createCallback = async (request: CreateCallbackRequest): Promise<CreateCallbackResponse> => {

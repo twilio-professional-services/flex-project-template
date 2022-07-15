@@ -23,7 +23,7 @@ export default function (state = initialState, action: Action): CallbackState {
 
     case `${INITIATE_CALLBACK}_FULFILLED`: {
       const { taskSid } = action.payload as Flex.ITask;
-      const isCompletingCallbackAction = state.isCompletingCallbackAction;
+      const isCompletingCallbackAction = {...state.isCompletingCallbackAction};
       delete isCompletingCallbackAction[taskSid];
 
       return {
@@ -47,7 +47,7 @@ export default function (state = initialState, action: Action): CallbackState {
     
     case `${REQUEUE_CALLBACK}_FULFILLED`: {
       const { taskSid } = action.payload as Flex.ITask;
-      const isRequeueingCallbackAction = state.isRequeueingCallbackAction;
+      const isRequeueingCallbackAction = {...state.isRequeueingCallbackAction};
       delete isRequeueingCallbackAction[taskSid];
     
       return {
