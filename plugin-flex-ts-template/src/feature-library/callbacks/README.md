@@ -37,7 +37,7 @@ the variable that you need to make sure is set is
 
 The feature works be registering a custom flex channel.  This channel is a presentation only layer, on top of the taskrouter channel, which remains voice.
 
-when the channel is registered, it renders custom components based on the task attribute; _taskType: callbck_
+when the channel is registered, it renders custom components based on the task attribute; _taskType: callback_
 
 there are two associated serverless functions called _create-callback_
 
