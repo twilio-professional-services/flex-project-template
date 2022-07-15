@@ -9,10 +9,11 @@ import Icon from '@material-ui/core/Icon';
 import styles from './CallbackStyles';
 import { TaskAttributes } from 'types/task-router/Task';
 import { ContainerProps } from './CallbackContainer'
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
 export interface OwnProps {
   task: Flex.ITask;
+  allowRequeue: boolean;
+  maxAttempts: number;
 }
 
 export type Props = ContainerProps & OwnProps;
@@ -25,8 +26,6 @@ export default class CallbackComponent extends React.Component<Props> {
     const localTz = moment.tz.guess();
     const localTimeShort = timeReceived.tz(localTz).format('MM-D-YYYY, h:mm:ss a z');
     const serverTimeShort = timeReceived.tz(callBackData?.mainTimeZone || localTz).format('MM-D-YYYY, h:mm:ss a z');
-    const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-    const { allow_requeue, max_attempts } = custom_data.features.callbacks;
 
     return (
         <span className="Twilio">
@@ -71,7 +70,7 @@ export default class CallbackComponent extends React.Component<Props> {
             <li>&nbsp;</li>
           </ul>
           <Button
-            disabled={taskStatus !== 'assigned'}
+            disabled={taskStatus !== 'assigned' || this.props.isCompletingCallbackAction[this.props.task.taskSid]}
             style={styles.cbButton}
             variant="contained"
             color="primary"
@@ -80,9 +79,9 @@ export default class CallbackComponent extends React.Component<Props> {
             Place Call Now ( {callBackData?.numberToCall} )
           </Button>
           {
-            allow_requeue && (!callBackData.attempts || callBackData.attempts < max_attempts) &&
+            this.props.allowRequeue && (!callBackData.attempts || callBackData.attempts < this.props.maxAttempts) &&
             <Button
-              disabled={taskStatus !== 'assigned'}
+              disabled={taskStatus !== 'assigned' || this.props.isRequeueingCallbackAction[this.props.task.taskSid]}
               style={styles.cbButton}
               variant="contained"
               onClick={async () => this.props.requeueCallback(this.props.task)}

@@ -84,7 +84,7 @@ class CallbackService extends ApiService {
     return task;
   }
   
-  async requeueCallback(task: Flex.ITask): Promise<Boolean> {
+  async requeueCallback(task: Flex.ITask): Promise<Flex.ITask> {
     let request: CreateCallbackRequest = {
       numberToCall: task.attributes.callBackData.numberToCall,
       numberToCallFrom: task.attributes.callBackData.numberToCallFrom,
@@ -102,12 +102,13 @@ class CallbackService extends ApiService {
       let response = await this.#createCallback(request);
       
       if (response.success) {
-        await Flex.Actions.invokeAction("WrapupTask", { sid: task.sid });
+        await Flex.Actions.invokeAction("WrapupTask", { task });
       }
       
-      return response.success;
+      return task;
     } catch (error) {
-      return false;
+      console.log('Unable to requeue callback', error);
+      return Promise.reject(task);
     }
   }
   
