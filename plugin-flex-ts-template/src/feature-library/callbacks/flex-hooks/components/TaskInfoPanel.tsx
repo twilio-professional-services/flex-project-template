@@ -11,6 +11,6 @@ export function replaceViewForCallbacks(flex: typeof Flex, manager: Flex.Manager
 
   Flex.TaskInfoPanel.Content.replace(<CallbackComponent key="callback-component" allowRequeue={allow_requeue} maxAttempts={max_attempts} />, {
     sortOrder: -1,
-    if: (props) => props.task.attributes.taskType === 'callback',
+    if: (props) => ['callback', 'voicemail'].includes(props.task.attributes.taskType),
   });
 }

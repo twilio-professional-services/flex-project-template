@@ -21,7 +21,12 @@ export interface CreateCallbackRequest {
   attempts?: number,
   conversation_id?: string,
   message?: string,
-  utcDateTimeReceived?: Date
+  utcDateTimeReceived?: Date,
+  recordingSid?: string,
+  recordingUrl?: string,
+  transcriptSid?: string,
+  transcriptText?: string,
+  isDeleted?: boolean,
 };
 
 class CallbackService extends ApiService {
@@ -96,7 +101,12 @@ class CallbackService extends ApiService {
         attempts: task.attributes.callBackData.attempts ? Number(task.attributes.callBackData.attempts) + 1 : 1,
         conversation_id: task.taskSid,
         message: task.attributes.message,
-        utcDateTimeReceived: task.attributes.callBackData.utcDateTimeReceived ? task.attributes.callBackData.utcDateTimeReceived : new Date()
+        utcDateTimeReceived: task.attributes.callBackData.utcDateTimeReceived ? task.attributes.callBackData.utcDateTimeReceived : new Date(),
+        recordingSid: task.attributes.callBackData.recordingSid,
+        recordingUrl: task.attributes.callBackData.recordingUrl,
+        transcriptSid: task.attributes.callBackData.transcriptSid,
+        transcriptText: task.attributes.callBackData.transcriptText,
+        isDeleted: task.attributes.callBackData.isDeleted
       }
       
       let response = await this.#createCallback(request);
@@ -124,6 +134,11 @@ class CallbackService extends ApiService {
       conversation_id: request.conversation_id ? encodeURIComponent(request.conversation_id) : undefined,
       message: request.message ? encodeURIComponent(request.message) : undefined,
       utcDateTimeReceived: request.utcDateTimeReceived ? encodeURIComponent(request.utcDateTimeReceived.toString()) : undefined,
+      recordingSid: request.recordingSid ? encodeURIComponent(request.recordingSid) : undefined,
+      recordingUrl: request.recordingUrl ? encodeURIComponent(request.recordingUrl) : undefined,
+      transcriptSid: request.transcriptSid ? encodeURIComponent(request.transcriptSid) : undefined,
+      transcriptText: request.transcriptText ? encodeURIComponent(request.transcriptText) : undefined,
+      isDeleted: request.isDeleted ? encodeURIComponent(request.isDeleted) : undefined,
     };
   
     const response = await this.fetchJsonWithReject<CreateCallbackResponse>(
