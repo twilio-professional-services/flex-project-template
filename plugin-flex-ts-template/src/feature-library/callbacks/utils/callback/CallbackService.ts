@@ -3,6 +3,7 @@ import ApiService from '../../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../../types/serverless';
 import { TaskAttributes } from '../../../../types/task-router/Task';
 import { CallbackNotification } from '../../flex-hooks/notifications/Callback';
+import { Actions } from '../../flex-hooks/states/callback';
 
 export interface CreateCallbackResponse {
   success: boolean,
@@ -38,6 +39,9 @@ class CallbackService extends ApiService {
       throw new Error('Oubound dialing is not enabled');
     } else {
       try {
+        // update state with the existing reservation sid so that we can re-select it later
+        Flex.Manager.getInstance().store.dispatch(Actions.setLastPlacedCallback(task));
+        
         // move the inbound callback task to wrapup state
         // this continues to block any inbound calls coming to
         // agent while they wait for outbound call to get placed

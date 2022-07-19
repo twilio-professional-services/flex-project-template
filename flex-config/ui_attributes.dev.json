@@ -23,7 +23,8 @@
       "callbacks": {
         "enabled": true,
         "allow_requeue": true,
-        "max_attempts": 3
+        "max_attempts": 3,
+        "auto_select_task": true
       },
       "caller_id": {
         "enabled": true
