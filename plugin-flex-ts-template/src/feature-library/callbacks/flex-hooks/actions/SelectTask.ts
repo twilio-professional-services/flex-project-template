@@ -37,7 +37,7 @@ export const selectCallbackTask = async (flex: typeof Flex, manager: Flex.Manage
     // cancel this action and select the parent task instead
     abortFunction();
     await flex.Actions.invokeAction('SelectTask', {
-      sid: state[reduxNamespace].callback.lastPlacedReservationSid
+      sid: parentTask
     });
   });
 }
