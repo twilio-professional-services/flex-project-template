@@ -3,6 +3,7 @@ import AgentDesktopView from './AgentDesktopView';
 import CallCanvasActions from './CallCanvasActions';
 import CRMContainer from './CRMContainer';
 import MainHeader from './MainHeader';
+import MessageListItem from './MessageListItem';
 import ParticipantCanvas from './ParticipantCanvas';
 import QueueStats from './QueueStats';
 import SideNav from './SideNav';
@@ -24,6 +25,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   CallCanvasActions(flex, manager);
   CRMContainer(flex, manager);
   MainHeader(flex, manager);
+  MessageListItem(flex, manager);
   NoTasksCanvas(flex, manager);
   ParticipantCanvas(flex, manager);
   QueueStats(flex, manager);

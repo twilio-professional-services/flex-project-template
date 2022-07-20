@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import { Action } from '../../../../../flex-hooks/states'
-import { CallbackState, INITIATE_CALLBACK, REQUEUE_CALLBACK } from './types';
+import { CallbackState, INITIATE_CALLBACK, REQUEUE_CALLBACK, PLACED_CALLBACK } from './types';
 
 import initialState from './initialState';
 
@@ -53,6 +53,13 @@ export default function (state = initialState, action: Action): CallbackState {
       return {
         ...state,
         isRequeueingCallbackAction
+      };
+    }
+    
+    case `${PLACED_CALLBACK}`: {
+      return {
+        ...state,
+        lastPlacedReservationSid: action.payload
       };
     }
 
