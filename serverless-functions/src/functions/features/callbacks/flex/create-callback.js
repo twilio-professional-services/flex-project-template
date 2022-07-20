@@ -40,7 +40,12 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
         attempts: retryAttempt,
         conversation_id,
         message,
-        utcDateTimeReceived
+        utcDateTimeReceived,
+        recordingSid,
+        recordingUrl,
+        transcriptSid,
+        transcriptText,
+        isDeleted
       } = event;
 
       // use assigned values or use defaults
@@ -51,8 +56,8 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
 
       // setup required task attributes for task
       const attributes = {
-        taskType: "callback",
-        name: `Callback: (${numberToCall})`,
+        taskType: recordingSid ? "voicemail" : "callback",
+        name: (recordingSid ? 'Voicemail' : 'Callback') + ` (${numberToCall})`,
         flow_execution_sid: flexFlowSid,
         message: message || null,
         callBackData: {
@@ -60,7 +65,12 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
           numberToCallFrom,
           attempts,
           mainTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          utcDateTimeReceived: utcDateTimeReceived || new Date()
+          utcDateTimeReceived: utcDateTimeReceived || new Date(),
+          recordingSid,
+          recordingUrl,
+          transcriptSid,
+          transcriptText,
+          isDeleted: isDeleted || false
         },
         direction: "inbound",
         conversations: {

@@ -21,7 +21,7 @@ export type Props = ContainerProps & OwnProps;
 export default class CallbackComponent extends React.Component<Props> {
   render() {
     const taskStatus = this.props.task?.taskStatus
-    const { callBackData } = this.props.task?.attributes as TaskAttributes
+    const { taskType, callBackData } = this.props.task?.attributes as TaskAttributes
     const timeReceived = moment(callBackData?.utcDateTimeReceived);
     const localTz = moment.tz.guess();
     const localTimeShort = timeReceived.tz(localTz).format('MM-D-YYYY, h:mm:ss a z');
@@ -31,8 +31,26 @@ export default class CallbackComponent extends React.Component<Props> {
 
     return (
         <span className="Twilio">
-          <h1>Contact Callback Request</h1>
-          <p>A contact has requested an immediate callback.</p>
+          {
+            taskType == 'callback' &&
+            <><h1>Contact Callback Request</h1>
+            <p>A contact has requested an immediate callback.</p></>
+          }
+          {
+            taskType == 'voicemail' &&
+            <><h1>Contact Voicemail</h1>
+            <p>A contact has left a voicemail that requires attention.</p></>
+          }
+          {
+            callBackData.recordingUrl && !callBackData.isDeleted &&
+            <><h2>Voicemail recording</h2>
+            <p><audio style={styles.audioPlayer} ref="audio_tag" src={callBackData.recordingUrl} controls /></p></>
+          }
+          {
+            callBackData.transcriptText && !callBackData.isDeleted &&
+            <><h2>Voicemail transcript</h2>
+            <p>{callBackData.transcriptText}</p></>
+          }
           <h2>Contact phone</h2>
           <p>{callBackData?.numberToCall}</p>
           <h2>Call reception time</h2>

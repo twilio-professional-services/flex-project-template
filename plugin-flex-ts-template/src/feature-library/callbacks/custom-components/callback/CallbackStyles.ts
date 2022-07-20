@@ -9,4 +9,7 @@ export default {
     fontSize: '13px',
     margin: '0 5px'
   },
+  audioPlayer: {
+    width: '100%'
+  }
 };

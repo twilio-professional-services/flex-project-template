@@ -47,6 +47,11 @@ export interface TaskAttributes {
     attempts?: number;
     mainTimeZone?: string;
     utcDateTimeReceived?: Date;
+    recordingSid?: string;
+    recordingUrl?: string;
+    transcriptSid?: string;
+    transcriptText?: string;
+    isDeleted?: boolean;
   },
 
   // Flex Insights typically referenced elements
