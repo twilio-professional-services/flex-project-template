@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { selectCallbackTask } from '../../feature-library/callbacks/flex-hooks/actions/SelectTask'
+import { autoSelectCallbackTaskWhenEndingCall } from '../../feature-library/callbacks/flex-hooks/actions/SelectTask'
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   beforeSelectTask(flex, manager);
@@ -8,7 +8,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
 }
 
 function beforeSelectTask(flex: typeof Flex, manager: Flex.Manager) {
-  selectCallbackTask(flex, manager);
+  autoSelectCallbackTaskWhenEndingCall(flex, manager);
 }
 
 // Avoid using replace hook if possible

@@ -8,7 +8,7 @@ export interface EventPayload {
 }
 
 // when an outbound call back completes, select the parent task that initiated it
-export const selectCallbackTask = async (flex: typeof Flex, manager: Flex.Manager) => {
+export const autoSelectCallbackTaskWhenEndingCall = async (flex: typeof Flex, manager: Flex.Manager) => {
   const { custom_data } = manager.serviceConfiguration.ui_attributes as UIAttributes;
   const { enabled, auto_select_task } = custom_data.features.callbacks;
 
