@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { Actions as BargeCoachStatusAction, } from '../../flex-hooks/states/SupervisorBargeCoach';
+import { Actions as BargeCoachStatusAction, } from '../states/SupervisorBargeCoach';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 // Import to get Sync Doc updates
 import { SyncDoc } from '../../utils/sync/Sync'

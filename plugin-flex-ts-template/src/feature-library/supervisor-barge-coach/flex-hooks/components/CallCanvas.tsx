@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel'
-import { cleanStateAndSyncUponAgentHangUp } from '../actions/Reservation';
+import { cleanStateAndSyncUponAgentHangUp } from '../actions/reservation';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
 const { enabled, agent_coaching_panel} = custom_data.features.supervisor_barge_coach;

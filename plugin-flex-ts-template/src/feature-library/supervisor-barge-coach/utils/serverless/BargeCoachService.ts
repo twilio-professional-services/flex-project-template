@@ -55,7 +55,7 @@ class BargeCoachService extends ApiService {
     };
 
     return this.fetchJsonWithReject<ParticipantMuteCoach>(
-      `https://${this.serverlessDomain}/functions/features/supervisor-barge-coach/participant-mute-and-coach`,
+      `https://${this.serverlessDomain}/functions/features/supervisor-barge-coach/flex/participant-mute-and-coach`,
       {
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
