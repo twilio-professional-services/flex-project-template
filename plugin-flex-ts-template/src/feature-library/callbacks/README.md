@@ -11,9 +11,13 @@ This feature enables the use of callbacks and voicemails as a custom task type. 
 
 # flex-user-experience
 
-the vanilla feature without any further customizations will look like this
+the vanilla feature without any further customizations will look like this for callbacks
 
 ![alt text](screenshots/flex-user-experience.gif)
+
+voicemails will look like this
+
+![alt text](screenshots/flex-user-experience-vm.gif)
 
 # setup and dependencies
 
