@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import { Action } from '../../../../../flex-hooks/states'
-import { CallbackState, INITIATE_CALLBACK } from './types';
+import { CallbackState, INITIATE_CALLBACK, REQUEUE_CALLBACK } from './types';
 
 import initialState from './initialState';
 
@@ -23,12 +23,36 @@ export default function (state = initialState, action: Action): CallbackState {
 
     case `${INITIATE_CALLBACK}_FULFILLED`: {
       const { taskSid } = action.payload as Flex.ITask;
-      const isCompletingCallbackAction = state.isCompletingCallbackAction;
+      const isCompletingCallbackAction = {...state.isCompletingCallbackAction};
       delete isCompletingCallbackAction[taskSid];
 
       return {
         ...state,
         isCompletingCallbackAction
+      };
+    }
+    
+    case `${REQUEUE_CALLBACK}_PENDING`: {
+      const { taskSid } = action.payload as Flex.ITask;
+      return {
+        ...state,
+        isRequeueingCallbackAction: {
+          ...state.isRequeueingCallbackAction,
+          [taskSid]: true
+        }
+      };
+    }
+    
+    case `${REQUEUE_CALLBACK}_REJECTED`:
+    
+    case `${REQUEUE_CALLBACK}_FULFILLED`: {
+      const { taskSid } = action.payload as Flex.ITask;
+      const isRequeueingCallbackAction = {...state.isRequeueingCallbackAction};
+      delete isRequeueingCallbackAction[taskSid];
+    
+      return {
+        ...state,
+        isRequeueingCallbackAction
       };
     }
 

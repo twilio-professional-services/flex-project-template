@@ -21,7 +21,9 @@
         }
       },
       "callbacks": {
-        "enabled": true
+        "enabled": true,
+        "allow_requeue": true,
+        "max_attempts": 3
       },
       "caller_id": {
         "enabled": true

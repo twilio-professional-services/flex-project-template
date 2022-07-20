@@ -12,68 +12,62 @@ import { ContainerProps } from './CallbackContainer'
 
 export interface OwnProps {
   task: Flex.ITask;
+  allowRequeue: boolean;
+  maxAttempts: number;
 }
 
 export type Props = ContainerProps & OwnProps;
 
 export default class CallbackComponent extends React.Component<Props> {
   render() {
+    const taskStatus = this.props.task?.taskStatus
     const { callBackData } = this.props.task?.attributes as TaskAttributes
     const timeReceived = moment(callBackData?.utcDateTimeReceived);
     const localTz = moment.tz.guess();
     const localTimeShort = timeReceived.tz(localTz).format('MM-D-YYYY, h:mm:ss a z');
-    const serverTimeShort = timeReceived.tz(callBackData?.mainTimeZone || localTz).format('MM-D-YYYY, h:mm:ss a z');
+    const serverTimeShort = 'System time: ' + timeReceived.tz(callBackData?.mainTimeZone || localTz).format('MM-D-YYYY, h:mm:ss a z');
+    const disableButtons = taskStatus !== 'assigned' || this.props.isCompletingCallbackAction[this.props.task.taskSid] || this.props.isRequeueingCallbackAction[this.props.task.taskSid];
+    const thisAttempt = callBackData?.attempts ? (Number(callBackData.attempts) + 1) : 1
 
     return (
         <span className="Twilio">
-          <h1>Contact CallBack Request</h1>
+          <h1>Contact Callback Request</h1>
           <p>A contact has requested an immediate callback.</p>
-          <h4 style={styles.itemBold}>Callback Details</h4>
-          <ul>
-            <li>
-              <div style={styles.itemWrapper}>
-                <span style={styles.item}>Contact Phone:</span>
-                <span style={styles.itemDetail}>{callBackData?.numberToCall}</span>
-              </div>
-            </li>
-            <li>&nbsp;</li>
-            <li>
-              <div style={styles.itemWrapper}>
-                <span style={styles.itemBold}>Call Reception Information</span>
-              </div>
-            </li>
-            <li>
-              <div style={styles.itemWrapper}>
-                <label style={styles.item}>Received:&nbsp;</label>
-                <Tooltip title="System call reception time" placement="right" >
-                  <Icon color="primary" style={styles.info}>
-                    info
-                  </Icon>
-                </Tooltip>
-                <label style={styles.itemDetail}>{serverTimeShort}</label>
-              </div>
-            </li>
-            <li>
-              <div style={styles.itemWrapper}>
-                <label style={styles.item}>Localized:&nbsp;</label>
-                <Tooltip title="Call time localized to agent" placement="right">
-                  <Icon color="primary" style={styles.info}>
-                    info
-                  </Icon>
-                </Tooltip>
-                <label style={styles.itemDetail}>{localTimeShort}</label>
-              </div>
-            </li>
-            <li>&nbsp;</li>
-          </ul>
+          <h2>Contact phone</h2>
+          <p>{callBackData?.numberToCall}</p>
+          <h2>Call reception time</h2>
+          <p>{localTimeShort}
+            <Tooltip title={serverTimeShort} placement="right" >
+              <Icon color="primary" style={styles.info}>
+                info
+              </Icon>
+            </Tooltip></p>
+          {
+            this.props.allowRequeue &&
+            <><h2>Callback attempt</h2>
+            <p>{thisAttempt} of {this.props.maxAttempts}</p></>
+          }
+          <p></p>
           <Button
+            disabled={disableButtons}
             style={styles.cbButton}
             variant="contained"
             color="primary"
             onClick={async () => this.props.startCall(this.props.task)}
           >
-            Place Call Now ( {callBackData?.numberToCall} )
+            Place Call Now To {callBackData?.numberToCall}
           </Button>
+          {
+            this.props.allowRequeue && thisAttempt < this.props.maxAttempts &&
+            <Button
+              disabled={disableButtons}
+              style={styles.cbButton}
+              variant="contained"
+              onClick={async () => this.props.requeueCallback(this.props.task)}
+            >
+              Retry Later
+            </Button>
+          }
         </span>
     );
   }

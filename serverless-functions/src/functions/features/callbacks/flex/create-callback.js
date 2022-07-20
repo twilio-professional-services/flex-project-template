@@ -1,3 +1,4 @@
+const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 const ParameterValidator = require(Runtime.getFunctions()['functions/common/helpers/parameter-validator'].path);
 const TaskOperations = require(Runtime.getFunctions()['functions/common/twilio-wrappers/taskrouter'].path);
 
@@ -39,6 +40,7 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
         attempts: retryAttempt,
         conversation_id,
         message,
+        utcDateTimeReceived
       } = event;
 
       // use assigned values or use defaults
@@ -58,7 +60,7 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
           numberToCallFrom,
           attempts,
           mainTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          utcDateTimeReceived: new Date()
+          utcDateTimeReceived: utcDateTimeReceived || new Date()
         },
         direction: "inbound",
         conversations: {

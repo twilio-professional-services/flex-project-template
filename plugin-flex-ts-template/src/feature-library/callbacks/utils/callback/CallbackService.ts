@@ -1,7 +1,28 @@
 import * as Flex from '@twilio/flex-ui';
 import ApiService from '../../../../utils/serverless/ApiService';
+import { EncodedParams } from '../../../../types/serverless';
 import { TaskAttributes } from '../../../../types/task-router/Task';
 import { CallbackNotification } from '../../flex-hooks/notifications/Callback';
+
+export interface CreateCallbackResponse {
+  success: boolean,
+  taskSid: string,
+  data: string,
+  message: string
+}
+
+export interface CreateCallbackRequest {
+  numberToCall: string,
+  numberToCallFrom: string,
+  flexFlowSid: string,
+  workflowSid?: string,
+  timeout?: number,
+  priority?: number,
+  attempts?: number,
+  conversation_id?: string,
+  message?: string,
+  utcDateTimeReceived?: Date
+};
 
 class CallbackService extends ApiService {
 
@@ -62,6 +83,60 @@ class CallbackService extends ApiService {
     }
     return task;
   }
+  
+  async requeueCallback(task: Flex.ITask): Promise<Flex.ITask> {
+    try {
+      let request: CreateCallbackRequest = {
+        numberToCall: task.attributes.callBackData.numberToCall,
+        numberToCallFrom: task.attributes.callBackData.numberToCallFrom,
+        flexFlowSid: task.attributes.flow_execution_sid,
+        workflowSid: task.workflowSid,
+        timeout: task.timeout,
+        priority: task.priority,
+        attempts: task.attributes.callBackData.attempts ? Number(task.attributes.callBackData.attempts) + 1 : 1,
+        conversation_id: task.taskSid,
+        message: task.attributes.message,
+        utcDateTimeReceived: task.attributes.callBackData.utcDateTimeReceived ? task.attributes.callBackData.utcDateTimeReceived : new Date()
+      }
+      
+      let response = await this.#createCallback(request);
+      
+      if (response.success) {
+        await Flex.Actions.invokeAction("WrapupTask", { task });
+      }
+    } catch (error) {
+      console.log('Unable to requeue callback', error);
+    }
+    
+    return task;
+  }
+  
+  #createCallback = async (request: CreateCallbackRequest): Promise<CreateCallbackResponse> => {
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(this.manager.user.token),
+      numberToCall: encodeURIComponent(request.numberToCall),
+      numberToCallFrom: encodeURIComponent(request.numberToCallFrom),
+      flexFlowSid: encodeURIComponent(request.numberToCallFrom),
+      workflowSid: request.workflowSid ? encodeURIComponent(request.workflowSid) : undefined,
+      timeout: request.timeout ? encodeURIComponent(request.timeout) : undefined,
+      priority: request.priority ? encodeURIComponent(request.priority) : undefined,
+      attempts: request.attempts ? encodeURIComponent(request.attempts) : undefined,
+      conversation_id: request.conversation_id ? encodeURIComponent(request.conversation_id) : undefined,
+      message: request.message ? encodeURIComponent(request.message) : undefined,
+      utcDateTimeReceived: request.utcDateTimeReceived ? encodeURIComponent(request.utcDateTimeReceived.toString()) : undefined,
+    };
+  
+    const response = await this.fetchJsonWithReject<CreateCallbackResponse>(
+          `https://${this.serverlessDomain}/functions/features/callbacks/flex/create-callback`,
+          {
+              method: 'post',
+              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+              body: this.buildBody(encodedParams)
+          }
+      );
+    
+    return response;
+  };
 }
 
 export default new CallbackService();
