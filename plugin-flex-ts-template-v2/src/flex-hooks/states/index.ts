@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import { combineReducers, Action as ReduxAction } from 'redux';
+import { OutboundCallerIDSelectorState, OutboundCallerIDSelectorReducer } from '../../feature-library/caller-id/flex-hooks/states/OutboundCallerIDSelector';
 
 // Register your redux store under a unique namespace
 export const reduxNamespace = 'custom';
@@ -15,9 +16,11 @@ export interface Action extends ReduxAction {
 export interface AppState {
   flex: Flex.AppState;
   [reduxNamespace]: {
+    outboundCallerIdSelector: OutboundCallerIDSelectorState;
   };
-}
+};
 
 // Combine the reducers
 export default combineReducers({
+  outboundCallerIdSelector: OutboundCallerIDSelectorReducer,
 });

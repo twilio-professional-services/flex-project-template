@@ -21,6 +21,7 @@ export default interface Worker extends EventEmitter {
   workspaceSid: string;
 }
 
+// flex-ui also defines this interface, but doesn't include our custom attributes.
 export interface WorkerAttributes {
   SID: string;
   contact_uri: string;
