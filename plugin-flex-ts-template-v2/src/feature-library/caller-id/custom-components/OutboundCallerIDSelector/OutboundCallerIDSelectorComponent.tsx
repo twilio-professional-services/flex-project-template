@@ -11,10 +11,12 @@ import { Select, Option } from '@twilio-paste/core/select';
 const OutboundCallerIDSelectorComponent = () => {
   const dispatch = useDispatch();
   
-  const isFetchingPhoneNumbers = useSelector((state: AppState) => state[reduxNamespace].outboundCallerIdSelector.isFetchingPhoneNumbers);
-  const fetchingPhoneNumbersFailed = useSelector((state: AppState) => state[reduxNamespace].outboundCallerIdSelector.fetchingPhoneNumbersFailed);
-  const phoneNumbers = useSelector((state: AppState) => state[reduxNamespace].outboundCallerIdSelector.phoneNumbers);
-  const selectedCallerId = useSelector((state: AppState) => state[reduxNamespace].outboundCallerIdSelector.selectedCallerId);
+  const {
+    isFetchingPhoneNumbers,
+    fetchingPhoneNumbersFailed,
+    phoneNumbers,
+    selectedCallerId
+  } = useSelector((state: AppState) => state[reduxNamespace].outboundCallerIdSelector);
   
   const [helpText, setHelpText] = useState("Loading phone numbers...");
   const [selectOptions, setSelectOptions] = useState([] as PhoneNumberItem[]);
