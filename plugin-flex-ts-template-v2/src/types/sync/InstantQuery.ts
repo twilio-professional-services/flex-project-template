@@ -1,8 +1,8 @@
-import { WorkerAttributes } from '../task-router/Worker';
+import { CustomWorkerAttributes } from '../task-router/Worker';
 
 export interface Worker {
   activity_name: string;
-  attributes: WorkerAttributes;
+  attributes: CustomWorkerAttributes;
   date_activity_changed?: string;
   date_updated: string;
   friendly_name: string;
