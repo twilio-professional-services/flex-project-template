@@ -1,3 +1,4 @@
+import { WorkerAttributes } from '@twilio/flex-ui';
 import { EventEmitter } from 'events';
 import Activity from './Activity';
 import Reservation from './Reservation';
@@ -9,7 +10,7 @@ export default interface Worker extends EventEmitter {
   accountSid: string;
   activities: Map<string, Activity>;
   activity: Activity;
-  attributes: WorkerAttributes;
+  attributes: CustomWorkerAttributes;
   channels: Map<string, Channel>;
   connectActivitySid: string;
   dateCreated: Date;
@@ -21,22 +22,13 @@ export default interface Worker extends EventEmitter {
   workspaceSid: string;
 }
 
-// flex-ui also defines this interface, but doesn't include our custom attributes.
-export interface WorkerAttributes {
+export interface CustomWorkerAttributes extends WorkerAttributes {
   SID: string;
   contact_uri: string;
-  disabled_skills?: {
-    levels: { [skillName: string]: number };
-    skills: string[];
-  };
   image_url: string;
   roles: ['admin' | 'supervisor' | 'agent'];
-  routing?: {
-    levels: { [skillName: string]: number };
-    skills: string[];
-  };
 
-  // used to overide name seen on webchat
+  // used to override name seen on webchat
   public_identity: string;
 
   //caller-id feature

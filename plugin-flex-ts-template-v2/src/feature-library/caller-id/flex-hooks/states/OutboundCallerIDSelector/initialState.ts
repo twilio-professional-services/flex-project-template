@@ -1,8 +1,8 @@
 import { Manager } from '@twilio/flex-ui';
 import { OutboundCallerIDSelectorState } from './types';
-import { WorkerAttributes } from '../../../../../types/task-router/Worker'
+import { CustomWorkerAttributes } from '../../../../../types/task-router/Worker'
 
-const  { selectedCallerId }  = Manager.getInstance().workerClient?.attributes as WorkerAttributes;
+const  { selectedCallerId }  = Manager.getInstance().workerClient?.attributes as CustomWorkerAttributes;
 
 const initialState: OutboundCallerIDSelectorState = {
   isFetchingPhoneNumbers: false,
