@@ -1,14 +1,14 @@
 import * as Flex from '@twilio/flex-ui';
 import { LiveQuery } from 'twilio-sync/lib/livequery';
-import { Worker } from '../../../types/sync/LiveQuery';
-import { LiveQueryWorkerAddedEvent, LiveQueryWorkerUpdatedEvent, LiveQueryWorkerRemovedEvent } from './types';
+import { LiveQueryAddedEvent, LiveQueryUpdatedEvent, LiveQueryRemovedEvent } from './types';
 
 export * from './types';
 
-export default abstract class WorkerLiveQueryHelper {
+export default abstract class LiveQueryHelper<T> {
+  readonly indexName: string;
   readonly queryExpression: string;
   protected manager = Flex.Manager.getInstance();
-  #items?: { [workerSid:string]: Worker };
+  #items?: { [key:string]: T };
   #liveQuery?: LiveQuery;
   #initializing?: Promise<LiveQuery>;
   protected get liveQuery() {
@@ -19,16 +19,17 @@ export default abstract class WorkerLiveQueryHelper {
   }
 
   // Functions derived classes can implement to hook into lifecycle events
-  protected onItemAdded?(event: LiveQueryWorkerAddedEvent): void;
-  protected onItemUpdated?(event: LiveQueryWorkerUpdatedEvent): void;
-  protected onItemRemoved?(event: LiveQueryWorkerRemovedEvent): void;
+  protected onItemAdded?(event: LiveQueryAddedEvent<T>): void;
+  protected onItemUpdated?(event: LiveQueryUpdatedEvent<T>): void;
+  protected onItemRemoved?(event: LiveQueryRemovedEvent): void;
 
   // For queryExpression syntax, see: https://www.twilio.com/docs/sync/live-query
-  constructor(queryExpression: string) {
+  constructor(indexName: string, queryExpression: string) {
+    this.indexName = indexName;
     this.queryExpression = queryExpression;
   }
 
-  protected async startLiveQuery(): Promise<{ [workerSid:string]: Worker }> {
+  protected async startLiveQuery(): Promise<{ [key:string]: T }> {
     await this.liveQuery;
     return this.#items || {};
   }
@@ -44,8 +45,8 @@ export default abstract class WorkerLiveQueryHelper {
 
   #initLiveQuery = async (): Promise<LiveQuery> => {
     try {
-      this.#liveQuery = await this.manager.insightsClient.liveQuery('tr-worker', this.queryExpression);
-      this.#items = this.#liveQuery.getItems() as { [workerSid:string]: Worker };
+      this.#liveQuery = await this.manager.insightsClient.liveQuery(this.indexName, this.queryExpression);
+      this.#items = this.#liveQuery.getItems() as unknown as { [key:string]: T };
       this.#liveQuery
         .on('itemUpdated', this.#onItemUpdated.bind(this))
         .on('itemRemoved', this.#onItemRemoved.bind(this));
@@ -61,19 +62,19 @@ export default abstract class WorkerLiveQueryHelper {
     }
   }
 
-  #onItemUpdated = (event: LiveQueryWorkerUpdatedEvent): void => {
+  #onItemUpdated = (event: LiveQueryUpdatedEvent<T>): void => {
     const data = { ...this.#items };
     const existingItem = Object.keys(data).includes(event.key);
     this.#items = { ...data, [event.key]: event.value };
     if (existingItem) {
       this.onItemUpdated && this.onItemUpdated(event);
     } else {
-      const addedEvent: LiveQueryWorkerAddedEvent = { ...event };
+      const addedEvent: LiveQueryAddedEvent<T> = { ...event };
       this.onItemAdded && this.onItemAdded(addedEvent);
     }
   }
 
-  #onItemRemoved = (event: LiveQueryWorkerRemovedEvent): void => {
+  #onItemRemoved = (event: LiveQueryRemovedEvent): void => {
     const data = { ...this.#items };
     delete data[event.key];
     this.#items = { ...data };
