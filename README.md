@@ -47,6 +47,7 @@ __.github__ lastly this package manages the github action workflows - with one e
 - [Override Queue Transfer Directory](plugin-flex-ts-template/src/feature-library/override-queue-transfer-directory/README.md)
 - [Salesforce Click To Dial](plugin-flex-ts-template/src/feature-library/salesforce-click-to-dial/README.md)
 - [Scrollable Activities](plugin-flex-ts-template/src/feature-library/scrollable-activities/README.md)
+- [Supervisor Barge Coach](plugin-flex-ts-template/src/feature-library/supervisor-barge-coach/README.md)
 
 
 ## local setup
