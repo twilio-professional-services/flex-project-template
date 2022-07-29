@@ -23,7 +23,10 @@ export interface UIAttributes extends FlexUIAttributes {
         rules: ActivitySkillFilterRules
       },
       callbacks: {
-        enabled: boolean
+        enabled: boolean,
+        allow_requeue: boolean,
+        max_attempts: number,
+        auto_select_task: boolean
       },
       caller_id: {
         enabled: boolean

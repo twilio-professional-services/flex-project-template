@@ -38,6 +38,12 @@ exports.handler = async function createCallbackStudio(context, event, callback) 
         attempts: retryAttempt,
         conversation_id,
         message,
+        utcDateTimeReceived,
+        recordingSid,
+        recordingUrl,
+        transcriptSid,
+        transcriptText,
+        isDeleted
       } = event;
 
       // use assigned values or use defaults
@@ -48,8 +54,8 @@ exports.handler = async function createCallbackStudio(context, event, callback) 
 
       // setup required task attributes for task
       const attributes = {
-        taskType: "callback",
-        name: `Callback: (${numberToCall})`,
+        taskType: recordingSid ? "voicemail" : "callback",
+        name: (recordingSid ? 'Voicemail' : 'Callback') + ` (${numberToCall})`,
         flow_execution_sid: flexFlowSid,
         message: message || null,
         callBackData: {
@@ -57,7 +63,12 @@ exports.handler = async function createCallbackStudio(context, event, callback) 
           numberToCallFrom,
           attempts,
           mainTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          utcDateTimeReceived: new Date()
+          utcDateTimeReceived: utcDateTimeReceived || new Date(),
+          recordingSid,
+          recordingUrl,
+          transcriptSid,
+          transcriptText,
+          isDeleted: isDeleted || false
         },
         direction: "inbound",
         conversations: {
