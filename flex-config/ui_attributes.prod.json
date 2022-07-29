@@ -1,10 +1,10 @@
 {
   "custom_data": {
-    "serverless_functions_domain": "custom-flex-extensions-serverless-4305-dev.twil.io",
+    "serverless_functions_domain": "custom-flex-extensions-serverless-1021-dev.twil.io",
     "features": {
       "activity_skill_filter": {
-        "enabled": false,
-        "filter_teams_view": false,
+        "enabled": true,
+        "filter_teams_view": true,
         "rules": {
           "WA845ba1c86cb933b0806deabb39784c66": {
             "required_skill": null,
@@ -42,8 +42,8 @@
         "enabled": true
       },
       "supervisor_barge_coach": {
-        "enabled": false,
-        "agent_coaching_panel": false,
+        "enabled": true,
+        "agent_coaching_panel": true,
         "supervisor_monitor_panel:": false
       }
     }
