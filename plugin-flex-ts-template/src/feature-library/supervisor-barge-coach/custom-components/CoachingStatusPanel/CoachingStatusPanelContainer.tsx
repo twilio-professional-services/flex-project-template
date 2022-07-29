@@ -13,6 +13,9 @@ const mapStateToProps = (state: AppState) => {
     // to manipulate the buttons
     const reduxStore = state[reduxNamespace].supervisorBargeCoach;
     const supervisorArray = reduxStore.supervisorArray;
+
+    console.log('Storing agentSyncDoc to cache');
+    localStorage.setItem('myWorkerSID',`syncDoc.${myWorkerSID}`);
     
     return {
       myWorkerSID,

@@ -2,13 +2,8 @@ import * as Flex from '@twilio/flex-ui';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { Actions as BargeCoachStatusAction, } from '../../flex-hooks/states/SupervisorBargeCoach';
 
-// Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync'
-
-// Standard Barge Coach Feature
 import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButtons'
-
-// Advancted Barge Coach Features
 import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateModeButton'
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;

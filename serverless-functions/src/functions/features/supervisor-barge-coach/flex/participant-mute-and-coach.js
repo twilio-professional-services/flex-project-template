@@ -4,6 +4,7 @@ const ConferenceOperations = require(Runtime.getFunctions()['functions/common/tw
 
 exports.handler = TokenValidator(async function participantMuteCoach(context, event, callback) {
 
+  const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
   const requiredParameters = [
     { key: 'conferenceSid', purpose: 'conference sid to target for changes' },
@@ -41,19 +42,18 @@ exports.handler = TokenValidator(async function participantMuteCoach(context, ev
 
       // If agentSid isn't null/blank, we know we are updating the conference coaching status
       if (agentSid != "") {
-        const result = await ConferenceOperations.coachToggle({context, conferenceSid, participantSid, agentSid, muted, coaching});
-        response.setStatusCode(result);
-        response.setBody({ success: result, conferenceSid })
+        const result = await ConferenceOperations.coachToggle({context, conferenceSid, participantSid, agentSid, muted, coaching, scriptName, attempts: 0});
+        response.setStatusCode(result.status);
+        response.setBody({ success: result.success, conference: result.conferenceSid })
       }
       // If the agentSid is null/blank, we know we are updating the conference muted status
       if (agentSid === "") {
-        const result = await ConferenceOperations.bargeToggle({context, conferenceSid, participantSid, muted});
-        response.setStatusCode(result);
-        response.setBody({ success: result, conferenceSid })
+        const result = await ConferenceOperations.bargeToggle({context, conferenceSid, participantSid, muted, scriptName, attempts: 0});
+        response.setStatusCode(result.status);
+        response.setBody({ success: result.success, conference: result.conferenceSid })
       }
       callback(null, response)
     } catch (error) {
-      console.log(error);
       response.setStatusCode(500);
       response.setBody({ success: false, message: error.message });
       callback(null, response);
