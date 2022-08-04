@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "## What is it? This repository provides development teams with a starting point for flex projects.",
   "scripts": {
-    "postinstall": "(cd serverless-functions && npm install && cp -n .env.local .env); (cd flex-config && npm install && cp -n .env.local .env); (cd plugin-flex-ts-template && npm install)"
+    "postinstall": "(cd serverless-functions && npm install && cp -n .env.example .env); (cd flex-config && npm install && cp -n .env.example .env); (cd plugin-flex-ts-template && npm install)"
   },
   "repository": {
     "type": "git",
