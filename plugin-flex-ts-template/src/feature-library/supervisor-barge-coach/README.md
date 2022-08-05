@@ -20,7 +20,7 @@ Coach Status Panel to the Agent's UI.  This UI change can be enabled/disabled by
 There is a private toggle to enable/disable the agent's ability to see who is coaching them  
 ![Plugin Demo](screenshots/Supervisor-Barge-Coach-Plugin-4.gif)
 
-This is also a Supervisor Monitor Panel, which gives the supervisors the ability to see if other supervisors are monitoring, coaching, or have joined (barged) the call.  **Note that the private toggle feature does apply to this feature as well.  If a Supervisor has private mode on, they will not show up in the Supervisor Monitor Panel!
+This is also a Supervisor Monitor Panel, which gives the supervisors the ability to see if other supervisors are monitoring, coaching, or have joined (barged) the call.  **Note that the private toggle feature does apply to this feature as well.  If a Supervisor has private mode on, they will not show up in the Supervisor Monitor Panel! 
 ![Plugin Demo](screenshots/Supervisor-Barge-Coach-Plugin-5.gif)
 
 
@@ -43,6 +43,12 @@ Some additional features have been added to give the ability for the agent to se
 ---
 
 ## Changelog
+
+### 1.1
+
+**August 5, 2022**
+
+- Added Supervisor Monitor Panel to the plugin
 
 ### 1.0
 
