@@ -38,10 +38,9 @@ function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.Manager
       const tasksArray = Array.from(tasksMap);
       const chatTasksArray = tasksArray.filter((array: any) => array[1].taskChannelUniqueName === 'chat');
 
-      console.log("JARED 1.5", tasksArray, chatTasksArray);
+      console.log("JARED 1.5", tasksArray, chatTasksArray, currentChatCapacity);
 
       const workerSid = manager.workerClient.sid;
-
 
       if (currentChatCapacity === 1) {
         console.log("JARED2");

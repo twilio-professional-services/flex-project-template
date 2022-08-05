@@ -110,7 +110,11 @@ class TaskRouterService extends ApiService {
 
   #updateWorkerChannel = (workerSid: string, workerChannelSid: string, capacity: number, available: boolean): Promise<UpdateWorkerChannelResponse> => {
         const encodedParams: EncodedParams = {
-			Token: encodeURIComponent(this.manager.user.token)
+			Token: encodeURIComponent(this.manager.user.token),
+      workerSid: encodeURIComponent(workerSid),
+      workerChannelSid: encodeURIComponent(workerChannelSid),
+      capacity: encodeURIComponent(capacity),
+      available: encodeURIComponent(available)
 		};
 
 		return this.fetchJsonWithReject<UpdateWorkerChannelResponse>(
