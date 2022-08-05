@@ -3,8 +3,8 @@
     "serverless_functions_domain": "custom-flex-extensions-serverless-1021-dev.twil.io",
     "features": {
       "activity_skill_filter": {
-        "enabled": true,
-        "filter_teams_view": true,
+        "enabled": false,
+        "filter_teams_view": false,
         "rules": {
           "WA845ba1c86cb933b0806deabb39784c66": {
             "required_skill": null,
@@ -47,7 +47,7 @@
       "supervisor_barge_coach": {
         "enabled": true,
         "agent_coaching_panel": true,
-        "supervisor_monitor_panel:": false
+        "supervisor_monitor_panel": true
       }
     }
   }

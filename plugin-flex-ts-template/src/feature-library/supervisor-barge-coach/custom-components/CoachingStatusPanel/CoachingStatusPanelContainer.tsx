@@ -7,12 +7,12 @@ import CoachingStatusPanelComponent, { Props } from './CoachingStatusPanelCompon
 
 // Mapping the the logged in user sid so we can snag the Sync Doc
 const mapStateToProps = (state: AppState) => {
-    const myWorkerSID = state?.flex?.worker?.worker?.sid;
+    const myWorkerSID: string = state?.flex?.worker?.worker?.sid;
   
     // Also pulling back the states from the redux store as we will use those later
     // to manipulate the buttons
     const reduxStore = state[reduxNamespace].supervisorBargeCoach;
-    const supervisorArray = reduxStore.supervisorArray;
+    const { supervisorArray } = reduxStore;
 
     console.log('Storing agentSyncDoc to cache');
     localStorage.setItem('myWorkerSID',`syncDoc.${myWorkerSID}`);

@@ -9,16 +9,14 @@ import SupervisorMonitorPanelComponent, { Props } from './SupervisorMonitorPanel
 // Mapping the agent's sid and supervisor full name
 const mapStateToProps = (state: AppState) => {
     const agentWorkerSID = state?.flex?.supervisor?.stickyWorker?.worker?.sid;
-    const supervisorFN = state?.flex?.worker?.attributes?.full_name;
   
     // Also pulling back the states from the redux store as we will use those later
     // to manipulate the buttons
     const reduxStore = state[reduxNamespace].supervisorBargeCoach;
-    const supervisorArray = reduxStore.supervisorArray;
+    const { supervisorArray } = reduxStore;
   
     return {
       agentWorkerSID,
-      supervisorFN,
       supervisorArray
     };
 };

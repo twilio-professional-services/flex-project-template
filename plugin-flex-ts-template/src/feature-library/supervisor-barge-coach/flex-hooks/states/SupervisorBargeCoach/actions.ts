@@ -1,10 +1,6 @@
 import { Action } from '../../../../../flex-hooks/states'
 import { ACTION_SET_BARGE_COACH_STATUS } from './types';
 
-
-// Provide task to "pending" action as payload
-// https://github.com/pburtchaell/redux-promise-middleware/blob/main/docs/guides/optimistic-updates.md
-
 class Actions {
 
   public static setBargeCoachStatus = (status: Object):Action => {
