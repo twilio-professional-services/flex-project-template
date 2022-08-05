@@ -33,6 +33,17 @@ export default class CoachingStatusPanel extends React.Component<Props> {
         doc.on("updated", (updatedDoc: string) => {
           if (doc.value.data.supervisors != null) {
             supervisorArray = [...doc.value.data.supervisors];
+
+            // Current verion of this feature will only show the Agent they are being coached
+            // This could be updated by removing the below logic and including Monitoring and Joined (barged)
+            // Supervisors
+            for(let i = 0; i < supervisorArray.length; i++){ 
+                                    
+              if (supervisorArray[i].status == "is Monitoring" || supervisorArray[i].status == "has Joined") { 
+                  supervisorArray.splice(i, 1); 
+                  i--; 
+              }
+            }
           } else {
             supervisorArray = [];
           }
@@ -50,7 +61,7 @@ export default class CoachingStatusPanel extends React.Component<Props> {
   }
   render() {
     
-    const { supervisorArray }: any = this.props;
+    const { supervisorArray } = this.props;
     this.syncUpdates();
 
     // If the supervisor array has value in it, that means someone is coaching

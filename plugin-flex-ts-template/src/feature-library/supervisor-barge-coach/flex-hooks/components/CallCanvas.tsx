@@ -5,7 +5,7 @@ import { cleanStateAndSyncUponAgentHangUp } from '../actions/reservation';
 import { SyncDoc } from '../../utils/sync/Sync'
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled, agent_coaching_panel} = custom_data.features.supervisor_barge_coach;
+const { enabled, agent_coaching_panel } = custom_data.features.supervisor_barge_coach;
 
 
 export function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Flex.Manager) {
@@ -18,7 +18,6 @@ export function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Fl
 
     // If myWorkerSID exists, clear the Agent Sync Doc to account for the refresh
     const myWorkerSID = localStorage.getItem('myWorkerSID');
-    console.warn("Agent Sync Doc =", myWorkerSID);
     if(myWorkerSID != null) {
       SyncDoc.clearSyncDoc(myWorkerSID);
     }
