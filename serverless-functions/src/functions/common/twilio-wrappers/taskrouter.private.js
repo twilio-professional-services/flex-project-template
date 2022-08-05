@@ -1,4 +1,4 @@
-const { merge, isString, isObject, isNumber } = require("lodash");
+const { merge, isString, isObject, isNumber, isBoolean } = require("lodash");
 
 const retryHandler = (require(Runtime.getFunctions()['functions/common/twilio-wrappers/retry-handler'].path)).retryHandler;
 
@@ -397,4 +397,57 @@ exports.getQueues = async function getQueues(parameters) {
             arguments.callee
         )
     }
+}
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {string} parameters.scriptName the name of the top level lambda function 
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @returns {object} worker channel capacity object
+ * @description the following method is used to robustly update 
+ *   worker channel capacity
+ */
+ exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
+
+  const { scriptName, context, attempts, workerSid, workerChannelSid, capacity, available } = parameters;
+
+  if(!isNumber(attempts))
+      throw "Invalid parameters object passed. Parameters must contain the number of attempts";
+  if(!isString(scriptName))
+      throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
+  if(!isObject(context))
+      throw "Invalid parameters object passed. Parameters must contain context object";
+  if(!isString(workerSid))
+      throw "Invalid parameters object passed. Parameters must contain workerSid string";
+  if(!isString(workerChannelSid))
+      throw "Invalid parameters object passed. Parameters must contain workerChannelSid string";
+  if(!isNumber(capacity))
+      throw "Invalid parameters object passed. Parameters must contain capacity number";
+  if(!isBoolean(available))
+      throw "Invalid parameters object passed. Parameters must contain available boolean";
+
+
+  try {
+
+      const client = context.getTwilioClient();
+      const workerChannelCapacity = await client.taskrouter
+          .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+          .workers(workerSid)
+          .workerChannels(workerChannelSid)
+          .update({capacity, available})
+
+      return { 
+          success: true, 
+          status: 200, 
+          workerChannelCapacity
+      }
+
+  } catch (error) {
+      return retryHandler(
+          error, 
+          parameters,
+          arguments.callee
+      )
+  }
 }
