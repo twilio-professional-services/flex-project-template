@@ -56,14 +56,16 @@ class TaskRouterService extends ApiService {
 		const response = await this.#getQueues();
     if(response.success) queues = response.queues;
 		return queues;
-    }
+   
+	}
 
-    async updateWorkerChannel(workerSid: string, workerChannelSid: string, capacity: number, available: boolean): Promise<Boolean> {
+  async updateWorkerChannel(workerSid: string, workerChannelSid: string, capacity: number, available: boolean): Promise<Boolean> {
 
 		const result = await this.#updateWorkerChannel(workerSid, workerChannelSid, capacity, available)
 
 		return result.success;
-	}
+
+  }
 
 	#updateTaskAttributes = (taskSid: string, attributesUpdate: string): Promise<UpdateTaskAttributesResponse> => {
 
@@ -106,7 +108,7 @@ class TaskRouterService extends ApiService {
 	};
 
 
-    #updateWorkerChannel = (workerSid: string, workerChannelSid: string, capacity: number, available: boolean): Promise<UpdateWorkerChannelResponse> => {
+  #updateWorkerChannel = (workerSid: string, workerChannelSid: string, capacity: number, available: boolean): Promise<UpdateWorkerChannelResponse> => {
         const encodedParams: EncodedParams = {
 			Token: encodeURIComponent(this.manager.user.token)
 		};
