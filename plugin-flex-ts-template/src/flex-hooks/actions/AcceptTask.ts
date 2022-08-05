@@ -25,36 +25,33 @@ function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.Manager
     const workerChanneslMap = manager.workerClient.channels;
     const tasksMap = manager.store.getState().flex.worker.tasks;
 
-    const workerChannelsArray = Array.from(workerChanneslMap);
-    const chatChannelArrayItem = workerChannelsArray.find(([string, channel]) => {
-      return channel?.taskChannelUniqueName === 'chat'});
-    const chatChannel = chatChannelArrayItem? chatChannelArrayItem[1] as Channel : null
+    const workerChannelsArray = workerChanneslMap.values();
+    const chatChannel: Channel | undefined = workerChannelsArray.find((channel: Channel) => {
+        return channel?.taskChannelUniqueName === 'chat'
+    });
     
-    console.log("JARED1", chatChannel);
-    if(chatChannel) {
-      const currentChatCapacity = chatChannel.capacity;
-      const workerChannelSid = chatChannel.sid;
+    if (!chatChannel) {
+        return;
+    }
+      
+    const currentChatCapacity = chatChannel.capacity;
+    const workerChannelSid = chatChannel.sid;
 
-      const tasksArray = Array.from(tasksMap);
-      const chatTasksArray = tasksArray.filter((array: any) => array[1].taskChannelUniqueName === 'chat');
+    const tasksArray = tasksMap.values();
+    const chatTasks: Flex.ITask[] = tasksArray.filter((task: Flex.ITask) => task.taskChannelUniqueName === 'chat');
 
-      console.log("JARED 1.5", tasksArray, chatTasksArray, currentChatCapacity);
+    const workerSid = manager.workerClient.sid;
 
-      const workerSid = manager.workerClient.sid;
+    if (currentChatCapacity === 1) {
+        // we're assuming chat capacity has been artificially reduced
+        // reset it to the desired max value
+        TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 2, true);
+    }
 
-      if (currentChatCapacity === 1) {
-        console.log("JARED2");
-          // we're assuming chat capacity has been artificially reduced
-          // reset it to the desired max value
-          TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 2, true);
-      }
-
-      if (chatTasksArray.length > 1 && chatTasksArray.length === currentChatCapacity) {
-        console.log("JARED3");
-          // we're saturated
-          // reduce capacity on chat channel to 1
-          TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 1, true);
-      }
+    if (chatTasks.length > 1 && chatTasks.length === currentChatCapacity) {
+        // we're saturated
+        // reduce capacity on chat channel to 1
+        TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 1, true);
     }
 
     return;
