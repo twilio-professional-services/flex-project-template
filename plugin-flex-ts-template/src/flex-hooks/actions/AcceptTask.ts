@@ -25,8 +25,8 @@ function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.Manager
     const workerChanneslMap = manager.workerClient.channels;
     const tasksMap = manager.store.getState().flex.worker.tasks;
 
-    const workerChannelsArray = workerChanneslMap.values();
-    const chatChannel: Channel | undefined = workerChannelsArray.find((channel: Channel) => {
+    const workerChannelsArray = Array.from(workerChanneslMap.values());
+    const chatChannel: Channel | undefined = workerChannelsArray.find((channel) => {
         return channel?.taskChannelUniqueName === 'chat'
     });
     
