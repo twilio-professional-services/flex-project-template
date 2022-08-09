@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
-import { Channel } from 'types/task-router';
+import { TaskHelper } from '@twilio/flex-ui';
+import { Channel, Reservation } from '../../types/task-router';
 import TaskRouterService from '../../utils/serverless/TaskRouter/TaskRouterService';
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
@@ -17,6 +18,29 @@ function replaceAcceptTask(flex: typeof Flex, manager: Flex.Manager) {
 
 function afterAcceptTask(flex: typeof Flex, manager: Flex.Manager) {
   omniChannelChatCapacityManager(flex, manager);
+  autoRejectOutstandingReservationsForOpposingChannel(flex, manager);
+}
+
+function autoRejectOutstandingReservationsForOpposingChannel(flex: typeof Flex, manager: Flex.Manager){
+  
+  Flex.Actions.addListener('afterAcceptTask', async (payload, abortFunction) => {
+
+    const task = payload.task || TaskHelper.getTaskByTaskSid(payload.sid);
+    const acceptedTaskChannel = task.taskChannelUniqueName;
+
+    const reservationMap = manager.workerClient.reservations;
+    reservationMap.forEach((reservation) => {
+      const status = reservation.status;
+      const reservationChannel = reservation.task.taskChannelUniqueName;
+
+      if(status === 'pending' && reservationChannel != acceptedTaskChannel){
+          reservation.reject();
+      }
+    })
+ 
+    return;
+  })
+
 }
 
 function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.Manager) {
