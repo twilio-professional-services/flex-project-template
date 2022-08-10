@@ -21,6 +21,9 @@ function afterAcceptTask(flex: typeof Flex, manager: Flex.Manager) {
   autoRejectOutstandingReservationsForOpposingChannel(flex, manager);
 }
 
+// this function or its equivalent would be required if taskrouter-workflow 
+// expressions are not used to ensure multiple reservations across channels 
+// are prevented
 function autoRejectOutstandingReservationsForOpposingChannel(flex: typeof Flex, manager: Flex.Manager){
   
   Flex.Actions.addListener('afterAcceptTask', async (payload, abortFunction) => {
@@ -43,6 +46,10 @@ function autoRejectOutstandingReservationsForOpposingChannel(flex: typeof Flex, 
 
 }
 
+
+// this function is required for managing capacity between tasks
+// to ensure chats are drained, freeing up the agent for taskrouter
+// to decide whether they should work a voice or chat task next
 function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.Manager) {
   
   Flex.Actions.addListener('afterAcceptTask', async (payload, abortFunction) => {
