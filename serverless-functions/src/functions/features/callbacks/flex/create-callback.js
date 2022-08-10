@@ -45,7 +45,8 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
         recordingUrl,
         transcriptSid,
         transcriptText,
-        isDeleted
+        isDeleted,
+        taskChannel: overriddenTaskChannel
       } = event;
 
       // use assigned values or use defaults
@@ -53,6 +54,7 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
       const timeout = overriddenTimeout || 86400;
       const priority = overriddenPriority || 0;
       const attempts = retryAttempt || 0;
+      const taskChannel = overriddenTaskChannel || "voice"
 
       // setup required task attributes for task
       const attributes = {
@@ -78,7 +80,7 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
         }
       }
 
-      const result = await TaskOperations.createTask({scriptName, context, workflowSid, taskChannel: "voice", attributes, priority, timeout, attempts: 0});
+      const result = await TaskOperations.createTask({scriptName, context, workflowSid, taskChannel, attributes, priority, timeout, attempts: 0});
       response.setStatusCode(result.status);
       response.setBody({ success: result.success, taskSid: result.taskSid })
       callback(null, response)
