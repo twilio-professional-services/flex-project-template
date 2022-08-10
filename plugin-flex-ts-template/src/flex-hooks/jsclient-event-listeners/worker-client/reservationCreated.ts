@@ -3,9 +3,10 @@ import { Reservation } from '../../../types/task-router';
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   (manager.workerClient).on('reservationCreated', (reservation: Reservation) => {
-  //autoAcceptVoiceTask(flex, manager, reservation);
+    autoAcceptReservation(flex, manager, reservation);
   });
 }
+
 
 function autoAcceptReservation(flex: typeof Flex, manager: Flex.Manager, reservation: Reservation) {
   const reservationMap = manager.workerClient.reservations;
@@ -15,22 +16,22 @@ function autoAcceptReservation(flex: typeof Flex, manager: Flex.Manager, reserva
   // if it was, TaskRouter assigned this first so its the most
   // important, accept it.
   if(firstReservation.sid === reservation.sid) {
-    autoAcceptTask(flex, manager, reservation);
+    autoAcceptReservationTask(reservation);
   } 
   // otherwise if the reservation is on the same channel as the first
   // reservation we also want to auto accept
   else if (reservation.task.taskChannelUniqueName == firstReservation.task.taskChannelUniqueName){
-    autoAcceptTask(flex, manager, reservation);
+    autoAcceptReservationTask(reservation);
   }
   // else do nothing and let auto accept check for open
   // reservations and dismiss them
 }
 
 
-function autoAcceptTask(flex: typeof Flex, manager: Flex.Manager, reservation: Reservation) {
+function autoAcceptReservationTask(reservation: Reservation) {
   const { sid, task: { taskChannelUniqueName, transfers, attributes } } = reservation;
 
-    // Auto select the voice task
+    // Auto select the task
     Flex.Actions.invokeAction('SelectTask', { sid });
 
     if (((transfers.incoming !== undefined && transfers.incoming !== null) || attributes.direction !== 'outbound')) {

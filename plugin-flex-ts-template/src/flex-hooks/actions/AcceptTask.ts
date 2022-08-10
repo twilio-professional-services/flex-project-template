@@ -61,8 +61,8 @@ function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.Manager
     const currentChatCapacity = chatChannel.capacity;
     const workerChannelSid = chatChannel.sid;
 
-    const tasksArray = tasksMap.values();
-    const chatTasks: Flex.ITask[] = tasksArray.filter((task: Flex.ITask) => task.taskChannelUniqueName === 'chat');
+    const tasksArray = Array.from(tasksMap.values());
+    const chatTasks: Array<any>[] | any = tasksArray.filter((task: any) => task.taskChannelUniqueName === 'chat');
 
     const workerSid = manager.workerClient.sid;
 
