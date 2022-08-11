@@ -40,8 +40,6 @@ export function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.
   
   if(!enabled) return;
 
-  console.log("JARED I AM ENABLEDD");
-
   Flex.Actions.addListener('afterAcceptTask', async (payload, abortFunction) => {
     const workerChanneslMap = manager.workerClient.channels;
     const tasksMap = manager.store.getState().flex.worker.tasks;

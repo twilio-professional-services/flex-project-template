@@ -40,16 +40,14 @@ export function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.
   
   if(!enabled) return;
 
-  console.log("JARED I AM ENABLEDD");
-
-  Flex.Actions.addListener('afterAcceptTask', async (payload, abortFunction) => {
-    const workerChanneslMap = manager.workerClient.channels;
+  Flex.Actions.addListener('afterAcceptTask', async () => {
+    const workerChanneslMap = manager?.workerClient?.channels;
     const tasksMap = manager.store.getState().flex.worker.tasks;
 
-    const workerChannelsArray = Array.from(workerChanneslMap.values());
-    const chatChannel: Channel | undefined = workerChannelsArray.find((channel) => {
+    const workerChannelsArray = workerChanneslMap?  Array.from(workerChanneslMap.values()) : null;
+    const chatChannel: Channel | undefined = workerChannelsArray ? workerChannelsArray.find((channel) => {
         return channel?.taskChannelUniqueName === 'chat'
-    });
+    }) : undefined;
     
     if (!chatChannel) {
         return;
@@ -62,7 +60,7 @@ export function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.
     const chatTasks: Array<any>[] | any = tasksArray.filter((task: any) => {
       return task.taskChannelUniqueName === 'chat'});
 
-    const workerSid = manager.workerClient.sid;
+    const workerSid = manager?.workerClient?.sid;
 
     if (currentChatCapacity === 1 && chatTasks.length < 2) {
         // we're assuming chat capacity has been artificially reduced
