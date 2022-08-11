@@ -5,7 +5,7 @@ import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { SyncDoc } from '../../utils/sync/Sync'
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled } = custom_data.features.supervisor_barge_coach;
+const { enabled, agent_coaching_panel, supervisor_monitor_panel } = custom_data.features.supervisor_barge_coach;
 
 export const enableBargeCoachButtonsUponMonitor = async (flex: typeof Flex, manager: Flex.Manager) => {
 
@@ -21,8 +21,19 @@ export const enableBargeCoachButtonsUponMonitor = async (flex: typeof Flex, mana
             enableBargeinButton: true,
             muted: true 
         }));
-    });
 
+        // If the Supervisor Monitor Panel feature is enabled, we want to update the Sync Doc that we are monitoring
+        // However we do not want to if privateMode is enabled by the Supervisor
+        if (!supervisor_monitor_panel) return;
+        const privateMode = manager.store.getState().custom?.supervisorBargeCoach?.privateMode;
+        if (privateMode) return;
+
+        const myWorkerSID = manager.store.getState().flex?.worker?.worker?.sid;
+        const agentWorkerSID = manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
+        const supervisorFN = manager.store.getState().flex?.worker?.attributes?.full_name;
+        const conferenceSID = payload.task?.conference?.conferenceSid;
+        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSID, myWorkerSID, supervisorFN, "is Monitoring", "add");
+    });
 }
 
 export const disableBargeCoachButtonsUponMonitor = async (flex: typeof Flex, manager: Flex.Manager) => {
@@ -38,13 +49,14 @@ export const disableBargeCoachButtonsUponMonitor = async (flex: typeof Flex, man
             enableBargeinButton: false,
             muted: true 
         }));
-        // Capture some info so we can remove the supervisor from the Sync Doc
+
+        // If the Agent Coaching Panel and Supervisor Monitor Panel are disabled, we can skip otherwise
+        // We need to update the Sync Doc to remove the Supervisor after they unmonitor the call
+        if (!agent_coaching_panel && !supervisor_monitor_panel) return;
+
+        const myWorkerSID = manager.store.getState().flex?.worker?.worker?.sid;
         const agentWorkerSID = manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
         const supervisorFN = manager.store.getState().flex?.worker?.attributes?.full_name;
-        // Sending the agentWorkerSID so we know which Sync Doc to update, the Supervisor's Full Name, and the remove status
-        // We don't care about the second or forth section in here as we are removing the Supervisor in this case
-        // Typcially we would pass in the conferenceSID and what the supervisor is doing (see SupervisorBargeCoachButton.js if you wish to see that in use)
-        SyncDoc.initSyncDoc(agentWorkerSID, "", supervisorFN, "", "remove");
+        SyncDoc.initSyncDoc(agentWorkerSID, "", myWorkerSID, supervisorFN, "", "remove");
     });
-
 }

@@ -8,7 +8,7 @@ const initialState: SupervisorBargeCoachState = {
     barge: false,
     enableBargeinButton: false,
     supervisorArray: [],
-    coachingStatusPanel: true
+    privateMode: false
 };
 
 export default initialState;

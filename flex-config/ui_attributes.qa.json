@@ -47,7 +47,7 @@
       "supervisor_barge_coach": {
         "enabled": true,
         "agent_coaching_panel": true,
-        "supervisor_monitor_panel:": false
+        "supervisor_monitor_panel:": true
       },
       "omni_channel_capacity_management": {
         "enabled": true

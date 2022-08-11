@@ -25,12 +25,10 @@ export default class SupervisorBargeCoachButton extends React.Component<Props> {
   // or clicks monitor/un-monitor multiple times, it still confirms that
   // we allow the correct user to barge-in on the call
   bargeHandleClick = () => {
-    const { task }: any = this.props;
+    const { task, muted, coaching, agent_coaching_panel, agentWorkerSID ,myWorkerSID, supervisorFN, privateMode }: any = this.props;
     const conference = task && task.conference;
     const conferenceSid: string = conference?.conferenceSid;
-    const muted = this.props.muted;
     const conferenceChildren: any[] = conference?.source?.children || [];
-    const coaching = this.props.coaching;
 
     // Checking the conference within the task for a participant with the value "supervisor", 
     // is their status "joined", reason for this is every time you click monitor/unmonitor on a call
@@ -39,7 +37,7 @@ export default class SupervisorBargeCoachButton extends React.Component<Props> {
     // which we pull from mapStateToProps at the bottom of this js file
     const supervisorParticipant = conferenceChildren.find(p => p.value.participant_type === 'supervisor' 
       && p.value.status === 'joined' 
-      && this.props.myWorkerSID === p.value.worker_sid);
+      && myWorkerSID === p.value.worker_sid);
     const participantSid = supervisorParticipant.key;
     console.log(`Current supervisorSID = ${supervisorParticipant.key}`);
 
@@ -61,11 +59,23 @@ export default class SupervisorBargeCoachButton extends React.Component<Props> {
           muted: false, 
           barge: false
         });
+        // If agent_coaching_panel is true (enabled), proceed
+        // otherwise we will not update to the Sync Doc
+        if (agent_coaching_panel && !privateMode) {
+          // Updating the Sync Doc to reflect that we are no longer barging and back into Monitoring
+          SyncDoc.initSyncDoc(agentWorkerSID, conferenceSid, myWorkerSID, supervisorFN, "is Coaching", "update");
+        }
       } else {
         this.props.setBargeCoachStatus({ 
           muted: false,
           barge: true
         });
+        // If agent_coaching_panel is true (enabled), proceed
+        // otherwise we will not update to the Sync Doc
+        if (agent_coaching_panel && !privateMode) {
+          // Updating the Sync Doc to reflect that we are no longer barging and back into Monitoring
+          SyncDoc.initSyncDoc(agentWorkerSID, conferenceSid, myWorkerSID, supervisorFN, "has Joined", "update");
+        }
       }
     } else {
       BargeCoachService.updateParticipantBargeCoach(conferenceSid, participantSid, "", true, coaching);
@@ -90,10 +100,9 @@ export default class SupervisorBargeCoachButton extends React.Component<Props> {
   // we allow the correct worker to coach on the call
 
   coachHandleClick = () => {
-    const { task }: any = this.props;
+    const { task, coaching, agent_coaching_panel, agentWorkerSID ,myWorkerSID, supervisorFN, privateMode }: any = this.props;
     const conference = task && task.conference;
     const conferenceSid: string = conference?.conferenceSid;
-    const coaching = this.props.coaching;
     const conferenceChildren: any[] = conference?.source?.children || [];
 
     // Checking the conference within the task for a participant with the value "supervisor", 
@@ -103,7 +112,7 @@ export default class SupervisorBargeCoachButton extends React.Component<Props> {
     // which we pull from mapStateToProps at the bottom of this js file
     const supervisorParticipant = conferenceChildren.find(p => p.value.participant_type === 'supervisor' 
       && p.value.status === 'joined' 
-      && this.props.myWorkerSID === p.value.worker_sid);
+      && myWorkerSID === p.value.worker_sid);
       const participantSid = supervisorParticipant.key;
     console.log(`Current supervisorSID = ${supervisorParticipant?.key}`);
 
@@ -130,8 +139,13 @@ export default class SupervisorBargeCoachButton extends React.Component<Props> {
         muted: true,
         barge: false
       });
-      // Updating the Sync Doc to reflect that we are no longer coaching and back into Monitoring
-      SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSid, this.props.supervisorFN, "is Monitoring", "remove");
+
+      // If agent_coaching_panel is true (enabled), proceed
+      // otherwise we will not update to the Sync Doc
+      if (agent_coaching_panel && !privateMode) {
+        // Updating the Sync Doc to reflect that we are no longer coaching and back into Monitoring
+        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSid, myWorkerSID, supervisorFN, "is Monitoring", "update");
+      }
 
     } else {
       BargeCoachService.updateParticipantBargeCoach(conferenceSid, participantSid, agentSid, false, true);
@@ -141,12 +155,11 @@ export default class SupervisorBargeCoachButton extends React.Component<Props> {
         barge: false 
       });
 
-      // If coachingStatusPanel is true (enabled), proceed
-      // otherwise we will not subscribe to the Sync Doc
-      const coachingStatusPanel = this.props.coachingStatusPanel;
-      if (coachingStatusPanel) {
+      // If agent_coaching_panel is true (enabled), proceed
+      // otherwise we will not update to the Sync Doc
+      if (agent_coaching_panel && !privateMode) {
         // Updating the Sync Doc to reflect that we are now coaching the agent
-      SyncDoc.initSyncDoc(this.props.agentWorkerSID, conferenceSid, this.props.supervisorFN, "is Coaching", "add");
+        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSid, myWorkerSID, supervisorFN, "is Coaching", "update");
       }
     }
   }
@@ -154,11 +167,7 @@ export default class SupervisorBargeCoachButton extends React.Component<Props> {
   // Render the coach and barge-in buttons, disable if the call isn't live or
   // if the supervisor isn't monitoring the call, toggle the icon based on coach and barge-in status
   render() {
-    const muted = this.props.muted;
-    const barge = this.props.barge;
-    const enableBargeinButton = this.props.enableBargeinButton;
-    const coaching = this.props.coaching;
-    const enableCoachButton = this.props.enableCoachButton;
+    const { muted, barge, enableBargeinButton, coaching, enableCoachButton } = this.props;
     const task: any = this.props.task;
 
     const isLiveCall = TaskHelper.isLiveCall(task);

@@ -7,23 +7,25 @@ import SupervisorPrivateModeButtonComponent, { Props } from './SupervisorPrivate
 
 // Mapping the agent's sid, supervisor full name, and coachingStatusPanel flag within the custom redux store/state
 const mapStateToProps = (state: AppState) => {
-    const agentWorkerSID = state?.flex?.supervisor?.stickyWorker?.worker?.sid;
-    const supervisorFN = state?.flex?.worker?.attributes?.full_name;
+  const myWorkerSID: string = state?.flex?.worker?.worker?.sid;
+  const agentWorkerSID: string = state?.flex?.supervisor?.stickyWorker?.worker?.sid || "";
+  const supervisorFN: string = state?.flex?.worker?.attributes?.full_name;
   
     const reduxStore = state[reduxNamespace].supervisorBargeCoach;
-    const coaching = reduxStore.coaching;
-    const coachingStatusPanel = reduxStore.coachingStatusPanel
-  
+    const { coaching, barge, privateMode }= reduxStore;
+
     // Storing the coachingStatusPanel value that will be used in SupervisorBargePlugin.js
     // If the supervisor refreshes, we want to remember their preference
     console.log('Storing privateToggle to cache');
-    localStorage.setItem('privateToggle',`${coachingStatusPanel}`);
+    localStorage.setItem('privateToggle',`${privateMode}`);
   
     return {
+      myWorkerSID,
       agentWorkerSID,
       supervisorFN,
       coaching,
-      coachingStatusPanel
+      barge,
+      privateMode
     };
 };
 

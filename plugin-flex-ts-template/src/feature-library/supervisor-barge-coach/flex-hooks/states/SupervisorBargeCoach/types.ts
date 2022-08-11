@@ -10,5 +10,5 @@ export interface SupervisorBargeCoachState {
     barge: boolean,
     enableBargeinButton: boolean,
     supervisorArray: Array<any>,
-    coachingStatusPanel: boolean
+    privateMode: boolean
 };

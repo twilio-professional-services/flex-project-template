@@ -3,11 +3,6 @@ import { SupervisorBargeCoachState, ACTION_SET_BARGE_COACH_STATUS } from './type
 
 import initialState from './initialState';
 
-//FIXME: Do I require this anymore, also wtf was it doing? :)
-// export class Actions {
-//     static setBargeCoachStatus = (status) => ({ type: ACTION_SET_BARGE_COACH_STATUS, status });
-//   };
-
 // Exporting and adding a reducer for the states we will use later for the buttons
 export default function(state = initialState, action: Action): SupervisorBargeCoachState  {
     switch (action.type) {
