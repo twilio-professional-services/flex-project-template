@@ -1,10 +1,10 @@
 export default interface Channel {
   accountSid: string;
-  assignedTasks: number;
+  assignedTasks?: number;
   available: boolean;
   availableCapacityPercentage: number;
   capacity: number;
-  lastReservedTime: Date;
+  lastReservedTime?: Date;
   dateCreated: Date;
   dateUpdated: Date;
   sid: string;

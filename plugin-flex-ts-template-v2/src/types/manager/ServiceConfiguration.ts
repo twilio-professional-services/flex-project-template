@@ -44,6 +44,9 @@ export interface UIAttributes extends FlexUIAttributes {
       },
       scrollable_activities: {
         enabled: boolean
+      },
+      omni_channel_capacity_management: {
+        enabled: boolean
       }
     }
   }
