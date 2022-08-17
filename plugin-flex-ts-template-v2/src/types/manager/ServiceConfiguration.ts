@@ -25,7 +25,8 @@ export interface UIAttributes extends FlexUIAttributes {
       callbacks: {
         enabled: boolean,
         allow_requeue: boolean,
-        max_attempts: number
+        max_attempts: number,
+        auto_select_task: boolean
       },
       caller_id: {
         enabled: boolean
