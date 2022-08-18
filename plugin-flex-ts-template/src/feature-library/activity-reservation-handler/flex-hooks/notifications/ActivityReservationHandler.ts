@@ -1,6 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { NotificationType } from '@twilio/flex-ui';
 import { StringTemplates } from '../strings/ActivityReservationHandler';
+import { FlexNotification } from "../../utils/enums"
 
 export enum NotificationIds {
   ActivityChangeDelayed = 'PSActivityChangeDelayed',
@@ -14,7 +15,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
 
 function activityChangeDelayed(flex: typeof Flex, manager: Flex.Manager) {
   flex.Notifications.registerNotification({
-    id: NotificationIds.ActivityChangeDelayed,
+    id: FlexNotification.activityChangeDelayed,
     closeButton: true,
     content: StringTemplates.ActivityChangeDelayed,
     timeout: 5000,
@@ -24,7 +25,7 @@ function activityChangeDelayed(flex: typeof Flex, manager: Flex.Manager) {
 
 function restrictedActivities(flex: typeof Flex, manager: Flex.Manager) {
   flex.Notifications.registerNotification({
-    id: NotificationIds.RestrictedActivities,
+    id: FlexNotification.restrictedActivities,
     closeButton: true,
     content: StringTemplates.RestrictedActivities,
     type: NotificationType.warning,

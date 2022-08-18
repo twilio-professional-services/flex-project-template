@@ -1,18 +1,21 @@
 import * as Flex from '@twilio/flex-ui';
 import { Reservation } from '../../../types/task-router';
+import trackReservationEventsForActivityChanges from '../../../feature-library/activity-reservation-handler/flex-hooks/jsclient-event-listeners/worker-client/reservationCreated'
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
+
+  trackReservationEventsForActivityChanges(flex, manager);
+
   (manager.workerClient).on('reservationCreated', (reservation: Reservation) => {
-    //autoAcceptVoiceTask(flex, manager, reservation);
+    //selectAndAcceptReservation(reservation);
   });
 }
 
-function autoAcceptVoiceTask(flex: typeof Flex, manager: Flex.Manager, reservation: Reservation) {
-  const { sid, task: { taskChannelUniqueName, transfers, attributes } } = reservation;
+// this is a robust form of auto selecting and auto accepting a task
+function selectAndAcceptReservation(reservation: Reservation) {
+  const { sid, task: { transfers, attributes } } = reservation;
 
-  if (taskChannelUniqueName === 'voice') {
-
-    // Auto select the voice task
+    // Auto select the task
     Flex.Actions.invokeAction('SelectTask', { sid });
 
     if (((transfers.incoming !== undefined && transfers.incoming !== null) || attributes.direction !== 'outbound')) {
@@ -45,5 +48,4 @@ function autoAcceptVoiceTask(flex: typeof Flex, manager: Flex.Manager, reservati
         }
       }, 500);
     }
-  }
 }

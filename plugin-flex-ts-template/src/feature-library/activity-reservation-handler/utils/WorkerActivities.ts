@@ -1,10 +1,10 @@
-import * as Flex from '@twilio/flex-ui';
+import  {Actions, Notifications, Manager} from '@twilio/flex-ui';
 //import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
 import FlexState from '../flex-hooks/states/FlexState';
 import WorkerState from '../flex-hooks/states/WorkerState';
 import { Activity, FlexNotification, ReservationEvents } from './enums';
 
-const manager = Flex.Manager.getInstance();
+const manager = Manager.getInstance();
 const reservationListeners = new Map();
 
 export const availableActivity = FlexState.getActivityByName(Activity.available);
@@ -54,7 +54,7 @@ export const canChangeWorkerActivity = (targetActivitySid: any) => {
   return canChange;
 };
 
-export const setWorkerActivity = (flex: typeof Flex, newActivitySid?: any, clearPendingActivity?: any) => {
+export const setWorkerActivity = (newActivitySid?: any, clearPendingActivity?: any) => {
   try {
     const targetActivity = FlexState.getActivityBySid(newActivitySid);
     console.log('FlexState', FlexState);
@@ -71,7 +71,7 @@ export const setWorkerActivity = (flex: typeof Flex, newActivitySid?: any, clear
       console.debug(`setWorkerActivity: Worker already in activity "${targetActivity?.name}". No change needed.`);
     } else {
       console.log('setWorkerActivity: ', targetActivity?.name);
-      flex.Actions.invokeAction('SetActivity', {
+      Actions.invokeAction('SetActivity', {
         activitySid: newActivitySid,
         isInvokedByPlugin: true,
       });
@@ -84,8 +84,8 @@ export const setWorkerActivity = (flex: typeof Flex, newActivitySid?: any, clear
   }
 };
 
-export const delayActivityChange = (flex: typeof Flex, activity: any) => {
-  flex.Notifications.showNotification(FlexNotification.activityChangeDelayed, {
+export const delayActivityChange = (activity: any) => {
+  Notifications.showNotification(FlexNotification.activityChangeDelayed, {
     activityName: activity.name,
   });
 

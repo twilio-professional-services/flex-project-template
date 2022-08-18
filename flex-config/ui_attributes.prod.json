@@ -48,6 +48,9 @@
         "enabled": true,
         "agent_coaching_panel": true,
         "supervisor_monitor_panel": true
+      },      
+      "activity_reservation_handler": {
+        "enabled": false
       }
     }
   }

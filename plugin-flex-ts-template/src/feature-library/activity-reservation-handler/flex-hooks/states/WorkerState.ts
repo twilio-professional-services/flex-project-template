@@ -26,10 +26,10 @@ class WorkerState {
       if (waitBetweenChecks * activityCheckCount > maxWaitTime) {
         console.warn('Timed out waiting for worker activity SID to be', activitySid);
         clearInterval(activityCheckInterval);
-        //resolve();
+        resolve(null);
       } else if (this.workerActivitySid === activitySid) {
         clearInterval(activityCheckInterval);
-        //resolve();
+        resolve(null);
       }
       activityCheckCount += 1;
     }, waitBetweenChecks)

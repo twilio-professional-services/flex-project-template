@@ -27,7 +27,7 @@ export function beforeSetActivity(flex: typeof Flex, manager: Flex.Manager) {
     } else if (FlexState.hasActiveCallTask || FlexState.hasWrappingTask) {
       abortFunction();
       const targetActivity = FlexState.getActivityBySid(activitySid);
-      delayActivityChange(flex, targetActivity);
+      delayActivityChange(targetActivity);
     }
   });
 }
