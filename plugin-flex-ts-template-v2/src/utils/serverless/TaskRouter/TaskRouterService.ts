@@ -16,6 +16,27 @@ interface GetQueuesResponse {
   queues: Array<Queue>
 }
 
+interface WorkerChannelCapacityRESTResponse {
+  accountSid: string,
+  assignedTasks: number,
+  available: boolean,
+  availableCapacityPercentage: number,
+  configuredCapacity: number,
+  dateCreated: string,
+  dateUpdated: string,
+  sid: string,
+  taskChannelSid: string,
+  taskChannelUniqueName: string,
+  workerSid: string,
+  workspaceSid: string,
+  url: string,
+}
+interface UpdateWorkerChannelResponse {
+  success: boolean,
+  message?: string,
+  workerChannelCapacity: WorkerChannelCapacityRESTResponse
+}
+
 let queues = null as null | Array<Queue>;
 
 class TaskRouterService extends ApiService {
@@ -37,6 +58,14 @@ class TaskRouterService extends ApiService {
     if(response.success) queues = response.queues;
 		return queues;
 	}
+
+  async updateWorkerChannel(workerSid: string, workerChannelSid: string, capacity: number, available: boolean): Promise<Boolean> {
+
+		const result = await this.#updateWorkerChannel(workerSid, workerChannelSid, capacity, available)
+
+		return result.success;
+
+  }
 
 	#updateTaskAttributes = (taskSid: string, attributesUpdate: string): Promise<UpdateTaskAttributesResponse> => {
 
@@ -77,6 +106,27 @@ class TaskRouterService extends ApiService {
 			return response;
 		});
 	};
+
+  #updateWorkerChannel = (workerSid: string, workerChannelSid: string, capacity: number, available: boolean): Promise<UpdateWorkerChannelResponse> => {
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(this.manager.user.token),
+      workerSid: encodeURIComponent(workerSid),
+      workerChannelSid: encodeURIComponent(workerChannelSid),
+      capacity: encodeURIComponent(capacity),
+      available: encodeURIComponent(available)
+    };
+
+    return this.fetchJsonWithReject<UpdateWorkerChannelResponse>(
+      `https://${this.serverlessDomain}/functions/common/flex/taskrouter/update-worker-channel`,
+      {
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams)
+      }
+    ).then((response): UpdateWorkerChannelResponse => {
+      return response;
+  });
+}
 
 
 }
