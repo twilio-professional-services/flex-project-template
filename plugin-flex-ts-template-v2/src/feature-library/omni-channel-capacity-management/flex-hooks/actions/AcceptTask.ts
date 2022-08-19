@@ -62,7 +62,7 @@ export function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.
 
     const workerSid = manager?.workerClient?.sid;
 
-    if (currentChatCapacity === 1 && chatTasks.length < 2) {
+    if (workerSid && currentChatCapacity === 1 && chatTasks.length < 2) {
         // we're assuming chat capacity has been artificially reduced
         // reset it to the desired max value
         /* 
@@ -71,7 +71,7 @@ export function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.
         TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 2, true);
     }
 
-    if (chatTasks.length > 1 && chatTasks.length === currentChatCapacity) {
+    if (workerSid && chatTasks.length > 1 && chatTasks.length === currentChatCapacity) {
         // we're saturated
         // reduce capacity on chat channel to 1
         TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 1, true);
