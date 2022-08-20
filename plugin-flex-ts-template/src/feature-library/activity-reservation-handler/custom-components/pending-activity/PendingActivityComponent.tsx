@@ -1,21 +1,15 @@
 import React from 'react';
-
 import { Activity, Container, Title } from './PendingActivityStyles';
-import FlexState from '../../flex-hooks/states/FlexState'
+import FlexState from '../../helpers/flexHelper'
+import IPendingActivity from '../../types/PendingActivity'
 
 
 interface IProps{ }
-interface IState { pendingActivity: any; }
+interface IState { pendingActivity: IPendingActivity | null}
  
 class PendingActivity extends React.PureComponent<IProps, IState> {
-  constructor(props: IProps) {
-    super(props);
-
-    this.state = {
-      pendingActivity: null
-    };
-  }
-
+  state : IState = {pendingActivity: null}
+  
   activityCheckInterval!: NodeJS.Timer;
 
   componentDidMount() {

@@ -51,6 +51,16 @@
       },
       "omni_channel_capacity_management": {
         "enabled": true
+      },
+      "activity_reservation_handler":{
+        "enabled": true,
+        "system_activity_names" : {
+          "available": "Available",
+          "onATask": "On a Task",
+          "onATaskNoAcd": "On a Task, No ACD",
+          "wrapup": "Wrap Up",
+          "wrapupNoAcd": "Wrap Up, No ACD"
+        }
       }
     }
   }

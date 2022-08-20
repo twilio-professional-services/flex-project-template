@@ -1,8 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
-import FlexState from '../states/FlexState';
+import FlexState from '../../helpers/flexHelper';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
-import { delayActivityChange, systemActivities } from '../../utils/WorkerActivities';
-import { FlexNotification } from '../../utils/enums';
+import { delayActivityChange} from '../../utils/WorkerActivities';
+import { NotificationIds } from '../notifications/ActivityReservationHandler'
+import {systemActivities} from "../../helpers/systemActivities"
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
 const { enabled } = custom_data.features.activity_reservation_handler;
@@ -21,7 +22,7 @@ export function beforeSetActivity(flex: typeof Flex, manager: Flex.Manager) {
 
     if (systemActivities.map((a) => a.toLowerCase()).includes(activityName.toLowerCase())) {
       abortFunction();
-      flex.Notifications.showNotification(FlexNotification.restrictedActivities, {
+      flex.Notifications.showNotification(NotificationIds.RestrictedActivities, {
         activityName,
       });
     } else if (FlexState.hasActiveCallTask || FlexState.hasWrappingTask) {

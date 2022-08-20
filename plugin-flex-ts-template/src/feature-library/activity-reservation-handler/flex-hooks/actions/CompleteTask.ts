@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
-import WorkerState from '../states/WorkerState';
-import FlexState from '../states/FlexState';
+import WorkerState from '../../helpers/workerActivityHelper';
+import FlexState from '../../helpers/flexHelper';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { setWorkerActivity } from '../../utils/WorkerActivities';
 

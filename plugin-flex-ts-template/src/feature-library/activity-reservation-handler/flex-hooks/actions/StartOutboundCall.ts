@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import WorkerState from '../states/WorkerState';
+import WorkerState from '../../helpers/workerActivityHelper';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import {
   onTaskActivity,
@@ -17,7 +17,7 @@ export function changeWorkerActivityBeforeOutboundCall(flex: typeof Flex, manage
   flex.Actions.addListener('beforeStartOutboundCall', async (payload, abortFunction) => {
     storeCurrentActivitySidIfNeeded();
 
-    const targetActivity = WorkerState.workerActivity.available ? onTaskActivity : onTaskNoAcdActivity;
+    const targetActivity = WorkerState.activity.available ? onTaskActivity : onTaskNoAcdActivity;
 
     setWorkerActivity(flex, targetActivity?.sid);
     await WorkerState.waitForWorkerActivityChange(targetActivity?.sid);

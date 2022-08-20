@@ -1,6 +1,7 @@
 import { Manager, TaskHelper } from "@twilio/flex-ui";
+import PendingActivity from "../types/PendingActivity"
 
-class FlexState {
+class FlexHelper {
   //#region Static Properties
   _manager = Manager.getInstance();
 
@@ -27,8 +28,9 @@ class FlexState {
   get pendingActivity() {
     const item = localStorage.getItem(this.pendingActivityChangeItemKey);
 
-    return item && JSON.parse(item);
-  }
+    const pendingActivity: PendingActivity = item && JSON.parse(item);
+    return pendingActivity;
+  } 
 
   get workerActivities() {
     return this.flexState?.worker?.activities || new Map();
@@ -111,9 +113,9 @@ class FlexState {
   storePendingActivityChange = (activity: any, isUserSelected?: boolean) => {
     // Pulling out only the relevant activity properties to avoid
     // a circular structure error in JSON.stringify()
-    const pendingActivityChange = {
+    const pendingActivityChange : PendingActivity = {
       available: activity.available,
-      isUserSelected,
+      isUserSelected: !!isUserSelected,
       name: activity.name,
       sid: activity.sid,
     };
@@ -130,6 +132,6 @@ class FlexState {
   //#endregion Class Methods
 }
 
-const FlexStateSingleton = new FlexState();
+const FlexHelperSingleton = new FlexHelper();
 
-export default FlexStateSingleton;
+export default FlexHelperSingleton;

@@ -1,18 +1,16 @@
 import { Manager } from '@twilio/flex-ui';
 
-class WorkerState {
-  _manager = Manager.getInstance();
+class WorkerActivityHelper {
+  workerClient = Manager.getInstance().workerClient
 
-  get workerClient() { return this._manager.workerClient; }
+  get activity() { return this.workerClient.activity; }
 
-  get workerActivity() { return this.workerClient.activity; }
+  get activityName() { return this.activity?.name; }
 
-  get workerActivityName() { return this.workerActivity?.name; }
-
-  get workerActivitySid() { return this.workerActivity?.sid; }
+  get activitySid() { return this.activity?.sid; }
 
   waitForWorkerActivityChange = (activitySid: string) => new Promise(resolve => {
-    if (this.workerActivitySid === activitySid) {
+    if (this.activitySid === activitySid) {
       return;
     }
 
@@ -27,7 +25,7 @@ class WorkerState {
         console.warn('Timed out waiting for worker activity SID to be', activitySid);
         clearInterval(activityCheckInterval);
         resolve(null);
-      } else if (this.workerActivitySid === activitySid) {
+      } else if (this.activitySid === activitySid) {
         clearInterval(activityCheckInterval);
         resolve(null);
       }
@@ -36,6 +34,6 @@ class WorkerState {
   })
 }
 
-const WorkerStateSingleton = new WorkerState();
+const WorkerActivityHelperSingleton = new WorkerActivityHelper();
 
-export default WorkerStateSingleton;
+export default WorkerActivityHelperSingleton;

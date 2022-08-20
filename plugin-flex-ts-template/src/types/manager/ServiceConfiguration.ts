@@ -13,11 +13,11 @@ export type ActivitySkillFilterRules = {
 };
 
 // feature: activity-reservation-handler
-export type PendingActivity = {
-  isUserSelected: boolean;
-  name: string;
-  sid: string;
+export type SystemActivityNames = {
+  [index: string]: string;
+  available: string;
 };
+
 
 export interface UIAttributes extends FlexUIAttributes {
   custom_data: {
@@ -25,6 +25,7 @@ export interface UIAttributes extends FlexUIAttributes {
     features: {
       activity_reservation_handler: {
         enabled: boolean;
+        system_activity_names: SystemActivityNames;
       };
       activity_skill_filter: {
         enabled: boolean;
@@ -60,6 +61,9 @@ export interface UIAttributes extends FlexUIAttributes {
         agent_coaching_panel: boolean;
         supervisor_monitor_panel: boolean;
       };
+      omni_channel_capacity_management: {
+        enabled: boolean
+      }
     };
   };
 }

@@ -1,43 +1,51 @@
 import  {Actions, Notifications, Manager} from '@twilio/flex-ui';
-//import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
-import FlexState from '../flex-hooks/states/FlexState';
-import WorkerState from '../flex-hooks/states/WorkerState';
-import { Activity, FlexNotification, ReservationEvents } from './enums';
+import FlexHelper from '../helpers/flexHelper';
+import WorkerActivity from '../helpers/workerActivityHelper';
+import { NotificationIds } from '../flex-hooks/notifications/ActivityReservationHandler'
+import { SystemActivityNames, systemActivities } from '../helpers/systemActivities';
+
+const ReservationEvents = {
+  accepted: 'accepted',
+  rejected: 'rejected',
+  timeout: 'timeout',
+  canceled: 'canceled',
+  rescinded: 'rescinded',
+  completed: 'completed',
+  wrapup: 'wrapup'
+};
+
 
 const manager = Manager.getInstance();
 const reservationListeners = new Map();
 
-export const availableActivity = FlexState.getActivityByName(Activity.available);
+export const availableActivity = FlexHelper.getActivityByName(SystemActivityNames.available);
 // Update 'Activity.onATask' value to match the activity name you're
 // using to indicate an agent has an active task
-export const onTaskActivity = FlexState.getActivityByName(Activity.onATask);
+export const onTaskActivity = FlexHelper.getActivityByName(SystemActivityNames.onATask);
 // Update 'Activity.onATaskNoAcd' value to match the activity name you're
 // using to indicate an agent's tasks are on an outbound task started from
 // a non-Available activity
-export const onTaskNoAcdActivity = FlexState.getActivityByName(Activity.onATaskNoAcd);
+export const onTaskNoAcdActivity = FlexHelper.getActivityByName(SystemActivityNames.onATaskNoAcd);
 // Update 'Activity.wrapup' value to match the activity name you're
 // using to indicate an agent's tasks are in wrapup status
-export const wrapupActivity = FlexState.getActivityByName(Activity.wrapup);
+export const wrapupActivity = FlexHelper.getActivityByName(SystemActivityNames.wrapup);
 // Update 'Activity.wrapupNoAcd' value to match the activity name you're
 // using to indicate an agent's tasks are in wrapup status when they started
 // the first task (outbound cal) from a non-Available activity
-export const wrapupNoAcdActivity = FlexState.getActivityByName(Activity.wrapupNoAcd);
+export const wrapupNoAcdActivity = FlexHelper.getActivityByName(SystemActivityNames.wrapupNoAcd);
 
-// The activities in this array can only be set programmatically and will
-// not be stored as pending activities to switch the user back to
-export const systemActivities = [Activity.onATask, Activity.onATaskNoAcd, Activity.wrapup, Activity.wrapupNoAcd];
 
 //#region Supporting functions
 export const shouldStoreCurrentActivitySid = () => {
-  return !systemActivities.map((a: string) => a.toLowerCase()).includes(WorkerState.workerActivityName.toLowerCase());
+  return !systemActivities.map((a) => a.toLowerCase()).includes(WorkerActivity.activityName.toLowerCase());
 };
 
 export const storeCurrentActivitySidIfNeeded = () => {
   if (shouldStoreCurrentActivitySid()) {
-    const { workerActivity } = WorkerState;
+    const { activity: workerActivity } = WorkerActivity;
 
     console.debug('Storing current activity as pending activity:', workerActivity.name);
-    FlexState.storePendingActivityChange(WorkerState.workerActivity);
+    FlexHelper.storePendingActivityChange(WorkerActivity.activity);
   }
 };
 
@@ -47,7 +55,7 @@ export const canChangeWorkerActivity = (targetActivitySid: any) => {
   // TaskRouter will not allow a worker to change from an available activity
   // to any other activity if the worker has a pending reservation without
   //  rejecting that reservation, which isn't what we want to do in this use case
-  if (FlexState.isAnAvailableActivityBySid(targetActivitySid) && FlexState.hasPendingTask) {
+  if (FlexHelper.isAnAvailableActivityBySid(targetActivitySid) && FlexHelper.hasPendingTask) {
     canChange = false;
   }
 
@@ -56,8 +64,8 @@ export const canChangeWorkerActivity = (targetActivitySid: any) => {
 
 export const setWorkerActivity = (newActivitySid?: any, clearPendingActivity?: any) => {
   try {
-    const targetActivity = FlexState.getActivityBySid(newActivitySid);
-    console.log('FlexState', FlexState);
+    const targetActivity = FlexHelper.getActivityBySid(newActivitySid);
+    console.log('FlexState', FlexHelper);
     console.log('targetActivity', targetActivity);
     console.log('newActivitySid', newActivitySid);
     if (!canChangeWorkerActivity(newActivitySid)) {
@@ -67,7 +75,7 @@ export const setWorkerActivity = (newActivitySid?: any, clearPendingActivity?: a
       );
       return;
     }
-    if (WorkerState.workerActivitySid === newActivitySid) {
+    if (WorkerActivity.activitySid === newActivitySid) {
       console.debug(`setWorkerActivity: Worker already in activity "${targetActivity?.name}". No change needed.`);
     } else {
       console.log('setWorkerActivity: ', targetActivity?.name);
@@ -77,7 +85,7 @@ export const setWorkerActivity = (newActivitySid?: any, clearPendingActivity?: a
       });
     }
     if (clearPendingActivity) {
-      FlexState.clearPendingActivityChange();
+      FlexHelper.clearPendingActivityChange();
     }
   } catch (error) {
     console.error('setWorkerActivity: Error setting worker activity SID', error);
@@ -85,26 +93,26 @@ export const setWorkerActivity = (newActivitySid?: any, clearPendingActivity?: a
 };
 
 export const delayActivityChange = (activity: any) => {
-  Notifications.showNotification(FlexNotification.activityChangeDelayed, {
+  Notifications.showNotification(NotificationIds.ActivityChangeDelayed, {
     activityName: activity.name,
   });
 
-  FlexState.storePendingActivityChange(activity, true);
+  FlexHelper.storePendingActivityChange(activity, true);
 };
 
 const validateAndSetWorkerActivity = () => {
-  console.debug('otherFlexSessionDetected:', FlexState.otherSessionDetected);
+  console.debug('otherFlexSessionDetected:', FlexHelper.otherSessionDetected);
 
-  if (FlexState.otherSessionDetected) {
+  if (FlexHelper.otherSessionDetected) {
     console.warn('Another flex session was detected. ' + 'Not validating or resetting worker activity');
 
     return;
   }
 
-  const pendingActivity = FlexState.pendingActivity;
-  const { workerActivitySid, workerActivityName } = WorkerState;
+  const pendingActivity = FlexHelper.pendingActivity;
+  const { activitySid: workerActivitySid, activityName: workerActivityName } = WorkerActivity;
 
-  if (!FlexState.hasLiveCallTask && FlexState.hasWrappingTask) {
+  if (!FlexHelper.hasLiveCallTask && FlexHelper.hasWrappingTask) {
     const targetActivity = pendingActivity?.available ? wrapupActivity : wrapupNoAcdActivity;
 
     console.log(`Resetting "${targetActivity.name}" Activity from:`, workerActivityName);
@@ -112,7 +120,7 @@ const validateAndSetWorkerActivity = () => {
     setWorkerActivity(targetActivity?.sid);
   } else if (
     (workerActivitySid === wrapupActivity?.sid || workerActivitySid === wrapupNoAcdActivity?.sid) &&
-    !FlexState.hasWrappingTask
+    !FlexHelper.hasWrappingTask
   ) {
     const targetActivity = pendingActivity ? pendingActivity : availableActivity;
 
@@ -124,7 +132,7 @@ const validateAndSetWorkerActivity = () => {
     setWorkerActivity(targetActivity?.sid, pendingActivity ? true : false);
   } else if (
     (workerActivitySid === onTaskActivity?.sid || workerActivitySid === onTaskNoAcdActivity?.sid) &&
-    !FlexState.hasActiveTask
+    !FlexHelper.hasActiveTask
   ) {
     const targetActivity = pendingActivity ? pendingActivity : availableActivity;
 
@@ -134,8 +142,8 @@ const validateAndSetWorkerActivity = () => {
     );
 
     setWorkerActivity(targetActivity?.sid, pendingActivity ? true : false);
-  } else if (workerActivitySid === FlexState.offlineActivitySid && !FlexState.hasWrappingTask) {
-    FlexState.clearPendingActivityChange();
+  } else if (workerActivitySid === FlexHelper.offlineActivitySid && !FlexHelper.hasWrappingTask) {
+    FlexHelper.clearPendingActivityChange();
   }
 };
 //#endregion Supporting functions
@@ -156,7 +164,7 @@ const handleReservationAccept = async (reservation: any) => {
 
   storeCurrentActivitySidIfNeeded();
 
-  const targetActivity = WorkerState.workerActivity.available ? onTaskActivity : onTaskNoAcdActivity;
+  const targetActivity = WorkerActivity.activity.available ? onTaskActivity : onTaskNoAcdActivity;
 
   setWorkerActivity(targetActivity?.sid);
 };
@@ -164,11 +172,11 @@ const handleReservationAccept = async (reservation: any) => {
 const handleReservationWrapup = async (reservation: any) => {
   console.log(`handleReservationWrapup: `, reservation);
 
-  if (FlexState.hasLiveCallTask || FlexState.hasPendingTask || WorkerState.workerActivityName === Activity.wrapup) {
+  if (FlexHelper.hasLiveCallTask || FlexHelper.hasPendingTask || WorkerActivity.activityName === SystemActivityNames.wrapup) {
     return;
   }
 
-  const targetActivity = WorkerState.workerActivity.available ? wrapupActivity : wrapupNoAcdActivity;
+  const targetActivity = WorkerActivity.activity.available ? wrapupActivity : wrapupNoAcdActivity;
 
   setWorkerActivity(targetActivity?.sid);
 };
@@ -176,13 +184,13 @@ const handleReservationWrapup = async (reservation: any) => {
 const handleReservationEnded = async (reservation: any, eventType?: any) => {
   console.log(`handleReservationEnded: `, reservation);
 
-  const pendingActivity = FlexState.pendingActivity;
+  const pendingActivity = FlexHelper.pendingActivity;
 
   if (
     eventType === ReservationEvents.timeout ||
-    FlexState.hasActiveCallTask ||
-    FlexState.hasWrappingTask ||
-    WorkerState.workerActivitySid === pendingActivity?.sid
+    FlexHelper.hasActiveCallTask ||
+    FlexHelper.hasWrappingTask ||
+    WorkerActivity.activitySid === pendingActivity?.sid
   ) {
     return;
   }
@@ -190,17 +198,17 @@ const handleReservationEnded = async (reservation: any, eventType?: any) => {
   if (pendingActivity) {
     console.debug('handleReservationEnded, Setting worker to pending activity', pendingActivity.name);
     setWorkerActivity(pendingActivity.sid, true);
-  } else if (systemActivities.includes(WorkerState.workerActivityName)) {
+  } else if( systemActivities.map((a) => a.toLowerCase()).includes(WorkerActivity.activityName.toLowerCase())) {
     console.debug(
       'handleReservationEnded, No pending activity and current activity ' +
-        `"${WorkerState.workerActivityName}" is a system activity. Setting worker to ` +
+        `"${WorkerActivity.activityName}" is a system activity. Setting worker to ` +
         'default activity:',
       availableActivity?.name,
     );
     setWorkerActivity(availableActivity?.sid);
   }
 };
-
+    
 const handleReservationUpdated = (event: any, reservation: any) => {
   console.debug('Event, reservation updated', event, reservation);
   switch (event) {
@@ -257,14 +265,14 @@ export const handleReservationCreated = async (reservation: any) => {
 //#region Manager event listeners and handlers
 manager.events.addListener('pluginsLoaded', () => {
   initialize();
-  FlexState.initialize();
+  FlexHelper.initialize();
 });
 //#endregion Manager event listeners and handlers
 
 export const initialize = () => {
   validateAndSetWorkerActivity();
 
-  for (const reservation of FlexState.workerTasks.values()) {
+  for (const reservation of FlexHelper.workerTasks.values()) {
     handleNewReservation(reservation);
   }
 };
