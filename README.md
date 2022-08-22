@@ -52,26 +52,21 @@ __.github__ lastly this package manages the github action workflows - with one e
 
 ## local setup
 
-1. clone the repository
-2. from **serverless-functions**
-  - run *npm install* 
-  - copy .env.dev to .env
-3. in the new .env file add (these are only needed for local)
-  > ACCOUNT_SID=<YOUR_TWILIO_ACCOUNT_SID><br>
-  > AUTH_TOKEN=<YOUR_TWILIO_AUTH_TOKEN>
-4. review the SIDs in the new .env file and update with the appropriate ones from your own account.  If you are using any features from the feature library, ensure you have read the appropriate readme for given feature and any dependencies that those features require are setup.  All variables under general should be set and if no features are being used, the rest can be ignored.
-5. ensuring your twilio cli profile is set to the right account run: **twilio serverless:deploy**
-6. Take the domain name for the given serverless deploy and it to **flex-config/ui_attributes.dev.json** and decide what features to enable.
-7. On your twilio account create an API key and secret
-8. Create a .env file in **/flex-config/**
-9. Add to the .env file
-> TWILIO_ACCOUNT_SID=<YOUR_TWILIO_ACCOUNT_SID><br>
-> TWILIO_API_KEY=<YOUR_API_KEY><br>
-> TWILIO_API_SECRET=<YOUR_API_SECRET><br>
-10. execute *npm install* and *npm run deploy:dev*
-11. from **plugin-flex-ts-template**
-  - run *npm install* and *twilio flex:plugins:start*
-
+1. Clone the repository
+    > ```git clone https://github.com/twilio-professional-services/twilio-proserv-flex-project-template.git```
+2. cd into the repository and execute (this installs all sub-project dependencies and creates two new .env files for the next step)
+    > ```npm install```
+3. Edit both ```serverless-functions/.env``` and ```flex-config/.env```
+  - Review the SIDs in the .env files and update with the appropriate ones from your own account.  If you are using any features from the feature library, ensure you have read the appropriate readme for given feature and any dependencies that those features require are setup.  All variables under general should be set and if no features are being used, the rest can be ignored. 
+4. Deploy serverless functions into your account
+    > ```cd serverless-functions && twilio serverless:deploy```
+5. Copy the domain name from the deployment details in step 4 and update ```flex-config/ui_attributes.dev.json```
+6. Ensure the proper destination account is active in the twilio cli
+    > ```twilio profiles:list```
+7. With selected account, deploy the configuration
+    > ```cd flex-config && npm run deploy:dev```
+8. Begin local run of flex plugin
+    > ```cd plugin-flex-ts-template && twilio flex:plugins:start```
 
 
 ## Disclaimer 

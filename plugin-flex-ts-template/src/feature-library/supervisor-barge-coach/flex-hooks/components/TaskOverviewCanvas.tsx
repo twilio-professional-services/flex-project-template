@@ -45,10 +45,10 @@ export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.
 
     // This is here if the Supervisor refreshes and has toggled alerts to false
     // By default alerts are enabled unless they toggle it off
-    let privateToggle = localStorage.getItem('privateToggle');
-    if (privateToggle === "false") {
+    const privateToggle = localStorage.getItem('privateToggle');
+    if (privateToggle === "true") {
         manager.store.dispatch(BargeCoachStatusAction.setBargeCoachStatus({ 
-          coachingStatusPanel: false, 
+          privateMode: true, 
         }));
     }
   }

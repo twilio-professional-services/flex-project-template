@@ -7,6 +7,7 @@ import KickParticipant from './KickParticipant';
 import MessageListItem from './MessageListItem';
 import NavigateToView from './NavigateToView';
 import RejectTask from './RejectTask';
+import SelectTask from './SelectTask';
 import SetActivity from './SetActivity';
 import SetWorkerActivity from './SetWorkerActivity';
 import StartOutboundCall from './StartOutboundCall';
@@ -22,6 +23,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   KickParticipant(flex, manager);
   NavigateToView(flex, manager);
   RejectTask(flex, manager);
+  SelectTask(flex, manager);
   SetActivity(flex, manager);
   SetWorkerActivity(flex, manager);
   StartOutboundCall(flex, manager);

@@ -18,7 +18,7 @@ class SyncDocClass {
 
 	// This function takes inputs from other parts of the application to add/remove based on the updateStatus
 	// we will adjust the array and eventually pass this into the updateSyncDoc function to update the Sync Doc with the new array
-	initSyncDoc(agentWorkerSID, conferenceSID, supervisorFN, supervisorStatus, updateStatus) {
+	initSyncDoc(agentWorkerSID, conferenceSID, supervisorSID, supervisorFN, supervisorStatus, updateStatus) {
 		const docToUpdate = `syncDoc.${agentWorkerSID}`;
 
 		// Getting the latest Sync Doc agent list and storing in an array
@@ -38,6 +38,7 @@ class SyncDocClass {
 				supervisorsArray.push(
 				{
 					'conference': conferenceSID,
+					'supervisorSID': supervisorSID,
 					'supervisor': supervisorFN,
 					'status': supervisorStatus
 				}
@@ -46,11 +47,23 @@ class SyncDocClass {
 				this.updateSyncDoc(docToUpdate, supervisorsArray);
 				
 			// Checking Updated Status we pass during the button click
+			// to update the Supervisor's Status within the Supervisor Array to the Sync Doc
+			} else if (updateStatus === 'update') {
+				console.log(`Updating Sync Doc: ${docToUpdate}, supervisor: ${supervisorFN} has been REMOVED from the supervisor array`);
+				// Get the index of the Supervisor we need to remove in the array
+				const updateSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
+				// Ensure we get something back, and update the status the supervisor is in
+				if (updateSupervisorIndex > -1) {
+					supervisorsArray[updateSupervisorIndex].status = supervisorStatus;	
+				}
+				// Update the Sync Doc with the new supervisorsArray
+				this.updateSyncDoc(docToUpdate, supervisorsArray);
+			// Checking Updated Status we pass during button click
 			// to splice/remove the Supervisor from the Supervisor Array within the Sync Doc
 			} else if (updateStatus === 'remove') {
 				console.log(`Updating Sync Doc: ${docToUpdate}, supervisor: ${supervisorFN} has been REMOVED from the supervisor array`);
 				// Get the index of the Supervisor we need to remove in the array
-				const removeSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisor === supervisorFN);
+				const removeSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
 				// Ensure we get something back, let's splice this index where the Supervisor is within the array
 				if (removeSupervisorIndex > -1) {
 				supervisorsArray.splice(removeSupervisorIndex, 1);
@@ -96,7 +109,6 @@ class SyncDocClass {
 				});
 			})
 	}
-	//FIXME: need to update to get this to work properly to "unsubscribe"
 	// Called when we wish to close/unsubscribe from a specific sync document
 	closeSyncDoc(syncDocName) {	
 		client
