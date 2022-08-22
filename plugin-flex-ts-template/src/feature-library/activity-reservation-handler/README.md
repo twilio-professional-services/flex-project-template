@@ -2,7 +2,7 @@
 <img  src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg"  alt="Twilio"  width="250"  />
 </a>
 
-# WIP: Activity Reservation Handler
+Activity Reservation Handler
 
 This feature demonstrates how you can dynamically change worker activities over the course of a task, as well as having the ability to define activites that should not be manually selected and preventing the worker from changing their activity while they're on task.
 
@@ -10,7 +10,7 @@ This feature demonstrates how you can dynamically change worker activities over 
 
 ## Overview
 
-This plugin addresses a few common needs in many contact centers:
+This feature addresses a few common needs in many contact centers:
 
 - Changing the worker's activity when they're handling tasks and when their tasks are in wrapup.
   - This makes it easier to monitor what workers are doing in realtime, and improves workforce management visibility in Flex Insights for historical reporting
@@ -18,22 +18,7 @@ This plugin addresses a few common needs in many contact centers:
 - Preventing the worker from changing their activity while they're on a task, delaying that activity change until after they've completed their tasks
   - Changing to another activity like "Break" while the agent is actively handling tasks can result in inaccurate activity based reporting. Preventing that change until they're actually complete with their tasks aids in reporting and monitoring accuracy.
 
----
 
-## Remaining Development Tasks
-
-Original Plugin Link -- [plugin-activity-handler](https://github.com/twilio-professional-services/plugin-activity-handler)
-
-- **Redux State Management**
-  - Currently, the redux state was ported over from the original plugin as-is, which sits in [`flex-hooks/states/FlexState.ts`](flex-hooks/states/FlexState.ts) and [`flex-hooks/states/WorkerState.ts`](flex-hooks/states/WorkerState.ts). The functionality needs to be augmented to fit the pattern of state management laid out in this template.
-- **Reservation Listeners**
-  - Currently, the bulk of the listeners are stored within [`utils/WorkerActivites.ts`](utils/WorkerActivites.ts), but need to be transformed into the `js-client-event-listeners` directory.
-- **Updated Typings**
-  - The `any` type was used as a temporary typing in a few locations, which needs to be updated to reflect the actual type
-- **Activity Configuration Strategy**
-  - Currently, the available activities are stored as an `enum` in [`utils/enums.ts`](utils/enums.ts), which should be re-worked to fit within the configuration objects located in the `flex-config` directory.
-
----
 
 ## Configuration
 
@@ -56,28 +41,53 @@ This plugin is built to support the following activities for tracking if an agen
 
 If these activity names suit your requirements, you simply need to add them to your TaskRouter configuration in the Twilio Console -> TaskRouter -> [Workspace] -> Activities. Please pay attention to the `Available` boolean following each activity name above and use that same boolean value when creating the activity in the Twilio Console.
 
-If you'd prefer to use different names for these activities, after creating the desired activities in the Twilio Console, you will need to change the activity string names referenced in the plugin [`utils/enums.ts`](utils/enums.ts) module, `Activity` object:
+If you'd prefer to use different names for these activities, after creating the desired activities in the Twilio Console, you will need to change the activity string names from confiuration.
+
+This feature relies on custom configuration being applied to your underlying [Flex configuration](https://www.twilio.com/docs/flex/developer/ui/configuration#modifying-configuration-for-flextwiliocom). This is accomplished using the [Flex Configuration Updater](https://github.com/twilio-professional-services/twilio-proserv-flex-project-template/tree/main/flex-config) package in this repository.
+
+In your `ui_attributes.{environment}.json` file, update "custom.data.features.activity_reservation_handler.system_activity_names" to a JSON object with the attributes available, onATask etc along with a string representing the name of the activity in the TaskRouter Workspace.
 
 ```
-export const Activity = {
+{
   available: 'Available',
   onATask: 'On a Task',
   onATaskNoAcd: 'On a Task, No ACD',
   wrapup: 'Wrap Up',
   wrapupNoAcd: 'Wrap Up, No ACD'
-};
+}
 ```
 
-For example, if you wanted to use "On a Call" to indicate when the worker was on a task and "After Call Work" to indicate a worker's assigned tasks are in `wrapping`, and carry those same base values to the non-Available variants, your modified `Activity` object would look like:
+For example, if you wanted to use "On a Call" to indicate when the worker was on a task and "After Call Work" to indicate a worker's assigned tasks are in `wrapping`, and carry those same base values to the non-Available variants, your modified object would look like:
 
 ```
-export const Activity = {
+ {
   available: 'Available',
   onATask: 'On a Call',
   onATaskNoAcd: 'On a Call, No ACD',
   wrapup: 'After Call Work',
   wrapupNoAcd: 'After Call Work, No ACD'
-};
+}
 ```
 
 If you are using your own activity names, please ensure the `Available` boolean values in the activity list at the start of this section are maintained. For example, "After Call Work" would still be `Available: true`, while "After Call Work, No ACD" would still be `Available: false`.
+
+
+# flex-user-experience
+
+This section provides visual examples of what to expect for each feature above.
+
+### "On a Task" and "Wrap Up" Activity Change (Inbound Queue Call)
+
+!["On a Task" and "Wrap Up" Activity Change, Inbound Queue Call](screenshots/plugin-activity-handler-inbound-acd.gif)
+
+### "On a Task, No ACD" and "Wrap Up, No ACD" Activity Change (Outbound Call from non-Available Activity)
+
+!["On a Task, No ACD" and "Wrap Up, No ACD" Activity Change, Outbound Call from non-Available Activity](screenshots/plugin-activity-handler-outbound-no-acd.gif)
+
+### Preventing Selection of Restricted Activities
+
+![Preventing Selection of Restricted Activities](screenshots/plugin-activity-handler-restricted-activities.gif)
+
+### Delaying Activity Change Until Tasks Are Completed
+
+![Delaying Activity Change Until Tasks Are Completed](screenshots/plugin-activity-handler-delayed-activity-change.gif)
