@@ -9,7 +9,7 @@ export default async () => {
   if( !enabled ) return;
 
   /***
-   * This is one of the worst ways to accomplish this, given Paste and <CustomizationProvider> features.
+   * This is a temporary way to accomplish this, given Paste and <CustomizationProvider> features.
    * However, Flex 2 as of the time of writing this code, does not uniguely identify the Activities MENU
    * element.  Should Flex 2 wrap the generic MENU in a custom element (perhaps ACTIVITY_MENU), then
    * we could leverage something like this:
@@ -19,17 +19,22 @@ export default async () => {
    *     maxHeight: '90vh',
    *   }
    * }}>
+   * 
    */
-  
-  let unmodified = true;
-  while(unmodified) {
-    try {
-     (document.querySelectorAll("div.Twilio-MainHeader-end")[0].querySelectorAll("div[data-paste-element='MENU']")[0] as HTMLDivElement).style.cssText += 'overflow-y: scroll;max-height: 90vh;';
-
-      unmodified = false;
+  Flex.Manager.getInstance().updateConfig({
+    theme: {
+      componentThemeOverrides: {
+        MainHeader: {
+          Container: {
+            ".Twilio-MainHeader-end": {
+              "[data-paste-element='MENU']": {
+                overflowY: "scroll",
+                maxHeight: "90vh"
+              }
+            }
+          }
+        }
+      }
     }
-    catch(e) {
-      await new Promise(f => setTimeout(f, 1000));
-    }
-  }
+  });  
 };
