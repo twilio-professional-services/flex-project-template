@@ -1,6 +1,6 @@
 import React from 'react';
 import { Activity, Container, Title } from './PendingActivityStyles';
-import FlexState from '../../helpers/flexHelper'
+import {getPendingActivity} from '../../helpers/pendingActivity'
 import IPendingActivity from '../../types/PendingActivity'
 
 
@@ -14,7 +14,7 @@ class PendingActivity extends React.PureComponent<IProps, IState> {
 
   componentDidMount() {
     this.activityCheckInterval = setInterval(() => {
-      const pendingActivity = FlexState.pendingActivity;
+      const pendingActivity = getPendingActivity();
       
       if (pendingActivity?.sid !== this.state.pendingActivity?.sid) {
         this.setState({ pendingActivity });

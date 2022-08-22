@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { handleReservationCreated } from '../../../utils/WorkerActivities'
+import { handleReservationCreated } from './reservationEventListeners'
 import { Reservation } from '../../../../../types/task-router';
 
 const trackReservationEventsForActivityChanges =  (flex: typeof Flex, manager: Flex.Manager) => {

@@ -1,5 +1,5 @@
-import { Manager, TaskHelper } from "@twilio/flex-ui";
-import PendingActivity from "../types/PendingActivity"
+import { Manager, TaskHelper, ITask } from '@twilio/flex-ui';
+import Activity from '../../../types/task-router/Activity';
 
 class FlexHelper {
   //#region Static Properties
@@ -13,121 +13,78 @@ class FlexHelper {
     return this._manager.store.getState().flex;
   }
 
-  get otherSessionDetected() {
+  get otherSessionDetected(): string | undefined {
     return this.flexState?.session?.singleSessionGuard?.otherSessionDetected;
   }
 
-  get offlineActivitySid() {
+  get offlineActivitySid(): string | undefined {
     return this._manager.serviceConfiguration.taskrouter_offline_activity_sid;
   }
 
-  get pendingActivityChangeItemKey() {
-    return `pendingActivityChange_${this.accountSid}`;
-  }
-
-  get pendingActivity() {
-    const item = localStorage.getItem(this.pendingActivityChangeItemKey);
-
-    const pendingActivity: PendingActivity = item && JSON.parse(item);
-    return pendingActivity;
-  } 
-
-  get workerActivities() {
+  get workerActivities(): Map<string, Activity> {
     return this.flexState?.worker?.activities || new Map();
   }
 
-  get workerTasks() {
+  get workerTasks(): Map<string, ITask> {
     return this.flexState.worker.tasks;
   }
 
-  get hasLiveCallTask() {
+  get hasLiveCallTask(): boolean {
     if (!this.workerTasks) return false;
 
-    return [...this.workerTasks.values()].some((task) =>
-      TaskHelper.isLiveCall(task)
-    );
+    return [...this.workerTasks.values()].some((task) => TaskHelper.isLiveCall(task));
   }
 
   /**
    * Returns true if there is a pending or live call task
    */
-  get hasActiveCallTask() {
+  get hasActiveCallTask(): boolean {
     if (!this.workerTasks) return false;
 
     return [...this.workerTasks.values()].some((task) => {
-      return (
-        TaskHelper.isCallTask(task) &&
-        (TaskHelper.isPending(task) || TaskHelper.isLiveCall(task))
-      );
+      return TaskHelper.isCallTask(task) && (TaskHelper.isPending(task) || TaskHelper.isLiveCall(task));
     });
   }
 
-  get hasActiveTask() {
+  get hasActiveTask(): boolean {
     if (!this.workerTasks) return false;
 
     return [...this.workerTasks.values()].some(
-      (task) =>
-        TaskHelper.isTaskAccepted(task) && !TaskHelper.isInWrapupMode(task)
+      (task) => TaskHelper.isTaskAccepted(task) && !TaskHelper.isInWrapupMode(task),
     );
   }
 
-  get hasWrappingTask() {
+  get hasWrappingTask(): boolean {
     if (!this.workerTasks) return false;
 
-    return [...this.workerTasks.values()].some((task) =>
-      TaskHelper.isInWrapupMode(task)
-    );
+    return [...this.workerTasks.values()].some((task) => TaskHelper.isInWrapupMode(task));
   }
 
-  get hasPendingTask() {
+  get hasPendingTask(): boolean {
     if (!this.workerTasks) return false;
 
-    return [...this.workerTasks.values()].some((task) =>
-      TaskHelper.isPending(task)
-    );
+    return [...this.workerTasks.values()].some((task) => TaskHelper.isPending(task));
   }
   //#endregion Dynamic Properties
 
   //#region Class Methods
-  initialize = () => {
+  initialize = (): void => {
     // Setting accountSid as a static property so it survives after
     // logout when several flexState objects are cleared
     this.accountSid = this.flexState.worker.source.accountSid;
   };
 
-  getActivityBySid = (activitySid: string) => {
+  getActivityBySid = (activitySid: string): Activity | undefined => {
     return this.workerActivities.get(activitySid);
   };
 
-  getActivityByName = (activityName: string) => {
+  getActivityByName = (activityName: string): Activity | undefined => {
     const activities = [...this.workerActivities.values()];
-    return activities.find(
-      (a) => a?.name?.toLowerCase() === activityName.toLowerCase()
-    );
+    return activities.find((a) => a?.name?.toLowerCase() === activityName.toLowerCase());
   };
 
-  isAnAvailableActivityBySid = (activitySid: string) => {
-    return this.getActivityBySid(activitySid)?.available;
-  };
-
-  storePendingActivityChange = (activity: any, isUserSelected?: boolean) => {
-    // Pulling out only the relevant activity properties to avoid
-    // a circular structure error in JSON.stringify()
-    const pendingActivityChange : PendingActivity = {
-      available: activity.available,
-      isUserSelected: !!isUserSelected,
-      name: activity.name,
-      sid: activity.sid,
-    };
-
-    localStorage.setItem(
-      this.pendingActivityChangeItemKey,
-      JSON.stringify(pendingActivityChange)
-    );
-  };
-
-  clearPendingActivityChange = () => {
-    localStorage.removeItem(this.pendingActivityChangeItemKey);
+  isAnAvailableActivityBySid = (activitySid: string): boolean => {
+    return !!this.getActivityBySid(activitySid)?.available;
   };
   //#endregion Class Methods
 }

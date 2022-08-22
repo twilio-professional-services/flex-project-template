@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import FlexState from '../../helpers/flexHelper';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
-import { delayActivityChange} from '../../utils/WorkerActivities';
+import { delayActivityChange} from '../..';
 import { NotificationIds } from '../notifications/ActivityReservationHandler'
 import {systemActivities} from "../../helpers/systemActivities"
 
