@@ -1,8 +1,10 @@
-import * as Flex from '@twilio/flex-ui';
+import * as Flex from "@twilio/flex-ui";
+import ActivityHandler from "../../feature-library/activity-reservation-handler/flex-hooks/strings/ActivityReservationHandler";
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   manager.strings = {
-    // -v- Add custom strings here -v-
+    // -v- Add custom strings here -v-'
+    ...ActivityHandler,
     // -^---------------------------^-
 
     ...manager.strings,
@@ -12,4 +14,4 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
     //WorkerDirectoryQueuesTabLabel: '<span style="font-size: 10px;">Queues</span>',
     // -^----------------------------------------^-
   } as any;
-}
+};
