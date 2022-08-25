@@ -1,41 +1,26 @@
 import React from 'react';
-import { Activity, Container, Title } from './PendingActivityStyles';
-import {getPendingActivity} from '../../helpers/pendingActivity'
-import IPendingActivity from '../../types/PendingActivity'
-
-
-interface IProps{ }
-interface IState { pendingActivity: IPendingActivity | null}
+import { getPendingActivity } from '../../helpers/pendingActivity'
+import { Ticker } from "@twilio/flex-ui-core"
+import { Flex, Text } from "@twilio-paste/core"
  
-class PendingActivity extends React.PureComponent<IProps, IState> {
-  state : IState = {pendingActivity: null}
-  
-  activityCheckInterval!: NodeJS.Timer;
-
-  componentDidMount() {
-    this.activityCheckInterval = setInterval(() => {
+const PendingActivity = () => {
+  return <Ticker>
+    {() => {
       const pendingActivity = getPendingActivity();
-      
-      if (pendingActivity?.sid !== this.state.pendingActivity?.sid) {
-        this.setState({ pendingActivity });
+
+      return (
+        pendingActivity && pendingActivity.name ?
+          (
+            <Flex vertical marginRight="space20" hAlignContent="center">
+              <Text as="p" color="colorTextInverse" marginY="space10" fontSize="fontSize20" fontWeight="fontWeightBold">Pending Activity</Text>
+              <Text as="p" color="colorTextInverse" fontSize="fontSize10">{pendingActivity.name}</Text>
+            </Flex>
+          )
+          : null
+        )
       }
-    }, 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.activityCheckInterval);
-  }
-
-  render() {
-    return (
-      this.state.pendingActivity && this.state.pendingActivity.isUserSelected ? (
-        <Container>
-          <Title>Pending Activity</Title>
-          <Activity>{this.state.pendingActivity.name}</Activity>
-        </Container>
-      ) : null
-    )
-  }
+    }
+    </Ticker>
 }
 
 export default PendingActivity;
