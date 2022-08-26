@@ -1,7 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
 import { Reservation } from '../../../types/task-router';
+import trackReservationEventsForActivityChanges from '../../../feature-library/activity-reservation-handler/flex-hooks/jsclient-event-listeners/worker-client/reservationCreated'
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
+
+  trackReservationEventsForActivityChanges(flex, manager);
+
   (manager.workerClient).on('reservationCreated', (reservation: Reservation) => {
     //selectAndAcceptReservation(reservation);
   });
