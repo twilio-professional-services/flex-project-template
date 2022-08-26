@@ -49,8 +49,8 @@
         "agent_coaching_panel": true,
         "supervisor_monitor_panel": true
       },
-      "omni_channel_capacity_management": {
-        "enabled": true
+      "activity_reservation_handler": {
+        "enabled": false
       }
     }
   }
