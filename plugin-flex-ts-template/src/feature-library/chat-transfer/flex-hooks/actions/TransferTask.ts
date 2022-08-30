@@ -1,7 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
 
-import ChatTransferService from '../../utils/serverless/ChatTransferService';
-
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
@@ -23,18 +21,18 @@ export interface EventPayload {
 // if the task channel is not chat, function defers to existing process
 // otherwise the function creates a new task for transfering the chat
 // and deals with the chat orchestration
-export function transferOverrideForChatTasks(flex: typeof Flex, manager: Flex.Manager) {
+export function interceptTransferOverrideForChatTasks(flex: typeof Flex, manager: Flex.Manager) {
 
   if(!enabled) return;
   
-  Flex.Actions.replaceAction('TransferTask', async (payload: EventPayload, original: any) => {
+  Flex.Actions.addListener('beforeTransferTask', (payload: EventPayload, original: any) => {
 
     if (!Flex.TaskHelper.isChatBasedTask(payload.task)) {
       return original(payload);
     }
   
     // Execute Chat Transfer Task
-    await ChatTransferService.executeChatTransfer(payload.task, payload.targetSid, payload.options);
+    Flex.Actions.invokeAction('chatTransferTask', payload)
 
   })
 }
