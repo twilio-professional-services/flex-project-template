@@ -1,4 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
+import { Actions } from '@twilio/flex-ui';
+import { chatTransferTaskAction } from '../../feature-library/chat-transfer/flex-hooks/actions/TransferAction';
 import AcceptTask from './AcceptTask';
 import CompleteTask from './CompleteTask';
 import HangupCall from './HangupCall';
@@ -16,6 +18,8 @@ import UnholdParticipant from './UnholdParticipant';
 import WrapupTask from './WrapupTask';
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
+  Actions.registerAction('chatTransferTask', chatTransferTaskAction);
+  
   AcceptTask(flex, manager);
   CompleteTask(flex, manager);
   HangupCall(flex, manager);
