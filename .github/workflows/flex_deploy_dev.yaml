@@ -14,6 +14,7 @@ env:
   TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID_DEV }}
   TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_DEV }}
   TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_DEV }}
+  PLUGIN_FOLDER: ${{ secrets.PLUGIN_FOLDER }}
 
 jobs:
   run:
@@ -40,7 +41,7 @@ jobs:
           TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy:dev
 
       - name: deploy and release flex-plugin
-        working-directory: plugin-flex-ts-template
+        working-directory: ${{ secrets.PLUGIN_FOLDER }}
         run: |
           npm install
           npm run install-flex-plugin
