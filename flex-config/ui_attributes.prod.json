@@ -32,6 +32,9 @@
       "chat_transfer": {
         "enabled": true
       },
+      "conference": {
+        "enabled": true
+      },
       "enhanced_crm_container": {
         "enabled": true
       },
