@@ -15,7 +15,7 @@ export function changeWorkerActivityBeforeOutboundCall(flex: typeof Flex, manage
 
     const targetActivity = WorkerState.activity?.available ? onTaskActivity : onTaskNoAcdActivity;
 
-    WorkerState.setWorkerActivity(flex, targetActivity?.sid);
+    WorkerState.setWorkerActivity(targetActivity?.sid);
     await WorkerState.waitForWorkerActivityChange(targetActivity?.sid);
   });
 }
