@@ -43,6 +43,9 @@ export interface UIAttributes extends FlexUIAttributes {
       chat_transfer: {
         enabled: boolean;
       };
+      conference: {
+        enabled: boolean;
+      };
       enhanced_crm_container: {
         enabled: boolean;
       };

@@ -1,0 +1,71 @@
+import React, { useEffect, useState } from 'react';
+import { styled, ConferenceParticipant, ITask } from '@twilio/flex-ui';
+import ConferenceService from '../../../../utils/serverless/ConferenceService/ConferenceService';
+import { FetchedCall } from '../../../../types/serverless/twilio-api';
+
+const Name = styled('div')`
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const NameListItem = styled('div')`
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+export interface OwnProps {
+  listMode?: boolean,
+  participant?: ConferenceParticipant,
+  task?: ITask
+}
+
+const ParticipantName = (props: OwnProps) => {
+  const [name, setName] = useState('');
+  
+  useEffect(() => {
+    const { participant, task } = props;
+    
+    if (!participant || !task) return;
+    
+    if (participant.participantType === 'customer') {
+      setName(task.attributes.outbound_to || task.attributes.name );
+      return;
+    }
+    
+    // FLEXEXP-865
+    if (!participant.participantType || participant.participantType === 'unknown') {
+      ConferenceService.getCallProperties(participant.callSid)
+      .then((response: FetchedCall) => {
+        if (response) {
+          setName((response && response.to) || 'Unknown');
+        }
+      })
+      .catch(_error => {
+        setName('Unknown');
+      });
+    } else {
+      setName(participant.worker ? participant.worker.fullName : 'Unknown');
+    }
+  }, []);
+  
+  return props.listMode === true
+  ? (
+    <NameListItem className="ParticipantCanvas-Name">
+      {name}
+    </NameListItem>
+  ) : (
+    <Name className="ParticipantCanvas-Name">
+      {name}
+    </Name>
+  );
+}
+
+export default ParticipantName;

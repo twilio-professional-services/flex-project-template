@@ -1,12 +1,14 @@
 import * as Flex from '@twilio/flex-ui';
+import { handleConferenceHangup } from "../../feature-library/conference/flex-hooks/actions/HangupCall";
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
-	//beforeHangupCall(flex, manager);
+	beforeHangupCall(flex, manager);
 	//replaceHangupCall(flex, manager);
 	//afterHangupCall(flex, manager);
 }
 
 function beforeHangupCall(flex: typeof Flex, manager: Flex.Manager) {
+	handleConferenceHangup(flex, manager);
 }
 
 // Avoid using replace hook if possible

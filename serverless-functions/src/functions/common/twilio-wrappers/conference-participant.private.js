@@ -1,4 +1,4 @@
-const { isString, isObject, isNumber } = require("lodash");
+const { isString, isObject, isNumber, isBoolean } = require("lodash");
 
 const retryHandler = (require(Runtime.getFunctions()['functions/common/twilio-wrappers/retry-handler'].path)).retryHandler;
 
