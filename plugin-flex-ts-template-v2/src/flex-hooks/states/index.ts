@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { combineReducers, Action as ReduxAction } from 'redux';
 import { OutboundCallerIDSelectorState, OutboundCallerIDSelectorReducer } from '../../feature-library/caller-id/flex-hooks/states/OutboundCallerIDSelector';
-import { CallbackAndVoicemailState, CallbackAndVoicemailReducer } from '../../feature-library/callbackAndVoicemail/flex-hooks/states/CallbackAndVoicemail'
+import { CallbackAndVoicemailState, CallbackAndVoicemailReducer } from '../../feature-library/callback-and-voicemail/flex-hooks/states/CallbackAndVoicemail'
 
 // Register your redux store under a unique namespace
 export const reduxNamespace = 'custom';

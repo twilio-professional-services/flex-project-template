@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { autoSelectCallbackTaskWhenEndingCall } from '../../feature-library/callbackAndVoicemail/flex-hooks/actions/SelectTask'
+import { autoSelectCallbackTaskWhenEndingCall } from '../../feature-library/callback-and-voicemail/flex-hooks/actions/SelectTask'
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   beforeSelectTask(flex, manager);
