@@ -43,6 +43,7 @@ __.github__ lastly this package manages the github action workflows - with one e
 - [Callbacks](plugin-flex-ts-template/src/feature-library/callbacks/README.md) 
 - [Caller ID](plugin-flex-ts-template/src/feature-library/caller-id/README.md)
 - [Chat Transfer](plugin-flex-ts-template/src/feature-library/chat-transfer/README.md)
+- [Conference (v2 only)](plugin-flex-ts-template-v2/src/feature-library/conference/README.md)
 - [Enhanced CRM Container](plugin-flex-ts-template/src/feature-library/enhanced-crm-container/README.md)
 - [Override Queue Transfer Directory](plugin-flex-ts-template/src/feature-library/override-queue-transfer-directory/README.md)
 - [Salesforce Click To Dial](plugin-flex-ts-template/src/feature-library/salesforce-click-to-dial/README.md)

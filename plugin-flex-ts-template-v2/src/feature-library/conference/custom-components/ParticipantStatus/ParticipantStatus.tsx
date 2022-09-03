@@ -9,15 +9,11 @@ import {
 import { AppState } from '../../../../flex-hooks/states';
 
 const Status = styled('div')`
-  font-size: 12px;
-`;
-
-const StatusListItem = styled('div')`
-  font-size: 10px;
+  font-size: 0.75rem;
+  line-height: 1rem;
 `;
 
 export interface OwnProps {
-  listMode?: boolean,
   participant?: ConferenceParticipant,
 }
 
@@ -40,12 +36,7 @@ const ParticipantStatus = (props: OwnProps) => {
     statusTemplate = templates.CallParticipantStatusKickConfirmation;
   }
   
-  return props.listMode
-  ? (
-    <StatusListItem className="ParticipantCanvas-Status">
-      <Template source={statusTemplate} />
-    </StatusListItem>
-  ) : (
+  return (
     <Status className="ParticipantCanvas-Status">
       <Template source={statusTemplate} />
     </Status>
