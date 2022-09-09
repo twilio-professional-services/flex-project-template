@@ -1,6 +1,6 @@
 {
   "custom_data": {
-    "serverless_functions_domain": "custom-flex-extensions-serverless-1021-dev.twil.io",
+    "serverless_functions_domain": "custom-flex-extensions-serverless-7569-dev.twil.io",
     "features": {
       "activity_skill_filter": {
         "enabled": false,
@@ -21,40 +21,43 @@
         }
       },
       "callbacks": {
-        "enabled": true,
+        "enabled": false,
         "allow_requeue": true,
         "max_attempts": 3,
         "auto_select_task": true
       },
       "caller_id": {
-        "enabled": true
+        "enabled": false
       },
       "chat_transfer": {
+        "enabled": false
+      },
+      "chat_to_video_escalation": {
         "enabled": true
       },
       "enhanced_crm_container": {
-        "enabled": true
+        "enabled": false
       },
       "override_queue_transfer_directory": {
-        "enabled": true
+        "enabled": false
       },
       "salesforce_click_to_dial": {
         "enabled": false
       },
       "scrollable_activities": {
-        "enabled": true
+        "enabled": false
       },
       "supervisor_barge_coach": {
-        "enabled": true,
+        "enabled": false,
         "agent_coaching_panel": true,
         "supervisor_monitor_panel:": true
       },
       "omni_channel_capacity_management": {
-        "enabled": true
+        "enabled": false
       },
-      "activity_reservation_handler":{
-        "enabled": true,
-        "system_activity_names" : {
+      "activity_reservation_handler": {
+        "enabled": false,
+        "system_activity_names": {
           "available": "Available",
           "onATask": "On a Task",
           "onATaskNoAcd": "On a Task, No ACD",
