@@ -20,29 +20,51 @@ In short the template provides:
 - a suite of ready to use tools for commonly leverage twilio APIs e.g. updateTaskAttributes or getQueues
 - a set of examples for implementing retry handling at both the front end and serverless layers of the code
 
+---
+
 ## Package Overview
 
 At the root of the repository you will find the following packages
 
-- flex-config
-- infra-as-code
-- plugin-flex-ts-template
-- serverless-functions
-- .github
+- [flex-config](#flex-config)
+- [infra-as-code](#infra-as-code)
+- [plugin-flex-ts-template](#plugin-flex-ts-template)
+- [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
+- [serverless-functions](#serverless-functions)
+- [web-app-examples](#web-app-examples)
+- [.github](#github)
 
-these packages are coupled together to provide a means of versioning these artifacts together, providing a robust method for building a release pipeline across multiple environments.
+These packages are coupled together to provide a means of versioning these artifacts together, providing a robust method for building a release pipeline across multiple environments.
 
-**flex-config:** this package manages a json artifact that can be used to version configuration elements on a per-twilio-account basis. We can think of this as allowing us to configure, dev, qa, test, production or any other environments indivdually. This configuration relates specifically to the the configuration for flex discussed [here](https://www.twilio.com/docs/flex/developer/ui/configuration) and works by injecting the custom object into ui_attributes within the flex configuration object. The plugin is then able to reference these variables. The first example being, hosting the domain name of the associated serverless-functions.
+### **flex-config**
 
-**infra-as-code:** this package is a legacy package of a previous initiative to leverage pulumi to manage twilio configuration artifacts such as taskrouter entities. This package is a functional methodology and was setup to represent a typicaly vanilla flex account thats just been initialized. This package has not been maintained as the intention is to move towards a similar solution using the terraform provider, however what has been setup and used before is available for anyone looking to use it for immediate needs. More details on how to use this can be found [here](https://www.twilio.com/blog/intro-to-infrastructure-as-code-with-twilio-part-1). Currently there are no dependencies in this package that need to be used and is here only for reference. Feel free to remove this if not utilized.
+This package manages a json artifact that can be used to version configuration elements on a per-twilio-account basis. We can think of this as allowing us to configure, dev, qa, test, production or any other environments indivdually. This configuration relates specifically to the the configuration for flex discussed [here](https://www.twilio.com/docs/flex/developer/ui/configuration) and works by injecting the custom object into ui_attributes within the flex configuration object. The plugin is then able to reference these variables. The first example being, hosting the domain name of the associated serverless-functions.
 
-**plugin-flex-ts-template:** this package is the actual flex plugin and a structure is already laid out that makes it a lot easier to work in a disributed development model. More details of the package structure are discussed [over here](plugin-flex-ts-template/README.md) but just now the imporant thing to understand is that the plugin has a library of examples that can be turned on or off, or if desired can be removed completely with little overhead. The utilities in this package are designed around the associated serverless-functions and leverage the associated flex-config.
+### **infra-as-code**
 
-**plugin-flex-ts-template-v2:** this package is identical in purpose tot he plugin-flex-ts-template except its intended for flex v2 projects. This package is still a work in progress as we migrate the feature libraries over. It is functional as a package structure though. The intention is when kicking off a project the owner would fork the repository then delete the plugin version they are not using.
+This package is a legacy package of a previous initiative to leverage pulumi to manage twilio configuration artifacts such as taskrouter entities. This package is a functional methodology and was setup to represent a typicaly vanilla flex account thats just been initialized. This package has not been maintained as the intention is to move towards a similar solution using the terraform provider, however what has been setup and used before is available for anyone looking to use it for immediate needs. More details on how to use this can be found [here](https://www.twilio.com/blog/intro-to-infrastructure-as-code-with-twilio-part-1). Currently there are no dependencies in this package that need to be used and is here only for reference. Feel free to remove this if not utilized.
 
-**serverless-functions:** this package manages the serverless functions that the _plugin-flex-ts-template_ is dependent on. In this package there are a suite of services already available to use, some of which are simply wrappers around existing twilio APIs but with added resiliancy around retrying given configurable parameters. These retry mechanisms are particularly useful when a twilio function needs to orchestrate multiple twilio APIs to perform an overall operation. It should be noted twilio functions still have a maximum runtime and therefore careful consideration of retries should be employed for each use case. This does however provided improved resiliency and performance when 429s, 412s or 503s occur.
+### **plugin-flex-ts-template**
 
-**.github** lastly this package manages the github action workflows - with one example being setup for a dev account where this template is maintained. Upon commits to _main_; _flex-config_, _plugin-flex-ts-template_ and _serverless-functions_ are all deployed on the associated environment, as controlled by the environment variables in github actions. The underly scripts can easily be used in alternative release management tools.
+This package is the actual flex plugin and a structure is already laid out that makes it a lot easier to work in a disributed development model. More details of the package structure are discussed [over here](plugin-flex-ts-template/README.md) but just now the imporant thing to understand is that the plugin has a library of examples that can be turned on or off, or if desired can be removed completely with little overhead. The utilities in this package are designed around the associated serverless-functions and leverage the associated flex-config.
+
+### **plugin-flex-ts-template-v2**
+
+This package is identical in purpose to the `plugin-flex-ts-template` except its intended for flex v2 projects. This package is still a work in progress as we migrate the feature libraries over. It is functional as a package structure though. The intention is when kicking off a project the owner would fork the repository then delete the plugin version they are not using.
+
+### **serverless-functions**
+
+This package manages the serverless functions that the _plugin-flex-ts-template_ is dependent on. In this package there are a suite of services already available to use, some of which are simply wrappers around existing twilio APIs but with added resiliancy around retrying given configurable parameters. These retry mechanisms are particularly useful when a twilio function needs to orchestrate multiple twilio APIs to perform an overall operation. It should be noted twilio functions still have a maximum runtime and therefore careful consideration of retries should be employed for each use case. This does however provided improved resiliency and performance when 429s, 412s or 503s occur.
+
+### **web-app-examples**
+
+This package contains web application examples that build off feature functionality found within the plugin templates. These examples utilize building applications with `React` and interact with various endpoints within the `serverless-functions` package.
+
+### **.github**
+
+Lastly, this package manages the github action workflows - with one example being setup for a dev account where this template is maintained. Upon commits to _main_; _flex-config_, _plugin-flex-ts-template_ and _serverless-functions_ are all deployed on the associated environment, as controlled by the environment variables in github actions. The underly scripts can easily be used in alternative release management tools.
+
+---
 
 ## Further Feature library Information
 
@@ -57,7 +79,9 @@ these packages are coupled together to provide a means of versioning these artif
 - [Supervisor Barge Coach](plugin-flex-ts-template/src/feature-library/supervisor-barge-coach/README.md)
 - [Activity Reservation Handler](plugin-flex-ts-template/src/feature-library/activity-reservation-handler/README.md)
 
-## local setup
+---
+
+## Local Setup
 
 1. Clone the repository
    > `git clone https://github.com/twilio-professional-services/twilio-proserv-flex-project-template.git`
