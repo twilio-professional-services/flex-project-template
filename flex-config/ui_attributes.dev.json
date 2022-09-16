@@ -1,6 +1,6 @@
 {
   "custom_data": {
-    "serverless_functions_domain": "custom-flex-extensions-serverless-2333-dev.twil.io",
+    "serverless_functions_domain": "custom-flex-extensions-serverless-1021-dev.twil.io",
     "features": {
       "activity_skill_filter": {
         "enabled": false,
