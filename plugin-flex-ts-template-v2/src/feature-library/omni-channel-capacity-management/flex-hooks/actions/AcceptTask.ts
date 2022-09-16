@@ -60,7 +60,7 @@ export function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.
     const chatTasks: Array<any>[] | any = tasksArray.filter((task: any) => {
       return task.taskChannelUniqueName === 'chat'});
 
-    const workerSid = manager?.workerClient?.sid;
+    const workerSid  = manager?.workerClient?.sid || "";
 
     if (currentChatCapacity === 1 && chatTasks.length < 2) {
         // we're assuming chat capacity has been artificially reduced

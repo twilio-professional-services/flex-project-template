@@ -2,6 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import { combineReducers, Action as ReduxAction } from 'redux';
 import { OutboundCallerIDSelectorState, OutboundCallerIDSelectorReducer } from '../../feature-library/caller-id/flex-hooks/states/OutboundCallerIDSelector';
 import { CallbackAndVoicemailState, CallbackAndVoicemailReducer } from '../../feature-library/callbackAndVoicemail/flex-hooks/states/CallbackAndVoicemail'
+import { SupervisorBargeCoachState, SupervisorBargeCoachReducer } from '../../feature-library/supervisor-barge-coach/flex-hooks/states/SupervisorBargeCoach'
 
 // Register your redux store under a unique namespace
 export const reduxNamespace = 'custom';
@@ -19,6 +20,7 @@ export interface AppState {
   [reduxNamespace]: {
     outboundCallerIdSelector: OutboundCallerIDSelectorState;
     callbackAndVoicemail: CallbackAndVoicemailState;
+    supervisorBargeCoach: SupervisorBargeCoachState;
   };
 };
 
@@ -26,5 +28,6 @@ export interface AppState {
 export default combineReducers({
   outboundCallerIdSelector: OutboundCallerIDSelectorReducer,
   callbackAndVoicemail: CallbackAndVoicemailReducer,
+  supervisorBargeCoach: SupervisorBargeCoachReducer,
 });
 

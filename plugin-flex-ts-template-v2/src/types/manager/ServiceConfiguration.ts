@@ -48,6 +48,11 @@ export interface UIAttributes extends FlexUIAttributes {
       },
       omni_channel_capacity_management: {
         enabled: boolean
+      },
+      supervisor_barge_coach: {
+        enabled: boolean,
+        agent_coaching_panel: boolean,
+        supervisor_monitor_panel: boolean
       }
     }
   }

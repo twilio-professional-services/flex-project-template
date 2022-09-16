@@ -5,6 +5,7 @@ import HangupCall from './HangupCall';
 import HoldParticipant from './HoldParticipant';
 import KickParticipant from './KickParticipant';
 import MessageListItem from './MessageListItem';
+import MonitorCall from './MonitorCall';
 import NavigateToView from './NavigateToView';
 import RejectTask from './RejectTask';
 import SelectTask from './SelectTask';
@@ -21,6 +22,8 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   HangupCall(flex, manager);
   HoldParticipant(flex, manager);
   KickParticipant(flex, manager);
+  MessageListItem(flex, manager);
+  MonitorCall(flex, manager);
   NavigateToView(flex, manager);
   RejectTask(flex, manager);
   SelectTask(flex, manager);
@@ -30,5 +33,4 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   TransferTask(flex, manager);
   UnholdParticipant(flex, manager);
   WrapupTask(flex, manager);
-  MessageListItem(flex, manager);
 }

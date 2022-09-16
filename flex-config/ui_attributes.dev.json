@@ -1,6 +1,6 @@
 {
   "custom_data": {
-    "serverless_functions_domain": "custom-flex-extensions-serverless-1021-dev.twil.io",
+    "serverless_functions_domain": "custom-flex-extensions-serverless-2333-dev.twil.io",
     "features": {
       "activity_skill_filter": {
         "enabled": false,
@@ -47,7 +47,7 @@
       "supervisor_barge_coach": {
         "enabled": true,
         "agent_coaching_panel": true,
-        "supervisor_monitor_panel:": true
+        "supervisor_monitor_panel": true
       },
       "omni_channel_capacity_management": {
         "enabled": true
