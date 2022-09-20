@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import AgentDesktopView from './AgentDesktopView';
+import CallCanvas from './CallCanvas';
 import CallCanvasActions from './CallCanvasActions';
 import CRMContainer from './CRMContainer';
 import MainHeader from './MainHeader';
@@ -21,6 +22,7 @@ import TaskInfoPanel from './TaskInfoPanel';
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   AgentDesktopView(flex, manager);
+  CallCanvas(flex, manager);
   CallCanvasActions(flex, manager);
   CRMContainer(flex, manager);
   MainHeader(flex, manager);

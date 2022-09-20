@@ -45,14 +45,8 @@ Some additional features have been added to give the ability for the agent to se
 
 ## Changelog
 
-### 1.1
-
-**August 5, 2022**
-
-- Added Supervisor Monitor Panel to the plugin
-
 ### 1.0
 
-**July 29, 2022**
+**Sept 16 2022**
 
-- Migrated to PS Template, reset version to 1.0
+- Upgraded Barge Coach to Flex 2.0!
