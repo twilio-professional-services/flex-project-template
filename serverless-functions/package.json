@@ -17,6 +17,7 @@
   "dependencies": {
     "@twilio-labs/serverless-runtime-types": "^1.1",
     "lodash": "^4.17.21",
+    "randomstring": "^1.2.2",
     "twilio": "^3.65.0",
     "twilio-flex-token-validator": "^1.5.4"
   },

@@ -32,6 +32,9 @@
       "chat_transfer": {
         "enabled": true
       },
+      "chat_to_video_escalation": {
+        "enabled": true
+      },
       "enhanced_crm_container": {
         "enabled": true
       },
@@ -48,7 +51,7 @@
         "enabled": true,
         "agent_coaching_panel": true,
         "supervisor_monitor_panel": true
-      },      
+      },
       "activity_reservation_handler": {
         "enabled": false
       }
