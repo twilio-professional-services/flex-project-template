@@ -43,6 +43,9 @@ export interface UIAttributes extends FlexUIAttributes {
       chat_transfer: {
         enabled: boolean;
       };
+      chat_to_video_escalation: {
+        enabled: boolean;
+      };
       conference: {
         enabled: boolean;
       };

@@ -1,25 +1,42 @@
-const TokenValidator = require('twilio-flex-token-validator').functionValidator;
-const ParameterValidator = require(Runtime.getFunctions()['functions/common/helpers/parameter-validator'].path);
-const TaskOperations = require(Runtime.getFunctions()['functions/common/twilio-wrappers/taskrouter'].path);
+const TokenValidator = require("twilio-flex-token-validator").functionValidator;
+const ParameterValidator = require(Runtime.getFunctions()[
+  "common/helpers/parameter-validator"
+].path);
+const TaskOperations = require(Runtime.getFunctions()[
+  "common/twilio-wrappers/taskrouter"
+].path);
 
-exports.handler = TokenValidator(async function createCallbackFlex(context, event, callback) {
-
+exports.handler = TokenValidator(async function createCallbackFlex(
+  context,
+  event,
+  callback
+) {
   const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
   const requiredParameters = [
-    { key: 'numberToCall', purpose: 'the number of the customer to call' },
-    { key: 'numberToCallFrom', purpose: 'the number to call the customer from' },
-    { key: 'flexFlowSid', purpose: 'the SID of the Flex Flow that triggered this function' },
+    { key: "numberToCall", purpose: "the number of the customer to call" },
+    {
+      key: "numberToCallFrom",
+      purpose: "the number to call the customer from",
+    },
+    {
+      key: "flexFlowSid",
+      purpose: "the SID of the Flex Flow that triggered this function",
+    },
   ];
-  const parameterError = ParameterValidator.validate(context.PATH, event, requiredParameters);
+  const parameterError = ParameterValidator.validate(
+    context.PATH,
+    event,
+    requiredParameters
+  );
 
-  response.appendHeader('Access-Control-Allow-Origin', '*');
-  response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST');
-  response.appendHeader('Content-Type', 'application/json');
-  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+  response.appendHeader("Access-Control-Allow-Origin", "*");
+  response.appendHeader("Access-Control-Allow-Methods", "OPTIONS POST");
+  response.appendHeader("Content-Type", "application/json");
+  response.appendHeader("Access-Control-Allow-Headers", "Content-Type");
 
   if (Object.keys(event).length === 0) {
-    console.log('Empty event object, likely an OPTIONS request');
+    console.log("Empty event object, likely an OPTIONS request");
     return callback(null, response);
   }
 
@@ -29,7 +46,6 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
     callback(null, response);
   } else {
     try {
-
       const {
         numberToCall,
         numberToCallFrom,
@@ -46,20 +62,21 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
         transcriptSid,
         transcriptText,
         isDeleted,
-        taskChannel: overriddenTaskChannel
+        taskChannel: overriddenTaskChannel,
       } = event;
 
       // use assigned values or use defaults
-      const workflowSid = overriddenWorkflowSid || process.env.TWILIO_FLEX_CALLBACK_WORKFLOW_SID;
+      const workflowSid =
+        overriddenWorkflowSid || process.env.TWILIO_FLEX_CALLBACK_WORKFLOW_SID;
       const timeout = overriddenTimeout || 86400;
       const priority = overriddenPriority || 0;
       const attempts = retryAttempt || 0;
-      const taskChannel = overriddenTaskChannel || "voice"
+      const taskChannel = overriddenTaskChannel || "voice";
 
       // setup required task attributes for task
       const attributes = {
         taskType: recordingSid ? "voicemail" : "callback",
-        name: (recordingSid ? 'Voicemail' : 'Callback') + ` (${numberToCall})`,
+        name: (recordingSid ? "Voicemail" : "Callback") + ` (${numberToCall})`,
         flow_execution_sid: flexFlowSid,
         message: message || null,
         callBackData: {
@@ -72,18 +89,27 @@ exports.handler = TokenValidator(async function createCallbackFlex(context, even
           recordingUrl,
           transcriptSid,
           transcriptText,
-          isDeleted: isDeleted || false
+          isDeleted: isDeleted || false,
         },
         direction: "inbound",
         conversations: {
-          conversation_id
-        }
-      }
+          conversation_id,
+        },
+      };
 
-      const result = await TaskOperations.createTask({scriptName, context, workflowSid, taskChannel, attributes, priority, timeout, attempts: 0});
+      const result = await TaskOperations.createTask({
+        scriptName,
+        context,
+        workflowSid,
+        taskChannel,
+        attributes,
+        priority,
+        timeout,
+        attempts: 0,
+      });
       response.setStatusCode(result.status);
-      response.setBody({ success: result.success, taskSid: result.taskSid })
-      callback(null, response)
+      response.setBody({ success: result.success, taskSid: result.taskSid });
+      callback(null, response);
     } catch (error) {
       console.log(error);
       response.setStatusCode(500);

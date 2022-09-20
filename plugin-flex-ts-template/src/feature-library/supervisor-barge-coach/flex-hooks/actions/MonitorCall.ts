@@ -12,14 +12,14 @@ export const enableBargeCoachButtonsUponMonitor = async (flex: typeof Flex, mana
     if(!enabled) return;
     // Listening for supervisor to monitor the call to enable the
     // barge and coach buttons, as well as reset their muted/coaching states
-    Flex.Actions.addListener('afterMonitorCall', (payload) => {
+    flex.Actions.addListener('afterMonitorCall', (payload) => {
 
         console.log(`Monitor button triggered, enable the Coach and Barge-In Buttons`);
         manager.store.dispatch(BargeCoachStatusAction.setBargeCoachStatus({ 
             enableCoachButton: true,
             coaching: false,
             enableBargeinButton: true,
-            muted: true 
+            muted: true
         }));
 
         // If the Supervisor Monitor Panel feature is enabled, we want to update the Sync Doc that we are monitoring
@@ -41,13 +41,14 @@ export const disableBargeCoachButtonsUponMonitor = async (flex: typeof Flex, man
     if(!enabled) return;
     // Listening for supervisor to click to unmonitor the call to disable the
     // barge and coach buttons, as well as reset their muted/coaching states
-    Flex.Actions.addListener('afterStopMonitoringCall', (payload) => {
+    flex.Actions.addListener('afterStopMonitoringCall', (payload) => {
         console.log(`Unmonitor button triggered, disable the Coach and Barge-In Buttons`);
         manager.store.dispatch(BargeCoachStatusAction.setBargeCoachStatus({ 
             enableCoachButton: false,
             coaching: false,
             enableBargeinButton: false,
-            muted: true 
+            muted: true,
+            barge: false
         }));
 
         // If the Agent Coaching Panel and Supervisor Monitor Panel are disabled, we can skip otherwise

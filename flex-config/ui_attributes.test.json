@@ -32,6 +32,9 @@
       "chat_transfer": {
         "enabled": true
       },
+      "chat_to_video_escalation": {
+        "enabled": true
+      },
       "conference": {
         "enabled": true
       },
