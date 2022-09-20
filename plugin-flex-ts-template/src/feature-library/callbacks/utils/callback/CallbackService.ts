@@ -6,38 +6,36 @@ import { CallbackNotification } from '../../flex-hooks/notifications/Callback';
 import { Actions } from '../../flex-hooks/states/callback';
 
 export interface CreateCallbackResponse {
-  success: boolean,
-  taskSid: string,
-  data: string,
-  message: string
+  success: boolean;
+  taskSid: string;
+  data: string;
+  message: string;
 }
 
 export interface CreateCallbackRequest {
-  numberToCall: string,
-  numberToCallFrom: string,
-  flexFlowSid: string,
-  workflowSid?: string,
-  timeout?: number,
-  priority?: number,
-  attempts?: number,
-  conversation_id?: string,
-  message?: string,
-  utcDateTimeReceived?: Date,
-  recordingSid?: string,
-  recordingUrl?: string,
-  transcriptSid?: string,
-  transcriptText?: string,
-  isDeleted?: boolean,
-};
+  numberToCall: string;
+  numberToCallFrom: string;
+  flexFlowSid: string;
+  workflowSid?: string;
+  timeout?: number;
+  priority?: number;
+  attempts?: number;
+  conversation_id?: string;
+  message?: string;
+  utcDateTimeReceived?: Date;
+  recordingSid?: string;
+  recordingUrl?: string;
+  transcriptSid?: string;
+  transcriptText?: string;
+  isDeleted?: boolean;
+}
 
 class CallbackService extends ApiService {
-
   async callCustomerBack(task: Flex.ITask, attempts: number): Promise<Flex.ITask> {
-
     // Check to see if outbound dialing is enabled on the account
     // as outbound calls won't work unless it is
     const { outbound_call_flows } = this.manager.serviceConfiguration;
-    const enabledOutboundFlows = Object.values(outbound_call_flows).filter(flow => flow.enabled);
+    const enabledOutboundFlows = Object.values(outbound_call_flows).filter((flow) => flow.enabled);
 
     if (!enabledOutboundFlows.length) {
       Flex.Notifications.showNotification(CallbackNotification.OutboundDialingNotEnabled);
@@ -46,7 +44,7 @@ class CallbackService extends ApiService {
       try {
         // update state with the existing reservation sid so that we can re-select it later
         Flex.Manager.getInstance().store.dispatch(Actions.setLastPlacedCallback(task));
-        
+
         // move the inbound callback task to wrapup state
         // this continues to block any inbound calls coming to
         // agent while they wait for outbound call to get placed
@@ -55,14 +53,13 @@ class CallbackService extends ApiService {
         const { queueSid } = task;
         const { callBackData, conversations } = task.attributes as TaskAttributes;
         if (callBackData) {
-
           const { numberToCall: destination, numberToCallFrom: callerId } = callBackData;
 
           let outboundCallTaskAttributes = {
             ...task.attributes,
             taskType: 'callback-outbound',
             conversations: {
-              conversation_id: conversations?.conversation_id || task.taskSid
+              conversation_id: conversations?.conversation_id || task.taskSid,
             },
             autoClose: true,
             parentTask: task.sid,
@@ -73,7 +70,7 @@ class CallbackService extends ApiService {
             destination,
             callerId,
             queueSid,
-            taskAttributes: outboundCallTaskAttributes
+            taskAttributes: outboundCallTaskAttributes,
           });
         }
       } catch (e) {
@@ -81,10 +78,9 @@ class CallbackService extends ApiService {
           // there can be some race conditions on invoking outbound call
           // this helps address them silently
           return await this.callCustomerBack(task, attempts + 1);
-        }
-        else {
+        } else {
           Flex.Notifications.showNotification(CallbackNotification.ErrorCallingCustomer, {
-            customer: task.defaultFrom
+            customer: task.defaultFrom,
           });
           throw e;
         }
@@ -92,7 +88,7 @@ class CallbackService extends ApiService {
     }
     return task;
   }
-  
+
   async requeueCallback(task: Flex.ITask): Promise<Flex.ITask> {
     try {
       let request: CreateCallbackRequest = {
@@ -105,26 +101,28 @@ class CallbackService extends ApiService {
         attempts: task.attributes.callBackData.attempts ? Number(task.attributes.callBackData.attempts) + 1 : 1,
         conversation_id: task.taskSid,
         message: task.attributes.message,
-        utcDateTimeReceived: task.attributes.callBackData.utcDateTimeReceived ? task.attributes.callBackData.utcDateTimeReceived : new Date(),
+        utcDateTimeReceived: task.attributes.callBackData.utcDateTimeReceived
+          ? task.attributes.callBackData.utcDateTimeReceived
+          : new Date(),
         recordingSid: task.attributes.callBackData.recordingSid,
         recordingUrl: task.attributes.callBackData.recordingUrl,
         transcriptSid: task.attributes.callBackData.transcriptSid,
         transcriptText: task.attributes.callBackData.transcriptText,
-        isDeleted: task.attributes.callBackData.isDeleted
-      }
-      
+        isDeleted: task.attributes.callBackData.isDeleted,
+      };
+
       let response = await this.#createCallback(request);
-      
+
       if (response.success) {
-        await Flex.Actions.invokeAction("WrapupTask", { task });
+        await Flex.Actions.invokeAction('WrapupTask', { task });
       }
     } catch (error) {
       console.log('Unable to requeue callback', error);
     }
-    
+
     return task;
   }
-  
+
   #createCallback = async (request: CreateCallbackRequest): Promise<CreateCallbackResponse> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(this.manager.user.token),
@@ -137,23 +135,25 @@ class CallbackService extends ApiService {
       attempts: request.attempts ? encodeURIComponent(request.attempts) : undefined,
       conversation_id: request.conversation_id ? encodeURIComponent(request.conversation_id) : undefined,
       message: request.message ? encodeURIComponent(request.message) : undefined,
-      utcDateTimeReceived: request.utcDateTimeReceived ? encodeURIComponent(request.utcDateTimeReceived.toString()) : undefined,
+      utcDateTimeReceived: request.utcDateTimeReceived
+        ? encodeURIComponent(request.utcDateTimeReceived.toString())
+        : undefined,
       recordingSid: request.recordingSid ? encodeURIComponent(request.recordingSid) : undefined,
       recordingUrl: request.recordingUrl ? encodeURIComponent(request.recordingUrl) : undefined,
       transcriptSid: request.transcriptSid ? encodeURIComponent(request.transcriptSid) : undefined,
       transcriptText: request.transcriptText ? encodeURIComponent(request.transcriptText) : undefined,
       isDeleted: request.isDeleted ? encodeURIComponent(request.isDeleted) : undefined,
     };
-  
+
     const response = await this.fetchJsonWithReject<CreateCallbackResponse>(
-          `https://${this.serverlessDomain}/functions/features/callbacks/flex/create-callback`,
-          {
-              method: 'post',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: this.buildBody(encodedParams)
-          }
-      );
-    
+      `https://${this.serverlessDomain}/features/callbacks/flex/create-callback`,
+      {
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      },
+    );
+
     return response;
   };
 }

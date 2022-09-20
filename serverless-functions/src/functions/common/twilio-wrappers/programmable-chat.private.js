@@ -1,10 +1,12 @@
-const {isString, isObject, isNumber } = require("lodash");
+const { isString, isObject, isNumber } = require("lodash");
 
-const retryHandler = (require(Runtime.getFunctions()['functions/common/twilio-wrappers/retry-handler'].path)).retryHandler;
+const retryHandler = require(Runtime.getFunctions()[
+  "common/twilio-wrappers/retry-handler"
+].path).retryHandler;
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function 
+ * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.channelSid the channel to be updated
@@ -14,39 +16,35 @@ const retryHandler = (require(Runtime.getFunctions()['functions/common/twilio-wr
  *    to the channel object
  */
 exports.updateChannelAttributes = async function (parameters) {
+  const { scriptName, attempts, context, channelSid, attributes } = parameters;
 
-  const {scriptName, attempts, context, channelSid, attributes} = parameters;
+  if (!isString(scriptName))
+    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
+  if (!isNumber(attempts))
+    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
+  if (!isObject(context))
+    throw "Invalid parameters object passed. Parameters must contain context object";
+  if (!isString(channelSid))
+    throw "Invalid parameters object passed. Parameters must contain channelSid string";
+  if (!isString(attributes))
+    throw "Invalid parameters object passed. Parameters must contain attributes string";
 
-  if(!isString(scriptName))
-      throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
-  if(!isNumber(attempts))
-      throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if(!isObject(context))
-      throw "Invalid parameters object passed. Parameters must contain context object";
-  if(!isString(channelSid))
-      throw "Invalid parameters object passed. Parameters must contain channelSid string";
-  if(!isString(attributes))
-      throw "Invalid parameters object passed. Parameters must contain attributes string";
-  
-  try {  
+  try {
     const client = context.getTwilioClient();
-    const channel = await client.chat.services(context.TWILIO_FLEX_CHAT_SERVICE_SID)
+    const channel = await client.chat
+      .services(context.TWILIO_FLEX_CHAT_SERVICE_SID)
       .channels(channelSid)
-      .fetch()
+      .fetch();
 
-    if (!channel) return { success: false, message: 'channel not found' }
+    if (!channel) return { success: false, message: "channel not found" };
 
-    const updatedChannel = await client.chat.services(context.TWILIO_FLEX_CHAT_SERVICE_SID)
+    const updatedChannel = await client.chat
+      .services(context.TWILIO_FLEX_CHAT_SERVICE_SID)
       .channels(channelSid)
-      .update({ attributes: attributes })
+      .update({ attributes: attributes });
 
     return { success: true, status: 200, channel: updatedChannel };
+  } catch (error) {
+    return retryHandler(error, parameters, arguments.callee);
   }
-  catch (error) {
-    return retryHandler(
-        error, 
-        parameters,
-        arguments.callee
-    )
-  }
-}
+};
