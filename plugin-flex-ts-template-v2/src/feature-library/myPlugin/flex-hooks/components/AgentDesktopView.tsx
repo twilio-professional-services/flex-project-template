@@ -1,4 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
+import React from 'react';
 import CustomTaskList from "../../custom-components/CustomTaskList";
 
 function addCustomTaskListToPanel1(flex: typeof Flex) {
