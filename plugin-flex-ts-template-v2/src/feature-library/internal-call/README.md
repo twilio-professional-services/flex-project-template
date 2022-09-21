@@ -53,5 +53,5 @@ On the called agent side, the AcceptTask action is also overridden and a similar
 
 # Known issues
 
-1. When in an agent-to-agent call, the transfer button is hidden, as Flex does not handle this scenario correctly. 
+1. When in an agent-to-agent call, the internal transfer button is hidden, as Flex does not handle this scenario correctly. 
 2. When in an agent-to-agent call, an external transfer is done correctly, but the UI does not reflect what is going on.
