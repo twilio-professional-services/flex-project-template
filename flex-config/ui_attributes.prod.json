@@ -41,6 +41,9 @@
       "enhanced_crm_container": {
         "enabled": true
       },
+      "internal_call": {
+        "enabled": true
+      },
       "override_queue_transfer_directory": {
         "enabled": true
       },

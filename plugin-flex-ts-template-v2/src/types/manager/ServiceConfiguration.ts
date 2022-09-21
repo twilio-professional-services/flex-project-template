@@ -52,6 +52,9 @@ export interface UIAttributes extends FlexUIAttributes {
       enhanced_crm_container: {
         enabled: boolean;
       };
+      internal_call: {
+        enabled: boolean;
+      };
       override_queue_transfer_directory: {
         enabled: boolean;
       };

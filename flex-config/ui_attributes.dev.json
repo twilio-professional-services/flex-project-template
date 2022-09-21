@@ -33,12 +33,15 @@
         "enabled": false
       },
       "chat_to_video_escalation": {
-        "enabled": true
+        "enabled": false
       },
       "conference": {
-        "enabled": true
+        "enabled": false
       },
       "enhanced_crm_container": {
+        "enabled": false
+      },
+      "internal_call": {
         "enabled": false
       },
       "override_queue_transfer_directory": {
