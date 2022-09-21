@@ -4,7 +4,7 @@ import SupervisorMonitorPanel from '../../custom-components/SupervisorMonitorPan
 import { SyncDoc } from '../../utils/sync/Sync';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled, supervisor_monitor_panel } = custom_data.features.supervisor_barge_coach;
+const { enabled = false, supervisor_monitor_panel = false } = custom_data?.features?.supervisor_barge_coach || {}
 
 
 export function addSupervisorMonitorPanel(flex: typeof Flex, manager: Flex.Manager) {

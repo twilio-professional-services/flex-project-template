@@ -1,0 +1,27 @@
+import * as Flex from "@twilio/flex-ui";
+
+type ActionNames =
+  | "AcceptTask"
+  | "CompleteTask"
+  | "HangupCall"
+  | "HoldParticipant"
+  | "KickParticipant"
+  | "MonitorCall"
+  | "StopMonitorCall"
+  | "SelectTask"
+  | "SetWorkerActivity"
+  | "StartOutboundCall"
+  | "UnHoldParticipant"
+  | "NavigateToView"
+  | "RejectTask"
+  | "SetActivity"
+  | "TransferTask"
+  | "WrapUpTask";
+
+type ActionEvents = "before" | "after" | "replace";
+
+type ActionHandler = (flex: typeof Flex, manager: Flex.Manager) => void;
+
+export type Actions = Partial<
+  Record<ActionNames, Partial<Record<ActionEvents, ActionHandler[]>>>
+>;

@@ -3,7 +3,7 @@ import CallbackAndVoicemail from '../../custom-components/CallbackAndVoicemail'
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled, allow_requeue, max_attempts } = custom_data.features.callbacks;
+const { enabled = false, allow_requeue, max_attempts } = custom_data?.features?.callbacks || {}
 
 export function replaceViewForCallbackAndVoicemail(flex: typeof Flex, manager: Flex.Manager) {
   

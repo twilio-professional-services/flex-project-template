@@ -7,7 +7,7 @@ import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButton
 import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateModeButton'
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled, agent_coaching_panel } = custom_data.features.supervisor_barge_coach;
+const { enabled = false, agent_coaching_panel = false } = custom_data?.features?.supervisor_barge_coach || {}
 
 
 export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.Manager) {

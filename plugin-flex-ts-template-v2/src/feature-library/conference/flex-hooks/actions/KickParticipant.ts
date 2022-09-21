@@ -3,7 +3,7 @@ import { UIAttributes } from "types/manager/ServiceConfiguration";
 import ConferenceService from "../../../../utils/serverless/ConferenceService/ConferenceService";
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled } = custom_data.features.conference;
+const { enabled = false } = custom_data?.features.conference || {};
 
 export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;

@@ -4,8 +4,8 @@ import { TaskAttributes } from '../../../../types/task-router/Task';
 import VoicemailIcon from "@material-ui/icons/Voicemail";
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled } = custom_data.features.callbacks;
+const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes || {}
+const { enabled = false } = custom_data?.features?.callbacks || {}
 
 export function createVoicemailChannel(flex: typeof Flex, manager: Flex.Manager) {
 

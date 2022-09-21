@@ -1,12 +1,14 @@
-import * as Flex from '@twilio/flex-ui';
+import * as Flex from "@twilio/flex-ui";
 
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { UIAttributes } from "types/manager/ServiceConfiguration";
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled } = custom_data.features.scrollable_activities;
+const { custom_data } =
+  (Flex.Manager.getInstance().serviceConfiguration
+    .ui_attributes as UIAttributes) || {};
+const { enabled = false } = custom_data?.features?.scrollable_activities || {};
 
 export default async () => {
-  if( !enabled ) return;
+  if (!enabled) return;
 
   /***
    * This is a temporary way to accomplish this, given Paste and <CustomizationProvider> features.
@@ -19,7 +21,7 @@ export default async () => {
    *     maxHeight: '90vh',
    *   }
    * }}>
-   * 
+   *
    */
   Flex.Manager.getInstance().updateConfig({
     theme: {
@@ -29,12 +31,12 @@ export default async () => {
             ".Twilio-MainHeader-end": {
               "[data-paste-element='MENU']": {
                 overflowY: "scroll",
-                maxHeight: "90vh"
-              }
-            }
-          }
-        }
-      }
-    }
-  });  
+                maxHeight: "90vh",
+              },
+            },
+          },
+        },
+      },
+    },
+  });
 };

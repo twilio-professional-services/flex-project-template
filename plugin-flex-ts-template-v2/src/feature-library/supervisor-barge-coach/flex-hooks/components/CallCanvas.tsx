@@ -4,8 +4,8 @@ import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel'
 import { cleanStateAndSyncUponAgentHangUp } from '../actions/reservation';
 import { SyncDoc } from '../../utils/sync/Sync'
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled, agent_coaching_panel } = custom_data.features.supervisor_barge_coach;
+const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes || {};
+const { enabled = false, agent_coaching_panel = false } = custom_data?.features?.supervisor_barge_coach || {}
 
 
 export function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Flex.Manager) {
