@@ -8,7 +8,7 @@ const ParameterValidator = require(Runtime.getFunctions()[
 ].path);
 const { VideoGrant } = AccessToken;
 
-exports.handler = async (context, event, callback) => {
+exports.handler = async function clientGetVideoToken(context, event, callback) {
   console.log("----- clientGetVideoToken -----");
   const scriptName = arguments.callee.name;
   const response = new Twilio.Response();

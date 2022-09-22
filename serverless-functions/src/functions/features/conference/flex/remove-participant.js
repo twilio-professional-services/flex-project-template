@@ -6,7 +6,7 @@ const ConferenceOperations = require(Runtime.getFunctions()[
   "common/twilio-wrappers/conference-participant"
 ].path);
 
-exports.handler = TokenValidator(async (context, event, callback) => {
+exports.handler = TokenValidator(async function removeParticipant(context, event, callback) {
   const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
   const requiredParameters = [

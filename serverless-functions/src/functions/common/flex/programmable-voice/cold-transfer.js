@@ -6,7 +6,7 @@ const VoiceOperations = require(Runtime.getFunctions()[
   "common/twilio-wrappers/programmable-voice"
 ].path);
 
-exports.handler = TokenValidator(async (context, event, callback) => {
+exports.handler = TokenValidator(async function coldTransfer(context, event, callback) {
   const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
   const requiredParameters = [
