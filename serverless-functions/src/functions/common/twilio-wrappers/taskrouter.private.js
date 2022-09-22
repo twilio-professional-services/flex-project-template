@@ -418,3 +418,128 @@ exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
     return retryHandler(error, parameters, arguments.callee);
   }
 };
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {string} parameters.scriptName the name of the top level lambda function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.taskSid the task to update
+ * @param {object} parameters.updateParams parameters to update on the task
+ * @returns {object} an object containing the task if successful
+ * @description updates the given task with the given params
+ */
+exports.updateTask = async function updateTask(parameters) {
+  const { attempts, scriptName, taskSid, updateParams, context } = parameters;
+
+  if (!isNumber(attempts))
+    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
+  if (!isString(scriptName))
+    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
+  if (!isString(taskSid))
+    throw "Invalid parameters object passed. Parameters must contain the taskSid string";
+  if (!isObject(updateParams))
+    throw "Invalid parameters object passed. Parameters must contain updateParams object";
+  if (!isObject(context))
+    throw "Invalid parameters object passed. Parameters must contain reason context object";
+
+  try {
+    const client = context.getTwilioClient();
+
+    const task = await client.taskrouter
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .tasks(taskSid)
+      .update(updateParams);
+
+    return {
+      success: true,
+      status: 200,
+      task: {
+        ...task,
+        attributes: JSON.parse(task.attributes),
+      }
+    };
+  } catch (error) {
+    // 20001 error code is returned when the task is not in an assigned state
+    // this can happen if its not been assigned at all or its been already closed
+    // through another process; as a result assuming the latter and
+    // treating as a success
+    // https://www.twilio.com/docs/api/errors/20001
+    // 20404 error code is returned when the task no longer exists
+    // in which case it is also assumed to be completed
+    // https://www.twilio.com/docs/api/errors/20404
+    if (error.code === 20001 || error.code === 20404) {
+      const { scriptName } = parameters;
+      console.warn(
+        `${scriptName}.${arguments.callee.name}(): ${error.message}`
+      );
+      return {
+        success: true,
+        status: 200,
+        message: error.message,
+      };
+    }
+    return retryHandler(error, parameters, arguments.callee);
+  }
+};
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {string} parameters.scriptName the name of the top level lambda function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.taskSid the task to fetch
+ * @returns {object} an object containing the task if successful
+ * @description fetches the given task
+ */
+exports.fetchTask = async function fetchTask(parameters) {
+  const { attempts, scriptName, taskSid, context } = parameters;
+
+  if (!isNumber(attempts))
+    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
+  if (!isString(scriptName))
+    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
+  if (!isString(taskSid))
+    throw "Invalid parameters object passed. Parameters must contain the taskSid string";
+  if (!isObject(context))
+    throw "Invalid parameters object passed. Parameters must contain reason context object";
+
+  try {
+    const client = context.getTwilioClient();
+
+    const task = await client.taskrouter
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .tasks(taskSid)
+      .fetch();
+
+    return {
+      success: true,
+      status: 200,
+      task: {
+        ...task,
+        attributes: JSON.parse(task.attributes),
+      }
+    };
+  } catch (error) {
+    // 20001 error code is returned when the task is not in an assigned state
+    // this can happen if its not been assigned at all or its been already closed
+    // through another process; as a result assuming the latter and
+    // treating as a success
+    // https://www.twilio.com/docs/api/errors/20001
+    // 20404 error code is returned when the task no longer exists
+    // in which case it is also assumed to be completed
+    // https://www.twilio.com/docs/api/errors/20404
+    if (error.code === 20001 || error.code === 20404) {
+      const { scriptName } = parameters;
+      console.warn(
+        `${scriptName}.${arguments.callee.name}(): ${error.message}`
+      );
+      return {
+        success: true,
+        status: 200,
+        message: error.message,
+      };
+    }
+    return retryHandler(error, parameters, arguments.callee);
+  }
+};

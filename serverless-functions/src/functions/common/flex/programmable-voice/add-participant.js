@@ -6,13 +6,13 @@ const ConferenceOperations = require(Runtime.getFunctions()[
   "common/twilio-wrappers/conference-participant"
 ].path);
 
-exports.handler = TokenValidator(async (context, event, callback) => {
+exports.handler = TokenValidator(async function addParticipant(context, event, callback) {
   const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
   const requiredParameters = [
-    { key: "conference", purpose: "unique ID of conference to update" },
-    { key: "participant", purpose: "unique ID of participant to update" },
-    { key: "hold", purpose: "whether to hold or unhold the participant" },
+    { key: "taskSid", purpose: "unique ID of task to update" },
+    { key: "to", purpose: "number to add to the conference" },
+    { key: "from", purpose: "caller ID to use when adding to the conference" },
   ];
   const parameterError = ParameterValidator.validate(
     context.PATH,
@@ -34,14 +34,14 @@ exports.handler = TokenValidator(async (context, event, callback) => {
   }
 
   try {
-    const { conference, participant, hold } = event;
+    const { taskSid, to, from } = event;
 
-    const result = await ConferenceOperations.holdParticipant({
+    const result = await ConferenceOperations.addParticipant({
       context,
       scriptName,
-      conference,
-      participant,
-      hold: hold === "true",
+      taskSid,
+      to,
+      from,
       attempts: 0,
     });
 

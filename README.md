@@ -68,17 +68,19 @@ Lastly, this package manages the github action workflows - with one example bein
 
 ## Further Feature library Information
 
+- [Activity Reservation Handler](plugin-flex-ts-template/src/feature-library/activity-reservation-handler/README.md)
 - [Activity Skill Filter](plugin-flex-ts-template/src/feature-library/activity-skill-filter/README.md)
 - [Callbacks](plugin-flex-ts-template/src/feature-library/callbacks/README.md)
 - [Caller ID](plugin-flex-ts-template/src/feature-library/caller-id/README.md)
+- [Chat to Video Escalation (v2 only)](plugin-flex-ts-template-v2/src/feature-library/chat-to-video-escalation/README.md)
 - [Chat Transfer](plugin-flex-ts-template/src/feature-library/chat-transfer/README.md)
 - [Conference (v2 only)](plugin-flex-ts-template-v2/src/feature-library/conference/README.md)
 - [Enhanced CRM Container](plugin-flex-ts-template/src/feature-library/enhanced-crm-container/README.md)
+- [Internal Call (v2 only)](plugin-flex-ts-template-v2/src/feature-library/internal-call/README.md)
 - [Override Queue Transfer Directory](plugin-flex-ts-template/src/feature-library/override-queue-transfer-directory/README.md)
 - [Salesforce Click To Dial](plugin-flex-ts-template/src/feature-library/salesforce-click-to-dial/README.md)
 - [Scrollable Activities](plugin-flex-ts-template/src/feature-library/scrollable-activities/README.md)
 - [Supervisor Barge Coach](plugin-flex-ts-template/src/feature-library/supervisor-barge-coach/README.md)
-- [Activity Reservation Handler](plugin-flex-ts-template/src/feature-library/activity-reservation-handler/README.md)
 
 ---
 

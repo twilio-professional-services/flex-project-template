@@ -2,6 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import AcceptTask from './AcceptTask';
 import CompleteTask from './CompleteTask';
 import HangupCall from './HangupCall';
+import HoldCall from './HoldCall';
 import HoldParticipant from './HoldParticipant';
 import KickParticipant from './KickParticipant';
 import MonitorCall from './MonitorCall';
@@ -12,6 +13,7 @@ import SetActivity from './SetActivity';
 import SetWorkerActivity from './SetWorkerActivity';
 import StartOutboundCall from './StartOutboundCall';
 import TransferTask from './TransferTask';
+import UnholdCall from './UnholdCall';
 import UnholdParticipant from './UnholdParticipant';
 import WrapupTask from './WrapupTask';
 
@@ -19,6 +21,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   AcceptTask(flex, manager);
   CompleteTask(flex, manager);
   HangupCall(flex, manager);
+  HoldCall(flex, manager);
   HoldParticipant(flex, manager);
   KickParticipant(flex, manager);
   MonitorCall(flex, manager);
@@ -29,6 +32,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   SetWorkerActivity(flex, manager);
   StartOutboundCall(flex, manager);
   TransferTask(flex, manager);
+  UnholdCall(flex, manager);
   UnholdParticipant(flex, manager);
   WrapupTask(flex, manager);
 }

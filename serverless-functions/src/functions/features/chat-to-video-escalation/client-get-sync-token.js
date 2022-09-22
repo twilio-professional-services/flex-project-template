@@ -8,7 +8,7 @@ const ParameterValidator = require(Runtime.getFunctions()[
 ].path);
 const { SyncGrant } = AccessToken;
 
-exports.handler = async (context, event, callback) => {
+exports.handler = async function clientGetSyncToken(context, event, callback) {
   console.log("----- clientGetSyncToken -----");
   const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
