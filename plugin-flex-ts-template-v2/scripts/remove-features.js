@@ -1,8 +1,8 @@
-const { forEach } = require("lodash");
 var shell = require("shelljs");
 // https://github.com/shelljs/shelljs#shellstringstr
 
 const templateDirectory = "template-files/no-features/";
+const featureDirectory = "src/feature-library/";
 const srcDirctory = "src/";
 
 const filesToCopy = [
@@ -20,7 +20,7 @@ const filesToCopy = [
   },
   {
     src: templateDirectory + "flex-hooks/css-overrides.ts",
-    dst: srcDirctory + "flex-hooks/overrides/",
+    dst: srcDirctory + "flex-hooks/css-overrides/",
   },
   {
     src: templateDirectory + "flex-hooks/events.ts",
@@ -38,6 +38,10 @@ const filesToCopy = [
     src: templateDirectory + "flex-hooks/strings.ts",
     dst: srcDirctory + "flex-hooks/strings/",
   },
+  {
+    src: templateDirectory + "flex-hooks/notifications.ts",
+    dst: srcDirctory + "flex-hooks/notifications/",
+  },
 ];
 
 shell.echo("Clearing flex-hooks of features handlers");
@@ -46,5 +50,5 @@ filesToCopy.forEach((files) => {
   shell.cp(files.src, files.dst);
 });
 
-shell.echo("Delete feature folders");
-// TODO - delete folders from features-library
+shell.echo(`Deleting ${featureDirectory} folders`);
+shell.rm("-rf", `${featureDirectory}/*`);
