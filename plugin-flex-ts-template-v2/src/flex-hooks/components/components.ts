@@ -1,6 +1,4 @@
-import * as Flex from "@twilio/flex-ui";
 import { Components } from "../../types/flex-hooks/Components";
-import { sampleFeatureCustomTaskListToPanel1 } from "../../feature-library/myPlugin/flex-hooks/components/AgentDesktopView";
 import { addConferenceToCallCanvas } from "../../feature-library/conference/flex-hooks/components/CallCanvas";
 import { addSupervisorCoachingPanelToAgent } from "../../feature-library/supervisor-barge-coach/flex-hooks/components/CallCanvas";
 import { addConferenceToCallCanvasActions } from "../../feature-library/conference/flex-hooks/components/CallCanvasActions";
@@ -14,7 +12,7 @@ import { replaceViewForCallbackAndVoicemail } from "../../feature-library/callba
 import { addSupervisorBargeCoachButtons } from "../../feature-library/supervisor-barge-coach/flex-hooks/components/TaskOverviewCanvas";
 
 const componentHandlers: Components = {
-  AgentDesktopView: [sampleFeatureCustomTaskListToPanel1],
+  AgentDesktopView: [],
   CallCanvas: [addConferenceToCallCanvas, addSupervisorCoachingPanelToAgent],
   CallCanvasActions: [addConferenceToCallCanvasActions],
   CRMContainer: [],

@@ -15,11 +15,10 @@ import { beforeSetActivity } from "../../feature-library/activity-reservation-ha
 import { applySelectedCallerIdForDialedNumbers } from "../../feature-library/caller-id/flex-hooks/actions/StartOutboundCall";
 import { changeWorkerActivityBeforeOutboundCall } from "../../feature-library/activity-reservation-handler/flex-hooks/actions/StartOutboundCall";
 import { handleUnholdConferenceParticipant } from "../../feature-library/conference/flex-hooks/actions/UnholdParticipant";
-import { sampleFeatureBeforeAcceptTask } from "../../feature-library/myPlugin/flex-hooks/actions/AcceptTask";
 
 const actionsToRegister: Actions = {
   AcceptTask: {
-    before: [sampleFeatureBeforeAcceptTask, omniChannelChatCapacityManager],
+    before: [omniChannelChatCapacityManager],
     after: [],
     replace: [],
   },
