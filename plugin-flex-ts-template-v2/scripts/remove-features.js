@@ -26,6 +26,18 @@ const filesToCopy = [
     src: templateDirectory + "flex-hooks/events.ts",
     dst: srcDirctory + "flex-hooks/events/",
   },
+  {
+    src: templateDirectory + "flex-hooks/paste-elements.ts",
+    dst: srcDirctory + "flex-hooks/paste-elements/",
+  },
+  {
+    src: templateDirectory + "flex-hooks/states.ts",
+    dst: srcDirctory + "flex-hooks/states/",
+  },
+  {
+    src: templateDirectory + "flex-hooks/strings.ts",
+    dst: srcDirctory + "flex-hooks/strings/",
+  },
 ];
 
 shell.echo("Clearing flex-hooks of features handlers");
@@ -34,4 +46,5 @@ filesToCopy.forEach((files) => {
   shell.cp(files.src, files.dst);
 });
 
+shell.echo("Delete feature folders");
 // TODO - delete folders from features-library
