@@ -4,6 +4,7 @@ var shell = require("shelljs");
 const templateDirectory = "template-files/no-features/";
 const featureDirectory = "src/feature-library/";
 const srcDirctory = "src/";
+const serverlessDirectory = "../serverless-functions/src/";
 
 const filesToCopy = [
   {
@@ -56,3 +57,9 @@ filesToCopy.forEach((files) => {
 
 shell.echo(`Deleting ${featureDirectory} folders`);
 shell.rm("-rf", `${featureDirectory}/*`);
+
+shell.echo(
+  `Deleting ${serverlessDirectory} functions and asserts feature folders`
+);
+shell.rm("-rf", `${serverlessDirectory}functions/features/*`);
+shell.rm("-rf", `${serverlessDirectory}assets/features/*`);
