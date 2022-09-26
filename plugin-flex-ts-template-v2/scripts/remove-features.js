@@ -42,6 +42,10 @@ const filesToCopy = [
     src: templateDirectory + "flex-hooks/notifications.ts",
     dst: srcDirctory + "flex-hooks/notifications/",
   },
+  {
+    src: templateDirectory + "types/CustomServiceConfiguration.ts",
+    dst: srcDirctory + "types/manager/",
+  },
 ];
 
 shell.echo("Clearing flex-hooks of features handlers");
