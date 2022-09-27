@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import * as Flex from '@twilio/flex-ui';
 
 import { wrapperStyle, frameStyle, IFrameRefreshButtonStyledDiv } from './IFrameWrapperStyles'
@@ -11,7 +11,7 @@ export interface Props {
 
 export const IFrameWrapper = ({thisTask, task, baseUrl}: Props) => {
 
-  const [iFrameRef, setIframeRef] = useState(React.createRef() as React.RefObject<HTMLIFrameElement>);
+  const iFrameRef = useRef<HTMLIFrameElement>(null);
   const [iFrameKey, setIframeKey] = useState(0 as number);
 
   const handleOnClick = (event: any) => {
