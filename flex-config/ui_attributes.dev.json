@@ -61,9 +61,9 @@
       "omni_channel_capacity_management": {
         "enabled": false
       },
-      "activity_reservation_handler": {
+      "activity_reservation_handler":{
         "enabled": false,
-        "system_activity_names": {
+        "system_activity_names" : {
           "available": "Available",
           "onATask": "On a Task",
           "onATaskNoAcd": "On a Task, No ACD",
