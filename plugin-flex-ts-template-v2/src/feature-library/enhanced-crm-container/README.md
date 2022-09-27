@@ -1,6 +1,6 @@
 # enhanced-crm-container
 
-This feature replaces the OOTB [CRMContainer](https://assets.flex.twilio.com/docs/releases/flex-ui/1.31.2/CRMContainer.html) with the aim of providing a more userfriendly iframe.
+This feature replaces the OOTB [CRMContainer](https://assets.flex.twilio.com/docs/releases/flex-ui/2.0.0-beta.1/programmable-components/components/CRMContainer) with the aim of providing a more userfriendly iframe.
 
 The short coming with the OOTB container is that it re-renders as you toggle between tasks. This CRMContainer will only render once and the iframe is simply hidden as you toggle between tasks. Furthermore, using a task attribute of parentTask we can ensure related tasks only render the one iframe. A typical example of this is when creating a callback which starts as one task and creates a seperate outbound call task to dial the customer. When toggling between these tasks, the iframe will render the same instance.
 

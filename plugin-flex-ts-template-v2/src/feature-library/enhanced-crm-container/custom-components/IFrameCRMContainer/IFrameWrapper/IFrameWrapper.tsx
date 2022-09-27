@@ -1,23 +1,7 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import * as Flex from '@twilio/flex-ui';
 
-import { wrapperStyle, frameStyle } from './IFrameWrapperStyles'
-
-const IFrameRefreshButtonStyledDiv = Flex.styled('div')`
-  align-items: center;
-  background-color: #5469D4;
-  border-radius: 50%;
-  bottom: 10px;
-  box-shadow: rgb(0 0 0 / 30%) 0px 1px 10px;
-  cursor: pointer;
-  display: flex;
-  height: 50px;
-  justify-content: center;
-  position: fixed;
-  right: 10px;
-  width: 50px;
-  z-index: 9999;
-`;
+import { wrapperStyle, frameStyle, IFrameRefreshButtonStyledDiv } from './IFrameWrapperStyles'
 
 export interface Props {
   thisTask: Flex.ITask, // task assigned to iframe
@@ -25,63 +9,40 @@ export interface Props {
   baseUrl: string
 }
 
-export class IFrameWrapper extends Component<Props> {
- 
-  state: {
-    iFrameKey: number;
-  };
+export const IFrameWrapper = ({thisTask, task, baseUrl}: Props) => {
 
-  private iFrameRef: React.RefObject<HTMLIFrameElement>;
+  const [iFrameRef, setIframeRef] = useState(React.createRef() as React.RefObject<HTMLIFrameElement>);
+  const [iFrameKey, setIframeKey] = useState(0 as number);
 
-  constructor(props: Props) {
-    super(props)
-
-    /**
-     * Setup ref for this iframe which we can use like this:
-     * this.iframeRef.current.contentWindow.postMessage('A test message...', '*')
-     */
-    this.iFrameRef = React.createRef();
-
-    this.state = {
-      iFrameKey: 0,
-    }
+  const handleOnClick = (event: any) => {
+    setIframeKey(Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER + 1)));
   }
 
-  handleOnClick = (event: any) => {
-    this.setState({
-      iFrameKey: Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER + 1)),
-    })
-  }
+  // This allows short-lived tasks (e.g. callback tasks) to share/show
+  // the same iframe as their parent task so CRM work can continue after
+  // the short-lived task completes and disappears
+  const visibility = (
+    task?.taskSid === thisTask.taskSid ||
+    task?.attributes?.parentTask === thisTask.sid
+  ) ? 'visible' : 'hidden' as any;
 
-  render() {
-    let { task, thisTask, baseUrl } = this.props;
+  const url = thisTask?.attributes?.case_id
+    ? `${baseUrl}?ticket_id=${thisTask.attributes.case_id}&iframe=true`
+    : `${baseUrl}?iframe=true`;
 
-    // This allows short-lived tasks (e.g. callback tasks) to share/show
-    // the same iframe as their parent task so CRM work can continue after
-    // the short-lived task completes and disappears
-    const visibility = (
-      task?.taskSid === thisTask.taskSid ||
-      task?.attributes?.parentTask === thisTask.sid
-    ) ? 'visible' : 'hidden' as any;
-
-    const url = thisTask?.attributes?.case_id
-      ? `${baseUrl}?ticket_id=${thisTask.attributes.case_id}&iframe=true`
-      : `${baseUrl}?iframe=true`;
-
-    return (
-      <div style={{ ...wrapperStyle, visibility }}>
-        <IFrameRefreshButtonStyledDiv
-          onClick={this.handleOnClick}
-        >
-          <Flex.IconButton icon="Loading" />
-        </IFrameRefreshButtonStyledDiv>
-        <iframe
-          key={this.state.iFrameKey}
-          style={frameStyle}
-          src={url}
-          ref={this.iFrameRef}
-        />
-      </div>
-    );
-  }
+  return (
+    <div style={{ ...wrapperStyle, visibility }}>
+      <IFrameRefreshButtonStyledDiv
+        onClick={handleOnClick}
+      >
+        <Flex.IconButton variant="primary" icon="Loading" />
+      </IFrameRefreshButtonStyledDiv>
+      <iframe
+        key={iFrameKey}
+        style={frameStyle}
+        src={url}
+        ref={iFrameRef}
+      />
+    </div>
+  );
 }
