@@ -6,6 +6,7 @@ import CallerIdLoaded from "../../../feature-library/caller-id/flex-hooks/events
 import ConferenceLoaded from "../../../feature-library/conference/flex-hooks/events/pluginsLoaded";
 import OmniChannelCapacityManagementLoaded from "../../../feature-library/omni-channel-capacity-management/flex-hooks/events/pluginsLoaded";
 import ScrollableActivitiesLoaded from "../../../feature-library/scrollable-activities/flex-hooks/events/pluginsLoaded";
+import EnhancedCRMContainer from "../../../feature-library/enhanced-crm-container/flex-hooks/events/pluginsLoaded";
 
 
 export default (manager: Flex.Manager) => {
@@ -16,5 +17,6 @@ export default (manager: Flex.Manager) => {
     ConferenceLoaded(FlexEvent.pluginsLoaded);
     OmniChannelCapacityManagementLoaded(FlexEvent.pluginsLoaded);
     ScrollableActivitiesLoaded(FlexEvent.pluginsLoaded);
+    EnhancedCRMContainer(FlexEvent.pluginsLoaded);
   });
 };

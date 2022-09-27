@@ -1,6 +1,6 @@
 {
   "custom_data": {
-    "serverless_functions_domain": "custom-flex-extensions-serverless-7569-dev.twil.io",
+    "serverless_functions_domain": "custom-flex-extensions-serverless-1021-dev.twil.io",
     "features": {
       "activity_skill_filter": {
         "enabled": false,
@@ -21,13 +21,13 @@
         }
       },
       "callbacks": {
-        "enabled": false,
+        "enabled": true,
         "allow_requeue": true,
         "max_attempts": 3,
         "auto_select_task": true
       },
       "caller_id": {
-        "enabled": false
+        "enabled": true
       },
       "chat_transfer": {
         "enabled": false
@@ -36,13 +36,13 @@
         "enabled": false
       },
       "conference": {
-        "enabled": false
+        "enabled": true
       },
       "enhanced_crm_container": {
-        "enabled": false
+        "enabled": true
       },
       "internal_call": {
-        "enabled": false
+        "enabled": true
       },
       "override_queue_transfer_directory": {
         "enabled": false
@@ -51,10 +51,10 @@
         "enabled": false
       },
       "scrollable_activities": {
-        "enabled": false
+        "enabled": true
       },
       "supervisor_barge_coach": {
-        "enabled": false,
+        "enabled": true,
         "agent_coaching_panel": true,
         "supervisor_monitor_panel": true
       },
