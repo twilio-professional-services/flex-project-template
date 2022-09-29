@@ -106,6 +106,7 @@ export interface TaskAttributes {
   conference: {
     sid: string;
     participants: { [participantType: string]: string };
+    friendlyName: string;
   };
   direction?: string;
   from: string;

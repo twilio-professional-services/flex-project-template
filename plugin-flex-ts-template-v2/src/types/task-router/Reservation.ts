@@ -14,4 +14,7 @@ export default interface Reservation extends EventEmitter {
   timeout: number;
   workerSid: string;
   workspaceSid: string;
+  accept: any;
+  reject: any;
+  call: any;
 }

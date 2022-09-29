@@ -264,3 +264,88 @@ exports.updateParticipant = async (parameters) => {
     return retryHandler(error, parameters, arguments.callee);
   }
 };
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {string} parameters.scriptName the name of the top level lambda function 
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.taskSid the task SID to fetch conferences for
+ * @param {string} parameters.status the status of conference(s) to fetch
+ * @param {number} parameters.limit the maximum number of conferences to retrieve
+ * @returns {Conference[]} The fetched conference(s)
+ * @description fetches conferences matching the given task SID and status
+ */
+exports.fetchByTask = async (parameters) => {
+    
+    const { context, taskSid, status, limit } = parameters;
+
+    if(!isObject(context))
+        throw "Invalid parameters object passed. Parameters must contain reason context object";
+    if(!isString(taskSid))
+        throw "Invalid parameters object passed. Parameters must contain taskSid string";
+    if(!isString(status))
+        throw "Invalid parameters object passed. Parameters must contain status string";
+    if(!isNumber(limit))
+        throw "Invalid parameters object passed. Parameters must contain limit number";
+
+    try {
+        const client = context.getTwilioClient();
+        
+        const conferences = await client
+            .conferences
+            .list({
+                friendlyName: taskSid, 
+                status,
+                limit
+            });
+
+        return { success: true, conferences, status: 200 };
+    }
+    catch (error) {
+        return retryHandler(
+            error, 
+            parameters,
+            arguments.callee
+        )
+    }
+}
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {string} parameters.scriptName the name of the top level lambda function 
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.conference the unique conference SID with the participant
+ * @param {object} parameters.updateParams parameters to update on the participant
+ * @returns {Conference} The newly updated conference
+ * @description updates the given conference
+ */
+exports.updateConference = async (parameters) => {
+    
+    const { context, conference, updateParams } = parameters;
+
+    if(!isObject(context))
+        throw "Invalid parameters object passed. Parameters must contain reason context object";
+    if(!isString(conference))
+        throw "Invalid parameters object passed. Parameters must contain conference string";
+    if(!isObject(updateParams))
+        throw "Invalid parameters object passed. Parameters must contain updateParams object";
+
+    try {
+        const client = context.getTwilioClient();
+        
+        const conferencesResponse = await client
+            .conferences(conference)
+            .update(updateParams);
+
+        return { success: true, conferencesResponse, status: 200 };
+    }
+    catch (error) {
+        return retryHandler(
+            error, 
+            parameters,
+            arguments.callee
+        )
+    }
+}
