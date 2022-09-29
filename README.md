@@ -3,14 +3,9 @@
 </a>
 
 # twilio-proserv-flex-project-template
+This repository provides development teams with a starting point for Flex projects. It is intended to accelerate the setup of a project and provide robust examples of the most common features added to Flex.
 
-## What is it?
-
-This repository provides development teams with a starting point for flex projects. It can simply be used by teams looking for ideas on how to manage development assets and configuration for a flex project. It can also be used as an educational tool to help expedite developers getting familiar with development patterns within Flex Plugins.
-
-This repository is really intended for anyone to use and is as much an educational tool as it is a template for development as it is a library of commonly built features for Twilio Flex. It's most valuable though, when used for large, complex flex customizations.
-
-In short the template provides:
+The template provides:
 
 - a pattern for distributed development
 - a pattern to support multiple environments
@@ -34,7 +29,7 @@ At the root of the repository you will find the following packages
 - [web-app-examples](#web-app-examples)
 - [.github](#github)
 
-These packages are coupled together to provide a means of versioning these artifacts together, providing a robust method for building a release pipeline across multiple environments.
+These packages are coupled together to provide a means of versioning these artifacts as a single release, providing a robust method for building a release pipeline across multiple environments.
 
 ### **flex-config**
 
@@ -46,11 +41,11 @@ This package is a legacy package of a previous initiative to leverage pulumi to 
 
 ### **plugin-flex-ts-template**
 
-This package is the actual flex plugin and a structure is already laid out that makes it a lot easier to work in a disributed development model. More details of the package structure are discussed [over here](plugin-flex-ts-template/README.md) but just now the imporant thing to understand is that the plugin has a library of examples that can be turned on or off, or if desired can be removed completely with little overhead. The utilities in this package are designed around the associated serverless-functions and leverage the associated flex-config.
+This package is the actual flex plugin and a structure is already laid out that makes it a lot easier to work in a disributed development model. More details of the package structure are discussed [over here](plugin-flex-ts-template/README.md) the plugin has a library of examples that can be turned on or off, or if desired can be removed completely with little overhead. The utilities in this package are designed around the associated serverless-functions and leverage the associated flex-config.
 
 ### **plugin-flex-ts-template-v2**
 
-This package is identical in purpose to the `plugin-flex-ts-template` except its intended for flex v2 projects. This package is still a work in progress as we migrate the feature libraries over. It is functional as a package structure though. The intention is when kicking off a project the owner would fork the repository then delete the plugin version they are not using.
+This package is identical in purpose to the `plugin-flex-ts-template` except its intended for flex v2 projects. The intention is when kicking off a project the owner would fork the repository as a template, then delete the plugin version they are not using.
 
 ### **serverless-functions**
 
@@ -62,32 +57,33 @@ This package contains web application examples that build off feature functional
 
 ### **.github**
 
-Lastly, this package manages the github action workflows - with one example being setup for a dev account where this template is maintained. Upon commits to _main_; _flex-config_, _plugin-flex-ts-template_ and _serverless-functions_ are all deployed on the associated environment, as controlled by the environment variables in github actions. The underly scripts can easily be used in alternative release management tools.
+Lastly, this package manages the github action workflows - with one example being setup for a dev account where this template is maintained. Upon commits to _main_; _flex-config_, _plugin-flex-ts-template_ and _serverless-functions_ are all deployed on the associated environment, as controlled by the environment variables in github actions. The underlying scripts can easily be moulded for use in alternative release management tools.
 
 ---
 
 ## Further Feature library Information
 
-- [Activity Reservation Handler](plugin-flex-ts-template/src/feature-library/activity-reservation-handler/README.md)
+- [Activity Reservation Handler](plugin-flex-ts-template-v2/src/feature-library/activity-reservation-handler/README.md)
 - [Activity Skill Filter](plugin-flex-ts-template/src/feature-library/activity-skill-filter/README.md)
-- [Callbacks](plugin-flex-ts-template/src/feature-library/callbacks/README.md)
-- [Caller ID](plugin-flex-ts-template/src/feature-library/caller-id/README.md)
+- [Callbacks and Voicemail](plugin-flex-ts-template-v2/src/feature-library/callback-and-voicemail/README.md)
+- [Caller ID](plugin-flex-ts-template-v2/src/feature-library/caller-id/README.md)
 - [Chat to Video Escalation (v2 only)](plugin-flex-ts-template-v2/src/feature-library/chat-to-video-escalation/README.md)
 - [Chat Transfer](plugin-flex-ts-template/src/feature-library/chat-transfer/README.md)
 - [Conference (v2 only)](plugin-flex-ts-template-v2/src/feature-library/conference/README.md)
-- [Enhanced CRM Container](plugin-flex-ts-template/src/feature-library/enhanced-crm-container/README.md)
+- [Enhanced CRM Container](plugin-flex-ts-template-v2/src/feature-library/enhanced-crm-container/README.md)
 - [Internal Call (v2 only)](plugin-flex-ts-template-v2/src/feature-library/internal-call/README.md)
 - [Override Queue Transfer Directory](plugin-flex-ts-template/src/feature-library/override-queue-transfer-directory/README.md)
+- [Omni Channel Management](plugin-flex-ts-template-v2/src/feature-library/omni-channel-capacity-management/README.md)
 - [Salesforce Click To Dial](plugin-flex-ts-template/src/feature-library/salesforce-click-to-dial/README.md)
-- [Scrollable Activities](plugin-flex-ts-template/src/feature-library/scrollable-activities/README.md)
-- [Supervisor Barge Coach](plugin-flex-ts-template/src/feature-library/supervisor-barge-coach/README.md)
+- [Scrollable Activities](plugin-flex-ts-template-v2/src/feature-library/scrollable-activities/README.md)
+- [Supervisor Barge Coach](plugin-flex-ts-template-v2/src/feature-library/supervisor-barge-coach/README.md)
 
 ---
 
 ## Local Setup
 
 1. Clone the repository
-   > `git clone https://github.com/twilio-professional-services/twilio-proserv-flex-project-template.git`
+   > `git clone https://github.com/twilio-professional-services/flex-project-template.git`
 2. cd into the repository and execute (this installs all sub-project dependencies and creates two new .env files for the next step)
    > `npm install`
 3. Edit both `serverless-functions/.env` and `flex-config/.env`
@@ -106,4 +102,4 @@ Lastly, this package manages the github action workflows - with one example bein
 
 ## Disclaimer
 
-This template is the evolution of multiple implementations and every effort has been made to make sure this template has been built to a high standard. **However** this template does come with **no warranty** and if you chose to use this template we encourage you to test anything you use or built to make sure it is suitable for **you**. This effort has largely been a side project, and feedback is welcome but no commitment can be made at this time for turning any issues around.
+This template is the evolution of multiple implementations and every effort has been made to make sure this template has been built to a high standard. **However** this template does come with **no warranty** and if you chose to use this template you are responsible for testing anything you use or build on top of it to make sure it is suitable for **you**. Feedback is welcome but no commitment can be made at this time for turning any issues around.
