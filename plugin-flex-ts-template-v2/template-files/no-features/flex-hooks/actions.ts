@@ -12,6 +12,8 @@ const actionsToRegister: Actions = {
   AcceptTask: { before: [], replace: [], after: [] },
   CompleteTask: {},
   HangupCall: {},
+  HoldCall: {},
+  UnholdCall: {},
   HoldParticipant: {},
   KickParticipant: {},
   MonitorCall: {},

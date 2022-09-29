@@ -4,7 +4,7 @@ import ConferenceService from "../../../../utils/serverless/ConferenceService/Co
 import { isInternalCall } from '../../helpers/internalCall';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled } = custom_data.features.internal_call;
+const { enabled } = custom_data?.features?.internal_call || {};
 
 export function handleInternalHoldCall(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;

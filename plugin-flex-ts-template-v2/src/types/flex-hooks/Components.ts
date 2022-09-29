@@ -22,6 +22,7 @@ type ComponentName =
   | "WorkerDirectory"
   | "OutboundDialerPanel"
   | "TaskInfoPanel";
+
 type ComponentHandler = (flex: typeof Flex, manager: Flex.Manager) => void;
 
 export type Components = Partial<Record<ComponentName, ComponentHandler[]>>;

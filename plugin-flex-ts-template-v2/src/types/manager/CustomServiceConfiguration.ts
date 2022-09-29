@@ -6,6 +6,8 @@ import ConferenceConfig from "../../feature-library/conference/types/ServiceConf
 import ScrollableActivitiesConfig from "../../feature-library/scrollable-activities/types/ServiceConfiguration";
 import SupervisorBargeCoachConfig from "../../feature-library/supervisor-barge-coach/types/ServiceConfiguration";
 import OmniChannelCapacityManagementConfig from "../../feature-library/omni-channel-capacity-management/types/ServiceConfiguration";
+import InternalCallConfig from "../../feature-library/internal-call/types/ServiceConfiguration";
+import EnhancedCRMContainerConfig from "../../feature-library/enhanced-crm-container/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguratoin {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -16,4 +18,6 @@ export default interface FeatureServiceConfiguratoin {
   scrollable_activities: ScrollableActivitiesConfig;
   supervisor_barge_coach: SupervisorBargeCoachConfig;
   omni_channel_capacity_management: OmniChannelCapacityManagementConfig;
+  internal_call: InternalCallConfig;
+  enhanced_crm_container: EnhancedCRMContainerConfig;
 }

@@ -4,6 +4,8 @@ type ActionNames =
   | "AcceptTask"
   | "CompleteTask"
   | "HangupCall"
+  | "HoldCall"
+  | "UnholdCall"
   | "HoldParticipant"
   | "KickParticipant"
   | "MonitorCall"

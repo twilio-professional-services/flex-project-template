@@ -11,6 +11,7 @@ import CallerIdLoaded from "../../feature-library/caller-id/flex-hooks/events/pl
 import ConferenceLoaded from "../../feature-library/conference/flex-hooks/events/pluginsLoaded";
 import OmniChannelCapacityManagementLoaded from "../../feature-library/omni-channel-capacity-management/flex-hooks/events/pluginsLoaded";
 import ScrollableActivitiesLoaded from "../../feature-library/scrollable-activities/flex-hooks/events/pluginsLoaded";
+import EnhancedCRMContainer from "../../feature-library/enhanced-crm-container/flex-hooks/events/pluginsLoaded";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -20,6 +21,7 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     ConferenceLoaded,
     OmniChannelCapacityManagementLoaded,
     ScrollableActivitiesLoaded,
+    EnhancedCRMContainer,
   ],
   taskAccepted: [taskAcceptedHandlerActivityReservationHandler],
   taskCanceled: [taskEndedHandlerActivityReservationHandler],

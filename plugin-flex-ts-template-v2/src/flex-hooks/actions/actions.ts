@@ -15,11 +15,15 @@ import { beforeSetActivity } from "../../feature-library/activity-reservation-ha
 import { applySelectedCallerIdForDialedNumbers } from "../../feature-library/caller-id/flex-hooks/actions/StartOutboundCall";
 import { changeWorkerActivityBeforeOutboundCall } from "../../feature-library/activity-reservation-handler/flex-hooks/actions/StartOutboundCall";
 import { handleUnholdConferenceParticipant } from "../../feature-library/conference/flex-hooks/actions/UnholdParticipant";
+import { handleInternalAcceptTask } from "../../feature-library/internal-call/flex-hooks/actions/AcceptTask";
+import { handleInternalHoldCall } from "../../feature-library/internal-call/flex-hooks/actions/HoldCall";
+import { handleInternalUnholdCall } from "../../feature-library/internal-call/flex-hooks/actions/UnholdCall";
+import { handleInternalRejectTask } from "../../feature-library/internal-call/flex-hooks/actions/RejectTask";
 
 const actionsToRegister: Actions = {
   AcceptTask: {
-    before: [omniChannelChatCapacityManager],
-    after: [],
+    before: [handleInternalAcceptTask],
+    after: [omniChannelChatCapacityManager],
     replace: [],
   },
   CompleteTask: {
@@ -32,6 +36,12 @@ const actionsToRegister: Actions = {
     after: [],
     replace: [],
   },
+  HoldCall: {
+    before: [handleInternalHoldCall],
+    after: [],
+    replace: [],
+  },
+  UnholdCall: { before: [handleInternalUnholdCall], after: [], replace: [] },
   HoldParticipant: {
     before: [handleHoldConferenceParticipant],
     after: [],
@@ -75,8 +85,8 @@ const actionsToRegister: Actions = {
     after: [],
     replace: [],
   },
+  RejectTask: { before: [handleInternalRejectTask], after: [], replace: [] },
   NavigateToView: {},
-  RejectTask: {},
   SetActivity: {},
   TransferTask: {},
   WrapUpTask: {},
