@@ -11,6 +11,6 @@ This is a simple little tool that should help deploy Flex configuration settings
 6. Create/Edit a `{stageNameHere}.ui_attributes.json` matching file
     - Currently only `ui_attributes.dev.json`, `ui_attributes.test.json`, `ui_attributes.qa.json`, and `ui_attributes.prod.json` are recognized
 7. Run `npm run deploy:{env}` to update the Flex configuration
-    - Currently `dev:deploy`, `test:deploy`, `qa:deploy`, and `prod:deploy` are the only ones configured
+    - Currently `deploy:dev`, `deploy:test`, `deploy:qa`, and `deploy:prod` are the only ones configured
 
 The output should log the now updated version of the data received from Flex.
