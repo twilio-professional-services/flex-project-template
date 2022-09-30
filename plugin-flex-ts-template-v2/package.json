@@ -16,9 +16,7 @@
     "release": "twilio flex:plugins:release --plugin ${npm_package_name}@${npm_package_version}",
     "start": "twilio flex:plugins:start",
     "twilio": "twilio",
-    "remove-features": "node scripts/remove-features.js",
-    "add-feature": "node scripts/add-feature.js",
-    "rename-template": "node scripts/rename-template.js"
+    "remove-features": "node scripts/remove-features.js"
   },
   "dependencies": {
     "@twilio-paste/core": "^10.14.0",
