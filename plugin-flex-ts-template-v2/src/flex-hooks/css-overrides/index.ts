@@ -1,5 +1,6 @@
-import scrollableActivities from '../../feature-library/scrollable-activities/css-overrides';
+import * as Flex from "@twilio/flex-ui";
+import css_overrides from "./css-overrides";
 
-export default () => {
-    scrollableActivities();
-  }
+export default (flex: typeof Flex, manager: Flex.Manager) => {
+  css_overrides.forEach((css_override) => css_override());
+};

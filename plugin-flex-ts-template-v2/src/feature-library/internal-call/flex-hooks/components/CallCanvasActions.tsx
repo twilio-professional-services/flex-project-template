@@ -3,7 +3,7 @@ import * as Flex from '@twilio/flex-ui';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled } = custom_data.features.internal_call;
+const { enabled } = custom_data?.features?.internal_call || {}
 
 export function removeDirectoryFromInternalCalls(flex: typeof Flex) {
 

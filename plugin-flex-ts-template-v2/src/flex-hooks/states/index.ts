@@ -1,11 +1,9 @@
-import * as Flex from '@twilio/flex-ui';
-import { combineReducers, Action as ReduxAction } from 'redux';
-import { OutboundCallerIDSelectorState, OutboundCallerIDSelectorReducer } from '../../feature-library/caller-id/flex-hooks/states/OutboundCallerIDSelector';
-import { CallbackAndVoicemailState, CallbackAndVoicemailReducer } from '../../feature-library/callback-and-voicemail/flex-hooks/states/CallbackAndVoicemail';
-import { SupervisorBargeCoachState, SupervisorBargeCoachReducer } from '../../feature-library/supervisor-barge-coach/flex-hooks/states/SupervisorBargeCoach';
+import * as Flex from "@twilio/flex-ui";
+import { combineReducers, Action as ReduxAction } from "redux";
+import { CustomState, customReducers } from "./states";
 
 // Register your redux store under a unique namespace
-export const reduxNamespace = 'custom';
+export const reduxNamespace = "custom";
 
 // Extend this payload to be of type that your ReduxAction is
 // Normally you'd follow this pattern...https://redux.js.org/recipes/usage-with-typescript#a-practical-example
@@ -17,17 +15,8 @@ export interface Action extends ReduxAction {
 // Register all component states under the namespace
 export interface AppState {
   flex: Flex.AppState;
-  [reduxNamespace]: {
-    outboundCallerIdSelector: OutboundCallerIDSelectorState;
-    callbackAndVoicemail: CallbackAndVoicemailState;
-    supervisorBargeCoach: SupervisorBargeCoachState;
-  };
-};
+  [reduxNamespace]: CustomState;
+}
 
 // Combine the reducers
-export default combineReducers({
-  outboundCallerIdSelector: OutboundCallerIDSelectorReducer,
-  callbackAndVoicemail: CallbackAndVoicemailReducer,
-  supervisorBargeCoach: SupervisorBargeCoachReducer,
-});
-
+export default combineReducers(customReducers);

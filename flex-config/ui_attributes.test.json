@@ -59,7 +59,7 @@
         "supervisor_monitor_panel": true
       },
       "activity_reservation_handler": {
-        "enabled": false
+        "enabled": true
       }
     }
   }

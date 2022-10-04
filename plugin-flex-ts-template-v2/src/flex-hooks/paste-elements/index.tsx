@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import { CustomizationProvider, PasteCustomCSS, CustomizationProviderProps } from "@twilio-paste/core/customization";
+import customPasteElements from "./paste-elements"
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   // Currently the method to customize Paste elements in Flex is somewhat clunky.
@@ -10,25 +11,8 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
         baseTheme: props.theme?.isLight ? "default" : "dark",
         theme: props.theme?.tokens,
         style: { minWidth: "100%", height: "100%" },
-        elements: {
-          // Callback and Voicemail styling
-          C_AND_V_BUTTON_BOX: {
-            paddingLeft: "space40",
-            paddingRight: "space40", 
-            paddingTop: "space40"
-          },
-          C_AND_V_CONTENT_BOX: {
-            paddingBottom: "space40"
-          },
-          C_AND_V_CONTENT_HEADING: {
-            marginBottom: "space0"
-          },
-          C_AND_V_CONTENT_PARAGRAPH: {
-            marginBottom: "space0"
-          }
-        }
-      };
-
+        elements: { customPasteElements }
+      }
       return (
         <CustomizationProvider {...pasteProviderProps}>
           <RootComponent {...props} />

@@ -4,7 +4,7 @@ import InternalCallService from "../../../../utils/serverless/InternalCall/Inter
 import { isInternalCall } from '../../helpers/internalCall';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
-const { enabled } = custom_data.features.internal_call;
+const { enabled } = custom_data?.features?.internal_call || {};
 
 export function handleInternalAcceptTask(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
