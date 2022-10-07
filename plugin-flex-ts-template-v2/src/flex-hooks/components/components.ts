@@ -13,6 +13,8 @@ import { replaceViewForCallbackAndVoicemail } from "../../feature-library/callba
 import { addSupervisorBargeCoachButtons } from "../../feature-library/supervisor-barge-coach/flex-hooks/components/TaskOverviewCanvas";
 import { addInternalCallToDialerPanel } from "../../feature-library/internal-call/flex-hooks/components/OutboundDialerPanel";
 import { replaceAndSetCustomCRMContainer } from "../../feature-library/enhanced-crm-container/flex-hooks/components/CRMContainer";
+import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
+import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -31,7 +33,7 @@ const componentHandlers: Components = {
   ],
   ParticipantCanvas: [addConferenceToParticipantCanvas],
   SideNav: [],
-  TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader],
+  TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader, addChatTransferButton],
   TaskCanvasTabs: [addVideoRoomTabToTaskCanvasTabs, addSupervisorMonitorPanel],
   TaskInfoPanel: [replaceViewForCallbackAndVoicemail],
   TaskListButtons: [],
@@ -39,7 +41,7 @@ const componentHandlers: Components = {
   TeamsView: [],
   ViewCollection: [],
   WorkerCanvas: [],
-  WorkerDirectory: [],
+  WorkerDirectory: [addChatTransferCustomization],
   WorkersDataTable: [],
 };
 
