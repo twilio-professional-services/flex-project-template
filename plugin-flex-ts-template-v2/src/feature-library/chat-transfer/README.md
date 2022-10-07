@@ -33,9 +33,9 @@ Flex 2.x used [Conversation Based Messaging (CBM)](https://www.twilio.com/docs/f
 
 This plugin makes use of the Interaction API [Invite](https://www.twilio.com/docs/flex/developer/conversations/interactions-api/invites-subresource) and [Participants](https://www.twilio.com/docs/flex/developer/conversations/interactions-api/interaction-channel-participants) endpoints.
 
-The when the plugin makes a request to the supporting Twilio Serverless Function it passes the details about the type of transfer and the transfer target. The Twilio Serverless Function uses the Invite endpoint to create a new task for the transfer that is linked to the underlying Conversation. The Function then uses the Participants endpoint to remove the transferring agent from the Conversation. Removing the participant completes the original task. 
+When the plugin makes a request to the supporting Twilio Serverless Function it passes the details about the type of transfer and the transfer target. The Twilio Serverless Function uses the Invite endpoint to create a new task for the transfer that is linked to the underlying Conversation. The Function then uses the Participants endpoint to remove the transferring agent from the Conversation. Removing the participant completes the original task. 
 Note that unlike the default behavior when the agent is removed the Conversation remains active as the Conversation is waiting for the new agent to accept the reservation and join the conversation.
 
-This plugin also copies all of the existing task attributes from the original task to the transferring task. The tasks conversations.conversations_id is updated to link the tasks for reporting puroposes. 
+This plugin also copies all of the existing task attributes from the original task to the transferring task. The tasks conversations.conversations_id is updated to link the tasks for reporting purposes. 
 
-The transferring task also has the agents co Tgus ntact_uri added to the transfering task attribute 'ignoreWorkerContactUri'. This allows the workflow to ensure that in the case of a transfer to a queue the transferring agent can be ignored for routing purposes so they don't just get the same conversation.
+The transferring task also has the agents contact_uri added to the transffering task attribute 'ignoreWorkerContactUri'. This allows the workflow to ensure that in the case of a transfer to a queue the transferring agent can be ignored for routing purposes so they don't just get the same conversation.
