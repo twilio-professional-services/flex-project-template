@@ -40,10 +40,7 @@ exports.participantCreateInvite = async function (parameters) {
       .channels(channelSid)
       .invites.create({
         routing: routing,
-      })
-      .then((interaction_channel_invite) =>
-        console.log(interaction_channel_invite.sid)
-      );
+      });
 
     return { success: true, status: 200, participantInvite };
   } catch (error) {
@@ -95,10 +92,7 @@ exports.participantUpdate = async function (parameters) {
       .interaction(interactionSid)
       .channels(channelSid)
       .participants(participantSid)
-      .update({ status: status })
-      .then((interaction_channel_participant) =>
-        console.log(interaction_channel_participant.sid)
-      );
+      .update({ status: status });
 
     return { success: true, status: 200, updatedParticipant };
   } catch (error) {

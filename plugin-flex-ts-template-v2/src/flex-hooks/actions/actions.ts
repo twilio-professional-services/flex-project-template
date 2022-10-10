@@ -19,6 +19,7 @@ import { handleInternalAcceptTask } from "../../feature-library/internal-call/fl
 import { handleInternalHoldCall } from "../../feature-library/internal-call/flex-hooks/actions/HoldCall";
 import { handleInternalUnholdCall } from "../../feature-library/internal-call/flex-hooks/actions/UnholdCall";
 import { handleInternalRejectTask } from "../../feature-library/internal-call/flex-hooks/actions/RejectTask";
+import { handleChatTransfer } from "../../feature-library/chat-transfer/flex-hooks/actions/TransferTask";
 
 const actionsToRegister: Actions = {
   AcceptTask: {
@@ -88,7 +89,7 @@ const actionsToRegister: Actions = {
   RejectTask: { before: [handleInternalRejectTask], after: [], replace: [] },
   NavigateToView: {},
   SetActivity: {},
-  TransferTask: {},
+  TransferTask: { before: [handleChatTransfer], after: [], replace: [] },
   WrapUpTask: {},
 };
 
