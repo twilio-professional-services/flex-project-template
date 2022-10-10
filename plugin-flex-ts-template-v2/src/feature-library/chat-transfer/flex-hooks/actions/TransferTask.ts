@@ -7,15 +7,15 @@ import { EventPayload } from "../../types/TransferOptions";
 export function handleChatTransfer(flex: typeof Flex, manager: Flex.Manager) {
   if (!isFeatureEnabled()) return;
 
-  Actions.replaceAction(
-    "TransferTask",
-    (payload: EventPayload, original: any) => {
-      if (!TaskHelper.isCBMTask(payload.task)) {
-        return original(payload);
+  Flex.Actions.addListener(
+    "beforeTransferTask",
+    (payload: EventPayload, abortFunction: any) => {
+      if (TaskHelper.isCBMTask(payload.task)) {
+        // native action handler would fail for chat task so abort the action
+        abortFunction();
+        // Execute Chat Transfer Task
+        Flex.Actions.invokeAction("ChatTransferTask", payload);
       }
-
-      //invoke new action
-      return Actions.invokeAction("ChatTransferTask", payload);
     }
   );
 }

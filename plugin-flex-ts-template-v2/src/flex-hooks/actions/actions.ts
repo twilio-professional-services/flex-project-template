@@ -89,7 +89,7 @@ const actionsToRegister: Actions = {
   RejectTask: { before: [handleInternalRejectTask], after: [], replace: [] },
   NavigateToView: {},
   SetActivity: {},
-  TransferTask: { before: [], after: [], replace: [handleChatTransfer] },
+  TransferTask: { before: [handleChatTransfer], after: [], replace: [] },
   WrapUpTask: {},
 };
 
