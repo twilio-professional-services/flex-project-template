@@ -4,6 +4,7 @@ _Provide a summary of the change..._
 
 ### Checklist
 - [ ] Tested changes end to end
+- [ ] Any Flex config changes added to all environment files
 - [ ] Completed README template for new features
   - [ ] Feature summary - _high level summary of what the feature does_
   - [ ] Flex User Experience with animations - _animations with descriptions if neccessary of the user experience in Flex_
