@@ -13,6 +13,7 @@ import { replaceViewForCallbackAndVoicemail } from "../../feature-library/callba
 import { addSupervisorBargeCoachButtons } from "../../feature-library/supervisor-barge-coach/flex-hooks/components/TaskOverviewCanvas";
 import { addInternalCallToDialerPanel } from "../../feature-library/internal-call/flex-hooks/components/OutboundDialerPanel";
 import { replaceAndSetCustomCRMContainer } from "../../feature-library/enhanced-crm-container/flex-hooks/components/CRMContainer";
+import { addDeviceManagerToMainHeader } from "../../feature-library/device-manager/flex-hooks/components/MainHeader";
 import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
 
@@ -24,7 +25,7 @@ const componentHandlers: Components = {
     removeDirectoryFromInternalCalls,
   ],
   CRMContainer: [replaceAndSetCustomCRMContainer],
-  MainHeader: [addPendingActivityComponent],
+  MainHeader: [addPendingActivityComponent, addDeviceManagerToMainHeader],
   MessageListItem: [],
   NoTasksCanvas: [],
   OutboundDialerPanel: [
