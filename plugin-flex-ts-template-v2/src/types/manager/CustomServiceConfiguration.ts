@@ -1,4 +1,5 @@
 import ActivityReservationHandlerConfig from "../../feature-library/activity-reservation-handler/types/ServiceConfiguration";
+import ActivitySkillFilterConfig from "../../feature-library/activity-skill-filter/types/ServiceConfiguration";
 import CallbackAndVoicemailConfig from "../../feature-library/callback-and-voicemail/types/ServiceConfigudation";
 import CallerIdConfig from "../../feature-library/caller-id/types/ServiceConfigudation";
 import ChatToVideoEscalationConfig from "../../feature-library/chat-to-video-escalation/types/ServiceConfiguration";
@@ -12,6 +13,7 @@ import ChatTransferConfiguration from "../../feature-library/chat-transfer/types
 
 export default interface FeatureServiceConfiguratoin {
   activity_reservation_handler: ActivityReservationHandlerConfig;
+  activity_skill_filter: ActivitySkillFilterConfig;
   callbacks: CallbackAndVoicemailConfig;
   caller_id: CallerIdConfig;
   chat_to_video_escalation: ChatToVideoEscalationConfig;

@@ -20,6 +20,7 @@ type ComponentName =
   | "WorkerCanvas"
   | "WorkersDataTable"
   | "WorkerDirectory"
+  | "WorkerProfile"
   | "OutboundDialerPanel"
   | "TaskInfoPanel";
 

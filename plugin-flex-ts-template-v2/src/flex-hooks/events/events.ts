@@ -6,6 +6,7 @@ import taskReceivedActivityReservationHandler from "../../feature-library/activi
 import taskWrapupHandlerActivityReservationHandler from "../../feature-library/activity-reservation-handler/flex-hooks/events/taskWrapup";
 
 import ActivityReservationHandlerLoaded from "../../feature-library/activity-reservation-handler/flex-hooks/events/pluginsLoaded";
+import ActivitySkillFilterLoaded from "../../feature-library/activity-skill-filter/flex-hooks/events/pluginsLoaded";
 import CallbackAndVoicemailLoaded from "../../feature-library/callback-and-voicemail/flex-hooks/events/pluginsLoaded";
 import CallerIdLoaded from "../../feature-library/caller-id/flex-hooks/events/pluginsLoaded";
 import ConferenceLoaded from "../../feature-library/conference/flex-hooks/events/pluginsLoaded";
@@ -17,6 +18,7 @@ import ChatTransfer from "../../feature-library/chat-transfer/flex-hooks/events/
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
     ActivityReservationHandlerLoaded,
+    ActivitySkillFilterLoaded,
     CallbackAndVoicemailLoaded,
     CallerIdLoaded,
     ConferenceLoaded,
