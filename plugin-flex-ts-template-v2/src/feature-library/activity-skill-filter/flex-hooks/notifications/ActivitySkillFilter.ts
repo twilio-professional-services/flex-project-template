@@ -12,8 +12,8 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
 
 function activitySkillRulesNotConfigured(flex: typeof Flex, manager: Flex.Manager) {
   flex.Notifications.registerNotification({
-	id: NotificationIds.ActivitySkillRulesNotConfigured,
-	type: Flex.NotificationType.error,
-	content: StringTemplates.ActivitySkillRulesNotConfigured
+    id: NotificationIds.ActivitySkillRulesNotConfigured,
+    type: Flex.NotificationType.error,
+    content: StringTemplates.ActivitySkillRulesNotConfigured
   });
 }

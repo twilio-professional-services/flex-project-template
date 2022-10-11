@@ -11,10 +11,10 @@ export function replaceWorkerProfileInfo(flex: typeof Flex, manager: Flex.Manage
   
   flex.WorkerProfile.Content.remove('info');
   flex.WorkerProfile.Content.add(
-	<WorkerProfileInfo key="worker-profile-info" />,
-	{
-	  align: 'start',
-	  sortOrder: 2
-	}
+    <WorkerProfileInfo key="worker-profile-info" />,
+    {
+      align: 'start',
+      sortOrder: 2
+    }
   );
 }

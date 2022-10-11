@@ -8,53 +8,53 @@ import AgentActivities from '../../utils/AgentActivities';
 import { Activity } from 'types/task-router';
 
 export interface OwnProps {
-	worker?: Flex.IWorker
+  worker?: Flex.IWorker
 }
 
 export type Props = OwnProps;
 
-function WorkerCanvasProfileComponent(props: Props) {
-	
-	if (props.worker === undefined) {
-	  return null;
-	}
-	
-	let { worker } = props;
-	
-	function handleChange(event: ChangeEvent<HTMLSelectElement>) {
-		Flex.Actions.invokeAction("SetWorkerActivity", { workerSid: worker.sid, activitySid: event.target.value });
-	};
-	
-	const activities = AgentActivities.getEligibleActivites(worker);
-	const currentActivity = activities.find(activity => activity.name === worker.activityName);
-	
-	return (
-		<Flex.FlexBoxColumn>
-			<Box
-				marginTop='space30'
-				marginRight='space50'>
-				<Stack
-					orientation='vertical'
-					spacing='space50'>
-					<Heading
-						as='div'
-						variant='heading50'>
-						{worker.fullName}
-					</Heading>
-					<Select
-						id="workerProfileSelect"
-						value={currentActivity?.sid}
-						onChange={handleChange}>
-						{activities.map((activity: Activity) => (
-							<Option value={activity.sid}>
-								{activity.name}
-							</Option>
-						))}
-					</Select>
-				</Stack>
-			</Box>
-		</Flex.FlexBoxColumn>
-	);
+function WorkerProfileInfo(props: Props) {
+  
+  if (props.worker === undefined) {
+    return null;
+  }
+  
+  let { worker } = props;
+  
+  function handleChange(event: ChangeEvent<HTMLSelectElement>) {
+    Flex.Actions.invokeAction("SetWorkerActivity", { workerSid: worker.sid, activitySid: event.target.value });
+  };
+  
+  const activities = AgentActivities.getEligibleActivites(worker);
+  const currentActivity = activities.find(activity => activity.name === worker.activityName);
+  
+  return (
+    <Flex.FlexBoxColumn>
+      <Box
+        marginTop='space30'
+        marginRight='space50'>
+        <Stack
+          orientation='vertical'
+          spacing='space50'>
+          <Heading
+            as='div'
+            variant='heading50'>
+            {worker.fullName}
+          </Heading>
+          <Select
+            id="workerProfileSelect"
+            value={currentActivity?.sid}
+            onChange={handleChange}>
+            {activities.map((activity: Activity) => (
+              <Option value={activity.sid}>
+                {activity.name}
+              </Option>
+            ))}
+          </Select>
+        </Stack>
+      </Box>
+    </Flex.FlexBoxColumn>
+  );
 }
 
-export default WorkerCanvasProfileComponent;
+export default WorkerProfileInfo;
