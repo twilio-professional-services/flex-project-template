@@ -32,7 +32,8 @@ Before we begin, we need to collect all the config values we need to run this qu
 
 | Config&nbsp;Value | Description                                                                                                                          |
 | :---------------- | :----------------------------------------------------------------------------------------------------------------------------------- |
-| Account&nbsp;Sid  | Your primary Twilio account identifier - find this [in the Console](https://www.twilio.com/console).                                 |
+| NextJS App URL    | The URL of your NextJS app. If you haven't created one yet, head to [Using 'create-next-app'](#using-create-next-app).
+| Account&nbsp;Sid  | Your primary Twilio account identifier - find this [in the Console](https://www.twilio.com/console).                                 
 | Auth Token        | Used to create an API key for future CLI access to your Twilio Account - find this [in the Console](https://www.twilio.com/console). |
 
 ---
