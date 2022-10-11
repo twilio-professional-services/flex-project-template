@@ -68,8 +68,12 @@ const DeviceManager: React.FunctionComponent = () => {
 
   if (devices) {
     return (
-      <Flex marginRight={"space40"}>
-        <MenuButton {...menu} variant="primary">
+      <Flex
+        marginRight={"space40"}
+        hAlignContent="center"
+        vAlignContent={"center"}
+      >
+        <MenuButton {...menu} variant={menu.visible ? "primary" : "reset"}>
           <AgentIcon decorative />
         </MenuButton>
         <Menu {...menu} aria-label="Actions">
