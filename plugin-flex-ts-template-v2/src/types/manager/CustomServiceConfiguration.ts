@@ -9,6 +9,7 @@ import SupervisorBargeCoachConfig from "../../feature-library/supervisor-barge-c
 import OmniChannelCapacityManagementConfig from "../../feature-library/omni-channel-capacity-management/types/ServiceConfiguration";
 import InternalCallConfig from "../../feature-library/internal-call/types/ServiceConfiguration";
 import EnhancedCRMContainerConfig from "../../feature-library/enhanced-crm-container/types/ServiceConfiguration";
+import DeviceManagerConfig from "../../feature-library/device-manager/types/ServiceConfiguration";
 import ChatTransferConfiguration from "../../feature-library/chat-transfer/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguratoin {
@@ -18,6 +19,7 @@ export default interface FeatureServiceConfiguratoin {
   caller_id: CallerIdConfig;
   chat_to_video_escalation: ChatToVideoEscalationConfig;
   conference: ConferenceConfig;
+  device_manager: DeviceManagerConfig;
   scrollable_activities: ScrollableActivitiesConfig;
   supervisor_barge_coach: SupervisorBargeCoachConfig;
   omni_channel_capacity_management: OmniChannelCapacityManagementConfig;
