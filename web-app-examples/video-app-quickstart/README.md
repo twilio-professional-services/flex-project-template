@@ -32,7 +32,7 @@ Before we begin, we need to collect all the config values we need to run this qu
 
 | Config&nbsp;Value | Description                                                                                                                          |
 | :---------------- | :----------------------------------------------------------------------------------------------------------------------------------- |
-| NextJS App Domain | The serverless domain where your app will be deployed to (for calling associated Functions from the UI)
+| Serverless Domain | The serverless domain where your associated backend Functions are deployed to (the actual customer-facing video app is deployed here too)
 | Account&nbsp;Sid  | Your primary Twilio account identifier - find this [in the Console](https://www.twilio.com/console).                                 
 | Auth Token        | Used to create an API key for future CLI access to your Twilio Account - find this [in the Console](https://www.twilio.com/console). |
 
@@ -55,7 +55,7 @@ After the above requirements have been met:
    ```
 
    ```
-   NEXT_PUBLIC_VIDEO_APP_DOMAIN=https://xxxxx
+   SERVERLESS_FUNCTIONS_DOMAIN=https://xxxxx
    ACCOUNT_SID=ACxxxxxxxxxx
    AUTH_TOKEN=xxxxxxxxxx
    ```
