@@ -4,6 +4,7 @@ import { addSupervisorCoachingPanelToAgent } from "../../feature-library/supervi
 import { addConferenceToCallCanvasActions } from "../../feature-library/conference/flex-hooks/components/CallCanvasActions";
 import { removeDirectoryFromInternalCalls } from "../../feature-library/internal-call/flex-hooks/components/CallCanvasActions";
 import { addPendingActivityComponent } from "../../feature-library/activity-reservation-handler/flex-hooks/components/MainHeader";
+import { replaceActivityComponent } from "../../feature-library/activity-skill-filter/flex-hooks/components/MainHeader";
 import { addOutboundCallerIdSelectorToMainHeader } from "../../feature-library/caller-id/flex-hooks/components/OutboundDialerPanel";
 import { addConferenceToParticipantCanvas } from "../../feature-library/conference/flex-hooks/components/ParticipantCanvas";
 import { addSwitchToVideoToTaskCanvasHeader } from "../../feature-library/chat-to-video-escalation/flex-hooks/components/TaskCanvasHeader";
@@ -16,6 +17,7 @@ import { replaceAndSetCustomCRMContainer } from "../../feature-library/enhanced-
 import { addDeviceManagerToMainHeader } from "../../feature-library/device-manager/flex-hooks/components/MainHeader";
 import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
+import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-filter/flex-hooks/components/WorkerProfile";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -25,7 +27,11 @@ const componentHandlers: Components = {
     removeDirectoryFromInternalCalls,
   ],
   CRMContainer: [replaceAndSetCustomCRMContainer],
-  MainHeader: [addPendingActivityComponent, addDeviceManagerToMainHeader],
+  MainHeader: [
+    addPendingActivityComponent,
+    addDeviceManagerToMainHeader,
+    replaceActivityComponent
+  ],
   MessageListItem: [],
   NoTasksCanvas: [],
   OutboundDialerPanel: [
@@ -43,6 +49,7 @@ const componentHandlers: Components = {
   ViewCollection: [],
   WorkerCanvas: [],
   WorkerDirectory: [addChatTransferCustomization],
+  WorkerProfile: [replaceWorkerProfileInfo],
   WorkersDataTable: [],
 };
 
