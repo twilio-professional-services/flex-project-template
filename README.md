@@ -84,7 +84,7 @@ Lastly, this package manages the github action workflows - with one example bein
 
 ---
 
-## Local Setup
+## Local Setup and use
 
 1. Clone the repository
 
@@ -104,18 +104,26 @@ npm install
 ```bash
 cd serverless-functions && twilio serverless:deploy
 ```
-5. Copy the domain name from the deployment details in step 4 and update `flex-config/ui_attributes.dev.json`
-6. Ensure the proper destination account is active in the twilio cli
+5. cd into the flex config directory
+```bash
+cd ../flex-config/
+```
+6. Copy the dev configuration file to a local environment config
+```bash
+cp ui_attributes.dev.json ui_attributes.local.json
+```
+7. Copy the domain name from the deployment details in step 4 and update `serverless_functions_domain` inside `ui_attributes.local.json` and edit the remaining config as appropriate
+8. Ensure the proper destination account is active in the twilio cli
 ```bash
 twilio profiles:list
 ```
-7. With selected account, deploy the configuration
+9. With selected account, deploy the configuration
 ```bash
-cd flex-config && npm run deploy:dev
+npm run deploy:local
 ```
-8. Begin local run of flex plugin
+10. Begin local run of flex plugin
 ```bash
-cd plugin-flex-ts-template && twilio flex:plugins:start
+cd ../plugin-flex-ts-template-v2 && twilio flex:plugins:start
 ```
 
 ## Disclaimer
