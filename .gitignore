@@ -146,6 +146,4 @@ test-results/
 # vscode
 .vscode
 
-# serverless assets
-serverless-functions/src/assets/*
 
