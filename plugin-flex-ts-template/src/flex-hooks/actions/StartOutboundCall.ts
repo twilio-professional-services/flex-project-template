@@ -1,6 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
 import { applySelectedCallerIdForDialedNumbers } from '../../feature-library/caller-id/flex-hooks/actions/StartOutboundCall';
-import { abortSalesforceClickToDialMissingCaseId } from '../../feature-library/salesforce-click-to-dial/flex-hooks/actions/StartOutboundCall';
 import { changeWorkerActivityBeforeOutboundCall } from '../../feature-library/activity-reservation-handler/flex-hooks/actions/StartOutboundCall';
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
@@ -11,7 +10,6 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
 
 function beforeStartOutboundCall(flex: typeof Flex, manager: Flex.Manager) {
   applySelectedCallerIdForDialedNumbers(flex, manager);
-  abortSalesforceClickToDialMissingCaseId(flex, manager);
   changeWorkerActivityBeforeOutboundCall(flex, manager);
 }
 
