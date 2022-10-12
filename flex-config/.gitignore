@@ -1,2 +1,3 @@
 *.env
 *.log
+ui_attributes.local.json

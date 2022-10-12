@@ -1,22 +1,41 @@
 const axios = require("axios");
 const dotenv = require("dotenv");
+const { promises: Fs } = require('fs')
+const _ = require('lodash');
 
-const uiAttributesDev = require("./ui_attributes.dev.json");
-const uiAttributesTest = require("./ui_attributes.test.json");
-const uiAttributesQa = require("./ui_attributes.qa.json");
-const uiAttributesProd = require("./ui_attributes.prod.json");
-const taskrouter_skills = require("./taskrouter_skills.json");
-
-dotenv.config();
-
-const uiAttributesEnvMap = {
-  dev: uiAttributesDev,
-  test: uiAttributesTest,
-  qa: uiAttributesQa,
-  prod: uiAttributesProd,
-};
+async function exists (path) {  
+  try {
+    await Fs.access(path)
+    return true
+  } catch {
+    return false
+  }
+}
 
 (async () => {
+
+  const localExists = await exists ("./ui_attributes.local.json");
+
+  const uiAttributesLocal = localExists? require("./ui_attributes.local.json") : "";
+  const uiAttributesCommon = require("./ui_attributes.common.json");
+  const uiAttributesDev = require("./ui_attributes.dev.json");
+  const uiAttributesTest = require("./ui_attributes.test.json");
+  const uiAttributesQa = require("./ui_attributes.qa.json");
+  const uiAttributesProd = require("./ui_attributes.prod.json");
+  const taskrouter_skills = require("./taskrouter_skills.json");
+
+  dotenv.config();
+
+  const uiAttributesEnvMap = {
+    common: uiAttributesCommon,
+    local: uiAttributesLocal,
+    dev: uiAttributesDev,
+    test: uiAttributesTest,
+    qa: uiAttributesQa,
+    prod: uiAttributesProd,
+    taskrouter_skills
+  };
+
   [
     "ENVIRONMENT",
     "TWILIO_ACCOUNT_SID",
@@ -32,6 +51,7 @@ const uiAttributesEnvMap = {
     process.env;
 
   deployConfigurationData({
+    map: uiAttributesEnvMap,
     auth: {
       TWILIO_ACCOUNT_SID,
       TWILIO_API_KEY,
@@ -52,18 +72,23 @@ Array.prototype.unique = function () {
   return a;
 };
 
-async function deployConfigurationData({ auth, environment }) {
+async function deployConfigurationData({ map, auth, environment }) {
   try {
-    const uiAttributes = uiAttributesEnvMap[environment];
+    const uiAttributes = map[environment];
+    const uiAttributesCommon = map["common"]
+    const taskrouter_skills = map["taskrouter_skills"]
+
+    if(uiAttributes === "")
+      throw "Local config file ui_attributes.local.json doesnt exist";
 
     console.log("Getting current configuration...");
     const {
       ui_attributes: uiAttributesCurrent,
       taskrouter_skills: tr_current = "",
     } = await getConfiguration({ auth });
-    console.log("tr_current", tr_current);
+
     console.log("Merging current configuraton with new configuration...");
-    const uiAttributesMerged = { ...uiAttributesCurrent, ...uiAttributes };
+    const uiAttributesMerged = _.merge( uiAttributesCurrent, uiAttributesCommon, uiAttributes)
     const trskillsMerged = tr_current
       ? tr_current.concat(taskrouter_skills).unique()
       : taskrouter_skills;
@@ -77,8 +102,9 @@ async function deployConfigurationData({ auth, environment }) {
       },
     });
 
-    console.log("Configuration updated to:");
-    console.log(configurationUpdated);
+    console.log("Configuration updated:");
+    console.log("UI Attributes", configurationUpdated.ui_attributes);
+    console.log("TaskRouter Skills", configurationUpdated.taskrouter_skills);
   } catch (error) {
     console.error("error caught", error);
     console.log("Auth", error.config?.auth);
