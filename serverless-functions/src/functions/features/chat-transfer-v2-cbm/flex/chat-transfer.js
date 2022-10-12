@@ -174,15 +174,15 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
         return sendErrorReply(callback, response, scriptName, status, message);
       }
 
-      await InteractionsOperations.participantUpdate({
-        status: "closed",
-        interactionSid: flexInteractionSid,
-        channelSid: flexInteractionChannelSid,
-        participantSid: flexInteractionParticipantSid,
-        scriptName,
-        context,
-        attempts: 0,
-      });
+      // await InteractionsOperations.participantUpdate({
+      //   status: "closed",
+      //   interactionSid: flexInteractionSid,
+      //   channelSid: flexInteractionChannelSid,
+      //   participantSid: flexInteractionParticipantSid,
+      //   scriptName,
+      //   context,
+      //   attempts: 0,
+      // });
 
       response.setStatusCode(201);
       response.setBody({
