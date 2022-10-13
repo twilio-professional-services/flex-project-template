@@ -20,7 +20,7 @@ const getParticipantDetails = (conversation: ConversationState.ConversationState
 
     const participants: ParticipantDetails[] = []
 
-    const conversationParticipants = Array.from(conversation.participants.values())
+    const conversationParticipants = Array.from(conversation?.participants.values())
     const intertactionParticipants = Object.values(flexState.participants.bySid)
 
     conversationParticipants.forEach(conversationParticipant => {

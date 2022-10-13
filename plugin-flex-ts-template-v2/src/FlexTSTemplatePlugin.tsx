@@ -32,6 +32,7 @@ export default class FlexTSTemplatePlugin extends FlexPlugin {
    * @param manager { Flex.Manager }
    */
   init(flex: typeof Flex, manager: Flex.Manager) {
+
     const initializers = [
       AddReducers,
       ConfigureFlexStrings,

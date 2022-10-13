@@ -17,11 +17,8 @@ import { replaceAndSetCustomCRMContainer } from "../../feature-library/enhanced-
 import { addDeviceManagerToMainHeader } from "../../feature-library/device-manager/flex-hooks/components/MainHeader";
 import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
-<<<<<<< Updated upstream
 import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-filter/flex-hooks/components/WorkerProfile";
-=======
 import { addTaskCanvasTabCustomization } from "../../feature-library/multi-agent-chat/flex-hooks/components/TaskCanvasTabs";
->>>>>>> Stashed changes
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -34,7 +31,7 @@ const componentHandlers: Components = {
   MainHeader: [
     addPendingActivityComponent,
     addDeviceManagerToMainHeader,
-    replaceActivityComponent
+    replaceActivityComponent,
   ],
   MessageListItem: [],
   NoTasksCanvas: [],
