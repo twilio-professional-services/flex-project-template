@@ -58,6 +58,9 @@
           "wrapup": "Wrap Up",
           "wrapupNoAcd": "Wrap Up, No ACD"
         }
+      },
+      "teams_view_filters": {
+        "enabled": false
       }
     }
   }

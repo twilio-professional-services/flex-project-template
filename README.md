@@ -80,6 +80,7 @@ Lastly, this package manages the github action workflows - with one example bein
 | Salesforce Click To Dial (enhanced data) | _enhancement for accessing extended data for_ [salesforce integration](https://www.twilio.com/docs/flex/admin-guide/integrations/salesforce)| [Yes](plugin-flex-ts-template/src/feature-library/salesforce-click-to-dial/README.md) | No | 
 | Scrollable Activities | _allow the scrolling of the acitivies list_ | [Yes](plugin-flex-ts-template/src/feature-library/scrollable-activities/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/scrollable-activities/README.md)
 | Supervisor Barge Coach | _introduce advanced supervisor barge and coach features_ | [Yes](plugin-flex-ts-template/src/feature-library/supervisor-barge-coach/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-barge-coach/README.md) |
+| Teams View Filters | _adds additional filtering options to the supervisor teams view_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/teams-view-filters/README.md) |
 
 
 ---
