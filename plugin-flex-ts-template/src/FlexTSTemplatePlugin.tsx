@@ -11,8 +11,7 @@ import RegisterJSClientEventListeners from './flex-hooks/jsclient-event-listener
 import CreateSdkClientInstances from './flex-hooks/sdk-clients';
 import TeamFilters from './flex-hooks/teams-filters/TeamFilters';
 import CustomChatOrchestration from './flex-hooks/chat-orchestrator';
-import SalesForceHooks from './flex-hooks/iframe-hooks'
-import cssoverrides from './flex-hooks/css-overrides'
+import CssOverrides from './flex-hooks/css-overrides';
 
 const PLUGIN_NAME = 'FlexTSTemplatePlugin';
 
@@ -40,8 +39,7 @@ export default class FlexTSTemplatePlugin extends FlexPlugin {
       CreateSdkClientInstances,
       TeamFilters,
       CustomChatOrchestration,
-      SalesForceHooks,
-      cssoverrides
+      CssOverrides
     ];
 
     initializers.forEach((initializer) => initializer(flex, manager));

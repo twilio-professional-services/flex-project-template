@@ -32,9 +32,6 @@
       "override_queue_transfer_directory": {
         "enabled": false
       },
-      "salesforce_click_to_dial": {
-        "enabled": false
-      },
       "scrollable_activities": {
         "enabled": true
       },
