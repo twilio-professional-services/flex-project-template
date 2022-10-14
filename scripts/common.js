@@ -10,7 +10,7 @@ if(shell.test('-d', `${originalPluginDir}`)){
 } else {
   shell.ls('./').forEach(function (dir){
     if(shell.test('-d', dir)){
-      if(dir.match(/plugin-ps-template-.*/)){
+      if(dir.match(/flex-template-.*/)){
         tempPluginDir  = dir;
       }
     }

@@ -9,17 +9,23 @@ const { pluginDir, pluginSrc, flexConfigDir, serverlessDir } = require ('./commo
 
 shell.echo(`pluginDir: `, pluginDir);
 
-if(process.argv[2] === undefined || process.argv[2] === ""){
+if(process.argv[2] === undefined || process.argv[2] === "" ){
   shell.echo("A new asset name was not provided, please try again and provide a new asset name when you run the script.  For example...");
   shell.echo("");
   shell.echo("npm run rename-assets my-new-asset-name");
+  shell.echo("");
+  return;
+}
+
+if(pluginDir === ""){
+  shell.echo("something went wrong trying to detect the current plugin directory, abandoning");
   shell.echo("");
   return;
 } 
 
 const packageSuffix = (process.argv[2]).toLowerCase();
 const pluginName =  capitalizeFirstLetter(`${process.argv[2]}Plugin`);
-const fullPluginName = `ps-template-${packageSuffix}`
+const fullPluginName = `flex-template-${packageSuffix}`
 
 const postInstall = `    "postinstall": "(cd serverless-functions && npm install && cp -n .env.example .env); (cd flex-config && npm install && cp -n .env.example .env); (cd ${fullPluginName} && npm install)"`
 
