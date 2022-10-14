@@ -19,8 +19,5 @@
   "homepage": "https://github.com/twilio-professional-services/twilio-proserv-flex-project-template#readme",
   "devDependencies": {
     "shelljs": "^0.8.5"
-  },
-  "dependencies": {
-    "simplify": "^1.0.0"
   }
 }
