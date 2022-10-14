@@ -57,8 +57,8 @@ shell.sed('-i', /.*"postinstall": .*"/, postInstall, `package.json`);
 
 
 // rename serverless package so plugins dont collide when deployed side by side
-shell.sed('-i', /.*"name": ".*",/, `  "name": "custom-flex-extensions-serverless-${packageSuffix}",`, `${serverlessDir}/package.json`);
-shell.sed('-i', /.*"name": ".*",/, `  "name": "custom-flex-extensions-serverless-${packageSuffix}",`, `${serverlessDir}/package-lock.json`);
+shell.sed('-i', /.*"name": ".*",/, `  "name": "template-serverless-${packageSuffix}",`, `${serverlessDir}/package.json`);
+shell.sed('-i', /.*"name": ".*",/, `  "name": "template-serverless-${packageSuffix}",`, `${serverlessDir}/package-lock.json`);
 
 // rename the flex-config serverless_functions_domain so it doesnt collide either
 shell.sed('-i', /serverless_functions_domain[_,a-z]*":/, `serverless_functions_domain_${packageSuffix}":`, `${flexConfigDir}/ui_attributes.*.json`);
@@ -69,6 +69,19 @@ shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_
 shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffix}`, `${fullPluginName}/src/types/manager/ServiceConfiguration.ts`);
 shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffix}`, `${fullPluginName}/src/utils/serverless/ApiService/ApiService.test.ts`);
 shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffix}`, `${fullPluginName}/src/utils/serverless/ApiService/index.ts`);
+
+
+shell.echo(`Removing v1 plugin`);
+shell.echo("");
+shell.rm('-rf', './plugin-flex-ts-template');
+
+
+if(shell.test('-e', './serverless-functions/.twiliodeployinfo')){
+  shell.echo(`Removing any serverless deployment references`);
+  shell.echo("");
+  shell.rm('-rf', './serverless-functions/.twiliodeployinfo'); 
+}
+
 
 
 shell.echo(`Renaming assets complete, dont forget to re-run: npm install, deploy your serverless functions and update the serverless_functions_domain_${packageSuffix} in your flex-config`);
