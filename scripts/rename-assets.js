@@ -7,7 +7,8 @@ function capitalizeFirstLetter(string) {
 
 const { pluginDir, pluginSrc, flexConfigDir, serverlessDir } = require ('./common');
 
-shell.echo(`pluginDir: `, pluginDir);
+shell.echo(`renaming plugin: `, pluginDir);
+shell.echo("");
 
 if(process.argv[2] === undefined || process.argv[2] === "" ){
   shell.echo("A new asset name was not provided, please try again and provide a new asset name when you run the script.  For example...");
@@ -77,18 +78,17 @@ shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_
 shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffix}`, `${fullPluginName}/src/utils/serverless/ApiService/index.ts`);
 
 
-shell.echo(`Removing v1 plugin`);
-shell.echo("");
-shell.rm('-rf', './plugin-flex-ts-template');
-
+if(shell.test('-e', './plugin-flex-ts-template')){
+  shell.echo(`Removing v1 plugin`);
+  shell.echo("");
+  shell.rm('-rf', './plugin-flex-ts-template');
+}
 
 if(shell.test('-e', './serverless-functions/.twiliodeployinfo')){
   shell.echo(`Removing any serverless deployment references`);
   shell.echo("");
   shell.rm('-rf', './serverless-functions/.twiliodeployinfo'); 
 }
-
-
 
 shell.echo(`Renaming assets complete, dont forget to re-run: npm install, deploy your serverless functions and update the serverless_functions_domain_${packageSuffix} in your flex-config`);
 shell.echo("");
