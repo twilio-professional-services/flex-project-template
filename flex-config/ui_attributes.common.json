@@ -46,6 +46,10 @@
       "device_manager": {
         "enabled": true
       },
+      "dual_channel_recording": {
+        "enabled": false,
+        "channel": "worker"
+      },
       "activity_reservation_handler": {
         "enabled": false,
         "system_activity_names": {

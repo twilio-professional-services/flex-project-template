@@ -11,6 +11,7 @@ import InternalCallConfig from "../../feature-library/internal-call/types/Servic
 import EnhancedCRMContainerConfig from "../../feature-library/enhanced-crm-container/types/ServiceConfiguration";
 import DeviceManagerConfig from "../../feature-library/device-manager/types/ServiceConfiguration";
 import ChatTransferConfiguration from "../../feature-library/chat-transfer/types/ServiceConfiguration";
+import DualChannelRecordingConfig from "../../feature-library/dual-channel-recording/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguratoin {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -26,4 +27,5 @@ export default interface FeatureServiceConfiguratoin {
   internal_call: InternalCallConfig;
   enhanced_crm_container: EnhancedCRMContainerConfig;
   chat_transfer: ChatTransferConfiguration;
+  dual_channel_recording: DualChannelRecordingConfig;
 }
