@@ -1,9 +1,11 @@
 {
-  "name": "twilio-proserv-flex-project-template",
+  "name": "flex-project-template",
   "version": "1.0.0",
   "description": "## What is it? This repository provides development teams with a starting point for flex projects.",
   "scripts": {
-    "postinstall": "(cd serverless-functions && npm install && cp -n .env.example .env); (cd flex-config && npm install && cp -n .env.example .env); (cd plugin-flex-ts-template && npm install)"
+    "postinstall": "(cd serverless-functions && npm install && cp -n .env.example .env); (cd flex-config && npm install && cp -n .env.example .env); (cd plugin-flex-ts-template-v2 && npm install)",
+    "remove-features": "node scripts/remove-features.js",
+    "rename-assets": "node scripts/rename-assets.js"
   },
   "repository": {
     "type": "git",
@@ -14,5 +16,11 @@
   "bugs": {
     "url": "https://github.com/twilio-professional-services/twilio-proserv-flex-project-template/issues"
   },
-  "homepage": "https://github.com/twilio-professional-services/twilio-proserv-flex-project-template#readme"
+  "homepage": "https://github.com/twilio-professional-services/twilio-proserv-flex-project-template#readme",
+  "devDependencies": {
+    "shelljs": "^0.8.5"
+  },
+  "dependencies": {
+    "simplify": "^1.0.0"
+  }
 }
