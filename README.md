@@ -106,9 +106,9 @@ Lastly, this package manages the github action workflows - with one example bein
 
 ## Removing Features
 
-You may want to remove all the featues in the template;
- - You are starting a project and you dont want the features, you just want to use the template skeleton.
- - You may be creating a standalone plugin with a targeted feature set and you just to leverage the template skeleton and serverless utlitities.
+You may want to remove all the featues in the template and just want to use the template skeleton and serverless utilities
+ - You are starting a project and you dont want the features
+ - You may be creating a standalone plugin with a targeted feature set
 
 There is a convenience script available to do this.  After cloning the template, simply run the following command from the repository root dir.
 
@@ -123,7 +123,7 @@ npm run remove-features
 (the following is only applicable when using the flex v2 plugin)
 
 You may want to rename the plugin and the serverless dependencies
-  - you are creating a standalone plugin and it needs to run side by side with other plugins usinig the template.
+  - you are creating a standalone plugin and it needs to run side by side with other plugins using the template.
 
 There is a convenience script available to do this.  After cloning the template, simply run the following command from the repository root dir.
 
