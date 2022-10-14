@@ -64,8 +64,8 @@ shell.sed('-i', /.*"postinstall": .*"/, postInstall, `package.json`);
 
 
 // rename serverless package so plugins dont collide when deployed side by side
-shell.sed('-i', /.*"name": ".*",/, `  "name": "template-serverless-${packageSuffix}",`, `${serverlessDir}/package.json`);
-shell.sed('-i', /.*"name": ".*",/, `  "name": "template-serverless-${packageSuffix}",`, `${serverlessDir}/package-lock.json`);
+shell.sed('-i', /.*"name": ".*",/, `  "name": "serverless-${packageSuffix}",`, `${serverlessDir}/package.json`);
+shell.sed('-i', /.*"name": ".*",/, `  "name": "serverless-${packageSuffix}",`, `${serverlessDir}/package-lock.json`);
 
 // rename the flex-config serverless_functions_domain so it doesnt collide either
 shell.sed('-i', /serverless_functions_domain[_,a-z]*":/, `serverless_functions_domain_${packageSuffix}":`, `${flexConfigDir}/ui_attributes.*.json`);

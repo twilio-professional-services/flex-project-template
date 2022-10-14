@@ -2,6 +2,13 @@
 <img  src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg"  alt="Twilio"  width="250"  />
 </a>
 
+<br>
+
+# Disclaimer
+As Open Source Software from Twilio Professional Services, this project is not supported by Twilio Support. This software is to be considered "sample code", a Type B Deliverable, and is delivered "as-is" to the user. Twilio bears no responsibility to support the use or implementation of this software. In using this project, you are assuming ownership over the code and its implementation.
+
+For bug reports and feature requests, please submit a Github Issue.
+
 # flex-project-template
 This repository provides development teams with a starting point for Flex projects. It is intended to accelerate the setup of a project and provide robust examples of the most common features added to Flex.
 
@@ -27,6 +34,7 @@ At the root of the repository you will find the following packages
 - [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
 - [serverless-functions](#serverless-functions)
 - [web-app-examples](#web-app-examples)
+- [scripts](#scripts)
 - [.github](#github)
 
 These packages are coupled together to provide a means of versioning these artifacts as a single release, providing a robust method for building a release pipeline across multiple environments.
@@ -55,11 +63,23 @@ This package manages the serverless functions that the _plugin-flex-ts-template_
 
 This package contains web application examples that build off feature functionality found within the plugin templates. These examples utilize building applications with `React` and interact with various endpoints within the `serverless-functions` package.
 
+### **scripts**
+
+this package maintains some convenience scripts namely
+
+- rename-assets - for renamingig the plugin, typically used when making standalone plugins that still want to follow the template structure
+- remove-features - for removing the features from the template, again typically used when making standalone plugins that still want to follow the template structure
+
+
 ### **.github**
 
 Lastly, this package manages the github action workflows - with one example being setup for a dev account where this template is maintained. Upon commits to _main_; _flex-config_, _plugin-flex-ts-template_ and _serverless-functions_ are all deployed on the associated environment, as controlled by the environment variables in github actions. The underlying scripts can easily be moulded for use in alternative release management tools.
 
+<br>
+
 ---
+
+<br>
 
 ## Further Feature library Information
 
@@ -80,6 +100,45 @@ Lastly, this package manages the github action workflows - with one example bein
 | Scrollable Activities | _allow the scrolling of the acitivies list_ | [Yes](plugin-flex-ts-template/src/feature-library/scrollable-activities/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/scrollable-activities/README.md)
 | Supervisor Barge Coach | _introduce advanced supervisor barge and coach features_ | [Yes](plugin-flex-ts-template/src/feature-library/supervisor-barge-coach/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-barge-coach/README.md) |
 
+
+
+---
+
+## Removing Features
+
+You may want to remove all the featues in the template;
+ - You are starting a project and you dont want the features, you just want to use the template skeleton.
+ - You may be creating a standalone plugin with a targeted feature set and you just to leverage the template skeleton and serverless utlitities.
+
+There is a convenience script available to do this.  After cloning the template, simply run the following command from the repository root dir.
+
+```bash
+npm run remove-features
+```
+
+---
+
+## Renaming plugin assets
+
+(the following is only applicable when using the flex v2 plugin)
+
+You may want to rename the plugin and the serverless dependencies
+  - you are creating a standalone plugin and it needs to run side by side with other plugins usinig the template.
+
+There is a convenience script available to do this.  After cloning the template, simply run the following command from the repository root dir.
+
+```bash
+npm run rename-assets MyFeature
+```
+
+It will
+- rename the plugin to `ps-template-myfeature` 
+  - _the prefix ps-template is used to easily identify plugins using the template format_
+- remove the flex v1 plugin (assuming its not to be used)
+- rename the serverless-functions deployment name to `serverless-myfeature`
+- reset the versions of these packages to `0.0.1`
+- rename the variable used in flex-config to identify the serverless domain to `serverless_functions_domain_myfeature`
+- rename references to the serverless domain within the plugin to match `serverless_functions_domain_myfeature`
 
 ---
 
@@ -124,7 +183,3 @@ npm run deploy:local
 ```bash
 cd ../plugin-flex-ts-template-v2 && twilio flex:plugins:start
 ```
-
-## Disclaimer
-
-This template is the evolution of multiple implementations and every effort has been made to make sure this template has been built to a high standard. **However** this template does come with **no warranty** and if you chose to use this template you are responsible for testing anything you use or build on top of it to make sure it is suitable for **you**. Feedback is welcome but no commitment can be made at this time for turning any issues around.
