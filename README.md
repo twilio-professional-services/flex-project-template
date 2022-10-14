@@ -77,7 +77,7 @@ Lastly, this package manages the github action workflows - with one example bein
 
 ---
 
-## Further Feature library Information
+## Feature library Information
 
 | Feature | Description | Flex V1 Plugin |  Flex V2 Plugin |
 | --------| ----------- | ------- | ----------|
