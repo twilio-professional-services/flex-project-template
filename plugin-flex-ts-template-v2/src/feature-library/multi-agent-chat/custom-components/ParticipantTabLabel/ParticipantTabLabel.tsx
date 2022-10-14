@@ -7,7 +7,7 @@ export const ParticipantTabLabelContainer = () => {
         <TaskContext.Consumer>
           {(context) => {
               console.log("getParticipantLabel ***", context)
-              const participantCount = context.conversation?.participants.size as number
+              const participantCount = context.conversation?.participants?.size as number
 
               return (
                   <Stack orientation="horizontal" spacing="space20" >

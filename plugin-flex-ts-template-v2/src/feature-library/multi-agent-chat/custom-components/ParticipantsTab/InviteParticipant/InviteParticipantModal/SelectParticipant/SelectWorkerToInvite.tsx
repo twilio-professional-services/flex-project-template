@@ -1,4 +1,5 @@
-import {useState, useEffect} from "react"
+import { useState, useEffect } from "react"
+import { WorkerParticipantInvite, ParticipantInvite, ParticipantInviteType } from "../../../../../types/ParticipantInvite";
 import { Combobox, Button} from "@twilio-paste/core"
 import { Manager } from "@twilio/flex-ui"
 import { CloseIcon } from "@twilio-paste/icons/esm/CloseIcon";
@@ -8,7 +9,6 @@ import { SearchIcon } from "@twilio-paste/icons/esm/SearchIcon";
 interface ActivityNameToAvailableFlagMapping {
    [index: string]: boolean;
 }
-
 const getActivityNameToAvailableFlagMapping = () =>
 {
   const workerClient = Manager.getInstance().workerClient;
@@ -18,14 +18,7 @@ const getActivityNameToAvailableFlagMapping = () =>
   return activityNameAvailableMapping; //{offine: false, available: true..... etc
 }
 
-interface SyncWorkerDetails {
-  full_name: string;
-  activity_name: string;
-  worker_sid: string;
-  available: boolean;
-}
-
-const getWorkerDetailsFromSyncObject = (tr_worker: any) : SyncWorkerDetails => {
+const getWorkerDetailsFromSyncObject = (tr_worker: any) : WorkerParticipantInvite => {
   return {
     full_name: tr_worker.attributes.full_name,
     activity_name: tr_worker.activity_name,
@@ -34,14 +27,12 @@ const getWorkerDetailsFromSyncObject = (tr_worker: any) : SyncWorkerDetails => {
   }
 }
 
-const instantQuery = (search: string, callback: any) => {
+const instantQuery = (search: string, callback: (workers: WorkerParticipantInvite[])=>void) => {
   const syncClient = Manager.getInstance()?.insightsClient;
 
   syncClient.instantQuery('tr-worker').then((q) => {
-    console.log("instantQuery", search, q)
     search = search ? search : "";
     q.search(search)
-    console.log("instantQuery", search)
 
     q.on('searchResult', (items) => {
       const workers: any[] = [];
@@ -51,13 +42,12 @@ const instantQuery = (search: string, callback: any) => {
         );
       })
       
-
       callback(workers);
     })
   })
 }
 
-const workerSort = (workerA: SyncWorkerDetails, workerB: SyncWorkerDetails): number => {
+const workerSort = (workerA: WorkerParticipantInvite, workerB: WorkerParticipantInvite): number => {
   // priority is sort on available flag, then activity name, then worker name
 
   if (workerA.available !== workerB.available)
@@ -80,16 +70,17 @@ const workerSort = (workerA: SyncWorkerDetails, workerB: SyncWorkerDetails): num
     return 1;
 }
 
-export const SelectAgentToInvite = () => {
-  const [inputItems, setInputItems] = useState<SyncWorkerDetails[]>([]);
+interface SelectWorkerToInviteProps {
+  updateSelectedParticipant: (selectedParticipant: ParticipantInvite | null)=>void;
+}
+export const SelectWorkerToInvite = ({updateSelectedParticipant} : SelectWorkerToInviteProps) => {
+  const [inputItems, setInputItems] = useState<WorkerParticipantInvite[]>([]);
   const [errorText, setErrorText] = useState<string>("")
-  const [selectedValue, setSelectedValue] = useState<string | undefined>("");
-  const [selectedWorker, setSelectedWorker] = useState<SyncWorkerDetails | null>(null)
+  const [inputValue, setInputValue] = useState<string | undefined>("");
+  const [selectedWorker, setSelectedWorker] = useState<WorkerParticipantInvite | null>(null)
  
-  const queryResultHandler = (workers: SyncWorkerDetails[]) => {
+  const queryResultHandler = (workers: WorkerParticipantInvite[]) => {
     const myWorkerSid = Manager.getInstance().workerClient?.sid;
-
-    console.log(workers)
     workers = workers.filter(worker => worker.worker_sid !== myWorkerSid) // remove ourseleves from the list
     workers.sort(workerSort)
     setInputItems(workers)
@@ -98,17 +89,22 @@ export const SelectAgentToInvite = () => {
   // fetch workers on mount and input change using sync instant query on tr-worker
   useEffect(() => {
     const fetchData = async () => {
-      instantQuery(`data.attributes.full_name contains "${selectedValue}"`, queryResultHandler)
+      instantQuery(`data.attributes.full_name contains "${inputValue}"`, queryResultHandler)
     }
 
     fetchData();
   },
-    [selectedValue]);   
+    [inputValue]);
   
-  const hanldeInputValueChange = (inputValue: string | undefined ) => {
-    console.log("hanldeInputValueChange ", inputValue)
-    const worker = inputItems.find(item => item.full_name === inputValue) || null;
-    console.log("worker?", worker)
+  useEffect(() => {
+    if (selectedWorker)
+      updateSelectedParticipant({ type: "Worker", participant: selectedWorker })
+    else
+      updateSelectedParticipant(null);
+  }, [selectedWorker])
+  
+  const hanldeInputSelectedChange = (selectedItem: WorkerParticipantInvite) => {
+    const worker = inputItems.find(item => item.full_name === selectedItem.full_name) || null;
     if (worker)
     {
       if (!worker.available)
@@ -127,32 +123,35 @@ export const SelectAgentToInvite = () => {
       setSelectedWorker(null);
       setErrorText("");
     }
-
-    setSelectedValue(inputValue)
   }
     
   return (
+    // ideally should follow all of the paste guidelines for useComobox state hook to make this a controlled componet so reset clears state
+    // disabled items not yet supported so lets grey out non available agents
     <Combobox
+      initialIsOpen
       autocomplete
       groupItemsBy="activity_name"
       items={inputItems}
       labelText="Choose an agent in an available activity:"
       helpText={errorText}
       hasError={!!errorText}
-      optionTemplate={(item) => <div>{item.full_name}</div>}
-      onInputValueChange={({ inputValue }) => { hanldeInputValueChange(inputValue) }}
-      
+      optionTemplate={(item) => <div style={item.available ? { opacity: 1 } : { opacity: 0.5 }}>
+        {item.full_name}
+      </div>}
+      onInputValueChange={({ inputValue }) => { setInputValue(inputValue) }}
+      onSelectedItemChange={({ selectedItem }) => { hanldeInputSelectedChange(selectedItem) }}
       itemToString={item => (item ? item.full_name : null)}
       insertAfter={
           <Button
             variant="link"
             size="reset"
             onClick={() => {
-              setSelectedValue('');
-             
+              setInputValue('');
+              setSelectedWorker(null);
             }}
           >
-          {!!selectedValue ? <CloseIcon decorative={false} title="Clear" />  : <SearchIcon decorative={false} title="Search" />}
+          {!!inputValue ? <CloseIcon decorative={false} title="Clear" />  : <SearchIcon decorative={false} title="Search" />}
           </Button>
         }          
     />
