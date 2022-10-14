@@ -19,7 +19,7 @@ if(process.argv[2] === undefined || process.argv[2] === ""){
 
 const packageSuffix = (process.argv[2]).toLowerCase();
 const pluginName =  capitalizeFirstLetter(`${process.argv[2]}Plugin`);
-const fullPluginName = `plugin-ps-template-${packageSuffix}`
+const fullPluginName = `ps-template-${packageSuffix}`
 
 const postInstall = `    "postinstall": "(cd serverless-functions && npm install && cp -n .env.example .env); (cd flex-config && npm install && cp -n .env.example .env); (cd ${fullPluginName} && npm install)"`
 
