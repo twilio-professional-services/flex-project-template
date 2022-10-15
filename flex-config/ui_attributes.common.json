@@ -50,6 +50,10 @@
         "enabled": false,
         "channel": "worker"
       },
+      "pause_recording": {
+        "enabled": false,
+        "includeSilence": false
+      },
       "activity_reservation_handler": {
         "enabled": false,
         "system_activity_names": {

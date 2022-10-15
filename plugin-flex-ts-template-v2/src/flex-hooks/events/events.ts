@@ -17,6 +17,7 @@ import ScrollableActivitiesLoaded from "../../feature-library/scrollable-activit
 import EnhancedCRMContainerLoaded from "../../feature-library/enhanced-crm-container/flex-hooks/events/pluginsLoaded";
 import ChatTransferLoaded from "../../feature-library/chat-transfer/flex-hooks/events/pluginsLoaded";
 import DualChannelRecordingLoaded from "../../feature-library/dual-channel-recording/flex-hooks/events/pluginsLoaded";
+import PauseRecordingLoaded from "../../feature-library/pause-recording/flex-hooks/events/pluginsLoaded";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -29,7 +30,8 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     ScrollableActivitiesLoaded,
     EnhancedCRMContainerLoaded,
     ChatTransferLoaded,
-    DualChannelRecordingLoaded
+    DualChannelRecordingLoaded,
+    PauseRecordingLoaded,
   ],
   taskAccepted: [
     taskAcceptedHandlerActivityReservationHandler,

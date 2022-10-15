@@ -12,6 +12,7 @@ import EnhancedCRMContainerConfig from "../../feature-library/enhanced-crm-conta
 import DeviceManagerConfig from "../../feature-library/device-manager/types/ServiceConfiguration";
 import ChatTransferConfiguration from "../../feature-library/chat-transfer/types/ServiceConfiguration";
 import DualChannelRecordingConfig from "../../feature-library/dual-channel-recording/types/ServiceConfiguration";
+import PauseRecordingConfig from "../../feature-library/pause-recording/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguratoin {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -28,4 +29,5 @@ export default interface FeatureServiceConfiguratoin {
   enhanced_crm_container: EnhancedCRMContainerConfig;
   chat_transfer: ChatTransferConfiguration;
   dual_channel_recording: DualChannelRecordingConfig;
+  pause_recording: PauseRecordingConfig;
 }
