@@ -1,6 +1,9 @@
-import * as Flex from '@twilio/flex-ui';
+import * as Flex from "@twilio/flex-ui";
+import ConfiguredTemplateTeamFilters from "../../feature-library/teams-view-filters/flex-hooks/team-filters/TeamFilters";
 
-export default async (flex: typeof Flex, manager: Flex.Manager) => {
+const TeamViewFiltersToregister: ((
+  flex: typeof Flex,
+  manager: Flex.Manager
+) => void)[] = [ConfiguredTemplateTeamFilters];
 
-	// TODO: Add in example common filters
-}
+export default TeamViewFiltersToregister;

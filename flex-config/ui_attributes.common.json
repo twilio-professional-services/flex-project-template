@@ -57,7 +57,7 @@
         }
       },
       "teams_view_filters": {
-        "enabled": false
+        "enabled": true
       }
     }
   }
