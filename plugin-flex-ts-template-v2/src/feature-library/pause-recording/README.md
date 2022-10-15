@@ -2,6 +2,10 @@
 
 This feature adds a Pause/Resume Recording button to the call canvas to allow the agent to temporarily pause the call recording before the customer provides sensitive information (such as credit card details, bank account, etc.) to the agent and to resume regular call recording afterwards.
 
+# flex-user-experience
+
+![Pause recording demo](screenshots/pause-recording.gif)
+
 # setup and dependencies
 
 Recording must be enabled either via the dual channel recording feature in this repository, or via the "Call Recording" setting in Twilio Console > Flex > Manage > Voice. Do not enable both recording methods simultaneously, or only one of the recordings will be paused.
