@@ -9,11 +9,11 @@ const manager = Flex.Manager.getInstance();
 const { custom_data } =
   (manager.serviceConfiguration
     .ui_attributes as UIAttributes) || {};
-const { channel } =
+const { enabled = false, channel } =
   custom_data?.features?.dual_channel_recording || {};
 
 const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
-  if (!Flex.TaskHelper.isCallTask(task)) {
+  if (!enabled || !Flex.TaskHelper.isCallTask(task)) {
     return;
   }
   
