@@ -65,8 +65,6 @@ const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
   // the worker participant and use that call SID instead.
   const { callSid } = participantLeg;
   
-  console.debug('callSid: ', callSid);
-  
   
   const recording = await RecordingService.startDualChannelRecording(callSid);
   await addCallDataToTask(task, callSid, recording);

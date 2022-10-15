@@ -1,4 +1,5 @@
 import { ConferenceParticipant, ITask, Manager, TaskHelper } from "@twilio/flex-ui";
+import TaskRouterService from "../../../utils/serverless/TaskRouter/TaskRouterService";
 import { UIAttributes } from "../../../types/manager/ServiceConfiguration";
 import { FetchedRecording } from "../../../types/serverless/twilio-api";
 
@@ -84,7 +85,7 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
   }
 
   if (shouldUpdateTaskAttributes) {
-    await task.setAttributes(newAttributes);
+    await TaskRouterService.updateTaskAttributes(task.taskSid, newAttributes);
   }
 };
 
