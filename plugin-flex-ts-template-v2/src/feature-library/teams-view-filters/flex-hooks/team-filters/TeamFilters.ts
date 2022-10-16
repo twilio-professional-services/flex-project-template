@@ -1,20 +1,20 @@
 import * as Flex from "@twilio/flex-ui";
-import {  isFeatureEnabled } from "../../index";
+import {  isFeatureEnabled, isDepartmentFilterEnabled, isExtensionsFilterEnabled, isQueueFilterEnabled, isTeamFilterEnabled, isAgnetSkillsFilterEnabled } from "../../index";
 
-import { companyFilter } from "../../filters/companyFilter";
 import { departmentFilter } from "../../filters/departmentFilter";
-import { extensionFilter } from "../../filters/extensionFilter";
+import { emailFilter } from "../../filters/emailFilter";
 import { queueFilter } from "../../filters/queueFilter";
 import { teamFilter } from "../../filters/teamFilter";
+import { agentSkillsFilter } from "../../filters/agentSkillsFilter"
+import { FilterDefinition } from "@twilio/flex-ui";
 
-//TODO - add configuration lookup to select which filters to load
-const enabledFilters = [
-  companyFilter,
-  departmentFilter,
-  extensionFilter,
-  queueFilter,
-  teamFilter
-];
+var enabledFilters = [] as Array<FilterDefinition>;
+
+isDepartmentFilterEnabled() ? enabledFilters.push(departmentFilter()) : null;isExtensionsFilterEnabled() ? enabledFilters.push(emailFilter()) : null;
+//isQueueFilterEnabled() ? enabledFilters.push(queueFilter()) : null;
+isTeamFilterEnabled() ? enabledFilters.push(teamFilter()) : null;
+isAgnetSkillsFilterEnabled() ? enabledFilters.push(agentSkillsFilter()) : null;
+
 
 const loadSampleFilters = async (flex: typeof Flex) => {
   if (!isFeatureEnabled()) return;

@@ -57,7 +57,36 @@
         }
       },
       "teams_view_filters": {
-        "enabled": true
+        "enabled": true,
+        "applied_filters": {
+          "email": true,
+          "department" : true,
+          "queue": true,
+          "team": true,
+          "agent_skills": true
+        },
+        "department_options": [
+          "General Management",
+          "Marketing",
+          "Operations",
+          "Finance",
+          "Sales",
+          "Human Resources",
+          "Purchasing",
+          "Customer Service",
+          "Recruiting"
+        ],
+        "team_options" :[
+          "Blue Team",
+          "Red Team",
+          "Gold Team",
+          "VIP Team",
+          "Orange Team",
+          "Yellow Team",
+          "Green Team",
+          "Purple Team",
+          "Gray Team"
+        ]
       }
     }
   }
