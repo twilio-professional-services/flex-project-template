@@ -8,23 +8,18 @@ import { teamFilter } from "../../filters/teamFilter";
 import { agentSkillsFilter } from "../../filters/agentSkillsFilter"
 import { FilterDefinition } from "@twilio/flex-ui";
 
-var enabledFilters = [] as Array<FilterDefinition>;
+const getSampleFilters = async () => {
 
-isDepartmentFilterEnabled() ? enabledFilters.push(departmentFilter()) : null;isExtensionsFilterEnabled() ? enabledFilters.push(emailFilter()) : null;
-//isQueueFilterEnabled() ? enabledFilters.push(queueFilter()) : null;
-isTeamFilterEnabled() ? enabledFilters.push(teamFilter()) : null;
-isAgnetSkillsFilterEnabled() ? enabledFilters.push(agentSkillsFilter()) : null;
+  var enabledFilters = [] as Array<FilterDefinition>;
 
+  if(isFeatureEnabled()) {
+    isDepartmentFilterEnabled() ? enabledFilters.push(departmentFilter()) : null;isExtensionsFilterEnabled() ? enabledFilters.push(emailFilter()) : null;
+    //isQueueFilterEnabled() ? enabledFilters.push(queueFilter()) : null;
+    isTeamFilterEnabled() ? enabledFilters.push(teamFilter()) : null;
+    isAgnetSkillsFilterEnabled() ? enabledFilters.push(agentSkillsFilter()) : null;
+  }
 
-const loadSampleFilters = async (flex: typeof Flex) => {
-  if (!isFeatureEnabled()) return;
-  
-  flex.TeamsView.defaultProps.filters = [
-    flex.TeamsView.activitiesFilter,
-    ...enabledFilters
-  ];
+  return enabledFilters;
 };
 
-export default (flex: typeof Flex, manager: Flex.Manager) => {
-  loadSampleFilters(flex);
-};
+export default getSampleFilters;
