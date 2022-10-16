@@ -1,5 +1,9 @@
-import * as Flex from "@twilio/flex-ui"
+import { FilterDefinition } from "@twilio/flex-ui";
 
-const filters = []
+var filters = [] as Array<FilterDefinition>;
 
-export default filters;
+const getFilters = async () => {
+  return filters;
+}
+
+export default getFilters;

@@ -1,8 +1,12 @@
-import * as Flex from "@twilio/flex-ui";
+import { FilterDefinition } from "@twilio/flex-ui";
 import getSampleFilters from "../../feature-library/teams-view-filters/flex-hooks/team-filters/TeamFilters";
 
-var sampleFilters = await getSampleFilters();
+var filters = [] as Array<FilterDefinition>;
 
-const filters = [...sampleFilters]
+const getFilters = async () => {
+  var sampleFilters = await getSampleFilters();
+  filters.push(...sampleFilters);
+  return filters;
+}
 
-export default filters;
+export default getFilters;
