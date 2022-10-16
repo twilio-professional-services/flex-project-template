@@ -1,9 +1,12 @@
 import * as Flex from "@twilio/flex-ui";
-import Filters from "./filters";
+import CustomFilters from "./filters";
 
-export default (flex: typeof Flex, manager: Flex.Manager) => {
+export default async (flex: typeof Flex, manager: Flex.Manager) => {
+  
+  const customFilters = await CustomFilters();
   Flex.TeamsView.defaultProps.filters = [
     Flex.TeamsView.activitiesFilter,
-    ...Filters
+    ...customFilters
   ];
+
 };

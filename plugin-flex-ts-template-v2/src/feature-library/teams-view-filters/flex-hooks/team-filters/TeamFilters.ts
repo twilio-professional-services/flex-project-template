@@ -1,4 +1,3 @@
-import * as Flex from "@twilio/flex-ui";
 import {  isFeatureEnabled, isDepartmentFilterEnabled, isExtensionsFilterEnabled, isQueueFilterEnabled, isTeamFilterEnabled, isAgnetSkillsFilterEnabled } from "../../index";
 
 import { departmentFilter } from "../../filters/departmentFilter";
@@ -14,7 +13,7 @@ const getSampleFilters = async () => {
 
   if(isFeatureEnabled()) {
     isDepartmentFilterEnabled() ? enabledFilters.push(departmentFilter()) : null;isExtensionsFilterEnabled() ? enabledFilters.push(emailFilter()) : null;
-    //isQueueFilterEnabled() ? enabledFilters.push(queueFilter()) : null;
+    isQueueFilterEnabled() ? enabledFilters.push(queueFilter()) : null;
     isTeamFilterEnabled() ? enabledFilters.push(teamFilter()) : null;
     isAgnetSkillsFilterEnabled() ? enabledFilters.push(agentSkillsFilter()) : null;
   }

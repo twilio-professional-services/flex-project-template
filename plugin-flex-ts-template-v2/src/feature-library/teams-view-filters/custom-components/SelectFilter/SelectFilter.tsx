@@ -17,6 +17,7 @@ export type OwnProps = {
   options?: Array<FilterDefinitionOption>;
   name?: string;
   currentValue?: string[];
+  IsMulti: boolean;
 }
 
 export const MultiSelectFilter = (props: OwnProps) => {
@@ -58,7 +59,13 @@ export const MultiSelectFilter = (props: OwnProps) => {
   };
   
   const _handleChange = (e: any, v: any) => {
-    const newValue = Array.isArray(e) ? e.map(o => o.value) : [];
+    var newValue;
+
+    if(props.IsMulti) {
+      newValue = Array.isArray(e) ? e.map(o => o.value) : [];
+    } else {
+      newValue = Array.isArray(e) ? e.map(o => o.value) : [e.value]; 
+    }
     
     if (props.handleChange) {
       props.handleChange(newValue);
@@ -78,7 +85,7 @@ export const MultiSelectFilter = (props: OwnProps) => {
         classNamePrefix={props.name}
         id={elementId}
         ref={selectRef}
-        isMulti
+        isMulti={props.IsMulti}
         name={props.name}
         options={props.options}
         onChange={_handleChange}

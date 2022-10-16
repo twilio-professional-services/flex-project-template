@@ -1,7 +1,7 @@
 import { FilterDefinition } from "@twilio/flex-ui";
 
-import MultiSelectFilter from '../custom-components/MultiSelectFilter';
-import MultiSelectFilterLabel from '../custom-components/MultiSelectFilterLabel';
+import SelectFilter from '../custom-components/SelectFilter';
+import SelectFilterLabel from '../custom-components/SelectFilterLabel';
 import { getDepartmentOptions } from '../index'
 
 /* 
@@ -34,8 +34,8 @@ export const departmentFilter = () => ({
     label: value
   })),
   customStructure: {
-    field: <MultiSelectFilter />,
-    label: <MultiSelectFilterLabel />
+    field: <SelectFilter IsMulti={true} />,
+    label: <SelectFilterLabel />
   },
   condition: 'IN'
 } as FilterDefinition);
