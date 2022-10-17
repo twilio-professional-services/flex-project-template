@@ -13,7 +13,7 @@ const getSampleFilters = async () => {
 
   if(isFeatureEnabled()) {
     isDepartmentFilterEnabled() ? enabledFilters.push(departmentFilter()) : null;isExtensionsFilterEnabled() ? enabledFilters.push(emailFilter()) : null;
-    isQueueFilterEnabled() ? enabledFilters.push(queueFilter()) : null;
+    isQueueFilterEnabled() ? enabledFilters.push(await queueFilter()) : null;
     isTeamFilterEnabled() ? enabledFilters.push(teamFilter()) : null;
     isAgnetSkillsFilterEnabled() ? enabledFilters.push(agentSkillsFilter()) : null;
   }

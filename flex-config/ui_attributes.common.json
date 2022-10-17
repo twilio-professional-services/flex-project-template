@@ -58,6 +58,7 @@
       },
       "teams_view_filters": {
         "enabled": true,
+        "logFilters": true,
         "applied_filters": {
           "email": true,
           "department" : true,

@@ -2,7 +2,7 @@ export type OwnProps = {
   currentValue?: string[];
 }
 
-export const MultiSelectFilterLabel = (props: OwnProps) => {
+export const SelectFilterLabel = (props: OwnProps) => {
   let label = 'Any';
   if (props.currentValue && props.currentValue.length === 1) {
     label = `${props.currentValue[0]} only`;
@@ -13,4 +13,4 @@ export const MultiSelectFilterLabel = (props: OwnProps) => {
   return (<>{label}</>);
 };
 
-export default MultiSelectFilterLabel;
+export default SelectFilterLabel;

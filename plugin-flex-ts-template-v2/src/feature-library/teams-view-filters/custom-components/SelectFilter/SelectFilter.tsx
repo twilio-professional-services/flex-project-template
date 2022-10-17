@@ -64,7 +64,7 @@ export const MultiSelectFilter = (props: OwnProps) => {
     if(props.IsMulti) {
       newValue = Array.isArray(e) ? e.map(o => o.value) : [];
     } else {
-      newValue = Array.isArray(e) ? e.map(o => o.value) : [e.value]; 
+      newValue = Array.isArray(e) ? e.map(o => o.value) : [e.value];
     }
     
     if (props.handleChange) {

@@ -1,4 +1,6 @@
 import { FilterDefinition, Manager } from "@twilio/flex-ui";
+import SelectFilter from '../custom-components/SelectFilter';
+import SelectFilterLabel from '../custom-components/SelectFilterLabel';
 
 const skillsArray = Manager.getInstance().serviceConfiguration.taskrouter_skills?.map(skill => ({
   value: skill.name,
@@ -22,6 +24,9 @@ export const agentSkillsFilter = () => ({
   title: 'Agent Skills',
   fieldName: 'skills',
   options: skillsArray? skillsArray : [],
-  type: 'multiValue',
+  customStructure: {
+    field: <SelectFilter IsMulti={true} />,
+    label: <SelectFilterLabel />
+  },
   condition: 'IN'
 } as FilterDefinition);

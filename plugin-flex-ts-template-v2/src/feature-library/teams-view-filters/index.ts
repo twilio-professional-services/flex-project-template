@@ -5,6 +5,7 @@ const { custom_data } =
   (Flex.Manager.getInstance().serviceConfiguration
     .ui_attributes as UIAttributes) || {};
 const { enabled = false } = custom_data?.features?.teams_view_filters || {};
+const { logFilters = false } = custom_data?.features?.teams_view_filters || {};
 
 const { email = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
 const { department = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
@@ -17,6 +18,10 @@ const { team_options = [] } = custom_data?.features?.teams_view_filters || {};
 
 export const isFeatureEnabled = () => {
   return enabled;
+};
+
+export const shouldLogFilters = () => {
+  return enabled && logFilters;
 };
 
 export const isExtensionsFilterEnabled = () => {
