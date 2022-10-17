@@ -69,7 +69,7 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
     });
 
     // if no queue filters return
-    if(!queueEligibilityFilter) return
+    if(!queueEligibilityFilter || queueEligibilityFilter.values.length < 1) return
 
     // remove the replacement filter
     let newFilter = filters.filter((filter: AppliedFilter) => filter.name !== "queue-replacement" );
