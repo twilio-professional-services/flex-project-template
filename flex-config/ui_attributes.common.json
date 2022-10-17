@@ -62,7 +62,7 @@
         "applied_filters": {
           "email": true,
           "department" : true,
-          "queue": true,
+          "queuePartial": true,
           "team": true,
           "agent_skills": true
         },

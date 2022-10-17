@@ -9,7 +9,7 @@ const { logFilters = false } = custom_data?.features?.teams_view_filters || {};
 
 const { email = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
 const { department = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { queue = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
+const { queuePartial = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
 const { team = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
 const { agent_skills = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
 
@@ -32,8 +32,8 @@ export const isDepartmentFilterEnabled = () => {
   return enabled && department;
 }
 
-export const isQueueFilterEnabled = () => {
-  return enabled && queue;
+export const isQueuePartialFilterEnabled = () => {
+  return enabled && queuePartial;
 }
 
 export const isTeamFilterEnabled = () => {

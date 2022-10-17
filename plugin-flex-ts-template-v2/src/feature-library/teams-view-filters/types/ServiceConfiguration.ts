@@ -4,7 +4,7 @@ export default interface TeamViewFiltersConfig {
   applied_filters: {
     email: boolean;
     department: boolean;
-    queue: boolean;
+    queuePartial: boolean;
     team: boolean;
     agent_skills: boolean;
   }

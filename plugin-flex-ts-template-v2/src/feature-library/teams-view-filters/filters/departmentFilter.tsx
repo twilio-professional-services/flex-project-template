@@ -6,9 +6,10 @@ import { getDepartmentOptions } from '../index'
 
 /* 
   This filter is based on the model of the worker attibutes adopted from
-  flex insights. See https://www.twilio.com/docs/flex/developer/insights/enhance-integration#enhance-agent-data for a definition of 
-  that model.
+  flex insights.  For a definition of that model see:
 
+  https://www.twilio.com/docs/flex/developer/insights/enhance-integration#enhance-agent-data
+  
   The worker department_name may be pushed into the worker object through SSO
   or it may be managed directly in flex using some worker customization
   tool.

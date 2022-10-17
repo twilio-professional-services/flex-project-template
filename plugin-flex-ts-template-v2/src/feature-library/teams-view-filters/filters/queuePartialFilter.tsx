@@ -3,7 +3,18 @@ import SelectFilter from "../custom-components/SelectFilter";
 import SelectFilterLabel from "../custom-components/SelectFilterLabel";
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService'
 
-export const queueFilter = async () => {
+/* 
+    this filter supports queue matching only on a subset of queues
+
+    queues must use only AND'd expressions, the inclusion of any OR'd
+    expressions will result in a notification to the user and the filter
+    will be ignored.
+
+    furthermore the expression can onlyuse the following qualifiers
+      HAS|==|EQ|!=|CONTAINS|IN|NOT IN
+*/
+
+export const queuePartialFilter = async () => {
   
   const queueOptions = await TaskRouterService.getQueues();
   const options = queueOptions? queueOptions.map((queue: any) => ({

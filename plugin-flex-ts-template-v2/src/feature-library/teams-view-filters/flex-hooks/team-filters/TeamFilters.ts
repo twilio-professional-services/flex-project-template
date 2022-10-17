@@ -1,8 +1,8 @@
-import {  isFeatureEnabled, isDepartmentFilterEnabled, isExtensionsFilterEnabled, isQueueFilterEnabled, isTeamFilterEnabled, isAgnetSkillsFilterEnabled } from "../../index";
+import {  isFeatureEnabled, isDepartmentFilterEnabled, isExtensionsFilterEnabled, isQueuePartialFilterEnabled, isTeamFilterEnabled, isAgnetSkillsFilterEnabled } from "../../index";
 
 import { departmentFilter } from "../../filters/departmentFilter";
 import { emailFilter } from "../../filters/emailFilter";
-import { queueFilter } from "../../filters/queueFilter";
+import { queuePartialFilter } from "../../filters/queuePartialFilter";
 import { teamFilter } from "../../filters/teamFilter";
 import { agentSkillsFilter } from "../../filters/agentSkillsFilter"
 import { FilterDefinition } from "@twilio/flex-ui";
@@ -13,7 +13,7 @@ const getSampleFilters = async () => {
 
   if(isFeatureEnabled()) {
     isDepartmentFilterEnabled() ? enabledFilters.push(departmentFilter()) : null;isExtensionsFilterEnabled() ? enabledFilters.push(emailFilter()) : null;
-    isQueueFilterEnabled() ? enabledFilters.push(await queueFilter()) : null;
+    isQueuePartialFilterEnabled() ? enabledFilters.push(await queuePartialFilter()) : null;
     isTeamFilterEnabled() ? enabledFilters.push(teamFilter()) : null;
     isAgnetSkillsFilterEnabled() ? enabledFilters.push(agentSkillsFilter()) : null;
   }
