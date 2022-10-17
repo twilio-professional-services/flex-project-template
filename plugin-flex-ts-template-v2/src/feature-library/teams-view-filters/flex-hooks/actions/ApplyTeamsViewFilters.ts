@@ -83,10 +83,12 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
     const queues =  fetchedQueues? fetchedQueues : [];
     const queue = queues.find(queue => {return queue.friendlyName === queueEligibilityFilter?.values[0]})
 
-    // if there is no queue found currently treating it like
-    // a queue that matches all workers.
-    // TODO: produce a warning notification.
-    const targetWorkers:string = queue? queue.targetWorkers : "1==1";
+    // if there is no queue found notify user
+    if(!queue) {
+      Flex.Notifications.showNotification(TeamViewQueueFilterNotification.ErrorLoadingQueue);
+      return;
+    }
+    const targetWorkers:string = queue.targetWorkers;
 
     // if the targetWorkers is 1==1 we can ignore it
     if(targetWorkers !== "1==1") {

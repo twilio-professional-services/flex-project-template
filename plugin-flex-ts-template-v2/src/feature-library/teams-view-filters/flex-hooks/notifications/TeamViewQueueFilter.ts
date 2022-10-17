@@ -4,7 +4,8 @@ import { StringTemplates } from '../strings/TeamViewQueueFilter';
 // Export the notification IDs an enum for better maintainability when accessing them elsewhere
 export enum TeamViewQueueFilterNotification {
   ErrorParsingQueueExpression = 'ErrorParsingQueueExpression',
-  ErrorParsingQueueExpressionWithOR = 'ErrorParsingQueueExpressionWithOR'
+  ErrorParsingQueueExpressionWithOR = 'ErrorParsingQueueExpressionWithOR',
+  ErrorLoadingQueue = 'ErrorLoadingQueue'
 };
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
@@ -22,5 +23,11 @@ function errorParsingQueueFilterExpression(flex: typeof Flex, manager: Flex.Mana
     id: TeamViewQueueFilterNotification.ErrorParsingQueueExpressionWithOR,
     type: Flex.NotificationType.warning,
     content: StringTemplates.ErrorParsingQueueExpressionWithOR
+  });
+
+  flex.Notifications.registerNotification({
+    id: TeamViewQueueFilterNotification.ErrorLoadingQueue,
+    type: Flex.NotificationType.warning,
+    content: StringTemplates.ErrorQueueNotFound
   });
 }
