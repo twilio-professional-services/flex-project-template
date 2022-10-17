@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService'
 import { TeamViewQueueFilterNotification } from '../notifications/TeamViewQueueFilter';
-import { isQueuePartialFilterEnabled, shouldLogFilters } from "../../index";
+import { isQueueNoWorkerDataFilterEnabled, shouldLogFilters } from "../../index";
 import { AppliedFilter } from '@twilio/flex-ui/src/state/Supervisor/SupervisorState.definitions';
 
 export interface ApplyTeamsViewFiltersPayload {
@@ -10,7 +10,7 @@ export interface ApplyTeamsViewFiltersPayload {
 }
 
 export function interceptQueueFilter(flex: typeof Flex, manager: Flex.Manager) {
-  if(!isQueuePartialFilterEnabled) return;
+  if(!isQueueNoWorkerDataFilterEnabled) return;
   replaceQueueFiltersForTeamView(flex, manager);
 }
 

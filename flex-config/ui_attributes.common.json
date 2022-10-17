@@ -62,7 +62,8 @@
         "applied_filters": {
           "email": true,
           "department" : true,
-          "queuePartial": true,
+          "queue_no_worker_data": true,
+          "queue_worker_data": true,
           "team": true,
           "agent_skills": true
         },
