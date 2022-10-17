@@ -63,7 +63,7 @@
           "email": true,
           "department" : true,
           "queue_no_worker_data": true,
-          "queue_worker_data": true,
+          "queue_worker_data": false,
           "team": true,
           "agent_skills": true
         },
