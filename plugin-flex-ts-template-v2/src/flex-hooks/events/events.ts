@@ -14,6 +14,7 @@ import OmniChannelCapacityManagementLoaded from "../../feature-library/omni-chan
 import ScrollableActivitiesLoaded from "../../feature-library/scrollable-activities/flex-hooks/events/pluginsLoaded";
 import EnhancedCRMContainer from "../../feature-library/enhanced-crm-container/flex-hooks/events/pluginsLoaded";
 import ChatTransfer from "../../feature-library/chat-transfer/flex-hooks/events/pluginsLoaded";
+import TeamsViewFilters from "../../feature-library/teams-view-filters/flex-hooks/events/pluginsLoaded";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -26,6 +27,7 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     ScrollableActivitiesLoaded,
     EnhancedCRMContainer,
     ChatTransfer,
+    TeamsViewFilters
   ],
   taskAccepted: [taskAcceptedHandlerActivityReservationHandler],
   taskCanceled: [taskEndedHandlerActivityReservationHandler],

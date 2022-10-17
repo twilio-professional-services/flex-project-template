@@ -10,7 +10,8 @@ import OmniChannelCapacityManagementConfig from "../../feature-library/omni-chan
 import InternalCallConfig from "../../feature-library/internal-call/types/ServiceConfiguration";
 import EnhancedCRMContainerConfig from "../../feature-library/enhanced-crm-container/types/ServiceConfiguration";
 import DeviceManagerConfig from "../../feature-library/device-manager/types/ServiceConfiguration";
-import ChatTransferConfiguration from "../../feature-library/chat-transfer/types/ServiceConfiguration";
+import ChatTransferConfig from "../../feature-library/chat-transfer/types/ServiceConfiguration";
+import TeamViewFiltersConfig from "../../feature-library/teams-view-filters/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguratoin {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -25,5 +26,6 @@ export default interface FeatureServiceConfiguratoin {
   omni_channel_capacity_management: OmniChannelCapacityManagementConfig;
   internal_call: InternalCallConfig;
   enhanced_crm_container: EnhancedCRMContainerConfig;
-  chat_transfer: ChatTransferConfiguration;
+  chat_transfer: ChatTransferConfig;
+  teams_view_filters: TeamViewFiltersConfig;
 }
