@@ -3,11 +3,14 @@ import { Stack, Card, Heading, Button, Box } from "@twilio-paste/core"
 import { AgentIcon } from "@twilio-paste/icons/esm/AgentIcon";
 import { ChatIcon } from "@twilio-paste/icons/esm/ChatIcon";
 import { InviteParticipantModal } from "./InviteParticipantModal/InviteParticipantModal";
-import { ParticipantInvite, ParticipantInviteType } from "../../../types/ParticipantInvite"
+import { ParticipantInvite, ParticipantInviteType, QueueParticipantInvite, WorkerParticipantInvite } from "../../../types/ParticipantInvite"
+import { Actions, ITask } from "@twilio/flex-ui";
+import { EventPayload, TransferOptions} from "../../../types/TransferOptions"
 
-
-export const InviteParticipant = () => {
-// Modal properties
+interface InviteParticipantProps {
+  task: ITask;
+}
+export const InviteParticipant = ({task} : InviteParticipantProps) => {
     const [participantModalType, setParticipantInviteModalType] = useState<ParticipantInviteType | null>(null);
 
     const handleOpenModal = (type: ParticipantInviteType): any => setParticipantInviteModalType(type);
@@ -15,9 +18,15 @@ export const InviteParticipant = () => {
 
     const handleInviteParticipantClicked = (invitedParticipantDetails: ParticipantInvite) => {
         console.log("handleInviteParticipantClicked", invitedParticipantDetails)
+
+        const targetSid = invitedParticipantDetails.type === "Queue" ? (invitedParticipantDetails.participant as QueueParticipantInvite).queue_sid :
+            (invitedParticipantDetails.participant as WorkerParticipantInvite).worker_sid;
+        
+        const chatTransferPayload : EventPayload = {task,targetSid, options: {mode: "WARM"}}
+        Actions.invokeAction("ChatTransferTask", chatTransferPayload);
+
         handleCloseModal();
     }
-
 
     return <>
         <Card padding="space60">

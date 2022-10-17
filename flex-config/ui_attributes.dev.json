@@ -30,7 +30,9 @@
         "enabled": true
       },
       "chat_transfer": {
-        "enabled": false
+        "enabled": true,
+        "cold_transfer": true,
+        "multi_participant": true
       },
       "chat_to_video_escalation": {
         "enabled": false

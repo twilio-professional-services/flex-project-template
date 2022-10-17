@@ -3,12 +3,14 @@ export enum StringTemplates {
   ChatTransferTaskSuccess = "ChatTransferTaskSuccess",
   ChatTransferFailedGeneric = "ChatTransferFailedGeneric",
   ChatTransferFailedConsultNotSupported = "ChatTransferFailedConsultNotSupported",
+  ChatParticipantInvited = "ChatParticipantInvited",
 }
 
 export default {
   [StringTemplates.ChatTransferTaskSuccess]: "Conversation transferred",
+  [StringTemplates.ChatParticipantInvited]: "Participant invited",
   [StringTemplates.ChatTransferFailedGeneric]:
-    "Error occured with conversation transfer",
+    "Error occured adding new participant",
   [StringTemplates.ChatTransferFailedConsultNotSupported]:
     "Consult/Warm transfer is not supported",
 };

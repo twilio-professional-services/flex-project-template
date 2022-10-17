@@ -81,7 +81,7 @@ export const SelectQueueToInvite = ({updateSelectedParticipant} : SelectQueueToI
   }
     
   return (
-    // ideally should follow all of the paste guidelines for useComobox state hook to make this a controlled componet so reset clears state
+    // ideally should follow all of the paste guidelines for useComobox state hook to make this a controlled component so reset clears state
     // disabled items not yet supported so lets grey out non available agents
     <Combobox
       initialIsOpen

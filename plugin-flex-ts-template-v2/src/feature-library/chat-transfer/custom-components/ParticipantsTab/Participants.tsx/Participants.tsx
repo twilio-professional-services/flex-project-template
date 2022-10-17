@@ -1,5 +1,5 @@
 import { Stack, Card, Heading } from "@twilio-paste/core"
-import { Participant } from "../Participant/Participant"
+import { Participant } from "./Participant/Participant"
 import { ParticipantDetails} from "../../../types/ParticipantDetails"
 
 interface ParticipantsProps {
@@ -8,7 +8,7 @@ interface ParticipantsProps {
 
 export const Participants = ({ participantDetails }: ParticipantsProps) => {
 
-    console.log(participantDetails)
+    console.log("Participants", participantDetails)
     
     const participants = participantDetails.map((participantDetail) => {
         const participantType = participantDetail.participantType;

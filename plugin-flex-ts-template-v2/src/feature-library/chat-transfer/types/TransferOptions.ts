@@ -1,9 +1,9 @@
 import * as Flex from "@twilio/flex-ui";
 
 export interface TransferOptions {
-  attributes: string;
+  attributes?: string;
   mode: string;
-  priority: string;
+  priority?: string;
 }
 
 export interface EventPayload {

@@ -11,7 +11,6 @@ import InternalCallConfig from "../../feature-library/internal-call/types/Servic
 import EnhancedCRMContainerConfig from "../../feature-library/enhanced-crm-container/types/ServiceConfiguration";
 import DeviceManagerConfig from "../../feature-library/device-manager/types/ServiceConfiguration";
 import ChatTransferConfiguration from "../../feature-library/chat-transfer/types/ServiceConfiguration";
-import MultiAgentChatConfiguration from "../../feature-library/multi-agent-chat/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguratoin {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -27,5 +26,4 @@ export default interface FeatureServiceConfiguratoin {
   internal_call: InternalCallConfig;
   enhanced_crm_container: EnhancedCRMContainerConfig;
   chat_transfer: ChatTransferConfiguration;
-  multi_agent_chat: MultiAgentChatConfiguration;
 }

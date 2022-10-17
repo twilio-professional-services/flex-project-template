@@ -18,7 +18,7 @@ import { addDeviceManagerToMainHeader } from "../../feature-library/device-manag
 import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
 import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-filter/flex-hooks/components/WorkerProfile";
-import { addTaskCanvasTabCustomization } from "../../feature-library/multi-agent-chat/flex-hooks/components/TaskCanvasTabs";
+import { addTaskCanvasTabCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasTabs"
 
 const componentHandlers: Components = {
   AgentDesktopView: [],

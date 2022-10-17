@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {ITask, TaskHelper } from "@twilio/flex-ui"
+import { ITask, TaskHelper } from "@twilio/flex-ui"
 
 // at the time of writing the worker directory is not a Flex UI component that is programmable down to the level of customizing existing tabs or tab items
 // rather than rewrite the component just to hide the warm transfer/consult button lets remove it using css
@@ -22,7 +22,7 @@ export const WorkerDirectoryCustomization = ( { task, isOpen } : WorkerDirectory
 
     // this supports starting and stopping a timer that runs the above cssHack when a cbm task is selected and directory is open
     useEffect(() => {
-        if (!timerId && isOpen && task && TaskHelper.isCBMTask(task))
+        if (!timerId && isOpen && task && TaskHelper.isCBMTask(task) )
         { 
             updateTimerId(setTimeout(() => doCSSHack(), 1000))
         }

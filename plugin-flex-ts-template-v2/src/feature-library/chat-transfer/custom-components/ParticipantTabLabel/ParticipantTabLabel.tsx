@@ -6,7 +6,6 @@ export const ParticipantTabLabelContainer = () => {
   return (
         <TaskContext.Consumer>
           {(context) => {
-              console.log("getParticipantLabel ***", context)
               const participantCount = context.conversation?.participants?.size as number
 
               return (

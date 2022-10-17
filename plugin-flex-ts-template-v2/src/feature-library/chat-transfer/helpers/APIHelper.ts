@@ -15,7 +15,7 @@ export interface TransferRESTPayload {
   ignoreWorkerContactUri: string; // transferring works contact uri so they don't boomerang the task on queue transfer
   flexInteractionSid: string; //KDxxx sid for inteactions API
   flexInteractionChannelSid: string; //UOxxx sid for interactions API
-  flexInteractionParticipantSid: string; // UTxxx sid for interactions API for the transferrring agent to remove them from conversation
+  removeFlexInteractionParticipantSid: string; // UTxxx sid for interactions API for the transferrring agent to remove them from conversation
 }
 
 const _getMyParticipantSid = async (
@@ -44,9 +44,10 @@ const _queueNameFromSid = async (transferTargetSid: string) => {
   return queueResult?.friendlyName || "";
 };
 
-export const buildTransferChatAPIPayload = async (
+export const buildInviteParticipantAPIPayload = async (
   task: ITask,
-  targetSid: string
+  targetSid: string,
+  removeInvitingAgent: boolean
 ): Promise<TransferRESTPayload | null> => {
   const taskSid = task.taskSid;
   const conversationId =
@@ -80,17 +81,18 @@ export const buildTransferChatAPIPayload = async (
     return null;
   }
 
-  const flexInteractionParticipantSid = await _getMyParticipantSid(
-    task,
-    flexInteractionChannelSid
-  );
+  let removeFlexInteractionParticipantSid = "";
+  if (removeInvitingAgent) {
+    removeFlexInteractionParticipantSid =
+      (await _getMyParticipantSid(task, flexInteractionChannelSid)) || "";
 
-  if (!flexInteractionParticipantSid) {
-    console.error(
-      "Transfer failed. Didn't find flexInteractionPartipantSid",
-      task.sid
-    );
-    return null;
+    if (!removeFlexInteractionParticipantSid) {
+      console.error(
+        "Transfer failed. Didn't find flexInteractionPartipantSid",
+        task.sid
+      );
+      return null;
+    }
   }
 
   return {
@@ -102,12 +104,13 @@ export const buildTransferChatAPIPayload = async (
     ignoreWorkerContactUri,
     flexInteractionSid,
     flexInteractionChannelSid,
-    flexInteractionParticipantSid,
+    removeFlexInteractionParticipantSid,
   };
 };
 
 export interface TransferRESTResponse {
   success: boolean;
+  invitesTaskSid: string;
 }
 
 class ChatTransferService extends ApiService {
@@ -128,13 +131,13 @@ class ChatTransferService extends ApiService {
       flexInteractionChannelSid: encodeURIComponent(
         requestPayload.flexInteractionChannelSid
       ),
-      flexInteractionParticipantSid: encodeURIComponent(
-        requestPayload.flexInteractionParticipantSid
+      removeFlexInteractionParticipantSid: encodeURIComponent(
+        requestPayload.removeFlexInteractionParticipantSid
       ),
     };
 
     return this.fetchJsonWithReject<TransferRESTResponse>(
-      `https://${this.serverlessDomain}/features/chat-transfer-v2-cbm/flex/chat-transfer`,
+      `https://${this.serverlessDomain}/features/chat-transfer-v2-cbm/flex/invite-participant`,
       {
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },

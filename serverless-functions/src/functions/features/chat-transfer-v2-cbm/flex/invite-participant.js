@@ -46,9 +46,9 @@ const getRequiredParameters = (event) => {
       purpose: "UOxxx sid for interactions API",
     },
     {
-      key: "flexInteractionParticipantSid",
+      key: "removeFlexInteractionParticipantSid",
       purpose:
-        "UTxxx sid for interactions API for the transferrring agent to remove them from conversation",
+        "UTxxx sid for interactions API for the transferrring agent to remove them from conversation. Can be empty string if we are adding additional participant and don't want to remove transferring",
     },
   ];
   return requiredParameters;
@@ -139,7 +139,7 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
         ignoreWorkerContactUri,
         flexInteractionSid,
         flexInteractionChannelSid,
-        flexInteractionParticipantSid,
+        removeFlexInteractionParticipantSid,
       } = event;
 
       const routingParams = getRoutingParams(
@@ -174,20 +174,31 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
         return sendErrorReply(callback, response, scriptName, status, message);
       }
 
-      // await InteractionsOperations.participantUpdate({
-      //   status: "closed",
-      //   interactionSid: flexInteractionSid,
-      //   channelSid: flexInteractionChannelSid,
-      //   participantSid: flexInteractionParticipantSid,
-      //   scriptName,
-      //   context,
-      //   attempts: 0,
-      // });
+      if (removeFlexInteractionParticipantSid)
+        await InteractionsOperations.participantUpdate({
+          status: "closed",
+          interactionSid: flexInteractionSid,
+          channelSid: flexInteractionChannelSid,
+          participantSid: removeFlexInteractionParticipantSid,
+          scriptName,
+          context,
+          attempts: 0,
+        });
+
+      console.log(
+        "participantInvite",
+        participantInvite,
+        JSON.stringify(participantInvite.routing),
+        JSON.stringify(participantInvite.routing.reservation),
+        JSON.stringify(participantInvite.routing.properties)
+      );
 
       response.setStatusCode(201);
       response.setBody({
         success: true,
         message: `Participant invite ${participantInvite.sid}`,
+        participantInviteSid: participantInvite.sid,
+        invitesTaskSid: participantInvite.routing.properties.sid,
       });
       callback(null, response);
     } catch (error) {

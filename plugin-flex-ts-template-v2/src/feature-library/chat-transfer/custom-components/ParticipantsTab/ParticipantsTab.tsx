@@ -4,8 +4,10 @@ import { Stack, Card, Heading } from "@twilio-paste/core"
 import { ConversationState, styled } from '@twilio/flex-ui';
 import { Participants } from "./Participants.tsx/Participants"
 import { InviteParticipant } from "./InviteParticipant/InviteParticipant"
+import { InvitedParticipants } from './InvitedParticipants/InvitedParticipants';
 import { ParticipantDetails } from "../../types/ParticipantDetails"
-import { getParticipantDetails} from "./hooks"
+import { InvitedParticipantDetails } from '../../types/InvitedParticipantDetails';
+import { getUpdatedParticipantDetails, getUpdatedInvitedParticipantDetails} from "./hooks"
 
 const ParticipantsTabContainer = styled.div`
   padding-left: 3%;
@@ -21,9 +23,22 @@ interface ParticipantsTabProps {
 
 export const ParticipantsTab = ({ task, conversation }: ParticipantsTabProps) => {
   const [participantDetails, setParticipantDetails] = useState<ParticipantDetails[]>([])
+  const [invitedParticipantDetails, setInvitedParticipantDetails] = useState<InvitedParticipantDetails[]>([])
 
+  console.log("ParticipantsTab", participantDetails, conversation)
   useEffect(() => {
-    setParticipantDetails(getParticipantDetails(conversation));
+    const updateParticipants = () => {
+      
+      getUpdatedParticipantDetails(task, conversation, participantDetails).then(
+        participantDetails => {
+          if (participantDetails)
+            setParticipantDetails(participantDetails)
+        }
+      )
+    }
+
+    updateParticipants();
+    setInvitedParticipantDetails(getUpdatedInvitedParticipantDetails(conversation))
   }, [conversation])
   
            
@@ -32,11 +47,9 @@ export const ParticipantsTab = ({ task, conversation }: ParticipantsTabProps) =>
 
       <Participants participantDetails={participantDetails} />
                 
-      <Card padding="space60">
-        <Heading as="h2" variant="heading20">Invited Participant</Heading>
-      </Card>
+      <InvitedParticipants invitedParticipantDetails={invitedParticipantDetails} />
 
-      <InviteParticipant />
+      <InviteParticipant task={task} />
     </Stack>
  </ParticipantsTabContainer>
 }

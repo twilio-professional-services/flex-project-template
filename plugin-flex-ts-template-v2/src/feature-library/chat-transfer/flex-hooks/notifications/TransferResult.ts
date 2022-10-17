@@ -4,12 +4,14 @@ import { StringTemplates } from "../strings/ChatTransferStrings";
 
 export enum NotificationIds {
   ChatTransferTaskSuccess = "ChatTransferTaskSuccess",
+  ChatParticipantInvited = "ChatParticipantInvited",
   ChatTransferFailedGeneric = "ChatTransferFailed",
   ChatTransferFailedConsultNotSupported = "ChatTransferFailedConsultNotSupported",
 }
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
   chatTransferTaskSuccess();
+  chatParticipantInvitedSuccess();
   chatTransferFailedGeneric();
   chatTransferFailedConsultNotSupported();
 };
@@ -19,6 +21,16 @@ const chatTransferTaskSuccess = () => {
     id: NotificationIds.ChatTransferTaskSuccess,
     closeButton: true,
     content: StringTemplates.ChatTransferTaskSuccess,
+    timeout: 3000,
+    type: NotificationType.success,
+  });
+};
+
+const chatParticipantInvitedSuccess = () => {
+  Notifications.registerNotification({
+    id: NotificationIds.ChatParticipantInvited,
+    closeButton: true,
+    content: StringTemplates.ChatParticipantInvited,
     timeout: 3000,
     type: NotificationType.success,
   });
