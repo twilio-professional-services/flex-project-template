@@ -22,12 +22,18 @@ import { handleInternalRejectTask } from "../../feature-library/internal-call/fl
 import { handleChatTransfer } from "../../feature-library/chat-transfer/flex-hooks/actions/TransferTask";
 import { handleDualChannelCompleteTask } from "../../feature-library/dual-channel-recording/flex-hooks/actions/CompleteTask";
 import { handleDualChannelHangupCall } from "../../feature-library/dual-channel-recording/flex-hooks/actions/HangupCall";
+import { interceptQueueFilter, logApplyListFilters } from "../../feature-library/teams-view-filters/flex-hooks/actions/ApplyTeamsViewFilters"
 
 const actionsToRegister: Actions = {
   AcceptTask: {
     before: [handleInternalAcceptTask],
     after: [omniChannelChatCapacityManager],
     replace: [],
+  },
+  ApplyTeamsViewFilters: {
+    before: [interceptQueueFilter],
+    after: [],
+    replace: [logApplyListFilters],
   },
   CompleteTask: {
     before: [

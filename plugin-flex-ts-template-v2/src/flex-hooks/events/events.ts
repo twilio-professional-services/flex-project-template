@@ -18,6 +18,7 @@ import EnhancedCRMContainerLoaded from "../../feature-library/enhanced-crm-conta
 import ChatTransferLoaded from "../../feature-library/chat-transfer/flex-hooks/events/pluginsLoaded";
 import DualChannelRecordingLoaded from "../../feature-library/dual-channel-recording/flex-hooks/events/pluginsLoaded";
 import PauseRecordingLoaded from "../../feature-library/pause-recording/flex-hooks/events/pluginsLoaded";
+import TeamsViewFilters from "../../feature-library/teams-view-filters/flex-hooks/events/pluginsLoaded";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -32,6 +33,7 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     ChatTransferLoaded,
     DualChannelRecordingLoaded,
     PauseRecordingLoaded,
+    TeamsViewFilters
   ],
   taskAccepted: [
     taskAcceptedHandlerActivityReservationHandler,

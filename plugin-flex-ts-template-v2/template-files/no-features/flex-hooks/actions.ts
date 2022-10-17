@@ -10,6 +10,7 @@ import { Actions } from "../../types/flex-hooks/Actions";
 
 const actionsToRegister: Actions = {
   AcceptTask: { before: [], replace: [], after: [] },
+  ApplyTeamsViewFilters: {},
   CompleteTask: {},
   HangupCall: {},
   HoldCall: {},

@@ -63,6 +63,40 @@
           "wrapup": "Wrap Up",
           "wrapupNoAcd": "Wrap Up, No ACD"
         }
+      },
+      "teams_view_filters": {
+        "enabled": true,
+        "logFilters": true,
+        "applied_filters": {
+          "email": true,
+          "department" : true,
+          "queue_no_worker_data": true,
+          "queue_worker_data": false,
+          "team": true,
+          "agent_skills": true
+        },
+        "department_options": [
+          "General Management",
+          "Marketing",
+          "Operations",
+          "Finance",
+          "Sales",
+          "Human Resources",
+          "Purchasing",
+          "Customer Service",
+          "Recruiting"
+        ],
+        "team_options" :[
+          "Blue Team",
+          "Red Team",
+          "Gold Team",
+          "VIP Team",
+          "Orange Team",
+          "Yellow Team",
+          "Green Team",
+          "Purple Team",
+          "Gray Team"
+        ]
       }
     }
   }
