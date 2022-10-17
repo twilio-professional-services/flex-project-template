@@ -28,13 +28,7 @@ export function logApplyListFilters(flex: typeof Flex, manager: Flex.Manager) {
 // can be supported.  This is because each individual expression in the TeamsFilter 
 // is explicitly OR'd on a single attribute and each expression in the TeamsFilter 
 // array is AND'd.  Since a queue expression can be made up of AND's and OR's its
-// impossible to apply those types fo expression across this interface
-//
-// if at a future date that kind of look up was required we would need to look
-// to replacing the mechanism for querying the workers.  Most likely what might
-// make sense then is to keep a state model on stripe backend systems thats synced
-// via event streams, then replace the query to query that backend and override 
-// ApplyListFilters to take the result and push it into the redux store.
+// impossible to apply those types of expression across this interface
 //
 // TeamsFilter array item:
 //
@@ -46,20 +40,26 @@ export function logApplyListFilters(flex: typeof Flex, manager: Flex.Manager) {
 //
 // note in the expression above only one element can be examined
 // i.e data.attributes.email.
-// 
-// given the current queue expression configuration used at Stripe 
-// this has been written to support a very narrow subset of queue expressions
-// explcititly that 
+//
 // if there are multiple expressions in the queue expression - these are expected
 // to be AND'd. The existence of any OR expressions will result in ignoring the
 // queue filter. Also only these qualifiers are supported
 // HAS|==|EQ|!=|CONTAINS|IN|NOT IN
 
+//
+// a more comprehensive solution can be found by leveraging a backend to 
+// keep track of queue:worker eligibiility and keeping eligible queue sids
+// synced on each individual worker object so it can be queried with a much
+// simpler query filter like:
+//
+// data.attributes.queues IN [<queue-sid>]
+//
+
 function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager) {
 
   Flex.Actions.addListener('beforeApplyTeamsViewFilters', async (payload: ApplyTeamsViewFiltersPayload, abortFunction) => {
 
-    const {  extraFilterQuery, filters } = payload 
+    const { filters } = payload 
 
     var queueEligibilityFilter = null as AppliedFilter | null;
 
@@ -71,26 +71,26 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
     // if no queue filters return
     if(!queueEligibilityFilter) return
 
-    // create new filters by copying existing filters 
-    // but remove any queue filter placeholders
+    // remove the replacement filter
     let newFilter = filters.filter((filter: AppliedFilter) => filter.name !== "queue-replacement" );
-    ;
-
-    // update the applied filters to use the new array
-    // which currently has no queue filters
     payload.filters = newFilter;
-    let queueFiltersArray: Array<AppliedFilter> = [];
 
-    // now match to queue so we can convert queue expression
-    // and generate new queue filters
+
+    // now find the queue for the replaced filter
+    // and get the queue eligibility expression
+    let queueFiltersArray: Array<AppliedFilter> = [];
     const fetchedQueues = await TaskRouterService.getQueues();
     const queues =  fetchedQueues? fetchedQueues : [];
     const queue = queues.find(queue => {return queue.friendlyName === queueEligibilityFilter?.values[0]})
 
+    // if there is no queue found currently treating it like
+    // a queue that matches all workers.
+    // TODO: produce a warning notification.
     const targetWorkers:string = queue? queue.targetWorkers : "1==1";
 
     // if the targetWorkers is 1==1 we can ignore it
     if(targetWorkers !== "1==1") {
+      
       // assuming expressions are formatted as explained above
       const expressionComponents = targetWorkers.match(/((\b(?:\.)+\S+\b|\b(?:\S+)+\S+\b)(\s)+(HAS|==|EQ|!=|CONTAINS|IN|NOT IN)(\s)+(('|")\S+('|")))/gi)
       const containsORs = targetWorkers.includes(" OR ");
@@ -110,8 +110,7 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
         const tempCondition = RegExp(/( HAS |==|!=| CONTAINS | IN | NOT IN )/, 'i').exec(expression);
         const tempValue = RegExp(/(('|")\S+('|"))/, 'i').exec(expression);
 
-        // check each regex pulled out a value
-        // struggled with regex here not pulling out the same value multiple times
+        // pulling out the same value multiple times
         // even though we expect it only to pull it out once so just checking
         // result is > 0
         // we than parse out any invalid characters such as spaces and format
@@ -131,11 +130,6 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
             values
           } as AppliedFilter;
           queueFiltersArray.push(tempFilter);
-          queueFiltersArray.push({
-            name: `data.attributes.routing.skills`,
-            condition: "IN",
-            values: []
-          } as AppliedFilter)
         } else {
           Flex.Notifications.showNotification(TeamViewQueueFilterNotification.ErrorParsingQueueExpression);
           return;
