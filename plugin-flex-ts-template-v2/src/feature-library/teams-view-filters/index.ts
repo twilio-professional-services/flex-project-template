@@ -20,23 +20,23 @@ export const isFeatureEnabled = () => {
 };
 
 export const isExtensionsFilterEnabled = () => {
-  return email;
+  return enabled && email;
 }
 
 export const isDepartmentFilterEnabled = () => {
-  return department;
+  return enabled && department;
 }
 
 export const isQueueFilterEnabled = () => {
-  return queue;
+  return enabled && queue;
 }
 
 export const isTeamFilterEnabled = () => {
-  return team;
+  return enabled && team;
 }
 
 export const isAgnetSkillsFilterEnabled = () => {
-  return agent_skills;
+  return enabled && agent_skills;
 }
 
 export const getDepartmentOptions = () => {
