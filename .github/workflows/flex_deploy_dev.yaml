@@ -45,5 +45,5 @@ jobs:
         run: |
           npm install
           npm run install-flex-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN_DEV }} npm run deploy --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN_DEV }} npm run release --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN_DEV }} npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN_DEV }} npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
