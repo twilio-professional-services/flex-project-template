@@ -102,3 +102,23 @@ export interface FetchedConferenceParticipant {
   status: number;
   uri: string;
 }
+
+export interface FetchedRecording {
+  accountSid: string;
+  apiVersion: string;
+  callSid: string;
+  conferenceSid: null | string;
+  dateCreated: string;
+  dateUpdated: string;
+  startTime: string;
+  duration: null | string;
+  sid: string;
+  price: null | number;
+  uri: string;
+  encryptionDetails: null | object;
+  priceUnit: null | string;
+  status: string;
+  channels: number;
+  errorCode: null | number;
+  track: string;
+}

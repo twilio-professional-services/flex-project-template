@@ -1,6 +1,6 @@
 {
   "name": "plugin-flex-ts-template",
-  "version": "9.0.13",
+  "version": "9.0.14",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
@@ -22,7 +22,7 @@
     "@twilio-paste/core": "^10.14.0",
     "@twilio-paste/icons": "^5.7.0",
     "@twilio/flex-dev-utils": "^5.1.3",
-    "@twilio/flex-plugin-scripts": "5.1.2",
+    "@twilio/flex-plugin-scripts": "6.0.1",
     "@types/jest": "^26.0.20",
     "lodash": "^4.17.20",
     "prop-types": "^15.7.2",
