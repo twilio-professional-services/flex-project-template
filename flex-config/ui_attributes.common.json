@@ -51,7 +51,7 @@
         "channel": "worker"
       },
       "pause_recording": {
-        "enabled": false,
+        "enabled": true,
         "includeSilence": false
       },
       "activity_reservation_handler": {

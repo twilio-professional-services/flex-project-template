@@ -18,19 +18,23 @@ There are various ways to enable call recordings with Twilio Flex. Let's outline
    - Cons:
      - All audio played to the caller while they wait in queue for an agent to become available will be included in the recording. This is likely not an issue for contact centers with low wait times, but when wait times are long, recording durations will increase along with recording storage costs.
      - This method does not address outbound calls from Flex as Studio flows are only triggered by inbound calls. So a custom solution would be required to record outbound calls.
-1. The solution in this Github repository is the third method we'll consider. Recordings are started from a Flex plugin, leveraging a server side Twilio Function to call the Twilio Recordings API. The task attribute `conversations.media` is updated with the recording metadata so Flex Insights can play the recording.
+1. The solution in this feature is the third method we'll consider. Recordings are started from a this plugin, leveraging a server side Twilio Function to call the Twilio Recordings API. The task attribute `conversations.media` is updated with the recording metadata so Flex Insights can play the recording.
    - Pros:
      - Recordings are dual-channel, capturing customer and agent audio in their own audio channels
      - The same solution works for both inbound and outbound calls
      - Custom business logic can be leveraged to selectively record calls
      - The recording begins from the moment the customer and agent are connected, so no IVR or queue hold audio is captured in the recording
    - Cons:
-     - Custom code is required, both on the front end (Flex plugin) and the backend (Twilio Function)
+     - Custom code is required, both on the front end and the backend (facilitated by this feature)
      - If it's desired to record the IVR messaging, that will not be included
 
 # setup and dependencies
 
-There are no setup steps required, only enabling the feature in the flex-config asset for your environment. There is also a `channel` configuration property to choose which perspective should be recorded--the customer perspective or the worker perspective. For example, if the customer is on hold and `channel` is set to `customer`, the recording will contain hold music. If `channel` is set to `worker`, the recording will not contain hold music and the worker will be heard instead.
+Enabling the feature in the flex-config asset for your environment. There is also a `channel` configuration property to choose which perspective should be recorded--the customer perspective or the worker perspective. For example, if the customer is on hold and `channel` is set to `customer`, the recording will contain hold music. If `channel` is set to `worker`, the recording will not contain hold music and the worker will be heard instead.
+
+If enabling the dual channel recording feature - you should also **disable** the call recording flag in the Flex Configuration of your twilio console.
+
+Twilio Console > Flex > Manage > Voice
 
 # how it works
 
