@@ -18,6 +18,7 @@ import { addDeviceManagerToMainHeader } from "../../feature-library/device-manag
 import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
 import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-filter/flex-hooks/components/WorkerProfile";
+import { addCapacityToWorkerCanvas } from "../../feature-library/supervisor-capacity/flex-hooks/components/WorkerCanvas";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -47,7 +48,7 @@ const componentHandlers: Components = {
   TaskOverviewCanvas: [addSupervisorBargeCoachButtons],
   TeamsView: [],
   ViewCollection: [],
-  WorkerCanvas: [],
+  WorkerCanvas: [addCapacityToWorkerCanvas],
   WorkerDirectory: [addChatTransferCustomization],
   WorkerProfile: [replaceWorkerProfileInfo],
   WorkersDataTable: [],

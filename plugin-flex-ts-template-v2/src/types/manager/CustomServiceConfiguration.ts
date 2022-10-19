@@ -12,6 +12,7 @@ import EnhancedCRMContainerConfig from "../../feature-library/enhanced-crm-conta
 import DeviceManagerConfig from "../../feature-library/device-manager/types/ServiceConfiguration";
 import ChatTransferConfig from "../../feature-library/chat-transfer/types/ServiceConfiguration";
 import TeamViewFiltersConfig from "../../feature-library/teams-view-filters/types/ServiceConfiguration";
+import SupervisorCapacityConfig from "../../feature-library/supervisor-capacity/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguratoin {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -28,4 +29,5 @@ export default interface FeatureServiceConfiguratoin {
   enhanced_crm_container: EnhancedCRMContainerConfig;
   chat_transfer: ChatTransferConfig;
   teams_view_filters: TeamViewFiltersConfig;
+  supervisor_capacity: SupervisorCapacityConfig;
 }

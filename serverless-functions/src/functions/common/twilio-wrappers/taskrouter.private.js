@@ -371,6 +371,51 @@ exports.getQueues = async function getQueues(parameters) {
  * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.workerSid the worker sid to fetch channels for
+ * @returns {object} worker channel object
+ * @description the following method is used to fetch the configured
+ *   worker channel
+ */
+exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
+  const {
+    scriptName,
+    context,
+    attempts,
+    workerSid,
+  } = parameters;
+
+  if (!isNumber(attempts))
+    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
+  if (!isString(scriptName))
+    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
+  if (!isObject(context))
+    throw "Invalid parameters object passed. Parameters must contain context object";
+  if (!isString(workerSid))
+    throw "Invalid parameters object passed. Parameters must contain workerSid string";
+
+  try {
+    const client = context.getTwilioClient();
+    const workerChannels = await client.taskrouter
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .workers(workerSid)
+      .workerChannels
+      .list();
+
+    return {
+      success: true,
+      status: 200,
+      workerChannels,
+    };
+  } catch (error) {
+    return retryHandler(error, parameters, arguments.callee);
+  }
+};
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {string} parameters.scriptName the name of the top level lambda function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
  * @returns {object} worker channel capacity object
  * @description the following method is used to robustly update
  *   worker channel capacity

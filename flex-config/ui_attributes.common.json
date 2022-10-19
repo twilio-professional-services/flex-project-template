@@ -89,6 +89,9 @@
           "Purple Team",
           "Gray Team"
         ]
+      },
+      "supervisor_capacity": {
+        "enabled": true
       }
     }
   }

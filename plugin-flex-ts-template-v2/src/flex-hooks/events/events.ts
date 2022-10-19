@@ -15,6 +15,7 @@ import ScrollableActivitiesLoaded from "../../feature-library/scrollable-activit
 import EnhancedCRMContainer from "../../feature-library/enhanced-crm-container/flex-hooks/events/pluginsLoaded";
 import ChatTransfer from "../../feature-library/chat-transfer/flex-hooks/events/pluginsLoaded";
 import TeamsViewFilters from "../../feature-library/teams-view-filters/flex-hooks/events/pluginsLoaded";
+import SupervisorCapacityLoaded from "../../feature-library/supervisor-capacity/flex-hooks/events/pluginsLoaded";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -27,7 +28,8 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     ScrollableActivitiesLoaded,
     EnhancedCRMContainer,
     ChatTransfer,
-    TeamsViewFilters
+    TeamsViewFilters,
+    SupervisorCapacityLoaded
   ],
   taskAccepted: [taskAcceptedHandlerActivityReservationHandler],
   taskCanceled: [taskEndedHandlerActivityReservationHandler],
