@@ -130,7 +130,8 @@ npm run rename-template My-Feature-Name
 ```
 
 It will
-- rename the plugin to `ps-template-my-feature-name` 
+- rename the plugin to `ps-template-my-feature-name`
+  - update the plugin filenames and code references to `MyFeatureName`
   - _the prefix ps-template is used to easily identify plugins using the template format_
 - remove the flex v1 plugin (assuming its not to be used)
 - rename the serverless-functions deployment name to `serverless-my-feature-name`

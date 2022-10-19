@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "(cd serverless-functions && npm install && cp -n .env.example .env); (cd flex-config && npm install && cp -n .env.example .env); (cd plugin-flex-ts-template-v2 && npm install)",
     "remove-features": "node scripts/remove-features.js",
-    "rename-template": "node scripts/renamet-template.js"
+    "rename-template": "node scripts/rename-template.js"
   },
   "repository": {
     "type": "git",
