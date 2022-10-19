@@ -49,9 +49,9 @@ export default function CapacityChannel(props: OwnProps) {
     let min;
     let max;
     
-    if (rules && rules[props.workerChannel.sid]) {
-      min = rules[props.workerChannel.sid].min;
-      max = rules[props.workerChannel.sid].max;
+    if (rules && rules[props.workerChannel.taskChannelUniqueName]) {
+      min = rules[props.workerChannel.taskChannelUniqueName].min;
+      max = rules[props.workerChannel.taskChannelUniqueName].max;
     }
     
     let value = parseInt(event.target.value);
@@ -83,6 +83,7 @@ export default function CapacityChannel(props: OwnProps) {
   }
   
   const onAvailableChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // TODO: Change from Checkbox to Switch after Paste upgrade
     setAvailable(event.target.checked);
   }
   
