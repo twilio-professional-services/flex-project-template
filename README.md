@@ -115,7 +115,7 @@ npm run remove-features
 
 ---
 
-## Renaming plugin assets
+## Renaming template
 
 (the following is only applicable when using the flex v2 plugin)
 
@@ -126,17 +126,17 @@ There is a convenience script available to do this.  After cloning the template,
 
 ```bash
 npm install
-npm run rename-assets MyFeature
+npm run rename-template My-Feature-Name
 ```
 
 It will
-- rename the plugin to `ps-template-myfeature` 
+- rename the plugin to `ps-template-my-feature-name` 
   - _the prefix ps-template is used to easily identify plugins using the template format_
 - remove the flex v1 plugin (assuming its not to be used)
-- rename the serverless-functions deployment name to `serverless-myfeature`
+- rename the serverless-functions deployment name to `serverless-my-feature-name`
 - reset the versions of these packages to `0.0.1`
-- rename the variable used in flex-config to identify the serverless domain to `serverless_functions_domain_myfeature`
-- rename references to the serverless domain within the plugin to match `serverless_functions_domain_myfeature`
+- rename the variable used in flex-config to identify the serverless domain to `serverless_functions_domain_my_feature_name`
+- rename references to the serverless domain within the plugin to match `serverless_functions_domain_my_feature_name`
 
 ---
 
