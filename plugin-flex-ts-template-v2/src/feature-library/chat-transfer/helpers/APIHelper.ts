@@ -74,6 +74,24 @@ export const buildRemoveMyPartiticipantAPIPayload = async (
   };
 };
 
+export const buildRemovePartiticipantAPIPayload = (
+  task: ITask,
+  flexInteractionParticipantSid: string
+) => {
+  if (!task || !TaskHelper.isCBMTask(task)) return null;
+
+  const { flexInteractionSid = "", flexInteractionChannelSid = "" } =
+    task.attributes;
+
+  if (!flexInteractionParticipantSid) return null;
+
+  return {
+    flexInteractionSid,
+    flexInteractionChannelSid,
+    flexInteractionParticipantSid,
+  };
+};
+
 export const buildInviteParticipantAPIPayload = async (
   task: ITask,
   targetSid: string,

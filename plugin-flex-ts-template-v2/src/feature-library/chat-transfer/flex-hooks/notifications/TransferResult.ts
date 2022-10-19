@@ -8,6 +8,9 @@ export enum NotificationIds {
   ChatTransferFailedGeneric = "ChatTransferFailed",
   ChatTransferFailedConsultNotSupported = "ChatTransferFailedConsultNotSupported",
   ChatRemoveParticipantFailed = "ChatRemoveParticipantFailed",
+  ChatRemoveParticipantSuccess = "ChatRemoveParticipantSuccess",
+  ChatCancelParticipantInviteFailed = "ChatCancelParticipantInviteFailed",
+  ChatCancelParticipantInviteSuccess = "ChatCancelParticipantInviteSuccess",
 }
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
@@ -16,6 +19,9 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   chatTransferFailedGeneric();
   chatTransferFailedConsultNotSupported();
   chatRemoveParticipantFailed();
+  chatRemoveParticipantSuccess();
+  chatCancelParticipantInviteFailed();
+  chatCancelParticipantInviteSuccess();
 };
 
 const chatTransferTaskSuccess = () => {
@@ -65,5 +71,35 @@ const chatRemoveParticipantFailed = () => {
     content: StringTemplates.ChatRemoveParticipantFailed,
     timeout: 3000,
     type: NotificationType.error,
+  });
+};
+
+const chatRemoveParticipantSuccess = () => {
+  Notifications.registerNotification({
+    id: NotificationIds.ChatRemoveParticipantSuccess,
+    closeButton: true,
+    content: StringTemplates.ChatRemoveParticipantSuccess,
+    timeout: 3000,
+    type: NotificationType.success,
+  });
+};
+
+const chatCancelParticipantInviteFailed = () => {
+  Notifications.registerNotification({
+    id: NotificationIds.ChatCancelParticipantInviteFailed,
+    closeButton: true,
+    content: StringTemplates.ChatCancelParticipantInviteFailed,
+    timeout: 3000,
+    type: NotificationType.error,
+  });
+};
+
+const chatCancelParticipantInviteSuccess = () => {
+  Notifications.registerNotification({
+    id: NotificationIds.ChatCancelParticipantInviteSuccess,
+    closeButton: true,
+    content: StringTemplates.ChatCancelParticipantInviteSuccess,
+    timeout: 3000,
+    type: NotificationType.success,
   });
 };

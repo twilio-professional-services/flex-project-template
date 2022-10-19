@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import {useState, useEffect} from "react"
-import { Stack, Card, Heading } from "@twilio-paste/core"
-import { ConversationState, styled } from '@twilio/flex-ui';
+import { Stack} from "@twilio-paste/core"
+import { ConversationState, styled, Actions } from '@twilio/flex-ui';
 import { Participants } from "./Participants.tsx/Participants"
 import { InviteParticipant } from "./InviteParticipant/InviteParticipant"
 import { InvitedParticipants } from './InvitedParticipants/InvitedParticipants';
@@ -45,14 +45,21 @@ export const ParticipantsTab = ({ task, conversation }: ParticipantsTabProps) =>
     updateInvitedParticipants();
     setInvitedParticipantDetails(getUpdatedInvitedParticipantDetails(conversation))
   }, [conversation])
-  
-           
+
+  const handleKickParticipant = (interactionParticipantSid : string) => {
+    Actions.invokeAction("RemoveChatParticipant", {task, interactionParticipantSid})
+  }
+
+  const handleCancelInvite = (invitedParticipantDetails: InvitedParticipantDetails) => {
+    Actions.invokeAction("CancelChatParticipantInvite", { conversation, invitesTaskSid: invitedParticipantDetails.invitesTaskSid })
+  }
+          
   return <ParticipantsTabContainer>
     <Stack orientation="vertical" spacing="space40">
 
-      <Participants participantDetails={participantDetails} />
+      <Participants participantDetails={participantDetails} handleKickParticipant={handleKickParticipant} />
                 
-      <InvitedParticipants invitedParticipantDetails={invitedParticipantDetails} />
+      <InvitedParticipants invitedParticipantDetails={invitedParticipantDetails} handleCancelInvite={handleCancelInvite} />
 
       <InviteParticipant task={task} />
     </Stack>

@@ -2,20 +2,19 @@ import { Stack, Card, Heading } from "@twilio-paste/core"
 import { InvitedParticipant } from "./InvitedParticipant/InvitedParticipant";
 import { InvitedParticipantDetails } from "../../../types/InvitedParticipantDetails"
 
-
-
 interface InvitedParticipantsProps {
   invitedParticipantDetails: InvitedParticipantDetails[];
+  handleCancelInvite: (invitedParticipantDetails: InvitedParticipantDetails) => void;
 }
 
-export const InvitedParticipants = ({ invitedParticipantDetails }: InvitedParticipantsProps) => {
+export const InvitedParticipants = ({ invitedParticipantDetails, handleCancelInvite }: InvitedParticipantsProps) => {
 
     console.log("Participants", invitedParticipantDetails)
     
     const invitedParticipants = invitedParticipantDetails.map((invitedParticipantDetail) => {
       const participantName = invitedParticipantDetail.targetName;
       const inviteTargetType = invitedParticipantDetail.inviteTargetType;
-        return <InvitedParticipant participantName={participantName} inviteTargetType={inviteTargetType} allowKick/>
+      return <InvitedParticipant participantName={participantName} inviteTargetType={inviteTargetType} handleCancelInvite={() => handleCancelInvite(invitedParticipantDetail)} />
     })
     
     return (

@@ -3,20 +3,24 @@ import { Participant } from "./Participant/Participant"
 import { ParticipantDetails} from "../../../types/ParticipantDetails"
 
 interface ParticipantsProps {
-  participantDetails: ParticipantDetails[];
+    participantDetails: ParticipantDetails[];
+    handleKickParticipant: (interactionParticipantSid: string) => void;
 }
 
-export const Participants = ({ participantDetails }: ParticipantsProps) => {
-
-    console.log("Participants", participantDetails)
+export const Participants = ({ participantDetails, handleKickParticipant }: ParticipantsProps) => {
     
     const participants = participantDetails.map((participantDetail) => {
         const participantType = participantDetail.participantType;
         const isMe = participantDetail.isMe
         const allowKick = !isMe && participantType === "agent"
         const participantName = participantDetail.friendlyName
+        const interactionParticipantSid = participantDetail.interactionParticipantSid
                      
-        return <Participant name={participantName} participantType={participantType} allowKick={allowKick} />
+        return <Participant
+            name={participantName}
+            participantType={participantType}
+            allowKick={allowKick}
+            handleKickParticiant={() => handleKickParticipant(interactionParticipantSid)} />
     })
     
     return (

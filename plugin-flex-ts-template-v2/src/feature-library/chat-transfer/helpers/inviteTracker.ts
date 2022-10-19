@@ -94,6 +94,7 @@ export const addInviteToConversation = async (
     }
 };
 
+// This is to handle removing an invite afer WE join the channel
 export const checkAndRemoveOldInvitedParticipants = async (
   task: ITask,
   conversation: ConversationState.ConversationState
@@ -102,24 +103,33 @@ export const checkAndRemoveOldInvitedParticipants = async (
   let { invites = {} } = (currentAttributes as any) || {};
 
   if (invites[task.taskSid]) {
-    // This task has an outstanding invite in the conversations attributes. We have accepted the task so can delete the invite
-    const updatedInvites = JSON.parse(JSON.stringify(invites));
-    delete updatedInvites[task.taskSid];
-
-    console.log("New invites", updatedInvites);
-    const updatedAttributes = {
-      ...currentAttributes,
-      invites: updatedInvites,
-    };
-
-    if (conversation?.source?.sid)
-      try {
-        await ProgrammableChatService.updateChannelAttributes(
-          conversation?.source?.sid,
-          updatedAttributes
-        );
-      } catch (error) {
-        console.log("Error", error, conversation);
-      }
+    await removeInvitedParticipant(conversation, task.taskSid);
   }
+};
+
+// This is to handle removing any invite by task sid for a channel
+export const removeInvitedParticipant = async (
+  conversation: ConversationState.ConversationState,
+  taskSid: string
+) => {
+  const currentAttributes = conversation?.source?.attributes;
+  let { invites = {} } = (currentAttributes as any) || {};
+
+  const updatedInvites = JSON.parse(JSON.stringify(invites));
+  delete updatedInvites[taskSid];
+
+  const updatedAttributes = {
+    ...currentAttributes,
+    invites: updatedInvites,
+  };
+
+  if (conversation?.source?.sid)
+    try {
+      await ProgrammableChatService.updateChannelAttributes(
+        conversation?.source?.sid,
+        updatedAttributes
+      );
+    } catch (error) {
+      console.log("Error", error, conversation);
+    }
 };
