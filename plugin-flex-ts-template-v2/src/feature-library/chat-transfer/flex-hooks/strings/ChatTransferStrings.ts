@@ -4,6 +4,7 @@ export enum StringTemplates {
   ChatTransferFailedGeneric = "ChatTransferFailedGeneric",
   ChatTransferFailedConsultNotSupported = "ChatTransferFailedConsultNotSupported",
   ChatParticipantInvited = "ChatParticipantInvited",
+  ChatRemoveParticipantFailed = "ChatRemoveParticipantFailed",
 }
 
 export default {
@@ -13,4 +14,6 @@ export default {
     "Error occured adding new participant",
   [StringTemplates.ChatTransferFailedConsultNotSupported]:
     "Consult/Warm transfer is not supported",
+  [StringTemplates.ChatRemoveParticipantFailed]:
+    "Remove chat participant failed",
 };

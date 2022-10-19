@@ -7,7 +7,8 @@ import { InviteParticipant } from "./InviteParticipant/InviteParticipant"
 import { InvitedParticipants } from './InvitedParticipants/InvitedParticipants';
 import { ParticipantDetails } from "../../types/ParticipantDetails"
 import { InvitedParticipantDetails } from '../../types/InvitedParticipantDetails';
-import { getUpdatedParticipantDetails, getUpdatedInvitedParticipantDetails} from "./hooks"
+import { getUpdatedParticipantDetails, getUpdatedInvitedParticipantDetails } from "./hooks"
+import {checkAndRemoveOldInvitedParticipants} from "../../helpers/inviteTracker"
 
 const ParticipantsTabContainer = styled.div`
   padding-left: 3%;
@@ -25,7 +26,6 @@ export const ParticipantsTab = ({ task, conversation }: ParticipantsTabProps) =>
   const [participantDetails, setParticipantDetails] = useState<ParticipantDetails[]>([])
   const [invitedParticipantDetails, setInvitedParticipantDetails] = useState<InvitedParticipantDetails[]>([])
 
-  console.log("ParticipantsTab", participantDetails, conversation)
   useEffect(() => {
     const updateParticipants = () => {
       
@@ -37,7 +37,12 @@ export const ParticipantsTab = ({ task, conversation }: ParticipantsTabProps) =>
       )
     }
 
+    const updateInvitedParticipants = () => {
+      checkAndRemoveOldInvitedParticipants(task, conversation);
+    }
+
     updateParticipants();
+    updateInvitedParticipants();
     setInvitedParticipantDetails(getUpdatedInvitedParticipantDetails(conversation))
   }, [conversation])
   

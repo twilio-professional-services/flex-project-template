@@ -18,7 +18,8 @@ import { addDeviceManagerToMainHeader } from "../../feature-library/device-manag
 import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
 import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-filter/flex-hooks/components/WorkerProfile";
-import { addTaskCanvasTabCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasTabs"
+import { addTaskCanvasTabCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasTabs";
+import { replaceEndTaskButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -41,7 +42,11 @@ const componentHandlers: Components = {
   ],
   ParticipantCanvas: [addConferenceToParticipantCanvas],
   SideNav: [],
-  TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader, addChatTransferButton],
+  TaskCanvasHeader: [
+    addSwitchToVideoToTaskCanvasHeader,
+    addChatTransferButton,
+    replaceEndTaskButton,
+  ],
   TaskCanvasTabs: [
     addVideoRoomTabToTaskCanvasTabs,
     addSupervisorMonitorPanel,

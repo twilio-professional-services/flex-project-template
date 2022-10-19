@@ -1,6 +1,7 @@
 import { FlexEvent } from "../../../../types/manager/FlexEvent";
 import { isColdTransferEnabled, isMultiParticipantEnabled } from "../../index";
 import { registerCustomChatTransferAction } from "../../custom-action/chatTransferTask";
+import { registerLeaveChatAction } from "../../custom-action/leaveChat";
 
 const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
   const coldTransferEnabled = isColdTransferEnabled();
@@ -12,6 +13,7 @@ const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
     `Feature enabled: chat-transfer cold_transfer=${coldTransferEnabled} multi_participant=${multiParticipantEnabled}`
   );
   registerCustomChatTransferAction();
+  registerLeaveChatAction();
 };
 
 export default pluginsLoadedHandler;

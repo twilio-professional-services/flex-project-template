@@ -1,6 +1,12 @@
-import { ITask, StateHelper, Manager } from "@twilio/flex-ui";
+import {
+  ITask,
+  StateHelper,
+  Manager,
+  ConversationState,
+} from "@twilio/flex-ui";
 import { InvitedParticipantDetails } from "../types/InvitedParticipantDetails";
 import { ParticipantInviteType } from "../types/ParticipantInvite";
+import ProgrammableChatService from "../../../utils/serverless/ProgrammableChat/ProgrammableChatService";
 
 const syncClient = Manager.getInstance()?.insightsClient;
 
@@ -76,5 +82,44 @@ export const addInviteToConversation = async (
     ...currentAttributes,
     invites: { ...currentAttributes?.invites, [invitesTaskSid]: invite },
   };
-  conversation.updateAttributes(updatedAttributes);
+
+  if (conversation.sid)
+    try {
+      await ProgrammableChatService.updateChannelAttributes(
+        conversation.sid,
+        updatedAttributes
+      );
+    } catch (error) {
+      console.log("Error", error, conversation);
+    }
+};
+
+export const checkAndRemoveOldInvitedParticipants = async (
+  task: ITask,
+  conversation: ConversationState.ConversationState
+) => {
+  const currentAttributes = conversation?.source?.attributes;
+  let { invites = {} } = (currentAttributes as any) || {};
+
+  if (invites[task.taskSid]) {
+    // This task has an outstanding invite in the conversations attributes. We have accepted the task so can delete the invite
+    const updatedInvites = JSON.parse(JSON.stringify(invites));
+    delete updatedInvites[task.taskSid];
+
+    console.log("New invites", updatedInvites);
+    const updatedAttributes = {
+      ...currentAttributes,
+      invites: updatedInvites,
+    };
+
+    if (conversation?.source?.sid)
+      try {
+        await ProgrammableChatService.updateChannelAttributes(
+          conversation?.source?.sid,
+          updatedAttributes
+        );
+      } catch (error) {
+        console.log("Error", error, conversation);
+      }
+  }
 };
