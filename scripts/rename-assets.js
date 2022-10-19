@@ -5,6 +5,10 @@ function capitalizeFirstLetter(string) {
   return string[0].toUpperCase() + string.slice(1);
 }
 
+function onlyValidCharacters(str) {
+  return /^[a-zA-_-]+$/.test(str);
+}
+
 const { pluginDir, pluginSrc, flexConfigDir, serverlessDir } = require ('./common');
 
 shell.echo(`renaming plugin: `, pluginDir);
@@ -18,6 +22,12 @@ if(process.argv[2] === undefined || process.argv[2] === "" ){
   return;
 }
 
+if(!onlyValidCharacters(process.argv[2])){
+  shell.echo("invalid characters detected in new name.  Only a-z, A-Z, hyphens and underscores are accepted");
+  shell.echo("");
+  return;
+}
+
 if(pluginDir === ""){
   shell.echo("something went wrong trying to detect the current plugin directory, abandoning");
   shell.echo("");
@@ -25,7 +35,14 @@ if(pluginDir === ""){
 } 
 
 const packageSuffix = (process.argv[2]).toLowerCase();
-const pluginName =  capitalizeFirstLetter(`${process.argv[2]}Plugin`);
+const packageSuffixUndercore = packageSuffix.replace(/-/g, '_');
+const wordArray = process.argv[2].replace(/-/g, ' ').replace(/_/g, ' ').split(' ')
+
+wordArray.forEach((word, index, array) => {
+  array[index] = capitalizeFirstLetter(word);
+});
+
+const pluginName =  wordArray.join('')
 const fullPluginName = `flex-template-${packageSuffix}`
 
 const postInstall = `    "postinstall": "(cd serverless-functions && npm install && cp -n .env.example .env); (cd flex-config && npm install && cp -n .env.example .env); (cd ${fullPluginName} && npm install)"`
@@ -68,14 +85,14 @@ shell.sed('-i', /.*"name": ".*",/, `  "name": "serverless-${packageSuffix}",`, `
 shell.sed('-i', /.*"name": ".*",/, `  "name": "serverless-${packageSuffix}",`, `${serverlessDir}/package-lock.json`);
 
 // rename the flex-config serverless_functions_domain so it doesnt collide either
-shell.sed('-i', /serverless_functions_domain[_,a-z]*":/, `serverless_functions_domain_${packageSuffix}":`, `${flexConfigDir}/ui_attributes.*.json`);
+shell.sed('-i', /serverless_functions_domain[_,a-z]*":/, `serverless_functions_domain_${packageSuffixUndercore}":`, `${flexConfigDir}/ui_attributes.*.json`);
 
 //update references to it
-shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffix}`, `${fullPluginName}/src/feature-library/chat-to-video-escalation/custom-components/SwitchToVideo/SwitchToVideo.tsx`);
-shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffix}`, `${fullPluginName}/src/feature-library/chat-to-video-escalation/custom-components/VideoRoom/VideoRoom.tsx`);
-shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffix}`, `${fullPluginName}/src/types/manager/ServiceConfiguration.ts`);
-shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffix}`, `${fullPluginName}/src/utils/serverless/ApiService/ApiService.test.ts`);
-shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffix}`, `${fullPluginName}/src/utils/serverless/ApiService/index.ts`);
+shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/feature-library/chat-to-video-escalation/custom-components/SwitchToVideo/SwitchToVideo.tsx`);
+shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/feature-library/chat-to-video-escalation/custom-components/VideoRoom/VideoRoom.tsx`);
+shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/types/manager/ServiceConfiguration.ts`);
+shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/utils/serverless/ApiService/ApiService.test.ts`);
+shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/utils/serverless/ApiService/index.ts`);
 
 
 if(shell.test('-e', './plugin-flex-ts-template')){
@@ -90,5 +107,5 @@ if(shell.test('-e', './serverless-functions/.twiliodeployinfo')){
   shell.rm('-rf', './serverless-functions/.twiliodeployinfo'); 
 }
 
-shell.echo(`Renaming assets complete, dont forget to re-run: npm install, deploy your serverless functions and update the serverless_functions_domain_${packageSuffix} in your flex-config`);
+shell.echo(`Renaming assets complete, dont forget to re-run: npm install, deploy your serverless functions and update the serverless_functions_domain_${packageSuffixUndercore} in your flex-config`);
 shell.echo("");
