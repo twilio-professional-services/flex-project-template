@@ -109,6 +109,7 @@ You may want to remove all the featues in the template and just want to use the 
 There is a convenience script available to do this.  After cloning the template, simply run the following command from the repository root dir.
 
 ```bash
+npm install
 npm run remove-features
 ```
 
@@ -124,6 +125,7 @@ You may want to rename the plugin and the serverless dependencies
 There is a convenience script available to do this.  After cloning the template, simply run the following command from the repository root dir.
 
 ```bash
+npm install
 npm run rename-assets MyFeature
 ```
 
