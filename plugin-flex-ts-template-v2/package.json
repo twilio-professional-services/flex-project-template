@@ -1,6 +1,6 @@
 {
   "name": "plugin-flex-ts-template",
-  "version": "9.0.13",
+  "version": "9.0.14",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
@@ -15,8 +15,7 @@
     "install-flex-plugin": "twilio plugins:install @twilio-labs/plugin-flex@5.1.2",
     "release": "twilio flex:plugins:release --plugin ${npm_package_name}@${npm_package_version}",
     "start": "twilio flex:plugins:start",
-    "twilio": "twilio",
-    "remove-features": "node scripts/remove-features.js"
+    "twilio": "twilio"
   },
   "dependencies": {
     "@twilio-paste/core": "^10.14.0",
@@ -29,7 +28,6 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-select": "^5.5.0",
-    "shelljs": "^0.8.5",
     "twilio-video": "^2.24.0"
   },
   "devDependencies": {
@@ -50,7 +48,7 @@
     "moment-timezone": "^0.5.34",
     "react-test-renderer": "17.0.2",
     "twilio": "3.76.0",
-    "twilio-cli": "3.4.2",
+    "twilio-cli": "4.2.0",
     "typescript": "^4"
   },
   "jest": {
