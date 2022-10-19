@@ -105,6 +105,8 @@ Lastly, this package manages the github action workflows - with one example bein
 
 ## Removing Features
 
+(the following is only applicable when using the flex v2 plugin)
+
 You may want to remove all the featues in the template and just want to use the template skeleton and serverless utilities
  - You are starting a project and you dont want the features
  - You may be creating a standalone plugin with a targeted feature set
