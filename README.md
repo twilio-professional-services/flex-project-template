@@ -67,7 +67,7 @@ This package contains web application examples that build off feature functional
 
 this package maintains some convenience scripts namely
 
-- rename-assets - for renamingig the plugin, typically used when making standalone plugins that still want to follow the template structure
+- rename-template - for renamingig the plugin and serverless packages along with the serverless domain, typically used when making standalone plugins that still want to follow the template structure
 - remove-features - for removing the features from the template, again typically used when making standalone plugins that still want to follow the template structure
 
 
