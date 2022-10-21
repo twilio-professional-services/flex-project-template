@@ -18,6 +18,7 @@ import { addDeviceManagerToMainHeader } from "../../feature-library/device-manag
 import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
 import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-filter/flex-hooks/components/WorkerProfile";
+import { addPauseRecordingButton } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvasActions";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -25,6 +26,7 @@ const componentHandlers: Components = {
   CallCanvasActions: [
     addConferenceToCallCanvasActions,
     removeDirectoryFromInternalCalls,
+    addPauseRecordingButton
   ],
   CRMContainer: [replaceAndSetCustomCRMContainer],
   MainHeader: [

@@ -20,6 +20,9 @@ import { handleInternalHoldCall } from "../../feature-library/internal-call/flex
 import { handleInternalUnholdCall } from "../../feature-library/internal-call/flex-hooks/actions/UnholdCall";
 import { handleInternalRejectTask } from "../../feature-library/internal-call/flex-hooks/actions/RejectTask";
 import { handleChatTransfer } from "../../feature-library/chat-transfer/flex-hooks/actions/TransferTask";
+import { handleDualChannelCompleteTask } from "../../feature-library/dual-channel-recording/flex-hooks/actions/CompleteTask";
+import { handleDualChannelHangupCall } from "../../feature-library/dual-channel-recording/flex-hooks/actions/HangupCall";
+import { interceptQueueFilter, logApplyListFilters } from "../../feature-library/teams-view-filters/flex-hooks/actions/ApplyTeamsViewFilters"
 
 const actionsToRegister: Actions = {
   AcceptTask: {
@@ -27,13 +30,25 @@ const actionsToRegister: Actions = {
     after: [omniChannelChatCapacityManager],
     replace: [],
   },
+  ApplyTeamsViewFilters: {
+    before: [interceptQueueFilter],
+    after: [],
+    replace: [logApplyListFilters],
+  },
   CompleteTask: {
-    before: [beforeCompleteWorkerTask, beforeCompleteVideoEscalatedChatTask],
+    before: [
+      beforeCompleteWorkerTask,
+      beforeCompleteVideoEscalatedChatTask,
+      handleDualChannelCompleteTask
+    ],
     after: [],
     replace: [],
   },
   HangupCall: {
-    before: [handleConferenceHangup],
+    before: [
+      handleConferenceHangup,
+      handleDualChannelHangupCall
+    ],
     after: [],
     replace: [],
   },

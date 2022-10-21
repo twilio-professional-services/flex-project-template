@@ -2,6 +2,7 @@ import * as Flex from "@twilio/flex-ui";
 
 type ActionNames =
   | "AcceptTask"
+  | "ApplyTeamsViewFilters"
   | "CompleteTask"
   | "HangupCall"
   | "HoldCall"

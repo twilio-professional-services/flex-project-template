@@ -50,9 +50,6 @@ export interface UIAttributes extends FlexUIAttributes {
       override_queue_transfer_directory: {
         enabled: boolean;
       };
-      salesforce_click_to_dial: {
-        enabled: boolean;
-      };
       scrollable_activities: {
         enabled: boolean;
       };
