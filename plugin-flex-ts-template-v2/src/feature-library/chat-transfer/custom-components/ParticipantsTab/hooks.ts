@@ -1,6 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
 import { ConversationState, ITask } from "@twilio/flex-ui";
-import { ChatProperties } from "@twilio/flex-ui/src/state/Participants/participants.types";
 import { ParticipantDetails } from "../../types/ParticipantDetails";
 import { InvitedParticipantDetails } from "../../types/InvitedParticipantDetails";
 
@@ -100,15 +99,13 @@ export const getUpdatedParticipantDetails = async (
   conversationParticipants.forEach((conversationParticipant) => {
     const intertactionParticipant = intertactionParticipants.find(
       (participant) =>
-        (participant.mediaProperties as ChatProperties)?.sid ==
-        conversationParticipant.source.sid
+        participant.mediaProperties?.sid == conversationParticipant.source.sid
     );
 
     if (intertactionParticipant) {
       const friendlyName =
         conversationParticipant.friendlyName ||
-        (intertactionParticipant.mediaProperties as ChatProperties)
-          .messagingBinding.address;
+        intertactionParticipant.mediaProperties?.messagingBinding.address;
       const participantType = intertactionParticipant.type;
       const isMe = conversationParticipant.source.identity === myIdentity;
       const interactionParticipantSid = intertactionParticipant.participantSid;

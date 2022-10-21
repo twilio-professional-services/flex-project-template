@@ -1,6 +1,5 @@
 import { ITask, Manager, ConversationState, TaskHelper } from "@twilio/flex-ui";
 import TaskService from "../../../utils/serverless/TaskRouter/TaskRouterService";
-import { WorkerAttributes } from "@twilio/flex-ui";
 import { EncodedParams } from "../../../types/serverless";
 import ApiService from "../../../utils/serverless/ApiService";
 
@@ -18,18 +17,13 @@ export interface TransferRESTPayload {
   jsonAttributes: string; // string representation of attributes for new task
   transferTargetSid: string; //worker or queue sid
   transferQueueName: string; // only valid if transfer to queue
-  ignoreWorkerContactUri: string; // transferring works contact uri so they don't boomerang the task on queue transfer
+  workersToIgnore: object; // {key: value} - where key is the taskrouter attribute to set and value is a string array of names of agents in conversation to make sure they don't get reservations to join again
   flexInteractionSid: string; //KDxxx sid for inteactions API
   flexInteractionChannelSid: string; //UOxxx sid for interactions API
   removeFlexInteractionParticipantSid: string; // UTxxx sid for interactions API for the transferrring agent to remove them from conversation
 }
 
-const _getMyParticipantSid = async (
-  task: ITask,
-  flexInteractionChannelSid: string
-): Promise<string | null> => {
-  const participants = await task.getParticipants(flexInteractionChannelSid);
-
+const _getMyParticipantSid = (participants: any): string => {
   const myParticipant = participants.find(
     (participant: any) =>
       participant.mediaProperties?.identity ===
@@ -37,6 +31,24 @@ const _getMyParticipantSid = async (
   );
 
   return myParticipant ? myParticipant.participantSid : "";
+};
+
+const _getAgentsWorkerSidArray = (participants: any) => {
+  const agentsWorkerSidArray = participants.reduce(
+    (prevArray: string[], currentParticipant: any) => {
+      if (
+        currentParticipant.type === "agent" &&
+        currentParticipant?.routingProperties?.workerSid
+      ) {
+        return [...prevArray, currentParticipant?.routingProperties?.workerSid];
+      } else {
+        return prevArray;
+      }
+    },
+    []
+  );
+
+  return agentsWorkerSidArray;
 };
 
 const _queueNameFromSid = async (transferTargetSid: string) => {
@@ -60,10 +72,9 @@ export const buildRemoveMyPartiticipantAPIPayload = async (
   const { flexInteractionSid = "", flexInteractionChannelSid = "" } =
     task.attributes;
 
-  const flexInteractionParticipantSid = await _getMyParticipantSid(
-    task,
-    flexInteractionChannelSid
-  );
+  const participants = await task.getParticipants(flexInteractionChannelSid);
+
+  const flexInteractionParticipantSid = _getMyParticipantSid(participants);
 
   if (!flexInteractionParticipantSid) return null;
 
@@ -115,9 +126,6 @@ export const buildInviteParticipantAPIPayload = async (
     }
   }
 
-  const { contact_uri: ignoreWorkerContactUri } = manager.workerClient
-    .attributes as WorkerAttributes;
-
   const { flexInteractionSid = null, flexInteractionChannelSid = null } =
     task.attributes;
 
@@ -129,10 +137,17 @@ export const buildInviteParticipantAPIPayload = async (
     return null;
   }
 
+  const participants = await task.getParticipants(flexInteractionChannelSid);
+
+  const workerSidsInConversationArray = _getAgentsWorkerSidArray(participants);
+  const workersToIgnore = {
+    workerSidsInConversation: workerSidsInConversationArray,
+  };
+
   let removeFlexInteractionParticipantSid = "";
   if (removeInvitingAgent) {
     removeFlexInteractionParticipantSid =
-      (await _getMyParticipantSid(task, flexInteractionChannelSid)) || "";
+      _getMyParticipantSid(participants) || "";
 
     if (!removeFlexInteractionParticipantSid) {
       console.error(
@@ -149,7 +164,7 @@ export const buildInviteParticipantAPIPayload = async (
     jsonAttributes,
     transferTargetSid,
     transferQueueName,
-    ignoreWorkerContactUri,
+    workersToIgnore,
     flexInteractionSid,
     flexInteractionChannelSid,
     removeFlexInteractionParticipantSid,
@@ -176,8 +191,8 @@ class ChatTransferService extends ApiService {
       jsonAttributes: encodeURIComponent(requestPayload.jsonAttributes),
       transferTargetSid: encodeURIComponent(requestPayload.transferTargetSid),
       transferQueueName: encodeURIComponent(requestPayload.transferQueueName),
-      ignoreWorkerContactUri: encodeURIComponent(
-        requestPayload.ignoreWorkerContactUri
+      workersToIgnore: encodeURIComponent(
+        JSON.stringify(requestPayload.workersToIgnore)
       ),
       flexInteractionSid: encodeURIComponent(requestPayload.flexInteractionSid),
       flexInteractionChannelSid: encodeURIComponent(

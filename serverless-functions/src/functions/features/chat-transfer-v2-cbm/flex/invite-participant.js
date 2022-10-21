@@ -33,9 +33,9 @@ const getRequiredParameters = (event) => {
         "friendly name of taskrouter queue - can be empty string if transferTargetSid is a worker sid",
     },
     {
-      key: "ignoreWorkerContactUri",
+      key: "workersToIgnore",
       purpose:
-        "contact_uri from workers attributes that transferred the task. we don't want to give them back the transferred task",
+        "json object with key indicating task attribute to set as an array of workers to ignore. eg {'workersToIgnore':['Alice','Bob']}. This gets copied to task attributes.",
     },
     {
       key: "flexInteractionSid",
@@ -60,12 +60,12 @@ const getRoutingParams = (
   jsonAttributes,
   transferTargetSid,
   transferQueueName,
-  ignoreWorkerContactUri
+  workersToIgnore
 ) => {
   const originalTaskAttributes = JSON.parse(jsonAttributes);
   const newAttributes = {
     ...originalTaskAttributes,
-    ignoreWorkerContactUri,
+    ...JSON.parse(workersToIgnore),
     transferTargetSid,
     transferQueueName,
     transferTargetType: transferTargetSid.startsWith("WK") ? "worker" : "queue",
@@ -136,7 +136,7 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
         jsonAttributes,
         transferTargetSid,
         transferQueueName,
-        ignoreWorkerContactUri,
+        workersToIgnore,
         flexInteractionSid,
         flexInteractionChannelSid,
         removeFlexInteractionParticipantSid,
@@ -148,7 +148,7 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
         jsonAttributes,
         transferTargetSid,
         transferQueueName,
-        ignoreWorkerContactUri
+        workersToIgnore
       );
 
       const participantCreateInviteParams = {
