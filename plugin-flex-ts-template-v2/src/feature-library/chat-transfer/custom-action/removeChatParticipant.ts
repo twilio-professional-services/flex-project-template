@@ -3,20 +3,18 @@ import ChatTransferService, {
   buildRemovePartiticipantAPIPayload,
 } from ".././helpers/APIHelper";
 import { NotificationIds } from "../flex-hooks/notifications/TransferResult";
+import { RemoveChatParticipantActionPayload } from "../types/ActionPayloads";
 
 export const registerRemoveChatParticipant = () => {
   Actions.registerAction("RemoveChatParticipant", (payload) =>
-    handleRemoveChatParticipant(
-      payload.task as ITask,
-      payload.interactionParticipantSid as string
-    )
+    handleRemoveChatParticipant(payload as RemoveChatParticipantActionPayload)
   );
 };
 
 const handleRemoveChatParticipant = async (
-  task: ITask,
-  interactionParticipantSid: string
+  payload: RemoveChatParticipantActionPayload
 ) => {
+  const { task, interactionParticipantSid } = payload;
   console.log("handleRemoveChatParticipant", task, interactionParticipantSid);
 
   const removePartcipantAPIPayload = await buildRemovePartiticipantAPIPayload(

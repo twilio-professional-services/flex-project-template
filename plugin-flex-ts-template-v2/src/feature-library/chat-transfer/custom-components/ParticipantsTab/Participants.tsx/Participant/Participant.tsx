@@ -4,17 +4,22 @@ import { UserIcon } from "@twilio-paste/icons/esm/UserIcon";
 import { AgentIcon } from "@twilio-paste/icons/esm/AgentIcon";
 import { CloseIcon } from "@twilio-paste/icons/esm/CloseIcon";
 import { useState } from "react";
+import { ParticipantType } from "../../../../types/ParticipantDetails";
 
+interface ParticipantProps {
+  name: string,
+  allowKick: boolean,
+  participantType: ParticipantType,
+  handleKickParticiant: ()=> void
+}
 
-export const Participant = (props: any) => {
-  const { participantType, name, allowKick, handleKickParticiant } = props;
+export const Participant = ({ participantType, name, allowKick, handleKickParticiant } : ParticipantProps) => {
   const [kickHandled, setKickHandled] = useState(false);
 
   const handleKick = () => {
     setKickHandled(true);
     handleKickParticiant()
   }
-
 
   const icon = participantType === "agent" ? <AgentIcon decorative={false} title={`Agent - ${name}`} />
     : <UserIcon decorative title={`Customer - ${name}`} />

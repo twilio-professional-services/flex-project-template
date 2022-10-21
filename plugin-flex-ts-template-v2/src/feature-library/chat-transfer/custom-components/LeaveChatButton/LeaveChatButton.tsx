@@ -1,4 +1,5 @@
 import { Button, ConversationState, Actions } from "@twilio/flex-ui";
+import { LeaveChatActionPayload } from "feature-library/chat-transfer/types/ActionPayloads";
 import { useState} from "react"
 
 interface LeaveChatButtonProps {
@@ -10,7 +11,8 @@ const LeaveChatButton = ({ conversation }: LeaveChatButtonProps) => {
     const handleLeaveChatClick = () => {
         if (conversation) {
             setButtonDisable(true);
-            Actions.invokeAction("LeaveChat", { conversation })
+            const payload: LeaveChatActionPayload = { conversation };
+            Actions.invokeAction("LeaveChat", payload)
         }
     }
     return (

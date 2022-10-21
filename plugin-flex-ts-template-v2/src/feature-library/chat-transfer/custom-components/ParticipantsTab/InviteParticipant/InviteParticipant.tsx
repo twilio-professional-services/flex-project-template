@@ -5,12 +5,13 @@ import { ChatIcon } from "@twilio-paste/icons/esm/ChatIcon";
 import { InviteParticipantModal } from "./InviteParticipantModal/InviteParticipantModal";
 import { ParticipantInvite, ParticipantInviteType, QueueParticipantInvite, WorkerParticipantInvite } from "../../../types/ParticipantInvite"
 import { Actions, ITask } from "@twilio/flex-ui";
-import { EventPayload, TransferOptions} from "../../../types/TransferOptions"
+import { TransferActionPayload, TransferOptions} from "../../../types/ActionPayloads"
 
 interface InviteParticipantProps {
-  task: ITask;
+    task: ITask;
+    disableNewInvites: boolean;
 }
-export const InviteParticipant = ({task} : InviteParticipantProps) => {
+export const InviteParticipant = ({task, disableNewInvites} : InviteParticipantProps) => {
     const [participantModalType, setParticipantInviteModalType] = useState<ParticipantInviteType | null>(null);
 
     const handleOpenModal = (type: ParticipantInviteType): any => setParticipantInviteModalType(type);
@@ -22,7 +23,7 @@ export const InviteParticipant = ({task} : InviteParticipantProps) => {
         const targetSid = invitedParticipantDetails.type === "Queue" ? (invitedParticipantDetails.participant as QueueParticipantInvite).queue_sid :
             (invitedParticipantDetails.participant as WorkerParticipantInvite).worker_sid;
         
-        const chatTransferPayload : EventPayload = {task,targetSid, options: {mode: "WARM"}}
+        const chatTransferPayload : TransferActionPayload = {task,targetSid, options: {mode: "WARM"}}
         Actions.invokeAction("ChatTransferTask", chatTransferPayload);
 
         handleCloseModal();
@@ -34,12 +35,12 @@ export const InviteParticipant = ({task} : InviteParticipantProps) => {
 
             <Stack orientation="horizontal" spacing="space30">
                 <Box paddingTop="space20">
-                    <Button variant="primary" onClick={() => handleOpenModal("Worker")}>
+                    <Button variant="primary" onClick={() => handleOpenModal("Worker")} disabled={disableNewInvites}>
                         <AgentIcon decorative/> Invite Specific Agent
                     </Button>
                 </Box>
                 <Box paddingTop="space20">
-                    <Button variant="primary" onClick={() => handleOpenModal("Queue")}>
+                    <Button variant="primary" onClick={() => handleOpenModal("Queue")} disabled={disableNewInvites}>
                         <ChatIcon decorative /> Invite from Queue
                     </Button>
                 </Box>

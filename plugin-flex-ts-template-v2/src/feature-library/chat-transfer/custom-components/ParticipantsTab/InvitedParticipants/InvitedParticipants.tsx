@@ -8,8 +8,6 @@ interface InvitedParticipantsProps {
 }
 
 export const InvitedParticipants = ({ invitedParticipantDetails, handleCancelInvite }: InvitedParticipantsProps) => {
-
-    console.log("Participants", invitedParticipantDetails)
     
     const invitedParticipants = invitedParticipantDetails.map((invitedParticipantDetail) => {
       const participantName = invitedParticipantDetail.targetName;

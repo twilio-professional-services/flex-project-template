@@ -1,7 +1,7 @@
 import * as Flex from "@twilio/flex-ui";
 import { TaskHelper, Actions } from "@twilio/flex-ui";
 import { isColdTransferEnabled } from "../../index";
-import { EventPayload } from "../../types/TransferOptions";
+import { TransferActionPayload } from "../../types/ActionPayloads";
 
 // invoke the custom chatTransferTask action if a cbm task otherwise carry on
 export function handleChatTransfer(flex: typeof Flex, manager: Flex.Manager) {
@@ -9,7 +9,7 @@ export function handleChatTransfer(flex: typeof Flex, manager: Flex.Manager) {
 
   Flex.Actions.addListener(
     "beforeTransferTask",
-    (payload: EventPayload, abortFunction: any) => {
+    (payload: TransferActionPayload, abortFunction: any) => {
       if (TaskHelper.isCBMTask(payload.task)) {
         // native action handler would fail for chat task so abort the action
         abortFunction();

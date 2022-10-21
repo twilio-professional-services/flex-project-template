@@ -1,5 +1,5 @@
 import { Actions, Notifications } from "@twilio/flex-ui";
-import { EventPayload } from "../types/TransferOptions";
+import { TransferActionPayload } from "../types/ActionPayloads";
 import { NotificationIds } from "../flex-hooks/notifications/TransferResult";
 import ChatTransferService, {
   buildInviteParticipantAPIPayload,
@@ -9,11 +9,11 @@ import { addInviteToConversation } from "../helpers/inviteTracker";
 
 export const registerCustomChatTransferAction = () => {
   Actions.registerAction("ChatTransferTask", (payload) =>
-    handleChatTransferAction(payload)
+    handleChatTransferAction(payload as TransferActionPayload)
   );
 };
 
-const handleChatTransferAction = async (payload: EventPayload | any) => {
+const handleChatTransferAction = async (payload: TransferActionPayload) => {
   console.log("transfer", payload);
 
   if (payload?.options?.mode === "WARM" && !isMultiParticipantEnabled()) {

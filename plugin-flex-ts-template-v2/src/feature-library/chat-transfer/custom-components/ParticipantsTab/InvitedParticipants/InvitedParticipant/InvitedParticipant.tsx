@@ -4,16 +4,22 @@ import { ChatIcon } from "@twilio-paste/icons/esm/ChatIcon";
 import { AgentIcon } from "@twilio-paste/icons/esm/AgentIcon";
 import { CloseIcon } from "@twilio-paste/icons/esm/CloseIcon";
 import { useState } from "react";
+import { ParticipantInviteType } from "../../../../types/ParticipantInvite"
 
-export const InvitedParticipant = (props: any) => {
-  const { participantName, inviteTargetType, handleCancelInvite } = props;
+
+interface InvitedParticipantProps {
+  participantName: string,
+  inviteTargetType: ParticipantInviteType,
+  handleCancelInvite: () => void
+}
+
+export const InvitedParticipant = ({ participantName, inviteTargetType, handleCancelInvite } : InvitedParticipantProps) => {
   const [cancelHandled, setCancelHandled] = useState(false);
 
   const handleCancel = () => {
     setCancelHandled(true);
     handleCancelInvite()
   }
-
 
   const icon = inviteTargetType === "Worker" ? <AgentIcon decorative={false} title={`Agent - ${participantName}`} />
     : <ChatIcon decorative title={`Queue - ${participantName}`} />

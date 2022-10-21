@@ -3,6 +3,7 @@ import { ITask, TaskHelper, StateHelper } from "@twilio/flex-ui";
 import { isColdTransferEnabled, isMultiParticipantEnabled } from '../../index'
 import TransferButton from "../../custom-components/TransferButton"
 import LeaveChatButton from "../../custom-components/LeaveChatButton"
+import {countOfOutstandingInvitesForConversation} from "../../helpers/inviteTracker"
 
 export function addChatTransferButton(flex: typeof Flex) {
     if (!isColdTransferEnabled()) return;
@@ -25,11 +26,11 @@ export function replaceEndTaskButton(flex: typeof Flex) {
         if (TaskHelper.isCBMTask(task) &&
             task.taskStatus === 'assigned')
         {
-            // more than two participants or invites sent?
+            // more than two participants or are there any active invites?
             const conversationState = StateHelper.getConversationStateForTask(task);
             if (conversationState) {
                 if (conversationState.participants.size > 2 ||
-                    Object.keys(conversationState.source?.attributes?.invites || {}).length)
+                    countOfOutstandingInvitesForConversation(conversationState))
                 return true;
             }
         }       

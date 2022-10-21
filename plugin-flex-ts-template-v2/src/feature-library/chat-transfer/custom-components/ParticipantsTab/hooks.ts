@@ -64,7 +64,7 @@ export const getUpdatedParticipantDetails = async (
   conversation: ConversationState.ConversationState,
   participantDetails: ParticipantDetails[]
 ) => {
-  const myIdentity = manager.user.identity;
+  const myIdentity = manager.conversationsClient?.user?.identity;
 
   const flexInteractionChannelSid = task?.attributes?.flexInteractionChannelSid;
   if (!flexInteractionChannelSid) return [];
@@ -85,7 +85,7 @@ export const getUpdatedParticipantDetails = async (
   );
 
   if (!intertactionParticipants || !conversation?.participants)
-    return intertactionParticipants;
+    return participantDetails;
 
   const conversationParticipants = Array.from(
     conversation?.participants.values()
@@ -113,6 +113,13 @@ export const getUpdatedParticipantDetails = async (
       const isMe = conversationParticipant.source.identity === myIdentity;
       const interactionParticipantSid = intertactionParticipant.participantSid;
       const conversationMemberSid = conversationParticipant.source.sid;
+
+      console.log(
+        "isMe",
+        isMe,
+        conversationParticipant.source.identity,
+        myIdentity
+      );
 
       participants.push({
         friendlyName,

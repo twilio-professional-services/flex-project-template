@@ -33,7 +33,7 @@ const _getMyParticipantSid = async (
   const myParticipant = participants.find(
     (participant: any) =>
       participant.mediaProperties?.identity ===
-      manager.conversationsClient.user.identity
+      manager.conversationsClient?.user?.identity
   );
 
   return myParticipant ? myParticipant.participantSid : "";

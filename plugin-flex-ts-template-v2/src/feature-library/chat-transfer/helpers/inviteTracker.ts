@@ -133,3 +133,9 @@ export const removeInvitedParticipant = async (
       console.log("Error", error, conversation);
     }
 };
+
+export const countOfOutstandingInvitesForConversation = (
+  conversation: ConversationState.ConversationState
+): number => {
+  return Object.keys(conversation?.source?.attributes?.invites || {}).length;
+};
