@@ -125,6 +125,8 @@ npm run remove-features
 
 (the following is only applicable when using the flex v2 plugin)
 
+**NOTE** *renaming the template will make it a little more challenging to merge further template updates later*
+
 You may want to rename the plugin and the serverless dependencies
   - you are creating a standalone plugin and it needs to run side by side with other plugins using the template.
 
