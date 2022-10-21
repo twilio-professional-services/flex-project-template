@@ -39,6 +39,14 @@ exports.handler = TokenValidator(async function updateWorkerChannel(
     response.setBody({ data: null, message: parameterError });
     callback(null, response);
   } else {
+    
+    // Make sure that this user is allowed to perform this action
+    if (!(event.TokenResult.roles.includes('supervisor') || event.TokenResult.roles.includes('admin'))) {
+      response.setStatusCode(403)
+      response.setBody({success: false, error: "User does not have the permissions to perform this action."});
+      return callback(null, response);
+    }
+    
     try {
       const { workerSid, workerChannelSid, capacity, available } = event;
       const result = await TaskRouterOperations.updateWorkerChannel({
