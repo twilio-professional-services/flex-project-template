@@ -14,6 +14,7 @@ import DualChannelRecordingConfig from "../../feature-library/dual-channel-recor
 import PauseRecordingConfig from "../../feature-library/pause-recording/types/ServiceConfiguration";
 import ChatTransferConfig from "../../feature-library/chat-transfer/types/ServiceConfiguration";
 import TeamViewFiltersConfig from "../../feature-library/teams-view-filters/types/ServiceConfiguration";
+import SupervisorCapacityConfig from "../../feature-library/supervisor-capacity/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguratoin {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -32,4 +33,5 @@ export default interface FeatureServiceConfiguratoin {
   dual_channel_recording: DualChannelRecordingConfig;
   pause_recording: PauseRecordingConfig;
   teams_view_filters: TeamViewFiltersConfig;
+  supervisor_capacity: SupervisorCapacityConfig;
 }

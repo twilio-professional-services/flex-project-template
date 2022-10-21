@@ -18,6 +18,7 @@ import { addDeviceManagerToMainHeader } from "../../feature-library/device-manag
 import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
 import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-filter/flex-hooks/components/WorkerProfile";
+import { addCapacityToWorkerCanvas } from "../../feature-library/supervisor-capacity/flex-hooks/components/WorkerCanvas";
 import { addPauseRecordingButton } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvasActions";
 import { addPauseStatusPanel } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvas";
 
@@ -54,7 +55,7 @@ const componentHandlers: Components = {
   TaskOverviewCanvas: [addSupervisorBargeCoachButtons],
   TeamsView: [],
   ViewCollection: [],
-  WorkerCanvas: [],
+  WorkerCanvas: [addCapacityToWorkerCanvas],
   WorkerDirectory: [addChatTransferCustomization],
   WorkerProfile: [replaceWorkerProfileInfo],
   WorkersDataTable: [],
