@@ -1,4 +1,4 @@
-import { Actions, Notifications } from "@twilio/flex-ui";
+import { Actions, Notifications, StateHelper } from "@twilio/flex-ui";
 import { TransferActionPayload } from "../types/ActionPayloads";
 import { NotificationIds } from "../flex-hooks/notifications/TransferResult";
 import ChatTransferService, {
@@ -6,6 +6,7 @@ import ChatTransferService, {
 } from "../helpers/APIHelper";
 import { isMultiParticipantEnabled } from "..";
 import { addInviteToConversation } from "../helpers/inviteTracker";
+import { countOfOutstandingInvitesForConversation } from "../helpers/inviteTracker";
 
 export const registerCustomChatTransferAction = () => {
   Actions.registerAction("ChatTransferTask", (payload) =>
@@ -14,7 +15,20 @@ export const registerCustomChatTransferAction = () => {
 };
 
 const handleChatTransferAction = async (payload: TransferActionPayload) => {
+  const { task, targetSid } = payload;
   console.log("transfer", payload);
+
+  const conversation = StateHelper.getConversationStateForTask(task);
+
+  if (
+    conversation &&
+    countOfOutstandingInvitesForConversation(conversation) !== 0
+  ) {
+    Notifications.showNotification(
+      NotificationIds.ChatCancelParticipantInviteFailedInviteOutstanding
+    );
+    return;
+  }
 
   if (payload?.options?.mode === "WARM" && !isMultiParticipantEnabled()) {
     Notifications.showNotification(
@@ -25,8 +39,8 @@ const handleChatTransferAction = async (payload: TransferActionPayload) => {
 
   const removeInvitingAgent = payload?.options?.mode === "COLD";
   const transferChatAPIPayload = await buildInviteParticipantAPIPayload(
-    payload.task,
-    payload.targetSid,
+    task,
+    targetSid,
     removeInvitingAgent
   );
 
@@ -40,11 +54,7 @@ const handleChatTransferAction = async (payload: TransferActionPayload) => {
       transferChatAPIPayload
     );
 
-    addInviteToConversation(
-      payload.task,
-      result.invitesTaskSid,
-      payload.targetSid
-    );
+    addInviteToConversation(task, result.invitesTaskSid, targetSid);
 
     if (removeInvitingAgent)
       Notifications.showNotification(NotificationIds.ChatTransferTaskSuccess);

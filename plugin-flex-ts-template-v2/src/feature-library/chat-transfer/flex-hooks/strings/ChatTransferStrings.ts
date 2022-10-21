@@ -8,6 +8,7 @@ export enum StringTemplates {
   ChatRemoveParticipantSuccess = "ChatRemoveParticipantSuccess",
   ChatCancelParticipantInviteFailed = "ChatCancelParticipantInviteFailed",
   ChatCancelParticipantInviteSuccess = "ChatCancelParticipantInviteSuccess",
+  ChatParticipantInviteOutstanding = "ChatParticipantInviteOutstanding",
 }
 
 export default {
@@ -23,4 +24,6 @@ export default {
     "Participant invite cancel failed",
   [StringTemplates.ChatCancelParticipantInviteSuccess]:
     "Participant invite canceled",
+  [StringTemplates.ChatParticipantInviteOutstanding]:
+    "Inviting Participant Failed. There is already an outstanding invite for the chat",
 };

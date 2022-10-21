@@ -11,6 +11,7 @@ export enum NotificationIds {
   ChatRemoveParticipantSuccess = "ChatRemoveParticipantSuccess",
   ChatCancelParticipantInviteFailed = "ChatCancelParticipantInviteFailed",
   ChatCancelParticipantInviteSuccess = "ChatCancelParticipantInviteSuccess",
+  ChatCancelParticipantInviteFailedInviteOutstanding = "ChatCancelParticipantInviteFailedInviteOutstanding",
 }
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
@@ -22,6 +23,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   chatRemoveParticipantSuccess();
   chatCancelParticipantInviteFailed();
   chatCancelParticipantInviteSuccess();
+  chatCancelParticipantInviteFailedInviteOutstanding();
 };
 
 const chatTransferTaskSuccess = () => {
@@ -101,5 +103,15 @@ const chatCancelParticipantInviteSuccess = () => {
     content: StringTemplates.ChatCancelParticipantInviteSuccess,
     timeout: 3000,
     type: NotificationType.success,
+  });
+};
+
+const chatCancelParticipantInviteFailedInviteOutstanding = () => {
+  Notifications.registerNotification({
+    id: NotificationIds.ChatCancelParticipantInviteFailedInviteOutstanding,
+    closeButton: true,
+    content: StringTemplates.ChatParticipantInviteOutstanding,
+    timeout: 3000,
+    type: NotificationType.error,
   });
 };
