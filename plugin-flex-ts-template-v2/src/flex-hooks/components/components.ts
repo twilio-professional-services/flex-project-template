@@ -19,10 +19,15 @@ import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-
 import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
 import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-filter/flex-hooks/components/WorkerProfile";
 import { addPauseRecordingButton } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvasActions";
+import { addPauseStatusPanel } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvas";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
-  CallCanvas: [addConferenceToCallCanvas, addSupervisorCoachingPanelToAgent],
+  CallCanvas: [
+    addConferenceToCallCanvas,
+    addSupervisorCoachingPanelToAgent,
+    addPauseStatusPanel
+  ],
   CallCanvasActions: [
     addConferenceToCallCanvasActions,
     removeDirectoryFromInternalCalls,

@@ -12,7 +12,7 @@ const { custom_data } =
     .ui_attributes as UIAttributes) || {};
 const { enabled: dualChannelEnabled = false, channel } =
   custom_data?.features?.dual_channel_recording || {};
-  const { includeSilence = false } =
+  const { include_silence = false, indicator_banner = false } =
     custom_data?.features?.pause_recording || {};
 
 const getDualChannelCallSid = (task: ITask): string | null => {
@@ -62,13 +62,13 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
       const callSid = getDualChannelCallSid(task);
       
       if (callSid) {
-        const recording = await RecordingService.pauseCallRecording(callSid, includeSilence ? "silence" : "skip");
+        const recording = await RecordingService.pauseCallRecording(callSid, include_silence ? "silence" : "skip");
         recordingSid = recording.sid;
       } else {
         console.error('Unable to get call SID to pause recording');
       }
     } else if (task.conference) {
-      const recording = await RecordingService.pauseConferenceRecording(task.conference?.conferenceSid, includeSilence ? "silence" : "skip");
+      const recording = await RecordingService.pauseConferenceRecording(task.conference?.conferenceSid, include_silence ? "silence" : "skip");
       recordingSid = recording.sid;
     }
     
@@ -77,7 +77,7 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
         reservationSid: task.sid,
         recordingSid
       }));
-      Notifications.showNotification(NotificationIds.RECORDING_PAUSED);
+      if (indicator_banner) Notifications.showNotification(NotificationIds.RECORDING_PAUSED);
       return true;
     }
   } catch (error) {
@@ -118,7 +118,7 @@ export const resumeRecording = async (task: ITask): Promise<boolean> => {
     
     if (success) {
       manager.store.dispatch(resume(recordingIndex));
-      Notifications.showNotification(NotificationIds.RESUME_RECORDING);
+      if (indicator_banner) Notifications.showNotification(NotificationIds.RESUME_RECORDING);
       return true;
     }
   } catch (error) {

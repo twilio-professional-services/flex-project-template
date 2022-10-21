@@ -10,7 +10,12 @@ This feature adds a Pause/Resume Recording button to the call canvas to allow th
 
 Recording must be enabled either via the dual channel recording feature in this repository, or via the "Call Recording" setting in Twilio Console > Flex > Manage > Voice. Do not enable both recording methods simultaneously, or only one of the recordings will be paused.
 
-There are no additional setup steps required, only enabling the feature in the flex-config asset for your environment. There is also a `includeSilence` configuration property to choose whether the paused portion of the call recording should be included as silence.
+There are no additional setup steps required, only enabling the feature in the flex-config asset for your environment.
+
+There are some additional configuration properties you may change if desired:
+- `include_silence` - whether the paused portion of the call recording should be included as silence
+- `indicator_banner` - whether recording indicator is displayed temporarily in a notification banner
+- `indicator_permanent` - whether a permanent 'Call Recording Paused' indicator is shown while paused
 
 # how it works
 

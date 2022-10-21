@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import PauseRecordingButton from '../../custom-components/PauseRecordingButton'
+import PauseRecordingButton from '../../custom-components/PauseRecordingButton';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;

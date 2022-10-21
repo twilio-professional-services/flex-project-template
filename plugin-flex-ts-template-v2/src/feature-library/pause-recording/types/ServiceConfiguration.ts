@@ -1,4 +1,6 @@
 export default interface PauseRecordingConfig {
   enabled: boolean;
-  includeSilence: boolean;
+  include_silence: boolean;
+  indicator_banner: boolean;
+  indicator_permanent: boolean;
 }
