@@ -1,6 +1,6 @@
 {
   "name": "plugin-flex-ts-template",
-  "version": "9.0.15",
+  "version": "9.0.16",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
