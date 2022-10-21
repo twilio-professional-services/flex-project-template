@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { AppState, reduxNamespace } from '../../../../flex-hooks/states';
 import {
-  Actions,
   IconButton,
   TaskHelper,
   ITask
 } from '@twilio/flex-ui';
 
-import { pausedRecordings, pauseRecording, resumeRecording } from "../../helpers/pauseRecordingHelper";
+import { pauseRecording, resumeRecording } from "../../helpers/pauseRecordingHelper";
 
 export interface OwnProps {
   task?: ITask
@@ -16,6 +17,8 @@ const PauseRecordingButton = (props: OwnProps) => {
   const [ paused, setPaused ] = useState(false);
   const [ waiting, setWaiting ] = useState(false);
   
+  const { pausedRecordings } = useSelector((state: AppState) => state[reduxNamespace].pauseRecording);
+  
   const isLiveCall = props.task ? TaskHelper.isLiveCall(props.task) : false;
   
   useEffect(() => {
@@ -23,10 +26,20 @@ const PauseRecordingButton = (props: OwnProps) => {
       return;
     }
     
+    updatePausedState();
+  }, []);
+  
+  useEffect(() => {
+    updatePausedState();
+  }, [pausedRecordings]);
+  
+  const updatePausedState = () => {
     if (pausedRecordings && pausedRecordings.find((pausedRecording) => props.task && pausedRecording.reservationSid === props.task.sid)) {
       setPaused(true);
+    } else {
+      setPaused(false);
     }
-  }, []);
+  }
   
   const handleClick = async () => {
     if (!isLiveCall || !props.task) {
@@ -36,17 +49,9 @@ const PauseRecordingButton = (props: OwnProps) => {
     setWaiting(true);
     
     if (paused) {
-      const success = await resumeRecording(props.task);
-      
-      if (success) {
-        setPaused(false);
-      }
+      await resumeRecording(props.task);
     } else {
-      const success = await pauseRecording(props.task);
-      
-      if (success) {
-        setPaused(true);
-      }
+      await pauseRecording(props.task);
     }
     
     setWaiting(false);

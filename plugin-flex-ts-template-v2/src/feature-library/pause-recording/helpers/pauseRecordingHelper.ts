@@ -2,6 +2,8 @@ import { ITask, Manager, Notifications } from "@twilio/flex-ui";
 import RecordingService from "../../../utils/serverless/Recording/RecordingService";
 import { UIAttributes } from "../../../types/manager/ServiceConfiguration";
 import { NotificationIds } from "../flex-hooks/notifications/PauseRecording";
+import { AppState, reduxNamespace } from "../../../flex-hooks/states";
+import { pause, resume } from "../flex-hooks/states/PauseRecordingSlice";
 
 const manager = Manager.getInstance();
 
@@ -12,13 +14,6 @@ const { enabled: dualChannelEnabled = false, channel } =
   custom_data?.features?.dual_channel_recording || {};
   const { includeSilence = false } =
     custom_data?.features?.pause_recording || {};
-
-export type PausedRecording = {
-  reservationSid: string;
-  recordingSid: string;
-}
-
-export var pausedRecordings = [] as Array<PausedRecording>;
 
 const getDualChannelCallSid = (task: ITask): string | null => {
   const participants = task.conference?.participants;
@@ -51,7 +46,8 @@ const getDualChannelCallSid = (task: ITask): string | null => {
 }
 
 export const pauseRecording = async (task: ITask): Promise<boolean> => {
-  const recordingIndex = pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
+  const state = manager.store.getState() as AppState;
+  const recordingIndex = state[reduxNamespace].pauseRecording.pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
   
   if (recordingIndex >= 0) {
     console.error(`Recording already paused for task ${task.sid}`);
@@ -77,10 +73,10 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
     }
     
     if (recordingSid) {
-      pausedRecordings.push({
+      manager.store.dispatch(pause({
         reservationSid: task.sid,
         recordingSid
-      });
+      }));
       Notifications.showNotification(NotificationIds.RECORDING_PAUSED);
       return true;
     }
@@ -93,14 +89,15 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
 }
 
 export const resumeRecording = async (task: ITask): Promise<boolean> => {
-  const recordingIndex = pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
+  const state = manager.store.getState() as AppState;
+  const recordingIndex = state[reduxNamespace].pauseRecording.pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
   
   if (recordingIndex < 0) {
     console.error(`Unable to find paused recording details for task ${task.sid}`);
     return false;
   }
   
-  const recording = pausedRecordings[recordingIndex];
+  const recording = state[reduxNamespace].pauseRecording.pausedRecordings[recordingIndex];
   
   try {
     let success = false;
@@ -120,7 +117,7 @@ export const resumeRecording = async (task: ITask): Promise<boolean> => {
     }
     
     if (success) {
-      pausedRecordings.splice(recordingIndex, 1);
+      manager.store.dispatch(resume(recordingIndex));
       Notifications.showNotification(NotificationIds.RESUME_RECORDING);
       return true;
     }
