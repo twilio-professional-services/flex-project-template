@@ -9,7 +9,10 @@ This feature implements transferring of chats between agents and multiple agents
 
 The two different features can be enabled/disabled independently. In the case of both being enabled and there is an invite that has been sent to an agent or queue then the cold_transfer option is disabled until an agent joins or the invite is canceled.
 
+### Cold Transfer
 ![cold transfer](screenshots/chat-transfer.gif)
+
+### Multi participant chat
 ![multiple partcipants](screenshots/multi-participant.gif)
 
 ## Setup
@@ -68,4 +71,4 @@ In these scenarios you could be left with a customer chatting and the messages n
 The plugin attempts to avoid these edge cases but there are timing conditions that can't easily be taken into account from the plugin. For example the plugin will change the *end chat* action to *leave chat* when there are multiple participants. But there could be a timing window where both agents leave the chat at the same time. This results in the participants being removed but the channel is still active.
 
 To handle these edge cases we would recommend using TaskRouter or Conversations webhooks to a backend platform that could detect any invalid Task or Conversations states and update the chat accordingly. For example in this case marking the channel as inactive so that subsequent messages from the customer create a new conversation.
- 
+
