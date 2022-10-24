@@ -17,7 +17,12 @@ interface GetQueuesResponse {
   queues: Array<Queue>;
 }
 
-interface WorkerChannelCapacityRESTResponse {
+interface GetWorkerChannelsResponse {
+  success: boolean;
+  workerChannels: Array<WorkerChannelCapacityResponse>;
+}
+
+export interface WorkerChannelCapacityResponse {
   accountSid: string;
   assignedTasks: number;
   available: boolean;
@@ -35,7 +40,7 @@ interface WorkerChannelCapacityRESTResponse {
 interface UpdateWorkerChannelResponse {
   success: boolean;
   message?: string;
-  workerChannelCapacity: WorkerChannelCapacityRESTResponse;
+  workerChannelCapacity: WorkerChannelCapacityResponse;
 }
 
 let queues = null as null | Array<Queue>;
@@ -73,6 +78,12 @@ class TaskRouterService extends ApiService {
     const response = await this.#getQueues();
     if (response.success) queues = response.queues;
     return queues;
+  }
+  
+  async getWorkerChannels(workerSid: string): Promise<Array<WorkerChannelCapacityResponse>> {
+    const response = await this.#getWorkerChannels(workerSid);
+    if (response.success) return response.workerChannels;
+    return [];
   }
 
   async updateWorkerChannel(
@@ -152,6 +163,24 @@ class TaskRouterService extends ApiService {
         body: this.buildBody(encodedParams),
       }
     ).then((response): GetQueuesResponse => {
+      return response;
+    });
+  };
+  
+  #getWorkerChannels = (workerSid: string): Promise<GetWorkerChannelsResponse> => {
+    const encodedParams: EncodedParams = {
+      workerSid: encodeURIComponent(workerSid),
+      Token: encodeURIComponent(this.manager.user.token),
+    };
+  
+    return this.fetchJsonWithReject<GetWorkerChannelsResponse>(
+      `https://${this.serverlessDomain}/common/flex/taskrouter/get-worker-channels`,
+      {
+        method: "post",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: this.buildBody(encodedParams),
+      }
+    ).then((response): GetWorkerChannelsResponse => {
       return response;
     });
   };

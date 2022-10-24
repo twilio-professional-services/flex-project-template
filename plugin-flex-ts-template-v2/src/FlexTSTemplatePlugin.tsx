@@ -10,12 +10,11 @@ import RegisterFlexNotifications from './flex-hooks/notifications';
 import RegisterJSClientEventListeners from './flex-hooks/jsclient-event-listeners';
 
 import CreateSdkClientInstances from './flex-hooks/sdk-clients';
-import TeamFilters from './flex-hooks/teams-filters/TeamFilters';
+import TeamFilters from './flex-hooks/teams-filters';
 import CustomChatOrchestration from './flex-hooks/chat-orchestrator';
-import SalesForceHooks from './flex-hooks/iframe-hooks'
-import CssOverrides from './flex-hooks/css-overrides'
-import CustomizePasteElements from './flex-hooks/paste-elements'
-import Events from "./flex-hooks/events"
+import CssOverrides from './flex-hooks/css-overrides';
+import CustomizePasteElements from './flex-hooks/paste-elements';
+import Events from "./flex-hooks/events";
 
 const PLUGIN_NAME = 'FlexTSTemplatePlugin';
 
@@ -45,7 +44,6 @@ export default class FlexTSTemplatePlugin extends FlexPlugin {
       CreateSdkClientInstances,
       TeamFilters,
       CustomChatOrchestration,
-      SalesForceHooks,
       CssOverrides,
       Events
     ];
