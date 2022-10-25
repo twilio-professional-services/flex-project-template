@@ -8,7 +8,7 @@ const { enabled = false } = custom_data?.features.conference || {}
 export function handleConferenceHangup(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
 
-  flex.Actions.addListener('beforeHangupCall', async (payload, abortFunction) => {
+  flex.Actions.addListener('beforeHangupCall', async (payload: any, abortFunction: () => void) => {
     const { conference, taskSid } = payload.task;
     const participantsOnHold = (participant: Flex.ConferenceParticipant) => {
       return participant.onHold && participant.status === "joined";

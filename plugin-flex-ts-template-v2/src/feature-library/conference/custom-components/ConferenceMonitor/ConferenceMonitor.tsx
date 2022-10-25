@@ -22,11 +22,11 @@ class ConferenceMonitor extends React.Component {
     const { task } = this.props as OwnProps;
 
     const conference = task && task.conference;
+    const conferenceSid = task?.attributes?.conference?.sid;
     
-    if (!conference) return;
+    if (!conference || !conferenceSid) return;
     
     const {
-      conferenceSid,
       liveParticipantCount,
       liveWorkerCount,
       participants = []
@@ -92,7 +92,7 @@ class ConferenceMonitor extends React.Component {
     const promises = [] as Promise<string>[];
     participants.forEach(p => {
       console.log(`setting endConferenceOnExit = ${endConferenceOnExit} for callSid: ${p.callSid} status: ${p.status}`);
-      if (p.connecting) { return } //skip setting end conference on connecting parties as it will fail
+      if (p.connecting || !p.callSid) { return } //skip setting end conference on connecting parties as it will fail
       promises.push(
         ConferenceService.setEndConferenceOnExit(conferenceSid, p.callSid, endConferenceOnExit)
       );

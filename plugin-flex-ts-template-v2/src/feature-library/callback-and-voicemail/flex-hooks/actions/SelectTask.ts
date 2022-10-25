@@ -21,7 +21,7 @@ export const autoSelectCallbackTaskWhenEndingCall = async (
 
   flex.Actions.addListener(
     "beforeSelectTask",
-    async (payload: EventPayload, abortFunction) => {
+    async (payload: EventPayload, abortFunction: () => void) => {
       // when a reservation is removed from state, Flex runs SelectTask with task set to null
       // this means that when an outbound call back to a contact is completed (or canceled)
       // we need to catch that here in order to select the callback task

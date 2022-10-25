@@ -6,7 +6,7 @@ import ChatTransferService, {
 } from "../helpers/APIHelper";
 
 export const registerCustomChatTransferAction = () => {
-  Actions.registerAction("ChatTransferTask", (payload) =>
+  Actions.registerAction("ChatTransferTask", (payload: any) =>
     handleChatTransferAction(payload)
   );
 };

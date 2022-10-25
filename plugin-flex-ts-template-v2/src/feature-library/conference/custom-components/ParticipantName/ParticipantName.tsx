@@ -43,7 +43,7 @@ const ParticipantName = (props: OwnProps) => {
     }
     
     // FLEXEXP-865
-    if (!participant.participantType || participant.participantType === 'unknown') {
+    if (participant.callSid && (!participant.participantType || participant.participantType === 'unknown')) {
       ConferenceService.getCallProperties(participant.callSid)
       .then((response: FetchedCall) => {
         if (response) {

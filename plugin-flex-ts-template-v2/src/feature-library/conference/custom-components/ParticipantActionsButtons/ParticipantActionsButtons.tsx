@@ -55,7 +55,7 @@ const ParticipantActionsButtons = (props: OwnProps) => {
           };
         }
         
-        if (newViewState[participant.callSid]) {
+        if (participant.callSid && newViewState[participant.callSid]) {
           delete newViewState[participant.callSid];
         }
         
@@ -69,7 +69,7 @@ const ParticipantActionsButtons = (props: OwnProps) => {
   
   useEffect(() => {
     const { participant } = props;
-    if (!participant) return;
+    if (!participant || !participant.callSid) return;
     
     let newViewState: {[index: string]:any} = {};
     

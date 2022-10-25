@@ -88,7 +88,7 @@ const ConferenceDialog = (props: OwnProps) => {
     try {
   
       participantCallSid = await ConferenceService.addParticipant(mainConferenceSid, from, conferenceTo);
-      ConferenceService.addConnectingParticipant(mainConferenceSid, participantCallSid, 'unknown');
+      ConferenceService.addConnectingParticipant(task.taskSid, participantCallSid, 'unknown');
   
     } catch (error) {
       console.error('Error adding conference participant:', error);

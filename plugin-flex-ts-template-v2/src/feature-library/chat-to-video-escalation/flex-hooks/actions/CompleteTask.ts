@@ -14,7 +14,7 @@ export function beforeCompleteVideoEscalatedChatTask(
 
   flex.Actions.addListener(
     "beforeCompleteTask",
-    async (payload, cancelActionInvocation) => {
+    async (payload: any, abortFunction: () => void) => {
       const { videoRoom } = payload.task.attributes;
 
       if (!Flex.TaskHelper.isChatBasedTask(payload.task) || !videoRoom) {
@@ -25,7 +25,7 @@ export function beforeCompleteVideoEscalatedChatTask(
         alert(
           "You are still connected to a video room. Please disconnect before completing the task."
         );
-        cancelActionInvocation();
+        abortFunction();
       }
 
       return payload;

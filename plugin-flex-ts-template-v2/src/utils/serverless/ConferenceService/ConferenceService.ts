@@ -8,6 +8,7 @@ import { ConferenceParticipant } from '@twilio/flex-ui';
 import ApiService from '../ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedCall, FetchedConferenceParticipant } from '../../../types/serverless/twilio-api';
+import { ParticipantBase, ParticipantTypes, VoiceProperties } from '@twilio/flex-ui/src/state/Participants/participants.types';
 
 export interface GetCallResponse {
   success: boolean;
@@ -108,7 +109,7 @@ class ConferenceService extends ApiService {
     })
   }
 
-  addConnectingParticipant = (conferenceSid: string, callSid: string, participantType: string) => {
+  addConnectingParticipant = (taskSid: string, callSid: string, participantType: string) => {
     const flexState = this.manager.store.getState().flex;
     const dispatch = this.manager.store.dispatch;
 
@@ -119,21 +120,45 @@ class ConferenceService extends ApiService {
     conferenceStates.forEach(conference => {
 
       const currentConference = conference.source;
-      console.log('Checking conference SID:', currentConference.conferenceSid);
-      if (currentConference.conferenceSid !== conferenceSid) {
+      console.log('Checking conference task SID:', currentConference.sid);
+      if (currentConference.sid !== taskSid) {
 
         console.log('Not the desired conference');
-        conferences.add(currentConference);
+        conferences.add(conference.source);
 
       } else {
         const participants = currentConference.participants;
-        const fakeSource = {
+        const fakeSource: ParticipantBase<VoiceProperties> = {
           connecting: true,
-          participant_type: participantType,
-          status: 'joined'
+          type: participantType as ParticipantTypes,
+          routingProperties: {
+            workerSid: '',
+            taskSid: '',
+            reservationSid: ''
+          },
+          mediaProperties: {
+            accountSid: '',
+            callSid: callSid,
+            coaching: false,
+            conferenceSid: '',
+            endConferenceOnExit: false,
+            friendlyName: '',
+            hold: false,
+            muted: false,
+            sequenceNumber: 0,
+            startConferenceOnEnter: false,
+            statusCallbackEvent: '',
+            timestamp: '',
+            from: '',
+            to: '',
+          },
+          participantSid: '',
+          channelType: 'voice',
+          channelSid: '',
+          interactionSid: callSid
         };
 
-        const fakeParticipant = new ConferenceParticipant(fakeSource, callSid);
+        const fakeParticipant = new ConferenceParticipant(fakeSource);
         console.log('Adding fake participant:', fakeParticipant);
         participants.push(fakeParticipant);
         conferences.add(conference.source);

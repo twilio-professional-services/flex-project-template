@@ -9,6 +9,7 @@ import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync'
+import { ParticipantTypes } from '@twilio/flex-ui/src/state/Participants/participants.types';
 
 type SupervisorBargeCoachProps = {
   task: ITask
@@ -55,23 +56,26 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
   // we allow the correct user to barge-in on the call
   const bargeHandleClick = () => {
     const conference = task && task.conference;
-    const conferenceSid: string = conference?.conferenceSid || "";
-    const conferenceChildren: any[] = conference?.source?.children || [];
+    const conferenceSid = task?.attributes?.conference?.sid;
+    if (!conferenceSid) {
+      console.log('conferenceSid = null, returning');
+      return;
+    }
 
     // Checking the conference within the task for a participant with the value "supervisor", 
     // is their status "joined", reason for this is every time you click monitor/unmonitor on a call
     // it creates an additional participant, the previous status will show as "left", we only want the active supervisor, 
     // and finally we want to ensure that the supervisor that is joined also matches their worker_sid 
     // which we pull from mapStateToProps at the bottom of this js file
-    const supervisorParticipant = conferenceChildren.find(p => p.data.participant_type === 'supervisor' 
-      && p.data.status === 'joined' 
-      && myWorkerSID === p.data.worker_sid);
-    const participantSid = supervisorParticipant.key;
-    console.log(`Current supervisorSID = ${supervisorParticipant.key}`);
+    const supervisorParticipant = conference?.source.channelParticipants.find(p => p.type === 'supervisor' as ParticipantTypes 
+      && p.mediaProperties.status === 'joined' 
+      && myWorkerSID === p.routingProperties.workerSid);
+    const participantSid = supervisorParticipant?.participantSid;
+    console.log(`Current supervisorSID = ${supervisorParticipant?.participantSid}`);
 
     // If the supervisorParticipant.key is null return, this would be rare and best practice to include this
     // before calling any function you do not want to send it null values unless your function is expecting that
-    if (supervisorParticipant.key == null) {
+    if (!supervisorParticipant || !participantSid) {
       console.log('supervisorParticipant.key = null, returning');
       return;
     }
@@ -129,32 +133,35 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
 
   const coachHandleClick = () => {
     const conference = task && task.conference;
-    const conferenceSid = conference?.conferenceSid || "";
-    const conferenceChildren: any[] = conference?.source?.children || [];
+    const conferenceSid = task?.attributes?.conference?.sid;
+    if (!conferenceSid) {
+      console.log('conferenceSid = null, returning');
+      return;
+    }
 
     // Checking the conference within the task for a participant with the value "supervisor", 
     // is their status "joined", reason for this is every time you click monitor/unmonitor on a call
     // it creates an additional participant, the previous status will show as "left", we only want the active supervisor, 
     // and finally we want to ensure that the supervisor that is joined also matches their worker_sid 
     // which we pull from mapStateToProps at the bottom of this js file
-    const supervisorParticipant = conferenceChildren.find(p => p.data.participant_type === 'supervisor' 
-      && p.data.status === 'joined' 
-      && myWorkerSID === p.data.worker_sid);
-      const participantSid = supervisorParticipant.key;
-    console.log(`Current supervisorSID = ${supervisorParticipant?.key}`);
+    const supervisorParticipant = conference?.source.channelParticipants.find(p => p.type === 'supervisor' as ParticipantTypes 
+      && p.mediaProperties.status === 'joined' 
+      && myWorkerSID === p.routingProperties.workerSid);
+    const participantSid = supervisorParticipant?.participantSid;
+    console.log(`Current supervisorSID = ${supervisorParticipant?.participantSid}`);
 
     // Pulling the agentSid that we will be coaching on this conference
     // Ensuring they are a worker (IE agent) and it matches the agentWorkerSid we pulled from the props
-    let agentParticipant = conferenceChildren.find(p => p.data.participant_type === 'worker'
-    && agentWorkerSID === p.data.worker_sid);
-    const agentSid = agentParticipant.key;
+    let agentParticipant = conference?.participants.find(p => p.participantType === 'worker'
+    && agentWorkerSID === p.workerSid);
+    const agentSid = agentParticipant?.sid;
     
     console.log(`Current agentWorkerSid = ${agentWorkerSID}`);
     console.log(`Current agentSid = ${agentSid}`);
 
     // If the agentParticipant.key or supervisorParticipant.key is null return, this would be rare and best practice to include this
     // before calling any function you do not want to send it null values unless your function is expecting that
-    if (agentParticipant?.key == null || supervisorParticipant?.key == null) {
+    if (!agentSid || !participantSid) {
       console.log('agentParticipant.key or supervisorParticipant.key = null, returning');
       return;
     }

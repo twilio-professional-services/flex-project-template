@@ -8,7 +8,7 @@ const { enabled = false } = custom_data?.features.conference || {};
 export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
 
-  flex.Actions.addListener("beforeKickParticipant", async (payload, abortFunction) => {
+  flex.Actions.addListener("beforeKickParticipant", async (payload: any, abortFunction: () => void) => {
     const { participantType } = payload;
 
     if (participantType !== "transfer" && participantType !== "worker") {
@@ -16,9 +16,7 @@ export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex
 
       const { task, targetSid } = payload;
 
-      const conference = task.attributes.conference
-        ? task.attributes.conference.sid
-        : task.conference.conferenceSid;
+      const conference = task.attributes?.conference?.sid;
 
       const participantSid = targetSid;
 

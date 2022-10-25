@@ -15,7 +15,7 @@ export function applySelectedCallerIdForDialedNumbers(
 
   flex.Actions.addListener(
     "beforeStartOutboundCall",
-    async (payload, abortFunction) => {
+    async (payload: any, abortFunction: () => void) => {
       const state = manager.store.getState() as AppState;
       const selectedCallerId =
         state[reduxNamespace].outboundCallerIdSelector.selectedCallerId;
