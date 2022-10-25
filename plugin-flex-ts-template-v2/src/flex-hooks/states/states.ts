@@ -10,15 +10,20 @@ import {
   SupervisorBargeCoachState,
   SupervisorBargeCoachReducer,
 } from "../../feature-library/supervisor-barge-coach/flex-hooks/states/SupervisorBargeCoach";
+import ConferenceReducer, {
+  ConferenceState
+} from "../../feature-library/conference/flex-hooks/states/ConferenceSlice";
 
 export interface CustomState {
   outboundCallerIdSelector: OutboundCallerIDSelectorState;
   callbackAndVoicemail: CallbackAndVoicemailState;
   supervisorBargeCoach: SupervisorBargeCoachState;
+  conference: ConferenceState;
 }
 
 export const customReducers = {
   outboundCallerIdSelector: OutboundCallerIDSelectorReducer,
   callbackAndVoicemail: CallbackAndVoicemailReducer,
   supervisorBargeCoach: SupervisorBargeCoachReducer,
+  conference: ConferenceReducer
 };

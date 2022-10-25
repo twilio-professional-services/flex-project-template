@@ -109,67 +109,6 @@ class ConferenceService extends ApiService {
     })
   }
 
-  addConnectingParticipant = (taskSid: string, callSid: string, participantType: string) => {
-    const flexState = this.manager.store.getState().flex;
-    const dispatch = this.manager.store.dispatch;
-
-    const conferenceStates = flexState.conferences.states;
-    const conferences = new Set();
-
-    console.log('Populating conferences set');
-    conferenceStates.forEach(conference => {
-
-      const currentConference = conference.source;
-      console.log('Checking conference task SID:', currentConference.sid);
-      if (currentConference.sid !== taskSid) {
-
-        console.log('Not the desired conference');
-        conferences.add(conference.source);
-
-      } else {
-        const participants = currentConference.participants;
-        const fakeSource: ParticipantBase<VoiceProperties> = {
-          connecting: true,
-          type: participantType as ParticipantTypes,
-          routingProperties: {
-            workerSid: '',
-            taskSid: '',
-            reservationSid: ''
-          },
-          mediaProperties: {
-            accountSid: '',
-            callSid: callSid,
-            coaching: false,
-            conferenceSid: '',
-            endConferenceOnExit: false,
-            friendlyName: '',
-            hold: false,
-            muted: false,
-            sequenceNumber: 0,
-            startConferenceOnEnter: false,
-            statusCallbackEvent: '',
-            timestamp: '',
-            from: '',
-            to: '',
-          },
-          participantSid: '',
-          channelType: 'voice',
-          channelSid: '',
-          interactionSid: callSid
-        };
-
-        const fakeParticipant = new ConferenceParticipant(fakeSource);
-        console.log('Adding fake participant:', fakeParticipant);
-        participants.push(fakeParticipant);
-        conferences.add(conference.source);
-
-      }
-
-    });
-    console.log('Updating conferences:', conferences);
-    dispatch({ type: 'CONFERENCE_MULTIPLE_UPDATE', payload: { conferences } });
-  }
-
   holdParticipant = (conference: string, participantSid: string): Promise<string> => {
     return this._toggleParticipantHold(conference, participantSid, true);
   }
