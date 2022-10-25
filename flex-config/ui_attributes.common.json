@@ -54,7 +54,9 @@
       },
       "pause_recording": {
         "enabled": true,
-        "includeSilence": false
+        "include_silence": false,
+        "indicator_banner": false,
+        "indicator_permanent": true
       },
       "activity_reservation_handler": {
         "enabled": false,
