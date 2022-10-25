@@ -28,13 +28,7 @@ const ConnectingParticipants = (props: OwnProps) => {
   }, [])
   
   useEffect(() => {
-    for (let i = 0; i < connectingParticipants.length; i++) {
-      const participant = connectingParticipants[i];
-      
-      if (participant.conferenceSid !== props.task?.attributes?.conference?.sid) {
-        continue;
-      }
-      
+    connectingParticipants.filter((p) => p.conferenceSid === props.task?.attributes?.conference?.sid).forEach((participant) => {
       // if this call is no longer active, remove it
       ConferenceService.getCallProperties(participant.callSid)
       .then((response: FetchedCall) => {
@@ -45,23 +39,19 @@ const ConnectingParticipants = (props: OwnProps) => {
       .catch(error => {
         console.log('ConnectingParticipant unable to check call status', error)
       });
-    }
+    });
   }, [clock])
   
   useEffect(() => {
-    for (let i = 0; i < connectingParticipants.length; i++) {
-      const participant = connectingParticipants[i];
+    connectingParticipants.filter((p) => p.conferenceSid === props.task?.attributes?.conference?.sid).forEach((participant) => {
       const connected = props.conference?.source.participants.filter((p) => p.callSid === participant.callSid);
       
       // remove connecting participant once connected
       if (connected && connected.length > 0) {
         dispatch(removeConnectingParticipant(participant.callSid));
-        
-        // break here; if there were multiple to remove the state change will trigger us again
-        break;
       }
-    }
-  }, [props.conference, connectingParticipants]);
+    });
+  }, [props.conference]);
   
   return (
     <>
