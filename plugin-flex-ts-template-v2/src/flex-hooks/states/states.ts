@@ -13,17 +13,22 @@ import {
 import ConferenceReducer, {
   ConferenceState
 } from "../../feature-library/conference/flex-hooks/states/ConferenceSlice";
+import PauseRecordingReducer, {
+  PauseRecordingState
+} from "../../feature-library/pause-recording/flex-hooks/states/PauseRecordingSlice";
 
 export interface CustomState {
   outboundCallerIdSelector: OutboundCallerIDSelectorState;
   callbackAndVoicemail: CallbackAndVoicemailState;
   supervisorBargeCoach: SupervisorBargeCoachState;
   conference: ConferenceState;
+  pauseRecording: PauseRecordingState;
 }
 
 export const customReducers = {
   outboundCallerIdSelector: OutboundCallerIDSelectorReducer,
   callbackAndVoicemail: CallbackAndVoicemailReducer,
   supervisorBargeCoach: SupervisorBargeCoachReducer,
-  conference: ConferenceReducer
+  conference: ConferenceReducer,
+  pauseRecording: PauseRecordingReducer
 };

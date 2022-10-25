@@ -2,6 +2,8 @@ import { ITask, Manager, Notifications } from "@twilio/flex-ui";
 import RecordingService from "../../../utils/serverless/Recording/RecordingService";
 import { UIAttributes } from "../../../types/manager/ServiceConfiguration";
 import { NotificationIds } from "../flex-hooks/notifications/PauseRecording";
+import { AppState, reduxNamespace } from "../../../flex-hooks/states";
+import { pause, resume } from "../flex-hooks/states/PauseRecordingSlice";
 
 const manager = Manager.getInstance();
 
@@ -10,15 +12,8 @@ const { custom_data } =
     .ui_attributes as UIAttributes) || {};
 const { enabled: dualChannelEnabled = false, channel } =
   custom_data?.features?.dual_channel_recording || {};
-  const { includeSilence = false } =
+  const { include_silence = false, indicator_banner = false } =
     custom_data?.features?.pause_recording || {};
-
-export type PausedRecording = {
-  reservationSid: string;
-  recordingSid: string;
-}
-
-export var pausedRecordings = [] as Array<PausedRecording>;
 
 const getDualChannelCallSid = (task: ITask): string | null => {
   const participants = task.conference?.participants;
@@ -51,7 +46,8 @@ const getDualChannelCallSid = (task: ITask): string | null => {
 }
 
 export const pauseRecording = async (task: ITask): Promise<boolean> => {
-  const recordingIndex = pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
+  const state = manager.store.getState() as AppState;
+  const recordingIndex = state[reduxNamespace].pauseRecording.pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
   
   if (recordingIndex >= 0) {
     console.error(`Recording already paused for task ${task.sid}`);
@@ -66,22 +62,22 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
       const callSid = getDualChannelCallSid(task);
       
       if (callSid) {
-        const recording = await RecordingService.pauseCallRecording(callSid, includeSilence ? "silence" : "skip");
+        const recording = await RecordingService.pauseCallRecording(callSid, include_silence ? "silence" : "skip");
         recordingSid = recording.sid;
       } else {
         console.error('Unable to get call SID to pause recording');
       }
     } else if (task.conference) {
-      const recording = await RecordingService.pauseConferenceRecording(task.attributes?.conference?.sid, includeSilence ? "silence" : "skip");
+      const recording = await RecordingService.pauseConferenceRecording(task.attributes?.conference?.sid, include_silence ? "silence" : "skip");
       recordingSid = recording.sid;
     }
     
     if (recordingSid) {
-      pausedRecordings.push({
+      manager.store.dispatch(pause({
         reservationSid: task.sid,
         recordingSid
-      });
-      Notifications.showNotification(NotificationIds.RECORDING_PAUSED);
+      }));
+      if (indicator_banner) Notifications.showNotification(NotificationIds.RECORDING_PAUSED);
       return true;
     }
   } catch (error) {
@@ -93,14 +89,15 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
 }
 
 export const resumeRecording = async (task: ITask): Promise<boolean> => {
-  const recordingIndex = pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
+  const state = manager.store.getState() as AppState;
+  const recordingIndex = state[reduxNamespace].pauseRecording.pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
   
   if (recordingIndex < 0) {
     console.error(`Unable to find paused recording details for task ${task.sid}`);
     return false;
   }
   
-  const recording = pausedRecordings[recordingIndex];
+  const recording = state[reduxNamespace].pauseRecording.pausedRecordings[recordingIndex];
   
   try {
     let success = false;
@@ -120,8 +117,8 @@ export const resumeRecording = async (task: ITask): Promise<boolean> => {
     }
     
     if (success) {
-      pausedRecordings.splice(recordingIndex, 1);
-      Notifications.showNotification(NotificationIds.RESUME_RECORDING);
+      manager.store.dispatch(resume(recordingIndex));
+      if (indicator_banner) Notifications.showNotification(NotificationIds.RESUME_RECORDING);
       return true;
     }
   } catch (error) {
