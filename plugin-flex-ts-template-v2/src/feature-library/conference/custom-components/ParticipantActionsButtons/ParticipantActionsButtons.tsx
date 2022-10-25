@@ -102,9 +102,6 @@ const ParticipantActionsButtons = (props: OwnProps) => {
     const { callSid, workerSid } = participant;
     let participantType = participant.participantType;
     
-    // FLEXEXP-865
-    if (!participantType) participantType = 'unknown';
-    
     Actions.invokeAction(participant.onHold ? 'UnholdParticipant' : 'HoldParticipant', {
       participantType,
       task,

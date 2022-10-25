@@ -30,7 +30,7 @@ export interface OwnProps {
 }
 
 const ParticipantName = (props: OwnProps) => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState('Unknown');
   
   useEffect(() => {
     const { participant, task } = props;
@@ -42,8 +42,7 @@ const ParticipantName = (props: OwnProps) => {
       return;
     }
     
-    // FLEXEXP-865
-    if (participant.callSid && (!participant.participantType || participant.participantType === 'unknown')) {
+    if (participant.callSid && participant.participantType === 'unknown') {
       ConferenceService.getCallProperties(participant.callSid)
       .then((response: FetchedCall) => {
         if (response) {

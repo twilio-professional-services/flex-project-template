@@ -13,8 +13,7 @@ export function addConferenceToParticipantCanvas(flex: typeof Flex) {
 
   if(!enabled) return;
   
-  // FLEXEXP-865
-  const isUnknownParticipant = (props: any) => !props.participant.participantType || props.participant.participantType === 'unknown';
+  const isUnknownParticipant = (props: any) => props.participant.participantType === 'unknown';
   const isNotTransferParticipant = (props: any) => props.participant.participantType !== 'transfer';
   
   // This section is for the full width ParticipantCanvas
