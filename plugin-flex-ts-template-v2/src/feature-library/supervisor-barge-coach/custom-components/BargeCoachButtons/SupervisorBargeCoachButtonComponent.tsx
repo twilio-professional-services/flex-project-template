@@ -154,7 +154,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
     // Ensuring they are a worker (IE agent) and it matches the agentWorkerSid we pulled from the props
     let agentParticipant = conference?.participants.find(p => p.participantType === 'worker'
     && agentWorkerSID === p.workerSid);
-    const agentSid = agentParticipant?.sid;
+    const agentSid = agentParticipant?.callSid;
     
     console.log(`Current agentWorkerSid = ${agentWorkerSID}`);
     console.log(`Current agentSid = ${agentSid}`);
