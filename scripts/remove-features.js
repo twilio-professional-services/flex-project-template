@@ -5,7 +5,7 @@ var shell = require("shelljs");
    as most work going forward is expected to be built on flex v2.x
 */
   
-const { templateDirectory, featureDirectory, pluginSrc, serverlessSrc } = require ('./common');
+const { templateDirectory, featureDirectory, pluginSrc, serverlessSrc, flexConfigDir, flexConfigTemplateDir } = require ('./common');
 
 const filesToCopy = [
   {
@@ -48,6 +48,10 @@ const filesToCopy = [
     src: `${templateDirectory}/types/CustomServiceConfiguration.ts`,
     dst: `${pluginSrc}/types/manager/`,
   },
+  {
+    src: `${flexConfigTemplateDir}/*.json`,
+    dst: `${flexConfigDir}/`
+  }
 ];
 
 shell.echo("Clearing flex-hooks of features handlers");

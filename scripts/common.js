@@ -24,6 +24,7 @@ const templateDirectory = `${pluginDir}/template-files/no-features`;
 const featureDirectory = `${pluginDir}/src/feature-library`;
 const pluginSrc = `${pluginDir}/src`;
 const serverlessSrc = `${serverlessDir}/src`;
+const flexConfigTemplateDir = `${flexConfigDir}/template-files`
 
 
 
@@ -34,3 +35,4 @@ exports.templateDirectory = templateDirectory;
 exports.featureDirectory = featureDirectory;
 exports.pluginSrc = pluginSrc;
 exports.serverlessSrc = serverlessSrc;
+exports.flexConfigTemplateDir = flexConfigTemplateDir;
