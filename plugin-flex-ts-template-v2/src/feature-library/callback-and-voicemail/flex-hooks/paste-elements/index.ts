@@ -1,3 +1,5 @@
+import { PasteCustomCSS } from "@twilio-paste/customization";
+
 const customPasteElements = {
   C_AND_V_BUTTON_BOX: {
     paddingLeft: "space40",
@@ -10,9 +12,6 @@ const customPasteElements = {
   C_AND_V_CONTENT_HEADING: {
     marginBottom: "space0",
   },
-  C_AND_V_CONTENT_PARAGRAPH: {
-    marginBottom: "space0",
-  },
-};
+} as {[key: string]: PasteCustomCSS};
 
 export default customPasteElements;
