@@ -40,9 +40,10 @@ The primary aims of this template are to
     7. [scripts](#scripts)
     8. [.github](#github)
 4. [Feature library Information](#feature-library-information)
-5. [Local Setup And Use](#local-setup-and-use)
-6. [Setup a project release pipeline](#setup-a-project-release-pipeline)
-7. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
+5. [Setup Guides](#setup-guides)
+    1. [Local Setup And Use](#local-setup-and-use)
+    2. [Setup a project release pipeline](#setup-a-project-release-pipeline)
+    3. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
 8. [More Scripts Details](#more-scripts-details)
     1. [Removing Features](#removing-features)
     2. [Renaming Template](#renaming-template)
@@ -154,6 +155,10 @@ Lastly, this package manages the github action workflows - with one example bein
 
 
 ---
+
+# Setup Guides
+
+The following are guides to instruct the user how to leverage this template for each of the following use cases
 
 ## Local Setup and use
 
