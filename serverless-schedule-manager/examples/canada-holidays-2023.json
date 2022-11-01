@@ -1,0 +1,124 @@
+{
+  "rules": [
+    {
+      "id": "c4d10897-63b8-485e-bd8a-0db23276dec8",
+      "name": "Christmas Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=25"
+    },
+    {
+      "id": "46c34f64-1efb-4453-9178-1ae6573d13ae",
+      "name": "New Year's Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=1;BYMONTHDAY=1"
+    },
+    {
+      "id": "5c0c7b9c-787f-4245-bb5b-b31160cb3ec5",
+      "name": "Open hours",
+      "isOpen": true,
+      "startTime": "08:00",
+      "endTime": "17:00",
+      "dateRRule": "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR"
+    },
+    {
+      "id": "fd1da4dc-0edf-486b-854d-e56ad60b9c9f",
+      "name": "Good Friday",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "startDate": "2023-04-07",
+      "endDate": "2023-04-07"
+    },
+    {
+      "id": "739457f9-dcd4-401f-9d5b-4119194d0d4e",
+      "name": "Easter Monday",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "startDate": "2023-04-10",
+      "endDate": "2023-04-10"
+    },
+    {
+      "id": "ff0b8e25-ba11-4474-9855-b9a3cb7c6a21",
+      "name": "Boxing Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=26"
+    },
+    {
+      "id": "e123ee1c-5268-46c6-b0f4-5d7fbc399154",
+      "name": "Canada Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=7;BYMONTHDAY=1"
+    },
+    {
+      "id": "d431e78c-525b-4d94-9ec3-04ef1d1379e0",
+      "name": "Victoria Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "startDate": "2023-05-22",
+      "endDate": "2023-05-22"
+    },
+    {
+      "id": "84a373e1-8a2c-4462-b542-3f61b97c8a16",
+      "name": "Civic Holiday",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "startDate": "2023-08-07",
+      "endDate": "2023-08-07"
+    },
+    {
+      "id": "ce8a91a9-348f-4225-af5e-4da3dc2d3c36",
+      "name": "Labour Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "startDate": "2023-09-04",
+      "endDate": "2023-09-04"
+    },
+    {
+      "id": "fd0c4403-f76d-4946-9b8d-1e24c26ce344",
+      "name": "National Day for Truth and Reconciliation",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=9;BYMONTHDAY=30"
+    },
+    {
+      "id": "ffb824d7-e1f3-430a-b3f7-89938d0581c1",
+      "name": "Thanksgiving",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "startDate": "2023-10-09",
+      "endDate": "2023-10-09"
+    },
+    {
+      "id": "713cdc82-5b6b-4931-ab6e-f34f288a2ab0",
+      "name": "Remembrance Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=11;BYMONTHDAY=11"
+    }
+  ],
+  "schedules": [
+    {
+      "name": "Example",
+      "manualClose": false,
+      "timeZone": "Canada/Eastern",
+      "rules": [
+        "5c0c7b9c-787f-4245-bb5b-b31160cb3ec5",
+        "c4d10897-63b8-485e-bd8a-0db23276dec8",
+        "46c34f64-1efb-4453-9178-1ae6573d13ae",
+        "ff0b8e25-ba11-4474-9855-b9a3cb7c6a21",
+        "739457f9-dcd4-401f-9d5b-4119194d0d4e",
+        "fd1da4dc-0edf-486b-854d-e56ad60b9c9f",
+        "e123ee1c-5268-46c6-b0f4-5d7fbc399154",
+        "84a373e1-8a2c-4462-b542-3f61b97c8a16",
+        "ce8a91a9-348f-4225-af5e-4da3dc2d3c36",
+        "fd0c4403-f76d-4946-9b8d-1e24c26ce344",
+        "713cdc82-5b6b-4931-ab6e-f34f288a2ab0",
+        "ffb824d7-e1f3-430a-b3f7-89938d0581c1",
+        "d431e78c-525b-4d94-9ec3-04ef1d1379e0"
+      ]
+    }
+  ]
+}
