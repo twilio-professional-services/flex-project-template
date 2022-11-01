@@ -1,9 +1,9 @@
 import { ITask, useFlexSelector, Manager } from '@twilio/flex-ui';
-import React, { FC } from 'react';
+import React from 'react';
 import moment from 'moment';
 import 'moment-timezone';
 import { TaskAttributes } from 'types/task-router/Task';
-import { Button, Box, Heading, Paragraph, Flex as Flex } from "@twilio-paste/core";
+import { Button, Box, Heading, Text, Flex as Flex } from "@twilio-paste/core";
 import { InformationIcon } from "@twilio-paste/icons/esm/InformationIcon";
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
@@ -44,34 +44,34 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
       {taskType == 'callback' &&
         <Box element="C_AND_V_CONTENT_BOX">
           <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">Callback Request</Heading>
-          <Paragraph element="C_AND_V_CONTENT_PARAGRAPH">A contact has requested an immediate callback.</Paragraph>
+          <Text as="span">A contact has requested an immediate callback.</Text>
         </Box>
       }
 
       {taskType == 'voicemail' &&
         <Box element="C_AND_V_CONTENT_BOX">
           <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">Contact Voicemail</Heading>
-          <Paragraph element="C_AND_V_CONTENT_PARAGRAPH">A contact has left a voicemail that requires attention.</Paragraph> 
+          <Text as="span">A contact has left a voicemail that requires attention.</Text> 
         </Box>
       }      
       
       {callBackData.recordingUrl && !callBackData.isDeleted &&
         <Box element="C_AND_V_CONTENT_BOX">
           <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">Voicemail recording</Heading>
-          <Paragraph element="C_AND_V_CONTENT_PARAGRAPH"><audio src={callBackData.recordingUrl} controls /></Paragraph>
+          <Text as="span"><audio src={callBackData.recordingUrl} controls /></Text>
         </Box>
       }    
       
       {callBackData.transcriptText && !callBackData.isDeleted &&
           <Box element="C_AND_V_CONTENT_BOX">
             <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">Voicemail transcript</Heading>
-            <Paragraph element="C_AND_V_CONTENT_PARAGRAPH">{callBackData.transcriptText}</Paragraph>
+            <Text as="span">{callBackData.transcriptText}</Text>
           </Box>
         }
       
       <Box element="C_AND_V_CONTENT_BOX">
         <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">Contact phone</Heading>
-        <Paragraph element="C_AND_V_CONTENT_PARAGRAPH">{callBackData?.numberToCall}</Paragraph>
+        <Text as="span">{callBackData?.numberToCall}</Text>
       </Box>
 
       <Box element="C_AND_V_CONTENT_BOX">
@@ -93,7 +93,7 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
       { allowRequeue &&
         <Box element="C_AND_V_CONTENT_BOX">
           <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">Callback attempt</Heading>
-          <Paragraph element="C_AND_V_CONTENT_PARAGRAPH">{thisAttempt} of { maxAttempts}</Paragraph>
+          <Text as="span">{thisAttempt} of { maxAttempts}</Text>
         </Box>
       }
       </Flex>

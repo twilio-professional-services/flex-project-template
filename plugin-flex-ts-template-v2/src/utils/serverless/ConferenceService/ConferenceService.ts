@@ -8,6 +8,7 @@ import { ConferenceParticipant } from '@twilio/flex-ui';
 import ApiService from '../ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedCall, FetchedConferenceParticipant } from '../../../types/serverless/twilio-api';
+import { ParticipantBase, ParticipantTypes, VoiceProperties } from '@twilio/flex-ui/src/state/Participants/participants.types';
 
 export interface GetCallResponse {
   success: boolean;
@@ -106,43 +107,6 @@ class ConferenceService extends ApiService {
           reject(error);
         });
     })
-  }
-
-  addConnectingParticipant = (conferenceSid: string, callSid: string, participantType: string) => {
-    const flexState = this.manager.store.getState().flex;
-    const dispatch = this.manager.store.dispatch;
-
-    const conferenceStates = flexState.conferences.states;
-    const conferences = new Set();
-
-    console.log('Populating conferences set');
-    conferenceStates.forEach(conference => {
-
-      const currentConference = conference.source;
-      console.log('Checking conference SID:', currentConference.conferenceSid);
-      if (currentConference.conferenceSid !== conferenceSid) {
-
-        console.log('Not the desired conference');
-        conferences.add(currentConference);
-
-      } else {
-        const participants = currentConference.participants;
-        const fakeSource = {
-          connecting: true,
-          participant_type: participantType,
-          status: 'joined'
-        };
-
-        const fakeParticipant = new ConferenceParticipant(fakeSource, callSid);
-        console.log('Adding fake participant:', fakeParticipant);
-        participants.push(fakeParticipant);
-        conferences.add(conference.source);
-
-      }
-
-    });
-    console.log('Updating conferences:', conferences);
-    dispatch({ type: 'CONFERENCE_MULTIPLE_UPDATE', payload: { conferences } });
   }
 
   holdParticipant = (conference: string, participantSid: string): Promise<string> => {

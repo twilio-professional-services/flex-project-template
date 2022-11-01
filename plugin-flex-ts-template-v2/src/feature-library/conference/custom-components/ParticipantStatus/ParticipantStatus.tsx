@@ -32,7 +32,7 @@ const ParticipantStatus = (props: OwnProps) => {
   if (participant && participant.connecting) {
     statusTemplate = templates.CallParticipantStatusConnecting;
   }
-  if (componentViewState && participant && componentViewState[participant.callSid] && componentViewState[participant.callSid].showKickConfirmation) {
+  if (componentViewState && participant && participant.callSid && componentViewState[participant.callSid] && componentViewState[participant.callSid].showKickConfirmation) {
     statusTemplate = templates.CallParticipantStatusKickConfirmation;
   }
   

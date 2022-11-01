@@ -55,7 +55,7 @@ const ParticipantActionsButtons = (props: OwnProps) => {
           };
         }
         
-        if (newViewState[participant.callSid]) {
+        if (participant.callSid && newViewState[participant.callSid]) {
           delete newViewState[participant.callSid];
         }
         
@@ -69,7 +69,7 @@ const ParticipantActionsButtons = (props: OwnProps) => {
   
   useEffect(() => {
     const { participant } = props;
-    if (!participant) return;
+    if (!participant || !participant.callSid) return;
     
     let newViewState: {[index: string]:any} = {};
     
@@ -101,9 +101,6 @@ const ParticipantActionsButtons = (props: OwnProps) => {
     
     const { callSid, workerSid } = participant;
     let participantType = participant.participantType;
-    
-    // FLEXEXP-865
-    if (!participantType) participantType = 'unknown';
     
     Actions.invokeAction(participant.onHold ? 'UnholdParticipant' : 'HoldParticipant', {
       participantType,
