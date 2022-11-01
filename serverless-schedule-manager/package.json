@@ -23,6 +23,7 @@
     "twilio-flex-token-validator": "^1.5.6"
   },
   "devDependencies": {
+    "twilio-cli": "^5.2.0",
     "twilio-run": "^3.4.2"
   },
   "engines": {
