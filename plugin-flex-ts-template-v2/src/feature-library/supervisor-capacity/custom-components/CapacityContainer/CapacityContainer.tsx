@@ -121,7 +121,7 @@ export default function CapacityContainer(props: OwnProps) {
       <SectionHeader>Channel Capacity</SectionHeader>
       { workerChannels.length > 0 && workerChannels.map((workerChannel) => (
         <CapacityChannel
-          isSaving={isSaving}
+          isSaving={isSaving || isLoading}
           resetCount={resetCount}
           workerChannel={workerChannel}
           channelSettingsChanged={channelSettingsChanged}

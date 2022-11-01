@@ -9,7 +9,7 @@ const { enabled } = custom_data?.features?.internal_call || {};
 export function handleInternalHoldCall(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
 
-  flex.Actions.addListener("beforeHoldCall", async (payload, abortFunction) => {
+  flex.Actions.addListener("beforeHoldCall", async (payload: any, abortFunction: () => void) => {
     if (!isInternalCall(payload.task)) {
       return;
     }

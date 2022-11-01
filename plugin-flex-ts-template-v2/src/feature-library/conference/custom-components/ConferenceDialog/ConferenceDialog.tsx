@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Actions, Manager, ITask, withTaskContext, useFlexSelector } from '@twilio/flex-ui';
+import { useDispatch } from 'react-redux';
 import { AppState } from '../../../../flex-hooks/states'
 import ConferenceService from '../../../../utils/serverless/ConferenceService/ConferenceService';
 
@@ -9,6 +10,7 @@ import {Button} from '@twilio-paste/core/button';
 import {Input} from '@twilio-paste/core/input';
 import {Label} from '@twilio-paste/core/label';
 import {Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading} from '@twilio-paste/core/modal';
+import { addConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
 
 export interface OwnProps {
   task?: ITask
@@ -23,6 +25,7 @@ const ConferenceDialog = (props: OwnProps) => {
   const conferenceDialogState = componentViewStates && componentViewStates.ConferenceDialog;
   const isOpen = conferenceDialogState && conferenceDialogState.isOpen;
   
+  const dispatch = useDispatch();
   const modalHeadingID = useUID();
   const inputRef = React.createRef<HTMLInputElement>();
   const inputID = useUID();
@@ -88,7 +91,11 @@ const ConferenceDialog = (props: OwnProps) => {
     try {
   
       participantCallSid = await ConferenceService.addParticipant(mainConferenceSid, from, conferenceTo);
-      ConferenceService.addConnectingParticipant(mainConferenceSid, participantCallSid, 'unknown');
+      dispatch(addConnectingParticipant({
+        callSid: participantCallSid,
+        conferenceSid: mainConferenceSid,
+        phoneNumber: conferenceTo
+      }));
   
     } catch (error) {
       console.error('Error adding conference participant:', error);

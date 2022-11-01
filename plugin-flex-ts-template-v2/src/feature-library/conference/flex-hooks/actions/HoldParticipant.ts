@@ -8,14 +8,14 @@ const { enabled = false } = custom_data?.features.conference || {};
 export function handleHoldConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
 
-  flex.Actions.addListener("beforeHoldParticipant", async (payload, abortFunction) => {
+  flex.Actions.addListener("beforeHoldParticipant", async (payload: any, abortFunction: () => void) => {
     const { participantType, targetSid: participantSid, task } = payload;
     
     if (participantType !== 'unknown') {
       return;
     }
     
-    const { conferenceSid } = task.conference;
+    const conferenceSid = task.attributes?.conference?.sid;
     abortFunction();
     console.log('Holding participant', participantSid);
     await ConferenceService.holdParticipant(conferenceSid, participantSid);

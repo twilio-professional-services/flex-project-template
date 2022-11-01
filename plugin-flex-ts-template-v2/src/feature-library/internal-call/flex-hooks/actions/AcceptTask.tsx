@@ -9,7 +9,7 @@ const { enabled } = custom_data?.features?.internal_call || {};
 export function handleInternalAcceptTask(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
 
-  flex.Actions.addListener("beforeAcceptTask", async (payload, abortFunction) => {
+  flex.Actions.addListener("beforeAcceptTask", async (payload: any, abortFunction: () => void) => {
     if (!isInternalCall(payload.task)) {
       return;
     }
