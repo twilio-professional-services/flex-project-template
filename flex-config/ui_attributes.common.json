@@ -102,6 +102,9 @@
       },
       "supervisor_capacity": {
         "enabled": true
+      },
+      "schedule_manager": {
+        "enabled": false
       }
     }
   }

@@ -1,0 +1,80 @@
+{
+  "rules": [
+    {
+      "id": "c4d10897-63b8-485e-bd8a-0db23276dec8",
+      "name": "Christmas Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=25"
+    },
+    {
+      "id": "46c34f64-1efb-4453-9178-1ae6573d13ae",
+      "name": "New Year's Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=1;BYMONTHDAY=1"
+    },
+    {
+      "id": "5c0c7b9c-787f-4245-bb5b-b31160cb3ec5",
+      "name": "Open hours",
+      "isOpen": true,
+      "startTime": "08:00",
+      "endTime": "17:00",
+      "dateRRule": "RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR"
+    },
+    {
+      "id": "e30640e1-e501-40b9-924f-f7b0f94cbe03",
+      "name": "Australia Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=1;BYMONTHDAY=26"
+    },
+    {
+      "id": "fd1da4dc-0edf-486b-854d-e56ad60b9c9f",
+      "name": "Good Friday",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "startDate": "2023-04-07",
+      "endDate": "2023-04-07"
+    },
+    {
+      "id": "739457f9-dcd4-401f-9d5b-4119194d0d4e",
+      "name": "Easter Monday",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "startDate": "2023-04-10",
+      "endDate": "2023-04-10"
+    },
+    {
+      "id": "d540f4bd-c86d-4b7f-8cd3-80c09a1e2773",
+      "name": "Anzac Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=4;BYMONTHDAY=25"
+    },
+    {
+      "id": "ff0b8e25-ba11-4474-9855-b9a3cb7c6a21",
+      "name": "Boxing Day",
+      "isOpen": false,
+      "closedReason": "holiday",
+      "dateRRule": "RRULE:FREQ=YEARLY;BYMONTH=12;BYMONTHDAY=26"
+    }
+  ],
+  "schedules": [
+    {
+      "name": "Example",
+      "manualClose": false,
+      "timeZone": "Australia/Sydney",
+      "rules": [
+        "5c0c7b9c-787f-4245-bb5b-b31160cb3ec5",
+        "c4d10897-63b8-485e-bd8a-0db23276dec8",
+        "46c34f64-1efb-4453-9178-1ae6573d13ae",
+        "d540f4bd-c86d-4b7f-8cd3-80c09a1e2773",
+        "e30640e1-e501-40b9-924f-f7b0f94cbe03",
+        "ff0b8e25-ba11-4474-9855-b9a3cb7c6a21",
+        "739457f9-dcd4-401f-9d5b-4119194d0d4e",
+        "fd1da4dc-0edf-486b-854d-e56ad60b9c9f"
+      ]
+    }
+  ]
+}
