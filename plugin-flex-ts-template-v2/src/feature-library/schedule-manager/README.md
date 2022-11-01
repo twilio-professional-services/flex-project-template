@@ -18,32 +18,29 @@ To manage rules and schedules, a Flex plugin is provided which adds a Schedule M
 
 To allow for greater scalability than provided by Twilio Sync and some other solutions, configuration is stored within a Twilio Asset behind a Twilio Function. When updates to the configuration are being saved, a new asset version is generated and included in a new build, which is deployed when completed. This means that publishing schedules may take a few moments.
 
-## Pre-requisites
-
-The plugin component is designed for usage with Flex UI 2.x only.
-
-Make sure you have [Node.js](https://nodejs.org) as well as [`npm`](https://npmjs.com) installed.
-
-Next, please install the [Twilio CLI](https://www.twilio.com/docs/twilio-cli/quickstart). If you are using Homebrew on macOS, you can do so by running:
-
-```bash
-brew tap twilio/brew && brew install twilio
-```
-
-Finally, install the [Flex Plugin extension](https://www.twilio.com/docs/flex/developer/plugins/cli/install) and the [serverless plugin](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started) for the Twilio CLI:
-
-```bash
-twilio plugins:install @twilio-labs/plugin-flex
-twilio plugins:install @twilio-labs/plugin-serverless
-```
-
 ## Installation
 
-First, deploy the serverless functions:
+First, switch to the `serverless-schedule-manager` directory and install:
 
 ```bash
 cd serverless-schedule-manager
 npm install
+```
+
+Then, copy `.env.example` to `.env` and configure your Twilio account SID and token:
+
+```
+ACCOUNT_SID=ACxxxxxx
+AUTH_TOKEN=abc123
+
+TWILIO_SERVICE_RETRY_LIMIT=5
+TWILIO_SERVICE_MIN_BACKOFF=100
+TWILIO_SERVICE_MAX_BACKOFF=300
+```
+
+Finally, deploy the serverless functions:
+
+```bash
 twilio serverless:deploy
 ```
 
@@ -58,6 +55,7 @@ Then, update your flex-config ui_attributes file(s) with the serverless function
   "custom_data": {
     "features": {
       "schedule_manager": {
+        "enabled": true,
         "serverless_domain": "my-serverless-domain.twil.io"
       }
     }
