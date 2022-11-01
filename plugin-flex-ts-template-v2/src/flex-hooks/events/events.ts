@@ -20,6 +20,7 @@ import DualChannelRecordingLoaded from "../../feature-library/dual-channel-recor
 import PauseRecordingLoaded from "../../feature-library/pause-recording/flex-hooks/events/pluginsLoaded";
 import TeamsViewFiltersLoaded from "../../feature-library/teams-view-filters/flex-hooks/events/pluginsLoaded";
 import SupervisorCapacityLoaded from "../../feature-library/supervisor-capacity/flex-hooks/events/pluginsLoaded";
+import ScheduleManagerLoaded from "../../feature-library/schedule-manager/flex-hooks/events/pluginsLoaded";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -35,7 +36,8 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     DualChannelRecordingLoaded,
     PauseRecordingLoaded,
     TeamsViewFiltersLoaded,
-    SupervisorCapacityLoaded
+    SupervisorCapacityLoaded,
+    ScheduleManagerLoaded
   ],
   taskAccepted: [
     taskAcceptedHandlerActivityReservationHandler,
