@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - schmgr-ci
 
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
