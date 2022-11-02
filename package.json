@@ -1,7 +1,7 @@
 {
   "name": "flex-project-template",
-  "version": "1.0.0",
-  "description": "## What is it? This repository provides development teams with a starting point for flex projects.",
+  "version": "1.0.1",
+  "description": "This repository provides development teams with a starting point for flex projects or developing flex features.",
   "scripts": {
     "postinstall": "(cd serverless-functions && npm install && cp -n .env.example .env); (cd flex-config && npm install && cp -n .env.example .env); (cd plugin-flex-ts-template-v2 && npm install)",
     "remove-features": "node scripts/remove-features.js",
