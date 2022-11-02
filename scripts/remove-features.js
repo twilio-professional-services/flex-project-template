@@ -73,8 +73,3 @@ shell.echo(
   `Deleting schedule-manager serverless package ${scheduleManagerServerlessDir}`
 );
 shell.rm("-rf", `${scheduleManagerServerlessDir}`);
-
-shell.echo(
-  `Deleting schedule-manager plugin utils ${pluginSrc}/utils/serverless/ScheduleManager`
-);
-shell.rm("-rf", `${scheduleManagerServerlessDir}`);
