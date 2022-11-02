@@ -1,5 +1,5 @@
 import { ITask, Manager, Notifications } from "@twilio/flex-ui";
-import RecordingService from "../../../utils/serverless/Recording/RecordingService";
+import RecordingService from "./RecordingService";
 import { UIAttributes } from "../../../types/manager/ServiceConfiguration";
 import { NotificationIds } from "../flex-hooks/notifications/PauseRecording";
 import { AppState, reduxNamespace } from "../../../flex-hooks/states";

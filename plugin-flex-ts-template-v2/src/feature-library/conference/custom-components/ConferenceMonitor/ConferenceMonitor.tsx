@@ -1,6 +1,6 @@
 import { ConferenceParticipant, ITask } from '@twilio/flex-ui';
 import * as React from 'react';
-import ConferenceService from '../../../../utils/serverless/ConferenceService/ConferenceService';
+import ConferenceService from '../../utils/ConferenceService';
 
 export interface OwnProps {
   task?: ITask

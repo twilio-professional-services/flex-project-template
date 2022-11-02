@@ -5,7 +5,7 @@
 
 */
 import { ConferenceParticipant } from '@twilio/flex-ui';
-import ApiService from '../ApiService';
+import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedCall, FetchedConferenceParticipant } from '../../../types/serverless/twilio-api';
 import { ParticipantBase, ParticipantTypes, VoiceProperties } from '@twilio/flex-ui/src/state/Participants/participants.types';

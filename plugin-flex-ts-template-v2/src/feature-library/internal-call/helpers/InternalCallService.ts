@@ -1,6 +1,6 @@
 import { ITask } from "@twilio/flex-ui";
 import { Reservation } from "types/task-router";
-import ApiService from "../ApiService";
+import ApiService from "../../../utils/serverless/ApiService";
 
 class InternalCallService extends ApiService {
   acceptInternalTask = async (reservation: Reservation, taskSid: string) => {

@@ -4,7 +4,7 @@ import { ConferenceState } from '@twilio/flex-ui/src/state/Conferences';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState, reduxNamespace } from '../../../../flex-hooks/states';
 import { removeConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
-import ConferenceService from '../../../../utils/serverless/ConferenceService/ConferenceService';
+import ConferenceService from '../../utils/ConferenceService';
 import { FetchedCall } from '../../../../types/serverless/twilio-api';
 
 export interface OwnProps {

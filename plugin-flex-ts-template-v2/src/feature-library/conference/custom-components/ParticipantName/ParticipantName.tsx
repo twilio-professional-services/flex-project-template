@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { styled, ConferenceParticipant, ITask } from '@twilio/flex-ui';
-import ConferenceService from '../../../../utils/serverless/ConferenceService/ConferenceService';
+import ConferenceService from '../../utils/ConferenceService';
 import { FetchedCall } from '../../../../types/serverless/twilio-api';
 
 const Name = styled('div')`

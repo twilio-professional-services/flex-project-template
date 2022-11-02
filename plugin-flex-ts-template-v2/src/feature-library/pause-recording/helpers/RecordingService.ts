@@ -1,4 +1,4 @@
-import ApiService from '../ApiService';
+import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedRecording } from '../../../types/serverless/twilio-api';
 
