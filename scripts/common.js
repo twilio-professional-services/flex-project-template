@@ -19,6 +19,7 @@ if(shell.test('-d', `${originalPluginDir}`)){
 
 const pluginDir = tempPluginDir;
 const serverlessDir = 'serverless-functions';
+const scheduleManagerServerlessDir = 'serverless-schedule-manager';
 const flexConfigDir = 'flex-config';
 const templateDirectory = `${pluginDir}/template-files/no-features`;
 const featureDirectory = `${pluginDir}/src/feature-library`;
@@ -30,6 +31,7 @@ const flexConfigTemplateDir = `${flexConfigDir}/template-files`
 
 exports.pluginDir = pluginDir;
 exports.serverlessDir =  serverlessDir;
+exports.scheduleManagerServerlessDir = scheduleManagerServerlessDir;
 exports.flexConfigDir = flexConfigDir;
 exports.templateDirectory = templateDirectory;
 exports.featureDirectory = featureDirectory;

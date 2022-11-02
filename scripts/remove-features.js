@@ -5,7 +5,7 @@ var shell = require("shelljs");
    as most work going forward is expected to be built on flex v2.x
 */
   
-const { templateDirectory, featureDirectory, pluginSrc, serverlessSrc, flexConfigDir, flexConfigTemplateDir } = require ('./common');
+const { templateDirectory, featureDirectory, pluginSrc, serverlessSrc, flexConfigDir, flexConfigTemplateDir, scheduleManagerServerlessDir } = require ('./common');
 
 const filesToCopy = [
   {
@@ -68,3 +68,13 @@ shell.echo(
 );
 shell.rm("-rf", `${serverlessSrc}/functions/features/*`);
 shell.rm("-rf", `${serverlessSrc}/assets/features/*`);
+
+shell.echo(
+  `Deleting schedule-manager serverless package ${scheduleManagerServerlessDir}`
+);
+shell.rm("-rf", `${scheduleManagerServerlessDir}`);
+
+shell.echo(
+  `Deleting schedule-manager plugin utils ${pluginSrc}/utils/serverless/ScheduleManager`
+);
+shell.rm("-rf", `${scheduleManagerServerlessDir}`);

@@ -1,0 +1,10 @@
+{
+  "custom_data": {
+    "serverless_functions_domain": "",
+    "features": {
+      "schedule_manager": {
+        "serverless_domain": ""
+      }
+    }
+  }
+}
