@@ -27,11 +27,15 @@ export function handleConferenceHangup(flex: typeof Flex, manager: Flex.Manager)
       conference.participants.forEach(async (participant: Flex.ConferenceParticipant) => {
         const { participantType, workerSid, callSid } = participant;
         if (participant.onHold && participant.status === "joined") {
-          await flex.Actions.invokeAction("UnholdParticipant", {
-            participantType,
-            task: payload.task,
-            targetSid: participantType === 'worker' ? workerSid : callSid
-          });
+          try {
+            await flex.Actions.invokeAction("UnholdParticipant", {
+              participantType,
+              task: payload.task,
+              targetSid: participantType === 'worker' ? workerSid : callSid
+            });
+          } catch (error) {
+            console.log('Conference: unable to unhold participant', error)
+          }
         }
       });
   
