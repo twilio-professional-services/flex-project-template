@@ -67,8 +67,12 @@ const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
   
   if (!callSid) return;
   
-  const recording = await RecordingService.startDualChannelRecording(callSid);
-  await addCallDataToTask(task, callSid, recording);
+  try {
+    const recording = await RecordingService.startDualChannelRecording(callSid);
+    await addCallDataToTask(task, callSid, recording);
+  } catch (error) {
+    console.error('Unable to start dual channel recording.', error);
+  }
 }
 
 export default taskAcceptedHandler;

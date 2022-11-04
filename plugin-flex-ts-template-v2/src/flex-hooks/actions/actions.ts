@@ -22,7 +22,11 @@ import { handleInternalRejectTask } from "../../feature-library/internal-call/fl
 import { handleChatTransfer } from "../../feature-library/chat-transfer/flex-hooks/actions/TransferTask";
 import { handleDualChannelCompleteTask } from "../../feature-library/dual-channel-recording/flex-hooks/actions/CompleteTask";
 import { handleDualChannelHangupCall } from "../../feature-library/dual-channel-recording/flex-hooks/actions/HangupCall";
-import { interceptQueueFilter, logApplyListFilters } from "../../feature-library/teams-view-filters/flex-hooks/actions/ApplyTeamsViewFilters"
+import { interceptQueueFilter, logApplyListFilters } from "../../feature-library/teams-view-filters/flex-hooks/actions/ApplyTeamsViewFilters";
+import { handleMultiCallHangupCall } from "../../feature-library/multi-call/flex-hooks/actions/HangupCall";
+import { handleMultiCallToggleMute } from "../../feature-library/multi-call/flex-hooks/actions/ToggleMute";
+import { handleMultiCallUnholdCall } from "../../feature-library/multi-call/flex-hooks/actions/UnholdCall";
+import { handleMultiCallUnholdParticipant } from "../../feature-library/multi-call/flex-hooks/actions/UnholdParticipant";
 
 const actionsToRegister: Actions = {
   AcceptTask: {
@@ -47,7 +51,8 @@ const actionsToRegister: Actions = {
   HangupCall: {
     before: [
       handleConferenceHangup,
-      handleDualChannelHangupCall
+      handleDualChannelHangupCall,
+      handleMultiCallHangupCall
     ],
     after: [],
     replace: [],
@@ -57,7 +62,14 @@ const actionsToRegister: Actions = {
     after: [],
     replace: [],
   },
-  UnholdCall: { before: [handleInternalUnholdCall], after: [], replace: [] },
+  UnholdCall: {
+    before: [
+      handleInternalUnholdCall,
+      handleMultiCallUnholdCall
+    ],
+    after: [],
+    replace: []
+  },
   HoldParticipant: {
     before: [handleHoldConferenceParticipant],
     after: [],
@@ -96,8 +108,16 @@ const actionsToRegister: Actions = {
     after: [],
     replace: [],
   },
+  ToggleMute: {
+    before: [handleMultiCallToggleMute],
+    after: [],
+    replace: [],
+  },
   UnHoldParticipant: {
-    before: [handleUnholdConferenceParticipant],
+    before: [
+      handleUnholdConferenceParticipant,
+      handleMultiCallUnholdParticipant
+    ],
     after: [],
     replace: [],
   },

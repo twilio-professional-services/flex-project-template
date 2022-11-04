@@ -16,6 +16,7 @@ import ChatTransferConfig from "../../feature-library/chat-transfer/types/Servic
 import TeamViewFiltersConfig from "../../feature-library/teams-view-filters/types/ServiceConfiguration";
 import SupervisorCapacityConfig from "../../feature-library/supervisor-capacity/types/ServiceConfiguration";
 import ScheduleManagerConfig from "../../feature-library/schedule-manager/types/ServiceConfiguration";
+import MultiCallConfig from "../../feature-library/multi-call/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguratoin {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -36,4 +37,5 @@ export default interface FeatureServiceConfiguratoin {
   teams_view_filters: TeamViewFiltersConfig;
   supervisor_capacity: SupervisorCapacityConfig;
   schedule_manager: ScheduleManagerConfig;
+  multi_call: MultiCallConfig;
 }
