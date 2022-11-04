@@ -18,6 +18,8 @@ const tokenUpdatedHandler = (tokenPayload: SSOTokenPayload, flexEvent: FlexEvent
   }
   
   SecondDevice?.updateToken(tokenPayload.token);
+  
+  console.log('MultiCall: Token updated');
 };
 
 export default tokenUpdatedHandler;

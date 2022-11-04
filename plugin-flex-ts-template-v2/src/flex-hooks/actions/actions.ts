@@ -23,8 +23,7 @@ import { handleChatTransfer } from "../../feature-library/chat-transfer/flex-hoo
 import { handleDualChannelCompleteTask } from "../../feature-library/dual-channel-recording/flex-hooks/actions/CompleteTask";
 import { handleDualChannelHangupCall } from "../../feature-library/dual-channel-recording/flex-hooks/actions/HangupCall";
 import { interceptQueueFilter, logApplyListFilters } from "../../feature-library/teams-view-filters/flex-hooks/actions/ApplyTeamsViewFilters";
-import { handleMultiCallHangupCall } from "../../feature-library/multi-call/flex-hooks/actions/HangupCall";
-import { handleMultiCallToggleMute } from "../../feature-library/multi-call/flex-hooks/actions/ToggleMute";
+import { handleMultiCallSelectTask } from "../../feature-library/multi-call/flex-hooks/actions/SelectTask";
 import { handleMultiCallUnholdCall } from "../../feature-library/multi-call/flex-hooks/actions/UnholdCall";
 import { handleMultiCallUnholdParticipant } from "../../feature-library/multi-call/flex-hooks/actions/UnholdParticipant";
 
@@ -51,8 +50,7 @@ const actionsToRegister: Actions = {
   HangupCall: {
     before: [
       handleConferenceHangup,
-      handleDualChannelHangupCall,
-      handleMultiCallHangupCall
+      handleDualChannelHangupCall
     ],
     after: [],
     replace: [],
@@ -91,7 +89,7 @@ const actionsToRegister: Actions = {
     replace: [],
   },
   SelectTask: {
-    before: [],
+    before: [handleMultiCallSelectTask],
     after: [autoSelectCallbackTaskWhenEndingCall],
     replace: [],
   },
@@ -109,7 +107,7 @@ const actionsToRegister: Actions = {
     replace: [],
   },
   ToggleMute: {
-    before: [handleMultiCallToggleMute],
+    before: [],
     after: [],
     replace: [],
   },

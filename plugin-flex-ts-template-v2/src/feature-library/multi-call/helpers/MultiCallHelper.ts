@@ -1,4 +1,4 @@
-import { Actions, ConferenceParticipant, Manager, VERSION as FlexVersion, } from '@twilio/flex-ui';
+import { Actions, ConferenceParticipant, ITask, Manager, TaskHelper, VERSION as FlexVersion, } from '@twilio/flex-ui';
 import { Call, Device } from '@twilio/voice-sdk';
 
 export let SecondDevice: Device | null = null;
@@ -22,16 +22,20 @@ const createNewDevice = (manager: Manager) => {
 }
 
 export const handleFlexCallIncoming = (manager: Manager, call: Call) => {
-  console.log('MultiCall: Incoming FlexDeviceCall');
+  console.log('MultiCall: FlexDeviceCall incoming');
   
   FlexDeviceCall = call;
   call.on("disconnect", handleFlexCallDisconnect);
+  
   let newDevice = false;
   
   if (!SecondDevice || SecondDevice?.state === 'destroyed') {
     // Create a new device so that an additional incoming call can be handled
     createNewDevice(manager);
     newDevice = true;
+  } else if (SecondDeviceCall) {
+    // place other calls on hold
+    holdOtherCalls(FlexDeviceCall?.parameters.CallSid ?? "");
   }
   
   if (!newDevice) {
@@ -48,7 +52,7 @@ export const handleFlexCallIncoming = (manager: Manager, call: Call) => {
 }
 
 const handleFlexCallDisconnect = (call: Call) => {
-  console.log('MultiCall: FlexDevice disconnect', call);
+  console.log('MultiCall: FlexDeviceCall disconnect', call);
   FlexDeviceCall = null;
   
   if (!SecondDeviceCall) {
@@ -62,18 +66,21 @@ const handleFlexCallDisconnect = (call: Call) => {
 }
 
 const handleSecondCallIncoming = (call: Call) => {
-  console.log('MultiCall: SecondDevice incoming', call);
+  console.log('MultiCall: SecondDeviceCall incoming', call);
   
   call.on("accept", (_innerCall) => {
-    console.log('MultiCall: SecondDevice accept', call);
+    console.log('MultiCall: SecondDeviceCall accept', call);
     SecondDeviceCall = call;
     
     // place other calls on hold
     holdOtherCalls(SecondDeviceCall?.parameters.CallSid ?? "");
+    
+    // put the current call in state
+    Manager.getInstance().store.dispatch({type:"PHONE_ADD_CALL", payload:SecondDeviceCall});
   });
   
   call.on("disconnect", (_innerCall: Call) => {
-    console.log('MultiCall: SecondDevice disconnect', call);
+    console.log('MultiCall: SecondDeviceCall disconnect', call);
     SecondDeviceCall = null;
     
     if (!FlexDeviceCall) {
@@ -95,26 +102,71 @@ const destroySecondDevice = () => {
   console.log('MultiCall: SecondDevice destroyed');
 }
 
-export const holdOtherCalls = (ignoreCallSid: string) => {
-  // TODO: Test if we need to also mute/unmute the other call so that recording doesn't leak
-  
+const holdOtherCalls = (ignoreCallSid: string) => {
   Manager.getInstance().store.getState().flex.worker.tasks.forEach((task) => {
-    let skip = false;
+    const callSid = getMyCallSid(task);
     
+    if (callSid === ignoreCallSid) return;
+    
+    if (callSid) {
+      // mute the call: even though we're holding it, the worker is still being recorded
+      muteCall(callSid, true);
+    }
+    
+    // hold individual participants in case of a multi-party conference
     if (task && task.conference && task.conference.participants) {
-      // Make sure we don't hold the call we just accepted.
       task.conference.participants.forEach((p: ConferenceParticipant) => {
-        // Find our worker in the list of participants to get the call SID.
-        if (p.isCurrentWorker && p.callSid === ignoreCallSid) {
-          skip = true;
+        if (!p.isCurrentWorker && p.status === 'joined') {
+          Actions.invokeAction("HoldParticipant", {
+            participantType: p.participantType,
+            task,
+            targetSid: p.participantType === 'worker' ? p.workerSid : p.callSid
+          });
         }
       });
     }
-    
-    if (skip) return;
-    
-    Actions.invokeAction("HoldCall", {
-      task
-    });
   });
+}
+
+const muteCall = (callSid: string, mute: boolean) => {
+  if (FlexDeviceCall && FlexDeviceCall.parameters.CallSid === callSid) {
+    FlexDeviceCall.mute(mute);
+  } else if (SecondDeviceCall && SecondDeviceCall.parameters.CallSid === callSid) {
+    SecondDeviceCall.mute(mute);
+  }
+}
+
+export const getMyCallSid = (task: ITask): string | null => {
+  let callSid = null;
+  
+  if (task && task.conference && task.conference.participants) {
+    task.conference.participants.forEach((p: ConferenceParticipant) => {
+      // Find our worker in the list of participants to get the call SID.
+      if (p.isCurrentWorker && p.callSid) {
+        callSid = p.callSid;
+      }
+    });
+  }
+  
+  return callSid;
+}
+
+export const handleUnhold = (payload: any) => {
+  let task;
+  
+  if (payload.task) {
+    task = payload.task;
+  } else if (payload.sid) {
+    task = TaskHelper.getTaskByTaskSid(payload.sid);
+  }
+  
+  const callSid = getMyCallSid(task);
+  
+  if (callSid) {
+    // unmute the call, which we muted if we held it
+    muteCall(callSid, false);
+    
+    // pass in the SID of the call we just unheld so that it doesn't get held again
+    holdOtherCalls(callSid);
+  }
 }
