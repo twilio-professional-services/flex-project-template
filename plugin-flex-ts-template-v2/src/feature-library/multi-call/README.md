@@ -28,3 +28,5 @@ The reason that Flex does not support multiple simultaneous calls out-of-the-box
 Due to the Voice SDK limitation, Flex's state maintains an assumption that only one call at a time may be considered active. To work around this, the `multi-call` feature changes the active call in Flex state whenever the selected task changes.
 
 When handling more than one call at once, only one call should be heard by the agent at a time. To handle this, when accepting or un-holding a call, any other active call is immediately placed on hold and muted. Mute is toggled in addition to hold in order to prevent the agent from being recorded on the wrong call.
+
+Finally, the teams view 'calls' column has been replaced and re-styled to prevent multiple calls from being cut off in the view.
