@@ -10,7 +10,7 @@ This feature requires some TaskRouter configuration changes in addition to Flex 
 
 ## TaskRouter
 
-First, agents will need their capacity for the `voice` channel to be increased from 1 to 2. This can be done via the console, API, or via the `supervisor-capacity` plugin feature. This will enable TaskRouter to successfully transfer a call to a worker that already has another call.
+First, agents will need their capacity for the `voice` channel to be increased from 1 to 2. This can be done via the console, API, Single Sign On configuration, or via the `supervisor-capacity` plugin feature. This will enable TaskRouter to successfully transfer a call to a worker that already has another call.
 
 Now that workers can accept multiple calls, we need to update the TaskRouter workflow(s) so that agents are not routed multiple calls from the queue. For each workflow filter, set the target worker expression to `worker.channel.voice.available_capacity_percentage == 100`. If you already have a target worker expression defined, you will need to combine the logic with `AND`.
 
