@@ -3,7 +3,7 @@ import ConferenceButton from '../../custom-components/ConferenceButton';
 
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes || {}
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes || {}
 const { enabled = false } = custom_data?.features?.conference || {};
 
 export function addConferenceToCallCanvasActions(flex: typeof Flex) {

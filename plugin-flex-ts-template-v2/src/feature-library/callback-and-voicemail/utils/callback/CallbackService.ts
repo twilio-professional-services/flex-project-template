@@ -186,7 +186,7 @@ class CallbackService extends ApiService {
     };
 
     const response = await this.fetchJsonWithReject<CreateCallbackResponse>(
-      `https://${this.serverlessDomain}/features/callbacks/flex/create-callback`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/features/callbacks/flex/create-callback`,
       {
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
