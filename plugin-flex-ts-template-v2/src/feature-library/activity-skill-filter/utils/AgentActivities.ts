@@ -5,7 +5,7 @@ import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { Activity } from 'types/task-router';
 import { ActivitySkillFilterRules } from '../types/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 
 export interface ActivityCssConfig {
   idx: number,

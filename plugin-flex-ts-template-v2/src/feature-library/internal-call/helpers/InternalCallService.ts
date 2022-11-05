@@ -7,7 +7,7 @@ class InternalCallService extends ApiService {
     if (typeof reservation.task.attributes.conference !== "undefined") {
       reservation.call(
         reservation.task.attributes.from,
-        `https://${this.serverlessDomain}/features/internal-call/common/agent-join-conference?conferenceName=${reservation.task.attributes.conference.friendlyName}`,
+        `${this.serverlessProtocol}://${this.serverlessDomain}/features/internal-call/common/agent-join-conference?conferenceName=${reservation.task.attributes.conference.friendlyName}`,
         {
           accept: true,
         }
@@ -15,7 +15,7 @@ class InternalCallService extends ApiService {
     } else {
       reservation.call(
         reservation.task.attributes.from,
-        `https://${this.serverlessDomain}/features/internal-call/common/agent-outbound-join?taskSid=${taskSid}`,
+        `${this.serverlessProtocol}://${this.serverlessDomain}/features/internal-call/common/agent-outbound-join?taskSid=${taskSid}`,
         {
           accept: true,
         }
@@ -40,7 +40,7 @@ class InternalCallService extends ApiService {
       };
 
       this.fetchJsonWithReject(
-        `https://${this.serverlessDomain}/features/internal-call/flex/cleanup-rejected-task`,
+        `${this.serverlessProtocol}://${this.serverlessDomain}/features/internal-call/flex/cleanup-rejected-task`,
         {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },

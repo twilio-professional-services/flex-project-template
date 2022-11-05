@@ -27,8 +27,7 @@ interface VideoRoomProps {
   task: ITask;
 }
 
-const { custom_data } = Manager.getInstance().serviceConfiguration
-  .ui_attributes as UIAttributes;
+const { custom_data } = Manager.getInstance().configuration as UIAttributes;
 const { serverless_functions_domain = "" } = custom_data || {}
 const BACKEND_URL = `https://${serverless_functions_domain}/features/chat-to-video-escalation`;
 

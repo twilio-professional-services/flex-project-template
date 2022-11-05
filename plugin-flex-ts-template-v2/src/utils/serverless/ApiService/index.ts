@@ -10,13 +10,14 @@ function delay<T>(ms: number, result?: T) {
 export default abstract class ApiService {
   protected manager = Flex.Manager.getInstance();
   readonly serverlessDomain: string;
+  readonly serverlessProtocol: string;
 
   constructor() {
-    const { custom_data } = this.manager.serviceConfiguration
-      .ui_attributes as UIAttributes;
+    const { custom_data } = this.manager.configuration as UIAttributes;
 
     // use serverless_functions_domain from ui_attributes, or .env or set as undefined
 
+    this.serverlessProtocol = "https";
     this.serverlessDomain = "";
 
     if (process.env?.FLEX_APP_SERVERLESS_FUNCTONS_DOMAIN)
@@ -24,6 +25,12 @@ export default abstract class ApiService {
 
     if (custom_data?.serverless_functions_domain)
       this.serverlessDomain = custom_data.serverless_functions_domain;
+    
+    if(custom_data?.serverless_functions_protocol)
+      this.serverlessProtocol = custom_data.serverless_functions_protocol;
+
+    if(custom_data?.serverless_functions_port)
+      this.serverlessDomain += ":" + custom_data.serverless_functions_port
 
     if (!this.serverlessDomain)
       console.error(

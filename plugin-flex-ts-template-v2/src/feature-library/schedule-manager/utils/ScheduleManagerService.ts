@@ -10,7 +10,7 @@ class ScheduleManagerService extends ApiService {
   constructor() {
     super();
     
-    const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes || {};
+    const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes || {};
     const { serverless_domain } = custom_data?.features?.schedule_manager || {};
     
     this.scheduleManagerServerlessDomain = serverless_domain;

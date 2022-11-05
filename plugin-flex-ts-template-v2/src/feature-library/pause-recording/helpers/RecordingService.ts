@@ -16,7 +16,7 @@ class RecordingService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token)
       };
   
-      this.fetchJsonWithReject<RecordingResponse>(`https://${this.serverlessDomain}/features/dual-channel-recording/flex/create-recording`,
+      this.fetchJsonWithReject<RecordingResponse>(`${this.serverlessProtocol}://${this.serverlessDomain}/features/dual-channel-recording/flex/create-recording`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -40,7 +40,7 @@ class RecordingService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token)
       };
   
-      this.fetchJsonWithReject<RecordingResponse>(`https://${this.serverlessDomain}/features/pause-recording/flex/pause-call-recording`,
+      this.fetchJsonWithReject<RecordingResponse>(`${this.serverlessProtocol}://${this.serverlessDomain}/features/pause-recording/flex/pause-call-recording`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -64,7 +64,7 @@ class RecordingService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token)
       };
   
-      this.fetchJsonWithReject<RecordingResponse>(`https://${this.serverlessDomain}/features/pause-recording/flex/resume-call-recording`,
+      this.fetchJsonWithReject<RecordingResponse>(`${this.serverlessProtocol}://${this.serverlessDomain}/features/pause-recording/flex/resume-call-recording`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -88,7 +88,7 @@ class RecordingService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token)
       };
   
-      this.fetchJsonWithReject<RecordingResponse>(`https://${this.serverlessDomain}/features/pause-recording/flex/pause-conference-recording`,
+      this.fetchJsonWithReject<RecordingResponse>(`${this.serverlessProtocol}://${this.serverlessDomain}/features/pause-recording/flex/pause-conference-recording`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -112,7 +112,7 @@ class RecordingService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token)
       };
   
-      this.fetchJsonWithReject<RecordingResponse>(`https://${this.serverlessDomain}/features/pause-recording/flex/resume-conference-recording`,
+      this.fetchJsonWithReject<RecordingResponse>(`${this.serverlessProtocol}://${this.serverlessDomain}/features/pause-recording/flex/resume-conference-recording`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

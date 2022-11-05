@@ -8,8 +8,7 @@ import {
 } from "../../helpers/systemActivities";
 
 const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
+  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
 const { enabled = false } =
   custom_data?.features?.activity_reservation_handler || {};
 

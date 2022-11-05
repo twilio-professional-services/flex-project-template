@@ -6,7 +6,7 @@ function capitalizeFirstLetter(string) {
 }
 
 function onlyValidCharacters(str) {
-  return /^[a-zA-_-]+$/.test(str);
+  return /^[0-9a-zA-Z_-]+$/.test(str);
 }
 
 const { pluginDir, pluginSrc, flexConfigDir, serverlessDir } = require ('./common');
@@ -64,10 +64,6 @@ shell.sed('-i', /.*"version": ".*",/, `  "version": "0.0.1",`, `${pluginDir}/pac
 
  shell.sed ('-i', /const PLUGIN_NAME = '.*Plugin';/, `const PLUGIN_NAME = '${pluginName}';`, `${pluginSrc}/*Plugin.tsx`);
  shell.sed ('-i', /export default class .*Plugin extends/, `export default class ${pluginName} extends`, `${pluginSrc}/*Plugin.tsx`);
-
- shell.ls(`${pluginSrc}/*Plugin.tsx`).forEach(function (file) {
-  shell.mv(file, `${pluginSrc}/${pluginName}.tsx`);
- });
 
  shell.ls(`${pluginSrc}/*Plugin.tsx`).forEach(function (file) {
   shell.mv(file, `${pluginSrc}/${pluginName}.tsx`);

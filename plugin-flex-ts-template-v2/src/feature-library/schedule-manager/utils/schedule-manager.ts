@@ -16,7 +16,7 @@ const delay = async (ms: number): Promise<void> => {
   return await new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const { custom_data } = Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes || {};
+const { custom_data } = Manager.getInstance().configuration as UIAttributes || {};
 const { enabled = false } = custom_data?.features?.schedule_manager || {};
 
 export const canShowScheduleManager = (manager: Manager) => {

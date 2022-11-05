@@ -36,7 +36,7 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token)
       }
 
-      this.fetchJsonWithReject<ParticipantResponse>(`https://${this.serverlessDomain}/common/flex/programmable-voice/hold-participant`,
+      this.fetchJsonWithReject<ParticipantResponse>(`${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/hold-participant`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -65,7 +65,7 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token)
       }
 
-      this.fetchJsonWithReject<ParticipantResponse>(`https://${this.serverlessDomain}/common/flex/programmable-voice/update-participant`,
+      this.fetchJsonWithReject<ParticipantResponse>(`${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/update-participant`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -92,7 +92,7 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token)
       };
 
-      this.fetchJsonWithReject<ParticipantResponse>(`https://${this.serverlessDomain}/common/flex/programmable-voice/add-participant`,
+      this.fetchJsonWithReject<ParticipantResponse>(`${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/add-participant`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -126,7 +126,7 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token)
       };
 
-      this.fetchJsonWithReject<RemoveParticipantResponse>(`https://${this.serverlessDomain}/common/flex/programmable-voice/remove-participant`,
+      this.fetchJsonWithReject<RemoveParticipantResponse>(`${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/remove-participant`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -151,7 +151,7 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token)
       };
   
-      this.fetchJsonWithReject<GetCallResponse>(`https://${this.serverlessDomain}/common/flex/programmable-voice/get-call-properties`,
+      this.fetchJsonWithReject<GetCallResponse>(`${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/get-call-properties`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
