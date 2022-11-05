@@ -5,7 +5,10 @@
   "scripts": {
     "postinstall": "(cd serverless-functions && npm install && cp -n .env.example .env); (cd flex-config && npm install && cp -n .env.example .env); (cd plugin-flex-ts-template-v2 && npm install)",
     "remove-features": "node scripts/remove-features.js",
-    "rename-template": "node scripts/rename-template.js"
+    "rename-template": "node scripts/rename-template.js",
+    "start:serverless" : "cd serverless-functions && twilio serverless:start --inspect=localhost --port=3001 --env .env",
+    "start:plugin": "cd plugin-flex-ts-template-v2 && twilio flex:plugins:start",
+    "start:local": "concurrently --kill-others \"npm run start:serverless\" \"npm run start:plugin\""
   },
   "repository": {
     "type": "git",
@@ -18,6 +21,7 @@
   },
   "homepage": "https://github.com/twilio-professional-services/twilio-proserv-flex-project-template#readme",
   "devDependencies": {
+    "concurrently": "^7.5.0",
     "shelljs": "^0.8.5"
   }
 }

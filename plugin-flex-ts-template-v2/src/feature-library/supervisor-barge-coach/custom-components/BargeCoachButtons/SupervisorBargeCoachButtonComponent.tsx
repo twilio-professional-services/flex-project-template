@@ -33,7 +33,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
   const supervisorFN = useFlexSelector(state => state?.flex?.worker?.attributes?.full_name);
 
   // Confirming if Agent Coaching Panel is enabled, we will use this in the Supervisor Barge Coach component
-  const { custom_data } = Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+  const { custom_data } = Manager.getInstance().configuration as UIAttributes;
   const { agent_coaching_panel } = custom_data.features.supervisor_barge_coach;
 
 

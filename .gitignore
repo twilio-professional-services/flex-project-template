@@ -146,4 +146,5 @@ test-results/
 # vscode
 .vscode
 
+appConfig.js
 
