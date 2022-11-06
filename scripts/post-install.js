@@ -77,34 +77,33 @@ setActiveProfile().then(() => {
 
   prompt.start();
   prompt.get(prompt_schema, function(err, result) {
-    if(result.proceed !== "Y" && result.proceed !== "y")
+    if(result.proceed && result.proceed.toLowerCase().includes("n"))
     {
-        auth_token = result.auth_token
-        api_key = result.api_key
-        api_secret = result.api_secret
-        
-        if(account_sid){
-          setEnvironmentVariables();
-        }
-        setupServerlessFunctions();
-        setupFlexConfig();
-        setupPlugin();
-        postInstallInstructions();
-        return;
-      
-      }
-      else {
         console.log("");
         console.log("Ok, abandoning script.  Please run \"npm run postinstall\" when the correct profile is set");
         return; 
+    }
+    else {
+      auth_token = result.auth_token
+      api_key = result.api_key
+      api_secret = result.api_secret
+      
+      if(account_sid){
+        setEnvironmentVariables();
       }
+      setupServerlessFunctions();
+      setupFlexConfig();
+      setupPlugin();
+      postInstallInstructions();
+      return;
+    }
   });
 });
 
 async function setActiveProfile() {
 
   try{
-    profile = await shell.exec("twilio profiles list", {silent: true}).grep("true").stdout;
+    profile = await shell.exec("twilio profiles:list", {silent: true}).grep("true").stdout;
     profile_name = profile.split(" ")[0].trim().trimStart();
     account_sid = profile.split("  ")[1].trim().trimStart();
 
@@ -121,11 +120,11 @@ function setEnvironmentVariables() {
     console.log("Loading environment variables..");
     console.log("");
     
-    taskrouter_workspace_sid = shell.exec("twilio api taskrouter v1 workspaces list", {silent: true}).grep("Flex Task Assignment").stdout.split(" ")[0]
-    sync_sid = shell.exec("twilio api sync v1 services list", {silent: true}).grep("Default Service").stdout.split(" ")[0]
-    chat_sid = shell.exec("twilio api conversations v1 services list", {silent: true}).grep("Flex").grep("Service").stdout.split(" ")[0]
+    taskrouter_workspace_sid = shell.exec("twilio api:taskrouter:v1:workspaces:list", {silent: true}).grep("Flex Task Assignment").stdout.split(" ")[0]
+    sync_sid = shell.exec("twilio api:sync:v1:services:list", {silent: true}).grep("Default Service").stdout.split(" ")[0]
+    chat_sid = shell.exec("twilio api:chat:v2:services:list", {silent: true}).grep("Flex").grep("Service").stdout.split(" ")[0]
 
-    var workflows = shell.exec(`twilio api taskrouter v1 workspaces workflows list --workspace-sid=${taskrouter_workspace_sid}`, {silent: true});
+    var workflows = shell.exec(`twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid=${taskrouter_workspace_sid}`, {silent: true});
     everyoneWorkflow = workflows.grep("Assign To Anyone").stdout.split(" ")[0].trim();
     chatTransferWorkFlow = workflows.grep("Chat Transfer").stdout.split(" ")[0].trim();
     callbackWorkflow = workflows.grep("Callback").stdout.split(" ")[0].trim();
@@ -208,7 +207,7 @@ function setupFlexConfig() {
 
 function setupPlugin() {
   console.log(`Installing npm dependencies for ${pluginDir}...`);
-  shell.exec("npm --prefix ./plugin-flex-ts-template-v2 ci ./plugin-flex-ts-template-v2", {silent:true});
+  shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
   if(!shell.test('-e', pluginAppConfig)){
     shell.cp(pluginAppConfigExample, pluginAppConfig);
   }
