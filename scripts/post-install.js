@@ -26,7 +26,7 @@ var flexConfigEnv = `./${flexConfigDir}/.env`;
 var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
 var pluginAppConfig = `./${pluginDir}/public/appConfig.js`
 
-console.log("Running post install script...");
+console.log(" ----- START OF POST INSTALL SCRIPT ----- ");
 console.log("");
 
 setActiveProfile().then(() => {
@@ -54,8 +54,7 @@ setActiveProfile().then(() => {
       },
       api_secret: {
         description: "Please enter the API Secret for your Twilio Account",
-        pattern: /^[a-zA-Z0-9]*/,
-        message: 'API Secret must be made up of only numbers and letters',
+        message: 'API Secret must be present',
         hidden: true,
         replace: '*',
         required: true,
@@ -65,8 +64,7 @@ setActiveProfile().then(() => {
       },
       auth_token: {
         description: "Please enter the AUTH token for your account",
-        pattern: /^[a-zA-Z0-9]*/,
-        message: 'Auth token must be made up of only numbers and letters',
+        message: 'Auth token must be present',
         hidden: true,
         replace: '*',
         required: true,
@@ -246,14 +244,16 @@ function postInstallInstructions(){
     console.log("You can now run the following command to start you local serverless functions and flex plugin together")
   
   } else {
-    console.log(`Twilio cli profile not detected, please populate the ${serverlessEnv} and ${flexConfigEnv} files with the required account sids`);
+    console.log("*****     WARNING       *****");
+    console.log(`Twilio cli profile not detected, please populate the ${serverlessEnv} and ${flexConfigEnv} files with the required account sids manually`);
     console.log("");
     console.log("Once you have setup the environment you can run the following command to start you local serverless functions and flex plugin together")
   }
 
   console.log("$ npm run start:local");
-
+  console.log("");
   console.log(" ----- END OF POST INSTALL SCRIPT ----- ");
+  console.log("");
 
   if(false){
     console.log("");
