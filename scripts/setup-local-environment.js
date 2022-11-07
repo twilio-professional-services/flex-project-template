@@ -1,4 +1,4 @@
-const { pluginDir, pluginSrc, flexConfigDir, serverlessDir, serverlessSrc } = require ('./common');
+const { pluginDir, flexConfigDir, serverlessDir } = require ('./common');
 const shell = require("shelljs");
 const prompt = require('prompt');
 const secondPrompt = require('prompt');
@@ -26,6 +26,8 @@ var flexConfigEnv = `./${flexConfigDir}/.env`;
 var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
 var pluginAppConfig = `./${pluginDir}/public/appConfig.js`
 
+const installNpm = false;
+
 console.log(" ----- START OF POST INSTALL SCRIPT ----- ");
 console.log("");
 
@@ -49,6 +51,7 @@ setActiveProfile().then(() => {
         message: 'API Key/SID must start with SK and be made up of only numbers and letters',
         required: true,
         ask: function() {
+          return false;
           return prompt.history('proceed') && prompt.history('proceed').value.toLocaleLowerCase() === 'y';
         }
       },
@@ -59,6 +62,7 @@ setActiveProfile().then(() => {
         replace: '*',
         required: true,
         ask: function() {
+          return false;
           return prompt.history('proceed') && prompt.history('proceed').value.toLocaleLowerCase() === 'y';
         }
       },
@@ -138,7 +142,9 @@ function setEnvironmentVariables() {
 
 function setupServerlessFunctions() {
   console.log("Installing npm dependencies for serverless functions..");
-  shell.exec("npm --prefix ./serverless-functions ci ./serverless-functions", {silent:true});
+  if(installNpm){
+    shell.exec("npm --prefix ./serverless-functions ci ./serverless-functions", {silent:true});
+  }
   if(!shell.test('-e', serverlessEnv)){
     shell.cp(serverlessEnvExample, serverlessEnv);
   }
@@ -184,7 +190,9 @@ function setupServerlessFunctions() {
 
 function setupFlexConfig() {
   console.log("Installing npm dependencies for flex-config...");
-  shell.exec("npm --prefix ./flex-config ci ./flex-config", {silent:true});
+  if(installNpm){
+    shell.exec("npm --prefix ./flex-config ci ./flex-config", {silent:true});
+  }
   if(!shell.test('-e', flexConfigEnv)){
     shell.cp(flexConfigEnvExample,flexConfigEnv);
   }
@@ -207,7 +215,9 @@ function setupFlexConfig() {
 
 function setupPlugin() {
   console.log(`Installing npm dependencies for ${pluginDir}...`);
-  shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
+  if(installNpm){
+    shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
+  }
   if(!shell.test('-e', pluginAppConfig)){
     shell.cp(pluginAppConfigExample, pluginAppConfig);
   }

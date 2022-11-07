@@ -4,11 +4,10 @@
     "features": {
       "activity_skill_filter": {
         "rules": {
-          "WA...": {
-            "required_skill": null,
-            "sort_order": 0
-          }
         }
+      },
+      "schedule_manager": {
+        "serverless_domain": ""
       }
     }
   }

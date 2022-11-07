@@ -2,6 +2,10 @@
   "custom_data": {
     "serverless_functions_domain": "",
     "features": {
+      "activity_skill_filter": {
+        "rules": {
+        }
+      },
       "schedule_manager": {
         "serverless_domain": ""
       }

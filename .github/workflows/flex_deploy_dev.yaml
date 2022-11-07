@@ -4,13 +4,13 @@ on:
   # Run on merge to main
   push:
     branches:
-      - main
+
 
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
 
 env:
-  ENVIRONMENT: ps template
+  ENVIRONMENT: dev
   TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID_DEV }}
   TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_DEV }}
   TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_DEV }}
