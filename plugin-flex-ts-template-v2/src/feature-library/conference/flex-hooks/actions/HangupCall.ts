@@ -2,13 +2,13 @@ import * as Flex from '@twilio/flex-ui';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { ConferenceNotification } from '../notifications/Conference';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled = false } = custom_data?.features.conference || {}
 
 export function handleConferenceHangup(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
 
-  flex.Actions.addListener('beforeHangupCall', async (payload, abortFunction) => {
+  flex.Actions.addListener('beforeHangupCall', async (payload: any, abortFunction: () => void) => {
     const { conference, taskSid } = payload.task;
     const participantsOnHold = (participant: Flex.ConferenceParticipant) => {
       return participant.onHold && participant.status === "joined";
@@ -27,11 +27,15 @@ export function handleConferenceHangup(flex: typeof Flex, manager: Flex.Manager)
       conference.participants.forEach(async (participant: Flex.ConferenceParticipant) => {
         const { participantType, workerSid, callSid } = participant;
         if (participant.onHold && participant.status === "joined") {
-          await flex.Actions.invokeAction("UnholdParticipant", {
-            participantType,
-            task: payload.task,
-            targetSid: participantType === 'worker' ? workerSid : callSid
-          });
+          try {
+            await flex.Actions.invokeAction("UnholdParticipant", {
+              participantType,
+              task: payload.task,
+              targetSid: participantType === 'worker' ? workerSid : callSid
+            });
+          } catch (error) {
+            console.log('Conference: unable to unhold participant', error)
+          }
         }
       });
   

@@ -23,6 +23,8 @@ import { addPauseRecordingButton } from "../../feature-library/pause-recording/f
 import { addPauseStatusPanel } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvas";
 import { addTaskCanvasTabCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasTabs";
 import { replaceEndTaskButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
+import { addScheduleManagerToSideNav } from "../../feature-library/schedule-manager/flex-hooks/components/SideNav";
+import { addScheduleManagerView } from "../../feature-library/schedule-manager/flex-hooks/components/ViewCollection";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -49,22 +51,14 @@ const componentHandlers: Components = {
     addInternalCallToDialerPanel,
   ],
   ParticipantCanvas: [addConferenceToParticipantCanvas],
-  SideNav: [],
-  TaskCanvasHeader: [
-    addSwitchToVideoToTaskCanvasHeader,
-    addChatTransferButton,
-    replaceEndTaskButton,
-  ],
-  TaskCanvasTabs: [
-    addVideoRoomTabToTaskCanvasTabs,
-    addSupervisorMonitorPanel,
-    addTaskCanvasTabCustomization,
-  ],
+  SideNav: [addScheduleManagerToSideNav],
+  TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader, addChatTransferButton, replaceEndTaskButton],
+  TaskCanvasTabs: [addVideoRoomTabToTaskCanvasTabs, addSupervisorMonitorPanel, addTaskCanvasTabCustomization],
   TaskInfoPanel: [replaceViewForCallbackAndVoicemail],
   TaskListButtons: [],
   TaskOverviewCanvas: [addSupervisorBargeCoachButtons],
   TeamsView: [],
-  ViewCollection: [],
+  ViewCollection: [addScheduleManagerView],
   WorkerCanvas: [addCapacityToWorkerCanvas],
   WorkerDirectory: [addChatTransferCustomization],
   WorkerProfile: [replaceWorkerProfileInfo],

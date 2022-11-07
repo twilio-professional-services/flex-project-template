@@ -33,6 +33,7 @@ At the root of the repository you will find the following packages
 - [plugin-flex-ts-template](#plugin-flex-ts-template)
 - [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
 - [serverless-functions](#serverless-functions)
+- [serverless-schedule-manager](#serverless-schedule-manager)
 - [web-app-examples](#web-app-examples)
 - [scripts](#scripts)
 - [.github](#github)
@@ -58,6 +59,10 @@ This package is identical in purpose to the `plugin-flex-ts-template` except its
 ### **serverless-functions**
 
 This package manages the serverless functions that the _plugin-flex-ts-template_ is dependent on. In this package there are a suite of services already available to use, some of which are simply wrappers around existing twilio APIs but with added resiliancy around retrying given configurable parameters. These retry mechanisms are particularly useful when a twilio function needs to orchestrate multiple twilio APIs to perform an overall operation. It should be noted twilio functions still have a maximum runtime and therefore careful consideration of retries should be employed for each use case. This does however provided improved resiliency and performance when 429s, 412s or 503s occur.
+
+### **serverless-schedule-manager**
+
+This package manages the serverless functions specific to the _schedule-manager_ feature. This package is separate from the `serverless-functions` package due to the actual schedule manager configuration being part of this serverless package--the entire service is re-deployed upon each configuration publish. If you are deploying the schedule-manager feature, you will need to also deploy this package using the instructions in the [schedule-manager readme](plugin-flex-ts-template-v2/src/feature-library/schedule-manager/README.md). If you are not deploying the `schedule-manager` feature, this service will not be used and does not need to be deployed.
 
 ### **web-app-examples**
 
@@ -95,6 +100,7 @@ Lastly, this package manages the github action workflows - with one example bein
 | Override Queue Transfer Directory | _a template for modifying the transfer directories_ | [Yes](plugin-flex-ts-template/src/feature-library/override-queue-transfer-directory/README.md) | No |
 | Omni Channel Management | _method for mixing chat and voice channels_ | [Yes](plugin-flex-ts-template/src/feature-library/omni-channel-capacity-management/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/omni-channel-capacity-management/README.md)
 | Pause Recording | _provide agents the ability to temporarily pause and resume call recording_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/pause-recording/README.md) |
+| Schedule Manager | _a flexible, robust, and scalable way to manage open and closed hours for Twilio Flex applications_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/schedule-manager/README.md) |
 | Scrollable Activities | _allow the scrolling of the acitivies list_ | [Yes](plugin-flex-ts-template/src/feature-library/scrollable-activities/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/scrollable-activities/README.md)
 | Supervisor Barge Coach | _introduce advanced supervisor barge and coach features_ | [Yes](plugin-flex-ts-template/src/feature-library/supervisor-barge-coach/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-barge-coach/README.md) |
 | Supervisor Capacity | _allow supervisors to update worker capacity configuration within Flex_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-capacity/README.md) |

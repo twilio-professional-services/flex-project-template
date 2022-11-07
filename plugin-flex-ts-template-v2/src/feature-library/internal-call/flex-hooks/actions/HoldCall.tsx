@@ -3,13 +3,13 @@ import { UIAttributes } from "types/manager/ServiceConfiguration";
 import ConferenceService from "../../../../utils/serverless/ConferenceService/ConferenceService";
 import { isInternalCall } from '../../helpers/internalCall';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled } = custom_data?.features?.internal_call || {};
 
 export function handleInternalHoldCall(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
 
-  flex.Actions.addListener("beforeHoldCall", async (payload, abortFunction) => {
+  flex.Actions.addListener("beforeHoldCall", async (payload: any, abortFunction: () => void) => {
     if (!isInternalCall(payload.task)) {
       return;
     }

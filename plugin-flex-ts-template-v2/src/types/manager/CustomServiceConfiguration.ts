@@ -15,6 +15,7 @@ import PauseRecordingConfig from "../../feature-library/pause-recording/types/Se
 import ChatTransferConfig from "../../feature-library/chat-transfer/types/ServiceConfiguration";
 import TeamViewFiltersConfig from "../../feature-library/teams-view-filters/types/ServiceConfiguration";
 import SupervisorCapacityConfig from "../../feature-library/supervisor-capacity/types/ServiceConfiguration";
+import ScheduleManagerConfig from "../../feature-library/schedule-manager/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguratoin {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -34,4 +35,5 @@ export default interface FeatureServiceConfiguratoin {
   pause_recording: PauseRecordingConfig;
   teams_view_filters: TeamViewFiltersConfig;
   supervisor_capacity: SupervisorCapacityConfig;
+  schedule_manager: ScheduleManagerConfig;
 }

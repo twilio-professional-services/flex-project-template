@@ -232,7 +232,7 @@ class ChatTransferService extends ApiService {
     };
 
     return this.fetchJsonWithReject<TransferRESTResponse>(
-      `https://${this.serverlessDomain}/features/chat-transfer-v2-cbm/flex/remove-participant`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/features/chat-transfer-v2-cbm/flex/remove-participant`,
       {
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },

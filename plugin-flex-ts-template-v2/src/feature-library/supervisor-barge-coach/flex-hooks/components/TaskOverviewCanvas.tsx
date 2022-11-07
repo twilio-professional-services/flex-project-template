@@ -6,7 +6,7 @@ import { SyncDoc } from '../../utils/sync/Sync'
 import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButtons'
 import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateModeButton'
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled = false, agent_coaching_panel = false } = custom_data?.features?.supervisor_barge_coach || {}
 
 

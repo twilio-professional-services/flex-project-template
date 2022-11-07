@@ -5,11 +5,12 @@ import Conference from "../../feature-library/conference/flex-hooks/notification
 import ChatTransfer from "../../feature-library/chat-transfer/flex-hooks/notifications/TransferResult";
 import DualChannelRecording from "../../feature-library/dual-channel-recording/flex-hooks/notifications/DualChannelRecording";
 import PauseRecording from "../../feature-library/pause-recording/flex-hooks/notifications/PauseRecording";
-import TeamsViewfilters from "../../feature-library/teams-view-filters/flex-hooks/notifications/TeamViewQueueFilter"
+import TeamsViewFilters from "../../feature-library/teams-view-filters/flex-hooks/notifications/TeamViewQueueFilter";
+import ScheduleManager from "../../feature-library/schedule-manager/flex-hooks/notifications/ScheduleManager";
 
 const notificationsToRegister: ((
   flex: typeof Flex,
   manager: Flex.Manager
-) => void)[] = [ActivityReservationHandler, ActivitySkillFilter, Conference, ChatTransfer, DualChannelRecording, PauseRecording, TeamsViewfilters];
+) => void)[] = [ActivityReservationHandler, ActivitySkillFilter, Conference, ChatTransfer, DualChannelRecording, PauseRecording, TeamsViewFilters, ScheduleManager];
 
 export default notificationsToRegister;

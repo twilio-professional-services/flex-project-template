@@ -2,13 +2,13 @@ import * as Flex from "@twilio/flex-ui";
 import { UIAttributes } from "types/manager/ServiceConfiguration";
 import ConferenceService from "../../../../utils/serverless/ConferenceService/ConferenceService";
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled = false } = custom_data?.features.conference || {};
 
 export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
 
-  flex.Actions.addListener("beforeKickParticipant", async (payload, abortFunction) => {
+  flex.Actions.addListener("beforeKickParticipant", async (payload: any, abortFunction: () => void) => {
     const { participantType } = payload;
 
     if (participantType !== "transfer" && participantType !== "worker") {
@@ -16,9 +16,7 @@ export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex
 
       const { task, targetSid } = payload;
 
-      const conference = task.attributes.conference
-        ? task.attributes.conference.sid
-        : task.conference.conferenceSid;
+      const conference = task.attributes?.conference?.sid;
 
       const participantSid = targetSid;
 

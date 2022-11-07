@@ -17,6 +17,10 @@
             "sort_order": 2
           }
         }
+      },
+      "schedule_manager": {
+        "enabled": true,
+        "serverless_domain": "schedule-manager-4870-dev.twil.io"
       }
     }
   }

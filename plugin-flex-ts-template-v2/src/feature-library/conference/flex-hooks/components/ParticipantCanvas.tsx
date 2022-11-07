@@ -1,4 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
+import ConnectingParticipants from '../../custom-components/ConnectingParticipants';
 import ParticipantActionsButtons from '../../custom-components/ParticipantActionsButtons';
 import ParticipantName from '../../custom-components/ParticipantName';
 import ParticipantStatus from '../../custom-components/ParticipantStatus';
@@ -6,15 +7,14 @@ import ParticipantStatusContainer from '../../custom-components/ParticipantStatu
 
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled = false } = custom_data?.features?.conference || {}
 
 export function addConferenceToParticipantCanvas(flex: typeof Flex) {
 
   if(!enabled) return;
   
-  // FLEXEXP-865
-  const isUnknownParticipant = (props: any) => !props.participant.participantType || props.participant.participantType === 'unknown';
+  const isUnknownParticipant = (props: any) => props.participant.participantType === 'unknown';
   const isNotTransferParticipant = (props: any) => props.participant.participantType !== 'transfer';
   
   // This section is for the full width ParticipantCanvas
@@ -53,4 +53,11 @@ export function addConferenceToParticipantCanvas(flex: typeof Flex) {
       />, { sortOrder: 10, if: isNotTransferParticipant }
     );
   }
+  
+  // This is used for dynamically displaying 'connecting' conference participants
+  flex.ParticipantsCanvas.Content.add(
+    <ConnectingParticipants
+      key="connecting-participants"
+    />, { sortOrder: 1000 }
+  );
 }

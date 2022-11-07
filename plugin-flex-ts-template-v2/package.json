@@ -1,6 +1,6 @@
 {
   "name": "plugin-flex-ts-template",
-  "version": "9.0.18",
+  "version": "9.0.22",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
@@ -18,8 +18,8 @@
     "twilio": "twilio"
   },
   "dependencies": {
-    "@twilio-paste/core": "^10.14.0",
-    "@twilio-paste/icons": "^5.7.0",
+    "@twilio-paste/core": "^15.3.0",
+    "@twilio-paste/icons": "^9.2.0",
     "@twilio/flex-dev-utils": "^5.1.3",
     "@twilio/flex-plugin-scripts": "6.0.2",
     "@types/jest": "^26.0.20",
@@ -28,14 +28,17 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-select": "^5.5.0",
-    "twilio-video": "^2.24.0"
+    "rrule": "^2.7.1",
+    "twilio-video": "^2.24.0",
+    "tzdata": "^1.0.35"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-private-methods": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
-    "@twilio/flex-ui": "2.0.0-beta.1",
+    "@twilio/flex-ui": "2.0.0-beta.2",
     "@types/react-redux": "^7.1.1",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.0.0",
     "dotenv": "16.0.0",

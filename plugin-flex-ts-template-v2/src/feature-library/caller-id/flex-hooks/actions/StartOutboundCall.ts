@@ -3,8 +3,7 @@ import { AppState, reduxNamespace } from "../../../../flex-hooks/states";
 import { UIAttributes } from "types/manager/ServiceConfiguration";
 
 const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
+  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
 const { enabled = false } = custom_data?.features?.caller_id || {};
 
 export function applySelectedCallerIdForDialedNumbers(
@@ -15,7 +14,7 @@ export function applySelectedCallerIdForDialedNumbers(
 
   flex.Actions.addListener(
     "beforeStartOutboundCall",
-    async (payload, abortFunction) => {
+    async (payload: any, abortFunction: () => void) => {
       const state = manager.store.getState() as AppState;
       const selectedCallerId =
         state[reduxNamespace].outboundCallerIdSelector.selectedCallerId;

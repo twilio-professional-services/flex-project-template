@@ -12,7 +12,7 @@ export function addChatTransferButton(flex: typeof Flex) {
         <TransferButton key='conversation-transfer-button' />,
         {
             sortOrder: 1,
-            if: ({ task }) =>
+            if: ({ task }: { task: Flex.ITask }) =>
                 TaskHelper.isCBMTask(task) &&
                 task.taskStatus === 'assigned'
         }
