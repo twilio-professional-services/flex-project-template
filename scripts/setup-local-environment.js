@@ -1,7 +1,6 @@
 const { pluginDir, flexConfigDir, serverlessDir } = require ('./common');
 const shell = require("shelljs");
 const prompt = require('prompt');
-const secondPrompt = require('prompt');
 // https://github.com/shelljs/shelljs#shellstringstr
 
 
