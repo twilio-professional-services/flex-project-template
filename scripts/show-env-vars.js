@@ -12,6 +12,12 @@ var chatTransferWorkFlow;
 var callbackWorkflow;
 var internalCallWorkflow;
 
+var serviceFunctionsSid
+var serviceFunctionsDomain
+var scheduleFunctionsSid
+var scheduledFunctionsDomain
+
+
 async function setActiveProfile() {
 
   try{
@@ -38,10 +44,18 @@ function setEnvironmentVariables() {
       chat_sid = shell.exec("twilio api:chat:v2:services:list", {silent: true}).grep("Flex").grep("Service").stdout.split(" ")[0]
 
       var workflows = shell.exec(`twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid=${taskrouter_workspace_sid}`, {silent: true});
-      everyoneWorkflow = workflows.grep("Assign To Anyone").stdout.split(" ")[0].trim();
+      everyoneWorkflow = workflows.grep("Assign").grep("Anyone").stdout.split(" ")[0].trim();
       chatTransferWorkFlow = workflows.grep("Chat Transfer").stdout.split(" ")[0].trim();
       callbackWorkflow = workflows.grep("Callback").stdout.split(" ")[0].trim();
       internalCallWorkflow = workflows.grep("Internal Call").stdout.split(" ")[0].trim();
+
+      serviceFunctionsSid = shell.exec("twilio api:serverless:v1:services:list", {silent: true}).grep("custom-flex-extensions-serverless").stdout.split(" ")[0]
+      serviceFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${serviceFunctionsSid}`, {silent: true}).grep("custom-flex-extensions-serverless").stdout.split(" ")[4]
+
+      scheduleFunctionsSid = shell.exec("twilio api:serverless:v1:services:list", {silent: true}).grep("schedule-manager").stdout.split(" ")[0]
+      scheduledFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${scheduleFunctionsSid}`, {silent: true}).grep("schedule-manager").stdout.split(" ")[4]
+
+      
     }
 
 
@@ -66,6 +80,10 @@ function postInstallInstructions(){
     console.log("chat transfer workflow sid: \t\t", chatTransferWorkFlow);
     console.log("callback workflow sid: \t\t\t", callbackWorkflow);
     console.log("internal call workflow sid: \t\t", internalCallWorkflow);
+    console.log("");
+    console.log("---- SERVERLESS DOMAINS -----------------------------------------");
+    console.log("serverless functions: \t\t", serviceFunctionsDomain);
+    console.log("schedule manager: \t\t", scheduledFunctionsDomain);
     console.log("");
     console.log("");
     console.log("if there are missing workflow sids, you can set those up for those features manually later");

@@ -18,6 +18,11 @@ var chatTransferWorkFlow;
 var callbackWorkflow;
 var internalCallWorkflow;
 
+var serviceFunctionsSid
+var serviceFunctionsDomain
+var scheduleFunctionsSid
+var scheduledFunctionsDomain
+
 var serverlessEnvExample = `./${serverlessDir}/.env.example`;
 var serverlessEnv = `./${serverlessDir}/.env`;
 var flexConfigEnvExample = `./${flexConfigDir}/.env.example`;
@@ -133,6 +138,12 @@ function setEnvironmentVariables() {
     callbackWorkflow = workflows.grep("Callback").stdout.split(" ")[0].trim();
     internalCallWorkflow = workflows.grep("Internal Call").stdout.split(" ")[0].trim();
 
+    serviceFunctionsSid = shell.exec("twilio api:serverless:v1:services:list", {silent: true}).grep("custom-flex-extensions-serverless").stdout.split(" ")[0]
+    serviceFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${serviceFunctionsSid}`, {silent: true}).grep("custom-flex-extensions-serverless").stdout.split(" ")[4]
+
+    scheduleFunctionsSid = shell.exec("twilio api:serverless:v1:services:list", {silent: true}).grep("schedule-manager").stdout.split(" ")[0]
+    scheduledFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${scheduleFunctionsSid}`, {silent: true}).grep("schedule-manager").stdout.split(" ")[4]
+
 
   } catch (error) {
     console.warn("Error trying to load environment variables, environment configuration files will have to be setup manually");
@@ -237,13 +248,16 @@ function postInstallInstructions(){
     console.log("Taskrouter Flex Workspace sid: \t\t", taskrouter_workspace_sid);
     console.log("Default Sync sid: \t\t\t", sync_sid);
     console.log("chat/conversation service sid: \t\t", chat_sid);
-
     console.log("");
     console.log("---- WORKFLOW SIDS -----------------------------------------");
     console.log("Assign to Anyone workflow sid: \t\t", everyoneWorkflow);
     console.log("chat transfer workflow sid: \t\t", chatTransferWorkFlow);
     console.log("callback workflow sid: \t\t\t", callbackWorkflow);
     console.log("internal call workflow sid: \t\t", internalCallWorkflow);
+    console.log("");
+    console.log("---- SERVERLESS DOMAINS -----------------------------------------");
+    console.log("serverless functions: \t\t\t", serviceFunctionsDomain);
+    console.log("schedule manager: \t\t\t", scheduledFunctionsDomain);
     console.log("");
     console.log("");
     console.log("if there are missing workflow sids, you can set those up for those features manually later");

@@ -271,15 +271,23 @@ npm run show-env
 ```bash
 cd serverless-functions && twilio serverless:deploy
 ```
-11. Copy the domain name from the deployment details in step 5 and update `serverless_functions_domain` or equivalent value inside `ui_attributes.<env-name>.json` and edit the remaining config as appropriate. In github, go to your project settings -> secrets and add a secret for each variable, for example `TWILIO_ACCOUNT_SID_DEV`, `TWILIO_API_KEY_DEV`, `TWILIO_API_SECRET_DEV`.  If this is the first environment being setup, you'll also need to add `PLUGIN_FOLDER` which is set to the folder name of the flex plugin you are deploying.  For example "plugin-flex-ts-template-v2" or potentially whatever its been renamed to.
+11. Copy the domain name from the deployment details in step 10 and update `serverless_functions_domain` or equivalent value inside `ui_attributes.<env-name>.json` and edit the remaining config as appropriate. 
+
+12. *OPTIONAL* if you are using the schedule manager do a one time deploy of the serverless functions for the schedule manager
+```bash
+cd ../serverless-schedule-manager && twilio serverless:deploy
+```
+13. *OPTIONAL* Copy the domain name from the deployment details in step 12 and update `serverless_domain` for the schedule_manager feature inside `ui_attributes.<env-name>.json` and edit the remaining config as appropriate. 
+
+14. In github, go to your project settings -> secrets and add a secret for each variable, for example `TWILIO_ACCOUNT_SID_DEV`, `TWILIO_API_KEY_DEV`, `TWILIO_API_SECRET_DEV`.  If this is the first environment being setup, you'll also need to add `PLUGIN_FOLDER` which is set to the folder name of the flex plugin you are deploying.  For example "plugin-flex-ts-template-v2" or potentially whatever its been renamed to.
 
 ![alt text](scripts/screenshots/github-secrets.png)
 
-10. You can now take your preferred steps to push all your changes to main, from there you can manually execute your [github actions script](.github/workflows/flex_deploy_dev.yaml)  to deploy your serverless, flex-config and plugin to the associated account.
+15. You can now take your preferred steps to push all your changes to main, from there you can manually execute your [github actions script](.github/workflows/flex_deploy_dev.yaml)  to deploy your serverless, flex-config and plugin to the associated account.
 
-11. when deploying to any accounts, make sure the version of flex selected in the admin panel matches the version loaded by the plugin
+16. when deploying to any accounts, make sure the version of flex selected in the admin panel matches the version loaded by the plugin
 
-11. To add more accounts, repeat steps 6-10 for other environments
+17. To add more accounts, repeat steps 6-10 for other environments
 
 # Using template for a standalone plugin
 
