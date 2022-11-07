@@ -25,7 +25,7 @@ var flexConfigEnv = `./${flexConfigDir}/.env`;
 var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
 var pluginAppConfig = `./${pluginDir}/public/appConfig.js`
 
-const installNpm = false;
+const installNpm = process.argv[2]? process.argv[2] == false: true;
 
 console.log(" ----- START OF POST INSTALL SCRIPT ----- ");
 console.log("");
@@ -128,7 +128,7 @@ function setEnvironmentVariables() {
     chat_sid = shell.exec("twilio api:chat:v2:services:list", {silent: true}).grep("Flex").grep("Service").stdout.split(" ")[0]
 
     var workflows = shell.exec(`twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid=${taskrouter_workspace_sid}`, {silent: true});
-    everyoneWorkflow = workflows.grep("Assign To Anyone").stdout.split(" ")[0].trim();
+    everyoneWorkflow = workflows.grep("Assign").grep("Anyone").stdout.split(" ")[0].trim();
     chatTransferWorkFlow = workflows.grep("Chat Transfer").stdout.split(" ")[0].trim();
     callbackWorkflow = workflows.grep("Callback").stdout.split(" ")[0].trim();
     internalCallWorkflow = workflows.grep("Internal Call").stdout.split(" ")[0].trim();
@@ -140,8 +140,8 @@ function setEnvironmentVariables() {
 }
 
 function setupServerlessFunctions() {
-  console.log("Installing npm dependencies for serverless functions..");
   if(installNpm){
+    console.log("Installing npm dependencies for serverless functions..");
     shell.exec("npm --prefix ./serverless-functions ci ./serverless-functions", {silent:true});
   }
   if(!shell.test('-e', serverlessEnv)){
@@ -188,8 +188,8 @@ function setupServerlessFunctions() {
 }
 
 function setupFlexConfig() {
-  console.log("Installing npm dependencies for flex-config...");
   if(installNpm){
+    console.log("Installing npm dependencies for flex-config...");
     shell.exec("npm --prefix ./flex-config ci ./flex-config", {silent:true});
   }
   if(!shell.test('-e', flexConfigEnv)){
@@ -213,8 +213,8 @@ function setupFlexConfig() {
 }
 
 function setupPlugin() {
-  console.log(`Installing npm dependencies for ${pluginDir}...`);
   if(installNpm){
+    console.log(`Installing npm dependencies for ${pluginDir}...`);
     shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
   }
   if(!shell.test('-e', pluginAppConfig)){

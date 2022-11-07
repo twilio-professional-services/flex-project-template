@@ -52,6 +52,7 @@ The primary aims of this template are to
     2. [Renaming Template](#renaming-template)
     3. [show-env-vars](#show-env-vars)
     4. [setup-local-environment](#setup-local-environment)
+    5. [generate-env](#generate-env)
 9. [Change log](#changelog)
 
 
@@ -231,29 +232,35 @@ When running the plugin locally, this template has been setup to pair the plugin
 
 ### Prerequisites 
 
+- you are running nodes v16 or above
+- twilio cli 5.2.1 or above is [installed](https://www.twilio.com/docs/twilio-cli/getting-started/install)
+- twilio flex plugins 6.0.2 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli)
+- twilio serverless plugin 3.0.4 or above is [installed](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit)
+- twilio profiles:list has an active account set.
 - have a twilio api key and secret for your account
     - follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key if you dont have one
     
 
 1. Fork the template and give it a name
-2. checkout the repository and run
-```bash
-npm install
-```
-3. *OPTIONAL* remove the features if they are not desired; to do this, from the root of the checkout run
-```bash
-npm run remove-features
-```
-4. *OPTIONAL* you may want to rename the template; to do this, from the root of the checkout run
-```bash
-npm rename-template <template-name>
-```
-5. *OPTIONAL* if the rename-template script was not used, you may want to delete the plugin version thats not in use.
-6. If the features were not removed, Review `flex-config/ui-attributes.common.json` and set the feature flags to enabled or disabled based on your preference.  Some features require further configuration or dependency setup, you can consult the [Feature library Information](#feature-library-information) for further details. 
-7. Ensure the proper destination account is active in the twilio cli for the account you want to setup
+2. Ensure the proper destination account is active in the twilio cli for the account you want to setup
 ```bash
 twilio profiles:list
 ```
+3. checkout the repository and run
+```bash
+npm install
+```
+4. *OPTIONAL* remove the features if they are not desired; to do this, from the root of the checkout run
+```bash
+npm run remove-features
+```
+5. *OPTIONAL* you may want to rename the template; to do this, from the root of the checkout run
+```bash
+npm rename-template <template-name>
+```
+6. *OPTIONAL* if the rename-template script was not used, you may want to delete the plugin version thats not in use.
+7. If the features were not removed, Review `flex-config/ui-attributes.common.json` and set the feature flags to enabled or disabled based on your preference.  Some features require further configuration or dependency setup, you can consult the [Feature library Information](#feature-library-information) for further details. 
+
 8. To get a summary of the SIDs you will likely need to use, this script can help
 ```bash
 npm run show-env
@@ -269,7 +276,10 @@ cd serverless-functions && twilio serverless:deploy
 ![alt text](scripts/screenshots/github-secrets.png)
 
 10. You can now take your preferred steps to push all your changes to main, from there you can manually execute your [github actions script](.github/workflows/flex_deploy_dev.yaml)  to deploy your serverless, flex-config and plugin to the associated account.
-11. To add more account configuration for higher accounts, repeat steps 6-10
+
+11. when deploying to any accounts, make sure the version of flex selected in the admin panel matches the version loaded by the plugin
+
+11. To add more accounts, repeat steps 6-10 for other environments
 
 # Using template for a standalone plugin
 
@@ -343,6 +353,10 @@ convenience script for showing the SIDs of key services on your twilio account v
 ## setup-local-environment
 
 convenience script for simplyfying local setup and development, triggered as part of an `npm install` at the root of the repository
+
+## generate-env
+
+conveience script that does the same as setup-local-environment except it won't install npm pacakges again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
 
 # CHANGELOG
 

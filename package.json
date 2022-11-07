@@ -4,6 +4,7 @@
   "description": "This repository provides development teams with a starting point for flex projects or developing flex features.",
   "scripts": {
     "postinstall": "node scripts/setup-local-environment.js",
+    "generate-env": "node scripts/setup-local-environment.js false",
     "show-env": "node scripts/show-env-vars.js",
     "remove-features": "node scripts/remove-features.js",
     "rename-template": "node scripts/rename-template.js",
