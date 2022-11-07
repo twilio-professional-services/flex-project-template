@@ -50,6 +50,8 @@ The primary aims of this template are to
 8. [More Scripts Details](#more-scripts-details)
     1. [Removing Features](#removing-features)
     2. [Renaming Template](#renaming-template)
+    3. [show-env-vars](#show-env-vars)
+    4. [setup-local-environment](#setup-local-environment)
 9. [Change log](#changelog)
 
 
@@ -227,37 +229,47 @@ When running the plugin locally, this template has been setup to pair the plugin
 
 ## Setup a project with release pipeline
 
+### Prerequisites 
+
+- have a twilio api key and secret for your account
+    - follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key if you dont have one
+    
+
 1. Fork the template and give it a name
 2. checkout the repository and run
 ```bash
 npm install
 ```
-2. *OPTIONAL* remove the features if not desired; from the root folder of a checkout of your new repository run
+3. *OPTIONAL* remove the features if they are not desired; to do this, from the root of the checkout run
 ```bash
 npm run remove-features
 ```
-3. *OPTIONAL* you may want to rename the template; from the root folder of a checkout of your new repository run
+4. *OPTIONAL* you may want to rename the template; to do this, from the root of the checkout run
 ```bash
 npm rename-template <template-name>
 ```
-4. *OPTIONAL* if the rename-template script was not used, you may want to delete the plugin version thats not in use.
-5. If the features were not removed, Review `flex-config/ui-attributes.common.json` and set the feature flags to enabled or disabled based on your preference.  Some features require further configuration or dependency setup, you can consult the [Feature library Information](#feature-library-information) for further details. 
-6. For the environment you want to setup, edit the related `serverless/.env.<env-name>` file, ensuring at a minimum that the *General* settings match the SIDs of the intended environment. Some features require supporting workflow sids so if they are being used, ensure the dependencies are setup. You can consult the [Feature library Information](#feature-library-information) for further details. Enabling these features can also be done later.
-7. Ensure the proper destination account is active in the twilio cli
+5. *OPTIONAL* if the rename-template script was not used, you may want to delete the plugin version thats not in use.
+6. If the features were not removed, Review `flex-config/ui-attributes.common.json` and set the feature flags to enabled or disabled based on your preference.  Some features require further configuration or dependency setup, you can consult the [Feature library Information](#feature-library-information) for further details. 
+7. Ensure the proper destination account is active in the twilio cli for the account you want to setup
 ```bash
 twilio profiles:list
 ```
-8. Do a one time manual deploy of the serverless functions into your account
+8. To get a summary of the SIDs you will likely need to use, this script can help
+```bash
+npm run show-env
+```
+9. For the environment you want to setup, edit the related `serverless/.env.<env-name>` file, ensuring at a minimum that the *General* settings match the SIDs of the intended environment. Some features require supporting workflow sids so if they are being used, ensure the dependencies are setup. You can consult the [Feature library Information](#feature-library-information) for further details. Enabling these features can also be done later.
+
+10. Do a one time manual deploy of the serverless functions into your account - this will generate a hostname to set in the associated flex-config
 ```bash
 cd serverless-functions && twilio serverless:deploy
 ```
-9. Copy the domain name from the deployment details in step 5 and update `serverless_functions_domain` inside `ui_attributes.<env-name>.json` and edit the remaining config as appropriate. In github, go to your project settings -> secrets and add a secret for each variable, `TWILIO_ACCOUNT_SID_DEV`, `TWILIO_AUTH_TOKEN_DEV`, `TWILIO_API_KEY_DEV`, `TWILIO_API_SECRET_DEV`.  If this is the first environment being setup, you'll also need to add `PLUGIN_FOLDER` which is set to the folder name of the flex plugin you are deploying.  For example "plugin-flex-ts-template-v2" or potentially whatever its been renamed to.
+11. Copy the domain name from the deployment details in step 5 and update `serverless_functions_domain` or equivalent value inside `ui_attributes.<env-name>.json` and edit the remaining config as appropriate. In github, go to your project settings -> secrets and add a secret for each variable, for example `TWILIO_ACCOUNT_SID_DEV`, `TWILIO_API_KEY_DEV`, `TWILIO_API_SECRET_DEV`.  If this is the first environment being setup, you'll also need to add `PLUGIN_FOLDER` which is set to the folder name of the flex plugin you are deploying.  For example "plugin-flex-ts-template-v2" or potentially whatever its been renamed to.
 
 ![alt text](scripts/screenshots/github-secrets.png)
 
-10. You can now take your preferred steps to push all your changes to main, based on the [github actions script](.github/workflows/flex_deploy_dev.yaml) your serverless, flex-config and plugin will be deployed to your twilio account.
-11. To add more account configuration for higher accounts, repeat steps 6-10, for automated deploys to higher level environments, create additional copies of the [github actions script](.github/workflows/flex_deploy_dev.yaml)
-
+10. You can now take your preferred steps to push all your changes to main, from there you can manually execute your [github actions script](.github/workflows/flex_deploy_dev.yaml)  to deploy your serverless, flex-config and plugin to the associated account.
+11. To add more account configuration for higher accounts, repeat steps 6-10
 
 # Using template for a standalone plugin
 
@@ -271,9 +283,8 @@ npm run remove-features
 ```bash
 npm rename-template <template-name>
 ```
-4. *Optionally* manually clear the serverless_domain_name in [ui_attributes.dev.json](/flex-config/ui_attributes.dev.json)
-5. *Optionally* you may want to tidy up your readme at this point or do it later 
-6. *Optionally* you may want to remove the trigger for automated releases in the [github actions script](/.github/workflows/flex_deploy_dev.yaml) by removing the main branch trigger.
+4. *OPTIONAL* manually clear the serverless_domain_name in [ui_attributes.dev.json](/flex-config/ui_attributes.dev.json)
+5. *OPTIONAL* you may want to tidy up your readme at this point or do it later 
 7. Push your changes to your repository - this is your new baseline
 8. You can follow the instructions for [local development setup](#local-setup-and-use) and then [adding a feature](/plugin-flex-ts-template-v2/README.md#adding-a-feature)
 
@@ -325,11 +336,19 @@ It will
 - rename the variable used in flex-config to identify the serverless domain to `serverless_functions_domain_my_feature_name`
 - rename references to the serverless domain within the plugin to match `serverless_functions_domain_my_feature_name`
 
+## show-env-vars
+
+convenience script for showing the SIDs of key services on your twilio account via the twilio cli
+
+## setup-local-environment
+
+convenience script for simplyfying local setup and development, triggered as part of an `npm install` at the root of the repository
+
 # CHANGELOG
 
 - 1.0.1
-    1. Updated flex-config deploy to never overwrite existing config, adding values only when they don't exist.
-    2. Updated readmes with instructions for various use cases
-    3. Updated remove-features scripts to account for schedule manager
+    1. Updated readmes with instructions for various use cases
+    2. Updated remove-features scripts to account for schedule manager
+    3. Modified plugin API strructure to leverage use of appConfig for easier local configuration
 
 

@@ -88,7 +88,7 @@ async function deployConfigurationData({ map, auth, environment }) {
     } = await getConfiguration({ auth });
 
     console.log("Merging current configuraton with new configuration...");
-    const uiAttributesMerged = _.merge( uiAttributesCommon, uiAttributes, uiAttributesCurrent)
+    const uiAttributesMerged = _.merge( uiAttributesCurrent, uiAttributesCommon, uiAttributes )
     const trskillsMerged = tr_current
       ? tr_current.concat(taskrouter_skills).unique()
       : taskrouter_skills;

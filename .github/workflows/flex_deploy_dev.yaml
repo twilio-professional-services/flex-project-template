@@ -2,9 +2,8 @@ name: flex_deploy_dev
 
 on:
   # Run on merge to main
-  push:
-    branches:
-    - readme_updates_october
+  #push:
+  #  branches:
   #  - main
 
   # Enable running this workflow manually from the Actions tab
