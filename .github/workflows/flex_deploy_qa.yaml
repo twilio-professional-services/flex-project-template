@@ -2,9 +2,9 @@ name: flex_deploy_qa
 
 on:
   # Run on merge to main
-  push:
-    branches:
-
+  #push:
+  #  branches:
+ 
 
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:

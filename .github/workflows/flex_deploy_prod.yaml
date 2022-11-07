@@ -2,8 +2,8 @@ name: flex_deploy_prod
 
 on:
   # Run on merge to main
-  push:
-    branches:
+  #push:
+  #  branches:
 
 
   # Enable running this workflow manually from the Actions tab
