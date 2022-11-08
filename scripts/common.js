@@ -79,6 +79,9 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     result.scheduleFunctionsSid = shell.exec("twilio api:serverless:v1:services:list", {silent: true}).grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[0]
     result.scheduledFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.scheduleFunctionsSid}`, {silent: true}).grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[4]
 
+    console.log("Done fetching environment variables");
+    console.log("");
+
     return result;
 
   } catch (error) {
@@ -97,7 +100,6 @@ exports.getActiveTwilioProfile = async function getActiveTwilioProfile() {
     result.profile_name = result.profile.split(" ")[0].trim().trim();
     result.account_sid = result.profile.match(/AC[0-9,a-z,A-Z]{32}/)[0];
 
-    console.log(result);
     return result;
 
   } catch (error) {
@@ -217,7 +219,7 @@ exports.generateFlexConfigEnv = function generateFlexConfigEnv(context, flexConf
       if(api_secret){
         shell.sed('-i', /<YOUR_API_SECRET>/g, `${api_secret}`, flexConfigEnv);
       }
-      console.log(`"Setting up environment ${flexConfigEnv}: complete`);
+      console.log(`Setting up environment ${flexConfigEnv}: complete`);
     } else {
       console.warn("Unable to configure flex config environment file, it will need to be done manually");
     }
