@@ -42,7 +42,7 @@ const DeviceManager: React.FunctionComponent = () => {
       });
       
       // set SecondDevice options if multi-call feature is enabled
-      const { custom_data } = (Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes) || {};
+      const { custom_data } = (Manager.getInstance().configuration as UIAttributes) || {};
       const { enabled = false } = custom_data?.features?.multi_call || {};
       
       if (enabled) {

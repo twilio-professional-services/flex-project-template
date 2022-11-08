@@ -3,8 +3,7 @@ import { FlexEvent } from "../../../../types/manager/FlexEvent";
 import { NotificationIds } from "../notifications/MultiCall";
 import { UIAttributes } from "types/manager/ServiceConfiguration";
 const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
+  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
 const { enabled = false } =
   custom_data?.features?.multi_call || {};
 
