@@ -94,9 +94,10 @@ exports.getActiveTwilioProfile = async function getActiveTwilioProfile() {
   
   try{
     result.profile = await shell.exec("twilio profiles:list", {silent: true}).grep("true").stdout;
-    result.profile_name = result.profile.split(" ")[0].trim().trimStart();
-    result.account_sid = result.profile.split("  ")[1].trim().trimStart();
+    result.profile_name = result.profile.split(" ")[0].trim().trim();
+    result.account_sid = result.profile.match(/AC[0-9,a-z,A-Z]{32}/)[0];
 
+    console.log(result);
     return result;
 
   } catch (error) {
