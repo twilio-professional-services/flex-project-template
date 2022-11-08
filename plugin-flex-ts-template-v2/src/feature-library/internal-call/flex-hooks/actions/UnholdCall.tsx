@@ -3,7 +3,7 @@ import { UIAttributes } from "types/manager/ServiceConfiguration";
 import ConferenceService from "../../../../utils/serverless/ConferenceService/ConferenceService";
 import { isInternalCall } from '../../helpers/internalCall';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled } = custom_data?.features?.internal_call || {};
 
 export function handleInternalUnholdCall(flex: typeof Flex, manager: Flex.Manager) {

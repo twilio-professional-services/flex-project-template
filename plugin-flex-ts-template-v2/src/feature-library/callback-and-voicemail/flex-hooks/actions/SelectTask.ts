@@ -13,7 +13,7 @@ export const autoSelectCallbackTaskWhenEndingCall = async (
   manager: Flex.Manager
 ) => {
   const { custom_data } =
-    (manager.serviceConfiguration.ui_attributes as UIAttributes) || {};
+    (manager.configuration as UIAttributes) || {};
   const { enabled = false, auto_select_task = false } =
     custom_data?.features?.callbacks || {};
 

@@ -134,7 +134,7 @@ class ChatTransferService extends ApiService {
     };
 
     return this.fetchJsonWithReject<TransferRESTResponse>(
-      `https://${this.serverlessDomain}/features/chat-transfer-v2-cbm/flex/chat-transfer`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/features/chat-transfer-v2-cbm/flex/chat-transfer`,
       {
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },

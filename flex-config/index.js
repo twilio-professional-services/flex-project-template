@@ -102,9 +102,22 @@ async function deployConfigurationData({ map, auth, environment }) {
       },
     });
 
-    console.log("Configuration updated:");
-    console.log("UI Attributes", configurationUpdated.ui_attributes);
-    console.log("TaskRouter Skills", configurationUpdated.taskrouter_skills);
+
+    console.log("Configuration updated: (following output formatted for readability)");
+    
+    var readableFeatures = []
+    Object.entries(configurationUpdated.ui_attributes.custom_data.features).forEach( feature => {
+      { readableFeatures.push( { name: feature[0], enabled: feature[1].enabled}  )};
+    });
+    var readableAttributes = configurationUpdated.ui_attributes;
+    readableAttributes.custom_data.features = readableFeatures;
+
+    console.log("UI Attributes");
+    console.dir(readableAttributes, { depth: null });
+    console.log("TaskRouter Skills:");
+    configurationUpdated.taskrouter_skills.forEach(element => {
+      console.log(`\t${element.name}`);
+    })
   } catch (error) {
     console.error("error caught", error);
     console.log("Auth", error.config?.auth);
