@@ -14,6 +14,9 @@ First, agents will need their capacity for the `voice` channel to be increased f
 
 Now that workers can accept multiple calls, we need to update the TaskRouter workflow(s) so that agents are not routed multiple calls from the queue. For each workflow filter, set the target worker expression to `worker.channel.voice.available_capacity_percentage == 100`. If you already have a target worker expression defined, you will need to combine the logic with `AND`.
 
+> **Warning**
+> Transfers to queues will not use the above configured worker expression. If workers in transfer queues do not all have their capacity set to 1, customize the queue transfer directory to instead transfer to workflows. Otherwise, transfers to queues may be assigned to workers already on calls.
+
 ## Flex configuration
 
 In your flex-config file(s), two changes need to be made:

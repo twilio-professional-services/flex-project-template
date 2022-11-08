@@ -18,6 +18,14 @@ const createNewDevice = (manager: Manager) => {
   
   let device = new Device(manager.voiceClient.token ?? "", deviceOptions);
   
+  if (audioConstraints) {
+    try {
+      device.audio?.setAudioConstraints(audioConstraints);
+    } catch (error) {
+      device.audio?.unsetAudioConstraints();
+    }
+  }
+  
   SecondDevice = device;
 }
 
@@ -26,6 +34,7 @@ export const handleFlexCallIncoming = (manager: Manager, call: Call) => {
   
   FlexDeviceCall = call;
   call.on("disconnect", handleFlexCallDisconnect);
+  call.on("reject", handleFlexCallReject);
   
   let newDevice = false;
   
@@ -45,7 +54,7 @@ export const handleFlexCallIncoming = (manager: Manager, call: Call) => {
   
   // register listeners for the new SecondDevice
   SecondDevice?.on('incoming', handleSecondCallIncoming);
-  SecondDevice?.on('registered', () => console.log('MultiCall: SecondDevice registered'));
+  SecondDevice?.on('registered', handleSecondDeviceRegistered);
   
   // register the new device with Twilio
   SecondDevice?.register();
@@ -65,7 +74,44 @@ const handleFlexCallDisconnect = (call: Call) => {
   }
 }
 
+const handleFlexCallReject = () => {
+  console.log('MultiCall: FlexDeviceCall reject');
+  FlexDeviceCall = null;
+  
+  if (!SecondDeviceCall) {
+    // No more calls; destroy the SecondDevice as it is no longer needed.
+    destroySecondDevice();
+  } else {
+    // SecondDeviceCall is still in flight, so put it into state
+    // Otherwise Flex thinks there is no call and disables some functionality
+    Manager.getInstance().store.dispatch({type:"PHONE_ADD_CALL", payload:SecondDeviceCall});
+  }
+}
+
+const handleSecondDeviceRegistered = () => {
+  console.log('MultiCall: SecondDevice registered');
+  
+  const speakerDevices = Manager.getInstance().voiceClient?.audio?.speakerDevices.get();
+  
+  if (speakerDevices && speakerDevices.size > 0) {
+    speakerDevices.forEach((speaker) => {
+      if (speaker.deviceId === "default") {
+        // default is the default, no need to do anything
+        return;
+      }
+      
+      try {
+        SecondDevice?.audio?.speakerDevices.set(speaker.deviceId);
+        console.log(`MultiCall: Set output device to ${speaker.label}`);
+      } catch (error) {
+        console.error('MultiCall: Unable to change output device', error);
+      }
+    });
+  }
+}
+
 const handleSecondCallIncoming = (call: Call) => {
+  const manager = Manager.getInstance();
   console.log('MultiCall: SecondDeviceCall incoming', call);
   
   call.on("accept", (_innerCall) => {
@@ -76,7 +122,7 @@ const handleSecondCallIncoming = (call: Call) => {
     holdOtherCalls(SecondDeviceCall?.parameters.CallSid ?? "");
     
     // put the current call in state
-    Manager.getInstance().store.dispatch({type:"PHONE_ADD_CALL", payload:SecondDeviceCall});
+    manager.store.dispatch({type:"PHONE_ADD_CALL", payload:SecondDeviceCall});
   });
   
   call.on("disconnect", (_innerCall: Call) => {
@@ -90,7 +136,14 @@ const handleSecondCallIncoming = (call: Call) => {
   });
   
   // auto-accept the call (we get here when the worker _accepts_ the task)
-  call.accept();
+  if (manager.configuration.initialDeviceCheck && manager.voiceClient.audio?.inputDevice?.deviceId) {
+    SecondDevice?.audio?.setInputDevice(manager.voiceClient.audio.inputDevice.deviceId)
+      .then(() => {
+        call.accept(manager.configuration.sdkOptions?.voice?.acceptOptions);
+      });
+  } else {
+    call.accept(manager.configuration.sdkOptions?.voice?.acceptOptions);
+  }
 }
 
 const destroySecondDevice = () => {
