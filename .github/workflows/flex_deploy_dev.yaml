@@ -21,31 +21,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-
-      - name: deploy flex config
-        working-directory: flex-config
+     
+      - name: install npm and apply missing envirnoment variables
         run: |
           npm install
-          npm run deploy:dev
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run populate-missing-placeholders $ENVIRONMENT
 
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
           npm install
           npm run install-serverless-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy:dev
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy:$ENVIRONMENT
           
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
           npm install
           npm run install-serverless-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy:dev
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy:$ENVIRONMENT
+
+      - name: deploy flex config
+        working-directory: flex-config
+        run: |
+          npm install
+          npm run deploy:$ENVIRONMENT
 
       - name: deploy and release flex-plugin
         working-directory: ${{ secrets.PLUGIN_FOLDER }}
