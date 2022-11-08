@@ -93,10 +93,10 @@ getActiveTwilioProfile().then((profile_result) => {
         console.log("Once you have setup the environment you can run the following command to start you local serverless functions and flex plugin together")
         console.log("$ npm run start:local");
       }
-
-      console.log("");
-      console.log(" ----- END OF POST INSTALL SCRIPT ----- ");
-      console.log("");
     }
+
+    console.log("");
+    console.log(" ----- END OF POST INSTALL SCRIPT ----- ");
+    console.log("");
   });
 });
