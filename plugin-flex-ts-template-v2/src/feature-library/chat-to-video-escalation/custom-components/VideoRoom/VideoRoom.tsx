@@ -32,7 +32,7 @@ const { serverless_functions_domain = "", serverless_functions_protocol = "https
 
 const domain = serverless_functions_port ? `${serverless_functions_domain}:${serverless_functions_port}` : serverless_functions_domain;
 
-const BACKEND_URL = `${domain}://${serverless_functions_domain}/features/chat-to-video-escalation`;
+const BACKEND_URL = `${serverless_functions_protocol}://${domain}/features/chat-to-video-escalation`;
 
 const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
   const [connecting, setConnecting] = useState(false);
