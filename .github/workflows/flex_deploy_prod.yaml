@@ -4,7 +4,7 @@ on:
   # Run on merge to main
   #push:
   #  branches:
-
+  #  - main
 
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
@@ -17,35 +17,70 @@ env:
   PLUGIN_FOLDER: ${{ secrets.PLUGIN_FOLDER }}
 
 jobs:
-  run:
+  deploy-serverless:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-
-      - name: deploy flex config
-        working-directory: flex-config
+     
+      - name: install npm and apply missing envirnoment variables
         run: |
           npm install
-          npm run deploy:prod
-
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_PROD }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_PROD }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_PROD }} npm run populate-missing-placeholders $ENVIRONMENT
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
           npm install
           npm run install-serverless-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_PROD }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_PROD }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_PROD }} npm run deploy:prod
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_PROD }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_PROD }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_PROD }} npm run deploy:$ENVIRONMENT
+
+  deploy-schedule-manager:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
           
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
           npm install
           npm run install-serverless-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_PROD }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_PROD }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_PROD }} npm run deploy:prod
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_PROD }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_PROD }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_PROD }} npm run deploy:$ENVIRONMENT
+
+  deploy-flex-config:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: install npm and apply missing envirnoment variables
+        run: |
+          npm install
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_PROD }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_PROD }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_PROD }} npm run populate-missing-placeholders $ENVIRONMENT
+    
+      - name: deploy flex config
+        working-directory: flex-config
+        run: |
+          npm install
+          npm run deploy:$ENVIRONMENT
+
+  deploy-release-plugin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'   
 
       - name: deploy and release flex-plugin
         working-directory: ${{ secrets.PLUGIN_FOLDER }}
@@ -53,4 +88,4 @@ jobs:
           npm install
           npm run install-flex-plugin
           TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_PROD }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_PROD }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_PROD }} npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_PROD }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_PROD }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_PROD }} npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_PROD }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_PROD }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_PROD }}  npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
