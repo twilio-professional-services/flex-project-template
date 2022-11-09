@@ -99,6 +99,12 @@ shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_
 shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/utils/serverless/ApiService/ApiService.test.ts`);
 shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/utils/serverless/ApiService/index.ts`);
 
+shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/public/appConfig.example.js`);
+
+if(shell.test('-e', `${fullPluginName}/public/appConfig.js`)){
+  shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/public/appConfig.js`);
+}
+
 
 if(shell.test('-e', './plugin-flex-ts-template')){
   shell.echo(`Removing v1 plugin`);
