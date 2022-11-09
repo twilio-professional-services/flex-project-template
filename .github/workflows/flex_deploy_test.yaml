@@ -1,4 +1,4 @@
-name: flex_deploy_dev
+name: flex_deploy_test
 
 on:
   # Run on merge to main
@@ -10,10 +10,10 @@ on:
   workflow_dispatch:
 
 env:
-  ENVIRONMENT: dev
-  TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID_DEV }}
-  TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_DEV }}
-  TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_DEV }}
+  ENVIRONMENT: test
+  TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID_TEST }}
+  TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_TEST }}
+  TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_TEST }}
   PLUGIN_FOLDER: ${{ secrets.PLUGIN_FOLDER }}
 
 jobs:
@@ -29,13 +29,13 @@ jobs:
       - name: install npm and apply missing envirnoment variables
         run: |
           npm install
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run populate-missing-placeholders $ENVIRONMENT
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_TEST }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_TEST }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_TEST }} npm run populate-missing-placeholders $ENVIRONMENT
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
           npm install
           npm run install-serverless-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy:$ENVIRONMENT
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_TEST }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_TEST }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_TEST }} npm run deploy:$ENVIRONMENT
 
   deploy-schedule-manager:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
         run: |
           npm install
           npm run install-serverless-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy:$ENVIRONMENT
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_TEST }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_TEST }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_TEST }} npm run deploy:$ENVIRONMENT
 
   deploy-flex-config:
     runs-on: ubuntu-latest
@@ -65,7 +65,7 @@ jobs:
       - name: install npm and apply missing envirnoment variables
         run: |
           npm install
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run populate-missing-placeholders $ENVIRONMENT
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_TEST }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_TEST }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_TEST }} npm run populate-missing-placeholders $ENVIRONMENT
     
       - name: deploy flex config
         working-directory: flex-config
@@ -87,5 +87,5 @@ jobs:
         run: |
           npm install
           npm run install-flex-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }}  npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_TEST }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_TEST }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_TEST }} npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
+          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_TEST }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_TEST }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_TEST }}  npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"

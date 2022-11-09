@@ -32,7 +32,7 @@
         "enabled": true
       },
       "internal_call": {
-        "enabled": true
+        "enabled": false
       },
       "override_queue_transfer_directory": {
         "enabled": false

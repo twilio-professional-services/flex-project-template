@@ -28,8 +28,11 @@ interface VideoRoomProps {
 }
 
 const { custom_data } = Manager.getInstance().configuration as UIAttributes;
-const { serverless_functions_domain = "" } = custom_data || {}
-const BACKEND_URL = `https://${serverless_functions_domain}/features/chat-to-video-escalation`;
+const { serverless_functions_domain = "", serverless_functions_protocol = "https", serverless_functions_port } = custom_data || {};
+
+const domain = serverless_functions_port ? `${serverless_functions_domain}:${serverless_functions_port}` : serverless_functions_domain;
+
+const BACKEND_URL = `${serverless_functions_protocol}://${domain}/features/chat-to-video-escalation`;
 
 const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
   const [connecting, setConnecting] = useState(false);

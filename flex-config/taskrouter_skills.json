@@ -2,13 +2,19 @@
     {
         "minimum": null,
         "multivalue": false,
-        "name": "Retention",
+        "name": "billing",
         "maximum": null
     },
     {
       "minimum": null,
       "multivalue": false,
-      "name": "Example Skill Two",
+      "name": "support",
       "maximum": null
-  }
+    },
+    {
+      "minimum": null,
+      "multivalue": false,
+      "name": "offline_work",
+      "maximum": null
+    }
 ]

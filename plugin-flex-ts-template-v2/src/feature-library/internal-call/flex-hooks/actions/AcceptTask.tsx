@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { UIAttributes } from "types/manager/ServiceConfiguration";
-import InternalCallService from "../../../../utils/serverless/InternalCall/InternalCallService";
+import InternalCallService from "../../helpers/InternalCallService";
 import { isInternalCall } from '../../helpers/internalCall';
 
 const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;

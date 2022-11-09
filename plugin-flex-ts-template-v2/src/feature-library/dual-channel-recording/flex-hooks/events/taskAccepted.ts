@@ -2,7 +2,7 @@ import * as Flex from "@twilio/flex-ui";
 import { addCallDataToTask, waitForConferenceParticipants } from "../../helpers/dualChannelHelper";
 import { FlexEvent } from "../../../../types/manager/FlexEvent";
 import { UIAttributes } from "../../../../types/manager/ServiceConfiguration";
-import RecordingService from "../../../../utils/serverless/Recording/RecordingService";
+import RecordingService from "../../../pause-recording/helpers/RecordingService";
 
 const manager = Flex.Manager.getInstance();
 
