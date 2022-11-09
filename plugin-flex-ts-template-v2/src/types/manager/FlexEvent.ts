@@ -9,4 +9,5 @@ export enum FlexEvent {
   taskTimeout = "taskTimeout",
   taskWrapup = "taskWrapup",
   pluginsLoaded = "pluginsLoaded",
+  tokenUpdated = "tokenUpdated",
 }

@@ -165,6 +165,7 @@ Lastly, this package manages the github action workflows - with one example bein
 | Dual Channel Recording | _automatically record both inbound and outbound calls in dual channel_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/dual-channel-recording/README.md) |  |
 | Enhanced CRM Container   | _optimize the CRM container experience_ | [Yes](plugin-flex-ts-template/src/feature-library/enhanced-crm-container/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/enhanced-crm-container/README.md) | ✅ | 
 | Internal Call (Agent to Agent)  | _provide agents the ability to dial each other_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/internal-call/README.md) |  |
+| Multi-call | _allow agents to receive a transferred call while already on a call_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/multi-call/README.md) |  |
 | Override Queue Transfer Directory | _a template for modifying the transfer directories_ | [Yes](plugin-flex-ts-template/src/feature-library/override-queue-transfer-directory/README.md) | No |   |
 | Omni Channel Management | _method for mixing chat and voice channels_ | [Yes](plugin-flex-ts-template/src/feature-library/omni-channel-capacity-management/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/omni-channel-capacity-management/README.md)|   |
 | Pause Recording | _provide agents the ability to temporarily pause and resume call recording_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/pause-recording/README.md) | ✅ |
@@ -230,7 +231,7 @@ When running the plugin locally, this template has been setup to pair the plugin
 
 ---
 
-## Setup a project with release pipeline    
+## Setup a project with release pipeline
 
 1. Use the template to create your own repository
 2. Nominate a Twilio account to act as one of dev, qa, test, prod

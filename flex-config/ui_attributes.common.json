@@ -1,4 +1,9 @@
 {
+  "sdkOptions": {
+    "voice": {
+      "allowIncomingWhileBusy": true
+    }
+  },
   "custom_data": {
     "features": {
       "activity_skill_filter": {
@@ -104,6 +109,9 @@
         "enabled": true
       },
       "schedule_manager": {
+        "enabled": false
+      },
+      "multi_call": {
         "enabled": false
       }
     }

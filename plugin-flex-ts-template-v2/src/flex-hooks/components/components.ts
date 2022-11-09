@@ -23,6 +23,7 @@ import { addPauseRecordingButton } from "../../feature-library/pause-recording/f
 import { addPauseStatusPanel } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvas";
 import { addScheduleManagerToSideNav } from "../../feature-library/schedule-manager/flex-hooks/components/SideNav";
 import { addScheduleManagerView } from "../../feature-library/schedule-manager/flex-hooks/components/ViewCollection";
+import { replaceWorkerDataTableCallsColumnMultiCall } from "../../feature-library/multi-call/flex-hooks/components/WorkersDataTable";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -60,7 +61,7 @@ const componentHandlers: Components = {
   WorkerCanvas: [addCapacityToWorkerCanvas],
   WorkerDirectory: [addChatTransferCustomization],
   WorkerProfile: [replaceWorkerProfileInfo],
-  WorkersDataTable: [],
+  WorkersDataTable: [replaceWorkerDataTableCallsColumnMultiCall],
 };
 
 export default componentHandlers;

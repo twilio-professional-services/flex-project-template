@@ -21,6 +21,8 @@ import PauseRecordingLoaded from "../../feature-library/pause-recording/flex-hoo
 import TeamsViewFiltersLoaded from "../../feature-library/teams-view-filters/flex-hooks/events/pluginsLoaded";
 import SupervisorCapacityLoaded from "../../feature-library/supervisor-capacity/flex-hooks/events/pluginsLoaded";
 import ScheduleManagerLoaded from "../../feature-library/schedule-manager/flex-hooks/events/pluginsLoaded";
+import MultiCallLoaded from "../../feature-library/multi-call/flex-hooks/events/pluginsLoaded";
+import MultiCallTokenUpdated from "../../feature-library/multi-call/flex-hooks/events/tokenUpdated";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -37,7 +39,8 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     PauseRecordingLoaded,
     TeamsViewFiltersLoaded,
     SupervisorCapacityLoaded,
-    ScheduleManagerLoaded
+    ScheduleManagerLoaded,
+    MultiCallLoaded
   ],
   taskAccepted: [
     taskAcceptedHandlerActivityReservationHandler,
@@ -51,6 +54,7 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   taskTimeout: [taskEndedHandlerActivityReservationHandler],
   taskUpdated: [],
   taskWrapup: [taskWrapupHandlerActivityReservationHandler],
+  tokenUpdated: [MultiCallTokenUpdated]
 };
 
 export default eventHandlers;
