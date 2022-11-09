@@ -15,7 +15,7 @@
         "enabled": true
       },
       "chat_transfer": {
-        "enabled": true,
+        "enabled": false,
         "cold_transfer": true,
         "multi_participant": true
       },

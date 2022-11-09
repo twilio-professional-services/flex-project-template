@@ -4,7 +4,7 @@ var appConfig = {
     url: "/plugins",
   },
   ytica: false,
-  //logLevel: "info",
+  logLevel: "info",
   showSupervisorDesktopView: true,
   custom_data: {
     serverless_functions_protocol: "http",
@@ -25,7 +25,9 @@ var appConfig = {
         enabled: true
       },
       chat_transfer: {
-        enabled: false
+        enabled: false,
+        cold_transfer: true,
+        multi_participant: true
       },
       chat_to_video_escalation: {
         enabled: false
