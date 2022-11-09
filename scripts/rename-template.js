@@ -83,6 +83,9 @@ shell.sed('-i', /.*"name": ".*",/, `  "name": "serverless-${packageSuffix}",`, `
 // rename the flex-config serverless_functions_domain so it doesnt collide either
 shell.sed('-i', /serverless_functions_domain[_,a-z]*":/, `serverless_functions_domain_${packageSuffixUndercore}":`, `${flexConfigDir}/ui_attributes.*.json`);
 
+// rename the flex-config serverless_functions_domain so it doesnt collide either
+shell.sed('-i', /serverless_functions_domain[_,a-z]*":/, `serverless_functions_domain_${packageSuffixUndercore}":`, `${flexConfigDir}/template-files/ui_attributes.*.json`);
+
 //update references to it
 if(shell.test('-e', `${fullPluginName}/src/feature-library/chat-to-video-escalation/custom-components/SwitchToVideo/SwitchToVideo.tsx`)){
   shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/feature-library/chat-to-video-escalation/custom-components/SwitchToVideo/SwitchToVideo.tsx`);
