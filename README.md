@@ -108,7 +108,7 @@ At the root of the repository you will find the following packages
 
 This package manages a json artifact that can be used to version configuration elements on a per-twilio-account basis. We can think of this as allowing us to configure, dev, qa, test, production or any other environments individually. This configuration relates specifically to the the configuration for flex discussed [here](https://www.twilio.com/docs/flex/developer/ui/configuration) and works by injecting the custom object into ui_attributes within the flex configuration object. The plugin is then able to reference these variables. The first example being, hosting the domain name of the associated serverless-functions.
 
-*NOTE* All changes are additive, that is to say, they are deep merged with whatever exists on the environment, never overwriting and only adding configuration when it doesn't exist.  This means we can ensure configuration exists as part of a release but then safely manage it on the environment over the lifetime of the solution, without worrying about subsequent releases overriding any changes made to the environment in between releases.
+*NOTE* changes are deep merged with whatever exists on the environment so existing configuration is preserved unless otherwise overridden by whats in version control.
 
 More details on the flex-config package can be found [here](/flex-config/README.md);
 
