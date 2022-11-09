@@ -210,21 +210,21 @@ When running the plugin locally, this template has been setup to pair the plugin
 
 ```json
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"address": "localhost",
-			"localRoot": "${workspaceFolder}/serverless-functions",
-			"name": "Attach To Serverless Remote",
-			"port": 9229,
-			"remoteRoot": "${workspaceFolder}/serverless-functions",
-			"request": "attach",
-			"skipFiles": [
-				"<node_internals>/**"
-			],
-			"type": "node"
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}/serverless-functions",
+      "name": "Attach To Serverless Remote",
+      "port": 9229,
+      "remoteRoot": "${workspaceFolder}/serverless-functions",
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    }
+  ]
 }
 ```
 
@@ -255,18 +255,20 @@ When running the plugin locally, this template has been setup to pair the plugin
 # Using template for a standalone plugin
 
 1. Fork the template and give it a name
-2. Remove the features; from the root folder of a checkout of your new repository run
+2. Install dependencies - you can skip when prompted to enter auth token
 ```bash
 npm install
+```
+3. Remove the features; from the root folder of a checkout of your new repository run
+```bash
 npm run remove-features
 ```
-3. Rename the template; from the root folder of a checkout of your new repository run
+4. Rename the template; from the root folder of a checkout of your new repository run
 ```bash
-npm rename-template <template-name>
+npm run rename-template <template-name>
 ```
-5. *OPTIONAL* you may want to tidy up your readme at this point or do it later 
-7. Push your changes to your repository - this is your new baseline
-8. You can follow the instructions for [local development setup](#local-setup-and-use) and then [adding a feature](/plugin-flex-ts-template-v2/README.md#adding-a-feature)
+5. Push your changes to your repository - this is your new baseline
+6. You can follow the instructions for [local development setup](#local-setup-and-use) and then [adding a feature](/plugin-flex-ts-template-v2/README.md#adding-a-feature)
 
 
 ---
