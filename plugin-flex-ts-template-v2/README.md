@@ -7,13 +7,21 @@ This plugin defines a package structure to make distributed development easier w
 ---
 
 1. [Overview](#overview)
-   1. [Flex hooks](#flex-hooks)
-      1. [actions](#actions)
-      2. [components](#components)
-      3. [init](#init)
-   2. [Feature Library](#feature-library)
-      1. [Adding a feature](#adding-a-feature)
-      2. [Extending template on a project](#extending-template-on-a-project)
+2. [Flex hooks](#flex-hooks)
+   1. [actions](#actions)
+   2. [components](#components)
+   3. [init](#init)
+3. [Feature Library](#feature-library)
+   1. [Adding a feature](#adding-a-feature)
+   2. [Extending template on a project](#extending-template-on-a-project)
+4. [Types](#types)
+5. [Utils](#utils)
+   1. [Live Query Helper](#live-query)
+6. [Serverless](#serverless)
+   1. [API Service](#api-service)
+   2. [PhoneNumbers](#phonenumbers)
+   3. [ProgrammableChat](#programmable-chat)
+   4. [TaskRouter](#task-router)
 
 # Overview
 
@@ -192,4 +200,42 @@ To add a new feature, create a new folder under the [feature-library](/plugin-fl
 
 ### extending template on a project
 
-When modifiying behavior of the template on a project (a fork of the template) it is less practical to compartmentalize everything into features. It is expected in this case to use the `project-extensions` folder to contain `custom-components` and `flex-hooks` much like a single large feature in the feature library.
+When modifiying behavior of the template on a project (a fork or possible clone of the template) it is less practical to compartmentalize everything into features. It is expected in this case to use the `project-extensions` folder to contain `custom-components` and `flex-hooks` much like a single large feature in the feature library.
+
+## types
+
+The types folder contains various object definitions that are used throughout the template, many declare the interface for operations within the serverless functions. Some key types to pay attention to.
+
+- [Task](/plugin-flex-ts-template-v2/src/types/task-router/Task.ts) defines expected object model for customisations to task. It is useful here to annotate what custom conversation measures are used for.
+- [Worker](/plugin-flex-ts-template-v2/src/types/task-router/Worker.ts) defines expected object model for customisations to worker.
+- [CustomServiceConfiguration](/plugin-flex-ts-template-v2/src/types/manager/CustomServiceConfiguration.ts) This is where custom feature configuration models are declared.
+
+## Utils
+
+# live-query
+
+Its not uncommon to want to levearge the [built in indexes](https://www.twilio.com/docs/sync/live-query#index-name) for custom features in flex. The live query helper is a convenience class for doing just that. Allowing you to hook into one of the four indexes with a query and instantly be able to manage the results.
+
+# serverless
+
+The serverless package contains the interface to the set of common twilio operations - these can be thought of as wrrappers around the direct suite of Twilio APIs, making it easy to leverrage these operations without having to rebuild an interface. They come with an example of how retry handling can be built in.
+
+## API Service
+
+The common class that implements retry handling, all utilities that act as interfaces to serverless functions should extend this
+
+## PhoneNumbers
+
+- getAccountPhoneNumbers()
+
+## Programmable Chat
+
+- updateChannelAttributes(channelSid: string, attributes: object)
+
+## Task Router
+
+- updateTaskAttributes(taskSid: string, attributesUpdate: object)
+  - this will merge the attributesUpdate object with existing attributes. It will use the backend to ensure the operation is transactionally safe be checking the ETAG header. This is something not currently done when using the front end SDK.
+- getQueues(force: boolean)
+- getWorkerChannels(workerSid: string)
+- updateWorkerChannel(workerSid: string, workerChannelSid: string, capacity: number, available: boolean)
