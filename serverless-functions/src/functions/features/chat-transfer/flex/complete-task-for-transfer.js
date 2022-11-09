@@ -77,7 +77,7 @@ exports.handler = TokenValidator(async function completeTaskForTransfer(
       // move the task to completed
       const reason = `Task ${transferType} Transfered to new task`;
       const { success: completeTaskSuccess, message: completeTaskMessage } =
-        await TaskOperations.completeTask(context, taskSid, reason, 0);
+        await TaskOperations.completeTask({context, taskSid, reason, scriptName, attempts: 0});
       response.setBody({ success: completeTaskSuccess, message });
       callback(null, response);
     } catch (error) {

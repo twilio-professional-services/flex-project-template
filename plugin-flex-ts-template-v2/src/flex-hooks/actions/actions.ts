@@ -32,8 +32,8 @@ const actionsToRegister: Actions = {
   },
   ApplyTeamsViewFilters: {
     before: [interceptQueueFilter],
-    after: [],
-    replace: [logApplyListFilters],
+    after: [logApplyListFilters],
+    replace: [],
   },
   CompleteTask: {
     before: [

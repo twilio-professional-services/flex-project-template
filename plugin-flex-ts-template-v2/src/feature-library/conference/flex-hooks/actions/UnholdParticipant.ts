@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { UIAttributes } from "types/manager/ServiceConfiguration";
-import ConferenceService from "../../../../utils/serverless/ConferenceService/ConferenceService";
+import ConferenceService from "../../utils/ConferenceService";
 
 const { custom_data } = Flex.Manager.getInstance().serviceConfiguration
   .ui_attributes as UIAttributes;

@@ -1,6 +1,6 @@
 import { Manager, Notifications } from '@twilio/flex-ui';
 import { NotificationIds } from "../flex-hooks/notifications/ScheduleManager";
-import ScheduleManagerService from '../../../utils/serverless/ScheduleManager/ScheduleManagerService';
+import ScheduleManagerService from './ScheduleManagerService';
 import { Rule, Schedule, ScheduleManagerConfig } from '../types/schedule-manager';
 import { UIAttributes } from '../../../types/manager/ServiceConfiguration';
 
