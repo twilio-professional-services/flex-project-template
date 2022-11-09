@@ -334,5 +334,6 @@ conveience script that does the same as setup-local-environment except it won't 
     1. Updated readmes with instructions for various use cases
     2. Updated remove-features scripts to account for schedule manager
     3. Modified plugin API strructure to leverage use of appConfig for easier local configuration
-
+    4. Updated github actions release scripts to attempt to infer environment variables if placeholders still in place
+    5. Updated github actions release scripts to break into multiple jobs decreasing the time taken to perform a release
 
