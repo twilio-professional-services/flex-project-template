@@ -112,5 +112,9 @@ if(shell.test('-e', './serverless-functions/.twiliodeployinfo')){
   shell.rm('-rf', './serverless-functions/.twiliodeployinfo'); 
 }
 
-shell.echo(`Renaming assets complete, dont forget to re-run: npm install, deploy your serverless functions and update the serverless_functions_domain_${packageSuffixUndercore} in your flex-config`);
+console.log(`Re-evaluating npm package-lock for ${fullPluginName}...`);
+shell.exec(`npm --prefix ./${fullPluginName} install ./${fullPluginName}`, {silent:true});
+
+shell.echo("");
+shell.echo(`Renaming assets complete, dont forget to re-run: npm install`);
 shell.echo("");
