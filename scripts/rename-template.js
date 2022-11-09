@@ -45,7 +45,7 @@ wordArray.forEach((word, index, array) => {
 const pluginName =  wordArray.join('')
 const fullPluginName = `flex-template-${packageSuffix}`
 
-const postInstall = `    "postinstall": "(cd serverless-functions && npm install && cp -n .env.example .env); (cd flex-config && npm install && cp -n .env.example .env); (cd ${fullPluginName} && npm install)"`
+const start_plugin =`     "start:plugin": "cd ${fullPluginName} && twilio flex:plugins:start"`
 
 
 // rename flex v2 plugin project name in package.json
@@ -73,7 +73,7 @@ shell.sed('-i', /.*"version": ".*",/, `  "version": "0.0.1",`, `${pluginDir}/pac
 shell.mv([pluginDir], `./${fullPluginName}`)
 
 // update the script to use the new plugin directory
-shell.sed('-i', /.*"postinstall": .*"/, postInstall, `package.json`);
+shell.sed('-i', /.*"start:plugin": .*"/, start_plugin, `package.json`);
 
 
 // rename serverless package so plugins dont collide when deployed side by side
