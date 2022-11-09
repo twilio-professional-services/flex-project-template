@@ -1,5 +1,6 @@
-import { ConferenceParticipant, ITask } from '@twilio/flex-ui';
+import { Actions, ConferenceParticipant, ITask, Manager } from '@twilio/flex-ui';
 import * as React from 'react';
+import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import ConferenceService from '../../utils/ConferenceService';
 
 export interface OwnProps {
@@ -37,11 +38,11 @@ class ConferenceMonitor extends React.Component {
 
     if (liveParticipantCount > 2 && this.state.liveParticipantCount <= 2) {
       if (this.shouldUpdateParticipants(participants, liveWorkerCount)) {
-        this.handleMoreThanTwoParticipants(conferenceSid, liveParticipants);
+        this.handleMoreThanTwoParticipants(task, conferenceSid, liveParticipants);
       }
     } else if (liveParticipantCount <= 2 && this.state.liveParticipantCount > 2) {
       if (this.shouldUpdateParticipants(participants, liveWorkerCount)) {
-        this.handleOnlyTwoParticipants(conferenceSid, liveParticipants);
+        this.handleOnlyTwoParticipants(task, conferenceSid, liveParticipants);
       }
     }
 
@@ -78,23 +79,22 @@ class ConferenceMonitor extends React.Component {
     return liveWorkerCount <= 1 && this.hasUnknownParticipant(participants);
   }
 
-  handleMoreThanTwoParticipants = (conferenceSid: string, participants: ConferenceParticipant[]) => {
+  handleMoreThanTwoParticipants = (task: ITask, conferenceSid: string, participants: ConferenceParticipant[]) => {
     console.log('More than two conference participants. Setting endConferenceOnExit to false for all participants.');
-    this.setEndConferenceOnExit(conferenceSid, participants, false);
+    this.setEndConferenceOnExit(task, conferenceSid, participants, false);
   }
 
-  handleOnlyTwoParticipants = (conferenceSid: string, participants: ConferenceParticipant[]) => {
+  handleOnlyTwoParticipants = (task: ITask, conferenceSid: string, participants: ConferenceParticipant[]) => {
     console.log('Conference participants dropped to two. Setting endConferenceOnExit to true for all participants.');
-    this.setEndConferenceOnExit(conferenceSid, participants, true);
+    this.setEndConferenceOnExit(task, conferenceSid, participants, true);
   }
 
-  setEndConferenceOnExit = async (conferenceSid: string, participants: ConferenceParticipant[], endConferenceOnExit: boolean) => {
-    const promises = [] as Promise<string>[];
+  setEndConferenceOnExit = async (task: ITask, conferenceSid: string, participants: ConferenceParticipant[], endConferenceOnExit: boolean) => {
+    const promises = [] as Promise<void>[];
+    
     participants.forEach(p => {
-      console.log(`setting endConferenceOnExit = ${endConferenceOnExit} for callSid: ${p.callSid} status: ${p.status}`);
-      if (p.connecting || !p.callSid) { return } //skip setting end conference on connecting parties as it will fail
       promises.push(
-        ConferenceService.setEndConferenceOnExit(conferenceSid, p.callSid, endConferenceOnExit)
+        this.performParticipantUpdate(task, conferenceSid, p, endConferenceOnExit)
       );
     });
 
@@ -103,6 +103,43 @@ class ConferenceMonitor extends React.Component {
       console.log(`endConferenceOnExit set to ${endConferenceOnExit} for all participants`);
     } catch (error) {
       console.error(`Error setting endConferenceOnExit to ${endConferenceOnExit} for all participants\r\n`, error);
+    }
+  }
+  
+  performParticipantUpdate = async (task: ITask, conferenceSid: string, participant: ConferenceParticipant, endConferenceOnExit: boolean) => {
+    if (participant.connecting || !participant.callSid) { return } //skip setting end conference on connecting parties as it will fail
+    console.log(`setting endConferenceOnExit = ${endConferenceOnExit} for callSid: ${participant.callSid} status: ${participant.status}`);
+    
+    let doWorkaround = false;
+    
+    if (participant.onHold) {
+      const { custom_data } = Manager.getInstance().configuration as UIAttributes;
+      const { hold_workaround = false } = custom_data?.features.conference || {};
+      
+      // The hold workaround will briefly take a held participant off hold so that we can update endConferenceOnExit.
+      // Unfortunately, setting endConferenceOnExit doesn't take effect if done while the participant is held.
+      
+      if (hold_workaround) {
+        doWorkaround = true;
+      }
+    }
+    
+    if (doWorkaround) {
+      await Actions.invokeAction('UnholdParticipant', {
+        participantType: participant.participantType,
+        task,
+        targetSid: participant.participantType === 'worker' ? participant.workerSid : participant.callSid
+      });
+    }
+    
+    await ConferenceService.setEndConferenceOnExit(conferenceSid, participant.callSid, endConferenceOnExit);
+    
+    if (doWorkaround) {
+      await Actions.invokeAction('HoldParticipant', {
+        participantType: participant.participantType,
+        task,
+        targetSid: participant.participantType === 'worker' ? participant.workerSid : participant.callSid
+      });
     }
   }
 
