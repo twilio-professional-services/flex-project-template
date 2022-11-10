@@ -68,7 +68,7 @@ jobs:
           node-version: '16'   
 
       - name: deploy and release flex-plugin
-        working-directory: ${{ secrets.PLUGIN_FOLDER }}
+        working-directory: $PLUGIN_FOLDER
         run: |
           npm install
           npm run install-flex-plugin
