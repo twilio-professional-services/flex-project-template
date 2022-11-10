@@ -241,7 +241,7 @@ When running the plugin locally, this template has been setup to pair the plugin
 2. Nominate a Twilio account to act as one of dev, qa, test, prod
 3. Create a twilio api key and secret for your account follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key.
 4. In github, go to your project settings -> secrets and add the 3 repostory secrets
-    2. For each environment add the 3 env variables for that environment, for example, if its dev you would add
+    - For each environment add the 3 env variables for that environment, for example, if its dev you would add
         - `TWILIO_ACCOUNT_SID_DEV` - the account sid you want to deploy to
         - `TWILIO_API_KEY_DEV` - the account key or key "sid" as its otherwise known
         - `TWILIO_API_SECRET_DEV` - the account secret
@@ -336,11 +336,14 @@ convenience script for simplyfying local setup and development, triggered as par
 conveience script that does the same as setup-local-environment except it won't install npm pacakges again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
 
 # CHANGELOG
-
+- 1.0.2
+    - README updates
+    - improved reliability of github actions scripts
+    - update rename-template and remove-features to account for github actions scripts
 - 1.0.1
-    1. Updated readmes with instructions for various use cases
-    2. Updated remove-features scripts to account for schedule manager
-    3. Modified plugin API strructure to leverage use of appConfig for easier local configuration
-    4. Updated github actions release scripts to attempt to infer environment variables if placeholders still in place
-    5. Updated github actions release scripts to break into multiple jobs decreasing the time taken to perform a release
+    - Updated readmes with instructions for various use cases
+    - Updated remove-features scripts to account for schedule manager
+    - Modified plugin API strructure to leverage use of appConfig for easier local configuration
+    - Updated github actions release scripts to attempt to infer environment variables if placeholders still in place
+    - Updated github actions release scripts to break into multiple jobs decreasing the time taken to perform a release
 
