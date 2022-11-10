@@ -13,7 +13,7 @@ export function handleUnholdConferenceParticipant(
 
   flex.Actions.addListener(
     "beforeUnholdParticipant",
-    async (payload: any, abortFunction: () => void) => {
+    async (payload, abortFunction) => {
       const { participantType, targetSid: participantSid, task } = payload;
 
       if (participantType !== "unknown") {

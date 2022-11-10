@@ -20,7 +20,7 @@ export function changeWorkerActivityBeforeOutboundCall(
 
   flex.Actions.addListener(
     "beforeStartOutboundCall",
-    async (payload: any, abortFunction: any) => {
+    async (payload, abortFunction) => {
       storeCurrentActivitySidIfNeeded();
 
       const targetActivity = WorkerState.activity?.available

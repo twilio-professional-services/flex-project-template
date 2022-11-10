@@ -13,7 +13,7 @@ export function handleDualChannelHangupCall(
 ) {
   if (!enabled) return;
 
-  flex.Actions.addListener("beforeHangupCall", async (payload: any) => {
+  flex.Actions.addListener("beforeHangupCall", async (payload) => {
     // Listening for this event to at least capture the conference SID
     // if the outbound call is canceled before the called party answers
     addMissingCallDataIfNeeded(payload.task);

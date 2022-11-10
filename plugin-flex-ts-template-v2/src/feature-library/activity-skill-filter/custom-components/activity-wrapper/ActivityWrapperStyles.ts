@@ -16,8 +16,8 @@ export const ActivityWrapper = styled('div')<OwnProps>`
     flex-direction: column;
   }
 
-  ${(props: any) => {
-    return props.activitiesConfig.map((config: any) => {
+  ${(props) => {
+    return props.activitiesConfig.map((config) => {
       const { idx, display, order } = config;
       // NOTE: idx/order are 0-based, CSS order and nth-of-type are 1-based
       return `

@@ -8,7 +8,7 @@ const { enabled = false, add_button = true } = custom_data?.features.conference 
 export function handleHoldConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled || !add_button) return;
 
-  flex.Actions.addListener("beforeHoldParticipant", async (payload: any, abortFunction: () => void) => {
+  flex.Actions.addListener("beforeHoldParticipant", async (payload, abortFunction) => {
     const { participantType, targetSid: participantSid, task } = payload;
     
     if (participantType !== 'unknown') {

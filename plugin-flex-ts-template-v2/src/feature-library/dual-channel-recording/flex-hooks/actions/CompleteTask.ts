@@ -13,7 +13,7 @@ export function handleDualChannelCompleteTask(
 ) {
   if (!enabled) return;
 
-  flex.Actions.addListener("beforeCompleteTask", async (payload: any) => {
+  flex.Actions.addListener("beforeCompleteTask", async (payload) => {
     // Listening for this event as a last resort check to ensure call
     // and conference metadata are captured on the task
     addMissingCallDataIfNeeded(payload.task);

@@ -21,7 +21,7 @@ export const enableBargeCoachButtonsUponMonitor = async (
   if (!enabled) return;
   // Listening for supervisor to monitor the call to enable the
   // barge and coach buttons, as well as reset their muted/coaching states
-  flex.Actions.addListener("afterMonitorCall", (payload: any) => {
+  flex.Actions.addListener("afterMonitorCall", (payload) => {
     console.log(
       `Monitor button triggered, enable the Coach and Barge-In Buttons`
     );
@@ -66,7 +66,7 @@ export const disableBargeCoachButtonsUponMonitor = async (
   if (!enabled) return;
   // Listening for supervisor to click to unmonitor the call to disable the
   // barge and coach buttons, as well as reset their muted/coaching states
-  flex.Actions.addListener("afterStopMonitoringCall", (payload: any) => {
+  flex.Actions.addListener("afterStopMonitoringCall", (payload) => {
     console.log(
       `Unmonitor button triggered, disable the Coach and Barge-In Buttons`
     );

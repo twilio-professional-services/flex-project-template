@@ -11,6 +11,6 @@ export function replaceViewForCallbackAndVoicemail(flex: typeof Flex, manager: F
 
   Flex.TaskInfoPanel.Content.replace(<CallbackAndVoicemail key="callback-component"  allowRequeue={allow_requeue} maxAttempts={max_attempts} />, {
     sortOrder: -1,
-    if: (props: any) => ['callback', 'voicemail'].includes(props.task.attributes.taskType),
+    if: (props) => ['callback', 'voicemail'].includes(props.task.attributes.taskType),
   });
 }
