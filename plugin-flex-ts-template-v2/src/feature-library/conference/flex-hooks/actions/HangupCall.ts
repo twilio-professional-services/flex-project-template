@@ -3,10 +3,10 @@ import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { ConferenceNotification } from '../notifications/Conference';
 
 const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } = custom_data?.features.conference || {}
+const { enabled = false, add_button = true } = custom_data?.features.conference || {}
 
 export function handleConferenceHangup(flex: typeof Flex, manager: Flex.Manager) {
-  if (!enabled) return;
+  if (!enabled || !add_button) return;
 
   flex.Actions.addListener('beforeHangupCall', async (payload: any, abortFunction: () => void) => {
     const { conference, taskSid } = payload.task;

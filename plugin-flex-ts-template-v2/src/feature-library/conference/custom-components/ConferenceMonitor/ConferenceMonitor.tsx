@@ -60,7 +60,7 @@ class ConferenceMonitor extends React.Component {
       // My worker has clearly left since previously joining
       // Time to stop monitoring at this point. Covers warm and cold transfers and generally stops Flex UI from tinkering
       // once the agent is done with the call.
-      console.debug('dialpad-addon, ConferenceMonitor, componentDidUpdate: My participant left. Time to STOP monitoring this task/conference');
+      console.debug('ConferenceMonitor: My participant left. Time to STOP monitoring this task/conference');
       this.setState({ stopMonitoring: true, didMyWorkerJoinYet: false });
     }
 
@@ -68,54 +68,57 @@ class ConferenceMonitor extends React.Component {
 
 
   hasUnknownParticipant = (participants: ConferenceParticipant[] = []) => {
-    return participants.some(p => p.participantType === 'unknown');
+    return participants.some(p => p.participantType === 'unknown' || p.participantType === 'external');
   }
 
   shouldUpdateParticipants = (participants: ConferenceParticipant[], liveWorkerCount: number) => {
     console.debug(
-      'dialpad-addon, ConferenceMonitor, shouldUpdateParticipants:',
+      'ConferenceMonitor: shouldUpdateParticipants:',
       liveWorkerCount <= 1 && this.hasUnknownParticipant(participants)
     );
     return liveWorkerCount <= 1 && this.hasUnknownParticipant(participants);
   }
 
   handleMoreThanTwoParticipants = (task: ITask, conferenceSid: string, participants: ConferenceParticipant[]) => {
-    console.log('More than two conference participants. Setting endConferenceOnExit to false for all participants.');
+    console.log('ConferenceMonitor: More than two conference participants. Setting endConferenceOnExit to false for all participants.');
     this.setEndConferenceOnExit(task, conferenceSid, participants, false);
   }
 
   handleOnlyTwoParticipants = (task: ITask, conferenceSid: string, participants: ConferenceParticipant[]) => {
-    console.log('Conference participants dropped to two. Setting endConferenceOnExit to true for all participants.');
+    console.log('ConferenceMonitor: Conference participants dropped to two. Setting endConferenceOnExit to true for all participants.');
     this.setEndConferenceOnExit(task, conferenceSid, participants, true);
   }
 
   setEndConferenceOnExit = async (task: ITask, conferenceSid: string, participants: ConferenceParticipant[], endConferenceOnExit: boolean) => {
     const promises = [] as Promise<void>[];
+      const { custom_data } = Manager.getInstance().configuration as UIAttributes;
+      const { add_button = true, hold_workaround = false } = custom_data?.features.conference || {};
     
     participants.forEach(p => {
       promises.push(
-        this.performParticipantUpdate(task, conferenceSid, p, endConferenceOnExit)
+        this.performParticipantUpdate(task, conferenceSid, p, endConferenceOnExit, hold_workaround, add_button)
       );
     });
 
     try {
       await Promise.all(promises);
-      console.log(`endConferenceOnExit set to ${endConferenceOnExit} for all participants`);
+      console.log(`ConferenceMonitor: endConferenceOnExit set to ${endConferenceOnExit} for all participants`);
     } catch (error) {
-      console.error(`Error setting endConferenceOnExit to ${endConferenceOnExit} for all participants\r\n`, error);
+      console.error(`ConferenceMonitor: Error setting endConferenceOnExit to ${endConferenceOnExit} for all participants\r\n`, error);
     }
   }
   
-  performParticipantUpdate = async (task: ITask, conferenceSid: string, participant: ConferenceParticipant, endConferenceOnExit: boolean) => {
-    if (participant.connecting || !participant.callSid) { return } //skip setting end conference on connecting parties as it will fail
-    console.log(`setting endConferenceOnExit = ${endConferenceOnExit} for callSid: ${participant.callSid} status: ${participant.status}`);
+  performParticipantUpdate = async (task: ITask, conferenceSid: string, participant: ConferenceParticipant, endConferenceOnExit: boolean, hold_workaround: boolean, add_button: boolean) => {
+    if (participant.connecting || !participant.callSid || (!add_button && participant.participantType !== "customer")) {
+      // skip setting end conference on connecting parties as it will fail
+      // only set on customer participants because Flex sets the others for us
+      return;
+    }
+    console.log(`ConferenceMonitor: setting endConferenceOnExit = ${endConferenceOnExit} for callSid: ${participant.callSid} status: ${participant.status}`);
     
     let doWorkaround = false;
     
     if (participant.onHold) {
-      const { custom_data } = Manager.getInstance().configuration as UIAttributes;
-      const { hold_workaround = false } = custom_data?.features.conference || {};
-      
       // The hold workaround will briefly take a held participant off hold so that we can update endConferenceOnExit.
       // Unfortunately, setting endConferenceOnExit doesn't take effect if done while the participant is held.
       
@@ -128,7 +131,7 @@ class ConferenceMonitor extends React.Component {
       await Actions.invokeAction('UnholdParticipant', {
         participantType: participant.participantType,
         task,
-        targetSid: participant.participantType === 'worker' ? participant.workerSid : participant.callSid
+        targetSid: participant.callSid
       });
     }
     
@@ -138,7 +141,7 @@ class ConferenceMonitor extends React.Component {
       await Actions.invokeAction('HoldParticipant', {
         participantType: participant.participantType,
         task,
-        targetSid: participant.participantType === 'worker' ? participant.workerSid : participant.callSid
+        targetSid: participant.callSid
       });
     }
   }
