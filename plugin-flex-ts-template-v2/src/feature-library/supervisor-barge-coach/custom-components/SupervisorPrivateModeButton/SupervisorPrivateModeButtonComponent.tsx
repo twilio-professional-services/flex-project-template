@@ -68,6 +68,7 @@ export const SupervisorPrivateToggle = ({task}: SupervisorPrivateToggleProps) =>
             onClick={togglePrivateMode}
             title={ privateMode ? "Disable Private Mode" : "Enable Private Mode" }
             variant="secondary"
+            css=''
           />
           { privateMode ? "Privacy On" : "Privacy Off" }
         </Stack>
