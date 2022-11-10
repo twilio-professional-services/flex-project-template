@@ -45,6 +45,22 @@ const filesToCopy = [
     dst: `${pluginSrc}/flex-hooks/notifications/`,
   },
   {
+    src: `${templateDirectory}/flex-hooks/filters.ts`,
+    dst: `${pluginSrc}/flex-hooks/teams-filters/`,
+  },
+  {
+    src: `${templateDirectory}/flex-hooks/jsclient-event-listeners/index.ts`,
+    dst: `${pluginSrc}/flex-hooks/jsclient-event-listeners/`,
+  },
+  {
+    src: `${templateDirectory}/flex-hooks/jsclient-event-listeners/voice-client/*`,
+    dst: `${pluginSrc}/flex-hooks/jsclient-event-listeners/voice-client/`,
+  },
+  {
+    src: `${templateDirectory}/flex-hooks/jsclient-event-listeners/worker-client/*`,
+    dst: `${pluginSrc}/flex-hooks/jsclient-event-listeners/worker-client/`,
+  },
+  {
     src: `${templateDirectory}/types/CustomServiceConfiguration.ts`,
     dst: `${pluginSrc}/types/manager/`,
   },

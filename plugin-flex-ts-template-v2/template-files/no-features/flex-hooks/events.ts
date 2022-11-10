@@ -12,6 +12,7 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   taskTimeout: [],
   taskUpdated: [],
   taskWrapup: [],
+  tokenUpdated: []
 };
 
 export default eventHandlers;
