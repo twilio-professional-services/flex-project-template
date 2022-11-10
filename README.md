@@ -340,6 +340,8 @@ conveience script that does the same as setup-local-environment except it won't 
     - README updates
     - improved reliability of github actions scripts
     - update rename-template and remove-features to account for github actions scripts
+    - defaulting plugin folder name for github action scripts to be the plugin-flex-ts-template-v2 plugin
+
 - 1.0.1
     - Updated readmes with instructions for various use cases
     - Updated remove-features scripts to account for schedule manager
