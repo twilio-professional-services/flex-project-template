@@ -194,12 +194,16 @@ The following are guides to instruct the user how to leverage this template for 
 
 ### Setup
 1. Clone the repository
-2. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
+2. make sure the twilio cli has the correct account set to active
 ```bash
-npm install
+twilio profiles:list
 ```
-3. follow the prompt and provide your auth token
-4. Run the serverless functions and plugin locally
+3. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
+```bash
+npm ci
+```
+4. follow the prompt and provide your auth token
+5. Run the serverless functions and plugin locally
 ```bash
 npm run start:local
 ```
@@ -236,9 +240,8 @@ When running the plugin locally, this template has been setup to pair the plugin
 1. Use the template to create your own repository
 2. Nominate a Twilio account to act as one of dev, qa, test, prod
 3. Create a twilio api key and secret for your account follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key.
-4. In github, go to your project settings -> secrets and add the following repostory secrets
-    1. `PLUGIN_FOLDER` - this should be set to the name of the plugin you are using - most likely its `plugin-flex-ts-template-v2`
-    2. For each environment add the appropriate env variables, for example, if its dev you would add
+4. In github, go to your project settings -> secrets and add the 3 repostory secrets
+    - For each environment add the 3 env variables for that environment, for example, if its dev you would add
         - `TWILIO_ACCOUNT_SID_DEV` - the account sid you want to deploy to
         - `TWILIO_API_KEY_DEV` - the account key or key "sid" as its otherwise known
         - `TWILIO_API_SECRET_DEV` - the account secret
@@ -246,10 +249,11 @@ When running the plugin locally, this template has been setup to pair the plugin
 ![alt text](scripts/screenshots/github-secrets.png)
 
 5. Login into Flex and make sure in the admin panel, the version of flex you are using meets the minimal version allowed by the plugin
-6. Navigate over to github actions for your repository and select the environment you want to deploy, then run the workflow.
+6. _Optionally_ navigate to the flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/manage/voice?frameUrl=%2Fconsole%2Fflex%2Fvoice%3Fx-target-region%3Dus1)
+6. Navigate over to github actions of your repository and select the environment you want to deploy, then run the workflow.
     - this will deploy the four assets to your environment with the default features enabled, See [Feature library Information](#feature-library-information) for further details of whats enabled by default.
-    - serverless-functions will auto-identify any missing environment variables for the default features. It is recommend you populate the [environment variables](/serverless-functions/) and manage through version control at a later date to remove any ambiguity.
-    - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommend you populate the [ui_attributes](/flex-config/) config and manage through version control at a later date to remove any ambiguity. 
+    - serverless-functions will auto-identify any missing environment variables for the default features. It is recommend you populate the [environment variables](/serverless-functions/) for each account and manage config in version control at a later date to remove any ambiguity.
+    - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommend you populate the [ui_attributes](/flex-config/) config and manage the domain names through version control at a later date to remove any ambiguity. 
     - for full functionality, review the configuration steps for the disable features and make sure their dependencies are setup.
 
 
@@ -332,11 +336,16 @@ convenience script for simplyfying local setup and development, triggered as par
 conveience script that does the same as setup-local-environment except it won't install npm pacakges again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
 
 # CHANGELOG
+- 1.0.2
+    - README updates
+    - improved reliability of github actions scripts
+    - update rename-template and remove-features to account for github actions scripts
+    - defaulting plugin folder name for github action scripts to be the plugin-flex-ts-template-v2 plugin
 
 - 1.0.1
-    1. Updated readmes with instructions for various use cases
-    2. Updated remove-features scripts to account for schedule manager
-    3. Modified plugin API strructure to leverage use of appConfig for easier local configuration
-    4. Updated github actions release scripts to attempt to infer environment variables if placeholders still in place
-    5. Updated github actions release scripts to break into multiple jobs decreasing the time taken to perform a release
+    - Updated readmes with instructions for various use cases
+    - Updated remove-features scripts to account for schedule manager
+    - Modified plugin API strructure to leverage use of appConfig for easier local configuration
+    - Updated github actions release scripts to attempt to infer environment variables if placeholders still in place
+    - Updated github actions release scripts to break into multiple jobs decreasing the time taken to perform a release
 

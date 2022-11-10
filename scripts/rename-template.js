@@ -59,15 +59,19 @@ shell.sed('-i', /.*"name": ".*",/, `  "name": "${fullPluginName}",`, `${pluginDi
 shell.sed('-i', /.*"version": ".*",/, `  "version": "0.0.1",`, `${pluginDir}/package-lock.json`);
 
 // rename the plugin file names
- shell.sed ('-i', /import .*Plugin from '.\/.*Plugin';/, `import ${pluginName} from './${pluginName}';`, `${pluginSrc}/index.ts`);
- shell.sed ('-i', /FlexPlugin.loadPlugin\(.*Plugin\);/, `FlexPlugin.loadPlugin(${pluginName});`, `${pluginSrc}/index.ts`);
+shell.sed ('-i', /import .*Plugin from '.\/.*Plugin';/, `import ${pluginName} from './${pluginName}';`, `${pluginSrc}/index.ts`);
+shell.sed ('-i', /FlexPlugin.loadPlugin\(.*Plugin\);/, `FlexPlugin.loadPlugin(${pluginName});`, `${pluginSrc}/index.ts`);
 
- shell.sed ('-i', /const PLUGIN_NAME = '.*Plugin';/, `const PLUGIN_NAME = '${pluginName}';`, `${pluginSrc}/*Plugin.tsx`);
- shell.sed ('-i', /export default class .*Plugin extends/, `export default class ${pluginName} extends`, `${pluginSrc}/*Plugin.tsx`);
+shell.sed ('-i', /const PLUGIN_NAME = '.*Plugin';/, `const PLUGIN_NAME = '${pluginName}';`, `${pluginSrc}/*lugin.tsx`);
+shell.sed ('-i', /export default class .*Plugin extends/, `export default class ${pluginName} extends`, `${pluginSrc}/*lugin.tsx`);
 
- shell.ls(`${pluginSrc}/*Plugin.tsx`).forEach(function (file) {
-  shell.mv(file, `${pluginSrc}/${pluginName}.tsx`);
- });
+shell.ls(`${pluginSrc}/*lugin.tsx`).forEach(function (file) {
+ if(pluginName.endsWith("Plugin") || pluginName.endsWith("plugin")){
+   shell.mv(file, `${pluginSrc}/${pluginName}.tsx`);
+ } else {
+   shell.mv(file, `${pluginSrc}/${pluginName}Plugin.tsx`);
+ }
+});
 
  // rename the plugin directory
 shell.mv([pluginDir], `./${fullPluginName}`)
@@ -117,6 +121,11 @@ if(shell.test('-e', './serverless-functions/.twiliodeployinfo')){
   shell.echo("");
   shell.rm('-rf', './serverless-functions/.twiliodeployinfo'); 
 }
+
+// update references to the plugin in the actions scripts
+var oldPluginNamdRegex = RegExp(`${pluginDir}`); 
+shell.sed('-i', oldPluginNamdRegex, fullPluginName, `./.github/*/flex_deploy_*.yaml`);
+
 
 console.log(`Re-evaluating npm package-lock for ${fullPluginName}...`);
 shell.exec(`npm --prefix ./${fullPluginName} install ./${fullPluginName}`, {silent:true});
