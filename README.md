@@ -240,9 +240,8 @@ When running the plugin locally, this template has been setup to pair the plugin
 1. Use the template to create your own repository
 2. Nominate a Twilio account to act as one of dev, qa, test, prod
 3. Create a twilio api key and secret for your account follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key.
-4. In github, go to your project settings -> secrets and add the following repostory secrets
-    1. `PLUGIN_FOLDER` - this should be set to the name of the plugin you are using - most likely its `plugin-flex-ts-template-v2`
-    2. For each environment add the appropriate env variables, for example, if its dev you would add
+4. In github, go to your project settings -> secrets and add the 3 repostory secrets
+    2. For each environment add the 3 env variables for that environment, for example, if its dev you would add
         - `TWILIO_ACCOUNT_SID_DEV` - the account sid you want to deploy to
         - `TWILIO_API_KEY_DEV` - the account key or key "sid" as its otherwise known
         - `TWILIO_API_SECRET_DEV` - the account secret
