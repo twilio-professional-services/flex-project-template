@@ -194,12 +194,16 @@ The following are guides to instruct the user how to leverage this template for 
 
 ### Setup
 1. Clone the repository
-2. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
+2. make sure the twilio cli has the correct account set to active
 ```bash
-npm install
+twilio profiles:list
 ```
-3. follow the prompt and provide your auth token
-4. Run the serverless functions and plugin locally
+3. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
+```bash
+npm ci
+```
+4. follow the prompt and provide your auth token
+5. Run the serverless functions and plugin locally
 ```bash
 npm run start:local
 ```
@@ -246,10 +250,11 @@ When running the plugin locally, this template has been setup to pair the plugin
 ![alt text](scripts/screenshots/github-secrets.png)
 
 5. Login into Flex and make sure in the admin panel, the version of flex you are using meets the minimal version allowed by the plugin
-6. Navigate over to github actions for your repository and select the environment you want to deploy, then run the workflow.
+6. _Optionally_ navigate to the flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/manage/voice?frameUrl=%2Fconsole%2Fflex%2Fvoice%3Fx-target-region%3Dus1)
+6. Navigate over to github actions of your repository and select the environment you want to deploy, then run the workflow.
     - this will deploy the four assets to your environment with the default features enabled, See [Feature library Information](#feature-library-information) for further details of whats enabled by default.
-    - serverless-functions will auto-identify any missing environment variables for the default features. It is recommend you populate the [environment variables](/serverless-functions/) and manage through version control at a later date to remove any ambiguity.
-    - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommend you populate the [ui_attributes](/flex-config/) config and manage through version control at a later date to remove any ambiguity. 
+    - serverless-functions will auto-identify any missing environment variables for the default features. It is recommend you populate the [environment variables](/serverless-functions/) for each account and manage config in version control at a later date to remove any ambiguity.
+    - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommend you populate the [ui_attributes](/flex-config/) config and manage the domain names through version control at a later date to remove any ambiguity. 
     - for full functionality, review the configuration steps for the disable features and make sure their dependencies are setup.
 
 

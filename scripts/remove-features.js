@@ -51,6 +51,10 @@ const filesToCopy = [
   {
     src: `${flexConfigTemplateDir}/*.json`,
     dst: `${flexConfigDir}/`
+  },
+  {
+    src: `./.github/template_files/*.yaml`,
+    dst: './.github/workflows/'
   }
 ];
 
