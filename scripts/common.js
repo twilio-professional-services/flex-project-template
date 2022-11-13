@@ -1,36 +1,11 @@
 const shell = require("shelljs");
-const { originalPluginName } = require("./select-plugin");
+var { setPluginName, getPaths } = require("./select-plugin");
 
-function getDirectoryName(originalName, regex) {
-
-  var tempPluginDir = "";
-
-  if(shell.test('-d', `${originalName}`)){
-    tempPluginDir = originalName;
-  } else {
-    shell.ls('./').forEach(function (dir){
-      if(shell.test('-d', dir)){
-        if(dir.match(regex)){
-          tempPluginDir  = dir;
-        }
-      }
-    })
-  }
-  return tempPluginDir;
-}
-
-const pluginDir = getDirectoryName(originalPluginName, /flex-template-.*/);
 const serverlessDir = 'serverless-functions';
 const scheduleManagerServerlessDir = 'serverless-schedule-manager';
 const flexConfigDir = 'flex-config';
-const templateDirectory = `${pluginDir}/template-files/no-features`;
-const featureDirectory = `${pluginDir}/src/feature-library`;
-const pluginSrc = `${pluginDir}/src`;
 const serverlessSrc = `${serverlessDir}/src`;
 const flexConfigTemplateDir = `${flexConfigDir}/template-files`
-
-console.log("Jared4", originalPluginName);
-console.log("Jaerd5", pluginDir);
 
 // the following function will use twilio cli
 // to try to fetch the sids of template dependencies based on typical 
@@ -63,7 +38,6 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
 
 
     console.log("Loading environment variables..");
-    console.log("");
 
     result.taskrouter_workspace_sid = shell.exec("twilio api:taskrouter:v1:workspaces:list", {silent: true}).grep(FLEX_WORKSPACE_NAME).stdout.split(" ")[0]
     result.sync_sid = shell.exec("twilio api:sync:v1:services:list", {silent: true}).grep(SYNC_SERVICE_NAME).stdout.split(" ")[0]
@@ -81,7 +55,7 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     result.scheduleFunctionsSid = shell.exec("twilio api:serverless:v1:services:list", {silent: true}).grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[0]
     result.scheduledFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.scheduleFunctionsSid}`, {silent: true}).grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[4]
 
-    console.log("Done fetching environment variables");
+    console.log("\tDone fetching environment variables");
     console.log("");
 
     return result;
@@ -123,8 +97,21 @@ exports.installNPMFlexConfig = function installNPMFlexConfig() {
 }
 
 exports.installNPMPlugin = function installNPMPlugin() {
-  console.log(`Installing npm dependencies for ${pluginDir}...`);
-  shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
+
+  setPluginName("v1");
+  var { pluginDir } = getPaths();
+  var temp = pluginDir;
+  if( pluginDir && pluginDir != "" ) {
+    console.log(`Installing npm dependencies for ${pluginDir}...`);
+    shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
+  }
+
+  setPluginName("v2");
+  var { pluginDir } = getPaths();
+  if ( pluginDir && temp != pluginDir && pluginDir != "" ) {
+    console.log(`Installing npm dependencies for ${pluginDir}...`);
+    shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
+  }
 }
 
 exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv(context, serverlessEnv) {
@@ -191,7 +178,6 @@ exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv
     console.error(error);
     console.log(`Error attempting to generate serverless environment file ${serverlessEnv}`);
   }
-  console.log("");
 }
 
 exports.generateFlexConfigEnv = function generateFlexConfigEnv(context, flexConfigEnv) {
@@ -229,7 +215,6 @@ exports.generateFlexConfigEnv = function generateFlexConfigEnv(context, flexConf
     console.error(error);
     console.log(`Error attempting to generate flex config environment file ${flexConfigEnv}`);
   }
-  console.log("");
 }
 
 exports.populateFlexConfigPlaceholders = function populateFlexConfigPlaceholders(context, environment) {
@@ -251,21 +236,46 @@ exports.populateFlexConfigPlaceholders = function populateFlexConfigPlaceholders
     }
 }
 
-exports.generateAppConfigForPluginV2 = function generateAppConfigForPluginV2() {
+exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
 
-  const pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
-  const pluginAppConfig = `./${pluginDir}/public/appConfig.js`
+  setPluginName("v1");
+  var { pluginDir } = getPaths();
+  var temp = pluginDir;
 
-  try{
+  var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
+  var pluginAppConfig = `./${pluginDir}/public/appConfig.js`
 
-    if(!shell.test('-e', pluginAppConfig)){
-      shell.cp(pluginAppConfigExample, pluginAppConfig);
+  if(pluginDir && pluginDir != ""){
+    try{
+
+      if(!shell.test('-e', pluginAppConfig)){
+        shell.cp(pluginAppConfigExample, pluginAppConfig);
+      }
+      console.log(`Setting up ${pluginAppConfig}: complete`);
+    } catch (error) {
+      console.error(error);
+      console.log(`Error attempting to generate appConfig file ${pluginAppConfig}`);
     }
-    console.log("Setting up public/appConfig.js: complete");
-  } catch (error) {
-    console.error(error);
-    console.log(`Error attempting to generate appConfig file ${pluginAppConfig}`);
   }
+
+  setPluginName("v2");
+  var { pluginDir } = getPaths();
+  if ( pluginDir && temp != pluginDir && pluginDir != "") {
+    var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
+    var pluginAppConfig = `./${pluginDir}/public/appConfig.js`
+  
+    try{
+  
+      if(!shell.test('-e', pluginAppConfig)){
+        shell.cp(pluginAppConfigExample, pluginAppConfig);
+      }
+      console.log(`Setting up ${pluginAppConfig}: complete`);
+    } catch (error) {
+      console.error(error);
+      console.log(`Error attempting to generate appConfig file ${pluginAppConfig}`);
+    }
+  }
+
   console.log("");
 }
 
@@ -304,13 +314,13 @@ exports.printEnvironmentSummary = function printEnvironmentSummary(context){
 }
 
 
-exports.pluginDir = pluginDir;
+
 exports.serverlessDir =  serverlessDir;
 exports.scheduleManagerServerlessDir = scheduleManagerServerlessDir;
 exports.flexConfigDir = flexConfigDir;
-exports.templateDirectory = templateDirectory;
-exports.featureDirectory = featureDirectory;
-exports.pluginSrc = pluginSrc;
+
+
+
 exports.serverlessSrc = serverlessSrc;
 exports.flexConfigTemplateDir = flexConfigTemplateDir;
 

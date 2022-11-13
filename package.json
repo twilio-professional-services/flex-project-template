@@ -4,8 +4,7 @@
   "description": "This repository provides development teams with a starting point for flex projects or developing flex features.",
   "scripts": {
     "postinstall": "node scripts/setup-local-environment.js",
-    "generate-env-v1": "node scripts/setup-local-environment.js v1 false",
-    "generate-env-v2": "node scripts/setup-local-environment.js v2 false",
+    "generate-env": "node scripts/setup-local-environment.js false",
     "populate-missing-placeholders": "node scripts/populate-missing-placeholders.js",
     "show-env": "node scripts/show-env-vars.js",
     "remove-features": "node scripts/remove-features.js",
@@ -29,8 +28,5 @@
     "prompt": "^1.3.0",
     "shelljs": "^0.8.5",
     "twilio-cli": "3.4.2"
-  },
-  "dependencies": {
-    "v1": "^1.0.0"
   }
 }

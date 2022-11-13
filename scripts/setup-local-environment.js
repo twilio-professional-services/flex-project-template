@@ -1,21 +1,10 @@
-const shell = require("shelljs");
-const { setPluginName } = require("./select-plugin");
+const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPlugins } = require ('./common');
+const prompt = require('prompt');
 
-const pluginVersion = process.argv[2];
-const installNpm = process.argv[3]? process.argv[3] == false: true;
+const installNpm = process.argv[2]? process.argv[2] == false: true;
 
 console.log(" ----- START OF POST INSTALL SCRIPT ----- ");
 console.log("");
-
-setPluginName(pluginVersion);
-const { originalPluginName } = require("./select-plugin");
-
-if(!originalPluginName) return;
-
-const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPluginV2 } = require ('./common');
-const prompt = require('prompt');
-// https://github.com/shelljs/shelljs#shellstringstr
-
 
 var serverlessEnv = `./${serverlessDir}/.env`;
 var flexConfigEnv = `./${flexConfigDir}/.env`;
@@ -72,25 +61,28 @@ getActiveTwilioProfile().then((profile_result) => {
       context = { 
         ...context, 
         ...prompt_result, 
-        ...getEnvironmentVariables()
+        ...getEnvironmentVariables(),
       };
 
       if(installNpm){
         installNPMServerlessFunctions();
         installNPMFlexConfig();
         installNPMPlugin();
+        console.log("");
       }
 
       if(context.account_sid) {
         generateServerlessFunctionsEnv(context, serverlessEnv);
         generateFlexConfigEnv(context, flexConfigEnv);
-        generateAppConfigForPluginV2();
+        generateAppConfigForPlugins();
+        console.log("");
 
         printEnvironmentSummary(context);
 
         console.log("if there are missing workflow sids, you can set those up for those features manually later");
         console.log("You can now run the following command to start you local serverless functions and flex plugin together")
-        console.log("$ npm run start:local");
+        console.log("");
+        console.log("npm run start:local <v1 or v2>");
       } else {
         console.log("*****     WARNING       *****");
         console.log(`Twilio cli profile not detected, please set an active profile with`);
