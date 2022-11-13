@@ -9,7 +9,12 @@ function onlyValidCharacters(str) {
   return /^[0-9a-zA-Z_-]+$/.test(str);
 }
 
-const { pluginDir, pluginSrc, flexConfigDir, serverlessDir } = require ('./common');
+const { flexConfigDir, serverlessDir } = require ('./common');
+
+// defaulting to plugin v2 for just now
+var { setPluginName, getPaths } = require("./select-plugin");
+setPluginName("v2");
+const { pluginDir, pluginSrc } = getPaths();
 
 shell.echo(`renaming plugin: `, pluginDir);
 shell.echo("");

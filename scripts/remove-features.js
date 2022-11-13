@@ -5,7 +5,13 @@ var shell = require("shelljs");
    as most work going forward is expected to be built on flex v2.x
 */
   
-const { templateDirectory, featureDirectory, pluginSrc, serverlessSrc, flexConfigDir, flexConfigTemplateDir, scheduleManagerServerlessDir } = require ('./common');
+const { serverlessSrc, flexConfigDir, flexConfigTemplateDir, scheduleManagerServerlessDir } = require ('./common');
+
+// defaulting to plugin v2 for just now
+var { setPluginName, getPaths } = require("./select-plugin");
+setPluginName("v2");
+const { pluginSrc, templateDirectory, featureDirectory} = getPaths();
+
 
 const filesToCopy = [
   {
