@@ -8,4 +8,3 @@ const paths = getPaths();
 
 shell.cd(`${paths.pluginDir}`);
 shell.exec("twilio flex:plugins:start");
-console.log("PLUGIN", paths.pluginDir);
