@@ -3,7 +3,7 @@ import { getWorkerFriendlyName } from '../../../utils/serverless/ChatTransferSer
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { Worker } from 'types/task-router';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled } = custom_data.features.chat_transfer;
 
 

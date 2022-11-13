@@ -4,7 +4,7 @@ import { sortBy } from 'lodash';
 import { ActivitySkillFilterRules, UIAttributes } from 'types/manager/ServiceConfiguration';
 import { Activity } from 'types/task-router';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 
 export interface ActivityCssConfig {
 	idx: number,

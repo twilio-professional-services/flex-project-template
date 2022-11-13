@@ -3,7 +3,7 @@ import CustomUserControlsContainer from '../../custom-components/custom-user-con
 import { NotificationIds } from '../notifications/ActivitySkillFilter'
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled, rules } = custom_data.features.activity_skill_filter;
 
 export function replaceUserControls(flex: typeof Flex, manager: Flex.Manager) {

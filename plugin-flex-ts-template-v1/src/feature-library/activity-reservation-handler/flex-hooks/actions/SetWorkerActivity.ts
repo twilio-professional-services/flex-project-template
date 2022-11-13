@@ -5,7 +5,7 @@ import { delayActivityChange} from '../..';
 import { NotificationIds } from '../notifications/ActivityReservationHandler'
 import {systemActivities} from "../../helpers/systemActivities"
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled } = custom_data.features.activity_reservation_handler;
 
 export function beforeSetActivity(flex: typeof Flex, manager: Flex.Manager) {

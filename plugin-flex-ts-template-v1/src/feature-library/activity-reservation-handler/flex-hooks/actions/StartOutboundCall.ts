@@ -4,7 +4,7 @@ import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { storeCurrentActivitySidIfNeeded } from '../../helpers/pendingActivity';
 import { onTaskActivity, onTaskNoAcdActivity } from '../../helpers/systemActivities';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled } = custom_data.features.activity_reservation_handler;
 
 export function changeWorkerActivityBeforeOutboundCall(flex: typeof Flex, manager: Flex.Manager) {

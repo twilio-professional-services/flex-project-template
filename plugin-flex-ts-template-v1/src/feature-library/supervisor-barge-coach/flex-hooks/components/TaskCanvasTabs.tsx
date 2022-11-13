@@ -3,7 +3,7 @@ import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import SupervisorMonitorPanel from '../../custom-components/SupervisorMonitorPanel';
 import { SyncDoc } from '../../utils/sync/Sync';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled, supervisor_monitor_panel } = custom_data.features.supervisor_barge_coach;
 
 

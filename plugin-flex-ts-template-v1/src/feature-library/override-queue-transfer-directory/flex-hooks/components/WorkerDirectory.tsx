@@ -3,7 +3,7 @@ import CustomQueueTransferDirectory from '../../custom-components/CustomQueueTra
 
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled } = custom_data.features.override_queue_transfer_directory;
 
 export function replaceQueueTabForChatTransfers(flex: typeof Flex, manager: Flex.Manager) {

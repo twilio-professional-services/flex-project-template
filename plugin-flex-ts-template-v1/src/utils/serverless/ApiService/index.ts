@@ -15,7 +15,7 @@ export default abstract class ApiService {
   readonly serverlessDomain: string;
 
   constructor() {
-    const { custom_data } = this.manager.serviceConfiguration.ui_attributes as UIAttributes;
+    const { custom_data } = this.manager.configuration as UIAttributes;
     this.serverlessDomain = custom_data.serverless_functions_domain;
   }
 

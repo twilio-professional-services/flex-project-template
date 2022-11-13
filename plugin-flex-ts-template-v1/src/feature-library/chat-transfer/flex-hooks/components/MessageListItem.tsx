@@ -3,7 +3,7 @@ import ChatNotificationMessage from '../../custom-components/ChatNotificationMes
 
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled } = custom_data.features.chat_transfer;
 
 export function replaceMessageForNotifications(flex: typeof Flex, manager: Flex.Manager) {

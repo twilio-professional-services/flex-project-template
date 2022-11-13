@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import CallbackComponent from '../../custom-components/callback'
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled, allow_requeue, max_attempts } = custom_data.features.callbacks;
 
 export function replaceViewForCallbacks(flex: typeof Flex, manager: Flex.Manager) {

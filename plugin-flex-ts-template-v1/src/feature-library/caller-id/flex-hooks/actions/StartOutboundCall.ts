@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration.ui_attributes as UIAttributes;
+const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled } = custom_data.features.caller_id;
 
 export function applySelectedCallerIdForDialedNumbers(flex: typeof Flex, manager: Flex.Manager) {
