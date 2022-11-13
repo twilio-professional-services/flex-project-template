@@ -82,7 +82,12 @@ getActiveTwilioProfile().then((profile_result) => {
         console.log("if there are missing workflow sids, you can set those up for those features manually later");
         console.log("You can now run the following command to start you local serverless functions and flex plugin together")
         console.log("");
-        console.log("npm run start:local <v1 or v2>");
+        console.log("For Flex v1 execute:");
+        console.log("\tnpm run start:local:v1");
+        console.log("For Flex v1 execute:");
+        console.log("\tnpm run start:local:v2");
+        console.log("Or if you have renamed the template");
+        console.log("\tnpm run start:local");
       } else {
         console.log("*****     WARNING       *****");
         console.log(`Twilio cli profile not detected, please set an active profile with`);

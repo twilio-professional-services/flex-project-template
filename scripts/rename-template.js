@@ -110,10 +110,10 @@ if(shell.test('-e', `${fullPluginName}/public/appConfig.js`)){
 }
 
 
-if(shell.test('-e', './plugin-flex-ts-template')){
+if(shell.test('-e', './plugin-flex-ts-template-v1')){
   shell.echo(`Removing v1 plugin`);
   shell.echo("");
-  shell.rm('-rf', './plugin-flex-ts-template');
+  shell.rm('-rf', './plugin-flex-ts-template-v1');
 }
 
 if(shell.test('-e', './serverless-functions/.twiliodeployinfo')){
