@@ -16,7 +16,7 @@ For bug reports and feature requests, please submit a Github Issue.
 # Flex Project Template
 The _Flex Project Template_ is a starting point for Flex solutions of any size.  It proposes recommendations around package structure and solution management.  It can be used for large projects or simple standalone features. 
 
-You can have the solution running locally with little overhead or have a development pipeline setup in a matter of minutes (really!)
+You can have the solution running locally with little overhead or have a development pipeline setup without even doing a checkout.
 
 The primary aims of this template are
 
@@ -27,35 +27,35 @@ The primary aims of this template are
 ---
 
 1. [Feature library Information](#feature-library-information)
-2. [Why a template?](#why-a-template)
-    1. [One Plugin](#one-plugin-instead-of-a-collection-of-plugins)
-    2. [Package Structure](#when-working-with-one-plugin-we-need-a-package-structure-to-organize-our-code)
-    3. [Versioning](#manage-serverless-functions-with-plugins-and-flex-configuration-in-once-place)
-    4. [Typescript](#use-typescript)
-3. [Okay, but why a template for a standalone plugin?](#okay-but-why-a-template-for-a-standalone-feature)
-4. [Okay tell me more, what does it do exactly?](#okay-tell-me-more-what-does-it-do-exactly)
-    1. [flex-config](#flex-config)
-    2. [infra-as-code](#infra-as-code)
-    3. [plugin-flex-ts-template](#plugin-flex-ts-template)
-    4. [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
-    5. [serverless-functions](#serverless-functions)
-    6. [web-app-examples](#web-app-examples)
-    7. [scripts](#scripts)
-    8. [.github](#github)
-5. [Setup Guides](#setup-guides)
+2. [Setup Guides](#setup-guides)
     1. [Local Setup And Use](#local-setup-and-use)
         1. [Prerequisites](#prerequisites)
         2. [setup](#setup)
         3. [development notes](#development-notes)
     2. [Setup a project release pipeline](#setup-a-project-with-release-pipeline)
     3. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
-8. [More Scripts Details](#more-scripts-details)
+3. [Why a template?](#why-a-template)
+    1. [One Plugin](#one-plugin-instead-of-a-collection-of-plugins)
+    2. [Package Structure](#when-working-with-one-plugin-we-need-a-package-structure-to-organize-our-code)
+    3. [Versioning](#manage-serverless-functions-with-plugins-and-flex-configuration-in-once-place)
+    4. [Typescript](#use-typescript)
+4. [Okay, but why a template for a standalone plugin?](#okay-but-why-a-template-for-a-standalone-feature)
+5. [Okay tell me more, what does it do exactly?](#okay-tell-me-more-what-does-it-do-exactly)
+    1. [flex-config](#flex-config)
+    2. [infra-as-code](#infra-as-code)
+    3. [plugin-flex-ts-template-v1](#plugin-flex-ts-template-v1)
+    4. [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
+    5. [serverless-functions](#serverless-functions)
+    6. [web-app-examples](#web-app-examples)
+    7. [scripts](#scripts)
+    8. [.github](#github)
+6. [More Scripts Details](#more-scripts-details)
     1. [Removing Features](#removing-features)
     2. [Renaming Template](#renaming-template)
     3. [show-env-vars](#show-env-vars)
     4. [setup-local-environment](#setup-local-environment)
     5. [generate-env](#generate-env)
-9. [Change log](#changelog)
+7. [Change log](#changelog)
 
 
 ## Feature library Information
@@ -83,99 +83,7 @@ The primary aims of this template are
 | Supervisor Capacity | _allow supervisors to update worker capacity configuration within Flex_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-capacity/README.md) |  ✅ |
 | Teams View Filters | _adds additional filtering options to the supervisor teams view_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/teams-view-filters/README.md) | ✅  |
 
-
-# Why a template?
-
-*The Professional Services* team has worked with many customers since the original launch of Flex several years ago.  There are many ways to build with Flex but the collective experience has learned a few lessons that when followed, make working on Flex a lot easier.
-
-### __One plugin instead of a collection of plugins.__
-
-Working on flex with multiple plugins can work but as the number of plugins increases so does the likelihood that one plugin does something to the solution that another plugin was not expecting.  This can lead to some very difficult and time consuming troubleshooting.  By working on a single plugin, we can identify undesired behavior quickly and easily during development.
-
-### __When working with one plugin we need a package structure to organize our code__
-
-Working on a single plugin means that there is going to be a lot of code.  Therefore we need a package structure that allows developers to modularize their work but also easily pinpoint where their work overlaps with others.  This template proposes that package structure making distributed development across a team much easier.
-
-### __Manage serverless functions with plugins and flex configuration in once place__
-
-Ok it might seem obvious that you would want to do this but it might not be so obvious the most convenient way to do this, this template puts all those provisions in place so you can just get working on the features you want to build!
-
-### __Use Typescript__
-
-Although not strictly necessary, TypeScript immediately affords development teams improved readability and error checking.
-
-# Okay, but why a template for a standalone feature?
-
-We often see development teams that want to use solutions that are developed and publicly shared.  Typically these solutions are `Type B` [deliverables](#disclaimer).  As a result, consumers of these solutions often look to take ownership by rewriting the code and they typically start that by organizing the code into the package structure for a single plugin solution.  By following the template structure and **standardizing** the approach, it reduces the overhead for development teams to utilize the sample code and accelerates their ability to harden it for their own needs.
-
-It also makes reuse of the serverless work that often gets re-written over and over again between plugins, minimizing overhead.
-
-# Okay tell me more, what does it do exactly?
-
-Well the template provides a means to version control the [Flex Configuration](#flex-config), [the plugin code](#plugin-flex-ts-template-v2) itself as well as the supporting [serverless functions](#serverless-functions).  There is also a solution to manage [task router configuration](#infra-as-code). The infrastructure as code is a bit more involved to setup and we are currently working on making that easier but there are guides available for the sample provided [here](https://www.twilio.com/blog/intro-to-infrastructure-as-code-with-twilio-part-1).  There is also an example yaml file for building a release pipeline using github actions.
-
-The template comes with a [library of example features](#feature-library-information) that cover a lot of typical extensions to Flex.  These features can easily be turned on or off or simply just removed by leveraging the [scripts](#scripts) provided.  If you use the scripts to [remove all the features](#removing-features), you will be left with just the structure of the template plus some handy utilities and serverless functions.
-
-You might be asking why would i want the serverless functions? Well you may be aware already, Twilio accounts have a maximum API concurrency limit of 100.  Some specific APIs have their own specific rate limit and so its [best practice](https://support.twilio.com/hc/en-us/articles/360044308153-Twilio-API-response-Error-429-Too-Many-Requests-) to handle the 429 responses that can come back.  The serverless functions provide an example of how to do this in the serverless and plugin layer.  There are also operations in there that improve the quality of the Flex solution, for example, you can update task attributes using an [ETAG](https://www.twilio.com/docs/taskrouter/api/task#task-version) to improve transaction safety and this isnt currently available on the front end sdk.
-
-At the root of the repository you will find the following packages
-
-- [flex-config](#flex-config)
-- [infra-as-code](#infra-as-code)
-- [plugin-flex-ts-template](#plugin-flex-ts-template)
-- [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
-- [serverless-functions](#serverless-functions)
-- [serverless-schedule-manager](#serverless-schedule-manager)
-- [web-app-examples](#web-app-examples)
-- [scripts](#scripts)
-- [.github](#github)
-
-### **flex-config**
-
-This package manages a json artifact that can be used to version configuration elements on a per-twilio-account basis. We can think of this as allowing us to configure, dev, qa, test, production or any other environments individually. This configuration relates specifically to the the configuration for flex discussed [here](https://www.twilio.com/docs/flex/developer/ui/configuration) and works by injecting the custom object into ui_attributes within the flex configuration object. The plugin is then able to reference these variables. The first example being, hosting the domain name of the associated serverless-functions.
-
-*NOTE* changes are deep merged with whatever exists on the environment so existing configuration is preserved unless otherwise overridden by whats in version control.
-
-More details on the flex-config package can be found [here](/flex-config/README.md);
-
-### **infra-as-code**
-
-This package is a legacy initiative to leverage pulumi in managing twilio configuration artifacts such as taskrouter entities. This package is a functional methodology and was setup to represent a typically vanilla flex account thats just been initialized. This package has not been maintained as the intention is to move towards a similar solution using the terraform provider, however what has been setup and used before is available for anyone looking to use it in the interim. More details on how to use this can be found [here](https://www.twilio.com/blog/intro-to-infrastructure-as-code-with-twilio-part-1). Currently there are no dependencies in this package that need to be used and is here only for reference. Feel free to remove this if not utilized.
-
-### **plugin-flex-ts-template**
-
-This package is the actual flex plugin and a structure is already laid out that makes it a lot easier to work in a distributed development model. More details of the package structure are discussed [over here](plugin-flex-ts-template-v2/README.md) the plugin has a library of examples that can be turned on or off, or if desired can be removed completely with little overhead. The utilities in this package are designed around the associated serverless-functions and leverage the associated flex-config.
-
-### **plugin-flex-ts-template-v2**
-
-This package is identical in purpose to the `plugin-flex-ts-template` except its intended for flex v2 projects. The intention is when kicking off a project or feature the owner would fork the repository as a template, then delete the plugin version they are not using.
-
-### **serverless-functions**
-
-This package manages the serverless functions that the _plugin-flex-ts-template_ is dependent on. In this package there are a suite of services already available to use, some of which are simply wrappers around existing twilio APIs but with added resilience around retrying given configurable parameters. These retry mechanisms are particularly useful when a twilio function needs to orchestrate multiple twilio APIs to perform an overall operation. It should be noted twilio functions still have a maximum runtime and therefore careful consideration of retries should be employed for each use case. This does however provide improved resiliency and performance when 429s, 412s or 503s occur.
-
-### **serverless-schedule-manager**
-
-This package manages the serverless functions specific to the _schedule-manager_ feature. This package is separate from the `serverless-functions` package due to the actual schedule manager configuration being part of this serverless package--the entire service is re-deployed upon each configuration publish. If you are deploying the schedule-manager feature, you will need to also deploy this package using the instructions in the [schedule-manager readme](plugin-flex-ts-template-v2/src/feature-library/schedule-manager/README.md). If you are not deploying the `schedule-manager` feature, this service will not be used and does not need to be deployed.
-
-### **web-app-examples**
-
-This package contains web application examples that build off feature functionality found within the plugin templates. These examples utilize building applications with `React` and interact with various endpoints within the `serverless-functions` package.
-
-### **scripts**
-
-this package maintains some convenience scripts namely
-
-- [rename-template](#renaming-template) - for renaming the plugin and serverless packages along with the serverless domain, typically used when making standalone plugins that still want to follow the template structure
-- [remove-features](#removing-features) - for removing the features from the template, again typically used when making standalone plugins that still want to follow the template structure
-
-
-### **.github**
-
-Lastly, this package manages the github action workflows - with one example being setup for a dev account where this template is maintained. Upon commits to _main_; _flex-config_, _plugin-flex-ts-template_ and _serverless-functions_ are all deployed on the associated environment, as controlled by the environment variables in github actions. The underlying scripts can easily be moulded for use in alternative release management tools.
-
-
----
+----
 
 # Setup Guides
 
@@ -275,6 +183,98 @@ npm run rename-template <template-name>
 6. You can follow the instructions for [local development setup](#local-setup-and-use) and then [adding a feature](/plugin-flex-ts-template-v2/README.md#adding-a-feature)
 
 
+----
+
+# Why a template?
+
+*The Professional Services* team has worked with many customers since the original launch of Flex several years ago.  There are many ways to build with Flex but the collective experience has learned a few lessons that when followed, make working on Flex a lot easier.
+
+### __One plugin instead of a collection of plugins.__
+
+Working on flex with multiple plugins can work but as the number of plugins increases so does the likelihood that one plugin does something to the solution that another plugin was not expecting.  This can lead to some very difficult and time consuming troubleshooting.  By working on a single plugin, we can identify undesired behavior quickly and easily during development.
+
+### __When working with one plugin we need a package structure to organize our code__
+
+Working on a single plugin means that there is going to be a lot of code.  Therefore we need a package structure that allows developers to modularize their work but also easily pinpoint where their work overlaps with others.  This template proposes that package structure making distributed development across a team much easier.
+
+### __Manage serverless functions with plugins and flex configuration in once place__
+
+Ok it might seem obvious that you would want to do this but it might not be so obvious the most convenient way to do this, this template puts all those provisions in place so you can just get working on the features you want to build!
+
+### __Use Typescript__
+
+Although not strictly necessary, TypeScript immediately affords development teams improved readability and error checking.
+
+# Okay, but why a template for a standalone feature?
+
+We often see development teams that want to use solutions that are developed and publicly shared.  Typically these solutions are `Type B` [deliverables](#disclaimer).  As a result, consumers of these solutions often look to take ownership by rewriting the code and they typically start that by organizing the code into the package structure for a single plugin solution.  By following the template structure and **standardizing** the approach, it reduces the overhead for development teams to utilize the sample code and accelerates their ability to harden it for their own needs.
+
+It also makes reuse of the serverless work that often gets re-written over and over again between plugins, minimizing overhead.
+
+# Okay tell me more, what does it do exactly?
+
+Well the template provides a means to version control the [Flex Configuration](#flex-config), [the plugin code](#plugin-flex-ts-template-v2) itself as well as the supporting [serverless functions](#serverless-functions).  There is also a solution to manage [task router configuration](#infra-as-code). The infrastructure as code is a bit more involved to setup and we are currently working on making that easier but there are guides available for the sample provided [here](https://www.twilio.com/blog/intro-to-infrastructure-as-code-with-twilio-part-1).  There is also an example yaml file for building a release pipeline using github actions.
+
+The template comes with a [library of example features](#feature-library-information) that cover a lot of typical extensions to Flex.  These features can easily be turned on or off or simply just removed by leveraging the [scripts](#scripts) provided.  If you use the scripts to [remove all the features](#removing-features), you will be left with just the structure of the template plus some handy utilities and serverless functions.
+
+You might be asking why would i want the serverless functions? Well you may be aware already, Twilio accounts have a maximum API concurrency limit of 100.  Some specific APIs have their own specific rate limit and so its [best practice](https://support.twilio.com/hc/en-us/articles/360044308153-Twilio-API-response-Error-429-Too-Many-Requests-) to handle the 429 responses that can come back.  The serverless functions provide an example of how to do this in the serverless and plugin layer.  There are also operations in there that improve the quality of the Flex solution, for example, you can update task attributes using an [ETAG](https://www.twilio.com/docs/taskrouter/api/task#task-version) to improve transaction safety and this isnt currently available on the front end sdk.
+
+At the root of the repository you will find the following packages
+
+- [flex-config](#flex-config)
+- [infra-as-code](#infra-as-code)
+- [plugin-flex-ts-template](#plugin-flex-ts-template)
+- [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
+- [serverless-functions](#serverless-functions)
+- [serverless-schedule-manager](#serverless-schedule-manager)
+- [web-app-examples](#web-app-examples)
+- [scripts](#scripts)
+- [.github](#github)
+
+### **flex-config**
+
+This package manages a json artifact that can be used to version configuration elements on a per-twilio-account basis. We can think of this as allowing us to configure, dev, qa, test, production or any other environments individually. This configuration relates specifically to the the configuration for flex discussed [here](https://www.twilio.com/docs/flex/developer/ui/configuration) and works by injecting the custom object into ui_attributes within the flex configuration object. The plugin is then able to reference these variables. The first example being, hosting the domain name of the associated serverless-functions.
+
+*NOTE* changes are deep merged with whatever exists on the environment so existing configuration is preserved unless otherwise overridden by whats in version control.
+
+More details on the flex-config package can be found [here](/flex-config/README.md);
+
+### **infra-as-code**
+
+This package is a legacy initiative to leverage pulumi in managing twilio configuration artifacts such as taskrouter entities. This package is a functional methodology and was setup to represent a typically vanilla flex account thats just been initialized. This package has not been maintained as the intention is to move towards a similar solution using the terraform provider, however what has been setup and used before is available for anyone looking to use it in the interim. More details on how to use this can be found [here](https://www.twilio.com/blog/intro-to-infrastructure-as-code-with-twilio-part-1). Currently there are no dependencies in this package that need to be used and is here only for reference. Feel free to remove this if not utilized.
+
+### **plugin-flex-ts-template-v1**
+
+This package is the actual flex plugin and a structure is already laid out that makes it a lot easier to work in a distributed development model. More details of the package structure are discussed [over here](plugin-flex-ts-template-v1/README.md) the plugin has a library of examples that can be turned on or off, or if desired can be removed completely with little overhead. The utilities in this package are designed around the associated serverless-functions and leverage the associated flex-config.
+
+### **plugin-flex-ts-template-v2**
+
+This package is identical in purpose to the `plugin-flex-ts-template-v1` except its intended for flex v2 projects. The intention is when kicking off a project or feature the owner would fork the repository or start a clean repository using the clone template function, then delete the plugin version they are not using.
+
+### **serverless-functions**
+
+This package manages the serverless functions that the _plugin-flex-ts-template_ is dependent on. In this package there are a suite of services already available to use, some of which are simply wrappers around existing twilio APIs but with added resilience around retrying given configurable parameters. These retry mechanisms are particularly useful when a twilio function needs to orchestrate multiple twilio APIs to perform an overall operation. It should be noted twilio functions still have a maximum runtime and therefore careful consideration of retries should be employed for each use case. This does however provide improved resiliency and performance when 429s, 412s or 503s occur.
+
+### **serverless-schedule-manager**
+
+This package manages the serverless functions specific to the _schedule-manager_ feature. This package is separate from the `serverless-functions` package due to the actual schedule manager configuration being part of this serverless package--the entire service is re-deployed upon each configuration publish. If you are deploying the schedule-manager feature, you will need to also deploy this package using the instructions in the [schedule-manager readme](plugin-flex-ts-template-v2/src/feature-library/schedule-manager/README.md). If you are not deploying the `schedule-manager` feature, this service will not be used and does not need to be deployed.
+
+### **web-app-examples**
+
+This package contains web application examples that build off feature functionality found within the plugin templates. These examples utilize building applications with `React` and interact with various endpoints within the `serverless-functions` package.
+
+### **scripts**
+
+this package maintains some convenience scripts namely
+
+- [rename-template](#renaming-template) - for renaming the plugin and serverless packages along with the serverless domain, typically used when making standalone plugins that still want to follow the template structure
+- [remove-features](#removing-features) - for removing the features from the template, again typically used when making standalone plugins that still want to follow the template structure
+
+
+### **.github**
+
+Lastly, this package manages the github action workflows - with one example being setup for a dev account where this template is maintained. Upon commits to _main_; _flex-config_, _plugin-flex-ts-template_ and _serverless-functions_ are all deployed on the associated environment, as controlled by the environment variables in github actions. The underlying scripts can easily be moulded for use in alternative release management tools.
+
 ---
 
 # More Scripts Details
@@ -335,6 +335,9 @@ convenience script for simplyfying local setup and development, triggered as par
 conveience script that does the same as setup-local-environment except it won't install npm pacakges again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
 
 # CHANGELOG
+- 1.0.3
+    - renamed plugin packages to plugin-flex-ts-template-v1 and plugin-flex-ts-template-v2 to explicitly seperate plugins
+    - updated README to account for v1 plugins in scripts
 - 1.0.2
     - README updates
     - improved reliability of github actions scripts
