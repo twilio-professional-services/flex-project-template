@@ -336,7 +336,7 @@ conveience script that does the same as setup-local-environment except it won't 
 
 # CHANGELOG
 - 1.0.3
-    - renamed plugin packages to plugin-flex-ts-template-v1 and plugin-flex-ts-template-v2 to explicitly seperate plugins
+    - *BREAKING CHANGE* renamed plugin packages to plugin-flex-ts-template-v1 and plugin-flex-ts-template-v2 to explicitly seperate plugins
     - updated README to account for v1 plugins in scripts
 - 1.0.2
     - README updates

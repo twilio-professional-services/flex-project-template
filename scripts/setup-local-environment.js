@@ -1,17 +1,24 @@
-const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPluginV2, generateAppConfigForPluginV2 } = require ('./common');
 const shell = require("shelljs");
+const { setPluginName } = require("./select-plugin");
+
+const pluginVersion = process.argv[2];
+const installNpm = process.argv[3]? process.argv[3] == false: true;
+
+console.log(" ----- START OF POST INSTALL SCRIPT ----- ");
+console.log("");
+
+setPluginName(pluginVersion);
+const { originalPluginName } = require("./select-plugin");
+
+if(!originalPluginName) return;
+
+const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPluginV2 } = require ('./common');
 const prompt = require('prompt');
 // https://github.com/shelljs/shelljs#shellstringstr
 
 
-
 var serverlessEnv = `./${serverlessDir}/.env`;
 var flexConfigEnv = `./${flexConfigDir}/.env`;
-
-const installNpm = process.argv[2]? process.argv[2] == false: true;
-
-console.log(" ----- START OF POST INSTALL SCRIPT ----- ");
-console.log("");
 
 var context;
 
@@ -71,7 +78,7 @@ getActiveTwilioProfile().then((profile_result) => {
       if(installNpm){
         installNPMServerlessFunctions();
         installNPMFlexConfig();
-        installNPMPluginV2();
+        installNPMPlugin();
       }
 
       if(context.account_sid) {

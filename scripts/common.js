@@ -1,6 +1,5 @@
 const shell = require("shelljs");
-
-const originalPluginDir = 'plugin-flex-ts-template-v2';
+const { originalPluginName } = require("./select-plugin");
 
 function getDirectoryName(originalName, regex) {
 
@@ -20,7 +19,7 @@ function getDirectoryName(originalName, regex) {
   return tempPluginDir;
 }
 
-const pluginDir = getDirectoryName(originalPluginDir, /flex-template-.*/);
+const pluginDir = getDirectoryName(originalPluginName, /flex-template-.*/);
 const serverlessDir = 'serverless-functions';
 const scheduleManagerServerlessDir = 'serverless-schedule-manager';
 const flexConfigDir = 'flex-config';
@@ -29,6 +28,9 @@ const featureDirectory = `${pluginDir}/src/feature-library`;
 const pluginSrc = `${pluginDir}/src`;
 const serverlessSrc = `${serverlessDir}/src`;
 const flexConfigTemplateDir = `${flexConfigDir}/template-files`
+
+console.log("Jared4", originalPluginName);
+console.log("Jaerd5", pluginDir);
 
 // the following function will use twilio cli
 // to try to fetch the sids of template dependencies based on typical 
@@ -120,7 +122,7 @@ exports.installNPMFlexConfig = function installNPMFlexConfig() {
   shell.exec("npm --prefix ./flex-config ci ./flex-config", {silent:true});
 }
 
-exports.installNPMPluginV2 = function installNPMPluginV2() {
+exports.installNPMPlugin = function installNPMPlugin() {
   console.log(`Installing npm dependencies for ${pluginDir}...`);
   shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
 }
