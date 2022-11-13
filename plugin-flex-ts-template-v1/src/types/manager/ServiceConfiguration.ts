@@ -22,6 +22,8 @@ export type SystemActivityNames = {
 export interface UIAttributes extends FlexUIAttributes {
   custom_data: {
     serverless_functions_domain: string;
+    serverless_functions_protocol: string;
+    serverless_functions_port: string;
     features: {
       activity_reservation_handler: {
         enabled: boolean;

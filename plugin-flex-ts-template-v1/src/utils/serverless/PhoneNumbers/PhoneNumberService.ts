@@ -34,7 +34,7 @@ class PhoneNumberService extends ApiService {
     };
 
     return this.fetchJsonWithReject<ListPhoneNumbersResponse>(
-      `https://${this.serverlessDomain}/common/flex/phone-numbers/list-phone-numbers`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/phone-numbers/list-phone-numbers`,
       {
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

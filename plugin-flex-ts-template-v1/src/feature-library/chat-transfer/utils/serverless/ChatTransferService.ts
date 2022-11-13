@@ -192,7 +192,7 @@ class ChatTransferService extends ApiService {
     };
 
     return this.fetchJsonWithReject<CreateTransferTaskResponse>(
-      `https://${this.serverlessDomain}/features/chat-transfer/flex/create-transfer-task`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/features/chat-transfer/flex/create-transfer-task`,
       {
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -220,7 +220,7 @@ class ChatTransferService extends ApiService {
     };
 
     return this.fetchJsonWithReject<CompleteTransferredTaskResponse>(
-      `https://${this.serverlessDomain}/features/chat-transfer/flex/complete-task-for-transfer`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/features/chat-transfer/flex/complete-task-for-transfer`,
       {
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

@@ -27,7 +27,7 @@ class ProgrammableChatService extends ApiService {
     };
 
     return this.fetchJsonWithReject<UpdateChannelAttributesResponse>(
-      `https://${this.serverlessDomain}/common/flex/programmable-chat/update-channel-attributes`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-chat/update-channel-attributes`,
       {
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
