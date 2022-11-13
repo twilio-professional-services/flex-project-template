@@ -176,6 +176,8 @@ When running the plugin locally, this template has been setup to pair the plugin
 
 # Using template for a standalone plugin
 
+(Only applicable to v2 plugin)
+
 1. Fork the template and give it a name
 2. Install dependencies - you can skip when prompted to enter auth token
 ```bash
