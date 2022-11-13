@@ -14,7 +14,7 @@ env:
   TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID_PROD }}
   TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_PROD }}
   TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_PROD }}
-  PLUGIN_FOLDER: plugin-flex-ts-template-v2
+  PLUGIN_FOLDER: ${{ secrets.PLUGIN_FOLDER }}
 
 jobs:
   deploy-serverless:
