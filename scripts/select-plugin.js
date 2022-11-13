@@ -5,7 +5,7 @@ function getDirectoryName(originalName, regex) {
 
   var tempPluginDir = "";
 
-  if(shell.test('-d', `${originalName}`)){
+  if(originalName && originalName != "" && shell.test('-d', `${originalName}`)){
     tempPluginDir = originalName;
   } else {
     shell.ls('./').forEach(function (dir){
@@ -15,6 +15,9 @@ function getDirectoryName(originalName, regex) {
         }
       }
     })
+  }
+  if(tempPluginDir == ""){
+    console.log("unable to detect plugin folder name");
   }
   return tempPluginDir;
 }
