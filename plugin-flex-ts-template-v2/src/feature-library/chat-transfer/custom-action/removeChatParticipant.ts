@@ -6,7 +6,7 @@ import { NotificationIds } from "../flex-hooks/notifications/TransferResult";
 import { RemoveChatParticipantActionPayload } from "../types/ActionPayloads";
 
 export const registerRemoveChatParticipant = () => {
-  Actions.registerAction("RemoveChatParticipant", (payload) =>
+  Actions.registerAction("RemoveChatParticipant", (payload: any) =>
     handleRemoveChatParticipant(payload as RemoveChatParticipantActionPayload)
   );
 };

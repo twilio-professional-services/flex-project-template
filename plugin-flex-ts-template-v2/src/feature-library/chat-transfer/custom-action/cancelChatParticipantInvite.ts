@@ -5,7 +5,7 @@ import { NotificationIds } from "../flex-hooks/notifications/TransferResult";
 import { CancelChatParticipantInviteActionPayload } from "../types/ActionPayloads";
 
 export const registerCancelChatParticipantInvite = () => {
-  Actions.registerAction("CancelChatParticipantInvite", (payload) =>
+  Actions.registerAction("CancelChatParticipantInvite", (payload: any) =>
     handleCancelChatParticipantInvite(
       payload as CancelChatParticipantInviteActionPayload
     )

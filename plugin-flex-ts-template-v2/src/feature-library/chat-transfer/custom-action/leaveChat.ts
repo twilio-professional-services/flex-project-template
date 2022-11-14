@@ -6,7 +6,7 @@ import { NotificationIds } from "../flex-hooks/notifications/TransferResult";
 import { LeaveChatActionPayload } from "../types/ActionPayloads";
 
 export const registerLeaveChatAction = () => {
-  Actions.registerAction("LeaveChat", (payload) =>
+  Actions.registerAction("LeaveChat", (payload: any) =>
     handleLeaveChatAction(payload as LeaveChatActionPayload)
   );
 };

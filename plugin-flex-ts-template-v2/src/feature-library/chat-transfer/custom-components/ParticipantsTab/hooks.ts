@@ -1,13 +1,14 @@
 import * as Flex from "@twilio/flex-ui";
-import { ConversationState, ITask } from "@twilio/flex-ui";
+import { ITask } from "@twilio/flex-ui";
 import { ParticipantDetails } from "../../types/ParticipantDetails";
 import { InvitedParticipantDetails } from "../../types/InvitedParticipantDetails";
+import { ConversationState } from "../../../../types/conversations";
 
 const manager = Flex.Manager.getInstance();
 
 // check that the members of the conversation match the participant details
 const participantDetailsUpToDateCheck = (
-  conversation: ConversationState.ConversationState,
+  conversation: ConversationState,
   participantDetails: ParticipantDetails[]
 ): boolean => {
   if (!conversation?.participants || !participantDetails) return false;
@@ -60,7 +61,7 @@ const getCBMParticipantsWrapper = async (
 // we use a mix of conversation participants (MBxxx sids) and Interactions Participants (UTxxx) to build what we need
 export const getUpdatedParticipantDetails = async (
   task: Flex.ITask,
-  conversation: ConversationState.ConversationState,
+  conversation: ConversationState,
   participantDetails: ParticipantDetails[]
 ) => {
   const myIdentity = manager.conversationsClient?.user?.identity;
@@ -111,13 +112,6 @@ export const getUpdatedParticipantDetails = async (
       const interactionParticipantSid = intertactionParticipant.participantSid;
       const conversationMemberSid = conversationParticipant.source.sid;
 
-      console.log(
-        "isMe",
-        isMe,
-        conversationParticipant.source.identity,
-        myIdentity
-      );
-
       participants.push({
         friendlyName,
         participantType,
@@ -132,7 +126,7 @@ export const getUpdatedParticipantDetails = async (
 };
 
 export const getUpdatedInvitedParticipantDetails = (
-  conversation: ConversationState.ConversationState
+  conversation: ConversationState
 ) => {
   if (!conversation?.source?.attributes?.invites) return [];
 

@@ -9,7 +9,7 @@ import { addInviteToConversation } from "../helpers/inviteTracker";
 import { countOfOutstandingInvitesForConversation } from "../helpers/inviteTracker";
 
 export const registerCustomChatTransferAction = () => {
-  Actions.registerAction("ChatTransferTask", (payload) =>
+  Actions.registerAction("ChatTransferTask", (payload: any) =>
     handleChatTransferAction(payload as TransferActionPayload)
   );
 };

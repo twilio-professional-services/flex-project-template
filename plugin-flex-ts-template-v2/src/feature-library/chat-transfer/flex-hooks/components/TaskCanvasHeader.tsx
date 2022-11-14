@@ -3,7 +3,11 @@ import { ITask, TaskHelper, StateHelper } from "@twilio/flex-ui";
 import { isColdTransferEnabled, isMultiParticipantEnabled } from '../../index'
 import TransferButton from "../../custom-components/TransferButton"
 import LeaveChatButton from "../../custom-components/LeaveChatButton"
-import {countOfOutstandingInvitesForConversation} from "../../helpers/inviteTracker"
+import { countOfOutstandingInvitesForConversation } from "../../helpers/inviteTracker"
+
+interface Props {
+    task : ITask
+}
 
 export function addChatTransferButton(flex: typeof Flex) {
     if (!isColdTransferEnabled()) return;
@@ -39,10 +43,10 @@ export function replaceEndTaskButton(flex: typeof Flex) {
   
     flex.TaskCanvasHeader.Content.add(
         <LeaveChatButton key='leave-chat' />,
-        { if: ({ task }) => replaceEndTaskButton(task) }
+        { if: ({ task} : Props) => replaceEndTaskButton(task) }
     )
 
     flex.TaskCanvasHeader.Content.remove("actions",
-        { if: ({ task }) => replaceEndTaskButton(task) }
+        { if: ({ task }: Props) => replaceEndTaskButton(task) }
     )
 }
