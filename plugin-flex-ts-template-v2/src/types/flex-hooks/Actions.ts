@@ -14,6 +14,7 @@ type ActionNames =
   | "SelectTask"
   | "SetWorkerActivity"
   | "StartOutboundCall"
+  | "ToggleMute"
   | "UnHoldParticipant"
   | "NavigateToView"
   | "RejectTask"

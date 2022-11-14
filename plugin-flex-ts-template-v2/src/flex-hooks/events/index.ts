@@ -1,4 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
+import { SSOTokenPayload } from "@twilio/flex-ui/src/core/TokenStorage";
 import { FlexEvent } from "../../types/manager/FlexEvent";
 import events from "./events";
 
@@ -25,6 +26,13 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
       manager.events.addListener(event, (task: Flex.ITask) => {
         eventHandlers.forEach((eventHandler) =>
           eventHandler(task, event as FlexEvent)
+        );
+      });
+    } else if (event === FlexEvent.tokenUpdated) {
+      // pass in token parameter from event to handler
+      manager.events.addListener(event, (tokenPayload: SSOTokenPayload) => {
+        eventHandlers.forEach((eventHandler) =>
+          eventHandler(tokenPayload, event as FlexEvent)
         );
       });
     } else {

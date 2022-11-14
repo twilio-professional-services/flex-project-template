@@ -55,6 +55,7 @@ jobs:
 
   deploy-flex-config:
     runs-on: ubuntu-latest
+    needs: [deploy-serverless, deploy-schedule-manager]
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
@@ -83,8 +84,8 @@ jobs:
           node-version: '16'   
 
       - name: deploy and release flex-plugin
-        working-directory: ${{ secrets.PLUGIN_FOLDER }}
         run: |
+          cd $PLUGIN_FOLDER
           npm install
           npm run install-flex-plugin
           TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_QA }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_QA }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_QA }} npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
