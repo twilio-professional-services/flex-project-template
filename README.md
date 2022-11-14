@@ -16,7 +16,7 @@ For bug reports and feature requests, please submit a Github Issue.
 # Flex Project Template
 The _Flex Project Template_ is a starting point for Flex solutions of any size.  It proposes recommendations around package structure and solution management.  It can be used for large projects or simple standalone features. 
 
-You can have the solution running locally with little overhead or have a development pipeline setup in a matter of minutes (really!)
+You can have the solution running locally with little overhead or have a development pipeline setup without even doing a checkout.
 
 The primary aims of this template are
 
@@ -27,35 +27,35 @@ The primary aims of this template are
 ---
 
 1. [Feature library Information](#feature-library-information)
-2. [Why a template?](#why-a-template)
-    1. [One Plugin](#one-plugin-instead-of-a-collection-of-plugins)
-    2. [Package Structure](#when-working-with-one-plugin-we-need-a-package-structure-to-organize-our-code)
-    3. [Versioning](#manage-serverless-functions-with-plugins-and-flex-configuration-in-once-place)
-    4. [Typescript](#use-typescript)
-3. [Okay, but why a template for a standalone plugin?](#okay-but-why-a-template-for-a-standalone-feature)
-4. [Okay tell me more, what does it do exactly?](#okay-tell-me-more-what-does-it-do-exactly)
-    1. [flex-config](#flex-config)
-    2. [infra-as-code](#infra-as-code)
-    3. [plugin-flex-ts-template](#plugin-flex-ts-template)
-    4. [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
-    5. [serverless-functions](#serverless-functions)
-    6. [web-app-examples](#web-app-examples)
-    7. [scripts](#scripts)
-    8. [.github](#github)
-5. [Setup Guides](#setup-guides)
+2. [Setup Guides](#setup-guides)
     1. [Local Setup And Use](#local-setup-and-use)
         1. [Prerequisites](#prerequisites)
         2. [setup](#setup)
         3. [development notes](#development-notes)
     2. [Setup a project release pipeline](#setup-a-project-with-release-pipeline)
     3. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
-8. [More Scripts Details](#more-scripts-details)
+3. [Why a template?](#why-a-template)
+    1. [One Plugin](#one-plugin-instead-of-a-collection-of-plugins)
+    2. [Package Structure](#when-working-with-one-plugin-we-need-a-package-structure-to-organize-our-code)
+    3. [Versioning](#manage-serverless-functions-with-plugins-and-flex-configuration-in-once-place)
+    4. [Typescript](#use-typescript)
+4. [Okay, but why a template for a standalone plugin?](#okay-but-why-a-template-for-a-standalone-feature)
+5. [Okay tell me more, what does it do exactly?](#okay-tell-me-more-what-does-it-do-exactly)
+    1. [flex-config](#flex-config)
+    2. [infra-as-code](#infra-as-code)
+    3. [plugin-flex-ts-template-v1](#plugin-flex-ts-template-v1)
+    4. [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
+    5. [serverless-functions](#serverless-functions)
+    6. [web-app-examples](#web-app-examples)
+    7. [scripts](#scripts)
+    8. [.github](#github)
+6. [More Scripts Details](#more-scripts-details)
     1. [Removing Features](#removing-features)
     2. [Renaming Template](#renaming-template)
     3. [show-env-vars](#show-env-vars)
     4. [setup-local-environment](#setup-local-environment)
     5. [generate-env](#generate-env)
-9. [Change log](#changelog)
+7. [Change log](#changelog)
 
 
 ## Feature library Information
@@ -83,6 +83,119 @@ The primary aims of this template are
 | Supervisor Capacity | _allow supervisors to update worker capacity configuration within Flex_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-capacity/README.md) |  ✅ |
 | Teams View Filters | _adds additional filtering options to the supervisor teams view_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/teams-view-filters/README.md) | ✅  |
 
+----
+
+# Setup Guides
+
+The following are guides to instruct the user how to leverage this template for each of the following use cases, they are focused around use of the flex V2 plugin.
+
+## Local Setup and use
+
+### Prerequisites
+- you are running nodes v16 or above
+- twilio cli 5.2.0 or above is [installed](https://www.twilio.com/docs/twilio-cli/getting-started/install) (`twilio --version`)
+- twilio flex plugins 6.0.2 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli) (`twilio plugins`, `twilio plugins:install @twilio-labs/plugin-flex@latest`)
+- twilio serverless plugin 3.0.4 or above is [installed](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit) (`twilio plugins` `twilio plugins:install @twilio-labs/plugin-serverless@latest`)
+- `twilio profiles:list` has an active account set.
+- have the twilio auth token for your account ready
+
+### Setup
+1. Clone the repository
+2. make sure the twilio cli has the correct account set to active
+```bash
+twilio profiles:list
+```
+3. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
+```bash
+npm ci
+```
+4. follow the prompt and provide your auth token
+5. Run the serverless functions and plugin locally by running
+```bash
+npm run start:local:v1
+```
+or
+```bash
+npm run start:local:v2
+```
+or if you have renamed your plugin (v2 only)
+```bash
+npm run start:local
+```
+
+### development notes
+When developing locally, flex config is overriden by anything in your [appConfig.js](/plugin-flex-ts-template-v2/public/appConfig.js).  Note appConfig is only applicable when running the plugin locally but you can edit this file to toggle features on and off for your locally running webserver, you can also tweak the api endpoint for your serverless functions if you need to.
+
+When running the plugin locally, this template has been setup to pair the plugin with the serverless functions also running locally on localhost:3001, the serverless functions can be debugged by attaching your debugger to the node instance.  The following is a sample entry for ".vscode/launch.json" to connect vscode for debugging
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}/serverless-functions",
+      "name": "Attach To Serverless Remote",
+      "port": 9229,
+      "remoteRoot": "${workspaceFolder}/serverless-functions",
+      "request": "attach",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "type": "node"
+    }
+  ]
+}
+```
+
+---
+
+## Setup a project with release pipeline
+
+1. Use the template to create your own repository
+2. Nominate a Twilio account to act as one of dev, qa, test, prod
+3. Create a twilio api key and secret for your account follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key.
+4. In github, go to your project settings -> secrets and add the following to select which plugin is released
+  - `PLUGIN_FOLDER` - this is typically `plugin-flex-ts-template-v1` or `plugin-flex-ts-template-v2`
+5. In github, go to your project settings -> secrets
+    - For each environment add the 3 env variables for that environment, for example, if its dev you would add
+        - `TWILIO_ACCOUNT_SID_DEV` - the account sid you want to deploy to
+        - `TWILIO_API_KEY_DEV` - the account key or key "sid" as its otherwise known
+        - `TWILIO_API_SECRET_DEV` - the account secret
+
+![alt text](scripts/screenshots/github-secrets.png)
+
+6. Login into Flex and make sure in the admin panel, the version of flex you are using meets the minimal version allowed by the plugin
+7. _Optionally_ navigate to the flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/manage/voice?frameUrl=%2Fconsole%2Fflex%2Fvoice%3Fx-target-region%3Dus1)
+8. Navigate over to github actions of your repository and select the environment you want to deploy, then run the workflow.
+    - this will deploy the four assets to your environment with the default features enabled, See [Feature library Information](#feature-library-information) for further details of whats enabled by default.
+    - serverless-functions will auto-identify any missing environment variables for the default features. It is recommend you populate the [environment variables](/serverless-functions/) for each account and manage config in version control at a later date to remove any ambiguity.
+    - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommend you populate the [ui_attributes](/flex-config/) config and manage the domain names through version control at a later date to remove any ambiguity. 
+    - for full functionality, review the configuration steps for the disable features and make sure their dependencies are setup.
+
+
+# Using template for a standalone plugin
+
+(Only applicable to v2 plugin)
+
+1. Fork the template and give it a name
+2. Install dependencies - you can skip when prompted to enter auth token
+```bash
+npm install
+```
+3. Remove the features; from the root folder of a checkout of your new repository run
+```bash
+npm run remove-features
+```
+4. Rename the template; from the root folder of a checkout of your new repository run
+```bash
+npm run rename-template <template-name>
+```
+5. Push your changes to your repository - this is your new baseline
+6. You can follow the instructions for [local development setup](#local-setup-and-use) and then [adding a feature](/plugin-flex-ts-template-v2/README.md#adding-a-feature)
+
+
+----
 
 # Why a template?
 
@@ -122,7 +235,7 @@ At the root of the repository you will find the following packages
 
 - [flex-config](#flex-config)
 - [infra-as-code](#infra-as-code)
-- [plugin-flex-ts-template](#plugin-flex-ts-template)
+- [plugin-flex-ts-template-v1](#plugin-flex-ts-template-v1)
 - [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
 - [serverless-functions](#serverless-functions)
 - [serverless-schedule-manager](#serverless-schedule-manager)
@@ -142,13 +255,13 @@ More details on the flex-config package can be found [here](/flex-config/README.
 
 This package is a legacy initiative to leverage pulumi in managing twilio configuration artifacts such as taskrouter entities. This package is a functional methodology and was setup to represent a typically vanilla flex account thats just been initialized. This package has not been maintained as the intention is to move towards a similar solution using the terraform provider, however what has been setup and used before is available for anyone looking to use it in the interim. More details on how to use this can be found [here](https://www.twilio.com/blog/intro-to-infrastructure-as-code-with-twilio-part-1). Currently there are no dependencies in this package that need to be used and is here only for reference. Feel free to remove this if not utilized.
 
-### **plugin-flex-ts-template**
+### **plugin-flex-ts-template-v1**
 
-This package is the actual flex plugin and a structure is already laid out that makes it a lot easier to work in a distributed development model. More details of the package structure are discussed [over here](plugin-flex-ts-template-v2/README.md) the plugin has a library of examples that can be turned on or off, or if desired can be removed completely with little overhead. The utilities in this package are designed around the associated serverless-functions and leverage the associated flex-config.
+This package is the actual flex plugin and a structure is already laid out that makes it a lot easier to work in a distributed development model. More details of the package structure are discussed [over here](plugin-flex-ts-template-v1/README.md) the plugin has a library of examples that can be turned on or off, or if desired can be removed completely with little overhead. The utilities in this package are designed around the associated serverless-functions and leverage the associated flex-config.
 
 ### **plugin-flex-ts-template-v2**
 
-This package is identical in purpose to the `plugin-flex-ts-template` except its intended for flex v2 projects. The intention is when kicking off a project or feature the owner would fork the repository as a template, then delete the plugin version they are not using.
+This package is identical in purpose to the `plugin-flex-ts-template-v1` except its intended for flex v2 projects which are discussed more [over here](plugin-flex-ts-template-v2/README.md). The intention is when kicking off a project or feature the owner would fork the repository or start a clean repository using the clone template function, then delete the plugin version they are not using.
 
 ### **serverless-functions**
 
@@ -173,107 +286,6 @@ this package maintains some convenience scripts namely
 ### **.github**
 
 Lastly, this package manages the github action workflows - with one example being setup for a dev account where this template is maintained. Upon commits to _main_; _flex-config_, _plugin-flex-ts-template_ and _serverless-functions_ are all deployed on the associated environment, as controlled by the environment variables in github actions. The underlying scripts can easily be moulded for use in alternative release management tools.
-
-
----
-
-# Setup Guides
-
-The following are guides to instruct the user how to leverage this template for each of the following use cases, they are focused around use of the flex V2 plugin.
-
-## Local Setup and use
-
-### Prerequisites
-- you are running nodes v16 or above
-- twilio cli 5.2.0 or above is [installed](https://www.twilio.com/docs/twilio-cli/getting-started/install) (`twilio --version`)
-- twilio flex plugins 6.0.2 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli) (`twilio plugins`, `twilio plugins:install @twilio-labs/plugin-flex@latest`)
-- twilio serverless plugin 3.0.4 or above is [installed](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit) (`twilio plugins` `twilio plugins:install @twilio-labs/plugin-serverless@latest`)
-- `twilio profiles:list` has an active account set.
-- have the twilio auth token for your account ready
-
-### Setup
-1. Clone the repository
-2. make sure the twilio cli has the correct account set to active
-```bash
-twilio profiles:list
-```
-3. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
-```bash
-npm ci
-```
-4. follow the prompt and provide your auth token
-5. Run the serverless functions and plugin locally
-```bash
-npm run start:local
-```
-
-### development notes
-When developing locally, flex config is overriden by anything in your [appConfig.js](/plugin-flex-ts-template-v2/public/appConfig.js).  Note appConfig is only applicable when running the plugin locally but you can edit this file to toggle features on and off for your locally running webserver, you can also tweak the api endpoint for your serverless functions if you need to.
-
-When running the plugin locally, this template has been setup to pair the plugin with the serverless functions also running locally on localhost:3001, the serverless functions can be debugged by attaching your debugger to the node instance.  The following is a sample entry for ".vscode/launch.json" to connect vscode for debugging
-
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "address": "localhost",
-      "localRoot": "${workspaceFolder}/serverless-functions",
-      "name": "Attach To Serverless Remote",
-      "port": 9229,
-      "remoteRoot": "${workspaceFolder}/serverless-functions",
-      "request": "attach",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "node"
-    }
-  ]
-}
-```
-
----
-
-## Setup a project with release pipeline
-
-1. Use the template to create your own repository
-2. Nominate a Twilio account to act as one of dev, qa, test, prod
-3. Create a twilio api key and secret for your account follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key.
-4. In github, go to your project settings -> secrets and add the 3 repostory secrets
-    - For each environment add the 3 env variables for that environment, for example, if its dev you would add
-        - `TWILIO_ACCOUNT_SID_DEV` - the account sid you want to deploy to
-        - `TWILIO_API_KEY_DEV` - the account key or key "sid" as its otherwise known
-        - `TWILIO_API_SECRET_DEV` - the account secret
-
-![alt text](scripts/screenshots/github-secrets.png)
-
-5. Login into Flex and make sure in the admin panel, the version of flex you are using meets the minimal version allowed by the plugin
-6. _Optionally_ navigate to the flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/manage/voice?frameUrl=%2Fconsole%2Fflex%2Fvoice%3Fx-target-region%3Dus1)
-6. Navigate over to github actions of your repository and select the environment you want to deploy, then run the workflow.
-    - this will deploy the four assets to your environment with the default features enabled, See [Feature library Information](#feature-library-information) for further details of whats enabled by default.
-    - serverless-functions will auto-identify any missing environment variables for the default features. It is recommend you populate the [environment variables](/serverless-functions/) for each account and manage config in version control at a later date to remove any ambiguity.
-    - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommend you populate the [ui_attributes](/flex-config/) config and manage the domain names through version control at a later date to remove any ambiguity. 
-    - for full functionality, review the configuration steps for the disable features and make sure their dependencies are setup.
-
-
-# Using template for a standalone plugin
-
-1. Fork the template and give it a name
-2. Install dependencies - you can skip when prompted to enter auth token
-```bash
-npm install
-```
-3. Remove the features; from the root folder of a checkout of your new repository run
-```bash
-npm run remove-features
-```
-4. Rename the template; from the root folder of a checkout of your new repository run
-```bash
-npm run rename-template <template-name>
-```
-5. Push your changes to your repository - this is your new baseline
-6. You can follow the instructions for [local development setup](#local-setup-and-use) and then [adding a feature](/plugin-flex-ts-template-v2/README.md#adding-a-feature)
-
 
 ---
 
@@ -335,6 +347,9 @@ convenience script for simplyfying local setup and development, triggered as par
 conveience script that does the same as setup-local-environment except it won't install npm pacakges again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
 
 # CHANGELOG
+- 1.0.3
+    - *BREAKING CHANGE* renamed plugin packages to plugin-flex-ts-template-v1 and plugin-flex-ts-template-v2 to explicitly seperate plugins
+    - updated README to account for v1 plugins in scripts
 - 1.0.2
     - README updates
     - improved reliability of github actions scripts
