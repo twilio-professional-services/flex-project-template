@@ -261,7 +261,7 @@ This package is the actual flex plugin and a structure is already laid out that 
 
 ### **plugin-flex-ts-template-v2**
 
-This package is identical in purpose to the `plugin-flex-ts-template-v1` except its intended for flex v2 projects which are discussed more [over here](plugin-flex-ts-template-v1/README.md). The intention is when kicking off a project or feature the owner would fork the repository or start a clean repository using the clone template function, then delete the plugin version they are not using.
+This package is identical in purpose to the `plugin-flex-ts-template-v1` except its intended for flex v2 projects which are discussed more [over here](plugin-flex-ts-template-v2/README.md). The intention is when kicking off a project or feature the owner would fork the repository or start a clean repository using the clone template function, then delete the plugin version they are not using.
 
 ### **serverless-functions**
 
