@@ -10,7 +10,11 @@
     "remove-features": "node scripts/remove-features.js",
     "rename-template": "node scripts/rename-template.js",
     "start:serverless": "cd serverless-functions && twilio serverless:start --inspect=localhost --port=3001 --env .env",
-    "start:plugin": "cd plugin-flex-ts-template-v2 && twilio flex:plugins:start",
+    "start:plugin:v1": "node scripts/start-local.js v1",
+    "start:plugin:v2": "node scripts/start-local.js v2",
+    "start:plugin": "node scripts/start-local.js",
+    "start:local:v1": "concurrently --kill-others \"npm run start:serverless\" \"npm run start:plugin:v1\"",
+    "start:local:v2": "concurrently --kill-others \"npm run start:serverless\" \"npm run start:plugin:v2\"",
     "start:local": "concurrently --kill-others \"npm run start:serverless\" \"npm run start:plugin\""
   },
   "repository": {
