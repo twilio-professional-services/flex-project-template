@@ -6,13 +6,6 @@
 
 ---
 
-# Disclaimer
-As Open Source Software from Twilio Professional Services, this project is not supported by Twilio Support. This software is to be considered "sample code", a Type B Deliverable, and is delivered "as-is" to the user. Twilio bears no responsibility to support the use or implementation of this software. In using this project, you are assuming ownership over the code and its implementation.
-
-For bug reports and feature requests, please submit a Github Issue.
-
----
-
 # Flex Project Template
 The _Flex Project Template_ is a starting point for Flex solutions of any size.  It proposes recommendations around package structure and solution management.  It can be used for large projects or simple standalone features. 
 
