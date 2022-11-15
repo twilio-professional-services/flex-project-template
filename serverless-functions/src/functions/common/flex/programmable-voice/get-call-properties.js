@@ -1,4 +1,4 @@
-const { prepareFunction } = require(Runtime.getFunctions()["common/helpers/prepare-function"].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()["common/helpers/prepare-function"].path);
 const VoiceOperations = require(Runtime.getFunctions()[
   "common/twilio-wrappers/programmable-voice"
 ].path);
@@ -7,7 +7,7 @@ const requiredParameters = [
   { key: "callSid", purpose: "unique ID of call to fetch" },
 ];
 
-exports.handler = prepareFunction(requiredParameters, async (context, event, callback, response, handleError) => {
+exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
     const { callSid } = event;
     
