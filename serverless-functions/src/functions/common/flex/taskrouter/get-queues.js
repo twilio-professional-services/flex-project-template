@@ -8,7 +8,6 @@ const requiredParameters = [];
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
     const result = await TaskRouterOperations.getQueues({
-      scriptName: context.PATH,
       context,
       attempts: 0,
     });

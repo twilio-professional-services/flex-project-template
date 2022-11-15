@@ -13,7 +13,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const { channelSid, attributes } = event;
     console.log(attributes);
     const result = await ChatOperations.updateChannelAttributes({
-      scriptName: context.PATH,
       context,
       channelSid,
       attributes,

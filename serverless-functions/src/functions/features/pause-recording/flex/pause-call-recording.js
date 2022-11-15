@@ -13,7 +13,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     
     const result = await VoiceOperations.updateCallRecording({
       context,
-      scriptName: context.PATH,
       callSid,
       recordingSid: recordingSid ?? 'Twilio.CURRENT',
       params: {

@@ -18,7 +18,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     
     const result = await ConferenceOperations.updateParticipant({
       context,
-      scriptName: context.PATH,
       conference,
       participant,
       endConferenceOnExit: endConferenceOnExit === "true",

@@ -72,7 +72,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       task: newTask,
       status: createTaskStatus,
     } = await TaskOperations.createTask({
-      scriptName: context.PATH,
       context,
       workflowSid,
       taskChannel: "chat",
@@ -88,7 +87,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     try {
       if (createTaskSuccess)
         await ChatOperations.addTaskToChannel({
-          scriptName: context.PATH,
           context,
           taskSid: newTask.sid,
           channelSid: newTask.attributes.channelSid,

@@ -15,7 +15,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     
     const result = await ConferenceOperations.holdParticipant({
       context,
-      scriptName: context.PATH,
       conference,
       participant,
       hold: hold === "true",

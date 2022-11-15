@@ -12,7 +12,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const conferencesResponse = await ConferenceOperations.fetchByTask(
     {
       context,
-      scriptName: context.PATH,
       taskSid,
       status: 'in-progress',
       limit: 20,
@@ -28,7 +27,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       return ConferenceOperations.updateConference(
         {
           context,
-          scriptName: context.PATH,
           conference: conference.sid,
           updateParams: {status: 'completed'},
           attempts: 0

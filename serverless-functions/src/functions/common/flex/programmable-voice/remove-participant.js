@@ -14,7 +14,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     
     const result = await ConferenceOperations.removeParticipant({
       context,
-      scriptName: context.PATH,
       conference,
       participant,
       attempts: 0,

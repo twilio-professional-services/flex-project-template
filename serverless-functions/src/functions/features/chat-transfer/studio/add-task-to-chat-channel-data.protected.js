@@ -12,7 +12,6 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
   try {
     const { taskSid, channelSid } = event;
     const { success } = await ChatOperations.addTaskToChannel({
-      scriptName: context.PATH,
       context,
       taskSid,
       channelSid,

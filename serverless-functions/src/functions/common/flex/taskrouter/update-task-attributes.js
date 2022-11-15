@@ -14,8 +14,7 @@ const requiredParameters = [
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
     const { taskSid, attributesUpdate } = event;
-    const result = await TaskOperations.updateTaskAttributes({
-      scriptName: context.PATH,
+    const result = await TaskRouterOperations.updateTaskAttributes({
       context,
       taskSid,
       attributesUpdate,

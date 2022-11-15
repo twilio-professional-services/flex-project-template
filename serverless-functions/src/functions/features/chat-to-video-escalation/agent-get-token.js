@@ -15,7 +15,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const client = context.getTwilioClient();
     
     const documentData = await SyncOperations.fetchDocument({
-      scriptName: context.PATH,
       attempts: 0,
       context,
       documentSid: document_sid,
@@ -46,7 +45,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         })
         .then((new_document_data) =>
           SyncOperations.updateDocumentData({
-            scriptName: context.PATH,
             attempts: 0,
             context,
             documentSid: document_sid,

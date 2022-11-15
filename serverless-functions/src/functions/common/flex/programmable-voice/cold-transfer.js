@@ -14,7 +14,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     
     const result = await VoiceOperations.coldTransfer({
       context,
-      scriptName: context.PATH,
       callSid,
       to,
       attempts: 0,

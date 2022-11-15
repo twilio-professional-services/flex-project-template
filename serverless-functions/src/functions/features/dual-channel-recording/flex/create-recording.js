@@ -13,7 +13,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     
     const result = await VoiceOperations.createRecording({
       context,
-      scriptName: context.PATH,
       callSid,
       params: {
         recordingChannels: 'dual'

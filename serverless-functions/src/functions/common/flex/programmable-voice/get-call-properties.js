@@ -13,7 +13,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     
     const result = await VoiceOperations.fetchProperties({
       context,
-      scriptName: context.PATH,
       callSid,
       attempts: 0,
     });

@@ -12,7 +12,6 @@ const retryHandler = require(Runtime.getFunctions()[
  * @param {string} parameters.agentSid the worker we will be coaching
  * @param {string} parameters.muted the muted status
  * @param {string} parameters.coaching the coaching status
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @returns {any}
  * @description the following method is used to modify a participant
@@ -26,7 +25,6 @@ exports.coachToggle = async function coachToggle(parameters) {
     agentSid,
     muted,
     coaching,
-    scriptName,
     attempts,
   } = parameters;
 
@@ -42,8 +40,6 @@ exports.coachToggle = async function coachToggle(parameters) {
     throw "Invalid parameters object passed. Parameters must contain muted boolean";
   if (!isString(coaching))
     throw "Invalid parameters object passed. Parameters must contain coaching boolean";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   try {
@@ -69,7 +65,6 @@ exports.coachToggle = async function coachToggle(parameters) {
  * @param {string} parameters.conferenceSid the conference we will be updating
  * @param {string} parameters.participantSid the participant that will be barging/coaching
  * @param {boolean} parameters.muted the muted status
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @returns {any}
  * @description the following method is used to modify a participant
@@ -81,7 +76,6 @@ exports.bargeToggle = async function bargeToggle(parameters) {
     conferenceSid,
     participantSid,
     muted,
-    scriptName,
     attempts,
   } = parameters;
 
@@ -93,8 +87,6 @@ exports.bargeToggle = async function bargeToggle(parameters) {
     throw "Invalid parameters object passed. Parameters must contain participantSid string";
   if (!isString(muted))
     throw "Invalid parameters object passed. Parameters must contain muted boolean";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   try {
@@ -114,7 +106,6 @@ exports.bargeToggle = async function bargeToggle(parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.taskSid the unique task SID to modify
@@ -155,7 +146,6 @@ exports.addParticipant = async (parameters) => {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.conference the unique conference SID with the participant
@@ -194,7 +184,6 @@ exports.holdParticipant = async (parameters) => {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.conference the unique conference SID with the participant
@@ -228,7 +217,6 @@ exports.removeParticipant = async (parameters) => {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.conference the unique conference SID with the participant
@@ -267,7 +255,6 @@ exports.updateParticipant = async (parameters) => {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function 
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.taskSid the task SID to fetch conferences for
@@ -277,43 +264,41 @@ exports.updateParticipant = async (parameters) => {
  * @description fetches conferences matching the given task SID and status
  */
 exports.fetchByTask = async (parameters) => {
+  const { context, taskSid, status, limit } = parameters;
+
+  if(!isObject(context))
+    throw "Invalid parameters object passed. Parameters must contain reason context object";
+  if(!isString(taskSid))
+    throw "Invalid parameters object passed. Parameters must contain taskSid string";
+  if(!isString(status))
+    throw "Invalid parameters object passed. Parameters must contain status string";
+  if(!isNumber(limit))
+    throw "Invalid parameters object passed. Parameters must contain limit number";
+
+  try {
+    const client = context.getTwilioClient();
     
-    const { context, taskSid, status, limit } = parameters;
+    const conferences = await client
+      .conferences
+      .list({
+        friendlyName: taskSid, 
+        status,
+        limit
+      });
 
-    if(!isObject(context))
-        throw "Invalid parameters object passed. Parameters must contain reason context object";
-    if(!isString(taskSid))
-        throw "Invalid parameters object passed. Parameters must contain taskSid string";
-    if(!isString(status))
-        throw "Invalid parameters object passed. Parameters must contain status string";
-    if(!isNumber(limit))
-        throw "Invalid parameters object passed. Parameters must contain limit number";
-
-    try {
-        const client = context.getTwilioClient();
-        
-        const conferences = await client
-            .conferences
-            .list({
-                friendlyName: taskSid, 
-                status,
-                limit
-            });
-
-        return { success: true, conferences, status: 200 };
-    }
-    catch (error) {
-        return retryHandler(
-            error, 
-            parameters,
-            arguments.callee
-        )
-    }
+    return { success: true, conferences, status: 200 };
+  }
+  catch (error) {
+    return retryHandler(
+      error, 
+      parameters,
+      arguments.callee
+    )
+  }
 }
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function 
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.conference the unique conference SID with the participant
@@ -322,30 +307,29 @@ exports.fetchByTask = async (parameters) => {
  * @description updates the given conference
  */
 exports.updateConference = async (parameters) => {
+  const { context, conference, updateParams } = parameters;
+
+  if(!isObject(context))
+    throw "Invalid parameters object passed. Parameters must contain reason context object";
+  if(!isString(conference))
+    throw "Invalid parameters object passed. Parameters must contain conference string";
+  if(!isObject(updateParams))
+    throw "Invalid parameters object passed. Parameters must contain updateParams object";
+
+  try {
+    const client = context.getTwilioClient();
     
-    const { context, conference, updateParams } = parameters;
+    const conferencesResponse = await client
+      .conferences(conference)
+      .update(updateParams);
 
-    if(!isObject(context))
-        throw "Invalid parameters object passed. Parameters must contain reason context object";
-    if(!isString(conference))
-        throw "Invalid parameters object passed. Parameters must contain conference string";
-    if(!isObject(updateParams))
-        throw "Invalid parameters object passed. Parameters must contain updateParams object";
-
-    try {
-        const client = context.getTwilioClient();
-        
-        const conferencesResponse = await client
-            .conferences(conference)
-            .update(updateParams);
-
-        return { success: true, conferencesResponse, status: 200 };
-    }
-    catch (error) {
-        return retryHandler(
-            error, 
-            parameters,
-            arguments.callee
-        )
-    }
+    return { success: true, conferencesResponse, status: 200 };
+  }
+  catch (error) {
+    return retryHandler(
+      error, 
+      parameters,
+      arguments.callee
+    )
+  }
 }

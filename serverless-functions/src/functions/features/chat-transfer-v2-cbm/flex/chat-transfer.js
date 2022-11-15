@@ -119,7 +119,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       interactionSid: flexInteractionSid,
       channelSid: flexInteractionChannelSid,
       context,
-      scriptName: context.PATH,
       attempts: 0,
     };
     
@@ -134,7 +133,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     
     // if this failed bail out so we don't remove the agent from the conversation and no one else joins
     if (!success) {
-      return sendErrorReply(callback, response, scriptName, status, message);
+      return sendErrorReply(callback, response, context.PATH, status, message);
     }
     
     await InteractionsOperations.participantUpdate({
@@ -142,7 +141,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       interactionSid: flexInteractionSid,
       channelSid: flexInteractionChannelSid,
       participantSid: flexInteractionParticipantSid,
-      scriptName: context.PATH,
       context,
       attempts: 0,
     });

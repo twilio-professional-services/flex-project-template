@@ -36,7 +36,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         agentSid,
         muted,
         coaching,
-        scriptName: context.PATH,
         attempts: 0,
       });
       response.setStatusCode(result.status);
@@ -52,7 +51,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         conferenceSid,
         participantSid,
         muted,
-        scriptName: context.PATH,
         attempts: 0,
       });
       response.setStatusCode(result.status);

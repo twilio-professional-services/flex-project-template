@@ -25,7 +25,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     // remove channel sid from task to prevent janitor from closing chat channel
     const { success: removeSidSuccess, message } =
       await ChatOperations.removeChannelSidFromTask({
-        scriptName: context.PATH,
         context,
         taskSid,
         attempts: 0,
@@ -35,7 +34,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     // update task data in channel to show this task is no longer in flight
     try {
       await ChatOperations.setTaskToCompleteOnChannel({
-        scriptName: context.PATH,
         context,
         taskSid,
         channelSid,
@@ -48,7 +46,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     // move the task to completed
     const reason = `Task ${transferType} Transfered to new task`;
     const { success: completeTaskSuccess, message: completeTaskMessage } =
-      await TaskOperations.completeTask({context, taskSid, reason, scriptName, attempts: 0});
+      await TaskOperations.completeTask({context, taskSid, reason, attempts: 0});
     response.setBody({ success: completeTaskSuccess, message });
     callback(null, response);
   } catch (error) {

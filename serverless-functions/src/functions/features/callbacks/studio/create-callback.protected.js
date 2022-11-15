@@ -69,7 +69,6 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
     };
     
     const result = await TaskOperations.createTask({
-      scriptName: context.PATH,
       context,
       workflowSid,
       taskChannel,

@@ -9,7 +9,6 @@ const COMPLETED = "completed";
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.channelSid the channel to be updated
@@ -21,10 +20,8 @@ const COMPLETED = "completed";
  *  is called which marks the task as "completed"
  */
 exports.addTaskToChannel = async function (parameters) {
-  const { scriptName, attempts, context, channelSid, taskSid } = parameters;
+  const { attempts, context, channelSid, taskSid } = parameters;
 
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if (!isObject(context))
@@ -68,7 +65,6 @@ exports.addTaskToChannel = async function (parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.channelSid the channel to be updated
@@ -79,10 +75,8 @@ exports.addTaskToChannel = async function (parameters) {
  *  channel data and marked as being "complete".
  */
 exports.setTaskToCompleteOnChannel = async function (parameters) {
-  const { scriptName, attempts, context, channelSid, taskSid } = parameters;
+  const { attempts, context, channelSid, taskSid } = parameters;
 
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if (!isObject(context))
@@ -126,7 +120,6 @@ exports.setTaskToCompleteOnChannel = async function (parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {object} parameters.taskSid the taskSid to add to the channel attributes
@@ -139,10 +132,8 @@ exports.setTaskToCompleteOnChannel = async function (parameters) {
 exports.removeChannelSidFromTask = async function removeChannelSidFromTask(
   parameters
 ) {
-  const { scriptName, attempts, context, taskSid } = parameters;
+  const { attempts, context, taskSid } = parameters;
 
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if (!isObject(context))

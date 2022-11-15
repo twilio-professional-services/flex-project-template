@@ -69,7 +69,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     };
     
     const result = await TaskOperations.createTask({
-      scriptName: context.PATH,
       context,
       workflowSid,
       taskChannel,

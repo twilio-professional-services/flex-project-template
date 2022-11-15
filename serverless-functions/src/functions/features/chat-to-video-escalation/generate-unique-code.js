@@ -32,7 +32,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       });
     
       document = await SyncOperations.createDocument({
-        scriptName: context.PATH,
         attempts: 0,
         context,
         uniqueName: unique_code,
@@ -49,7 +48,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     };
     
     const result = await TaskOperations.updateTaskAttributes({
-      scriptName: context.PATH,
       context,
       taskSid,
       attributesUpdate: JSON.stringify(attributesUpdate),

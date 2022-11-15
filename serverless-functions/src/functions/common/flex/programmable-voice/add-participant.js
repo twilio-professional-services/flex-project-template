@@ -15,7 +15,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     
     const result = await ConferenceOperations.addParticipant({
       context,
-      scriptName: context.PATH,
       taskSid,
       to,
       from,
