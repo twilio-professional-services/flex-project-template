@@ -5,7 +5,6 @@ const retryHandler = (require(Runtime.getFunctions()['common/twilio-wrappers/ret
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function 
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.buildSid the build to be deployed
@@ -14,10 +13,8 @@ const retryHandler = (require(Runtime.getFunctions()['common/twilio-wrappers/ret
  */
 exports.deployBuild = async function (parameters) {
 
-  const { scriptName, attempts, context, buildSid } = parameters;
+  const { attempts, context, buildSid } = parameters;
 
-  if(!isString(scriptName))
-      throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if(!isNumber(attempts))
       throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if(!isObject(context))
@@ -46,7 +43,6 @@ exports.deployBuild = async function (parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function 
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.buildSid the build SID to check status for 
@@ -55,10 +51,8 @@ exports.deployBuild = async function (parameters) {
  */
 exports.fetchBuildStatus = async function (parameters) {
 
-  const { scriptName, attempts, context, buildSid } = parameters;
+  const { attempts, context, buildSid } = parameters;
 
-  if(!isString(scriptName))
-      throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if(!isNumber(attempts))
       throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if(!isObject(context))
@@ -91,7 +85,6 @@ exports.fetchBuildStatus = async function (parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function 
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @returns {object} An object containing the deployment sid
@@ -99,10 +92,8 @@ exports.fetchBuildStatus = async function (parameters) {
  */
 exports.fetchLatestBuild = async function (parameters) {
 
-  const { scriptName, attempts, context } = parameters;
+  const { attempts, context } = parameters;
 
-  if(!isString(scriptName))
-      throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if(!isNumber(attempts))
       throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if(!isObject(context))
@@ -133,7 +124,6 @@ exports.fetchLatestBuild = async function (parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function 
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @returns {object} The latest deployment
@@ -141,10 +131,8 @@ exports.fetchLatestBuild = async function (parameters) {
  */
 exports.fetchLatestDeployment = async function (parameters) {
 
-  const { scriptName, attempts, context } = parameters;
+  const { attempts, context } = parameters;
 
-  if(!isString(scriptName))
-      throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if(!isNumber(attempts))
       throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if(!isObject(context))
@@ -176,7 +164,6 @@ exports.fetchLatestDeployment = async function (parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function 
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {array} parameters.assetVersions the asset versions to include in this build
@@ -187,10 +174,8 @@ exports.fetchLatestDeployment = async function (parameters) {
  */
 exports.createBuild = async function (parameters) {
 
-  const { scriptName, attempts, context, assetVersions, dependencies, functionVersions } = parameters;
+  const { attempts, context, assetVersions, dependencies, functionVersions } = parameters;
 
-  if(!isString(scriptName))
-      throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if(!isNumber(attempts))
       throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if(!isObject(context))
@@ -223,7 +208,6 @@ exports.createBuild = async function (parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function 
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.assetSid the asset versions to include in this build
@@ -234,10 +218,8 @@ exports.createBuild = async function (parameters) {
  */
 exports.uploadAsset = async function (parameters) {
 
-  const { scriptName, attempts, context, assetSid, assetPath, assetData } = parameters;
+  const { attempts, context, assetSid, assetPath, assetData } = parameters;
 
-  if(!isString(scriptName))
-      throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if(!isNumber(attempts))
       throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if(!isObject(context))

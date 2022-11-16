@@ -1,14 +1,10 @@
-const TokenValidator = require('twilio-flex-token-validator').functionValidator;
+const { prepareFlexFunction } = require(Runtime.getFunctions()["common/helpers/prepare-function"].path);
 const ScheduleUtils = require(Runtime.getFunctions()['common/helpers/schedule-utils'].path);
 const ServerlessOperations = require(Runtime.getFunctions()['common/twilio-wrappers/serverless'].path);
 
-exports.handler = TokenValidator(async function list(context, event, callback) {
-  const scriptName = arguments.callee.name;
-  const response = new Twilio.Response();
-  response.appendHeader('Access-Control-Allow-Origin', '*');
-  response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS GET');
-  response.appendHeader('Content-Type', 'application/json');
-  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+const requiredParameters = [];
+
+exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   
   const assetPath = '/config.json';
   
@@ -21,7 +17,7 @@ exports.handler = TokenValidator(async function list(context, event, callback) {
     // this is so we can provide a version sid in the response to avoid racing with multiple users updating config.
     // when updating the config, the client provides the sid, and we will only save if it matches the latest one.
     
-    const latestBuildResult = await ServerlessOperations.fetchLatestBuild({ scriptName, context, attempts: 0 });
+    const latestBuildResult = await ServerlessOperations.fetchLatestBuild({ context, attempts: 0 });
     
     if (!latestBuildResult.success) {
       response.setStatusCode(latestBuildResult.status);
@@ -42,7 +38,7 @@ exports.handler = TokenValidator(async function list(context, event, callback) {
     }
     
     // now validate that this build is what is deployed
-    const latestDeploymentResult = await ServerlessOperations.fetchLatestDeployment({ scriptName, context, attempts: 0 });
+    const latestDeploymentResult = await ServerlessOperations.fetchLatestDeployment({ context, attempts: 0 });
     
     if (!latestDeploymentResult.success) {
       response.setStatusCode(latestDeploymentResult.status);
@@ -72,7 +68,6 @@ exports.handler = TokenValidator(async function list(context, event, callback) {
     response.setBody(returnData);
     callback(null, response);
   } catch (error) {
-    console.log('Error executing function', error)
-    callback(error);
+    handleError(error);
   }
 });

@@ -5,7 +5,6 @@ snooze = ms => new Promise(resolve => setTimeout(resolve, ms));
 /**
  * @param {object} error the error from the calling function
  * @param {object} parameters the parameters to call the callback with
- * @param {string} parameters.scriptName the name of the top level lambda function 
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {function} callback the callback function to retry
  * @returns {any}
@@ -28,14 +27,12 @@ exports.retryHandler = async (error, parameters, callback) => {
 
   if(!isNumber(parameters.attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if(!isString(parameters.scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
 
   const { 
     TWILIO_SERVICE_MAX_BACKOFF, 
     TWILIO_SERVICE_MIN_BACKOFF, 
     TWILIO_SERVICE_RETRY_LIMIT } = process.env;
-  const { attempts, scriptName } = parameters;
+  const { attempts, context } = parameters;
   const { response, message: errorMessage } = error;
   const status = response? response.status : 500;
   const logWarning = attempts == 1 ? `${parameters.attempts} retry attempt` : `${parameters.attempts} retry attempts`;
@@ -46,7 +43,7 @@ exports.retryHandler = async (error, parameters, callback) => {
     && isNumber(attempts)
     && attempts < TWILIO_SERVICE_RETRY_LIMIT) 
     {
-      console.warn(`retrying ${scriptName}.${callback.name}() after ${logWarning}, status code: ${status}`);
+      console.warn(`retrying ${context.PATH}.${callback.name}() after ${logWarning}, status code: ${status}`);
       if(status === 429 || status === 503)
         await snooze(
           random(
@@ -59,7 +56,7 @@ exports.retryHandler = async (error, parameters, callback) => {
       const updatedParameters = {...parameters, attempts: updatedAttempts};
       return callback(updatedParameters);
   } else {
-    console.error(`retrying ${scriptName}.${callback.name}() failed after ${logWarning}, status code: ${status}, message: ${message}`);
+    console.error(`retrying ${context.PATH}.${callback.name}() failed after ${logWarning}, status code: ${status}, message: ${message}`);
     return { success: false, message, status };
   }
 }

@@ -6,7 +6,6 @@ const retryHandler = require(Runtime.getFunctions()[
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.uniqueName the unique name of the Sync document (optional)
@@ -16,10 +15,8 @@ const retryHandler = require(Runtime.getFunctions()[
  * @description the following method is used to create a sync document
  */
 exports.createDocument = async function (parameters) {
-  const { scriptName, attempts, context, uniqueName, ttl, data } = parameters;
+  const { attempts, context, uniqueName, ttl, data } = parameters;
 
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if (!isObject(context))
@@ -58,7 +55,6 @@ exports.createDocument = async function (parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.documentSid the sid of the Sync document
@@ -66,10 +62,8 @@ exports.createDocument = async function (parameters) {
  * @description the following method is used to fetch a sync document
  */
 exports.fetchDocument = async function (parameters) {
-  const { scriptName, attempts, context, documentSid } = parameters;
+  const { attempts, context, documentSid } = parameters;
 
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if (!isObject(context))
@@ -100,7 +94,6 @@ exports.fetchDocument = async function (parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.documentSid the sid of the Sync document
@@ -109,10 +102,8 @@ exports.fetchDocument = async function (parameters) {
  * @description the following method is used to fetch a sync document
  */
 exports.updateDocumentData = async function (parameters) {
-  const { scriptName, attempts, context, documentSid, updateData } = parameters;
+  const { attempts, context, documentSid, updateData } = parameters;
 
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if (!isObject(context))
