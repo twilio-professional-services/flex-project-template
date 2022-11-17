@@ -8,7 +8,7 @@ const { enabled = false } = custom_data?.features.multi_call || {};
 export function handleMultiCallSelectTask(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
   
-  flex.Actions.addListener('beforeSelectTask', async (payload: any, abortFunction: () => void) => {
+  flex.Actions.addListener('beforeSelectTask', async (payload, abortFunction) => {
     let task = null;
     
     if (payload.task) {
