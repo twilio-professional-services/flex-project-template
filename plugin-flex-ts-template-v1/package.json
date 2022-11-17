@@ -1,6 +1,6 @@
 {
   "name": "plugin-flex-ts-template-v1",
-  "version": "8.0.11",
+  "version": "8.0.12",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
@@ -48,7 +48,7 @@
     "react-test-renderer": "16.5.2",
     "twilio": "3.76.0",
     "twilio-cli": "5.2.1",
-    "typescript": "^3.9.4"
+    "typescript": "^4"
   },
   "jest": {
     "clearMocks": true,
