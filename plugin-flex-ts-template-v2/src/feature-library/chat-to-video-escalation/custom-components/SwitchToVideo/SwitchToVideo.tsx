@@ -9,7 +9,7 @@ import { UIAttributes } from "types/manager/ServiceConfiguration";
 interface SwitchToVideoProps {
   task: ITask;
   context?: any;
-  conversation?: ConversationState;
+  conversation?: ConversationState.ConversationState;
 }
 
 const { custom_data } = Manager.getInstance().configuration as UIAttributes;
