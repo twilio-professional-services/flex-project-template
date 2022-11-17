@@ -5,7 +5,6 @@ const retryHandler = require(Runtime.getFunctions()[
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @returns {Array<PhoneNumber>} An array of phone numbers for the account

@@ -26,7 +26,9 @@
         "enabled": false
       },
       "conference": {
-        "enabled": true
+        "enabled": true,
+        "add_button": true,
+        "hold_workaround": false
       },
       "enhanced_crm_container": {
         "enabled": true

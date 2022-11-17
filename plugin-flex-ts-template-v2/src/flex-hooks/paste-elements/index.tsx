@@ -6,7 +6,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
   // Currently the method to customize Paste elements in Flex is somewhat clunky.
   // This is correct for now but may improve. See FLEXEXP-772
   flex.setProviders({
-    CustomProvider: (RootComponent: any) => (props: any) => {
+    CustomProvider: (RootComponent) => (props) => {
       const pasteProviderProps: CustomizationProviderProps & { style: PasteCustomCSS } = {
         baseTheme: props.theme?.isLight ? "default" : "dark",
         theme: props.theme?.tokens,
@@ -29,9 +29,9 @@ import { PasteCustomCSS } from "@twilio-paste/core/customization";
 export default {
   MY_COOL_LABEL: {
     fontWeight: 'fontWeightSemibold'
-  } as PasteCustomCSS,
+  },
   MY_COOL_SELECT: {
     fontWeight: 'fontWeightNormal'
-  } as PasteCustomCSS
-}
+  }
+} as {[key: string]: PasteCustomCSS}
 */

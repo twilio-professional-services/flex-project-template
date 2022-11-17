@@ -17,7 +17,7 @@ export function interceptQueueFilter(flex: typeof Flex, manager: Flex.Manager) {
 export function logApplyListFilters(flex: typeof Flex, manager: Flex.Manager) {
   if(!shouldLogFilters) return;
 
-  Flex.Actions.addListener('afterApplyTeamsViewFilters', async (payload: any, abortFunction: () => void) => {
+  Flex.Actions.addListener('afterApplyTeamsViewFilters', async (payload, abortFunction) => {
     console.log("Team view filters applied", payload);
   })
 }

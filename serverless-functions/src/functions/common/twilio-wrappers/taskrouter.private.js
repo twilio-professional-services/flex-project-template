@@ -6,7 +6,6 @@ const retryHandler = require(Runtime.getFunctions()[
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {string} parameters.taskSid the task to update
  * @param {string} parameters.attributesUpdate a JSON object to merge with the task
@@ -17,12 +16,10 @@ const retryHandler = require(Runtime.getFunctions()[
  * more explained here https://www.twilio.com/docs/taskrouter/api/task#task-version
  */
 exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
-  const { attempts, scriptName, taskSid, attributesUpdate } = parameters;
+  const { attempts, taskSid, attributesUpdate } = parameters;
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isString(taskSid))
     throw "Invalid parameters object passed. Parameters must contain the taskSid string";
   if (!isString(attributesUpdate))
@@ -81,7 +78,6 @@ exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.taskSid the task to update
@@ -90,12 +86,10 @@ exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
  * @description this operation safely completes the task with the given reason
  */
 exports.completeTask = async function completeTask(parameters) {
-  const { attempts, scriptName, taskSid, reason, context } = parameters;
+  const { attempts, taskSid, reason, context } = parameters;
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isString(taskSid))
     throw "Invalid parameters object passed. Parameters must contain the taskSid string";
   if (!isString(reason))
@@ -126,9 +120,9 @@ exports.completeTask = async function completeTask(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      const { scriptName } = parameters;
+      const { context } = parameters;
       console.warn(
-        `${scriptName}.${arguments.callee.name}(): ${error.message}`
+        `${context.PATH}.${arguments.callee.name}(): ${error.message}`
       );
       return {
         success: true,
@@ -142,7 +136,6 @@ exports.completeTask = async function completeTask(parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.taskSid the task to update
@@ -151,12 +144,10 @@ exports.completeTask = async function completeTask(parameters) {
  * @description this operation safely completes the task reservation
  */
 exports.completeReservation = async function completeReservation(parameters) {
-  const { attempts, scriptName, context, taskSid, reservationSid } = parameters;
+  const { attempts, context, taskSid, reservationSid } = parameters;
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isString(taskSid))
     throw "Invalid parameters object passed. Parameters must contain the taskSid string";
   if (!isString(reservationSid))
@@ -188,9 +179,9 @@ exports.completeReservation = async function completeReservation(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      const { scriptName } = parameters;
+      const { context } = parameters;
       console.warn(
-        `${scriptName}.${arguments.callee.name}(): ${error.message}`
+        `${context.PATH}.${arguments.callee.name}(): ${error.message}`
       );
       return {
         success: true,
@@ -204,7 +195,6 @@ exports.completeReservation = async function completeReservation(parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.taskSid the task to update
@@ -213,12 +203,10 @@ exports.completeReservation = async function completeReservation(parameters) {
  * @description this operation safely moves the reservation to wrapup
  */
 exports.wrapupReservation = async function wrapupReservation(parameters) {
-  const { attempts, scriptName, context, taskSid, reservationSid } = parameters;
+  const { attempts, context, taskSid, reservationSid } = parameters;
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isString(taskSid))
     throw "Invalid parameters object passed. Parameters must contain the taskSid string";
   if (!isString(reservationSid))
@@ -250,9 +238,9 @@ exports.wrapupReservation = async function wrapupReservation(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      const { scriptName } = parameters;
+      const { context } = parameters;
       console.warn(
-        `${scriptName}.${arguments.callee.name}(): ${error.message}`
+        `${context.PATH}.${arguments.callee.name}(): ${error.message}`
       );
       return {
         success: true,
@@ -266,7 +254,6 @@ exports.wrapupReservation = async function wrapupReservation(parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.workflowSid the workflow to submit the task
@@ -279,7 +266,6 @@ exports.wrapupReservation = async function wrapupReservation(parameters) {
  */
 exports.createTask = async function createTask(parameters) {
   const {
-    scriptName,
     context,
     workflowSid,
     taskChannel,
@@ -291,8 +277,6 @@ exports.createTask = async function createTask(parameters) {
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(scriptName) || scriptName.length == 0)
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isObject(context))
     throw "Invalid parameters object passed. Parameters must contain context object";
   if (!isString(workflowSid) || workflowSid.length == 0)
@@ -333,7 +317,6 @@ exports.createTask = async function createTask(parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @returns {object} An object containing an array of queues for the account
@@ -341,12 +324,10 @@ exports.createTask = async function createTask(parameters) {
  *   the queues for the account
  */
 exports.getQueues = async function getQueues(parameters) {
-  const { scriptName, context, attempts } = parameters;
+  const { context, attempts } = parameters;
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isObject(context))
     throw "Invalid parameters object passed. Parameters must contain context object";
 
@@ -368,7 +349,6 @@ exports.getQueues = async function getQueues(parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.workerSid the worker sid to fetch channels for
@@ -378,7 +358,6 @@ exports.getQueues = async function getQueues(parameters) {
  */
 exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
   const {
-    scriptName,
     context,
     attempts,
     workerSid,
@@ -386,8 +365,6 @@ exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isObject(context))
     throw "Invalid parameters object passed. Parameters must contain context object";
   if (!isString(workerSid))
@@ -413,7 +390,6 @@ exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @returns {object} worker channel capacity object
@@ -422,7 +398,6 @@ exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
  */
 exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
   const {
-    scriptName,
     context,
     attempts,
     workerSid,
@@ -433,8 +408,6 @@ exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isObject(context))
     throw "Invalid parameters object passed. Parameters must contain context object";
   if (!isString(workerSid))
@@ -466,7 +439,6 @@ exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.taskSid the task to update
@@ -475,12 +447,10 @@ exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
  * @description updates the given task with the given params
  */
 exports.updateTask = async function updateTask(parameters) {
-  const { attempts, scriptName, taskSid, updateParams, context } = parameters;
+  const { attempts, taskSid, updateParams, context } = parameters;
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isString(taskSid))
     throw "Invalid parameters object passed. Parameters must contain the taskSid string";
   if (!isObject(updateParams))
@@ -514,9 +484,9 @@ exports.updateTask = async function updateTask(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      const { scriptName } = parameters;
+      const { context } = parameters;
       console.warn(
-        `${scriptName}.${arguments.callee.name}(): ${error.message}`
+        `${context.PATH}.${arguments.callee.name}(): ${error.message}`
       );
       return {
         success: true,
@@ -530,7 +500,6 @@ exports.updateTask = async function updateTask(parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.taskSid the task to fetch
@@ -538,12 +507,10 @@ exports.updateTask = async function updateTask(parameters) {
  * @description fetches the given task
  */
 exports.fetchTask = async function fetchTask(parameters) {
-  const { attempts, scriptName, taskSid, context } = parameters;
+  const { attempts, taskSid, context } = parameters;
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isString(taskSid))
     throw "Invalid parameters object passed. Parameters must contain the taskSid string";
   if (!isObject(context))
@@ -575,9 +542,9 @@ exports.fetchTask = async function fetchTask(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      const { scriptName } = parameters;
+      const { context } = parameters;
       console.warn(
-        `${scriptName}.${arguments.callee.name}(): ${error.message}`
+        `${context.PATH}.${arguments.callee.name}(): ${error.message}`
       );
       return {
         success: true,

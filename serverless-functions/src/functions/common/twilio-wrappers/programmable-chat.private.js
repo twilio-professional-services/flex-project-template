@@ -6,7 +6,6 @@ const retryHandler = require(Runtime.getFunctions()[
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.channelSid the channel to be updated
@@ -16,10 +15,8 @@ const retryHandler = require(Runtime.getFunctions()[
  *    to the channel object
  */
 exports.updateChannelAttributes = async function (parameters) {
-  const { scriptName, attempts, context, channelSid, attributes } = parameters;
+  const { attempts, context, channelSid, attributes } = parameters;
 
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if (!isObject(context))

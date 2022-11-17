@@ -6,7 +6,6 @@ const retryHandler = require(Runtime.getFunctions()[
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.interactionSid the Interaction Sid for this channel
@@ -16,11 +15,9 @@ const retryHandler = require(Runtime.getFunctions()[
  * @description the following method is used to create an Interaction Channel Invite
  */
 exports.participantCreateInvite = async function (parameters) {
-  const { scriptName, attempts, context, interactionSid, channelSid, routing } =
+  const { attempts, context, interactionSid, channelSid, routing } =
     parameters;
 
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if (!isObject(context))
@@ -50,7 +47,6 @@ exports.participantCreateInvite = async function (parameters) {
 
 /**
  * @param {object} parameters the parameters for the function
- * @param {string} parameters.scriptName the name of the top level lambda function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.interactionSid the Interaction Sid for this channel
@@ -62,7 +58,6 @@ exports.participantCreateInvite = async function (parameters) {
  */
 exports.participantUpdate = async function (parameters) {
   const {
-    scriptName,
     attempts,
     context,
     interactionSid,
@@ -71,8 +66,6 @@ exports.participantUpdate = async function (parameters) {
     status,
   } = parameters;
 
-  if (!isString(scriptName))
-    throw "Invalid parameters object passed. Parameters must contain scriptName of calling function";
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
   if (!isObject(context))

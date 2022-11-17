@@ -5,7 +5,7 @@ import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterSe
 
 /* 
     this filter only works when a supporting backend solution is keeping
-    worker data up-to-date with an array of queue sids that they aer eligible
+    worker data up-to-date with an array of queue sids that they are eligible
     to work
 */
 

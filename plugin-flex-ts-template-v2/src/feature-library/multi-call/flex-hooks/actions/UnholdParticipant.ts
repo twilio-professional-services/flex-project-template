@@ -8,7 +8,7 @@ const { enabled = false } = custom_data?.features.multi_call || {};
 export function handleMultiCallUnholdParticipant(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
   
-  flex.Actions.addListener('beforeUnholdParticipant', async (payload: any, abortFunction: () => void) => {
+  flex.Actions.addListener('beforeUnholdParticipant', async (payload, abortFunction) => {
     handleUnhold(payload);
   });
 }
