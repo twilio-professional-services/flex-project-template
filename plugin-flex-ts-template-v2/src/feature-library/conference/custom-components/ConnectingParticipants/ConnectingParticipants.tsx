@@ -28,7 +28,7 @@ const ConnectingParticipants = (props: OwnProps) => {
   }, [])
   
   useEffect(() => {
-    connectingParticipants.filter((p) => p.conferenceSid === props.task?.attributes?.conference?.sid).forEach((participant) => {
+    connectingParticipants.filter((p) => p.conferenceSid === props.task?.conference?.conferenceSid).forEach((participant) => {
       // if this call is no longer active, remove it
       ConferenceService.getCallProperties(participant.callSid)
       .then((response: FetchedCall) => {
@@ -43,7 +43,7 @@ const ConnectingParticipants = (props: OwnProps) => {
   }, [clock])
   
   useEffect(() => {
-    connectingParticipants.filter((p) => p.conferenceSid === props.task?.attributes?.conference?.sid).forEach((participant) => {
+    connectingParticipants.filter((p) => p.conferenceSid === props.task?.conference?.conferenceSid).forEach((participant) => {
       const connected = props.conference?.source.participants.filter((p) => p.callSid === participant.callSid);
       
       // remove connecting participant once connected
@@ -55,7 +55,7 @@ const ConnectingParticipants = (props: OwnProps) => {
   
   return (
     <>
-    { connectingParticipants.filter((p) => p.conferenceSid === props.task?.attributes?.conference?.sid).map((p) => {
+    { connectingParticipants.filter((p) => p.conferenceSid === props.task?.conference?.conferenceSid).map((p) => {
         const fakeParticipant = {
           participantType: 'external',
           phoneNumber: p.phoneNumber,

@@ -46,7 +46,7 @@ export const enableBargeCoachButtonsUponMonitor = async (
       manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
     const supervisorFN =
       manager.store.getState().flex?.worker?.attributes?.full_name;
-    const conferenceSID = payload.task?.attributes?.conference?.sid;
+    const conferenceSID = payload.task?.conference?.conferenceSid;
 
     SyncDoc.initSyncDoc(
       agentWorkerSID,

@@ -15,7 +15,7 @@ export function handleHoldConferenceParticipant(flex: typeof Flex, manager: Flex
       return;
     }
     
-    const conferenceSid = task.attributes?.conference?.sid;
+    const conferenceSid = task.conference?.conferenceSid;
     abortFunction();
     console.log('Holding participant', participantSid);
     await ConferenceService.holdParticipant(conferenceSid, participantSid);

@@ -16,7 +16,7 @@ export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex
 
       const { task, targetSid } = payload;
 
-      const conference = task.attributes?.conference?.sid;
+      const conference = task.conference?.conferenceSid;
 
       const participantSid = targetSid;
 

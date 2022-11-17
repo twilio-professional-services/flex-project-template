@@ -23,7 +23,7 @@ class ConferenceMonitor extends React.Component {
     const { task } = this.props as OwnProps;
 
     const conference = task && task.conference;
-    const conferenceSid = task?.attributes?.conference?.sid;
+    const conferenceSid = conference?.conferenceSid;
     
     if (!conference || !conferenceSid) return;
     

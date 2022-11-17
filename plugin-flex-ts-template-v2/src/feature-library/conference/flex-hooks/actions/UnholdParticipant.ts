@@ -22,7 +22,7 @@ export function handleUnholdConferenceParticipant(
 
       console.log("Unholding participant", participantSid);
 
-      const conferenceSid = task.attributes?.conference?.sid;
+      const conferenceSid = task.conference?.conferenceSid;
       abortFunction();
       await ConferenceService.unholdParticipant(conferenceSid, participantSid);
     }
