@@ -15,8 +15,8 @@ export function handleInternalUnholdCall(flex: typeof Flex, manager: Flex.Manage
     }
     
     const { task } = payload;
-    const conference = task.attributes.conference
-      ? task.attributes.conference.sid
+    const conference = task.conference
+      ? task.conference.conferenceSid
       : task.attributes.conferenceSid;
     
     const participant = task.attributes.conference.participants
