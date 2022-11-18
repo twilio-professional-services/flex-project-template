@@ -56,7 +56,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
   // we allow the correct user to barge-in on the call
   const bargeHandleClick = () => {
     const conference = task && task.conference;
-    const conferenceSid = task?.attributes?.conference?.sid;
+    const conferenceSid = conference?.conferenceSid;
     if (!conferenceSid) {
       console.log('conferenceSid = null, returning');
       return;
@@ -133,7 +133,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
 
   const coachHandleClick = () => {
     const conference = task && task.conference;
-    const conferenceSid = task?.attributes?.conference?.sid;
+    const conferenceSid = conference?.conferenceSid;
     if (!conferenceSid) {
       console.log('conferenceSid = null, returning');
       return;

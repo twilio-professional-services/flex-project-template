@@ -30,7 +30,7 @@ export const SupervisorPrivateToggle = ({task}: SupervisorPrivateToggleProps) =>
   // of the coachingStatusPanel along with udpating the Sync Doc appropriately
   const togglePrivateMode = () => {
     const conference = task && task.conference;
-    const conferenceSID = task.attributes?.conference?.sid;
+    const conferenceSID = conference?.conferenceSid;
 
     // If privateMode is true, toggle to false and update the Sync Doc with the appropriate Supervisor and Status
     if (privateMode) {
