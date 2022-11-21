@@ -1,11 +1,8 @@
 import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled } = custom_data.features.chat_transfer;
+import { isFeatureEnabled } from '../../index';
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
-  if(!enabled) return;
+  if(!isFeatureEnabled()) return;
   
   flex.ChatOrchestrator.setOrchestrations('wrapup', handleChatWrapup);
   flex.ChatOrchestrator.setOrchestrations('completed', handleChatComplete);

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Actions, ITask, Manager, ConversationState } from "@twilio/flex-ui";
-import { Flex, Button } from "@twilio-paste/core";
-import { VideoOnIcon } from "@twilio-paste/icons/esm/VideoOnIcon";
+import { Actions, ITask, Manager, ConversationState, styled, IconButton } from "@twilio/flex-ui";
 
 import { updateTaskAttributesForVideo } from "../../helpers/taskAttributes";
 import { UIAttributes } from "types/manager/ServiceConfiguration";
@@ -18,6 +16,11 @@ const {
   serverless_functions_port = "",
   serverless_functions_protocol = "",
 } = custom_data || {};
+
+const IconContainer = styled.div`
+  margin: auto;
+  padding-right: 0.8em;
+`;
 
 const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({
   task,
@@ -82,15 +85,16 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({
   };
 
   return (
-    <Flex padding="space10" marginTop="space30" marginLeft={"space30"}>
-      <Button
-        variant="primary"
-        onClick={async () => await onClick()}
-        loading={isLoading}
-      >
-        <VideoOnIcon decorative size="sizeIcon10" title="Switch to Video" />
-      </Button>
-    </Flex>
+    <IconContainer>
+        <IconButton
+            icon="Video"
+            key="chat-video-transfer-button"
+            disabled={isLoading}
+            onClick={async () => await onClick()}
+            variant="secondary"
+            title="Switch to Video"
+            css='' />
+    </IconContainer>
   );
 };
 

@@ -115,6 +115,9 @@
       },
       "multi_call": {
         "enabled": false
+      },
+      "programmable_chat_transfer": {
+        "enabled": false
       }
     }
   }

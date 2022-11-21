@@ -116,7 +116,7 @@ class ChatTransferService extends ApiService {
           messageAttributes: { notification: true },
         });
 
-        // if succesful update existing task to preserve transfer data
+        // if successful update existing task to preserve transfer data
         const updatedTaskAttributes = {
           autoClose: true,
           chatTransferData: {

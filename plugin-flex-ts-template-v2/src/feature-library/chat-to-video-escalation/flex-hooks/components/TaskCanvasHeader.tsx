@@ -12,7 +12,7 @@ export function addSwitchToVideoToTaskCanvasHeader(flex: typeof Flex) {
   if (!enabled) return;
 
   flex.TaskCanvasHeader.Content.add(<SwitchToVideo key="switch-to-video" />, {
-    sortOrder: 10,
-    if: (props: any) => flex.TaskHelper.isChatBasedTask(props.task),
+    sortOrder: 1,
+    if: (props: any) => flex.TaskHelper.isChatBasedTask(props.task) && props.task.taskStatus === 'assigned',
   });
 }

@@ -1,10 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import ChatTransferService from '../../utils/serverless/ChatTransferService';
-
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled } = custom_data.features.chat_transfer;
+import { isFeatureEnabled } from '../../index';
 
 export interface TransferOptions {
   attributes: string;
@@ -23,7 +19,7 @@ export interface EventPayload {
 // otherwise the function creates a new task for transfering the chat
 // and deals with the chat orchestration
 export function interceptTransferOverrideForChatTasks(flex: typeof Flex, manager: Flex.Manager) {
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
 
   Flex.Actions.addListener('beforeTransferTask', async (payload: EventPayload, abortFunction: any) => {
     if (Flex.TaskHelper.isChatBasedTask(payload.task) && !Flex.TaskHelper.isCBMTask(payload.task)) {

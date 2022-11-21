@@ -5,6 +5,6 @@ export enum StringTemplates {
 }
 
 export default {
-  [StringTemplates.FailedToSumitTransfer]: 'Failed to submit transfer. {{message}}, please try again.  If problem persists please contact a supervisor',
-  [StringTemplates.FailedToUpdateTaskAttributes]: 'Failed to update task as part of transfer. You may continue but please notify a supervisor',
+  [StringTemplates.FailedToSumitTransfer]: 'Failed to submit transfer. {{message}}; please try again.  If the problem persists, please contact a supervisor.',
+  [StringTemplates.FailedToUpdateTaskAttributes]: 'Failed to update task for transfer. You may continue, but please notify a supervisor.',
 }

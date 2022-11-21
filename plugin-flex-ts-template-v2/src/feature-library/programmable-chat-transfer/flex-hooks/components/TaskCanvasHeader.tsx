@@ -1,15 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
-import TransferButton from '../../custom-components/TransferButton'
-
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled } = custom_data.features.chat_transfer;
-
+import TransferButton from '../../custom-components/TransferButton';
+import { isFeatureEnabled } from '../../index';
 
 export function addTransferButtonToChatTaskView(flex: typeof Flex, manager: Flex.Manager) {
 
-  if(!enabled) return;
+  if(!isFeatureEnabled()) return;
   
   Flex.TaskCanvasHeader.Content.add(<TransferButton key="chat-transfer-button" />, {
     sortOrder: 1,
