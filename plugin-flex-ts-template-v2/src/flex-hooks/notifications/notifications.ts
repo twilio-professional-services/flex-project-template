@@ -3,6 +3,7 @@ import ActivityReservationHandler from "../../feature-library/activity-reservati
 import ActivitySkillFilter from "../../feature-library/activity-skill-filter/flex-hooks/notifications/ActivitySkillFilter";
 import Conference from "../../feature-library/conference/flex-hooks/notifications/Conference";
 import ChatTransfer from "../../feature-library/chat-transfer/flex-hooks/notifications/TransferResult";
+import ProgrammableChatTransfer from "../../feature-library/programmable-chat-transfer/flex-hooks/notifications/ChatTransfer";
 import DualChannelRecording from "../../feature-library/dual-channel-recording/flex-hooks/notifications/DualChannelRecording";
 import PauseRecording from "../../feature-library/pause-recording/flex-hooks/notifications/PauseRecording";
 import TeamsViewFilters from "../../feature-library/teams-view-filters/flex-hooks/notifications/TeamViewQueueFilter";
@@ -12,6 +13,6 @@ import MultiCall from "../../feature-library/multi-call/flex-hooks/notifications
 const notificationsToRegister: ((
   flex: typeof Flex,
   manager: Flex.Manager
-) => void)[] = [ActivityReservationHandler, ActivitySkillFilter, Conference, ChatTransfer, DualChannelRecording, PauseRecording, TeamsViewFilters, ScheduleManager, MultiCall];
+) => void)[] = [ActivityReservationHandler, ActivitySkillFilter, Conference, ChatTransfer, DualChannelRecording, PauseRecording, TeamsViewFilters, ScheduleManager, MultiCall, ProgrammableChatTransfer];
 
 export default notificationsToRegister;

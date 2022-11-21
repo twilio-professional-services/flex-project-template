@@ -20,6 +20,9 @@ import { handleInternalHoldCall } from "../../feature-library/internal-call/flex
 import { handleInternalUnholdCall } from "../../feature-library/internal-call/flex-hooks/actions/UnholdCall";
 import { handleInternalRejectTask } from "../../feature-library/internal-call/flex-hooks/actions/RejectTask";
 import { handleChatTransfer } from "../../feature-library/chat-transfer/flex-hooks/actions/TransferTask";
+import { interceptTransferredChatTasks } from "../../feature-library/programmable-chat-transfer/flex-hooks/actions/CompleteTask";
+import { interceptTransferOverrideForChatTasks } from "../../feature-library/programmable-chat-transfer/flex-hooks/actions/TransferTask";
+import { announceOnChannelWhenLeaving, removeChannelSidAndLeaveChatForChatTransfer } from "../../feature-library/programmable-chat-transfer/flex-hooks/actions/WrapupTask";
 import { handleDualChannelCompleteTask } from "../../feature-library/dual-channel-recording/flex-hooks/actions/CompleteTask";
 import { handleDualChannelHangupCall } from "../../feature-library/dual-channel-recording/flex-hooks/actions/HangupCall";
 import { interceptQueueFilter, logApplyListFilters } from "../../feature-library/teams-view-filters/flex-hooks/actions/ApplyTeamsViewFilters";
@@ -42,7 +45,8 @@ const actionsToRegister: Actions = {
     before: [
       beforeCompleteWorkerTask,
       beforeCompleteVideoEscalatedChatTask,
-      handleDualChannelCompleteTask
+      handleDualChannelCompleteTask,
+      interceptTransferredChatTasks
     ],
     after: [],
     replace: [],
@@ -122,8 +126,22 @@ const actionsToRegister: Actions = {
   RejectTask: { before: [handleInternalRejectTask], after: [], replace: [] },
   NavigateToView: {},
   SetActivity: {},
-  TransferTask: { before: [handleChatTransfer], after: [], replace: [] },
-  WrapUpTask: {},
+  TransferTask: {
+    before: [
+      handleChatTransfer,
+      interceptTransferOverrideForChatTasks
+    ],
+    after: [],
+    replace: []
+  },
+  WrapUpTask: {
+    before: [
+      announceOnChannelWhenLeaving,
+      removeChannelSidAndLeaveChatForChatTransfer
+    ],
+    after: [],
+    replace: []
+  },
 };
 
 export default actionsToRegister;

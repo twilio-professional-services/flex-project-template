@@ -17,6 +17,8 @@ import { replaceAndSetCustomCRMContainer } from "../../feature-library/enhanced-
 import { addDeviceManagerToMainHeader } from "../../feature-library/device-manager/flex-hooks/components/MainHeader";
 import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addChatTransferCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/WorkerDirectory";
+import { replaceMessageForNotifications } from "../../feature-library/programmable-chat-transfer/flex-hooks/components/MessageListItem";
+import { addTransferButtonToChatTaskView } from "../../feature-library/programmable-chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-filter/flex-hooks/components/WorkerProfile";
 import { addCapacityToWorkerCanvas } from "../../feature-library/supervisor-capacity/flex-hooks/components/WorkerCanvas";
 import { addPauseRecordingButton } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvasActions";
@@ -43,7 +45,7 @@ const componentHandlers: Components = {
     addDeviceManagerToMainHeader,
     replaceActivityComponent
   ],
-  MessageListItem: [],
+  MessageListItem: [replaceMessageForNotifications],
   NoTasksCanvas: [],
   OutboundDialerPanel: [
     addOutboundCallerIdSelectorToMainHeader,
@@ -51,7 +53,11 @@ const componentHandlers: Components = {
   ],
   ParticipantCanvas: [addConferenceToParticipantCanvas],
   SideNav: [addScheduleManagerToSideNav],
-  TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader, addChatTransferButton],
+  TaskCanvasHeader: [
+    addSwitchToVideoToTaskCanvasHeader,
+    addChatTransferButton,
+    addTransferButtonToChatTaskView
+  ],
   TaskCanvasTabs: [addVideoRoomTabToTaskCanvasTabs, addSupervisorMonitorPanel],
   TaskInfoPanel: [replaceViewForCallbackAndVoicemail],
   TaskListButtons: [],
