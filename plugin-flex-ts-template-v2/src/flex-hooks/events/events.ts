@@ -23,6 +23,7 @@ import SupervisorCapacityLoaded from "../../feature-library/supervisor-capacity/
 import ScheduleManagerLoaded from "../../feature-library/schedule-manager/flex-hooks/events/pluginsLoaded";
 import MultiCallLoaded from "../../feature-library/multi-call/flex-hooks/events/pluginsLoaded";
 import MultiCallTokenUpdated from "../../feature-library/multi-call/flex-hooks/events/tokenUpdated";
+import ProgrammableChatTransferLoaded from "../../feature-library/programmable-chat-transfer/flex-hooks/events/pluginsLoaded";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -40,7 +41,8 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     TeamsViewFiltersLoaded,
     SupervisorCapacityLoaded,
     ScheduleManagerLoaded,
-    MultiCallLoaded
+    MultiCallLoaded,
+    ProgrammableChatTransferLoaded
   ],
   taskAccepted: [
     taskAcceptedHandlerActivityReservationHandler,
