@@ -123,7 +123,7 @@ export const waitForConferenceParticipants = (task: ITask): Promise<ConferencePa
         return;
       }
       const worker = participants.find(
-        (p) => p.participantType === 'worker'
+        (p) => p.participantType === 'worker' && p.isCurrentWorker
       );
       const customer = participants.find(
         (p) => p.participantType === 'customer'
