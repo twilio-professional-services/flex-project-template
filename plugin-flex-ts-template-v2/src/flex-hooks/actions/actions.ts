@@ -19,6 +19,7 @@ import { handleInternalAcceptTask } from "../../feature-library/internal-call/fl
 import { handleInternalHoldCall } from "../../feature-library/internal-call/flex-hooks/actions/HoldCall";
 import { handleInternalUnholdCall } from "../../feature-library/internal-call/flex-hooks/actions/UnholdCall";
 import { handleInternalRejectTask } from "../../feature-library/internal-call/flex-hooks/actions/RejectTask";
+import { handleChatTransferShowDirectory } from "../../feature-library/chat-transfer/flex-hooks/actions/ShowDirectory";
 import { handleChatTransfer } from "../../feature-library/chat-transfer/flex-hooks/actions/TransferTask";
 import { handleDualChannelCompleteTask } from "../../feature-library/dual-channel-recording/flex-hooks/actions/CompleteTask";
 import { handleDualChannelHangupCall } from "../../feature-library/dual-channel-recording/flex-hooks/actions/HangupCall";
@@ -105,6 +106,11 @@ const actionsToRegister: Actions = {
   },
   SetWorkerActivity: {
     before: [beforeSetActivity],
+    after: [],
+    replace: [],
+  },
+  ShowDirectory: {
+    before: [handleChatTransferShowDirectory],
     after: [],
     replace: [],
   },

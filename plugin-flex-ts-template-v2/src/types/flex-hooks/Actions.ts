@@ -20,6 +20,7 @@ type ActionNames =
   | "RejectTask"
   | "SetActivity"
   | "StartExternalWarmTransfer"
+  | "ShowDirectory"
   | "TransferTask"
   | "WrapUpTask";
 
