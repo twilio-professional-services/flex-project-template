@@ -13,7 +13,7 @@ const { enabled = false } =
 export function beforeSetActivity(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;
 
-  flex.Actions.addListener("beforeSetActivity", (payload: any, abortFunction: () => void) => {
+  flex.Actions.addListener("beforeSetActivity", (payload, abortFunction) => {
     const { activityName, activitySid, isInvokedByPlugin } = payload;
 
     if (isInvokedByPlugin) {

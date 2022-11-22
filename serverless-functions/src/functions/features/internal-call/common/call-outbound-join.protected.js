@@ -3,7 +3,6 @@ const TaskOperations = require(Runtime.getFunctions()["common/twilio-wrappers/ta
 exports.handler = async function callOutboundJoin(context, event, callback) {
   const client = context.getTwilioClient();
   const { FriendlyName: taskSid, ConferenceSid } = event;
-  const scriptName = arguments.callee.name;
 
   if (event.StatusCallbackEvent === "participant-join") {
     console.log(
@@ -17,7 +16,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
 
       const fetchTaskResult = await TaskOperations.fetchTask({
         context,
-        scriptName,
         taskSid,
         attempts: 0,
       });
@@ -39,7 +37,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
         if (to.substring(0, 6) === "client") {
           const createTaskResult = await TaskOperations.createTask({
             context,
-            scriptName,
             attributes: {
               to: to,
               name: fromName,
@@ -64,7 +61,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
         
         await TaskOperations.updateTaskAttributes({
           context,
-          scriptName,
           taskSid,
           attributesUpdate: JSON.stringify(newAttributes),
           attempts: 0,
@@ -77,7 +73,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
     try {
       const fetchTaskResult = await TaskOperations.fetchTask({
         context,
-        scriptName,
         taskSid,
         attempts: 0,
       });
@@ -87,7 +82,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
       if (["assigned", "pending", "reserved"].includes(task.assignmentStatus)) {
         await TaskOperations.updateTask({
           context,
-          scriptName,
           taskSid,
           updateParams: {
             assignmentStatus:
@@ -103,7 +97,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
       if (targetTaskSid) {
         const fetchTargetTaskResult = await TaskOperations.fetchTask({
           context,
-          scriptName,
           taskSid: targetTaskSid,
           attempts: 0,
         });
@@ -113,7 +106,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
         if (["assigned", "pending", "reserved"].includes(targetTask.assignmentStatus)) {
           await TaskOperations.updateTask({
             context,
-            scriptName,
             taskSid: targetTaskSid,
             updateParams: {
               assignmentStatus:

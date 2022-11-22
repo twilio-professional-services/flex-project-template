@@ -68,7 +68,7 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
         console.error('Unable to get call SID to pause recording');
       }
     } else if (task.conference) {
-      const recording = await RecordingService.pauseConferenceRecording(task.attributes?.conference?.sid, include_silence ? "silence" : "skip");
+      const recording = await RecordingService.pauseConferenceRecording(task.conference?.conferenceSid, include_silence ? "silence" : "skip");
       recordingSid = recording.sid;
     }
     
@@ -112,7 +112,7 @@ export const resumeRecording = async (task: ITask): Promise<boolean> => {
         console.error('Unable to get call SID to resume recording');
       }
     } else if (task.conference) {
-      await RecordingService.resumeConferenceRecording(task.attributes?.conference?.sid, recording.recordingSid);
+      await RecordingService.resumeConferenceRecording(task.conference?.conferenceSid, recording.recordingSid);
       success = true;
     }
     

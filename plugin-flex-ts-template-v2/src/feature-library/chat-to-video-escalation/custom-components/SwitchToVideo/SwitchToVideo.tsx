@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Actions, ITask, Manager } from "@twilio/flex-ui";
+import { Actions, ITask, Manager, ConversationState } from "@twilio/flex-ui";
 import { Flex, Button } from "@twilio-paste/core";
 import { VideoOnIcon } from "@twilio-paste/icons/esm/VideoOnIcon";
 
@@ -9,14 +9,20 @@ import { UIAttributes } from "types/manager/ServiceConfiguration";
 interface SwitchToVideoProps {
   task: ITask;
   context?: any;
+  conversation?: ConversationState.ConversationState;
 }
 
 const { custom_data } = Manager.getInstance().configuration as UIAttributes;
-const { serverless_functions_domain = "" } = custom_data || {};
+const {
+  serverless_functions_domain = "",
+  serverless_functions_port = "",
+  serverless_functions_protocol = "",
+} = custom_data || {};
 
 const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({
   task,
   context,
+  conversation
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -39,9 +45,20 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       },
     };
+    
+    let serverlessDomain = serverless_functions_domain;
+    let serverlessProtocol = "https";
+    
+    if (serverless_functions_port) {
+      serverlessDomain += ":" + serverless_functions_port;
+    }
+    
+    if (serverless_functions_protocol) {
+      serverlessProtocol = serverless_functions_protocol;
+    }
 
     await fetch(
-      `https://${serverless_functions_domain}/features/chat-to-video-escalation/generate-unique-code?taskSid=${taskSid}`,
+      `${serverlessProtocol}://${serverlessDomain}/features/chat-to-video-escalation/generate-unique-code?taskSid=${taskSid}`,
       options
     )
       .then((response) => response.json())
@@ -49,7 +66,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({
         console.log("SwitchToVideo: unique link created:", response);
         return Actions.invokeAction("SendMessage", {
           body: `Please join me using this unique video link: ${response.full_url}`,
-          conversationSid: channelSid,
+          conversation,
           messageAttributes: {
             hasVideo: true,
             videoUrl: response.full_url,

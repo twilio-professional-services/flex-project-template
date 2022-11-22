@@ -1,27 +1,12 @@
-const TokenValidator = require('twilio-flex-token-validator').functionValidator;
-const ParameterValidator = require(Runtime.getFunctions()['common/helpers/parameter-validator'].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()["common/helpers/prepare-function"].path);
 const ServerlessOperations = require(Runtime.getFunctions()['common/twilio-wrappers/serverless'].path);
 
-exports.handler = TokenValidator(async function update(context, event, callback) {
-  const scriptName = arguments.callee.name;
-  const response = new Twilio.Response();
-  response.appendHeader('Access-Control-Allow-Origin', '*');
-  response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST');
-  response.appendHeader('Content-Type', 'application/json');
-  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
-  const requiredParameters = [
-    { key: 'data', purpose: 'data to save' },
-    { key: 'version', purpose: 'asset version SID that is being updated, so that multiple users making updates do not accidentally overwrite each other' }
-  ];
-  const parameterError = ParameterValidator.validate(context.PATH, event, requiredParameters);
-  
-  if (parameterError) {
-    response.setStatusCode(400);
-    response.setBody({ parameterError });
-    callback(null, response);
-    return;
-  }
+const requiredParameters = [
+  { key: 'data', purpose: 'data to save' },
+  { key: 'version', purpose: 'asset version SID that is being updated, so that multiple users making updates do not accidentally overwrite each other' }
+];
+
+exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   
   const assetPath = '/config.json';
   
@@ -35,9 +20,8 @@ exports.handler = TokenValidator(async function update(context, event, callback)
   }
   
   try {
-    
     // get latest build
-    const latestBuildResult = await ServerlessOperations.fetchLatestBuild({ scriptName, context, attempts: 0 });
+    const latestBuildResult = await ServerlessOperations.fetchLatestBuild({ context, attempts: 0 });
     
     if (!latestBuildResult.success) {
       response.setStatusCode(latestBuildResult.status);
@@ -67,7 +51,6 @@ exports.handler = TokenValidator(async function update(context, event, callback)
     
     // upload new asset version
     const uploadResult = await ServerlessOperations.uploadAsset({
-      scriptName,
       context,
       attempts: 0,
       assetSid: assetVersion.asset_sid,
@@ -89,13 +72,12 @@ exports.handler = TokenValidator(async function update(context, event, callback)
     const functionVersions = latestBuild.functionVersions.map(version => version.sid);
     const dependencies = latestBuild.dependencies;
     
-    const buildResult = await ServerlessOperations.createBuild({ scriptName, context, attempts: 0, assetVersions, dependencies, functionVersions });
+    const buildResult = await ServerlessOperations.createBuild({ context, attempts: 0, assetVersions, dependencies, functionVersions });
     
     response.setStatusCode(buildResult.status);
     response.setBody(buildResult);
     callback(null, response);
   } catch (error) {
-    console.log('Error executing function', error);
-    callback(error);
+    handleError(error);
   }
 });

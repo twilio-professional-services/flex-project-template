@@ -13,7 +13,7 @@ export function beforeCompleteVideoEscalatedChatTask(
 
   flex.Actions.addListener(
     "beforeCompleteTask",
-    async (payload: any, abortFunction: () => void) => {
+    async (payload, abortFunction) => {
       const { videoRoom } = payload.task.attributes;
 
       if (!Flex.TaskHelper.isChatBasedTask(payload.task) || !videoRoom) {

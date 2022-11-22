@@ -61,7 +61,8 @@ const TransferButton = ({ task, conversation }: TransferButtonProps) => {
                 disabled={transferForTaskClicked || outstandingInvitesForConversation}
                 onClick={onShowDirectory}
                 variant="secondary"
-                title={title} />
+                title={title}
+                css='' />
         </IconContainer>
     )
 }

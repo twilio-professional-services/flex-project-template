@@ -27,6 +27,7 @@ const ConferenceButton = (props: OwnProps) => {
       onClick={handleClick}
       variant='secondary'
       title="Add Conference Participant"
+      css=''
     />
   );
 }

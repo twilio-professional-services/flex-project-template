@@ -66,6 +66,7 @@ const PauseRecordingButton = (props: OwnProps) => {
       onClick={handleClick}
       variant={ paused ? "primary" : "secondary" }
       title={ paused ? PauseRecordingStrings[StringTemplates.RESUME_TOOLTIP] : PauseRecordingStrings[StringTemplates.PAUSE_TOOLTIP] }
+      css=''
     />
   );
 }
