@@ -1,11 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
 import { AppState } from 'flex-hooks/states';
 import { sortBy } from 'lodash';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { Activity } from 'types/task-router';
 import { ActivitySkillFilterRules } from '../types/ServiceConfiguration';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
+import { getRules } from '..';
 
 export interface ActivityCssConfig {
   idx: number,
@@ -23,8 +21,7 @@ class AgentActivities {
     // the supporting configuration for this utility is expected to be set 
     // as a custom element on the ui_attributes of the flex configuration
     // see README for more details
-    const { rules } = custom_data.features.activity_skill_filter;
-    this.config = rules;
+    this.config = getRules();
   }
 
   // NOTE: This will hide any TR activities that are NOT set in the flex config

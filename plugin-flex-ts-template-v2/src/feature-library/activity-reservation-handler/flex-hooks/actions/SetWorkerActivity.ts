@@ -1,17 +1,12 @@
 import * as Flex from "@twilio/flex-ui";
 import FlexState from "../../helpers/flexHelper";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import { delayActivityChange } from "../..";
 import { NotificationIds } from "../notifications/ActivityReservationHandler";
 import { systemActivities } from "../../helpers/systemActivities";
-
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } =
-  custom_data?.features?.activity_reservation_handler || {};
+import { isFeatureEnabled } from '../..';
 
 export function beforeSetActivity(flex: typeof Flex, manager: Flex.Manager) {
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
 
   flex.Actions.addListener("beforeSetActivity", (payload, abortFunction) => {
     const { activityName, activitySid, isInvokedByPlugin } = payload;

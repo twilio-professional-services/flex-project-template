@@ -1,13 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import ConferenceService from "../../../conference/utils/ConferenceService";
 import { isInternalCall } from '../../helpers/internalCall';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled } = custom_data?.features?.internal_call || {};
+import { isFeatureEnabled } from '../..';
 
 export function handleInternalHoldCall(flex: typeof Flex, manager: Flex.Manager) {
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
 
   flex.Actions.addListener("beforeHoldCall", async (payload, abortFunction) => {
     if (!isInternalCall(payload.task)) {

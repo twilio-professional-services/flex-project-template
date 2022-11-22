@@ -1,19 +1,11 @@
 import * as Flex from "@twilio/flex-ui";
 import { addCallDataToTask, waitForConferenceParticipants } from "../../helpers/dualChannelHelper";
 import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { UIAttributes } from "../../../../types/manager/ServiceConfiguration";
 import RecordingService from "../../../pause-recording/helpers/RecordingService";
-
-const manager = Flex.Manager.getInstance();
-
-const { custom_data } =
-  (manager.serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { enabled = false, channel } =
-  custom_data?.features?.dual_channel_recording || {};
+import { isFeatureEnabled, getChannelToRecord } from '../..';
 
 const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
-  if (!enabled || !Flex.TaskHelper.isCallTask(task)) {
+  if (!isFeatureEnabled() || !Flex.TaskHelper.isCallTask(task)) {
     return;
   }
   
@@ -23,7 +15,7 @@ const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
   if (
     conversations &&
     conversations.media &&
-    channel == 'customer'
+    getChannelToRecord() == 'customer'
   ) {
     // This indicates a recording has already been started for this call
     // and all relevant metadata should already be on task attributes
@@ -36,7 +28,7 @@ const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
   const participants = await waitForConferenceParticipants(task);
   
   let participantLeg;
-  switch (channel) {
+  switch (getChannelToRecord()) {
     case 'customer': {
       participantLeg = participants.find(
         (p) => p.participantType === 'customer'

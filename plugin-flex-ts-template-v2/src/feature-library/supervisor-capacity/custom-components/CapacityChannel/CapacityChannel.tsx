@@ -4,15 +4,8 @@ import {Checkbox} from '@twilio-paste/core/checkbox';
 import {Flex} from '@twilio-paste/core/flex';
 import {Input} from '@twilio-paste/core/input';
 import {DeleteIcon} from "@twilio-paste/icons/esm/DeleteIcon";
-import { Manager } from '@twilio/flex-ui';
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import { WorkerChannelCapacityResponse } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
-
-const { custom_data } =
-  (Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { rules } =
-  custom_data?.features?.supervisor_capacity || {};
+import { getRules } from '../..';
 
 export interface OwnProps {
   isSaving: boolean;
@@ -48,6 +41,8 @@ export default function CapacityChannel(props: OwnProps) {
   const onCapacityBlur = (event: React.ChangeEvent<HTMLInputElement>) => {
     let min;
     let max;
+    
+    const rules = getRules();
     
     if (rules && rules[props.workerChannel.taskChannelUniqueName]) {
       min = rules[props.workerChannel.taskChannelUniqueName].min;

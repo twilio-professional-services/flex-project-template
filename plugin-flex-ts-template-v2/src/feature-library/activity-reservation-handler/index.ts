@@ -14,8 +14,20 @@ import {
   getPendingActivity,
   clearPendingActivityChange,
 } from "./helpers/pendingActivity";
+import { UIAttributes } from "types/manager/ServiceConfiguration";
 
 const manager = Manager.getInstance();
+
+const { custom_data } = (manager.configuration as UIAttributes) || {};
+const { enabled = false, system_activity_names } = custom_data?.features?.activity_reservation_handler || {};
+
+export const isFeatureEnabled = () => {
+  return enabled;
+};
+
+export const getSystemActivityNames = () => {
+  return system_activity_names;
+};
 
 export const delayActivityChange = (activity: any) => {
   Notifications.showNotification(NotificationIds.ActivityChangeDelayed, {

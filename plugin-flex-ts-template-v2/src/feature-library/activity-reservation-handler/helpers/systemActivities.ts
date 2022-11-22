@@ -1,8 +1,5 @@
-import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import FlexHelper from "./flexHelper";
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
+import { getSystemActivityNames } from '..';
 
 const {
   available = "Available",
@@ -10,8 +7,7 @@ const {
   onATaskNoAcd = "On a Task, No ACD",
   wrapup = "Wrap Up",
   wrapupNoAcd = "Wrap Up, No ACD",
-} = custom_data?.features?.activity_reservation_handler
-  ?.system_activity_names || {};
+} = getSystemActivityNames() || {};
 
 const SystemActivityNames = {
   available: available as string,

@@ -7,12 +7,12 @@ const { custom_data } =
 const { enabled = false } = custom_data?.features?.teams_view_filters || {};
 const { logFilters = false } = custom_data?.features?.teams_view_filters || {};
 
-const { email = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { department = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { queue_no_worker_data = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { queue_worker_data = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { team = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { agent_skills = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
+const { email = false } = custom_data?.features?.teams_view_filters?.applied_filters || {};
+const { department = false } = custom_data?.features?.teams_view_filters?.applied_filters || {};
+const { queue_no_worker_data = false } = custom_data?.features?.teams_view_filters?.applied_filters || {};
+const { queue_worker_data = false } = custom_data?.features?.teams_view_filters?.applied_filters || {};
+const { team = false } = custom_data?.features?.teams_view_filters?.applied_filters || {};
+const { agent_skills = false } = custom_data?.features?.teams_view_filters?.applied_filters || {};
 
 const { department_options = [] } = custom_data?.features?.teams_view_filters || {};
 const { team_options = [] } = custom_data?.features?.teams_view_filters || {};

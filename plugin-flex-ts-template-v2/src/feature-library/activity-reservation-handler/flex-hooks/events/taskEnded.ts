@@ -7,15 +7,10 @@ import {
 } from "../../helpers/systemActivities";
 import { getPendingActivity } from "../../helpers/pendingActivity";
 import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } =
-  custom_data?.features?.activity_reservation_handler || {};
+import { isFeatureEnabled } from '../..';
 
 const taskEndedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
 
   console.log(`activity-handler: handle ${flexEvent} for ${task.sid}`);
 

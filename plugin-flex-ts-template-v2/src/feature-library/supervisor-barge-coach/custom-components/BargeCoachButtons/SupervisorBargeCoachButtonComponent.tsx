@@ -5,7 +5,7 @@ import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
 import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
 import BargeCoachService from '../../utils/serverless/BargeCoachService';
 import { Flex, Stack } from "@twilio-paste/core";
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { isAgentCoachingPanelEnabled } from '../..';
 
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync'
@@ -33,8 +33,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
   const supervisorFN = useFlexSelector(state => state?.flex?.worker?.attributes?.full_name);
 
   // Confirming if Agent Coaching Panel is enabled, we will use this in the Supervisor Barge Coach component
-  const { custom_data } = Manager.getInstance().configuration as UIAttributes;
-  const { agent_coaching_panel } = custom_data.features.supervisor_barge_coach;
+  const agent_coaching_panel = isAgentCoachingPanelEnabled();
 
 
   // Storing teamViewPath and agentSyncDoc to browser cache to help if a refresh happens

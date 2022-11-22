@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { AppState, reduxNamespace } from "../../../../flex-hooks/states";
-import { UIAttributes } from "../../../../types/manager/ServiceConfiguration";
+import { isAutoSelectTaskEnabled } from '../..';
 
 export interface EventPayload {
   task?: Flex.ITask;
@@ -12,12 +12,8 @@ export const autoSelectCallbackTaskWhenEndingCall = async (
   flex: typeof Flex,
   manager: Flex.Manager
 ) => {
-  const { custom_data } =
-    (manager.configuration as UIAttributes) || {};
-  const { enabled = false, auto_select_task = false } =
-    custom_data?.features?.callbacks || {};
 
-  if (!enabled || !auto_select_task) return;
+  if (!isAutoSelectTaskEnabled()) return;
 
   flex.Actions.addListener(
     "beforeSelectTask",

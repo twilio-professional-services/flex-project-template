@@ -1,12 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { ConferenceNotification } from '../notifications/Conference';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false, add_button = true } = custom_data?.features.conference || {}
+import { isAddButtonEnabled } from '../..';
 
 export function handleConferenceHangup(flex: typeof Flex, manager: Flex.Manager) {
-  if (!enabled || !add_button) return;
+  if (!isAddButtonEnabled()) return;
 
   flex.Actions.addListener('beforeHangupCall', async (payload, abortFunction) => {
     const { conference, taskSid } = payload.task;

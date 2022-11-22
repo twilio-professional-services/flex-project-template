@@ -1,16 +1,12 @@
 import * as Flex from "@twilio/flex-ui";
 import { AppState, reduxNamespace } from "../../../../flex-hooks/states";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.caller_id || {};
+import { isFeatureEnabled } from '../..';
 
 export function applySelectedCallerIdForDialedNumbers(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
 
   flex.Actions.addListener(
     "beforeStartOutboundCall",

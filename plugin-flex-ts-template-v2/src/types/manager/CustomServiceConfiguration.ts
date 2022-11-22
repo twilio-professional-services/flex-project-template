@@ -18,7 +18,7 @@ import SupervisorCapacityConfig from "../../feature-library/supervisor-capacity/
 import ScheduleManagerConfig from "../../feature-library/schedule-manager/types/ServiceConfiguration";
 import MultiCallConfig from "../../feature-library/multi-call/types/ServiceConfiguration";
 
-export default interface FeatureServiceConfiguratoin {
+export default interface FeatureServiceConfiguration {
   activity_reservation_handler: ActivityReservationHandlerConfig;
   activity_skill_filter: ActivitySkillFilterConfig;
   callbacks: CallbackAndVoicemailConfig;
