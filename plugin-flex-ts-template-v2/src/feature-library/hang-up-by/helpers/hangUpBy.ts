@@ -151,6 +151,11 @@ export const setHangUpByAttribute = async (taskSid: string, taskAttributes: any,
     return;
   }
   
+  if (taskAttributes && !taskAttributes.call_sid) {
+    // no call sid? no call! this functionality is call-specific, so return.
+    return;
+  }
+  
   let newAttributes = {
     conversations: {
       hang_up_by: value,

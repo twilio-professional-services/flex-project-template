@@ -8,6 +8,11 @@ import TaskRouterService from "../../../../utils/serverless/TaskRouter/TaskRoute
 const taskWrapupHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
   if (!isFeatureEnabled()) return;
   
+  if (task.attributes && !task.attributes.call_sid) {
+    // no call sid? no call! this functionality is call-specific, so return.
+    return;
+  }
+  
   let currentHangUpBy = HangUpByHelper.getHangUpBy()[task.sid];
   
   if (currentHangUpBy !== HangUpBy.Consult && task.incomingTransferObject && HangUpByHelper.hasAnotherWorkerJoined(task)) {

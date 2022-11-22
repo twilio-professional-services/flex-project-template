@@ -29,6 +29,12 @@ export function reportHangUpByCompleteTask(flex: typeof Flex, manager: Flex.Mana
     
     try {
       const task = Flex.TaskHelper.getTaskByTaskSid(payload.sid);
+      
+      if (task.attributes && !task.attributes.call_sid) {
+        // no call sid? no call! this functionality is call-specific, so return.
+        return;
+      }
+      
       await TaskRouterService.updateTaskAttributes(task.taskSid, attributes);
       console.log(`Set conversation attributes for ${task.taskSid}`, attributes);
     } catch (error) {
