@@ -8,7 +8,7 @@ const { enabled } = custom_data.features.internal_call;
 const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
   if (!enabled) return;
   
-  console.log(`Feature enabled: internal_call`);
+  console.log(`Feature enabled: internal-call`);
 };
 
 export default pluginsLoadedHandler;
