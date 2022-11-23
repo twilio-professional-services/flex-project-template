@@ -16,5 +16,11 @@
       "multivalue": false,
       "name": "offline_work",
       "maximum": null
+    },
+    {
+      "minimum": null,
+      "multivalue": false,
+      "name": "sales",
+      "maximum": null
     }
 ]

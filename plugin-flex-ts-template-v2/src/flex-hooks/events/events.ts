@@ -23,6 +23,8 @@ import SupervisorCapacityLoaded from "../../feature-library/supervisor-capacity/
 import ScheduleManagerLoaded from "../../feature-library/schedule-manager/flex-hooks/events/pluginsLoaded";
 import MultiCallLoaded from "../../feature-library/multi-call/flex-hooks/events/pluginsLoaded";
 import MultiCallTokenUpdated from "../../feature-library/multi-call/flex-hooks/events/tokenUpdated";
+// import OverrideQueueLoaded from "../../feature-library/override-queue-directory/flex-hooks/pluginsLoaded";
+
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -35,6 +37,7 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     ScrollableActivitiesLoaded,
     EnhancedCRMContainerLoaded,
     ChatTransferLoaded,
+    // OverrideQueueLoaded,
     DualChannelRecordingLoaded,
     PauseRecordingLoaded,
     TeamsViewFiltersLoaded,

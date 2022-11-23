@@ -23,6 +23,7 @@ import { addPauseStatusPanel } from "../../feature-library/pause-recording/flex-
 import { addScheduleManagerToSideNav } from "../../feature-library/schedule-manager/flex-hooks/components/SideNav";
 import { addScheduleManagerView } from "../../feature-library/schedule-manager/flex-hooks/components/ViewCollection";
 import { replaceWorkerDataTableCallsColumnMultiCall } from "../../feature-library/multi-call/flex-hooks/components/WorkersDataTable";
+import { addOverrideQueueTransferDirectory } from "../../feature-library/override-queue-directory/flex-hooks/components/OverrideQueueTransferDirectory";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -58,7 +59,7 @@ const componentHandlers: Components = {
   TeamsView: [],
   ViewCollection: [addScheduleManagerView],
   WorkerCanvas: [addCapacityToWorkerCanvas],
-  WorkerDirectory: [],
+  WorkerDirectory: [addOverrideQueueTransferDirectory],
   WorkerProfile: [replaceWorkerProfileInfo],
   WorkersDataTable: [replaceWorkerDataTableCallsColumnMultiCall],
 };
