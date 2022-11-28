@@ -1,5 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
-import { addCallDataToTask, waitForConferenceParticipants } from "../../helpers/dualChannelHelper";
+import { addCallDataToTask, waitForConferenceParticipants, waitForActiveCall } from "../../helpers/dualChannelHelper";
 import { FlexEvent } from "../../../../types/manager/FlexEvent";
 import { UIAttributes } from "../../../../types/manager/ServiceConfiguration";
 import RecordingService from "../../../pause-recording/helpers/RecordingService";
@@ -18,7 +18,8 @@ const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
   }
   
   const { attributes } = task;
-  const { conversations } = attributes;
+  const { client_call, conversations } = attributes;
+  let callSid;
   
   if (
     conversations &&
@@ -30,42 +31,49 @@ const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
     return;
   }
   
-  // We want to wait for all participants (customer and worker) to join the
-  // conference before we start the recording
-  console.debug('Waiting for customer and worker to join the conference');
-  const participants = await waitForConferenceParticipants(task);
-  
-  let participantLeg;
-  switch (channel) {
-    case 'customer': {
-      participantLeg = participants.find(
-        (p) => p.participantType === 'customer'
-      );
-      break;
+  if (client_call) {
+    // internal call - always record based on call SID, as conference state is unknown by Flex
+    console.debug('Waiting for internal call to begin');
+    callSid = await waitForActiveCall(task);
+    console.debug('Recorded internal call:', callSid);
+  } else {
+    // We want to wait for all participants (customer and worker) to join the
+    // conference before we start the recording
+    console.debug('Waiting for customer and worker to join the conference');
+    const participants = await waitForConferenceParticipants(task);
+    
+    let participantLeg;
+    switch (channel) {
+      case 'customer': {
+        participantLeg = participants.find(
+          (p) => p.participantType === 'customer'
+        );
+        break;
+      }
+      case 'worker': {
+        participantLeg = participants.find(
+          (p) => p.participantType === 'worker' && p.isCurrentWorker
+        );
+        break;
+      }
     }
-    case 'worker': {
-      participantLeg = participants.find(
-        (p) => p.participantType === 'worker' && p.isCurrentWorker
+    
+    console.debug('Recorded Participant: ', participantLeg);
+    
+    if (!participantLeg) {
+      console.warn(
+        'No customer or worker participant. Not starting the call recording'
       );
-      break;
+      return;
     }
+    
+    callSid = participantLeg.callSid;
   }
   
-  console.debug('Recorded Participant: ', participantLeg);
-  
-  if (!participantLeg) {
-    console.warn(
-      'No customer or worker participant. Not starting the call recording'
-    );
+  if (!callSid) {
+    console.warn('Unable to determine call SID for recording');
     return;
   }
-  
-  // Choosing to record the customer call SID here. If you want to record
-  // the worker leg of the call instead, adjust the logic above to find
-  // the worker participant and use that call SID instead.
-  const { callSid } = participantLeg;
-  
-  if (!callSid) return;
   
   try {
     const recording = await RecordingService.startDualChannelRecording(callSid);
