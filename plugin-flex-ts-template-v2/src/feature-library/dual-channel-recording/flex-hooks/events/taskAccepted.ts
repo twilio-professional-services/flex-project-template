@@ -18,7 +18,7 @@ const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
   }
   
   const { attributes } = task;
-  const { client_call, conversations } = attributes;
+  const { client_call, direction, conversations } = attributes;
   let callSid;
   
   if (
@@ -31,11 +31,15 @@ const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
     return;
   }
   
-  if (client_call) {
+  if (client_call && direction === "outbound") {
     // internal call - always record based on call SID, as conference state is unknown by Flex
+    // Record only the outbound leg to prevent duplicate recordings
     console.debug('Waiting for internal call to begin');
     callSid = await waitForActiveCall(task);
     console.debug('Recorded internal call:', callSid);
+  } else if (client_call) {
+    // internal call, inbound leg - skip recording this leg
+    console.debug('Skipping recording for inbound internal call', task.sid);
   } else {
     // We want to wait for all participants (customer and worker) to join the
     // conference before we start the recording
