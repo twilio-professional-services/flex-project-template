@@ -13,7 +13,7 @@ You can have the solution running locally with little overhead or have a develop
 
 The primary aims of this template are
 
-1. To make interatively building on Flex *easier*
+1. To make iteratively building on Flex *easier*
 2. Improve interoperability of plugin features by proposing some standardization
 3. Massively accelerate project setup with options for asset and configuration versioning across multiple Twilio accounts
 
@@ -93,17 +93,18 @@ The following are guides to instruct the user how to leverage this template for 
 - have the twilio auth token for your account ready
 
 ### Setup
-1. Clone the repository
-2. make sure the twilio cli has the correct account set to active
+1. [Generate a new repository based on the template](https://github.com/twilio-professional-services/flex-project-template/generate)
+2. Clone the new repository that you just created
+3. make sure the twilio cli has the correct account set to active
 ```bash
 twilio profiles:list
 ```
-3. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
+4. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
 ```bash
 npm ci
 ```
-4. follow the prompt and provide your auth token
-5. Run the serverless functions and plugin locally by running
+5. follow the prompt and provide your auth token
+6. Run the serverless functions and plugin locally by running
 ```bash
 npm run start:local:v1
 ```
@@ -117,9 +118,9 @@ npm run start:local
 ```
 
 ### development notes
-When developing locally, flex config is overriden by anything in your [appConfig.js](/plugin-flex-ts-template-v2/public/appConfig.example.js).  Note appConfig is only applicable when running the plugin locally but you can edit this file to toggle features on and off for your locally running webserver, you can also tweak the api endpoint for your serverless functions if you need to.
+When developing locally, Flex config is overridden by anything in your [appConfig.js](/plugin-flex-ts-template-v2/public/appConfig.example.js).  Note: appConfig is only applicable when running the plugin locally, so you can edit this file to toggle features on and off for your locally running web server. You can also tweak the api endpoint for your serverless functions if you need to.
 
-When running the plugin locally, this template has been setup to pair the plugin with the serverless functions also running locally on localhost:3001, the serverless functions can be debugged by attaching your debugger to the node instance.  The following is a sample entry for ".vscode/launch.json" to connect vscode for debugging
+When running the plugin locally, this template has been set up to pair the plugin with the serverless functions also running locally on localhost:3001. The serverless functions can be debugged by attaching your debugger to the node instance.  The following is a sample entry for ".vscode/launch.json" to connect vscode for debugging
 
 ```json
 {
@@ -160,7 +161,7 @@ When running the plugin locally, this template has been setup to pair the plugin
 ![alt text](scripts/screenshots/github-secrets.png)
 
 6. Login into Flex and make sure in the admin panel, the version of flex you are using meets the minimal version allowed by the plugin
-7. _Optionally_ navigate to the flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/manage/voice?frameUrl=%2Fconsole%2Fflex%2Fvoice%3Fx-target-region%3Dus1)
+7. _Optionally_ navigate to the flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/manage/voice?frameUrl=%2Fconsole%2Fflex%2Fvoice%3Fx-target-region%3Dus1) (this is required for some features)
 8. Navigate over to github actions of your repository and select the environment you want to deploy, then run the workflow.
     - this will deploy the four assets to your environment with the default features enabled, See [Feature library Information](#feature-library-information) for further details of whats enabled by default.
     - serverless-functions will auto-identify any missing environment variables for the default features. It is recommended you populate the [environment variables](/serverless-functions/) for each account and manage config in version control at a later date to remove any ambiguity.
@@ -338,11 +339,11 @@ convenience script for simplyfying local setup and development, triggered as par
 
 ## generate-env
 
-conveience script that does the same as setup-local-environment except it won't install npm pacakges again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
+convenience script that does the same as setup-local-environment except it won't install npm pacakges again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
 
 # CHANGELOG
 - 1.0.3
-    - *BREAKING CHANGE* renamed plugin packages to plugin-flex-ts-template-v1 and plugin-flex-ts-template-v2 to explicitly seperate plugins
+    - *BREAKING CHANGE* renamed plugin packages to plugin-flex-ts-template-v1 and plugin-flex-ts-template-v2 to explicitly separate plugins
     - updated README to account for v1 plugins in scripts
 - 1.0.2
     - README updates
