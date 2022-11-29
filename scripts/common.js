@@ -31,7 +31,6 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     const ANYONE_WORKFLOW_NAME = /(Assign.*Anyone)/
     const CHAT_WORRKFLOW_NAME = "Chat Transfer"
     const CALLBACK_WORKFLOW_NAME = "Callback"
-    const INTERNAL_CALL_WORKFLOW_NAME = "Internal Call";
 
     const SERVERLESS_FUNCTIONS_SERVICE_NAME = "custom-flex-extensions-serverless"
     const SCHEDULE_MANAGER_SERVICE_NAME = "schedule-manager"
@@ -47,7 +46,6 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     result.everyoneWorkflow = workflows.grep(ANYONE_WORKFLOW_NAME).stdout.split(" ")[0].trim();
     result.chatTransferWorkFlow = workflows.grep(CHAT_WORRKFLOW_NAME).stdout.split(" ")[0].trim();
     result.callbackWorkflow = workflows.grep(CALLBACK_WORKFLOW_NAME).stdout.split(" ")[0].trim();
-    result.internalCallWorkflow = workflows.grep(INTERNAL_CALL_WORKFLOW_NAME).stdout.split(" ")[0].trim();
 
     result.serviceFunctionsSid = shell.exec("twilio api:serverless:v1:services:list", {silent: true}).grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[0]
     result.serviceFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.serviceFunctionsSid}`, {silent: true}).grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[4]
@@ -128,7 +126,6 @@ exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv
       chat_sid, 
       callbackWorkflow, 
       everyoneWorkflow, 
-      internalCallWorkflow, 
       chatTransferWorkFlow } = context
 
     if(process.env.TWILIO_API_KEY && !api_key) api_key = process.env.TWILIO_API_KEY;
@@ -163,9 +160,6 @@ exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv
       if(callbackWorkflow || everyoneWorkflow){
         var workflow = callbackWorkflow?  callbackWorkflow: everyoneWorkflow;
         shell.sed('-i', /<YOUR_FLEX_CALLBACK_WORKFLOW_SID>/g, `${workflow}`, serverlessEnv);
-      }
-      if(internalCallWorkflow){
-        shell.sed('-i', /<YOUR_FLEX_INTERNAL_CALL_WORKFLOW_SID>/g, `${internalCallWorkflow}`, serverlessEnv);
       }
       if(chatTransferWorkFlow){
         shell.sed('-i', /<YOUR_FLEX_CHAT_TRANSFER_WORKFLOW_SID>/g, `${chatTransferWorkFlow}`, serverlessEnv);
@@ -287,7 +281,6 @@ exports.printEnvironmentSummary = function printEnvironmentSummary(context){
     chat_sid, 
     callbackWorkflow, 
     everyoneWorkflow, 
-    internalCallWorkflow, 
     chatTransferWorkFlow,
     serviceFunctionsDomain,
     scheduledFunctionsDomain } = context
@@ -303,7 +296,6 @@ exports.printEnvironmentSummary = function printEnvironmentSummary(context){
     console.log("Assign to Anyone workflow sid: \t\t", everyoneWorkflow);
     console.log("chat transfer workflow sid: \t\t", chatTransferWorkFlow);
     console.log("callback workflow sid: \t\t\t", callbackWorkflow);
-    console.log("internal call workflow sid: \t\t", internalCallWorkflow);
     console.log("");
     console.log("---- SERVERLESS DOMAINS -----------------------------------------");
     console.log("serverless functions: \t\t\t", serviceFunctionsDomain);
