@@ -7,6 +7,8 @@ import taskWrapupHandlerActivityReservationHandler from "../../feature-library/a
 
 import taskAcceptedHandlerDualChannelRecording from "../../feature-library/dual-channel-recording/flex-hooks/events/taskAccepted";
 
+import InternalCallTaskReceived from "../../feature-library/internal-call/flex-hooks/events/taskReceived";
+
 import ActivityReservationHandlerLoaded from "../../feature-library/activity-reservation-handler/flex-hooks/events/pluginsLoaded";
 import ActivitySkillFilterLoaded from "../../feature-library/activity-skill-filter/flex-hooks/events/pluginsLoaded";
 import CallbackAndVoicemailLoaded from "../../feature-library/callback-and-voicemail/flex-hooks/events/pluginsLoaded";
@@ -48,7 +50,10 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   ],
   taskCanceled: [taskEndedHandlerActivityReservationHandler],
   taskCompleted: [taskEndedHandlerActivityReservationHandler],
-  taskReceived: [taskReceivedActivityReservationHandler],
+  taskReceived: [
+    taskReceivedActivityReservationHandler,
+    InternalCallTaskReceived
+  ],
   taskRejected: [taskEndedHandlerActivityReservationHandler],
   taskRescinded: [taskEndedHandlerActivityReservationHandler],
   taskTimeout: [taskEndedHandlerActivityReservationHandler],

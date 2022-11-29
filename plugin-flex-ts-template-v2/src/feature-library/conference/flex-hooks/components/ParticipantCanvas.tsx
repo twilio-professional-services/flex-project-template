@@ -4,6 +4,7 @@ import ParticipantActionsButtons from '../../custom-components/ParticipantAction
 import ParticipantName from '../../custom-components/ParticipantName';
 import ParticipantStatus from '../../custom-components/ParticipantStatus';
 import ParticipantStatusContainer from '../../custom-components/ParticipantStatusContainer';
+import { isInternalCall } from '../../../internal-call/helpers/internalCall';
 
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
@@ -19,7 +20,7 @@ export function addConferenceToParticipantCanvas(flex: typeof Flex) {
     // if the add button is disabled, only the customer participant needs replacement buttons
     if (!add_button && props.participant.participantType !== 'customer') return false;
     
-    return props.participant.participantType !== 'transfer';
+    return props.participant.participantType !== 'transfer' && !isInternalCall(props.task);
   };
   
   flex.ParticipantCanvas.Content.remove('actions', { if: replaceButtons });

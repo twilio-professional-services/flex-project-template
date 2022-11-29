@@ -16,8 +16,6 @@ import { applySelectedCallerIdForDialedNumbers } from "../../feature-library/cal
 import { changeWorkerActivityBeforeOutboundCall } from "../../feature-library/activity-reservation-handler/flex-hooks/actions/StartOutboundCall";
 import { handleUnholdConferenceParticipant } from "../../feature-library/conference/flex-hooks/actions/UnholdParticipant";
 import { handleInternalAcceptTask } from "../../feature-library/internal-call/flex-hooks/actions/AcceptTask";
-import { handleInternalHoldCall } from "../../feature-library/internal-call/flex-hooks/actions/HoldCall";
-import { handleInternalUnholdCall } from "../../feature-library/internal-call/flex-hooks/actions/UnholdCall";
 import { handleInternalRejectTask } from "../../feature-library/internal-call/flex-hooks/actions/RejectTask";
 import { handleChatTransferShowDirectory } from "../../feature-library/chat-transfer/flex-hooks/actions/ShowDirectory";
 import { handleChatTransfer } from "../../feature-library/chat-transfer/flex-hooks/actions/TransferTask";
@@ -57,13 +55,12 @@ const actionsToRegister: Actions = {
     replace: [],
   },
   HoldCall: {
-    before: [handleInternalHoldCall],
+    before: [],
     after: [],
     replace: [],
   },
   UnholdCall: {
     before: [
-      handleInternalUnholdCall,
       handleMultiCallUnholdCall
     ],
     after: [],

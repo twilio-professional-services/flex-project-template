@@ -1,36 +1,11 @@
 import { ITask } from "@twilio/flex-ui";
-import { Reservation } from "types/task-router";
 import ApiService from "../../../utils/serverless/ApiService";
 
 class InternalCallService extends ApiService {
-  acceptInternalTask = async (reservation: Reservation, taskSid: string) => {
-    if (typeof reservation.task.attributes.conference !== "undefined") {
-      reservation.call(
-        reservation.task.attributes.from,
-        `${this.serverlessProtocol}://${this.serverlessDomain}/features/internal-call/common/agent-join-conference?conferenceName=${reservation.task.attributes.conference.friendlyName}`,
-        {
-          accept: true,
-        }
-      );
-    } else {
-      reservation.call(
-        reservation.task.attributes.from,
-        `${this.serverlessProtocol}://${this.serverlessDomain}/features/internal-call/common/agent-outbound-join?taskSid=${taskSid}`,
-        {
-          accept: true,
-        }
-      );
-    }
-  };
-
   rejectInternalTask = async (task: ITask) => {
-    await (task.sourceObject as Reservation).accept();
-    await task.wrapUp();
-    await task.complete();
-    
     return new Promise((resolve, reject) => {
 
-      const taskSid = task.attributes.conferenceSid;
+      const taskSid = task.taskSid;
 
       const encodedParams = {
         taskSid,

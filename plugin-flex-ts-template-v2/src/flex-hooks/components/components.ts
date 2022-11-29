@@ -2,7 +2,6 @@ import { Components } from "../../types/flex-hooks/Components";
 import { addConferenceToCallCanvas } from "../../feature-library/conference/flex-hooks/components/CallCanvas";
 import { addSupervisorCoachingPanelToAgent } from "../../feature-library/supervisor-barge-coach/flex-hooks/components/CallCanvas";
 import { addConferenceToCallCanvasActions } from "../../feature-library/conference/flex-hooks/components/CallCanvasActions";
-import { removeDirectoryFromInternalCalls } from "../../feature-library/internal-call/flex-hooks/components/CallCanvasActions";
 import { addPendingActivityComponent } from "../../feature-library/activity-reservation-handler/flex-hooks/components/MainHeader";
 import { replaceActivityComponent } from "../../feature-library/activity-skill-filter/flex-hooks/components/MainHeader";
 import { addOutboundCallerIdSelectorToMainHeader } from "../../feature-library/caller-id/flex-hooks/components/OutboundDialerPanel";
@@ -13,6 +12,7 @@ import { addSupervisorMonitorPanel } from "../../feature-library/supervisor-barg
 import { replaceViewForCallbackAndVoicemail } from "../../feature-library/callback-and-voicemail/flex-hooks/components/TaskInfoPanel";
 import { addSupervisorBargeCoachButtons } from "../../feature-library/supervisor-barge-coach/flex-hooks/components/TaskOverviewCanvas";
 import { addInternalCallToDialerPanel } from "../../feature-library/internal-call/flex-hooks/components/OutboundDialerPanel";
+import { removeFromCanvasForInternalCall } from "../../feature-library/internal-call/flex-hooks/components/ParticipantCanvas";
 import { replaceAndSetCustomCRMContainer } from "../../feature-library/enhanced-crm-container/flex-hooks/components/CRMContainer";
 import { addDeviceManagerToMainHeader } from "../../feature-library/device-manager/flex-hooks/components/MainHeader";
 import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
@@ -33,7 +33,6 @@ const componentHandlers: Components = {
   ],
   CallCanvasActions: [
     addConferenceToCallCanvasActions,
-    removeDirectoryFromInternalCalls,
     addPauseRecordingButton
   ],
   CRMContainer: [replaceAndSetCustomCRMContainer],
@@ -48,7 +47,10 @@ const componentHandlers: Components = {
     addOutboundCallerIdSelectorToMainHeader,
     addInternalCallToDialerPanel,
   ],
-  ParticipantCanvas: [addConferenceToParticipantCanvas],
+  ParticipantCanvas: [
+    addConferenceToParticipantCanvas,
+    removeFromCanvasForInternalCall
+  ],
   SideNav: [addScheduleManagerToSideNav],
   TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader, addChatTransferButton],
   TaskCanvasTabs: [addVideoRoomTabToTaskCanvasTabs, addSupervisorMonitorPanel],

@@ -1,8 +1,6 @@
 # internal call
 
-This feature adds a new "Call Agent" section to the outbound dialpad allowing an agent to directly call another agent. In this section, there is an autocomplete dropdown where you can select the agent you want to call.
-
-This feature is based on [the dialpad addon plugin](https://github.com/twilio-professional-services/flex-dialpad-addon-plugin).
+This feature adds a new "Call Agent" section to the outbound dialpad allowing an agent to directly call another agent. In this section, there is an autocomplete dropdown where you can select an available agent you want to call.
 
 # flex-user-experience
 
@@ -12,46 +10,27 @@ This feature is based on [the dialpad addon plugin](https://github.com/twilio-pr
 
 ## Outbound Call Configuration
 
-When placing the internal call, the default outbound call settings are used. If this has not yet been configured, you will encounter errors. This can be updated using the Flex Configuration API:
+When placing the internal call, the default outbound call settings are used. If this has not yet been configured, you will encounter errors. This can be configured in the Twilio Console > Flex > Manage > Voice.
 
-```
-POST https://flex-api.twilio.com/v1/Configuration
-Authorization: Basic {base64-encoded Twilio Account SID : Auth Token}
-Content-Type: application/json
+## Call Target
 
-{
-  "account_sid": "Enter your Twilio Account SID here",
-  "outbound_call_flows": {
-    "default": {
-      "workflow_sid": "WWxxxc",
-      "enabled": true,
-      "queue_sid": "WQxxx",
-      "caller_id": "+1xxx",
-      "location": "US"
-    }
-  },
-}
-```
+When placing a call from Flex, it must be to a phone number or SIP address. Therefore, a phone number or SIP address is needed for the sole purpose of establishing the call.
 
-## TaskRouter
+For simplicity sake, let's set an unused Twilio phone number as the call target. A phone number can be purchased in the Twilio Console if you do not have an unused one available. In the serverless-functions package, a webhook is deployed which will immediately disconnect the call. This webhook must be assigned to the phone number as follows:
 
-Before using this plugin you must first create a dedicated TaskRouter workflow or just add the following filter to your current workflow. Make sure it is part of your Flex Task Assignment workspace.
+1. Open Twilio Console > Phone Numbers > Manage > Active Numbers
+2. Select the desired unused phone number
+3. In the 'Voice & Fax' section, configure a webhook as follows:
+  - Accept incoming: Voice Calls
+  - Configure with: Webhook, TwiML Bin, Function, Studio Flow, Proxy Service
+  - A call comes in: Function
+  - Service: custom-flex-extensions-serverless _(the name of the service deployed from the serverless-functions package)_
+  - Environment: dev-environment
+  - Function path: /features/internal-call/common/call-silence
+4. Click Save
 
-- ensure the following matching worker expression: *task.targetWorker==worker.contact_uri*
-- ensure the priority of the filter is set to 1000 (or at least the highest in the system)
-- make sure the filter matches to a queue with Everyone on it. The default Everyone queue will work but if you want to seperate real time reporting for outbound calls, you should make a dedicated queue for it with a queue expression *1==1*
-
-![Workflow filter configuration](screenshots/outbound-filter.png)
-
-In the `serverless-functions/.env` file, be sure to set `TWILIO_FLEX_INTERNAL_CALL_WORKFLOW_SID` to the SID of the workflow configured above (and set `TWILIO_FLEX_WORKSPACE_SID` if it has not been already).
+In your flex-config, set the `call_target` setting under the `internal_call` feature to the phone number configured above.
 
 # how does it work?
 
-After selecting and clicking the call button, the WorkerClient's createTask method is used to create the outbound call task having the caller agent as target. When the task is sent to this agent, the AcceptTask action is overridden so we can control all the calling process. Then, we use the reservation object inside the task payload to call the caller agent. This reservation object is part of the TaskRouter JavaScript SDK bundled with Flex. The URL endpoint of this call is used and pointed to a Twilio Function that returns TwiML which in turn creates a conference and sets the statusCallbackEvent. The latter endpoint will be used to create the called agent task.
-
-On the called agent side, the AcceptTask action is also overridden and a similar calling process is done. The difference is that the URL endpoint points to a different Twilio Function that returns simple TwiML which in turn calls the conference created on the caller side.
-
-# Known issues
-
-1. When in an agent-to-agent call, the internal transfer button is hidden, as Flex does not handle this scenario correctly. 
-2. When in an agent-to-agent call, an external transfer is done correctly, but the UI does not reflect what is going on.
+After selecting and clicking the call button, the WorkerClient's createTask method is used to create the outbound call task having the phone number configured above as target. When the task is sent to this agent, the AcceptTask action is overridden to immediately warm transfer the task to the desired called agent. This establishes a call between the two agents.
