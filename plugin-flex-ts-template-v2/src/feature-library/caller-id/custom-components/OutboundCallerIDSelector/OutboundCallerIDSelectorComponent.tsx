@@ -41,6 +41,11 @@ const OutboundCallerIDSelectorComponent = () => {
         ...phoneNumbers
       ]);
       setHelpText('');
+      
+      // initialize state to the first number, which is what the Select control will display
+      if (!selectedCallerId && phoneNumbers.length > 0) {
+        dispatch(Actions.setCallerId(phoneNumbers[0].phoneNumber))
+      }
     }
   }, [isFetchingPhoneNumbers, fetchingPhoneNumbersFailed])
   
