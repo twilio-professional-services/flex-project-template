@@ -1,8 +1,6 @@
-# internal call
+# Internal call
 
 This feature adds a new "Call Agent" section to the outbound dialpad allowing an agent to directly call another agent. In this section, there is an autocomplete dropdown where you can select an available agent you want to call.
-
-# flex-user-experience
 
 ![Internal call demo](screenshots/internal-call.gif)
 
@@ -31,6 +29,6 @@ For simplicity sake, let's set an unused Twilio phone number as the call target.
 
 In your flex-config, set the `call_target` setting under the `internal_call` feature to the phone number configured above.
 
-# how does it work?
+# How does it work?
 
-After selecting and clicking the call button, the WorkerClient's createTask method is used to create the outbound call task having the phone number configured above as target. When the task is sent to this agent, the AcceptTask action is overridden to immediately warm transfer the task to the desired called agent. This establishes a call between the two agents.
+After selecting and clicking the call button, the WorkerClient's createTask method is used to create the outbound call task having the phone number configured above as target. When the task is sent to the agent, the AcceptTask action is overridden to immediately warm transfer the task to the desired called agent. This establishes a call between the two agents.
