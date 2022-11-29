@@ -90,7 +90,7 @@ The following are guides to instruct the user how to leverage this template for 
 - twilio flex plugins 6.0.2 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli) (`twilio plugins`, `twilio plugins:install @twilio-labs/plugin-flex@latest`)
 - twilio serverless plugin 3.0.4 or above is [installed](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit) (`twilio plugins` `twilio plugins:install @twilio-labs/plugin-serverless@latest`)
 - `twilio profiles:list` has an active account set.
-- have the twilio auth token for your account ready
+- have the twilio auth token for your account ready (you can find this in the [Twilio Console](https://console.twilio.com/))
 
 ### Setup
 1. [Generate a new repository based on the template](https://github.com/twilio-professional-services/flex-project-template/generate)
@@ -104,11 +104,11 @@ twilio profiles:list
 npm ci
 ```
 5. follow the prompt and provide your auth token
-6. Run the serverless functions and plugin locally by running
+6. Run the serverless functions and plugin locally by running (for Flex UI v1.x)
 ```bash
 npm run start:local:v1
 ```
-or
+or (for Flex UI v2.x)
 ```bash
 npm run start:local:v2
 ```
@@ -168,6 +168,44 @@ When running the plugin locally, this template has been set up to pair the plugi
     - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommended you populate the [ui_attributes](/flex-config/) config and manage the domain names through version control at a later date to remove any ambiguity. 
     - for full functionality, review the configuration steps for the disable features and make sure their dependencies are setup.
 
+## Deploying to hosted Flex without a release pipeline
+
+For the below steps, where `<environment>` is referenced, you may use `dev`, `test`, `qa`, or `prod`.
+
+First, deploy the serverless functions:
+```bash
+cd serverless-functions
+twilio serverless:deploy
+```
+
+If you plan to use the schedule manager feature, deploy its serverless functions as well:
+```bash
+cd ../serverless-schedule-manager
+twilio serverless:deploy
+```
+
+Next, populate the serverless domains deployed above into the config:
+```bash
+cd ..
+npm run populate-missing-placeholders <environment>
+```
+
+If you customized `custom_data` in `appConfig.js` while running locally, and would like to deploy with those settings, be sure to make the same changes in your `flex-config/ui_attributes.<environment>.json` file as well.
+
+Deploy the configuration:
+```bash
+cd flex-config
+npm run deploy:<environment>
+```
+
+Start the plugin deployment:
+```bash
+twilio flex:plugins:deploy --major --changelog "Initial deploy" --description "Flex project template"
+```
+
+After your deployment runs you will receive instructions for releasing your plugin from the bash prompt. You can use this or skip this step and release your plugin from the Flex plugin dashboard here https://flex.twilio.com/admin/plugins
+
+For more details on deploying your plugin, refer to the [deploying your plugin guide](https://www.twilio.com/docs/flex/plugins#deploying-your-plugin).
 
 # Using template for a standalone plugin
 
@@ -339,7 +377,7 @@ convenience script for simplyfying local setup and development, triggered as par
 
 ## generate-env
 
-convenience script that does the same as setup-local-environment except it won't install npm pacakges again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
+convenience script that does the same as setup-local-environment except it won't install npm packages again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
 
 # CHANGELOG
 - 1.0.3
