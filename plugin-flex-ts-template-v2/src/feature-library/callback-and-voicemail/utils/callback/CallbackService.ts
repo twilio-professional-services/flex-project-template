@@ -22,7 +22,7 @@ export interface CreateCallbackRequest {
   attempts?: number;
   conversation_id?: string;
   message?: string;
-  utcDateTimeReceived?: Date;
+  utcDateTimeReceived?: string;
   recordingSid?: string;
   recordingUrl?: string;
   transcriptSid?: string;
@@ -166,7 +166,7 @@ class CallbackService extends ApiService {
         ? encodeURIComponent(request.message)
         : undefined,
       utcDateTimeReceived: request.utcDateTimeReceived
-        ? encodeURIComponent(request.utcDateTimeReceived.toString())
+        ? encodeURIComponent(request.utcDateTimeReceived)
         : undefined,
       recordingSid: request.recordingSid
         ? encodeURIComponent(request.recordingSid)
