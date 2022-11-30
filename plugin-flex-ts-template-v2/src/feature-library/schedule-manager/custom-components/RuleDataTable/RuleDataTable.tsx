@@ -8,6 +8,7 @@ import { RRule } from 'rrule';
 import RuleEditor from '../RuleEditor/RuleEditor';
 import { Rule, Schedule } from '../../types/schedule-manager';
 import ScheduleManagerStrings, { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
+import RRuleLanguage from '../../utils/RRuleLanguage';
 
 interface OwnProps {
   isLoading: boolean;
@@ -99,7 +100,7 @@ const RuleDataTable = (props: OwnProps) => {
       dateStr = '';
       
       if (rule.dateRRule) {
-        dateStr += RRule.fromString(rule.dateRRule).toText();
+        dateStr += RRule.fromString(rule.dateRRule).toText(undefined, RRuleLanguage);
       }
       
       if (dateStr && (rule.startDate || rule.endDate)) {
