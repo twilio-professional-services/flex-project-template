@@ -7,7 +7,8 @@ import PauseRecording from "../../feature-library/pause-recording/flex-hooks/str
 import TeamsViewFilters from "../../feature-library/teams-view-filters/flex-hooks/strings/TeamViewQueueFilter";
 import ScheduleManager from "../../feature-library/schedule-manager/flex-hooks/strings/ScheduleManager";
 import MultiCall from "../../feature-library/multi-call/flex-hooks/strings/MultiCall";
+import Callback from "../../feature-library/callback-and-voicemail/flex-hooks/strings/Callback";
 
-const customStrings = { ...ActivityReservationHandler, ...ActivitySkillFilter, ...Conference, ...ChatTransfer, ...DualChannelRecording, ...PauseRecording, ...TeamsViewFilters, ...ScheduleManager, ...MultiCall };
+const customStrings = { ...ActivityReservationHandler, ...ActivitySkillFilter, ...Conference, ...ChatTransfer, ...DualChannelRecording, ...PauseRecording, ...TeamsViewFilters, ...ScheduleManager, ...MultiCall , ...Callback};
 
 export default customStrings;
