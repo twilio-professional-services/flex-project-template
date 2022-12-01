@@ -1,10 +1,8 @@
 import * as Flex from "@twilio/flex-ui";
 import VideoRoom from "../../custom-components/VideoRoom";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } = custom_data?.features?.chat_to_video_escalation || {};
+const { enabled = false } = getFeatureFlags().features?.chat_to_video_escalation || {};
 
 export function addVideoRoomTabToTaskCanvasTabs(flex: typeof Flex) {
   if (!enabled) return;

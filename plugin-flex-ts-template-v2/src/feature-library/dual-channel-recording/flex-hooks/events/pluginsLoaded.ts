@@ -1,12 +1,9 @@
 import * as Flex from "@twilio/flex-ui";
 import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import { NotificationIds } from "../notifications/DualChannelRecording";
-const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { enabled = false, channel } =
-  custom_data?.features?.dual_channel_recording || {};
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
+
+const { enabled = false, channel } = getFeatureFlags().features?.dual_channel_recording || {};
 
 const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
   if (!enabled) return;

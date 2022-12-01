@@ -1,10 +1,9 @@
 import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import InternalCallService from "../../helpers/InternalCallService";
 import { isInternalCall } from '../../helpers/internalCall';
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled } = custom_data?.features?.internal_call || {};
+const { enabled = false } = getFeatureFlags().features?.internal_call || {};
 
 export function handleInternalRejectTask(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;

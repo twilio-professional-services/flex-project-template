@@ -1,21 +1,19 @@
-import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../utils/configuration/configuration';
 
-const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.teams_view_filters || {};
-const { logFilters = false } = custom_data?.features?.teams_view_filters || {};
-
-const { email = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { department = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { queue_no_worker_data = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { queue_worker_data = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { team = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-const { agent_skills = false } = custom_data?.features?.teams_view_filters.applied_filters || {};
-
-const { department_options = [] } = custom_data?.features?.teams_view_filters || {};
-const { team_options = [] } = custom_data?.features?.teams_view_filters || {};
+const { 
+  enabled = false, 
+  logFilters = false,
+  department_options = [],
+  team_options = []
+} = getFeatureFlags().features?.teams_view_filters || {};
+const {
+  email = false,
+  department = false,
+  queue_no_worker_data = false,
+  queue_worker_data = false,
+  team = false,
+  agent_skills = false
+  } = getFeatureFlags().features?.teams_view_filters.applied_filters || {};
 
 export const isFeatureEnabled = () => {
   return enabled;

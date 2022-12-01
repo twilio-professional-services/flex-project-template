@@ -1,11 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import SupervisorMonitorPanel from '../../custom-components/SupervisorMonitorPanel';
 import { SyncDoc } from '../../utils/sync/Sync';
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false, supervisor_monitor_panel = false } = custom_data?.features?.supervisor_barge_coach || {}
-
+const { enabled = false, supervisor_monitor_panel = false } = getFeatureFlags().features?.supervisor_barge_coach || {};
 
 export function addSupervisorMonitorPanel(flex: typeof Flex, manager: Flex.Manager) {
 

@@ -6,12 +6,9 @@ import {
   onTaskNoAcdActivity,
 } from "../../helpers/systemActivities";
 import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } =
-  custom_data?.features?.activity_reservation_handler || {};
+const { enabled = false } = getFeatureFlags().features?.activity_reservation_handler || {};
 
 const taskAcceptedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
   if (!enabled) return;

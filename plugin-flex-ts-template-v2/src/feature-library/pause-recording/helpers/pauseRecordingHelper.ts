@@ -1,19 +1,13 @@
 import { ITask, Manager, Notifications } from "@twilio/flex-ui";
 import RecordingService from "./RecordingService";
-import { UIAttributes } from "../../../types/manager/ServiceConfiguration";
 import { NotificationIds } from "../flex-hooks/notifications/PauseRecording";
 import { AppState, reduxNamespace } from "../../../flex-hooks/states";
 import { pause, resume } from "../flex-hooks/states/PauseRecordingSlice";
+import { getFeatureFlags } from '../../../utils/configuration/configuration';
 
+const { enabled: dualChannelEnabled = false, channel } = getFeatureFlags().features?.dual_channel_recording || {};
+const { include_silence = false, indicator_banner = false } = getFeatureFlags().features?.pause_recording || {};
 const manager = Manager.getInstance();
-
-const { custom_data } =
-  (manager.serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { enabled: dualChannelEnabled = false, channel } =
-  custom_data?.features?.dual_channel_recording || {};
-  const { include_silence = false, indicator_banner = false } =
-    custom_data?.features?.pause_recording || {};
 
 const getDualChannelCallSid = (task: ITask): string | null => {
   const participants = task.conference?.participants;

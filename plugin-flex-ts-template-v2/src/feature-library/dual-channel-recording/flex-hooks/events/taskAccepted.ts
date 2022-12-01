@@ -1,16 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
 import { addCallDataToTask, waitForConferenceParticipants } from "../../helpers/dualChannelHelper";
 import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { UIAttributes } from "../../../../types/manager/ServiceConfiguration";
 import RecordingService from "../../../pause-recording/helpers/RecordingService";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const manager = Flex.Manager.getInstance();
-
-const { custom_data } =
-  (manager.serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { enabled = false, channel } =
-  custom_data?.features?.dual_channel_recording || {};
+const { enabled = false, channel } = getFeatureFlags().features?.dual_channel_recording || {};
 
 const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
   if (!enabled || !Flex.TaskHelper.isCallTask(task)) {

@@ -1,11 +1,8 @@
 import * as Flex from "@twilio/flex-ui";
 
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../utils/configuration/configuration';
 
-const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.scrollable_activities || {};
+const { enabled = false } = getFeatureFlags().features?.scrollable_activities || {};
 
 export default async () => {
   if (!enabled) return;

@@ -2,7 +2,9 @@ import { Manager, Notifications } from '@twilio/flex-ui';
 import { NotificationIds } from "../flex-hooks/notifications/ScheduleManager";
 import ScheduleManagerService from './ScheduleManagerService';
 import { Rule, Schedule, ScheduleManagerConfig } from '../types/schedule-manager';
-import { UIAttributes } from '../../../types/manager/ServiceConfiguration';
+import { getFeatureFlags } from '../../../utils/configuration/configuration';
+
+const { enabled = false } = getFeatureFlags().features?.schedule_manager || {};
 
 let config = {
   data: {
@@ -15,9 +17,6 @@ let config = {
 const delay = async (ms: number): Promise<void> => {
   return await new Promise(resolve => setTimeout(resolve, ms));
 }
-
-const { custom_data } = Manager.getInstance().configuration as UIAttributes || {};
-const { enabled = false } = custom_data?.features?.schedule_manager || {};
 
 export const canShowScheduleManager = (manager: Manager) => {
   const { roles } = manager.user;

@@ -12,8 +12,8 @@ import {
 } from "@twilio-paste/core";
 import { VolumeOnIcon } from "@twilio-paste/icons/esm/VolumeOnIcon";
 import { AgentIcon } from "@twilio-paste/icons/esm/AgentIcon";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import { SecondDevice } from "../../../multi-call/helpers/MultiCallHelper";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
 const DeviceManager: React.FunctionComponent = () => {
   const menu = useMenuState();
@@ -42,8 +42,7 @@ const DeviceManager: React.FunctionComponent = () => {
       });
       
       // set SecondDevice options if multi-call feature is enabled
-      const { custom_data } = (Manager.getInstance().configuration as UIAttributes) || {};
-      const { enabled = false } = custom_data?.features?.multi_call || {};
+      const { enabled = false } = getFeatureFlags().features?.multi_call || {};
       
       if (enabled) {
         SecondDevice?.audio?.speakerDevices.set(selectedDevice.deviceId);

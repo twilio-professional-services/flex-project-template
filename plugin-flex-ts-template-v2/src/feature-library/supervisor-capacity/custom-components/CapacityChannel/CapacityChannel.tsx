@@ -4,15 +4,10 @@ import {Checkbox} from '@twilio-paste/core/checkbox';
 import {Flex} from '@twilio-paste/core/flex';
 import {Input} from '@twilio-paste/core/input';
 import {DeleteIcon} from "@twilio-paste/icons/esm/DeleteIcon";
-import { Manager } from '@twilio/flex-ui';
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import { WorkerChannelCapacityResponse } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } =
-  (Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { rules } =
-  custom_data?.features?.supervisor_capacity || {};
+const { rules } = getFeatureFlags().features?.supervisor_capacity || {};
 
 export interface OwnProps {
   isSaving: boolean;

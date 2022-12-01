@@ -1,14 +1,13 @@
 import * as Flex from '@twilio/flex-ui';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { Actions as BargeCoachStatusAction, } from '../../flex-hooks/states/SupervisorBargeCoach';
 
 import { SyncDoc } from '../../utils/sync/Sync'
 import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButtons'
 import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateModeButton'
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false, agent_coaching_panel = false } = custom_data?.features?.supervisor_barge_coach || {}
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
+const { enabled = false, agent_coaching_panel = false } = getFeatureFlags().features?.supervisor_barge_coach || {};
 
 export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.Manager) {
 

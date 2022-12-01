@@ -1,12 +1,9 @@
 import * as Flex from "@twilio/flex-ui";
 import { Channel } from "../../../../types/task-router";
 import TaskRouterService from "../../../../utils/serverless/TaskRouter/TaskRouterService";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration
-  .ui_attributes as UIAttributes;
-const { enabled = false } =
-  custom_data?.features?.omni_channel_capacity_management || {};
+const { enabled = false } = getFeatureFlags().features?.omni_channel_capacity_management || {};
 
 /*
   this function manages channel capacity for chat and is intended to be used in

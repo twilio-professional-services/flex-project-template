@@ -2,10 +2,9 @@ import * as Flex from '@twilio/flex-ui';
 import React from 'react';
 import { TaskAttributes } from '../../../../types/task-router/Task';
 import VoicemailIcon from "@material-ui/icons/Voicemail";
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes || {}
-const { enabled = false } = custom_data?.features?.callbacks || {}
+const { enabled = false } = getFeatureFlags().features?.callbacks || {};
 
 export function createVoicemailChannel(flex: typeof Flex, manager: Flex.Manager) {
 

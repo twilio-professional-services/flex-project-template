@@ -1,13 +1,9 @@
 import * as Flex from "@twilio/flex-ui";
 import { Actions as BargeCoachStatusAction } from "../states/SupervisorBargeCoach";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-// Import to get Sync Doc updates
 import { SyncDoc } from "../../utils/sync/Sync";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration
-  .ui_attributes as UIAttributes;
-const { agent_coaching_panel = false } =
-  custom_data?.features.supervisor_barge_coach || {};
+const { agent_coaching_panel = false } = getFeatureFlags().features?.supervisor_barge_coach || {};
 
 export const cleanStateAndSyncUponAgentHangUp = async (
   flex: typeof Flex,

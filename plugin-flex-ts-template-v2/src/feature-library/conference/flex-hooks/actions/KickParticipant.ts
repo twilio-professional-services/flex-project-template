@@ -1,9 +1,8 @@
 import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import ConferenceService from "../../utils/ConferenceService";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } = custom_data?.features.conference || {};
+const { enabled = false } = getFeatureFlags().features?.conference || {};
 
 export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
   if (!enabled) return;

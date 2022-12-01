@@ -1,7 +1,7 @@
 import { Actions, ConferenceParticipant, ITask, Manager } from '@twilio/flex-ui';
 import * as React from 'react';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import ConferenceService from '../../utils/ConferenceService';
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
 export interface OwnProps {
   task?: ITask
@@ -91,8 +91,8 @@ class ConferenceMonitor extends React.Component {
 
   setEndConferenceOnExit = async (task: ITask, conferenceSid: string, participants: ConferenceParticipant[], endConferenceOnExit: boolean) => {
     const promises = [] as Promise<void>[];
-      const { custom_data } = Manager.getInstance().configuration as UIAttributes;
-      const { add_button = true, hold_workaround = false } = custom_data?.features.conference || {};
+
+      const { add_button = true, hold_workaround = false } = getFeatureFlags().features?.conference || {};
     
     participants.forEach(p => {
       promises.push(

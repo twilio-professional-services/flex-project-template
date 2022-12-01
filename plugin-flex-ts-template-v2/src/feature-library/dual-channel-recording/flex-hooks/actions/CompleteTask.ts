@@ -1,11 +1,8 @@
 import * as Flex from "@twilio/flex-ui";
 import { addMissingCallDataIfNeeded } from "../../helpers/dualChannelHelper";
-import { UIAttributes } from "../../../../types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration
-  .ui_attributes as UIAttributes;
-const { enabled = false } =
-  custom_data?.features.dual_channel_recording || {};
+const { enabled = false } = getFeatureFlags().features?.dual_channel_recording || {};
 
 export function handleDualChannelCompleteTask(
   flex: typeof Flex,

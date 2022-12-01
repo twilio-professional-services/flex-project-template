@@ -1,9 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 import CallbackAndVoicemail from '../../custom-components/CallbackAndVoicemail'
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false, allow_requeue, max_attempts } = custom_data?.features?.callbacks || {}
+const { enabled = false, allow_requeue, max_attempts } = getFeatureFlags().features?.callbacks || {};
 
 export function replaceViewForCallbackAndVoicemail(flex: typeof Flex, manager: Flex.Manager) {
   

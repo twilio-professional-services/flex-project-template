@@ -2,10 +2,9 @@ import * as Flex from '@twilio/flex-ui';
 
 import IFrameCRMContainer from '../../custom-components/IFrameCRMContainer'
 
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled } = custom_data?.features?.enhanced_crm_container || {};
+const { enabled } = getFeatureFlags().features?.enhanced_crm_container || {};
 
 export function replaceAndSetCustomCRMContainer(flex: typeof Flex, manager: Flex.Manager) {
 

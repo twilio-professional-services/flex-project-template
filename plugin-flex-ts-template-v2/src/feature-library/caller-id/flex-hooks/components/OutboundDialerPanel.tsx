@@ -1,10 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 import OutboundCallerIDSelector from '../../custom-components/OutboundCallerIDSelector'
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } = custom_data?.features?.caller_id || {}
+const { enabled = false } = getFeatureFlags().features?.caller_id || {};
 
 export function addOutboundCallerIdSelectorToMainHeader(flex: typeof Flex) {
 

@@ -1,9 +1,7 @@
 import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } =
-  custom_data?.features?.chat_to_video_escalation || {};
+const { enabled = false } = getFeatureFlags().features?.chat_to_video_escalation || {};
 
 export function beforeCompleteVideoEscalatedChatTask(
   flex: typeof Flex,

@@ -5,15 +5,11 @@ import {Stack} from '@twilio-paste/core/stack';
 import {Text} from '@twilio-paste/text';
 import { SectionHeader } from './CapacityContainerStyles';
 import TaskRouterService, { WorkerChannelCapacityResponse } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
-import { IWorker, Manager } from '@twilio/flex-ui';
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { IWorker } from '@twilio/flex-ui';
 import CapacityChannel from '../CapacityChannel';
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } =
-  (Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { rules } =
-  custom_data?.features?.supervisor_capacity || {};
+const { rules } = getFeatureFlags().features?.supervisor_capacity || {};
 
 export interface OwnProps {
   worker?: IWorker;

@@ -1,8 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
-import { UIAttributes } from '../../../types/manager/ServiceConfiguration';
 import { ScheduleManagerConfig, UpdateConfigResponse, UpdateConfigStatusResponse, PublishConfigRequest, PublishConfigResponse } from '../types/schedule-manager';
 import { EncodedParams } from '../../../types/serverless';
 import ApiService from '../../../utils/serverless/ApiService';
+import { getFeatureFlags } from '../../../utils/configuration/configuration';
 
 class ScheduleManagerService extends ApiService {
   readonly scheduleManagerServerlessDomain: string;
@@ -10,8 +10,7 @@ class ScheduleManagerService extends ApiService {
   constructor() {
     super();
     
-    const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes || {};
-    const { serverless_domain } = custom_data?.features?.schedule_manager || {};
+    const { serverless_domain } = getFeatureFlags().features?.schedule_manager || {};
     
     this.scheduleManagerServerlessDomain = serverless_domain;
     

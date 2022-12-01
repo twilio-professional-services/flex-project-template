@@ -1,10 +1,7 @@
-import * as Flex from "@twilio/flex-ui";
 import { FlexEvent } from "../../../../types/manager/FlexEvent";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.callbacks || {};
+const { enabled = false } = getFeatureFlags().features?.callbacks || {};
 
 const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
   if (!enabled) return;

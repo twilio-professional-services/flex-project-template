@@ -1,11 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
 import { AppState } from 'flex-hooks/states';
 import { sortBy } from 'lodash';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { Activity } from 'types/task-router';
 import { ActivitySkillFilterRules } from '../types/ServiceConfiguration';
+import { getFeatureFlags } from '../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
+const custom_data = getFeatureFlags() || {};
 
 export interface ActivityCssConfig {
   idx: number,

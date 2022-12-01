@@ -1,18 +1,15 @@
 import * as Flex from "@twilio/flex-ui";
 import { Actions as BargeCoachStatusAction } from "../../flex-hooks/states/SupervisorBargeCoach";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import { reduxNamespace } from "../../../../flex-hooks/states";
 // Import to get Sync Doc updates
 import { SyncDoc } from "../../utils/sync/Sync";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const {
-  enabled = false,
-  agent_coaching_panel = false,
-  supervisor_monitor_panel = false,
-} = custom_data?.features?.supervisor_barge_coach || {};
+const { 
+    enabled = false, 
+    agent_coaching_panel = false, 
+    supervisor_monitor_panel = false 
+} = getFeatureFlags().features?.supervisor_barge_coach || {};
 
 export const enableBargeCoachButtonsUponMonitor = async (
   flex: typeof Flex,

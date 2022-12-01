@@ -1,10 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
 import ActivityWrapperComponent from '../../custom-components/activity-wrapper';
 import { NotificationIds } from '../notifications/ActivitySkillFilter';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled, rules } = custom_data.features.activity_skill_filter;
+const { enabled, rules } = getFeatureFlags().features?.activity_skill_filter || {};
 
 export function replaceActivityComponent(flex: typeof Flex, manager: Flex.Manager) {
   

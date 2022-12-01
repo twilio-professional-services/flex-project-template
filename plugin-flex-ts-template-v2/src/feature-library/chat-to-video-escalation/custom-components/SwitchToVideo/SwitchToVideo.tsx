@@ -4,7 +4,7 @@ import { Flex, Button } from "@twilio-paste/core";
 import { VideoOnIcon } from "@twilio-paste/icons/esm/VideoOnIcon";
 
 import { updateTaskAttributesForVideo } from "../../helpers/taskAttributes";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
 interface SwitchToVideoProps {
   task: ITask;
@@ -12,7 +12,7 @@ interface SwitchToVideoProps {
   conversation?: ConversationState.ConversationState;
 }
 
-const { custom_data } = Manager.getInstance().configuration as UIAttributes;
+const custom_data = getFeatureFlags() || {};
 const {
   serverless_functions_domain = "",
   serverless_functions_port = "",

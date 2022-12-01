@@ -1,10 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 import ConferenceButton from '../../custom-components/ConferenceButton';
+import { getFeatureFlags } from '../../../../utils/configuration/configuration';
 
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes || {}
-const { enabled = false, add_button = true } = custom_data?.features?.conference || {};
+const { enabled = false, add_button = true } = getFeatureFlags().features?.conference || {};
 
 export function addConferenceToCallCanvasActions(flex: typeof Flex) {
 
