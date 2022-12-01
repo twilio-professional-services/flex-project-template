@@ -146,7 +146,7 @@ class CallbackService extends ApiService {
       Token: encodeURIComponent(this.manager.user.token),
       numberToCall: encodeURIComponent(request.numberToCall),
       numberToCallFrom: encodeURIComponent(request.numberToCallFrom),
-      flexFlowSid: encodeURIComponent(request.numberToCallFrom),
+      flexFlowSid: encodeURIComponent(request.flexFlowSid),
       workflowSid: request.workflowSid
         ? encodeURIComponent(request.workflowSid)
         : undefined,
