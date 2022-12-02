@@ -186,7 +186,8 @@ exports.generateFlexConfigEnv = function generateFlexConfigEnv(context, flexConf
   const { 
     account_sid,
     api_key,
-    api_secret } = context
+    api_secret,
+    auth_token } = context
 
   try {
 
@@ -201,11 +202,12 @@ exports.generateFlexConfigEnv = function generateFlexConfigEnv(context, flexConf
       if(account_sid){
         shell.sed('-i', /<YOUR_TWILIO_ACCOUNT_SID>/g, `${account_sid}`, flexConfigEnv);
       }
-      if(api_key){
+      if(api_key && api_secret){
         shell.sed('-i', /<YOUR_API_KEY>/g, `${api_key}`, flexConfigEnv);
-      } 
-      if(api_secret){
         shell.sed('-i', /<YOUR_API_SECRET>/g, `${api_secret}`, flexConfigEnv);
+      } else if (account_sid && auth_token) {
+        shell.sed('-i', /<YOUR_API_KEY>/g, `${account_sid}`, flexConfigEnv);
+        shell.sed('-i', /<YOUR_API_SECRET>/g, `${auth_token}`, flexConfigEnv);
       }
       console.log(`Setting up environment ${flexConfigEnv}: complete`);
     } else {
