@@ -41,6 +41,11 @@ const OutboundCallerIDSelectorComponent = () => {
         ...phoneNumbers
       ]);
       setHelpText('');
+      
+      // initialize state to the first number, which is what the Select control will display
+      if (!selectedCallerId && phoneNumbers.length > 0) {
+        dispatch(Actions.setCallerId(phoneNumbers[0].phoneNumber))
+      }
     }
   }, [isFetchingPhoneNumbers, fetchingPhoneNumbersFailed])
   
@@ -53,7 +58,7 @@ const OutboundCallerIDSelectorComponent = () => {
       value={selectedCallerId}
       onChange={e => dispatch(Actions.setCallerId(e.target.value))}>
         {selectOptions.map((item: PhoneNumberItem) => (
-          <Option value={item.phoneNumber}>
+          <Option value={item.phoneNumber} disabled={item.phoneNumber === "placeholder"}>
             {item.friendlyName}
           </Option>
         ))}

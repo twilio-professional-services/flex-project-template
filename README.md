@@ -13,7 +13,7 @@ You can have the solution running locally with little overhead or have a develop
 
 The primary aims of this template are
 
-1. To make interatively building on Flex *easier*
+1. To make iteratively building on Flex *easier*
 2. Improve interoperability of plugin features by proposing some standardization
 3. Massively accelerate project setup with options for asset and configuration versioning across multiple Twilio accounts
 
@@ -26,7 +26,8 @@ The primary aims of this template are
         2. [setup](#setup)
         3. [development notes](#development-notes)
     2. [Setup a project release pipeline](#setup-a-project-with-release-pipeline)
-    3. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
+    3. [Deploying to hosted Flex without a release pipeline](#deploying-to-hosted-flex-without-a-release-pipeline)
+    4. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
 3. [Why a template?](#why-a-template)
     1. [One Plugin](#one-plugin-instead-of-a-collection-of-plugins)
     2. [Package Structure](#when-working-with-one-plugin-we-need-a-package-structure-to-organize-our-code)
@@ -64,7 +65,8 @@ The primary aims of this template are
 | Conference (external) | _provide agents the ability to conference in external numbers_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/conference/README.md) | ✅ |
 | Device Manager | _provide agents the ability to select the audio output device_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/device-manager/README.md) | ✅ |
 | Dual Channel Recording | _automatically record both inbound and outbound calls in dual channel_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/dual-channel-recording/README.md) |  |
-| Enhanced CRM Container   | _optimize the CRM container experience_ | [Yes](plugin-flex-ts-template/src/feature-library/enhanced-crm-container/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/enhanced-crm-container/README.md) | ✅ | 
+| Enhanced CRM Container   | _optimize the CRM container experience_ | [Yes](plugin-flex-ts-template/src/feature-library/enhanced-crm-container/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/enhanced-crm-container/README.md) | ✅ |
+| Hang Up By Reporting | _populates the Hang Up By and Destination attributes in Flex Insights_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/hang-up-by/README.md) |  |
 | Internal Call (Agent to Agent)  | _provide agents the ability to dial each other_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/internal-call/README.md) |  |
 | Multi-call | _allow agents to receive a transferred call while already on a call_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/multi-call/README.md) |  |
 | Override Queue Transfer Directory | _a template for modifying the transfer directories_ | [Yes](plugin-flex-ts-template/src/feature-library/override-queue-transfer-directory/README.md) | No |   |
@@ -90,24 +92,25 @@ The following are guides to instruct the user how to leverage this template for 
 - twilio flex plugins 6.0.2 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli) (`twilio plugins`, `twilio plugins:install @twilio-labs/plugin-flex@latest`)
 - twilio serverless plugin 3.0.4 or above is [installed](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit) (`twilio plugins` `twilio plugins:install @twilio-labs/plugin-serverless@latest`)
 - `twilio profiles:list` has an active account set.
-- have the twilio auth token for your account ready
+- have the twilio auth token for your account ready (you can find this in the [Twilio Console](https://console.twilio.com/))
 
 ### Setup
-1. Clone the repository
-2. make sure the twilio cli has the correct account set to active
+1. [Generate a new repository based on the template](https://github.com/twilio-professional-services/flex-project-template/generate)
+2. Clone the new repository that you just created
+3. make sure the twilio cli has the correct account set to active
 ```bash
 twilio profiles:list
 ```
-3. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
+4. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
 ```bash
 npm ci
 ```
-4. follow the prompt and provide your auth token
-5. Run the serverless functions and plugin locally by running
+5. follow the prompt and provide your auth token
+6. Run the serverless functions and plugin locally by running (for Flex UI v1.x)
 ```bash
 npm run start:local:v1
 ```
-or
+or (for Flex UI v2.x)
 ```bash
 npm run start:local:v2
 ```
@@ -117,9 +120,9 @@ npm run start:local
 ```
 
 ### development notes
-When developing locally, flex config is overriden by anything in your [appConfig.js](/plugin-flex-ts-template-v2/public/appConfig.example.js).  Note appConfig is only applicable when running the plugin locally but you can edit this file to toggle features on and off for your locally running webserver, you can also tweak the api endpoint for your serverless functions if you need to.
+When developing locally, Flex config is overridden by anything in your [appConfig.js](/plugin-flex-ts-template-v2/public/appConfig.example.js).  Note: appConfig is only applicable when running the plugin locally, so you can edit this file to toggle features on and off for your locally running web server. You can also tweak the api endpoint for your serverless functions if you need to.
 
-When running the plugin locally, this template has been setup to pair the plugin with the serverless functions also running locally on localhost:3001, the serverless functions can be debugged by attaching your debugger to the node instance.  The following is a sample entry for ".vscode/launch.json" to connect vscode for debugging
+When running the plugin locally, this template has been set up to pair the plugin with the serverless functions also running locally on localhost:3001. The serverless functions can be debugged by attaching your debugger to the node instance.  The following is a sample entry for ".vscode/launch.json" to connect vscode for debugging
 
 ```json
 {
@@ -160,13 +163,51 @@ When running the plugin locally, this template has been setup to pair the plugin
 ![alt text](scripts/screenshots/github-secrets.png)
 
 6. Login into Flex and make sure in the admin panel, the version of flex you are using meets the minimal version allowed by the plugin
-7. _Optionally_ navigate to the flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/manage/voice?frameUrl=%2Fconsole%2Fflex%2Fvoice%3Fx-target-region%3Dus1)
+7. _Optionally_ navigate to the flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/manage/voice?frameUrl=%2Fconsole%2Fflex%2Fvoice%3Fx-target-region%3Dus1) (this is required for some features)
 8. Navigate over to github actions of your repository and select the environment you want to deploy, then run the workflow.
     - this will deploy the four assets to your environment with the default features enabled, See [Feature library Information](#feature-library-information) for further details of whats enabled by default.
     - serverless-functions will auto-identify any missing environment variables for the default features. It is recommended you populate the [environment variables](/serverless-functions/) for each account and manage config in version control at a later date to remove any ambiguity.
     - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommended you populate the [ui_attributes](/flex-config/) config and manage the domain names through version control at a later date to remove any ambiguity. 
     - for full functionality, review the configuration steps for the disable features and make sure their dependencies are setup.
 
+## Deploying to hosted Flex without a release pipeline
+
+For the below steps, where `<environment>` is referenced, you may use `dev`, `test`, `qa`, or `prod`.
+
+First, deploy the serverless functions:
+```bash
+cd serverless-functions
+twilio serverless:deploy
+```
+
+If you plan to use the schedule manager feature, deploy its serverless functions as well:
+```bash
+cd ../serverless-schedule-manager
+twilio serverless:deploy
+```
+
+Next, populate the serverless domains deployed above into the config:
+```bash
+cd ..
+npm run populate-missing-placeholders <environment>
+```
+
+If you customized `custom_data` in `appConfig.js` while running locally, and would like to deploy with those settings, be sure to make the same changes in your `flex-config/ui_attributes.<environment>.json` file as well.
+
+Deploy the configuration:
+```bash
+cd flex-config
+npm run deploy:<environment>
+```
+
+Start the plugin deployment:
+```bash
+twilio flex:plugins:deploy --major --changelog "Initial deploy" --description "Flex project template"
+```
+
+After your deployment runs you will receive instructions for releasing your plugin from the bash prompt. You can use this or skip this step and release your plugin from the Flex plugin dashboard here https://flex.twilio.com/admin/plugins
+
+For more details on deploying your plugin, refer to the [deploying your plugin guide](https://www.twilio.com/docs/flex/plugins#deploying-your-plugin).
 
 # Using template for a standalone plugin
 
@@ -338,11 +379,11 @@ convenience script for simplyfying local setup and development, triggered as par
 
 ## generate-env
 
-conveience script that does the same as setup-local-environment except it won't install npm pacakges again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
+convenience script that does the same as setup-local-environment except it won't install npm packages again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
 
 # CHANGELOG
 - 1.0.3
-    - *BREAKING CHANGE* renamed plugin packages to plugin-flex-ts-template-v1 and plugin-flex-ts-template-v2 to explicitly seperate plugins
+    - *BREAKING CHANGE* renamed plugin packages to plugin-flex-ts-template-v1 and plugin-flex-ts-template-v2 to explicitly separate plugins
     - updated README to account for v1 plugins in scripts
 - 1.0.2
     - README updates

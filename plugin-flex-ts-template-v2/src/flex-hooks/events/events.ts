@@ -8,6 +8,8 @@ import taskWrapupHandlerActivityReservationHandler from "../../feature-library/a
 import taskAcceptedHandlerDualChannelRecording from "../../feature-library/dual-channel-recording/flex-hooks/events/taskAccepted";
 
 import InternalCallTaskReceived from "../../feature-library/internal-call/flex-hooks/events/taskReceived";
+import HangUpByTaskCompleted from "../../feature-library/hang-up-by/flex-hooks/events/taskCompleted";
+import HangUpByTaskWrapup from "../../feature-library/hang-up-by/flex-hooks/events/taskWrapup";
 
 import ActivityReservationHandlerLoaded from "../../feature-library/activity-reservation-handler/flex-hooks/events/pluginsLoaded";
 import ActivitySkillFilterLoaded from "../../feature-library/activity-skill-filter/flex-hooks/events/pluginsLoaded";
@@ -25,6 +27,7 @@ import SupervisorCapacityLoaded from "../../feature-library/supervisor-capacity/
 import ScheduleManagerLoaded from "../../feature-library/schedule-manager/flex-hooks/events/pluginsLoaded";
 import MultiCallLoaded from "../../feature-library/multi-call/flex-hooks/events/pluginsLoaded";
 import MultiCallTokenUpdated from "../../feature-library/multi-call/flex-hooks/events/tokenUpdated";
+import HangUpByLoaded from "../../feature-library/hang-up-by/flex-hooks/events/pluginsLoaded";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -42,14 +45,18 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     TeamsViewFiltersLoaded,
     SupervisorCapacityLoaded,
     ScheduleManagerLoaded,
-    MultiCallLoaded
+    MultiCallLoaded,
+    HangUpByLoaded
   ],
   taskAccepted: [
     taskAcceptedHandlerActivityReservationHandler,
     taskAcceptedHandlerDualChannelRecording
   ],
   taskCanceled: [taskEndedHandlerActivityReservationHandler],
-  taskCompleted: [taskEndedHandlerActivityReservationHandler],
+  taskCompleted: [
+    taskEndedHandlerActivityReservationHandler,
+    HangUpByTaskCompleted
+  ],
   taskReceived: [
     taskReceivedActivityReservationHandler,
     InternalCallTaskReceived
@@ -58,7 +65,10 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   taskRescinded: [taskEndedHandlerActivityReservationHandler],
   taskTimeout: [taskEndedHandlerActivityReservationHandler],
   taskUpdated: [],
-  taskWrapup: [taskWrapupHandlerActivityReservationHandler],
+  taskWrapup: [
+    taskWrapupHandlerActivityReservationHandler,
+    HangUpByTaskWrapup
+  ],
   tokenUpdated: [MultiCallTokenUpdated]
 };
 

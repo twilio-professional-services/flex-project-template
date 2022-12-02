@@ -25,6 +25,11 @@ import { interceptQueueFilter, logApplyListFilters } from "../../feature-library
 import { handleMultiCallSelectTask } from "../../feature-library/multi-call/flex-hooks/actions/SelectTask";
 import { handleMultiCallUnholdCall } from "../../feature-library/multi-call/flex-hooks/actions/UnholdCall";
 import { handleMultiCallUnholdParticipant } from "../../feature-library/multi-call/flex-hooks/actions/UnholdParticipant";
+import { reportHangUpByCompleteTask } from "../../feature-library/hang-up-by/flex-hooks/actions/CompleteTask";
+import { reportHangUpByHangupCall } from "../../feature-library/hang-up-by/flex-hooks/actions/HangupCall";
+import { reportHangUpByKickParticipant } from "../../feature-library/hang-up-by/flex-hooks/actions/KickParticipant";
+import { reportHangUpByStartExternalWarmTransfer } from "../../feature-library/hang-up-by/flex-hooks/actions/StartExternalWarmTransfer";
+import { reportHangUpByTransferTask } from "../../feature-library/hang-up-by/flex-hooks/actions/TransferTask";
 
 const actionsToRegister: Actions = {
   AcceptTask: {
@@ -41,7 +46,8 @@ const actionsToRegister: Actions = {
     before: [
       beforeCompleteWorkerTask,
       beforeCompleteVideoEscalatedChatTask,
-      handleDualChannelCompleteTask
+      handleDualChannelCompleteTask,
+      reportHangUpByCompleteTask
     ],
     after: [],
     replace: [],
@@ -49,7 +55,8 @@ const actionsToRegister: Actions = {
   HangupCall: {
     before: [
       handleConferenceHangup,
-      handleDualChannelHangupCall
+      handleDualChannelHangupCall,
+      reportHangUpByHangupCall
     ],
     after: [],
     replace: [],
@@ -72,7 +79,10 @@ const actionsToRegister: Actions = {
     replace: [],
   },
   KickParticipant: {
-    before: [handleKickConferenceParticipant],
+    before: [
+      handleKickConferenceParticipant,
+      reportHangUpByKickParticipant
+    ],
     after: [],
     replace: [],
   },
@@ -125,7 +135,19 @@ const actionsToRegister: Actions = {
   RejectTask: { before: [handleInternalRejectTask], after: [], replace: [] },
   NavigateToView: {},
   SetActivity: {},
-  TransferTask: { before: [handleChatTransfer], after: [], replace: [] },
+  StartExternalWarmTransfer: {
+    before: [reportHangUpByStartExternalWarmTransfer],
+    after: [],
+    replace: [],
+  },
+  TransferTask: {
+    before: [
+      handleChatTransfer,
+      reportHangUpByTransferTask
+    ],
+    after: [],
+    replace: []
+  },
   WrapUpTask: {},
 };
 
