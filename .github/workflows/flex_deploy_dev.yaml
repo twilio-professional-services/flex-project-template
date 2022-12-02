@@ -84,7 +84,7 @@ jobs:
           node-version: '16'
           
       - name: install twilio cli
-        run: npm install
+        run: npm install skip-postinstall
 
       - name: deploy and release flex-plugin
         run: |
