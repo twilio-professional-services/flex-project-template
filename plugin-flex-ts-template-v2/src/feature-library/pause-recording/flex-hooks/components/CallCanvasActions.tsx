@@ -8,8 +8,11 @@ const { enabled = false } = custom_data?.features?.pause_recording || {}
 export function addPauseRecordingButton(flex: typeof Flex, manager: Flex.Manager) {
   
   if (!enabled) return;
+  
+  const isNotInternalCall = (props: any) => props.task.attributes.client_call !== true;
 
   flex.CallCanvasActions.Content.add(<PauseRecordingButton key="pause-recording-button" />, {
-    sortOrder: 2
+    sortOrder: 2,
+    if: isNotInternalCall
   });
 }
