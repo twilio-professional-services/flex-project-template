@@ -1,7 +1,6 @@
 import { ITask, useFlexSelector, Manager } from '@twilio/flex-ui';
 import React from 'react';
-import moment from 'moment';
-import 'moment-timezone';
+import { DateTime } from 'luxon';
 import { TaskAttributes } from 'types/task-router/Task';
 import { Button, Box, Heading, Text, Flex as Flex } from "@twilio-paste/core";
 import { InformationIcon } from "@twilio-paste/icons/esm/InformationIcon";
@@ -30,10 +29,19 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
 
   const taskStatus = task?.taskStatus
   const { taskType, callBackData } = task?.attributes as TaskAttributes
-  const timeReceived = moment(callBackData?.utcDateTimeReceived);
-  const localTz = moment.tz.guess();
-  const localTimeShort = timeReceived.tz(localTz).format('MM-D-YYYY, h:mm:ss a z');
-  const serverTimeShort = 'System time: ' + timeReceived.tz(callBackData?.mainTimeZone || localTz).format('MM-D-YYYY, h:mm:ss a z');
+  const localTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  let timeReceived;
+  
+  if (callBackData?.utcDateTimeReceived) {
+    timeReceived = DateTime.fromISO(callBackData?.utcDateTimeReceived);
+  } else {
+    timeReceived = DateTime.utc();
+  }
+  
+  const formatOptions = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' } as Intl.DateTimeFormatOptions;
+  
+  const localTimeShort = timeReceived.toLocaleString({ ...formatOptions, timeZone: localTz });
+  const serverTimeShort = 'System time: ' + timeReceived.toLocaleString({ ...formatOptions, timeZone: callBackData?.mainTimeZone || localTz });
   const disableRetryButton = taskStatus !== 'assigned' || isCompletingCallbackAction[task.taskSid] || isRequeueingCallbackAction[task.taskSid]
   const disableCallCustomerButton = disableRetryButton || workerOffline(workerActivitySid)
   const thisAttempt = callBackData?.attempts ? (Number(callBackData.attempts) + 1) : 1

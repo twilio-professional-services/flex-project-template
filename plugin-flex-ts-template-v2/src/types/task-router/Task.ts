@@ -46,7 +46,7 @@ export interface TaskAttributes {
     numberToCallFrom?: string;
     attempts?: number;
     mainTimeZone?: string;
-    utcDateTimeReceived?: Date;
+    utcDateTimeReceived?: string;
     recordingSid?: string;
     recordingUrl?: string;
     transcriptSid?: string;
