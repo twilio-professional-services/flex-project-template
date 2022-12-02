@@ -1,9 +1,6 @@
-import * as Flex from "@twilio/flex-ui";
+import { getFeatureFlags } from '../../utils/configuration';
 
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.scrollable_activities || {};
+const { enabled = false } = getFeatureFlags()?.features?.scrollable_activities || {};
 
 export const isFeatureEnabled = () => {
   return enabled;

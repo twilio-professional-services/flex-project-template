@@ -1,12 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
-
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.internal_call || {};
+import { isFeatureEnabled } from '../..';
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
   
   suppressConferenceErrorNotification(flex, manager);
 }

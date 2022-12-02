@@ -9,7 +9,8 @@ import { MicrophoneOffIcon } from "@twilio-paste/icons/esm/MicrophoneOffIcon";
 import { CloseIcon } from "@twilio-paste/icons/esm/CloseIcon";
 
 import { updateTaskAttributesForVideo } from "../../helpers/taskAttributes";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../../utils/configuration';
+
 import {
   btn,
   btnContainer,
@@ -27,8 +28,7 @@ interface VideoRoomProps {
   task: ITask;
 }
 
-const { custom_data } = Manager.getInstance().configuration as UIAttributes;
-const { serverless_functions_domain = "", serverless_functions_protocol = "https", serverless_functions_port } = custom_data || {};
+const { serverless_functions_domain = "", serverless_functions_protocol = "https", serverless_functions_port } = getFeatureFlags() || {};
 
 const domain = serverless_functions_port ? `${serverless_functions_domain}:${serverless_functions_port}` : serverless_functions_domain;
 

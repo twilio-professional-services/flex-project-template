@@ -1,9 +1,6 @@
-import * as Flex from "@twilio/flex-ui";
+import { getFeatureFlags } from '../../utils/configuration';
 
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.hang_up_by || {};
+const { enabled = false } = getFeatureFlags()?.features?.hang_up_by || {};
 
 export const isFeatureEnabled = () => {
   return enabled;

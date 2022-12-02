@@ -1,9 +1,6 @@
-import * as Flex from "@twilio/flex-ui";
+import { getFeatureFlags } from '../../utils/configuration';
 
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false, channel } = custom_data?.features?.dual_channel_recording || {};
+const { enabled = false, channel } = getFeatureFlags()?.features?.dual_channel_recording || {};
 
 export const isFeatureEnabled = () => {
   return enabled;
