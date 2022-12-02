@@ -3,6 +3,7 @@ const { serverlessDir, getEnvironmentVariables, generateServerlessFunctionsEnv, 
 
 if(!process.argv[2]) {
   console.error("Please provide an environment name");
+  return;
 }
 
 const environmentName = `${process.argv[2]}`;
