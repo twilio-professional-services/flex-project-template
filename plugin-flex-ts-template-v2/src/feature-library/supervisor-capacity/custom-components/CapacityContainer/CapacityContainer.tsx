@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {Button} from '@twilio-paste/core/button';
 import {Flex} from '@twilio-paste/core/flex';
 import {Stack} from '@twilio-paste/core/stack';
-import {Text} from '@twilio-paste/text';
+import {Text} from '@twilio-paste/core/text';
 import { SectionHeader } from './CapacityContainerStyles';
 import TaskRouterService, { WorkerChannelCapacityResponse } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import { IWorker, Manager } from '@twilio/flex-ui';

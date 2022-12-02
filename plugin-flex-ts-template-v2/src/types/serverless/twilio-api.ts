@@ -99,7 +99,7 @@ export interface FetchedConferenceParticipant {
   label: null | string;
   muted: boolean;
   startConferenceOnEnter: boolean;
-  status: number;
+  status: string;
   uri: string;
 }
 

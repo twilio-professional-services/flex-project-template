@@ -506,7 +506,7 @@ const RuleEditor = (props: OwnProps) => {
           <RadioGroup
             name="isOpen"
             value={isOpen ? "open" : "closed"}
-            legend="Type"
+            legend={ScheduleManagerStrings[StringTemplates.TYPE]}
             onChange={handleIsOpenChange}
             orientation="horizontal"
             required>
