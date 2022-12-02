@@ -8,10 +8,12 @@ import PauseRecording from "../../feature-library/pause-recording/flex-hooks/not
 import TeamsViewFilters from "../../feature-library/teams-view-filters/flex-hooks/notifications/TeamViewQueueFilter";
 import ScheduleManager from "../../feature-library/schedule-manager/flex-hooks/notifications/ScheduleManager";
 import MultiCall from "../../feature-library/multi-call/flex-hooks/notifications/MultiCall";
+import InternalCall from "../../feature-library/internal-call/flex-hooks/notifications/InternalCall";
+import Callback from "../../feature-library/callback-and-voicemail/flex-hooks/notifications/Callback";
 
 const notificationsToRegister: ((
   flex: typeof Flex,
   manager: Flex.Manager
-) => void)[] = [ActivityReservationHandler, ActivitySkillFilter, Conference, ChatTransfer, DualChannelRecording, PauseRecording, TeamsViewFilters, ScheduleManager, MultiCall];
+) => void)[] = [ActivityReservationHandler, ActivitySkillFilter, Conference, ChatTransfer, DualChannelRecording, PauseRecording, TeamsViewFilters, ScheduleManager, MultiCall, InternalCall, Callback];
 
 export default notificationsToRegister;
