@@ -105,7 +105,7 @@ twilio profiles:list
 ```
 4. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
 ```bash
-npm ci
+npm install
 ```
 5. follow the prompt and provide your auth token
 6. Run the serverless functions and plugin locally by running (for Flex UI v1.x)
