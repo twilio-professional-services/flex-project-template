@@ -159,6 +159,55 @@ export const waitForConferenceParticipants = (task: ITask): Promise<ConferencePa
       }
     }, maxWaitTimeMs);
   });
+  
+  export const waitForActiveCall = (task: ITask): Promise<string> =>
+    new Promise((resolve) => {
+      const waitTimeMs = 100;
+      // For internal calls, there is no conference, so we only have the active call to work with.
+      // Wait here for the call to establish.
+      const maxWaitTimeMs = 60000;
+      let waitForCallInterval: null | NodeJS.Timeout = setInterval(async () => {
+  
+        if (!isTaskActive(task)) {
+          console.debug('Call canceled, clearing waitForCallInterval');
+          if (waitForCallInterval) {
+            clearInterval(waitForCallInterval);
+            waitForCallInterval = null;
+          }
+          return;
+        }
+        
+        const activeCall = manager.store.getState().flex.phone.activeCall;
+        
+        if (!activeCall) {
+          return;
+        }
+  
+        if (waitForCallInterval) {
+          clearInterval(waitForCallInterval);
+          waitForCallInterval = null;
+        }
+  
+        resolve(activeCall.parameters.CallSid);
+      }, waitTimeMs);
+  
+      setTimeout(() => {
+        if (waitForCallInterval) {
+          console.debug(
+            `Call didn't activate within ${
+              maxWaitTimeMs / 1000
+            } seconds`
+          );
+          
+          if (waitForCallInterval) {
+            clearInterval(waitForCallInterval);
+            waitForCallInterval = null;
+          }
+  
+          resolve('');
+        }
+      }, maxWaitTimeMs);
+    });
 
 export const addMissingCallDataIfNeeded = async (task: ITask) => {
   const { attributes } = task;
