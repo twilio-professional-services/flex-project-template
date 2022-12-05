@@ -16,6 +16,11 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
       - name: 'Bump version'
         uses: 'phips28/gh-action-bump-version@master'
         env:
