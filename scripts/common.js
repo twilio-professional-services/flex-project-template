@@ -110,12 +110,12 @@ exports.getActiveTwilioProfile = async function getActiveTwilioProfile() {
 
 exports.installNPMServerlessFunctions = function installNPMServerlessFunctions() {
   console.log("Installing npm dependencies for serverless functions..");
-  shell.exec("npm --prefix ./serverless-functions install ./serverless-functions", {silent:true});
+  shell.exec("npm --prefix ./serverless-functions ci ./serverless-functions", {silent:true});
 }
 
 exports.installNPMFlexConfig = function installNPMFlexConfig() {
   console.log("Installing npm dependencies for flex-config...");
-  shell.exec("npm --prefix ./flex-config install ./flex-config", {silent:true});
+  shell.exec("npm --prefix ./flex-config ci ./flex-config", {silent:true});
 }
 
 exports.installNPMPlugin = function installNPMPlugin() {
@@ -123,13 +123,13 @@ exports.installNPMPlugin = function installNPMPlugin() {
   var temp = pluginDir;
   if( pluginDir && pluginDir != "" ) {
     console.log(`Installing npm dependencies for ${pluginDir}...`);
-    shell.exec(`npm --prefix ./${pluginDir} install ./${pluginDir}`, {silent:true});
+    shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
   }
 
   var { pluginDir } = getPaths("v2");
   if ( pluginDir && temp != pluginDir && pluginDir != "" ) {
     console.log(`Installing npm dependencies for ${pluginDir}...`);
-    shell.exec(`npm --prefix ./${pluginDir} install ./${pluginDir}`, {silent:true});
+    shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
   }
 }
 
