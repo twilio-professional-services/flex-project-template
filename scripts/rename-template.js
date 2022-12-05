@@ -13,8 +13,7 @@ const { flexConfigDir, serverlessDir } = require ('./common');
 
 // defaulting to plugin v2 for just now
 var { setPluginName, getPaths } = require("./select-plugin");
-setPluginName("v2");
-const { pluginDir, pluginSrc } = getPaths();
+const { pluginDir, pluginSrc } = getPaths("v2");
 
 shell.echo(`renaming plugin: `, pluginDir);
 shell.echo("");
