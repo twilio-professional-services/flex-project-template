@@ -22,7 +22,7 @@ function getDirectoryName(originalName, regex) {
   return tempPluginDir;
 }
 
-exports.setPluginName = function setPluginName(pluginVersion){
+function setPluginName(pluginVersion){
   if(pluginVersion && pluginVersion.toLowerCase() === "v1" ){
     originalPluginName = 'plugin-flex-ts-template-v1';
     exports.originalPluginName = originalPluginName;
@@ -32,7 +32,10 @@ exports.setPluginName = function setPluginName(pluginVersion){
   }
 }
 
-exports.getPaths = function getPaths() {
+exports.setPluginName = setPluginName
+
+exports.getPaths = function getPaths(plugin_version) {
+  setPluginName(plugin_version);
   const pluginDir = getDirectoryName(originalPluginName, /flex-template-.*/);
   const templateDirectory = `${pluginDir}/template-files/no-features`;
   const featureDirectory = `${pluginDir}/src/feature-library`;
