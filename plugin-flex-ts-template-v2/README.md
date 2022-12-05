@@ -27,7 +27,7 @@ This plugin defines a package structure to make distributed development easier w
 
 The following guide assumes the reader has some familiarity with _Twilio Flex Plugins_, the _Flex Action Framework_ and _Flex React Component Model_ if not you can pop over [here](https://www.twilio.com/docs/flex/developer/ui-and-plugins) and read up on it.
 
-Even though the Flex plugin model allows a lot of extensibility and customization it doesnt offer any opinions on how to structure the code so that its readable and maintainable. The package structure outlined here aims to do that.
+Even though the Flex plugin model allows a lof of extensibility and customization it doesnt offer any opinions on how to structure the code so that its readable and maintainable. The package structure outlined here aims to do that.
 
 ---
 
