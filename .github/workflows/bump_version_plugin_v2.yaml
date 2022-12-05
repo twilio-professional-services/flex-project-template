@@ -1,0 +1,23 @@
+name: bump_version_plugin_v2
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'plugin-flex-ts-template-v2/**'
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: 'Bump version'
+        uses: 'phips28/gh-action-bump-version@master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGEJSON_DIR:  'plugin-flex-ts-template-v2'
+        with:
+          skip-tag: 'true'
+          version-type: 'minor'
