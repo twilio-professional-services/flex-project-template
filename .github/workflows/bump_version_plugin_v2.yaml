@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - 'auto-version-bump'
     paths:
       - 'plugin-flex-ts-template-v2/**'
   # Enable running this workflow manually from the Actions tab
