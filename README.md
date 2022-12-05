@@ -49,7 +49,7 @@ The primary aims of this template are
     3. [show-env-vars](#show-env-vars)
     4. [setup-local-environment](#setup-local-environment)
     5. [generate-env](#generate-env)
-7. [Change log](#changelog)
+7. [Change log](#changelog) 
 
 
 ## Feature library Information
