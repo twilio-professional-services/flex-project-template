@@ -107,7 +107,7 @@ class ConferenceMonitor extends React.Component {
   }
   
   performParticipantUpdate = async (task: ITask, conferenceSid: string, participant: ConferenceParticipant, endConferenceOnExit: boolean, hold_workaround: boolean, add_button: boolean) => {
-    if (participant.connecting || !participant.callSid || (!add_button && participant.participantType !== "customer")) {
+    if (participant.connecting || !participant.callSid || (!add_button && participant.participantType === "worker")) {
       // skip setting end conference on connecting parties as it will fail
       // only set on customer participants because Flex sets the others for us
       return;
