@@ -49,7 +49,7 @@ The primary aims of this template are
     3. [show-env-vars](#show-env-vars)
     4. [setup-local-environment](#setup-local-environment)
     5. [generate-env](#generate-env)
-7. [Change log](#changelog) 
+7. [Change log](#changelog)
 
 
 ## Feature library Information
@@ -103,7 +103,7 @@ twilio profiles:list
 ```
 4. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
 ```bash
-npm install
+npm ci
 ```
 5. follow the prompt and provide your auth token
 6. Run the serverless functions and plugin locally by running (for Flex UI v1.x)
