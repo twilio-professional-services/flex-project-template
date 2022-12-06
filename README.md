@@ -114,7 +114,7 @@ or (for Flex UI v2.x)
 ```bash
 npm run start:local:v2
 ```
-or if you have renamed your plugin (v2 only)
+or if you have renamed your plugin (v2 only, this does not currently work for windows)
 ```bash
 npm run start:local
 ```
