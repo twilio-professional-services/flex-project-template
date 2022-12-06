@@ -8,7 +8,8 @@ import TeamsViewFilters from "../../feature-library/teams-view-filters/flex-hook
 import ScheduleManager from "../../feature-library/schedule-manager/flex-hooks/strings/ScheduleManager";
 import MultiCall from "../../feature-library/multi-call/flex-hooks/strings/MultiCall";
 import Callback from "../../feature-library/callback-and-voicemail/flex-hooks/strings/Callback";
+import ChatToVideo from "../../feature-library/chat-to-video-escalation/flex-hooks/strings/ChatToVideo";
 
-const customStrings = { ...ActivityReservationHandler, ...ActivitySkillFilter, ...Conference, ...ChatTransfer, ...DualChannelRecording, ...PauseRecording, ...TeamsViewFilters, ...ScheduleManager, ...MultiCall , ...Callback};
+const customStrings = { ...ActivityReservationHandler, ...ActivitySkillFilter, ...Conference, ...ChatTransfer, ...DualChannelRecording, ...PauseRecording, ...TeamsViewFilters, ...ScheduleManager, ...MultiCall , ...Callback, ...ChatToVideo};
 
 export default customStrings;

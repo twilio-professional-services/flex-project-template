@@ -10,10 +10,11 @@ import ScheduleManager from "../../feature-library/schedule-manager/flex-hooks/n
 import MultiCall from "../../feature-library/multi-call/flex-hooks/notifications/MultiCall";
 import InternalCall from "../../feature-library/internal-call/flex-hooks/notifications/InternalCall";
 import Callback from "../../feature-library/callback-and-voicemail/flex-hooks/notifications/Callback";
+import ChatToVideo from "../../feature-library/chat-to-video-escalation/flex-hooks/notifications/ChatToVideo";
 
 const notificationsToRegister: ((
   flex: typeof Flex,
   manager: Flex.Manager
-) => void)[] = [ActivityReservationHandler, ActivitySkillFilter, Conference, ChatTransfer, DualChannelRecording, PauseRecording, TeamsViewFilters, ScheduleManager, MultiCall, InternalCall, Callback];
+) => void)[] = [ActivityReservationHandler, ActivitySkillFilter, Conference, ChatTransfer, DualChannelRecording, PauseRecording, TeamsViewFilters, ScheduleManager, MultiCall, InternalCall, Callback, ChatToVideo];
 
 export default notificationsToRegister;
