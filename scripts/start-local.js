@@ -1,5 +1,5 @@
 const shell = require("shelljs");
-var { setPluginName, getPaths } = require("./select-plugin");
+var { getPaths } = require("./select-plugin");
 
 const plugin = process.argv[2]
 
