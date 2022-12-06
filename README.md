@@ -200,8 +200,9 @@ cd flex-config
 npm run deploy:<environment>
 ```
 
-Start the plugin deployment:
+Start the plugin deployment (example is v2, substitute for v1 if you're using v1):
 ```bash
+cd ../plugin-flex-ts-template-v2
 twilio flex:plugins:deploy --major --changelog "Initial deploy" --description "Flex project template"
 ```
 
