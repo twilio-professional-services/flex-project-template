@@ -30,4 +30,5 @@ jobs:
           PACKAGEJSON_DIR:  'plugin-flex-ts-template-v1'
         with:
           skip-tag: 'true'
+          target-branch: 'main'
           version-type: 'patch'
