@@ -1,1 +1,1 @@
-export default interface FeatureServiceConfiguratoin {}
+export default interface FeatureServiceConfiguration {}

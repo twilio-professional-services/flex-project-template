@@ -1,12 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
 import PendingActivityComponent from '../../custom-components/pending-activity';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes || {};
-const { enabled = false } = custom_data?.features?.activity_reservation_handler || {}
+import { isFeatureEnabled } from '../..';
 
 export function addPendingActivityComponent(flex: typeof Flex, manager: Flex.Manager) {
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
   flex.MainHeader.Content.add(<PendingActivityComponent key="pending-activity" />, {
     sortOrder: -999,
     align: 'end',

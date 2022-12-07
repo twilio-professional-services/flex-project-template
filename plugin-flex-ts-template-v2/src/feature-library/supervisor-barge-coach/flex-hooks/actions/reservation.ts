@@ -1,20 +1,15 @@
 import * as Flex from "@twilio/flex-ui";
 import { Actions as BargeCoachStatusAction } from "../states/SupervisorBargeCoach";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { isAgentCoachingPanelEnabled } from '../..';
 // Import to get Sync Doc updates
 import { SyncDoc } from "../../utils/sync/Sync";
-
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration
-  .ui_attributes as UIAttributes;
-const { agent_coaching_panel = false } =
-  custom_data?.features.supervisor_barge_coach || {};
 
 export const cleanStateAndSyncUponAgentHangUp = async (
   flex: typeof Flex,
   manager: Flex.Manager
 ) => {
   // If agent_coaching_panel feature is true proceed, otherwise we will not subscribe to the Sync Doc
-  if (!agent_coaching_panel) return;
+  if (!isAgentCoachingPanelEnabled()) return;
 
   // Listening for agent to hang up the call so we can clear the Sync Doc
   // for the CoachStatePanel feature

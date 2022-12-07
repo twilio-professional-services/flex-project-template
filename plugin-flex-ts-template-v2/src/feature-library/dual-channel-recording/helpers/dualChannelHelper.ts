@@ -1,15 +1,9 @@
 import { ConferenceParticipant, ITask, Manager, TaskHelper } from "@twilio/flex-ui";
 import TaskRouterService from "../../../utils/serverless/TaskRouter/TaskRouterService";
-import { UIAttributes } from "../../../types/manager/ServiceConfiguration";
 import { FetchedRecording } from "../../../types/serverless/twilio-api";
+import { getChannelToRecord } from '..';
 
 const manager = Manager.getInstance();
-
-const { custom_data } =
-  (manager.serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { channel } =
-  custom_data?.features?.dual_channel_recording || {};
 
 export const addCallDataToTask = async (task: ITask, callSid: string | null, recording: FetchedRecording | null) => {
   const { attributes, conference } = task;
@@ -63,7 +57,7 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
       channels: ['customer', 'others'],
     };
 
-    switch (channel) {
+    switch (getChannelToRecord()) {
       case 'worker':
         newAttributes = {
           ...attributes,

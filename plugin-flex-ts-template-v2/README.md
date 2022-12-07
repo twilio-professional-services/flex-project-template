@@ -163,12 +163,9 @@ For clarity, lets take a look at our `StartOutboundCall` [action](/plugin-flex-t
 ```js
 import * as Flex from "@twilio/flex-ui";
 import { AppState, reduxNamespace } from "../../../../flex-hooks/states";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../../utils/configuration';
 
-const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.caller_id || {};
+const { enabled = false } = getFeatureFlags()?.features?.caller_id || {};
 
 export function applySelectedCallerIdForDialedNumbers(
   flex: typeof Flex,
