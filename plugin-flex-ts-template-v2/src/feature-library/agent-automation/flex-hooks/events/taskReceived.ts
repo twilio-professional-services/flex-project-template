@@ -4,7 +4,7 @@ import { isFeatureEnabled, getMatchingTaskConfiguration } from "../.."
 import { TaskQualificationConfig } from "feature-library/agent-automation/types/ServiceConfiguration";
 
 
-function selectAndAcceptReservation(task: ITask, taskConfig: TaskQualificationConfig) {
+function selectAndAcceptTask(task: ITask, taskConfig: TaskQualificationConfig) {
   const {
     sid
   } = task
@@ -41,10 +41,10 @@ function selectAndAcceptReservation(task: ITask, taskConfig: TaskQualificationCo
   }
 }
 
-export default function autoSelectAndAcceptReservation(task: ITask){
+export default function autoSelectAndAcceptTask(task: ITask){
  
   if(!isFeatureEnabled()) return;
 
   const taskConfig = getMatchingTaskConfiguration(task);
-  if(taskConfig) selectAndAcceptReservation(task, taskConfig);
+  if(taskConfig) selectAndAcceptTask(task, taskConfig);
 }

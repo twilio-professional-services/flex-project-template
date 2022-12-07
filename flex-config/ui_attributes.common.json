@@ -125,8 +125,9 @@
           "channel": "voice",
           "auto_accept": true,
           "auto_select": true,
+          "auto_wrapup": true,
           "required_attributes": [{"key": "direction", "value": "inbound"}],
-          "wrapup_time" : 15
+          "wrapup_time" : 1500
         }]
       }
     }
