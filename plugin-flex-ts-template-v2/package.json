@@ -1,6 +1,6 @@
 {
   "name": "plugin-flex-ts-template-v2",
-  "version": "9.0.39",
+  "version": "9.0.40",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
@@ -37,7 +37,7 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-private-methods": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
-    "@twilio/flex-ui": "2.0.0-beta.3",
+    "@twilio/flex-ui": "^2",
     "@types/luxon": "^3.1.0",
     "@types/react-redux": "^7.1.1",
     "@types/uuid": "^8.3.4",

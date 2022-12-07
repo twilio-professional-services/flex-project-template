@@ -58,7 +58,7 @@ const OutboundCallerIDSelectorComponent = () => {
       value={selectedCallerId}
       onChange={e => dispatch(Actions.setCallerId(e.target.value))}>
         {selectOptions.map((item: PhoneNumberItem) => (
-          <Option value={item.phoneNumber} disabled={item.phoneNumber === "placeholder"}>
+          <Option value={item.phoneNumber} disabled={item.phoneNumber === "placeholder"} key={item.phoneNumber}>
             {item.friendlyName}
           </Option>
         ))}

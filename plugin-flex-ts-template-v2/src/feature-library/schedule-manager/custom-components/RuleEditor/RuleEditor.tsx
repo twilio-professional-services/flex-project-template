@@ -59,7 +59,7 @@ const RuleEditor = (props: OwnProps) => {
   const [dayOfMonth, setDayOfMonth] = useState('');
   
   // yearly recurrence
-  const [month, setMonth] = useState('');
+  const [month, setMonth] = useState('1');
   
   // restrict dates
   const [restrictDates, setRestrictDates] = useState(false);
@@ -160,7 +160,7 @@ const RuleEditor = (props: OwnProps) => {
     setDowSaturday(false);
     setDowSunday(false);
     setDayOfMonth('');
-    setMonth('');
+    setMonth('1');
     setRestrictDates(false);
     setStartDate('');
     setEndDate('');
@@ -576,14 +576,13 @@ const RuleEditor = (props: OwnProps) => {
             <Select
               id="recurrence"
               name="recurrence"
-              defaultValue="none"
               value={recurrence}
               onChange={handleChangeRecurrence}>
-              <Option value="none">{ScheduleManagerStrings[StringTemplates.RECURRENCE_ONCE]}</Option>
-              <Option value="daily">{ScheduleManagerStrings[StringTemplates.RECURRENCE_DAILY]}</Option>
-              <Option value="weekly">{ScheduleManagerStrings[StringTemplates.RECURRENCE_WEEKLY]}</Option>
-              <Option value="monthly">{ScheduleManagerStrings[StringTemplates.RECURRENCE_MONTHLY]}</Option>
-              <Option value="yearly">{ScheduleManagerStrings[StringTemplates.RECURRENCE_YEARLY]}</Option>
+              <Option value="none" key="recurrenceNone">{ScheduleManagerStrings[StringTemplates.RECURRENCE_ONCE]}</Option>
+              <Option value="daily" key="recurrenceDaily">{ScheduleManagerStrings[StringTemplates.RECURRENCE_DAILY]}</Option>
+              <Option value="weekly" key="recurrenceWeekly">{ScheduleManagerStrings[StringTemplates.RECURRENCE_WEEKLY]}</Option>
+              <Option value="monthly" key="recurrenceMonthly">{ScheduleManagerStrings[StringTemplates.RECURRENCE_MONTHLY]}</Option>
+              <Option value="yearly" key="recurrenceYearly">{ScheduleManagerStrings[StringTemplates.RECURRENCE_YEARLY]}</Option>
             </Select>
           </>
           { recurrence === "none" && (
@@ -659,21 +658,20 @@ const RuleEditor = (props: OwnProps) => {
               <Select
                 id="month"
                 name="month"
-                defaultValue="1"
                 value={month}
                 onChange={handleChangeMonth}>
-                <Option value="1">{ScheduleManagerStrings[StringTemplates.MONTH_JAN]}</Option>
-                <Option value="2">{ScheduleManagerStrings[StringTemplates.MONTH_FEB]}</Option>
-                <Option value="3">{ScheduleManagerStrings[StringTemplates.MONTH_MAR]}</Option>
-                <Option value="4">{ScheduleManagerStrings[StringTemplates.MONTH_APR]}</Option>
-                <Option value="5">{ScheduleManagerStrings[StringTemplates.MONTH_MAY]}</Option>
-                <Option value="6">{ScheduleManagerStrings[StringTemplates.MONTH_JUN]}</Option>
-                <Option value="7">{ScheduleManagerStrings[StringTemplates.MONTH_JUL]}</Option>
-                <Option value="8">{ScheduleManagerStrings[StringTemplates.MONTH_AUG]}</Option>
-                <Option value="9">{ScheduleManagerStrings[StringTemplates.MONTH_SEP]}</Option>
-                <Option value="10">{ScheduleManagerStrings[StringTemplates.MONTH_OCT]}</Option>
-                <Option value="11">{ScheduleManagerStrings[StringTemplates.MONTH_NOV]}</Option>
-                <Option value="12">{ScheduleManagerStrings[StringTemplates.MONTH_DEC]}</Option>
+                <Option value="1" key="month1">{ScheduleManagerStrings[StringTemplates.MONTH_JAN]}</Option>
+                <Option value="2" key="month2">{ScheduleManagerStrings[StringTemplates.MONTH_FEB]}</Option>
+                <Option value="3" key="month3">{ScheduleManagerStrings[StringTemplates.MONTH_MAR]}</Option>
+                <Option value="4" key="month4">{ScheduleManagerStrings[StringTemplates.MONTH_APR]}</Option>
+                <Option value="5" key="month5">{ScheduleManagerStrings[StringTemplates.MONTH_MAY]}</Option>
+                <Option value="6" key="month6">{ScheduleManagerStrings[StringTemplates.MONTH_JUN]}</Option>
+                <Option value="7" key="month7">{ScheduleManagerStrings[StringTemplates.MONTH_JUL]}</Option>
+                <Option value="8" key="month8">{ScheduleManagerStrings[StringTemplates.MONTH_AUG]}</Option>
+                <Option value="9" key="month9">{ScheduleManagerStrings[StringTemplates.MONTH_SEP]}</Option>
+                <Option value="10" key="month10">{ScheduleManagerStrings[StringTemplates.MONTH_OCT]}</Option>
+                <Option value="11" key="month11">{ScheduleManagerStrings[StringTemplates.MONTH_NOV]}</Option>
+                <Option value="12" key="month12">{ScheduleManagerStrings[StringTemplates.MONTH_DEC]}</Option>
               </Select>
             </>
           )}

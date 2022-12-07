@@ -12,6 +12,7 @@ const createNewDevice = (manager: Manager) => {
   const deviceOptions = {
     allowIncomingWhileBusy: false,
     ...customDeviceOptions,
+    codecPreferences: customDeviceOptions?.codecPreferences as Call.Codec[] | undefined,
     appName: "flex-ui",
     appVersion: FlexVersion
   };
