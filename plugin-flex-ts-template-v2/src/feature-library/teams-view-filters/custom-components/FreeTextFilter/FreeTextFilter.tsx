@@ -14,10 +14,6 @@ export type OwnProps = {
 
 export const FreeTextFilter = (props: OwnProps) => {
   
-  if (!props.currentValue) {
-    props.currentValue = ''
-  }
-  
   const _handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     
@@ -32,7 +28,7 @@ export const FreeTextFilter = (props: OwnProps) => {
         type="text"
         onChange={_handleChange}
         name={props.fieldName}
-        value={props.currentValue}
+        value={props.currentValue ?? ''}
       />
     </FilterContainer>
   );

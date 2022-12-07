@@ -132,14 +132,12 @@ const ParticipantActionsButtons = (props: OwnProps) => {
           className="ParticipantCanvas-AcceptAction"
           onClick={onKickParticipantConfirmClick}
           variant='secondary'
-          css=''
         />
         <IconButton
           icon="Close"
           className="ParticipantCanvas-DeclineAction"
           onClick={hideKickConfirmation}
           variant='secondary'
-          css=''
         />
       </>
     );
@@ -166,7 +164,6 @@ const ParticipantActionsButtons = (props: OwnProps) => {
           onClick={onHoldParticipantClick}
           variant='secondary'
           title={holdParticipantTooltip}
-          css=''
         />
         <IconButton
           icon="Hangup"
@@ -174,7 +171,6 @@ const ParticipantActionsButtons = (props: OwnProps) => {
           onClick={showKickConfirmation}
           variant='destructive'
           title={kickParticipantTooltip}
-          css=''
         />
       </>
     );
