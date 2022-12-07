@@ -125,6 +125,7 @@ export default function CapacityContainer(props: OwnProps) {
           resetCount={resetCount}
           workerChannel={workerChannel}
           channelSettingsChanged={channelSettingsChanged}
+          key={workerChannel.sid}
            />
       )) }
       { workerChannels.length > 0 && (!isLoading || isSaving) && (
