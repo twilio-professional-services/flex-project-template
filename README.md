@@ -114,7 +114,7 @@ or (for Flex UI v2.x)
 ```bash
 npm run start:local:v2
 ```
-or if you have renamed your plugin (v2 only)
+or if you have renamed your plugin (v2 only, this does not currently work for windows)
 ```bash
 npm run start:local
 ```
@@ -200,8 +200,9 @@ cd flex-config
 npm run deploy:<environment>
 ```
 
-Start the plugin deployment:
+Start the plugin deployment (example is v2, substitute for v1 if you're using v1):
 ```bash
+cd ../plugin-flex-ts-template-v2
 twilio flex:plugins:deploy --major --changelog "Initial deploy" --description "Flex project template"
 ```
 
