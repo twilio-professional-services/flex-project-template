@@ -118,6 +118,16 @@
       },
       "hang_up_by": {
         "enabled": false
+      },
+      "agent_automation": {
+        "enabled": true,
+        "configuration" : [{
+          "channel": "voice",
+          "auto_accept": true,
+          "auto_select": true,
+          "required_attributes": [{"key": "direction", "value": "inbound"}],
+          "wrapup_time" : 15
+        }]
       }
     }
   }

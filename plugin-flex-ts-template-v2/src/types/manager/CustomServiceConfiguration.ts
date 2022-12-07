@@ -18,6 +18,7 @@ import SupervisorCapacityConfig from "../../feature-library/supervisor-capacity/
 import ScheduleManagerConfig from "../../feature-library/schedule-manager/types/ServiceConfiguration";
 import MultiCallConfig from "../../feature-library/multi-call/types/ServiceConfiguration";
 import HangUpByConfig from "../../feature-library/hang-up-by/types/ServiceConfiguration";
+import AgentAutomationConfig from "feature-library/agent-automation/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguration {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -40,4 +41,5 @@ export default interface FeatureServiceConfiguration {
   schedule_manager: ScheduleManagerConfig;
   multi_call: MultiCallConfig;
   hang_up_by: HangUpByConfig;
+  agent_automation: AgentAutomationConfig;
 }
