@@ -1,6 +1,6 @@
 import ActivityReservationHandlerConfig from "../../feature-library/activity-reservation-handler/types/ServiceConfiguration";
 import ActivitySkillFilterConfig from "../../feature-library/activity-skill-filter/types/ServiceConfiguration";
-import CallbackAndVoicemailConfig from "../../feature-library/callback-and-voicemail/types/ServiceConfigudation";
+import CallbackAndVoicemailConfig from "../../feature-library/callback-and-voicemail/types/ServiceConfiguration";
 import CallerIdConfig from "../../feature-library/caller-id/types/ServiceConfigudation";
 import ChatToVideoEscalationConfig from "../../feature-library/chat-to-video-escalation/types/ServiceConfiguration";
 import ConferenceConfig from "../../feature-library/conference/types/ServiceConfiguration";
