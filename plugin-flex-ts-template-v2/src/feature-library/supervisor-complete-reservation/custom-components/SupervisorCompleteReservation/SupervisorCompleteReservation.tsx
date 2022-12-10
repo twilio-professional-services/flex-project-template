@@ -35,7 +35,7 @@ const SupervisorCompleteReservation = ({task}: OwnProps) => {
     <div style={{ textAlign: 'center' }}>
       <IconButton
           icon={ 'CloseLarge' }
-          disabled={isTaskProcessingRequest  || task.status === "completed" }
+          disabled={isTaskProcessingRequest  || task.status != "wrapping" }
           onClick={handleOpen}
           title={ "close task" }
           variant="secondary"
