@@ -95,7 +95,7 @@ exports.completeTask = async function completeTask(parameters) {
   if (!isString(reason))
     throw "Invalid parameters object passed. Parameters must contain reason string";
   if (!isObject(context))
-    throw "Invalid parameters object passed. Parameters must contain reason context object";
+    throw "Invalid parameters object passed. Parameters must contain context object";
 
   try {
     const client = context.getTwilioClient();
@@ -140,70 +140,12 @@ exports.completeTask = async function completeTask(parameters) {
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.taskSid the task to update
  * @param {string} parameters.reservationSid the reservation to update
- * @returns {object} an object containing the task if successful
- * @description this operation safely completes the task reservation
- */
-exports.completeReservation = async function completeReservation(parameters) {
-  const { attempts, context, taskSid, reservationSid } = parameters;
-
-  if (!isNumber(attempts))
-    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(taskSid))
-    throw "Invalid parameters object passed. Parameters must contain the taskSid string";
-  if (!isString(reservationSid))
-    throw "Invalid parameters object passed. Parameters must contain reservationSid string";
-  if (!isObject(context))
-    throw "Invalid parameters object passed. Parameters must contain reason context object";
-
-  try {
-    const client = context.getTwilioClient();
-
-    const reservation = await client.taskrouter
-      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
-      .tasks(taskSid)
-      .reservations(reservationSid)
-      .update({ reservationStatus: "completed" });
-
-    return {
-      success: true,
-      status: 200,
-      reservation,
-    };
-  } catch (error) {
-    // 20001 error code is returned when the reservation is not in an assigned
-    // state this can happen if its not been assigned at all or its been already
-    // closed through another process; as a result assuming the latter and
-    // treating as a success
-    // https://www.twilio.com/docs/api/errors/20001
-    // 20404 error code is returned when the reservation no longer exists
-    // in which case it is also assumed to be completed
-    // https://www.twilio.com/docs/api/errors/20404
-    if (error.code === 20001 || error.code === 20404) {
-      const { context } = parameters;
-      console.warn(
-        `${context.PATH}.${arguments.callee.name}(): ${error.message}`
-      );
-      return {
-        success: true,
-        status: 200,
-        message: error.message,
-      };
-    }
-    return retryHandler(error, parameters, arguments.callee);
-  }
-};
-
-/**
- * @param {object} parameters the parameters for the function
- * @param {number} parameters.attempts the number of retry attempts performed
- * @param {object} parameters.context the context from calling lambda function
- * @param {string} parameters.taskSid the task to update
- * @param {string} parameters.reservationSid the reservation to update
+ * @param {string} parameters.status the status, can be "wrapping" or "completed"
  * @returns {object} an object containing the task if successful
  * @description this operation safely moves the reservation to wrapup
  */
-exports.wrapupReservation = async function wrapupReservation(parameters) {
-  const { attempts, context, taskSid, reservationSid } = parameters;
+exports.updateReservation = async function updateReservation(parameters) {
+  const { attempts, context, taskSid, reservationSid, status } = parameters;
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
@@ -213,6 +155,8 @@ exports.wrapupReservation = async function wrapupReservation(parameters) {
     throw "Invalid parameters object passed. Parameters must contain reservationSid string";
   if (!isObject(context))
     throw "Invalid parameters object passed. Parameters must contain reason context object";
+  if (!isString(status) || (status != "completed" && status != "wrapping"))
+    throw "Invalid parameters object passed. Parameters must contain status to update the reservation to and it must be one of \"completed\" or \"wrapping\""
 
   try {
     const client = context.getTwilioClient();
@@ -221,7 +165,7 @@ exports.wrapupReservation = async function wrapupReservation(parameters) {
       .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
       .tasks(taskSid)
       .reservations(reservationSid)
-      .update({ reservationStatus: "wrapping" });
+      .update({ reservationStatus: status });
 
     return {
       success: true,

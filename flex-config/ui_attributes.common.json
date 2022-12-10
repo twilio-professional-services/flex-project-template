@@ -127,8 +127,11 @@
           "auto_select": true,
           "auto_wrapup": true,
           "required_attributes": [{"key": "direction", "value": "inbound"}],
-          "wrapup_time" : 1500
+          "wrapup_time" : 30000
         }]
+      },
+      "supervisor_complete_reservation": {
+        "enabled": true
       }
     }
   }

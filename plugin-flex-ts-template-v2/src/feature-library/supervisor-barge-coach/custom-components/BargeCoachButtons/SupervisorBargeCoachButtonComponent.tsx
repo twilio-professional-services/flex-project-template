@@ -6,6 +6,8 @@ import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
 import BargeCoachService from '../../utils/serverless/BargeCoachService';
 import { Flex, Stack } from "@twilio-paste/core";
 import { isAgentCoachingPanelEnabled } from '../..';
+import SupervisorCompleteReservation from '../../../supervisor-complete-reservation/custom-components/SupervisorCompleteReservation';
+import { isSupervisorCompleteReservationEnabled } from "../.."
 
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync'
@@ -231,6 +233,9 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
             style={{width:'44px',height:'44px'}}
             css=''
           />
+          { isSupervisorCompleteReservationEnabled() ? <SupervisorCompleteReservation 
+            key="supervisor-complete-reservation"
+          /> : <></> }
         </Stack>
       </Flex>
     </>

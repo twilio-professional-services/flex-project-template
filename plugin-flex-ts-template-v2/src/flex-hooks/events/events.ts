@@ -31,6 +31,7 @@ import HangUpByLoaded from "../../feature-library/hang-up-by/flex-hooks/events/p
 import AgentAutomationLoaded from "../../feature-library/agent-automation/flex-hooks/events/pluginsLoaded";
 import autoSelectAndAcceptTask from "../../feature-library/agent-automation/flex-hooks/events/taskReceived"
 import autoCompleteTaskAfterTimeout from "../../feature-library/agent-automation/flex-hooks/events/taskWrapup"
+import SupervisorCompleteReservationLoaded from "../../feature-library/supervisor-complete-reservation/flex-hooks/events/pluginsLoaded"
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -51,7 +52,8 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     MultiCallLoaded,
     InternalCallLoaded,
     HangUpByLoaded,
-    AgentAutomationLoaded
+    AgentAutomationLoaded,
+    SupervisorCompleteReservationLoaded
   ],
   taskAccepted: [
     taskAcceptedHandlerActivityReservationHandler,
