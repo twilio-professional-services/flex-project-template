@@ -77,6 +77,8 @@ The primary aims of this template are
 | Supervisor Barge Coach | _introduce advanced supervisor barge and coach features_ | [Yes](plugin-flex-ts-template/src/feature-library/supervisor-barge-coach/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-barge-coach/README.md) | ✅  |
 | Supervisor Capacity | _allow supervisors to update worker capacity configuration within Flex_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-capacity/README.md) |  ✅ |
 | Teams View Filters | _adds additional filtering options to the supervisor teams view_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/teams-view-filters/README.md) | ✅  |
+| Agent Automation | _adds auto accept and auto wrapup behaviors to agent desktop_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/agent-automation/README.md) | ✅  |
+| Supervisor Complete Reservation | _allows supervisor to remotely complete agent tasks_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-complete-reservation/README.md) | ✅  |
 
 ----
 
