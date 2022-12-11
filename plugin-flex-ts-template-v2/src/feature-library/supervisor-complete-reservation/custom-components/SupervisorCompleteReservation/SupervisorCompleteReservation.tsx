@@ -40,7 +40,6 @@ const SupervisorCompleteReservation = ({task}: OwnProps) => {
           title={ "close task" }
           variant="secondary"
           style={{width:'44px',height:'44px'}}
-          css=''
         ></IconButton>
         <AlertDialog
           heading="Complete Task Reservation"
