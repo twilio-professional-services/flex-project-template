@@ -4,9 +4,9 @@ This feature provides auto select, auto accept and auto wrap up behavior for age
 
 # known issues
 
-As this is a front end implementation of operations, if the browser is closed or refreshed it can void the automated behavior. For this reason it is advised to also use the `supervisor-complete-reservation` feature in unison with this one to allow supervisors to force complete any reservations that have fallen into this rouge state.
+As this is a front end implementation of operations, if the browser is closed will void the automated behavior. For this reason it is advised to also use the `supervisor-complete-reservation` feature in unison with this one to allow supervisors to force complete any reservations that have fallen into this rouge state.
 
-An ideal solution to auto wrapup would require a backend handler to move the state of the task after the given timeout.
+A prefered solution to auto wrapup would require a backend handler to move the state of the task after the given timeout.
 
 # flex-user-experience
 
@@ -36,4 +36,4 @@ To enable the `Agent Automation` feature, under the `flex-config` attributes set
 
 # how does it work?
 
-When enabled, this feature listens for taskReceived events and evaluates whether the tasks matches any configuration sets and if so executes SelectTask & AcceptTask action as configured. This feature also listens for the taskWrapup event and if the task matches any configuration it sets a timeout period as configured which triggers a CompleteTask action.
+When enabled, this feature listens for taskReceived events and evaluates whether the tasks matches any configuration sets and if so executes SelectTask & AcceptTask action as configured. This feature also loads a renderless component on the task canvas at wrapup. When the compoonent mounts, if there is a matching task configuration then a timeout is set per the task configurration that triggers a CompleteTask action.

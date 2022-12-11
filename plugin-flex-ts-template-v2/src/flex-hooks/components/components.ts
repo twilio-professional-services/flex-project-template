@@ -24,6 +24,7 @@ import { addScheduleManagerToSideNav } from "../../feature-library/schedule-mana
 import { addScheduleManagerView } from "../../feature-library/schedule-manager/flex-hooks/components/ViewCollection";
 import { replaceWorkerDataTableCallsColumnMultiCall } from "../../feature-library/multi-call/flex-hooks/components/WorkersDataTable";
 import { addUpdateReservationToSupervisorTaskCanvas } from "../../feature-library/supervisor-complete-reservation/flex-hooks/components/TaskOverviewCanvas"
+import { addAutoWrap } from "../../feature-library/agent-automation/flex-hooks/components/TaskCanvasHeader";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -51,7 +52,7 @@ const componentHandlers: Components = {
   ],
   ParticipantCanvas: [addConferenceToParticipantCanvas],
   SideNav: [addScheduleManagerToSideNav],
-  TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader, addChatTransferButton],
+  TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader, addChatTransferButton, addAutoWrap],
   TaskCanvasTabs: [addVideoRoomTabToTaskCanvasTabs, addSupervisorMonitorPanel],
   TaskInfoPanel: [replaceViewForCallbackAndVoicemail],
   TaskListButtons: [],

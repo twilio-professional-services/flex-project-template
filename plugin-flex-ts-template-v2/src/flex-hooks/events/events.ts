@@ -29,8 +29,7 @@ import MultiCallTokenUpdated from "../../feature-library/multi-call/flex-hooks/e
 import InternalCallLoaded from "../../feature-library/internal-call/flex-hooks/events/pluginsLoaded";
 import HangUpByLoaded from "../../feature-library/hang-up-by/flex-hooks/events/pluginsLoaded";
 import AgentAutomationLoaded from "../../feature-library/agent-automation/flex-hooks/events/pluginsLoaded";
-import autoSelectAndAcceptTask from "../../feature-library/agent-automation/flex-hooks/events/taskReceived"
-import autoCompleteTaskAfterTimeout from "../../feature-library/agent-automation/flex-hooks/events/taskWrapup"
+import autoSelectAndAcceptTask from "../../feature-library/agent-automation/flex-hooks/events/taskReceived";
 import SupervisorCompleteReservationLoaded from "../../feature-library/supervisor-complete-reservation/flex-hooks/events/pluginsLoaded"
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
@@ -71,8 +70,7 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   taskUpdated: [],
   taskWrapup: [
     taskWrapupHandlerActivityReservationHandler,
-    HangUpByTaskWrapup,
-    autoCompleteTaskAfterTimeout
+    HangUpByTaskWrapup
   ],
   tokenUpdated: [MultiCallTokenUpdated]
 };
