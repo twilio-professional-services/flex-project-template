@@ -213,7 +213,6 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
             title={ muted ? "Unmute" : "Mute" }
             variant="secondary"
             style={{width:'44px',height:'44px'}}
-            css=''
           ></IconButton>
           <IconButton
             icon={ barge ? `IncomingCallBold` :  'IncomingCall' }
@@ -222,7 +221,6 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
             title={ barge ? 'Barge-Out' : 'Barge-In' }
             variant={ barge ? 'primary' : 'secondary' }
             style={{width:'44px',height:'44px'}}
-            css=''
           />
           <IconButton
             icon={ coaching ? `DefaultAvatarBold` : `DefaultAvatar` }
@@ -231,7 +229,6 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
             title={ coaching ? "Disable Coach Mode" : "Enable Coach Mode" }
             variant={ coaching ? 'primary' : 'secondary' }
             style={{width:'44px',height:'44px'}}
-            css=''
           />
           { isSupervisorCompleteReservationEnabled() ? <SupervisorCompleteReservation 
             key="supervisor-complete-reservation"

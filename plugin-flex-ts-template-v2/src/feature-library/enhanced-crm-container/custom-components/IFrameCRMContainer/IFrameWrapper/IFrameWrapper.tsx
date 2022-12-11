@@ -35,7 +35,7 @@ export const IFrameWrapper = ({thisTask, task, baseUrl}: Props) => {
       <IFrameRefreshButtonStyledDiv
         onClick={handleOnClick}
       >
-        <Flex.IconButton variant="primary" icon="Loading" css='' />
+        <Flex.IconButton variant="primary" icon="Loading" />
       </IFrameRefreshButtonStyledDiv>
       <iframe
         key={iFrameKey}

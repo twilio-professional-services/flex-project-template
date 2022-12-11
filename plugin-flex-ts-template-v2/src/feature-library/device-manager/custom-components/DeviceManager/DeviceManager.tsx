@@ -99,7 +99,7 @@ const DeviceManager: React.FunctionComponent = () => {
             {devices.map((device) => {
               if (device.kind == "audiooutput") {
                 return (
-                  <MenuItem {...menu} onClick={() => selectedDevice(device)}>
+                  <MenuItem {...menu} onClick={() => selectedDevice(device)} key={device.deviceId}>
                     {device.label}
                   </MenuItem>
                 );
