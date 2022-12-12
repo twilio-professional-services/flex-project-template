@@ -117,6 +117,9 @@
       },
       "multi_call": {
         "enabled": false
+      },
+      "hang_up_by": {
+        "enabled": false
       }
     }
   }

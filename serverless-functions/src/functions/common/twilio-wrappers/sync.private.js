@@ -38,14 +38,7 @@ exports.createDocument = async function (parameters) {
 
     const document = await client.sync
       .services(context.TWILIO_FLEX_SYNC_SID)
-      .documents.create(documentParameters)
-      .catch((reason) => false);
-
-    if (!document)
-      return {
-        success: false,
-        message: `Failed to create Sync document ${reason}`,
-      };
+      .documents.create(documentParameters);
 
     return { success: true, status: 200, document: document };
   } catch (error) {
@@ -77,14 +70,7 @@ exports.fetchDocument = async function (parameters) {
     const document = await client.sync
       .services(context.TWILIO_FLEX_SYNC_SID)
       .documents(documentSid)
-      .fetch()
-      .catch((reason) => false);
-
-    if (!document)
-      return {
-        success: false,
-        message: `Failed to fetch Sync document ${reason}`,
-      };
+      .fetch();
 
     return { success: true, status: 200, document: document };
   } catch (error) {
@@ -119,14 +105,7 @@ exports.updateDocumentData = async function (parameters) {
     const documentUpdate = await client.sync
       .services(context.TWILIO_FLEX_SYNC_SID)
       .documents(documentSid)
-      .update({ data: updateData })
-      .catch((reason) => false);
-
-    if (!documentUpdate)
-      return {
-        success: false,
-        message: `Failed to update Sync document data ${reason}`,
-      };
+      .update({ data: updateData });
 
     return { success: true, status: 200, document: documentUpdate };
   } catch (error) {

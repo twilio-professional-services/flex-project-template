@@ -9,8 +9,7 @@ const { serverlessSrc, flexConfigDir, flexConfigTemplateDir, scheduleManagerServ
 
 // defaulting to plugin v2 for just now
 var { setPluginName, getPaths } = require("./select-plugin");
-setPluginName("v2");
-const { pluginSrc, templateDirectory, featureDirectory} = getPaths();
+const { pluginSrc, templateDirectory, featureDirectory} = getPaths("v2");
 
 
 const filesToCopy = [

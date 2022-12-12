@@ -1,4 +1,4 @@
-import { Notifications, Manager } from "@twilio/flex-ui";
+import { Notifications } from "@twilio/flex-ui";
 import FlexHelper from "./helpers/flexHelper";
 import WorkerActivity from "./helpers/workerActivityHelper";
 import { NotificationIds } from "./flex-hooks/notifications/ActivityReservationHandler";
@@ -14,8 +14,17 @@ import {
   getPendingActivity,
   clearPendingActivityChange,
 } from "./helpers/pendingActivity";
+import { getFeatureFlags } from '../../utils/configuration';
 
-const manager = Manager.getInstance();
+const { enabled = false, system_activity_names } = getFeatureFlags()?.features?.activity_reservation_handler || {};
+
+export const isFeatureEnabled = () => {
+  return enabled;
+};
+
+export const getSystemActivityNames = () => {
+  return system_activity_names;
+};
 
 export const delayActivityChange = (activity: any) => {
   Notifications.showNotification(NotificationIds.ActivityChangeDelayed, {

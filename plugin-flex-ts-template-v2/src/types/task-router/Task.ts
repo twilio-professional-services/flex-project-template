@@ -54,7 +54,7 @@ export interface TaskAttributes {
     numberToCallFrom?: string;
     attempts?: number;
     mainTimeZone?: string;
-    utcDateTimeReceived?: Date;
+    utcDateTimeReceived?: string;
     recordingSid?: string;
     recordingUrl?: string;
     transcriptSid?: string;
@@ -65,6 +65,8 @@ export interface TaskAttributes {
   // Flex Insights typically referenced elements
   conversations?: {
     conversation_id: string;
+    destination?: string;
+    hang_up_by?: string;
     outcome?: string;
     conversation_attribute_1?: string;
     conversation_attribute_2?: string;

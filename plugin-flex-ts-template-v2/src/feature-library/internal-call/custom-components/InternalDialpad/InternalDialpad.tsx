@@ -96,8 +96,7 @@ const InternalDialpad = (props: OwnProps) => {
                         variant='primary'
                         icon='Call'
                         disabled={!selectedWorker} 
-                        onClick={makeCall}
-                        css='' />
+                        onClick={makeCall} />
                 </Flex>
             </Stack>
         </Box>

@@ -1,12 +1,9 @@
 import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import ConferenceService from "../../utils/ConferenceService";
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } = custom_data?.features.conference || {};
+import { isFeatureEnabled } from '../..';
 
 export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
 
   flex.Actions.addListener("beforeKickParticipant", async (payload, abortFunction) => {
     const { participantType } = payload;

@@ -17,8 +17,9 @@ import TeamViewFiltersConfig from "../../feature-library/teams-view-filters/type
 import SupervisorCapacityConfig from "../../feature-library/supervisor-capacity/types/ServiceConfiguration";
 import ScheduleManagerConfig from "../../feature-library/schedule-manager/types/ServiceConfiguration";
 import MultiCallConfig from "../../feature-library/multi-call/types/ServiceConfiguration";
+import HangUpByConfig from "../../feature-library/hang-up-by/types/ServiceConfiguration";
 
-export default interface FeatureServiceConfiguratoin {
+export default interface FeatureServiceConfiguration {
   activity_reservation_handler: ActivityReservationHandlerConfig;
   activity_skill_filter: ActivitySkillFilterConfig;
   callbacks: CallbackAndVoicemailConfig;
@@ -38,4 +39,5 @@ export default interface FeatureServiceConfiguratoin {
   supervisor_capacity: SupervisorCapacityConfig;
   schedule_manager: ScheduleManagerConfig;
   multi_call: MultiCallConfig;
+  hang_up_by: HangUpByConfig;
 }

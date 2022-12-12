@@ -1,12 +1,9 @@
 import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import { handleUnhold } from '../../helpers/MultiCallHelper';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } = custom_data?.features.multi_call || {};
+import { isFeatureEnabled } from '../..';
 
 export function handleMultiCallUnholdParticipant(flex: typeof Flex, manager: Flex.Manager) {
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
   
   flex.Actions.addListener('beforeUnholdParticipant', async (payload, abortFunction) => {
     handleUnhold(payload);

@@ -1,19 +1,12 @@
 import { ITask, Manager, Notifications } from "@twilio/flex-ui";
 import RecordingService from "./RecordingService";
-import { UIAttributes } from "../../../types/manager/ServiceConfiguration";
 import { NotificationIds } from "../flex-hooks/notifications/PauseRecording";
 import { AppState, reduxNamespace } from "../../../flex-hooks/states";
 import { pause, resume } from "../flex-hooks/states/PauseRecordingSlice";
+import { isBannerIndicatorEnabled, isIncludeSilenceEnabled } from '..';
+import { isFeatureEnabled as isDualChannelEnabled, getChannelToRecord } from '../../dual-channel-recording';
 
 const manager = Manager.getInstance();
-
-const { custom_data } =
-  (manager.serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { enabled: dualChannelEnabled = false, channel } =
-  custom_data?.features?.dual_channel_recording || {};
-  const { include_silence = false, indicator_banner = false } =
-    custom_data?.features?.pause_recording || {};
 
 const getDualChannelCallSid = (task: ITask): string | null => {
   const participants = task.conference?.participants;
@@ -23,7 +16,7 @@ const getDualChannelCallSid = (task: ITask): string | null => {
   }
   
   let participantLeg;
-  switch (channel) {
+  switch (getChannelToRecord()) {
     case 'customer': {
       participantLeg = participants.find(
         (p) => p.participantType === 'customer'
@@ -57,18 +50,18 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
   try {
     let recordingSid;
     
-    if (dualChannelEnabled) {
+    if (isDualChannelEnabled()) {
       // Dual channel records a call SID rather than a conference SID
       const callSid = getDualChannelCallSid(task);
       
       if (callSid) {
-        const recording = await RecordingService.pauseCallRecording(callSid, include_silence ? "silence" : "skip");
+        const recording = await RecordingService.pauseCallRecording(callSid, isIncludeSilenceEnabled() ? "silence" : "skip");
         recordingSid = recording.sid;
       } else {
         console.error('Unable to get call SID to pause recording');
       }
     } else if (task.conference) {
-      const recording = await RecordingService.pauseConferenceRecording(task.conference?.conferenceSid, include_silence ? "silence" : "skip");
+      const recording = await RecordingService.pauseConferenceRecording(task.conference?.conferenceSid, isIncludeSilenceEnabled() ? "silence" : "skip");
       recordingSid = recording.sid;
     }
     
@@ -77,7 +70,7 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
         reservationSid: task.sid,
         recordingSid
       }));
-      if (indicator_banner) Notifications.showNotification(NotificationIds.RECORDING_PAUSED);
+      if (isBannerIndicatorEnabled()) Notifications.showNotification(NotificationIds.RECORDING_PAUSED);
       return true;
     }
   } catch (error) {
@@ -101,7 +94,7 @@ export const resumeRecording = async (task: ITask): Promise<boolean> => {
   
   try {
     let success = false;
-    if (dualChannelEnabled) {
+    if (isDualChannelEnabled()) {
       // Dual channel records a call SID rather than a conference SID
       const callSid = getDualChannelCallSid(task);
       
@@ -118,7 +111,7 @@ export const resumeRecording = async (task: ITask): Promise<boolean> => {
     
     if (success) {
       manager.store.dispatch(resume(recordingIndex));
-      if (indicator_banner) Notifications.showNotification(NotificationIds.RESUME_RECORDING);
+      if (isBannerIndicatorEnabled()) Notifications.showNotification(NotificationIds.RESUME_RECORDING);
       return true;
     }
   } catch (error) {
