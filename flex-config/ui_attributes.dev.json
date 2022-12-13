@@ -1,7 +1,13 @@
 {
   "custom_data": {
-    "serverless_functions_domain": "<PLACEHOLDER_SERVERLESS_DOMAIN>",
-    "features": {
+    "serverless_functions_domain:":
+      "custom-flex-extensions-serverless-7216-dev.twil.io",    
+      "features": {      
+        "chat_transfer": {
+        "enabled": false,
+        "cold_transfer": true,
+        "multi_participant": false
+      },
       "activity_skill_filter": {
         "rules": {
         }
