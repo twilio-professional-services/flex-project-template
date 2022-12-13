@@ -10,7 +10,7 @@ const retryHandler = require(Runtime.getFunctions()[
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.mapSid the SID of the Sync Map
  * @param {string} parameters.key the key of the Sync Map item
- * @returns {object} A new Sync Map Item
+ * @returns {object} success
  * @description the following method is used to remove a Sync Map Item
  */
  exports.deleteMapItem = async function (parameters) {
@@ -21,9 +21,9 @@ const retryHandler = require(Runtime.getFunctions()[
   if (!isObject(context))
     throw "Invalid parameters object passed. Parameters must contain context object";
   if (!!mapSid && !isString(mapSid))
-    throw "Invalid parameters object passed. Parameters must contain context object";
+    throw "Invalid parameters object passed. Parameters must contain mapSid string value";
   if (!!key && !isString(key))
-    throw "Invalid parameters object passed. Parameters must contain uniqueName string value";
+    throw "Invalid parameters object passed. Parameters must contain key string value";
 
   try {
     const client = context.getTwilioClient();
@@ -33,7 +33,7 @@ const retryHandler = require(Runtime.getFunctions()[
       .syncMaps(mapSid)
       .syncMapItems(key).remove();
 
-    return { success: true, status: 200, mapItem: mapItem };
+    return { success: true, status: 200 };
   } catch (error) {
     return retryHandler(error, parameters, arguments.callee);
   }
@@ -46,7 +46,7 @@ const retryHandler = require(Runtime.getFunctions()[
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.mapSid the SID of the Sync Map
  * @param {string} parameters.key the key of the Sync Map item
- * @returns {object} A new Sync Map Item
+ * @returns {object} An existing Sync Map Item
  * @description the following method is used to fetch a Sync Map Item
  */
 exports.fetchMapItem = async function (parameters) {
