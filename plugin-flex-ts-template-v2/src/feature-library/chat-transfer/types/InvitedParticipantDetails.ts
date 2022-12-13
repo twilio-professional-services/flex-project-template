@@ -7,3 +7,7 @@ export interface InvitedParticipantDetails {
   timestampCreated: Date;
   inviteTargetType: ParticipantInviteType;
 }
+
+export interface InvitedParticipants {
+  invites: (InvitedParticipantDetails | undefined)[]
+}

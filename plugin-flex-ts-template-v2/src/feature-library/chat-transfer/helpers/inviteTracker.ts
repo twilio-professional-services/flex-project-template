@@ -4,7 +4,10 @@ import {
   Manager,
   ConversationState,
 } from "@twilio/flex-ui";
-import { InvitedParticipantDetails } from "../types/InvitedParticipantDetails";
+import {
+  InvitedParticipantDetails,
+  InvitedParticipants,
+} from "../types/InvitedParticipantDetails";
 import { ParticipantInviteType } from "../types/ParticipantInvite";
 import ProgrammableChatService from "../../../utils/serverless/ProgrammableChat/ProgrammableChatService";
 
@@ -77,10 +80,13 @@ export const addInviteToConversation = async (
   if (!conversationState?.source) return;
 
   const conversation = conversationState?.source;
-  const currentAttributes = conversation.attributes;
+  const currentAttributes = conversation.attributes as object;
   const updatedAttributes = {
     ...currentAttributes,
-    invites: { ...currentAttributes?.invites, [invitesTaskSid]: invite },
+    invites: {
+      ...(currentAttributes as InvitedParticipants)?.invites,
+      [invitesTaskSid]: invite,
+    },
   };
 
   if (conversation.sid)
@@ -112,7 +118,8 @@ export const removeInvitedParticipant = async (
   conversation: ConversationState.ConversationState,
   taskSid: string
 ) => {
-  const currentAttributes = conversation?.source?.attributes;
+  const currentAttributes = conversation?.source?.attributes as object;
+
   let { invites = {} } = (currentAttributes as any) || {};
 
   const updatedInvites = JSON.parse(JSON.stringify(invites));
@@ -137,5 +144,7 @@ export const removeInvitedParticipant = async (
 export const countOfOutstandingInvitesForConversation = (
   conversation: ConversationState.ConversationState
 ): number => {
-  return Object.keys(conversation?.source?.attributes?.invites || {}).length;
+  const { invites = undefined } =
+    (conversation?.source?.attributes as any as InvitedParticipants) || {};
+  return Object.keys(invites || {}).length;
 };

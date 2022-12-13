@@ -1,7 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
 import { ITask } from "@twilio/flex-ui";
 import { ParticipantDetails } from "../../types/ParticipantDetails";
-import { InvitedParticipantDetails } from "../../types/InvitedParticipantDetails";
+import {
+  InvitedParticipantDetails,
+  InvitedParticipants,
+} from "../../types/InvitedParticipantDetails";
 import { ConversationState } from "../../../../types/conversations";
 
 const manager = Flex.Manager.getInstance();
@@ -128,16 +131,17 @@ export const getUpdatedParticipantDetails = async (
 export const getUpdatedInvitedParticipantDetails = (
   conversation: ConversationState
 ) => {
-  if (!conversation?.source?.attributes?.invites) return [];
+  const { invites = undefined } =
+    (conversation?.source?.attributes as any as InvitedParticipants) || {};
+
+  if (!invites) return [];
 
   let invitedParticipantsDetails: InvitedParticipantDetails[] = [];
 
-  Object.entries(conversation?.source?.attributes?.invites).forEach(
-    ([key, value]) => {
-      const invitedParticipantDetails = value as InvitedParticipantDetails;
-      invitedParticipantsDetails.push(invitedParticipantDetails);
-    }
-  );
+  Object.entries(invites).forEach(([key, value]) => {
+    const invitedParticipantDetails = value as InvitedParticipantDetails;
+    invitedParticipantsDetails.push(invitedParticipantDetails);
+  });
 
   return invitedParticipantsDetails;
 };
