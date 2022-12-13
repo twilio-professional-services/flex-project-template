@@ -126,7 +126,15 @@
           "auto_accept": true,
           "auto_select": true,
           "auto_wrapup": true,
-          "required_attributes": [{"key": "direction", "value": "inbound"}],
+          "required_attributes": [],
+          "wrapup_time" : 30000
+        },
+        {
+          "channel": "chat",
+          "auto_accept": true,
+          "auto_select": true,
+          "auto_wrapup": true,
+          "required_attributes": [],
           "wrapup_time" : 30000
         }]
       },

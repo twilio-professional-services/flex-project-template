@@ -1,8 +1,5 @@
-import {
-  IconButton,
-  ITask,
-} from '@twilio/flex-ui';
-import { AlertDialog } from "@twilio-paste/core";
+import { ITask } from '@twilio/flex-ui';
+import { AlertDialog, Button } from "@twilio-paste/core";
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
@@ -33,14 +30,14 @@ const SupervisorCompleteReservation = ({task}: OwnProps) => {
 
   return (
     <div style={{ textAlign: 'center' }}>
-      <IconButton
-          icon={ 'CloseLarge' }
+      <Button
           disabled={isTaskProcessingRequest  || task.status != "wrapping" }
           onClick={handleOpen}
-          title={ "close task" }
-          variant="secondary"
-          style={{width:'44px',height:'44px'}}
-        ></IconButton>
+          title={ "Remotely complete the task reservation on behalf of the agent" }
+          variant="destructive"
+        >
+          Complete
+        </Button>
         <AlertDialog
           heading="Complete Task Reservation"
           isOpen={isOpen}

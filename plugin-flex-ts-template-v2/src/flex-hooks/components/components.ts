@@ -23,7 +23,7 @@ import { addPauseStatusPanel } from "../../feature-library/pause-recording/flex-
 import { addScheduleManagerToSideNav } from "../../feature-library/schedule-manager/flex-hooks/components/SideNav";
 import { addScheduleManagerView } from "../../feature-library/schedule-manager/flex-hooks/components/ViewCollection";
 import { replaceWorkerDataTableCallsColumnMultiCall } from "../../feature-library/multi-call/flex-hooks/components/WorkersDataTable";
-import { addUpdateReservationToSupervisorTaskCanvas } from "../../feature-library/supervisor-complete-reservation/flex-hooks/components/TaskOverviewCanvas"
+import { addUpdateReservationToSupervisorTaskCanvasHeader } from "../../feature-library/supervisor-complete-reservation/flex-hooks/components/SupervisorTaskCanvasHeader"
 import { addAutoWrap } from "../../feature-library/agent-automation/flex-hooks/components/TaskCanvasHeader";
 
 const componentHandlers: Components = {
@@ -56,13 +56,14 @@ const componentHandlers: Components = {
   TaskCanvasTabs: [addVideoRoomTabToTaskCanvasTabs, addSupervisorMonitorPanel],
   TaskInfoPanel: [replaceViewForCallbackAndVoicemail],
   TaskListButtons: [],
-  TaskOverviewCanvas: [addSupervisorBargeCoachButtons, addUpdateReservationToSupervisorTaskCanvas],
+  TaskOverviewCanvas: [addSupervisorBargeCoachButtons],
   TeamsView: [],
   ViewCollection: [addScheduleManagerView],
   WorkerCanvas: [addCapacityToWorkerCanvas],
   WorkerDirectory: [],
   WorkerProfile: [replaceWorkerProfileInfo],
   WorkersDataTable: [replaceWorkerDataTableCallsColumnMultiCall],
+  SupervisorTaskCanvasHeader: [addUpdateReservationToSupervisorTaskCanvasHeader]
 };
 
 export default componentHandlers;
