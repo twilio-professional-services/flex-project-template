@@ -1,5 +1,5 @@
 import { ITask } from '@twilio/flex-ui';
-import { AlertDialog, Button } from "@twilio-paste/core";
+import { AlertDialog, Button, Box } from "@twilio-paste/core";
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
@@ -29,12 +29,16 @@ const SupervisorCompleteReservation = ({task}: OwnProps) => {
  };
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <Box
+      paddingRight="space20"
+      paddingTop="space20">
       <Button
           disabled={isTaskProcessingRequest  || task.status != "wrapping" }
           onClick={handleOpen}
           title={ "Remotely complete the task reservation on behalf of the agent" }
           variant="destructive"
+          size="small"
+
         >
           Complete
         </Button>
@@ -48,7 +52,7 @@ const SupervisorCompleteReservation = ({task}: OwnProps) => {
         >
           Are you sure you want to force complete this reservation?
         </AlertDialog>
-    </div>
+    </Box>
   );
 }
 
