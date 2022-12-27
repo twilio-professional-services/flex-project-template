@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@twilio-paste/core": "^17.0.1",
-    "@twilio-paste/icons": "^9.2.0",
+    "@twilio-paste/icons": "9.4.0",
     "@twilio/flex-dev-utils": "^5.1.3",
     "@twilio/flex-plugin-scripts": "6.0.3",
     "@types/jest": "^26.0.20",
