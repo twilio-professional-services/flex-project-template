@@ -17,6 +17,10 @@ const createNewDevice = (manager: Manager) => {
     appVersion: FlexVersion
   };
   
+  if (!deviceOptions.codecPreferences) {
+    delete deviceOptions.codecPreferences;
+  }
+  
   let device = new Device(manager.voiceClient.token ?? "", deviceOptions);
   
   if (audioConstraints) {
