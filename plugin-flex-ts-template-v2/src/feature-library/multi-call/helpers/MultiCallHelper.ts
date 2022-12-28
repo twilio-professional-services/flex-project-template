@@ -18,6 +18,7 @@ const createNewDevice = (manager: Manager) => {
   };
   
   if (!deviceOptions.codecPreferences) {
+    // The voice SDK throws an error when codecPreferences is set to undefined
     delete deviceOptions.codecPreferences;
   }
   
