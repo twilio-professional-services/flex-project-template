@@ -5,20 +5,16 @@ import ParticipantName from '../../custom-components/ParticipantName';
 import ParticipantStatus from '../../custom-components/ParticipantStatus';
 import ParticipantStatusContainer from '../../custom-components/ParticipantStatusContainer';
 import { isInternalCall } from '../../../internal-call/helpers/internalCall';
-
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false, add_button = true } = custom_data?.features?.conference || {}
+import { isFeatureEnabled, isAddButtonEnabled } from '../..';
 
 export function addConferenceToParticipantCanvas(flex: typeof Flex) {
 
-  if(!enabled) return;
+  if(!isFeatureEnabled()) return;
   
   const isUnknownParticipant = (props: any) => props.participant.participantType === 'unknown';
   const replaceButtons = (props: any) => {
     // if the add button is disabled, only the customer participant needs replacement buttons
-    if (!add_button && props.participant.participantType !== 'customer') return false;
+    if (!isAddButtonEnabled() && props.participant.participantType !== 'customer') return false;
     
     return props.participant.participantType !== 'transfer' && !isInternalCall(props.task);
   };
@@ -37,7 +33,7 @@ export function addConferenceToParticipantCanvas(flex: typeof Flex) {
     />, { sortOrder: 10, if: replaceButtons }
   );
   
-  if (!add_button) return;
+  if (!isAddButtonEnabled()) return;
   // Everything below here is not relevant without the add button enabled
   
   flex.ParticipantCanvas.Content.remove('name', { if: isUnknownParticipant });

@@ -27,7 +27,7 @@ This plugin defines a package structure to make distributed development easier w
 
 The following guide assumes the reader has some familiarity with _Twilio Flex Plugins_, the _Flex Action Framework_ and _Flex React Component Model_ if not you can pop over [here](https://www.twilio.com/docs/flex/developer/ui-and-plugins) and read up on it.
 
-Even though the Flex plugin model allows a lof of extensibility and customization it doesnt offer any opinions on how to structure the code so that its readable and maintainable. The package structure outlined here aims to do that.
+Even though the Flex plugin model allows a lot of extensibility and customization it doesnt offer any opinions on how to structure the code so that its readable and maintainable. The package structure outlined here aims to do that.
 
 ---
 
@@ -163,12 +163,9 @@ For clarity, lets take a look at our `StartOutboundCall` [action](/plugin-flex-t
 ```js
 import * as Flex from "@twilio/flex-ui";
 import { AppState, reduxNamespace } from "../../../../flex-hooks/states";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../../utils/configuration';
 
-const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.caller_id || {};
+const { enabled = false } = getFeatureFlags()?.features?.caller_id || {};
 
 export function applySelectedCallerIdForDialedNumbers(
   flex: typeof Flex,

@@ -1,6 +1,6 @@
 {
   "name": "plugin-flex-ts-template-v2",
-  "version": "9.0.34",
+  "version": "9.0.42",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@twilio-paste/core": "^17.0.1",
-    "@twilio-paste/icons": "^9.2.0",
+    "@twilio-paste/icons": "9.4.0",
     "@twilio/flex-dev-utils": "^5.1.3",
     "@twilio/flex-plugin-scripts": "6.0.3",
     "@types/jest": "^26.0.20",
@@ -37,7 +37,7 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-private-methods": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
-    "@twilio/flex-ui": "2.0.0-beta.3",
+    "@twilio/flex-ui": "^2",
     "@types/luxon": "^3.1.0",
     "@types/react-redux": "^7.1.1",
     "@types/uuid": "^8.3.4",

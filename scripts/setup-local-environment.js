@@ -1,5 +1,6 @@
 const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPlugins } = require ('./common');
 const prompt = require('prompt');
+prompt.colors = false;
 
 const installNpm = process.argv[2]? process.argv[2] == false: true;
 

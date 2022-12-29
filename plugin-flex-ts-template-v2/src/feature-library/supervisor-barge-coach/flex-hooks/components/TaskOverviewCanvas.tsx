@@ -1,18 +1,15 @@
 import * as Flex from '@twilio/flex-ui';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { Actions as BargeCoachStatusAction, } from '../../flex-hooks/states/SupervisorBargeCoach';
+import { isFeatureEnabled, isAgentCoachingPanelEnabled } from '../..';
 
-import { SyncDoc } from '../../utils/sync/Sync'
-import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButtons'
-import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateModeButton'
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false, agent_coaching_panel = false } = custom_data?.features?.supervisor_barge_coach || {}
+import { SyncDoc } from '../../utils/sync/Sync';
+import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButtons';
+import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateModeButton';
 
 
 export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.Manager) {
 
-  if(!enabled) return;
+  if(!isFeatureEnabled()) return;
 
   
   // Add the Barge-in and Coach Option
@@ -48,7 +45,7 @@ export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.
     }
   }
 
-  if(!agent_coaching_panel) return;
+  if(!isAgentCoachingPanelEnabled()) return;
   // Add the Supervisor Private Mode Toggle
   flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorPrivateToggle key="supervisorprviate-button" />);
 }

@@ -27,6 +27,7 @@ import SupervisorCapacityLoaded from "../../feature-library/supervisor-capacity/
 import ScheduleManagerLoaded from "../../feature-library/schedule-manager/flex-hooks/events/pluginsLoaded";
 import MultiCallLoaded from "../../feature-library/multi-call/flex-hooks/events/pluginsLoaded";
 import MultiCallTokenUpdated from "../../feature-library/multi-call/flex-hooks/events/tokenUpdated";
+import InternalCallLoaded from "../../feature-library/internal-call/flex-hooks/events/pluginsLoaded";
 import HangUpByLoaded from "../../feature-library/hang-up-by/flex-hooks/events/pluginsLoaded";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
@@ -46,6 +47,7 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     SupervisorCapacityLoaded,
     ScheduleManagerLoaded,
     MultiCallLoaded,
+    InternalCallLoaded,
     HangUpByLoaded
   ],
   taskAccepted: [

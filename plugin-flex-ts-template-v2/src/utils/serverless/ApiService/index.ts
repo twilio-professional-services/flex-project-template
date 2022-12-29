@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { EncodedParams } from "../../../types/serverless";
-import { UIAttributes } from "../../../types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../utils/configuration';
 import { random } from "lodash";
 
 function delay<T>(ms: number, result?: T) {
@@ -13,7 +13,7 @@ export default abstract class ApiService {
   readonly serverlessProtocol: string;
 
   constructor() {
-    const { custom_data } = this.manager.configuration as UIAttributes;
+    const custom_data = getFeatureFlags() || {};
 
     // use serverless_functions_domain from ui_attributes, or .env or set as undefined
 

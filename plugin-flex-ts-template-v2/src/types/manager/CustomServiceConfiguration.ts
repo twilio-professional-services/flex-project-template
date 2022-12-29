@@ -19,7 +19,7 @@ import ScheduleManagerConfig from "../../feature-library/schedule-manager/types/
 import MultiCallConfig from "../../feature-library/multi-call/types/ServiceConfiguration";
 import HangUpByConfig from "../../feature-library/hang-up-by/types/ServiceConfiguration";
 
-export default interface FeatureServiceConfiguratoin {
+export default interface FeatureServiceConfiguration {
   activity_reservation_handler: ActivityReservationHandlerConfig;
   activity_skill_filter: ActivitySkillFilterConfig;
   callbacks: CallbackAndVoicemailConfig;
