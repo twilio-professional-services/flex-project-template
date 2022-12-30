@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService'
 import { TeamViewQueueFilterNotification } from '../notifications/TeamViewQueueFilter';
-import { isQueueNoWorkerDataFilterEnabled, shouldLogFilters } from "../../index";
+import { isQueueNoWorkerDataFilterEnabled, shouldLogFilters, isFeatureEnabled } from "../../index";
 import { AppliedFilter } from '@twilio/flex-ui/src/state/Supervisor/SupervisorState.definitions';
 
 export interface ApplyTeamsViewFiltersPayload {
@@ -10,12 +10,12 @@ export interface ApplyTeamsViewFiltersPayload {
 }
 
 export function interceptQueueFilter(flex: typeof Flex, manager: Flex.Manager) {
-  if(!isQueueNoWorkerDataFilterEnabled) return;
+  if(!isQueueNoWorkerDataFilterEnabled()) return;
   replaceQueueFiltersForTeamView(flex, manager);
 }
 
 export function logApplyListFilters(flex: typeof Flex, manager: Flex.Manager) {
-  if(!shouldLogFilters) return;
+  if(!shouldLogFilters()) return;
 
   Flex.Actions.addListener('afterApplyTeamsViewFilters', async (payload, abortFunction) => {
     console.log("Team view filters applied", payload);
@@ -56,6 +56,8 @@ export function logApplyListFilters(flex: typeof Flex, manager: Flex.Manager) {
 //
 
 function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager) {
+  
+  if (!isFeatureEnabled()) return;
 
   Flex.Actions.addListener('beforeApplyTeamsViewFilters', async (payload: ApplyTeamsViewFiltersPayload, abortFunction: () => void) => {
 

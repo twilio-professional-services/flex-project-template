@@ -7,6 +7,9 @@ import taskWrapupHandlerActivityReservationHandler from "../../feature-library/a
 
 import taskAcceptedHandlerDualChannelRecording from "../../feature-library/dual-channel-recording/flex-hooks/events/taskAccepted";
 
+import HangUpByTaskCompleted from "../../feature-library/hang-up-by/flex-hooks/events/taskCompleted";
+import HangUpByTaskWrapup from "../../feature-library/hang-up-by/flex-hooks/events/taskWrapup";
+
 import ActivityReservationHandlerLoaded from "../../feature-library/activity-reservation-handler/flex-hooks/events/pluginsLoaded";
 import ActivitySkillFilterLoaded from "../../feature-library/activity-skill-filter/flex-hooks/events/pluginsLoaded";
 import CallbackAndVoicemailLoaded from "../../feature-library/callback-and-voicemail/flex-hooks/events/pluginsLoaded";
@@ -24,6 +27,8 @@ import ScheduleManagerLoaded from "../../feature-library/schedule-manager/flex-h
 import MultiCallLoaded from "../../feature-library/multi-call/flex-hooks/events/pluginsLoaded";
 import MultiCallTokenUpdated from "../../feature-library/multi-call/flex-hooks/events/tokenUpdated";
 import ProgrammableChatTransferLoaded from "../../feature-library/programmable-chat-transfer/flex-hooks/events/pluginsLoaded";
+import InternalCallLoaded from "../../feature-library/internal-call/flex-hooks/events/pluginsLoaded";
+import HangUpByLoaded from "../../feature-library/hang-up-by/flex-hooks/events/pluginsLoaded";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -42,20 +47,28 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     SupervisorCapacityLoaded,
     ScheduleManagerLoaded,
     MultiCallLoaded,
-    ProgrammableChatTransferLoaded
+    ProgrammableChatTransferLoaded,
+    InternalCallLoaded,
+    HangUpByLoaded
   ],
   taskAccepted: [
     taskAcceptedHandlerActivityReservationHandler,
     taskAcceptedHandlerDualChannelRecording
   ],
   taskCanceled: [taskEndedHandlerActivityReservationHandler],
-  taskCompleted: [taskEndedHandlerActivityReservationHandler],
+  taskCompleted: [
+    taskEndedHandlerActivityReservationHandler,
+    HangUpByTaskCompleted
+  ],
   taskReceived: [taskReceivedActivityReservationHandler],
   taskRejected: [taskEndedHandlerActivityReservationHandler],
   taskRescinded: [taskEndedHandlerActivityReservationHandler],
   taskTimeout: [taskEndedHandlerActivityReservationHandler],
   taskUpdated: [],
-  taskWrapup: [taskWrapupHandlerActivityReservationHandler],
+  taskWrapup: [
+    taskWrapupHandlerActivityReservationHandler,
+    HangUpByTaskWrapup
+  ],
   tokenUpdated: [MultiCallTokenUpdated]
 };
 

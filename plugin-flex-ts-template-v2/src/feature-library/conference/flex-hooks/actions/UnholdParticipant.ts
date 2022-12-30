@@ -1,15 +1,12 @@
 import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import ConferenceService from "../../utils/ConferenceService";
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false, add_button = true } = custom_data?.features.conference || {};
+import { isAddButtonEnabled } from '../..';
 
 export function handleUnholdConferenceParticipant(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  if (!enabled || !add_button) return;
+  if (!isAddButtonEnabled()) return;
 
   flex.Actions.addListener(
     "beforeUnholdParticipant",
@@ -22,7 +19,7 @@ export function handleUnholdConferenceParticipant(
 
       console.log("Unholding participant", participantSid);
 
-      const conferenceSid = task.attributes?.conference?.sid;
+      const conferenceSid = task.conference?.conferenceSid;
       abortFunction();
       await ConferenceService.unholdParticipant(conferenceSid, participantSid);
     }

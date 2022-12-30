@@ -18,8 +18,9 @@ import SupervisorCapacityConfig from "../../feature-library/supervisor-capacity/
 import ScheduleManagerConfig from "../../feature-library/schedule-manager/types/ServiceConfiguration";
 import MultiCallConfig from "../../feature-library/multi-call/types/ServiceConfiguration";
 import ProgrammableChatTransferConfig from "../../feature-library/programmable-chat-transfer/types/ServiceConfiguration";
+import HangUpByConfig from "../../feature-library/hang-up-by/types/ServiceConfiguration";
 
-export default interface FeatureServiceConfiguratoin {
+export default interface FeatureServiceConfiguration {
   activity_reservation_handler: ActivityReservationHandlerConfig;
   activity_skill_filter: ActivitySkillFilterConfig;
   callbacks: CallbackAndVoicemailConfig;
@@ -40,4 +41,5 @@ export default interface FeatureServiceConfiguratoin {
   schedule_manager: ScheduleManagerConfig;
   multi_call: MultiCallConfig;
   programmable_chat_transfer: ProgrammableChatTransferConfig;
+  hang_up_by: HangUpByConfig;
 }

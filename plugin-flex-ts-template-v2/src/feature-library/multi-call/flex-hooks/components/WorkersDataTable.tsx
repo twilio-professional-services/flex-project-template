@@ -1,13 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definition';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled } = custom_data.features.multi_call;
+import { isFeatureEnabled } from '../..';
 
 export function replaceWorkerDataTableCallsColumnMultiCall(flex: typeof Flex, manager: Flex.Manager) {
   
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
   
   const CallsColumnStyle = Flex.styled('div')`
   .Twilio-TaskCardList {

@@ -12,8 +12,8 @@ import {
 } from "@twilio-paste/core";
 import { VolumeOnIcon } from "@twilio-paste/icons/esm/VolumeOnIcon";
 import { AgentIcon } from "@twilio-paste/icons/esm/AgentIcon";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import { SecondDevice } from "../../../multi-call/helpers/MultiCallHelper";
+import { isFeatureEnabled as isMultiCallEnabled } from '../../../multi-call';
 
 const DeviceManager: React.FunctionComponent = () => {
   const menu = useMenuState();
@@ -42,10 +42,7 @@ const DeviceManager: React.FunctionComponent = () => {
       });
       
       // set SecondDevice options if multi-call feature is enabled
-      const { custom_data } = (Manager.getInstance().configuration as UIAttributes) || {};
-      const { enabled = false } = custom_data?.features?.multi_call || {};
-      
-      if (enabled) {
+      if (isMultiCallEnabled()) {
         SecondDevice?.audio?.speakerDevices.set(selectedDevice.deviceId);
         
         devices?.forEach((device: MediaDeviceInfo) => {
@@ -88,11 +85,10 @@ const DeviceManager: React.FunctionComponent = () => {
   if (devices) {
     return (
       <Flex
-        marginRight={"space40"}
         hAlignContent="center"
         vAlignContent={"center"}
       >
-        <MenuButton {...menu} variant={menu.visible ? "primary" : "reset"}>
+        <MenuButton {...menu} variant="reset" element={menu.visible ? "DEVICE_MGR_BUTTON_OPEN" : "DEVICE_MGR_BUTTON"}>
           <AgentIcon decorative />
         </MenuButton>
         <Menu {...menu} aria-label="Actions">
@@ -103,7 +99,7 @@ const DeviceManager: React.FunctionComponent = () => {
             {devices.map((device) => {
               if (device.kind == "audiooutput") {
                 return (
-                  <MenuItem {...menu} onClick={() => selectedDevice(device)}>
+                  <MenuItem {...menu} onClick={() => selectedDevice(device)} key={device.deviceId}>
                     {device.label}
                   </MenuItem>
                 );

@@ -45,8 +45,7 @@ const TransferButton = ({ task }: TransferButtonProps) => {
                 disabled={disableTransferButtonForTask}
                 onClick={onShowDirectory}
                 variant="secondary"
-                title="Transfer Chat"
-                css='' />
+                title="Transfer Chat" />
         </IconContainer>
     )
 }

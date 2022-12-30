@@ -1,6 +1,6 @@
 {
   "name": "plugin-flex-ts-template-v2",
-  "version": "9.0.28",
+  "version": "9.0.42",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
@@ -18,12 +18,13 @@
     "twilio": "twilio"
   },
   "dependencies": {
-    "@twilio-paste/core": "^15.3.0",
-    "@twilio-paste/icons": "^9.2.0",
+    "@twilio-paste/core": "^17.0.1",
+    "@twilio-paste/icons": "9.4.0",
     "@twilio/flex-dev-utils": "^5.1.3",
     "@twilio/flex-plugin-scripts": "6.0.3",
     "@types/jest": "^26.0.20",
     "lodash": "^4.17.20",
+    "luxon": "^3.1.1",
     "prop-types": "^15.7.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -36,22 +37,18 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-private-methods": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
-    "@twilio/flex-ui": "2.0.0-beta.3",
+    "@twilio/flex-ui": "^2",
+    "@types/luxon": "^3.1.0",
     "@types/react-redux": "^7.1.1",
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.0.0",
-    "dotenv": "16.0.0",
     "eslint": "^8.12.0",
     "eslint-config-twilio": "^2.0.0",
     "jest": "^26.0.20",
     "jest-fetch-mock": "3.0.3",
     "jest-junit": "12.0.0",
-    "moment": "^2.29.1",
-    "moment-timezone": "^0.5.34",
     "react-test-renderer": "17.0.2",
-    "twilio": "3.76.0",
-    "twilio-cli": "5.2.0",
     "typescript": "^4"
   },
   "jest": {

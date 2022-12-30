@@ -12,9 +12,15 @@ const createNewDevice = (manager: Manager) => {
   const deviceOptions = {
     allowIncomingWhileBusy: false,
     ...customDeviceOptions,
+    codecPreferences: customDeviceOptions?.codecPreferences as Call.Codec[] | undefined,
     appName: "flex-ui",
     appVersion: FlexVersion
   };
+  
+  if (!deviceOptions.codecPreferences) {
+    // The voice SDK throws an error when codecPreferences is set to undefined
+    delete deviceOptions.codecPreferences;
+  }
   
   let device = new Device(manager.voiceClient.token ?? "", deviceOptions);
   

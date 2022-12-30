@@ -1,7 +1,7 @@
 import { Actions, ConferenceParticipant, ITask, Manager } from '@twilio/flex-ui';
 import * as React from 'react';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import ConferenceService from '../../utils/ConferenceService';
+import { isAddButtonEnabled, isHoldWorkaroundEnabled } from '../..';
 
 export interface OwnProps {
   task?: ITask
@@ -23,7 +23,7 @@ class ConferenceMonitor extends React.Component {
     const { task } = this.props as OwnProps;
 
     const conference = task && task.conference;
-    const conferenceSid = task?.attributes?.conference?.sid;
+    const conferenceSid = conference?.conferenceSid;
     
     if (!conference || !conferenceSid) return;
     
@@ -91,12 +91,10 @@ class ConferenceMonitor extends React.Component {
 
   setEndConferenceOnExit = async (task: ITask, conferenceSid: string, participants: ConferenceParticipant[], endConferenceOnExit: boolean) => {
     const promises = [] as Promise<void>[];
-      const { custom_data } = Manager.getInstance().configuration as UIAttributes;
-      const { add_button = true, hold_workaround = false } = custom_data?.features.conference || {};
     
     participants.forEach(p => {
       promises.push(
-        this.performParticipantUpdate(task, conferenceSid, p, endConferenceOnExit, hold_workaround, add_button)
+        this.performParticipantUpdate(task, conferenceSid, p, endConferenceOnExit, isHoldWorkaroundEnabled(), isAddButtonEnabled())
       );
     });
 
@@ -109,7 +107,7 @@ class ConferenceMonitor extends React.Component {
   }
   
   performParticipantUpdate = async (task: ITask, conferenceSid: string, participant: ConferenceParticipant, endConferenceOnExit: boolean, hold_workaround: boolean, add_button: boolean) => {
-    if (participant.connecting || !participant.callSid || (!add_button && participant.participantType !== "customer")) {
+    if (participant.connecting || !participant.callSid || (!add_button && participant.participantType === "worker")) {
       // skip setting end conference on connecting parties as it will fail
       // only set on customer participants because Flex sets the others for us
       return;

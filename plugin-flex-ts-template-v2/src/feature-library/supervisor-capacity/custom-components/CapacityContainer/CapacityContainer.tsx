@@ -2,18 +2,12 @@ import React, { useEffect, useState } from 'react';
 import {Button} from '@twilio-paste/core/button';
 import {Flex} from '@twilio-paste/core/flex';
 import {Stack} from '@twilio-paste/core/stack';
-import {Text} from '@twilio-paste/text';
+import {Text} from '@twilio-paste/core/text';
 import { SectionHeader } from './CapacityContainerStyles';
 import TaskRouterService, { WorkerChannelCapacityResponse } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import { IWorker, Manager } from '@twilio/flex-ui';
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getRules } from '../..';
 import CapacityChannel from '../CapacityChannel';
-
-const { custom_data } =
-  (Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { rules } =
-  custom_data?.features?.supervisor_capacity || {};
 
 export interface OwnProps {
   worker?: IWorker;
@@ -24,6 +18,8 @@ export interface ChannelSettings {
   available: boolean;
   capacity: number;
 }
+
+const rules = getRules();
 
 export default function CapacityContainer(props: OwnProps) {
   const [isLoading, setIsLoading] = useState(true);
@@ -125,6 +121,7 @@ export default function CapacityContainer(props: OwnProps) {
           resetCount={resetCount}
           workerChannel={workerChannel}
           channelSettingsChanged={channelSettingsChanged}
+          key={workerChannel.sid}
            />
       )) }
       { workerChannels.length > 0 && (!isLoading || isSaving) && (

@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {Button} from '@twilio-paste/core/button';
-import {Checkbox} from '@twilio-paste/core/checkbox';
+import {Switch} from '@twilio-paste/core/switch';
 import {Flex} from '@twilio-paste/core/flex';
 import {Input} from '@twilio-paste/core/input';
 import {DeleteIcon} from "@twilio-paste/icons/esm/DeleteIcon";
-import { Manager } from '@twilio/flex-ui';
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import { WorkerChannelCapacityResponse } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
-
-const { custom_data } =
-  (Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { rules } =
-  custom_data?.features?.supervisor_capacity || {};
+import { getRules } from '../..';
 
 export interface OwnProps {
   isSaving: boolean;
@@ -49,6 +42,8 @@ export default function CapacityChannel(props: OwnProps) {
     let min;
     let max;
     
+    const rules = getRules();
+    
     if (rules && rules[props.workerChannel.taskChannelUniqueName]) {
       min = rules[props.workerChannel.taskChannelUniqueName].min;
       max = rules[props.workerChannel.taskChannelUniqueName].max;
@@ -83,19 +78,18 @@ export default function CapacityChannel(props: OwnProps) {
   }
   
   const onAvailableChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO: Change from Checkbox to Switch after Paste upgrade
     setAvailable(event.target.checked);
   }
   
   return (
     <Flex margin='space50' vAlignContent='center'>
       <Flex grow>
-        <Checkbox
+        <Switch
           checked={available}
           onChange={onAvailableChange}
           disabled={props.isSaving}
           id={"available" + props.workerChannel.sid}
-          name={"available" + props.workerChannel.sid}>{props.workerChannel.taskChannelUniqueName}</Checkbox>
+          name={"available" + props.workerChannel.sid}>{props.workerChannel.taskChannelUniqueName}</Switch>
       </Flex>
       { changed && (
         <Flex margin='space30'>

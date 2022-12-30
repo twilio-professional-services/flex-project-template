@@ -19,6 +19,7 @@ import { handleInternalAcceptTask } from "../../feature-library/internal-call/fl
 import { handleInternalHoldCall } from "../../feature-library/internal-call/flex-hooks/actions/HoldCall";
 import { handleInternalUnholdCall } from "../../feature-library/internal-call/flex-hooks/actions/UnholdCall";
 import { handleInternalRejectTask } from "../../feature-library/internal-call/flex-hooks/actions/RejectTask";
+import { handleChatTransferShowDirectory } from "../../feature-library/chat-transfer/flex-hooks/actions/ShowDirectory";
 import { handleChatTransfer } from "../../feature-library/chat-transfer/flex-hooks/actions/TransferTask";
 import { interceptTransferredChatTasks } from "../../feature-library/programmable-chat-transfer/flex-hooks/actions/CompleteTask";
 import { interceptTransferOverrideForChatTasks } from "../../feature-library/programmable-chat-transfer/flex-hooks/actions/TransferTask";
@@ -29,6 +30,11 @@ import { interceptQueueFilter, logApplyListFilters } from "../../feature-library
 import { handleMultiCallSelectTask } from "../../feature-library/multi-call/flex-hooks/actions/SelectTask";
 import { handleMultiCallUnholdCall } from "../../feature-library/multi-call/flex-hooks/actions/UnholdCall";
 import { handleMultiCallUnholdParticipant } from "../../feature-library/multi-call/flex-hooks/actions/UnholdParticipant";
+import { reportHangUpByCompleteTask } from "../../feature-library/hang-up-by/flex-hooks/actions/CompleteTask";
+import { reportHangUpByHangupCall } from "../../feature-library/hang-up-by/flex-hooks/actions/HangupCall";
+import { reportHangUpByKickParticipant } from "../../feature-library/hang-up-by/flex-hooks/actions/KickParticipant";
+import { reportHangUpByStartExternalWarmTransfer } from "../../feature-library/hang-up-by/flex-hooks/actions/StartExternalWarmTransfer";
+import { reportHangUpByTransferTask } from "../../feature-library/hang-up-by/flex-hooks/actions/TransferTask";
 
 const actionsToRegister: Actions = {
   AcceptTask: {
@@ -46,6 +52,7 @@ const actionsToRegister: Actions = {
       beforeCompleteWorkerTask,
       beforeCompleteVideoEscalatedChatTask,
       handleDualChannelCompleteTask,
+      reportHangUpByCompleteTask,
       interceptTransferredChatTasks
     ],
     after: [],
@@ -54,7 +61,8 @@ const actionsToRegister: Actions = {
   HangupCall: {
     before: [
       handleConferenceHangup,
-      handleDualChannelHangupCall
+      handleDualChannelHangupCall,
+      reportHangUpByHangupCall
     ],
     after: [],
     replace: [],
@@ -78,7 +86,10 @@ const actionsToRegister: Actions = {
     replace: [],
   },
   KickParticipant: {
-    before: [handleKickConferenceParticipant],
+    before: [
+      handleKickConferenceParticipant,
+      reportHangUpByKickParticipant
+    ],
     after: [],
     replace: [],
   },
@@ -99,6 +110,11 @@ const actionsToRegister: Actions = {
   },
   SetWorkerActivity: {
     before: [beforeSetActivity],
+    after: [],
+    replace: [],
+  },
+  ShowDirectory: {
+    before: [handleChatTransferShowDirectory],
     after: [],
     replace: [],
   },
@@ -126,9 +142,15 @@ const actionsToRegister: Actions = {
   RejectTask: { before: [handleInternalRejectTask], after: [], replace: [] },
   NavigateToView: {},
   SetActivity: {},
+  StartExternalWarmTransfer: {
+    before: [reportHangUpByStartExternalWarmTransfer],
+    after: [],
+    replace: [],
+  },
   TransferTask: {
     before: [
       handleChatTransfer,
+      reportHangUpByTransferTask,
       interceptTransferOverrideForChatTasks
     ],
     after: [],

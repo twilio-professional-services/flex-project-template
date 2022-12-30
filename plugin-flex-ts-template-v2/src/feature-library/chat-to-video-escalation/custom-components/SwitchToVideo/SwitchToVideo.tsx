@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Actions, ITask, Manager, ConversationState, styled, IconButton } from "@twilio/flex-ui";
+import { Actions, ITask, Manager, ConversationState, Notifications, styled, IconButton } from "@twilio/flex-ui";
 
 import { updateTaskAttributesForVideo } from "../../helpers/taskAttributes";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import { getFeatureFlags } from '../../../../utils/configuration';
+import { ChatToVideoNotification } from '../../flex-hooks/notifications/ChatToVideo';
 
 interface SwitchToVideoProps {
   task: ITask;
@@ -10,12 +11,11 @@ interface SwitchToVideoProps {
   conversation?: ConversationState.ConversationState;
 }
 
-const { custom_data } = Manager.getInstance().configuration as UIAttributes;
 const {
   serverless_functions_domain = "",
   serverless_functions_port = "",
   serverless_functions_protocol = "",
-} = custom_data || {};
+} = getFeatureFlags() || {};
 
 const IconContainer = styled.div`
   margin: auto;
@@ -67,6 +67,12 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({
       .then((response) => response.json())
       .then((response) => {
         console.log("SwitchToVideo: unique link created:", response);
+        
+        if (!response.full_url) {
+          Notifications.showNotification(ChatToVideoNotification.FailedVideoLinkNotification);
+          return;
+        }
+        
         return Actions.invokeAction("SendMessage", {
           body: `Please join me using this unique video link: ${response.full_url}`,
           conversation,
@@ -92,8 +98,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({
             disabled={isLoading}
             onClick={async () => await onClick()}
             variant="secondary"
-            title="Switch to Video"
-            css='' />
+            title="Switch to Video" />
     </IconContainer>
   );
 };

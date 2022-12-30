@@ -26,7 +26,7 @@ jobs:
         with:
           node-version: '16'
      
-      - name: install npm and apply missing envirnoment variables
+      - name: install npm and apply missing environment variables
         run: |
           npm install
           TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_QA }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_QA }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_QA }} npm run populate-missing-placeholders $ENVIRONMENT
@@ -63,7 +63,7 @@ jobs:
         with:
           node-version: '16'
 
-      - name: install npm and apply missing envirnoment variables
+      - name: install npm and apply missing environment variables
         run: |
           npm install
           TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_QA }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_QA }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_QA }} npm run populate-missing-placeholders $ENVIRONMENT
@@ -81,7 +81,10 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'   
+          node-version: '16'
+          
+      - name: install twilio cli
+        run: npm install skip-postinstall
 
       - name: deploy and release flex-plugin
         run: |

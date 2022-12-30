@@ -5,7 +5,7 @@ import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
 import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
 import BargeCoachService from '../../utils/serverless/BargeCoachService';
 import { Flex, Stack } from "@twilio-paste/core";
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { isAgentCoachingPanelEnabled } from '../..';
 
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync'
@@ -33,8 +33,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
   const supervisorFN = useFlexSelector(state => state?.flex?.worker?.attributes?.full_name);
 
   // Confirming if Agent Coaching Panel is enabled, we will use this in the Supervisor Barge Coach component
-  const { custom_data } = Manager.getInstance().configuration as UIAttributes;
-  const { agent_coaching_panel } = custom_data.features.supervisor_barge_coach;
+  const agent_coaching_panel = isAgentCoachingPanelEnabled();
 
 
   // Storing teamViewPath and agentSyncDoc to browser cache to help if a refresh happens
@@ -56,7 +55,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
   // we allow the correct user to barge-in on the call
   const bargeHandleClick = () => {
     const conference = task && task.conference;
-    const conferenceSid = task?.attributes?.conference?.sid;
+    const conferenceSid = conference?.conferenceSid;
     if (!conferenceSid) {
       console.log('conferenceSid = null, returning');
       return;
@@ -133,7 +132,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
 
   const coachHandleClick = () => {
     const conference = task && task.conference;
-    const conferenceSid = task?.attributes?.conference?.sid;
+    const conferenceSid = conference?.conferenceSid;
     if (!conferenceSid) {
       console.log('conferenceSid = null, returning');
       return;
@@ -212,7 +211,6 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
             title={ muted ? "Unmute" : "Mute" }
             variant="secondary"
             style={{width:'44px',height:'44px'}}
-            css=''
           ></IconButton>
           <IconButton
             icon={ barge ? `IncomingCallBold` :  'IncomingCall' }
@@ -221,7 +219,6 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
             title={ barge ? 'Barge-Out' : 'Barge-In' }
             variant={ barge ? 'primary' : 'secondary' }
             style={{width:'44px',height:'44px'}}
-            css=''
           />
           <IconButton
             icon={ coaching ? `DefaultAvatarBold` : `DefaultAvatar` }
@@ -230,7 +227,6 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
             title={ coaching ? "Disable Coach Mode" : "Enable Coach Mode" }
             variant={ coaching ? 'primary' : 'secondary' }
             style={{width:'44px',height:'44px'}}
-            css=''
           />
         </Stack>
       </Flex>

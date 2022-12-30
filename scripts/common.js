@@ -39,22 +39,44 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
 
     console.log("Loading environment variables..");
 
-    result.taskrouter_workspace_sid = shell.exec("twilio api:taskrouter:v1:workspaces:list", {silent: true}).grep(FLEX_WORKSPACE_NAME).stdout.split(" ")[0]
-    result.sync_sid = shell.exec("twilio api:sync:v1:services:list", {silent: true}).grep(SYNC_SERVICE_NAME).stdout.split(" ")[0]
-    result.chat_sid = shell.exec("twilio api:chat:v2:services:list", {silent: true}).grep(CHAT_SERVICE_NAME).stdout.split(" ")[0]
+    const workspace_raw = shell.exec("twilio api:taskrouter:v1:workspaces:list", {silent: true})
+    if(workspace_raw.length > 0){
+      result.taskrouter_workspace_sid = workspace_raw.grep(FLEX_WORKSPACE_NAME).stdout.split(" ")[0];
+    } else {
+      console.log("Flex Workspace not returned, try running the following");
+      console.log("twilio api:taskrouter:v1:workspaces:list");
+      console.log("");
+    } 
+
+    const sync_raw = shell.exec("twilio api:sync:v1:services:list", {silent: true})
+    result.sync_sid = sync_raw.length > 0 ? sync_raw.grep(SYNC_SERVICE_NAME).stdout.split(" ")[0] : console.log("Sync Service Not Found");
+
+    const chat_raw = shell.exec("twilio api:chat:v2:services:list", {silent: true})
+    result.chat_sid = chat_raw.length > 0 ? chat_raw.grep(CHAT_SERVICE_NAME).stdout.split(" ")[0] : console.log("Chat Service Not Found");
 
     var workflows = shell.exec(`twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid=${result.taskrouter_workspace_sid}`, {silent: true});
-    result.everyoneWorkflow = workflows.grep(ANYONE_WORKFLOW_NAME).stdout.split(" ")[0].trim();
-    result.chatTransferWorkFlow = workflows.grep(CHAT_WORRKFLOW_NAME).stdout.split(" ")[0].trim();
-    result.callbackWorkflow = workflows.grep(CALLBACK_WORKFLOW_NAME).stdout.split(" ")[0].trim();
-    result.internalCallWorkflow = workflows.grep(INTERNAL_CALL_WORKFLOW_NAME).stdout.split(" ")[0].trim();
+    if (workflows.length > 0) {
+      result.everyoneWorkflow = workflows.grep(ANYONE_WORKFLOW_NAME).stdout.split(" ")[0].trim();
+      result.chatTransferWorkFlow = workflows.grep(CHAT_WORRKFLOW_NAME).stdout.split(" ")[0].trim();
+      result.callbackWorkflow = workflows.grep(CALLBACK_WORKFLOW_NAME).stdout.split(" ")[0].trim();
+      result.internalCallWorkflow = workflows.grep(INTERNAL_CALL_WORKFLOW_NAME).stdout.split(" ")[0].trim();
+    } else {
+      console.log("Workflows not found");
+    }
 
-    result.serviceFunctionsSid = shell.exec("twilio api:serverless:v1:services:list", {silent: true}).grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[0]
-    result.serviceFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.serviceFunctionsSid}`, {silent: true}).grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[4]
+    const serverless_services_raw = shell.exec("twilio api:serverless:v1:services:list", {silent: true})
+    if(serverless_services_raw.length > 0){
+      result.serviceFunctionsSid = serverless_services_raw.grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[0];
+      result.serviceFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.serviceFunctionsSid}`, {silent: true}).grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[4]
+      result.scheduleFunctionsSid = serverless_services_raw.grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[0]
 
-    result.scheduleFunctionsSid = shell.exec("twilio api:serverless:v1:services:list", {silent: true}).grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[0]
-    result.scheduledFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.scheduleFunctionsSid}`, {silent: true}).grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[4]
+      const scheduledFunctionsDomain_raw = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.scheduleFunctionsSid}`, {silent: true})
+      result.scheduledFunctionsDomain = scheduledFunctionsDomain_raw.length > 0 ? scheduledFunctionsDomain_raw.grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[4] : console.log("Scheduled Functions Domain not found");
+    } else {
+      console.log("No Serverless services found");
+    }
 
+    console.log("");
     console.log("\tDone fetching environment variables");
     console.log("");
 
@@ -88,29 +110,34 @@ exports.getActiveTwilioProfile = async function getActiveTwilioProfile() {
 
 exports.installNPMServerlessFunctions = function installNPMServerlessFunctions() {
   console.log("Installing npm dependencies for serverless functions..");
-  shell.exec("npm --prefix ./serverless-functions ci ./serverless-functions", {silent:true});
+  shell.cd("./serverless-functions")
+  shell.exec("npm install", {silent:true});
+  shell.cd("..");
 }
 
 exports.installNPMFlexConfig = function installNPMFlexConfig() {
   console.log("Installing npm dependencies for flex-config...");
-  shell.exec("npm --prefix ./flex-config ci ./flex-config", {silent:true});
+  shell.cd("./flex-config");
+  shell.exec("npm install", {silent:true});
+  shell.cd("..");
 }
 
 exports.installNPMPlugin = function installNPMPlugin() {
-
-  setPluginName("v1");
-  var { pluginDir } = getPaths();
+  var { pluginDir } = getPaths("v1");
   var temp = pluginDir;
   if( pluginDir && pluginDir != "" ) {
     console.log(`Installing npm dependencies for ${pluginDir}...`);
-    shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
+    shell.cd(`./${pluginDir}`)
+    shell.exec(`npm install`, {silent:true});
+    shell.cd("..")
   }
 
-  setPluginName("v2");
-  var { pluginDir } = getPaths();
+  var { pluginDir } = getPaths("v2");
   if ( pluginDir && temp != pluginDir && pluginDir != "" ) {
     console.log(`Installing npm dependencies for ${pluginDir}...`);
-    shell.exec(`npm --prefix ./${pluginDir} ci ./${pluginDir}`, {silent:true});
+    shell.cd(`./${pluginDir}`)
+    shell.exec(`npm install`, {silent:true});
+    shell.cd("..");
   }
 }
 
@@ -186,7 +213,8 @@ exports.generateFlexConfigEnv = function generateFlexConfigEnv(context, flexConf
   const { 
     account_sid,
     api_key,
-    api_secret } = context
+    api_secret,
+    auth_token } = context
 
   try {
 
@@ -201,11 +229,12 @@ exports.generateFlexConfigEnv = function generateFlexConfigEnv(context, flexConf
       if(account_sid){
         shell.sed('-i', /<YOUR_TWILIO_ACCOUNT_SID>/g, `${account_sid}`, flexConfigEnv);
       }
-      if(api_key){
+      if(api_key && api_secret){
         shell.sed('-i', /<YOUR_API_KEY>/g, `${api_key}`, flexConfigEnv);
-      } 
-      if(api_secret){
         shell.sed('-i', /<YOUR_API_SECRET>/g, `${api_secret}`, flexConfigEnv);
+      } else if (account_sid && auth_token) {
+        shell.sed('-i', /<YOUR_API_KEY>/g, `${account_sid}`, flexConfigEnv);
+        shell.sed('-i', /<YOUR_API_SECRET>/g, `${auth_token}`, flexConfigEnv);
       }
       console.log(`Setting up environment ${flexConfigEnv}: complete`);
     } else {
@@ -237,9 +266,7 @@ exports.populateFlexConfigPlaceholders = function populateFlexConfigPlaceholders
 }
 
 exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
-
-  setPluginName("v1");
-  var { pluginDir } = getPaths();
+  var { pluginDir } = getPaths("v1");
   var temp = pluginDir;
 
   var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
@@ -258,8 +285,7 @@ exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
     }
   }
 
-  setPluginName("v2");
-  var { pluginDir } = getPaths();
+  var { pluginDir } = getPaths("v2");
   if ( pluginDir && temp != pluginDir && pluginDir != "") {
     var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
     var pluginAppConfig = `./${pluginDir}/public/appConfig.js`

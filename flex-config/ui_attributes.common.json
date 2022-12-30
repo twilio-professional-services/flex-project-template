@@ -116,6 +116,9 @@
       "multi_call": {
         "enabled": false
       },
+      "hang_up_by": {
+        "enabled": false
+      },
       "programmable_chat_transfer": {
         "enabled": false
       }

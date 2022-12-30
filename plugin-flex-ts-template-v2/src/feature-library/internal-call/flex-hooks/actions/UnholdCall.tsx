@@ -1,13 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
 import ConferenceService from "../../../conference/utils/ConferenceService";
 import { isInternalCall } from '../../helpers/internalCall';
-
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled } = custom_data?.features?.internal_call || {};
+import { isFeatureEnabled } from '../..';
 
 export function handleInternalUnholdCall(flex: typeof Flex, manager: Flex.Manager) {
-  if (!enabled) return;
+  if (!isFeatureEnabled()) return;
 
   flex.Actions.addListener("beforeUnholdCall", async (payload, abortFunction) => {
     if (!isInternalCall(payload.task)) {
@@ -15,8 +12,8 @@ export function handleInternalUnholdCall(flex: typeof Flex, manager: Flex.Manage
     }
     
     const { task } = payload;
-    const conference = task.attributes.conference
-      ? task.attributes.conference.sid
+    const conference = task.conference
+      ? task.conference.conferenceSid
       : task.attributes.conferenceSid;
     
     const participant = task.attributes.conference.participants

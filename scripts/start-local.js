@@ -1,10 +1,9 @@
 const shell = require("shelljs");
-var { setPluginName, getPaths } = require("./select-plugin");
+var { getPaths } = require("./select-plugin");
 
 const plugin = process.argv[2]
 
-setPluginName(plugin)
-const paths = getPaths();
+const paths = getPaths(plugin);
 
 shell.cd(`${paths.pluginDir}`);
 shell.exec("twilio flex:plugins:start");

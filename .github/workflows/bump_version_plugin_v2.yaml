@@ -1,0 +1,32 @@
+name: bump_version_plugin_v2
+
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - main
+    paths:
+      - 'plugin-flex-ts-template-v2/**'
+  # Enable running this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: 'Bump version'
+        uses: 'phips28/gh-action-bump-version@master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PACKAGEJSON_DIR:  'plugin-flex-ts-template-v2'
+        with:
+          skip-tag: 'true'
+          version-type: 'patch'
