@@ -30,8 +30,8 @@ const SupervisorCompleteReservation = ({task}: OwnProps) => {
 
   return (
     <Box
-      paddingRight="space20"
-      paddingTop="space20">
+      padding="space20"
+      paddingBottom="space0">
       <Button
           disabled={isTaskProcessingRequest  || task.status != "wrapping" }
           onClick={handleOpen}
