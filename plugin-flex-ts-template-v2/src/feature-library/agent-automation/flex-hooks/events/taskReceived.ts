@@ -3,42 +3,18 @@ import { ITask } from "@twilio/flex-ui";
 import { isFeatureEnabled, getMatchingTaskConfiguration } from "../.."
 import { TaskQualificationConfig } from "feature-library/agent-automation/types/ServiceConfiguration";
 
-
-function selectAndAcceptTask(task: ITask, taskConfig: TaskQualificationConfig) {
+async function selectAndAcceptTask(task: ITask, taskConfig: TaskQualificationConfig) {
   const {
-    sid
+    sid, attributes: {direction}, taskChannelUniqueName
   } = task
 
-  // Attempt to accept the task
-  if(taskConfig.auto_accept) Flex.Actions.invokeAction("AcceptTask", { sid });
+  // we don't want to auto accept outbound voice tasks as they are already auto 
+  // accepted
+  if(taskChannelUniqueName === "voice" && direction === "outbound") return;
 
-  // Creating an interval to check the task has been accepted
-  // and retries if it has not.  To avoid a runway process,
-  // applying an attempts counter to ultimately abandon the retry
-  // after ten attempts
-  if(taskConfig.auto_select && taskConfig.auto_accept) {
-    let attempts = 0;
-    const selectTaskTimer = setInterval(() => {
-      const task = Flex.TaskHelper.getTaskByTaskSid(
-        sid
-      );
-      if (!task || !task.status) {
-        clearInterval(selectTaskTimer);
-        attempts = 0;
-      } else if (Flex.TaskHelper.isTaskAccepted(task)) {
-        Flex.Actions.invokeAction("SelectTask", { sid });
-        clearInterval(selectTaskTimer);
-        attempts = 0;
-      } else if (attempts > 10) {
-        clearInterval(selectTaskTimer);
-        attempts = 0;
-      } else {
-        attempts++;
-      }
-    }, 500);
-  } else if (taskConfig.auto_select) {
-    Flex.Actions.invokeAction("SelectTask", { sid });
-  }
+  // Select and accept the task per configuration
+  if(taskConfig.auto_select) await Flex.Actions.invokeAction("SelectTask", { sid });
+  if(taskConfig.auto_accept) await Flex.Actions.invokeAction("AcceptTask", { sid });
 }
 
 export default function autoSelectAndAcceptTask(task: ITask){
