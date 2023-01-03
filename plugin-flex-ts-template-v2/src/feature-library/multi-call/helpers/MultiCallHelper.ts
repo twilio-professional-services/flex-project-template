@@ -17,6 +17,11 @@ const createNewDevice = (manager: Manager) => {
     appVersion: FlexVersion
   };
   
+  if (!deviceOptions.codecPreferences) {
+    // The voice SDK throws an error when codecPreferences is set to undefined
+    delete deviceOptions.codecPreferences;
+  }
+  
   let device = new Device(manager.voiceClient.token ?? "", deviceOptions);
   
   if (audioConstraints) {
