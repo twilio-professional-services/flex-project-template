@@ -16,6 +16,10 @@ import ConferenceReducer, {
 import PauseRecordingReducer, {
   PauseRecordingState
 } from "../../feature-library/pause-recording/flex-hooks/states/PauseRecordingSlice";
+import {
+  SupervisorCompleteReservationState,
+  SupervisorCompleteReservationReducer,
+} from "../../feature-library/supervisor-complete-reservation/flex-hooks/states/SupervisorCompleteReservation";
 
 export interface CustomState {
   outboundCallerIdSelector: OutboundCallerIDSelectorState;
@@ -23,6 +27,7 @@ export interface CustomState {
   supervisorBargeCoach: SupervisorBargeCoachState;
   conference: ConferenceState;
   pauseRecording: PauseRecordingState;
+  supervisorCompleteReservation: SupervisorCompleteReservationState;
 }
 
 export const customReducers = {
@@ -30,5 +35,6 @@ export const customReducers = {
   callbackAndVoicemail: CallbackAndVoicemailReducer,
   supervisorBargeCoach: SupervisorBargeCoachReducer,
   conference: ConferenceReducer,
-  pauseRecording: PauseRecordingReducer
+  pauseRecording: PauseRecordingReducer,
+  supervisorCompleteReservation: SupervisorCompleteReservationReducer
 };

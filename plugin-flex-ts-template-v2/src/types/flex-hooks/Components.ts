@@ -22,7 +22,8 @@ type ComponentName =
   | "WorkerDirectory"
   | "WorkerProfile"
   | "OutboundDialerPanel"
-  | "TaskInfoPanel";
+  | "TaskInfoPanel"
+  | "SupervisorTaskCanvasHeader";
 
 type ComponentHandler = (flex: typeof Flex, manager: Flex.Manager) => void;
 
