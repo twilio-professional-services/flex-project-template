@@ -37,7 +37,7 @@ exports.setPluginName = setPluginName
 exports.getPaths = function getPaths(plugin_version) {
   setPluginName(plugin_version);
   const pluginDir = getDirectoryName(originalPluginName, /flex-template-.*/);
-  const templateDirectory = `${pluginDir}/template-files/no-features`;
+  const templateDirectory = `${pluginDir}/template-files`;
   const featureDirectory = `${pluginDir}/src/feature-library`;
   const pluginSrc = `${pluginDir}/src`;
 

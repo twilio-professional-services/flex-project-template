@@ -1,15 +1,5 @@
-import * as Flex from "@twilio/flex-ui";
 import { FlexEvent } from "../../types/manager/FlexEvent";
-import taskAcceptedHandlerActivityReservationHandler from "../../feature-library/activity-reservation-handler/flex-hooks/events/taskAccepted";
-import taskEndedHandlerActivityReservationHandler from "../../feature-library/activity-reservation-handler/flex-hooks/events/taskEnded";
-import taskReceivedActivityReservationHandler from "../../feature-library/activity-reservation-handler/flex-hooks/events/taskReceived";
-import taskWrapupHandlerActivityReservationHandler from "../../feature-library/activity-reservation-handler/flex-hooks/events/taskWrapup";
-
-import taskAcceptedHandlerDualChannelRecording from "../../feature-library/dual-channel-recording/flex-hooks/events/taskAccepted";
-
-import HangUpByTaskCompleted from "../../feature-library/hang-up-by/flex-hooks/events/taskCompleted";
-import HangUpByTaskWrapup from "../../feature-library/hang-up-by/flex-hooks/events/taskWrapup";
-
+// add-feature-script: pluginsLoaded imports
 import ActivityReservationHandlerLoaded from "../../feature-library/activity-reservation-handler/flex-hooks/events/pluginsLoaded";
 import ActivitySkillFilterLoaded from "../../feature-library/activity-skill-filter/flex-hooks/events/pluginsLoaded";
 import CallbackAndVoicemailLoaded from "../../feature-library/callback-and-voicemail/flex-hooks/events/pluginsLoaded";
@@ -25,12 +15,23 @@ import TeamsViewFiltersLoaded from "../../feature-library/teams-view-filters/fle
 import SupervisorCapacityLoaded from "../../feature-library/supervisor-capacity/flex-hooks/events/pluginsLoaded";
 import ScheduleManagerLoaded from "../../feature-library/schedule-manager/flex-hooks/events/pluginsLoaded";
 import MultiCallLoaded from "../../feature-library/multi-call/flex-hooks/events/pluginsLoaded";
-import MultiCallTokenUpdated from "../../feature-library/multi-call/flex-hooks/events/tokenUpdated";
 import InternalCallLoaded from "../../feature-library/internal-call/flex-hooks/events/pluginsLoaded";
 import HangUpByLoaded from "../../feature-library/hang-up-by/flex-hooks/events/pluginsLoaded";
 import AgentAutomationLoaded from "../../feature-library/agent-automation/flex-hooks/events/pluginsLoaded";
+import SupervisorCompleteReservationLoaded from "../../feature-library/supervisor-complete-reservation/flex-hooks/events/pluginsLoaded";
+
+// tokenUpdated imports
+import MultiCallTokenUpdated from "../../feature-library/multi-call/flex-hooks/events/tokenUpdated";
+
+// task event imports
 import autoSelectAndAcceptTask from "../../feature-library/agent-automation/flex-hooks/events/taskReceived";
-import SupervisorCompleteReservationLoaded from "../../feature-library/supervisor-complete-reservation/flex-hooks/events/pluginsLoaded"
+import taskAcceptedHandlerActivityReservationHandler from "../../feature-library/activity-reservation-handler/flex-hooks/events/taskAccepted";
+import taskEndedHandlerActivityReservationHandler from "../../feature-library/activity-reservation-handler/flex-hooks/events/taskEnded";
+import taskReceivedActivityReservationHandler from "../../feature-library/activity-reservation-handler/flex-hooks/events/taskReceived";
+import taskWrapupHandlerActivityReservationHandler from "../../feature-library/activity-reservation-handler/flex-hooks/events/taskWrapup";
+import taskAcceptedHandlerDualChannelRecording from "../../feature-library/dual-channel-recording/flex-hooks/events/taskAccepted";
+import HangUpByTaskCompleted from "../../feature-library/hang-up-by/flex-hooks/events/taskCompleted";
+import HangUpByTaskWrapup from "../../feature-library/hang-up-by/flex-hooks/events/taskWrapup";
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -52,7 +53,8 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     InternalCallLoaded,
     HangUpByLoaded,
     AgentAutomationLoaded,
-    SupervisorCompleteReservationLoaded
+    SupervisorCompleteReservationLoaded,
+    // add-feature-script: add pluginsLoaded handlers above this line
   ],
   taskAccepted: [
     taskAcceptedHandlerActivityReservationHandler,
