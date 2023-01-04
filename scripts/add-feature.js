@@ -111,29 +111,43 @@ const setVars = () => {
   newFeatureDirectory = `${featureDirectory}/${featureName}`;
 }
 
-const createDir = () => {
-  shell.echo("Creating feature directory");
-  shell.mkdir(newFeatureDirectory);
-  shell.echo("Copying feature boilerplate");
-  shell.cp('-R', `${templateDirectory}/feature-template/.`, `${newFeatureDirectory}/`);
+const createDir = async () => {
+  try {
+    await fs.access(newFeatureDirectory);
+    // if this is successful, the feature directory already exists
+    shell.echo("feature directory already exists, abandoning");
+    shell.echo("");
+    return false;
+  } catch {
+    shell.echo("Creating feature");
+    shell.mkdir(newFeatureDirectory);
+    shell.cp('-R', `${templateDirectory}/feature-template/.`, `${newFeatureDirectory}/`);
+    return true;
+  }
 }
 
 const updateNames = async () => {
-  shell.echo("Setting feature name");
+  var success = true;
+  
   await Promise.all(featureSubstitutionFiles.map(async (file) => {
     try {
-      shell.echo(`Updating ${file}`);
+      shell.echo(`Setting feature name in ${file}`);
       const fileData = await fs.readFile(`${newFeatureDirectory}/${file}`, "utf8");
       let newFileData = performSubstitutions(fileData);
       await fs.writeFile(`${newFeatureDirectory}/${file}`, newFileData, 'utf8');
     } catch (error) {
       shell.echo(`Failed to update ${file}: ${error}`);
+      success = false;
     }
   }));
+  
+  return success;
 }
 
 // add references to base files
 const updateRefs = async () => {
+  var success = true;
+  
   await Promise.all(referenceSubstitutions.map(async (reference) => {
     try {
       shell.echo(`Adding feature to ${reference.path}`);
@@ -144,18 +158,28 @@ const updateRefs = async () => {
       await fs.writeFile(reference.path, fileData, 'utf8');
     } catch (error) {
       shell.echo(`Failed to update ${reference.path}: ${error}`);
+      success = false;
     }
   }));
+  
+  return success;
 }
 
 const addFeature = async () => {
   if (!validateInput()) {
     return;
   }
+  
   setVars();
-  createDir();
-  await updateNames();
-  await updateRefs();
+  
+  if (!(await createDir()) || !(await updateNames()) || !(await updateRefs())) {
+    return;
+  }
+  
+  shell.echo("");
+  shell.echo(`Feature added: "${featureName}"`);
+  shell.echo("Please note that this feature will not be enabled until it is added to flex-config for the appropriate environment.");
+  shell.echo("");
 }
 
 addFeature();
