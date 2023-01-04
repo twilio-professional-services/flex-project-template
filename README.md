@@ -44,11 +44,12 @@ The primary aims of this template are
     7. [scripts](#scripts)
     8. [.github](#github)
 6. [More Scripts Details](#more-scripts-details)
-    1. [Removing Features](#removing-features)
-    2. [Renaming Template](#renaming-template)
-    3. [show-env-vars](#show-env-vars)
-    4. [setup-local-environment](#setup-local-environment)
-    5. [generate-env](#generate-env)
+    1. [Add Feature](#add-feature)
+    2. [Removing Features](#removing-features)
+    3. [Renaming Template](#renaming-template)
+    4. [show-env-vars](#show-env-vars)
+    5. [setup-local-environment](#setup-local-environment)
+    6. [generate-env](#generate-env)
 7. [Change log](#changelog)
 
 
