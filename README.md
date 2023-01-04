@@ -317,6 +317,7 @@ This package contains web application examples that build off feature functional
 
 this package maintains some convenience scripts namely
 
+- [add-feature](#add-feature) - for adding a new feature to the template, adds all of the necessary boilerplate
 - [rename-template](#renaming-template) - for renaming the plugin and serverless packages along with the serverless domain, typically used when making standalone plugins that still want to follow the template structure
 - [remove-features](#removing-features) - for removing the features from the template, again typically used when making standalone plugins that still want to follow the template structure
 
@@ -328,6 +329,24 @@ Lastly, this package manages the github action workflows - with one example bein
 ---
 
 # More Scripts Details
+
+## Add feature
+
+(the following is only applicable when using the flex v2 plugin)
+
+When adding new features to the template, some boilerplate is required. This script does all of that for you, specifically:
+- Creates a feature directory under `feature-library`
+- Adds an interface for feature configuration
+- Adds a `pluginsLoaded` event handler
+- Adds the appropriate references to the above files
+- Adds a feature readme file
+
+After cloning the template, simply run the following command from the repository root dir.
+
+```bash
+npm install
+npm run add-feature my-new-feature-name-goes-here
+```
 
 ## Removing Features
 
