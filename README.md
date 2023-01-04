@@ -25,8 +25,8 @@ The primary aims of this template are
         1. [Prerequisites](#prerequisites)
         2. [setup](#setup)
         3. [development notes](#development-notes)
-    2. [Setup a project release pipeline](#setup-a-project-with-release-pipeline)
-    3. [Deploying to hosted Flex without a release pipeline](#deploying-to-hosted-flex-without-a-release-pipeline)
+    2. [Setup a project release pipeline (Recommended ~5 mins)](#setup-a-project-with-release-pipeline-recommended)
+    3. [Deploying to hosted Flex without a release pipeline (Not Recommended ~20-30 minutes)](#deploying-to-hosted-flex-without-a-release-pipeline-not-recommended)
     4. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
 3. [Why a template?](#why-a-template)
     1. [One Plugin](#one-plugin-instead-of-a-collection-of-plugins)
@@ -148,8 +148,8 @@ When running the plugin locally, this template has been set up to pair the plugi
 
 ---
 
-## Setup a project with release pipeline
-
+## Setup a project with release pipeline (Recommended)
+_~5 minutes_
 1. Use the template to create your own repository
 2. Nominate a Twilio account to act as one of dev, qa, test, prod (based on your use case)
 3. Create a twilio api key and secret for your account follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key.
@@ -172,8 +172,8 @@ When running the plugin locally, this template has been set up to pair the plugi
     - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommended you populate the [ui_attributes](/flex-config/) config and manage the domain names through version control at a later date to remove any ambiguity. 
     - for full functionality, review the configuration steps for the disable features and make sure their dependencies are setup.
 
-## Deploying to hosted Flex without a release pipeline
-
+## Deploying to hosted Flex without a release pipeline (Not Recommended)
+_~20-30 minutes_ <br><br>
 For the below steps, where `<environment>` is referenced, you may use `dev`, `test`, `qa`, or `prod`.
 
 First, deploy the serverless functions:
