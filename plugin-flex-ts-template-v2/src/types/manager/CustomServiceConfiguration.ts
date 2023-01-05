@@ -1,7 +1,7 @@
 import ActivityReservationHandlerConfig from "../../feature-library/activity-reservation-handler/types/ServiceConfiguration";
 import ActivitySkillFilterConfig from "../../feature-library/activity-skill-filter/types/ServiceConfiguration";
-import CallbackAndVoicemailConfig from "../../feature-library/callback-and-voicemail/types/ServiceConfigudation";
-import CallerIdConfig from "../../feature-library/caller-id/types/ServiceConfigudation";
+import CallbackAndVoicemailConfig from "../../feature-library/callback-and-voicemail/types/ServiceConfiguration";
+import CallerIdConfig from "../../feature-library/caller-id/types/ServiceConfiguration";
 import ChatToVideoEscalationConfig from "../../feature-library/chat-to-video-escalation/types/ServiceConfiguration";
 import ConferenceConfig from "../../feature-library/conference/types/ServiceConfiguration";
 import ScrollableActivitiesConfig from "../../feature-library/scrollable-activities/types/ServiceConfiguration";
@@ -19,6 +19,8 @@ import ScheduleManagerConfig from "../../feature-library/schedule-manager/types/
 import MultiCallConfig from "../../feature-library/multi-call/types/ServiceConfiguration";
 import ProgrammableChatTransferConfig from "../../feature-library/programmable-chat-transfer/types/ServiceConfiguration";
 import HangUpByConfig from "../../feature-library/hang-up-by/types/ServiceConfiguration";
+import AgentAutomationConfig from "feature-library/agent-automation/types/ServiceConfiguration";
+import SupervisorCompleteReservation from "feature-library/supervisor-complete-reservation/types/ServiceConfiguration";
 
 export default interface FeatureServiceConfiguration {
   activity_reservation_handler: ActivityReservationHandlerConfig;
@@ -42,4 +44,6 @@ export default interface FeatureServiceConfiguration {
   multi_call: MultiCallConfig;
   programmable_chat_transfer: ProgrammableChatTransferConfig;
   hang_up_by: HangUpByConfig;
+  agent_automation: AgentAutomationConfig;
+  supervisor_complete_reservation: SupervisorCompleteReservation;
 }

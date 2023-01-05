@@ -1,7 +1,19 @@
-import { getFeatureFlags } from '../../utils/configuration';
+import * as Flex from "@twilio/flex-ui";
 
-const { enabled = false } = getFeatureFlags()?.features?.chat_transfer || {};
+import { UIAttributes } from "types/manager/ServiceConfiguration";
+const { custom_data } =
+  (Flex.Manager.getInstance().serviceConfiguration
+    .ui_attributes as UIAttributes) || {};
+const {
+  enabled = false,
+  cold_transfer = false,
+  multi_participant = false,
+} = custom_data?.features?.chat_transfer || {};
 
-export const isFeatureEnabled = () => {
-  return enabled;
+export const isColdTransferEnabled = () => {
+  return enabled && cold_transfer;
+};
+
+export const isMultiParticipantEnabled = () => {
+  return enabled && multi_participant;
 };

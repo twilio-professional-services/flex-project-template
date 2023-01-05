@@ -22,27 +22,31 @@ import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-f
 import { addCapacityToWorkerCanvas } from "../../feature-library/supervisor-capacity/flex-hooks/components/WorkerCanvas";
 import { addPauseRecordingButton } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvasActions";
 import { addPauseStatusPanel } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvas";
+import { addTaskCanvasTabCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasTabs";
+import { replaceEndTaskButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addScheduleManagerToSideNav } from "../../feature-library/schedule-manager/flex-hooks/components/SideNav";
 import { addScheduleManagerView } from "../../feature-library/schedule-manager/flex-hooks/components/ViewCollection";
 import { replaceWorkerDataTableCallsColumnMultiCall } from "../../feature-library/multi-call/flex-hooks/components/WorkersDataTable";
+import { addUpdateReservationToSupervisorTaskCanvasHeader } from "../../feature-library/supervisor-complete-reservation/flex-hooks/components/SupervisorTaskCanvasHeader"
+import { addAutoWrap } from "../../feature-library/agent-automation/flex-hooks/components/TaskCanvasHeader";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
   CallCanvas: [
     addConferenceToCallCanvas,
     addSupervisorCoachingPanelToAgent,
-    addPauseStatusPanel
+    addPauseStatusPanel,
   ],
   CallCanvasActions: [
     addConferenceToCallCanvasActions,
     removeDirectoryFromInternalCalls,
-    addPauseRecordingButton
+    addPauseRecordingButton,
   ],
   CRMContainer: [replaceAndSetCustomCRMContainer],
   MainHeader: [
     addPendingActivityComponent,
     addDeviceManagerToMainHeader,
-    replaceActivityComponent
+    replaceActivityComponent,
   ],
   MessageListItem: [replaceMessageForNotifications],
   NoTasksCanvas: [],
@@ -55,9 +59,11 @@ const componentHandlers: Components = {
   TaskCanvasHeader: [
     addSwitchToVideoToTaskCanvasHeader,
     addChatTransferButton,
-    addTransferButtonToChatTaskView
+    addTransferButtonToChatTaskView,
+    replaceEndTaskButton,
+    addAutoWrap
   ],
-  TaskCanvasTabs: [addVideoRoomTabToTaskCanvasTabs, addSupervisorMonitorPanel],
+  TaskCanvasTabs: [addVideoRoomTabToTaskCanvasTabs, addSupervisorMonitorPanel, addTaskCanvasTabCustomization],
   TaskInfoPanel: [replaceViewForCallbackAndVoicemail],
   TaskListButtons: [],
   TaskOverviewCanvas: [addSupervisorBargeCoachButtons],
@@ -67,6 +73,7 @@ const componentHandlers: Components = {
   WorkerDirectory: [],
   WorkerProfile: [replaceWorkerProfileInfo],
   WorkersDataTable: [replaceWorkerDataTableCallsColumnMultiCall],
+  SupervisorTaskCanvasHeader: [addUpdateReservationToSupervisorTaskCanvasHeader]
 };
 
 export default componentHandlers;
