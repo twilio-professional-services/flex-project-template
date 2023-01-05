@@ -6,18 +6,18 @@
         "expression": "transferTargetType == 'worker'",
         "targets": [
           {
-            "queue": "WQe42a800776a447906eaf6a0932e955ff",
+            "queue": "WQaaaaa",
             "known_worker_sid": "task.transferTargetSid"
           }
         ]
       },
       {
-        "filter_friendly_name": "Assign To Queue - Everyone",
+        "filter_friendly_name": "Assign to Queue - Everyone",
         "expression": "transferQueueName == 'Everyone'",
         "targets": [
           {
-            "queue": "WQe42a800776a447906eaf6a0932e955ff",
-            "expression": "worker.contact_uri != task.ignoreWorkerContactUri"
+            "queue": "WQbbbb",
+            "expression": "worker.sid NOT IN task.workerSidsInConversation"
           }
         ]
       },
@@ -26,24 +26,21 @@
         "expression": "transferQueueName == 'Parked Calls'",
         "targets": [
           {
-            "queue": "WQc94a5f5f961a709ddd2dc050ac96e4c9",
-            "expression": "worker.contact_uri != task.ignoreWorkerContactUri"
+            "queue": "WQcccc",
+            "expression": "worker.sid NOT IN task.workerSidsInConversation"
           }
         ]
       },
       {
-        "filter_friendly_name": "Assign To Queue Outbound Communication",
-        "expression": "transferQueueName == 'Outbound Communications'",
+        "filter_friendly_name": "Assign To Queue Outbound",
+        "expression": "transferQueueName == 'Outbound'",
         "targets": [
           {
-            "queue": "WQfb3e7e644af671b568494c4210ead2a5",
-            "expression": "worker.contact_uri != task.ignoreWorkerContactUri"
+            "queue": "WQdddd",
+            "expression": "worker.sid NOT IN task.workerSidsInConversation"
           }
         ]
       }
-    ],
-    "default_filter": {
-      "queue": "WQe42a800776a447906eaf6a0932e955ff"
-    }
+    ]
   }
 }

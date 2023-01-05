@@ -1,10 +1,15 @@
-import { ITask, Manager } from "@twilio/flex-ui";
+import { ITask, Manager, ConversationState, TaskHelper } from "@twilio/flex-ui";
 import TaskService from "../../../utils/serverless/TaskRouter/TaskRouterService";
-import { WorkerAttributes } from "@twilio/flex-ui";
 import { EncodedParams } from "../../../types/serverless";
 import ApiService from "../../../utils/serverless/ApiService";
 
 const manager: any | undefined = Manager.getInstance();
+
+export interface RemoveParticipantRESTPayload {
+  flexInteractionSid: string; //KDxxx sid for inteactions API
+  flexInteractionChannelSid: string; //UOxxx sid for interactions API
+  flexInteractionParticipantSid: string; // UTxxx sid for interactions API for the transferrring agent to remove
+}
 
 export interface TransferRESTPayload {
   taskSid: string; // sid of task to be transferred
@@ -12,25 +17,38 @@ export interface TransferRESTPayload {
   jsonAttributes: string; // string representation of attributes for new task
   transferTargetSid: string; //worker or queue sid
   transferQueueName: string; // only valid if transfer to queue
-  ignoreWorkerContactUri: string; // transferring works contact uri so they don't boomerang the task on queue transfer
+  workersToIgnore: object; // {key: value} - where key is the taskrouter attribute to set and value is a string array of names of agents in conversation to make sure they don't get reservations to join again
   flexInteractionSid: string; //KDxxx sid for inteactions API
   flexInteractionChannelSid: string; //UOxxx sid for interactions API
-  flexInteractionParticipantSid: string; // UTxxx sid for interactions API for the transferrring agent to remove them from conversation
+  removeFlexInteractionParticipantSid: string; // UTxxx sid for interactions API for the transferrring agent to remove them from conversation
 }
 
-const _getMyParticipantSid = async (
-  task: ITask,
-  flexInteractionChannelSid: string
-): Promise<string | null> => {
-  const participants = await task.getParticipants(flexInteractionChannelSid);
-
+const _getMyParticipantSid = (participants: any): string => {
   const myParticipant = participants.find(
     (participant: any) =>
       participant.mediaProperties?.identity ===
-      manager.conversationsClient.user.identity
+      manager.conversationsClient?.user?.identity
   );
 
   return myParticipant ? myParticipant.participantSid : "";
+};
+
+const _getAgentsWorkerSidArray = (participants: any) => {
+  const agentsWorkerSidArray = participants.reduce(
+    (prevArray: string[], currentParticipant: any) => {
+      if (
+        currentParticipant.type === "agent" &&
+        currentParticipant?.routingProperties?.workerSid
+      ) {
+        return [...prevArray, currentParticipant?.routingProperties?.workerSid];
+      } else {
+        return prevArray;
+      }
+    },
+    []
+  );
+
+  return agentsWorkerSidArray;
 };
 
 const _queueNameFromSid = async (transferTargetSid: string) => {
@@ -44,9 +62,51 @@ const _queueNameFromSid = async (transferTargetSid: string) => {
   return queueResult?.friendlyName || "";
 };
 
-export const buildTransferChatAPIPayload = async (
+export const buildRemoveMyPartiticipantAPIPayload = async (
+  conversation: ConversationState.ConversationState
+): Promise<RemoveParticipantRESTPayload | null> => {
+  if (!conversation.source?.sid) return null;
+  const task = TaskHelper.getTaskFromConversationSid(conversation.source?.sid);
+  if (!task || !TaskHelper.isCBMTask(task)) return null;
+
+  const { flexInteractionSid = "", flexInteractionChannelSid = "" } =
+    task.attributes;
+
+  const participants = await task.getParticipants(flexInteractionChannelSid);
+
+  const flexInteractionParticipantSid = _getMyParticipantSid(participants);
+
+  if (!flexInteractionParticipantSid) return null;
+
+  return {
+    flexInteractionSid,
+    flexInteractionChannelSid,
+    flexInteractionParticipantSid,
+  };
+};
+
+export const buildRemovePartiticipantAPIPayload = (
   task: ITask,
-  targetSid: string
+  flexInteractionParticipantSid: string
+) => {
+  if (!task || !TaskHelper.isCBMTask(task)) return null;
+
+  const { flexInteractionSid = "", flexInteractionChannelSid = "" } =
+    task.attributes;
+
+  if (!flexInteractionParticipantSid) return null;
+
+  return {
+    flexInteractionSid,
+    flexInteractionChannelSid,
+    flexInteractionParticipantSid,
+  };
+};
+
+export const buildInviteParticipantAPIPayload = async (
+  task: ITask,
+  targetSid: string,
+  removeInvitingAgent: boolean
 ): Promise<TransferRESTPayload | null> => {
   const taskSid = task.taskSid;
   const conversationId =
@@ -66,9 +126,6 @@ export const buildTransferChatAPIPayload = async (
     }
   }
 
-  const { contact_uri: ignoreWorkerContactUri } = manager.workerClient
-    .attributes as WorkerAttributes;
-
   const { flexInteractionSid = null, flexInteractionChannelSid = null } =
     task.attributes;
 
@@ -80,17 +137,25 @@ export const buildTransferChatAPIPayload = async (
     return null;
   }
 
-  const flexInteractionParticipantSid = await _getMyParticipantSid(
-    task,
-    flexInteractionChannelSid
-  );
+  const participants = await task.getParticipants(flexInteractionChannelSid);
 
-  if (!flexInteractionParticipantSid) {
-    console.error(
-      "Transfer failed. Didn't find flexInteractionPartipantSid",
-      task.sid
-    );
-    return null;
+  const workerSidsInConversationArray = _getAgentsWorkerSidArray(participants);
+  const workersToIgnore = {
+    workerSidsInConversation: workerSidsInConversationArray,
+  };
+
+  let removeFlexInteractionParticipantSid = "";
+  if (removeInvitingAgent) {
+    removeFlexInteractionParticipantSid =
+      _getMyParticipantSid(participants) || "";
+
+    if (!removeFlexInteractionParticipantSid) {
+      console.error(
+        "Transfer failed. Didn't find flexInteractionPartipantSid",
+        task.sid
+      );
+      return null;
+    }
   }
 
   return {
@@ -99,14 +164,19 @@ export const buildTransferChatAPIPayload = async (
     jsonAttributes,
     transferTargetSid,
     transferQueueName,
-    ignoreWorkerContactUri,
+    workersToIgnore,
     flexInteractionSid,
     flexInteractionChannelSid,
-    flexInteractionParticipantSid,
+    removeFlexInteractionParticipantSid,
   };
 };
 
 export interface TransferRESTResponse {
+  success: boolean;
+  invitesTaskSid: string;
+}
+
+export interface RemoveParticipantRESTResponse {
   success: boolean;
 }
 
@@ -121,9 +191,37 @@ class ChatTransferService extends ApiService {
       jsonAttributes: encodeURIComponent(requestPayload.jsonAttributes),
       transferTargetSid: encodeURIComponent(requestPayload.transferTargetSid),
       transferQueueName: encodeURIComponent(requestPayload.transferQueueName),
-      ignoreWorkerContactUri: encodeURIComponent(
-        requestPayload.ignoreWorkerContactUri
+      workersToIgnore: encodeURIComponent(
+        JSON.stringify(requestPayload.workersToIgnore)
       ),
+      flexInteractionSid: encodeURIComponent(requestPayload.flexInteractionSid),
+      flexInteractionChannelSid: encodeURIComponent(
+        requestPayload.flexInteractionChannelSid
+      ),
+      removeFlexInteractionParticipantSid: encodeURIComponent(
+        requestPayload.removeFlexInteractionParticipantSid
+      ),
+    };
+
+    return this.fetchJsonWithReject<TransferRESTResponse>(
+      `https://${this.serverlessDomain}/features/chat-transfer-v2-cbm/flex/invite-participant`,
+      {
+        method: "post",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: this.buildBody(encodedParams),
+      }
+    ).then((response): TransferRESTResponse => {
+      return {
+        ...response,
+      };
+    });
+  };
+
+  removeParticipantAPIRequest = (
+    requestPayload: RemoveParticipantRESTPayload
+  ): Promise<RemoveParticipantRESTResponse> => {
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(manager.user.token),
       flexInteractionSid: encodeURIComponent(requestPayload.flexInteractionSid),
       flexInteractionChannelSid: encodeURIComponent(
         requestPayload.flexInteractionChannelSid
@@ -134,7 +232,7 @@ class ChatTransferService extends ApiService {
     };
 
     return this.fetchJsonWithReject<TransferRESTResponse>(
-      `${this.serverlessProtocol}://${this.serverlessDomain}/features/chat-transfer-v2-cbm/flex/chat-transfer`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/features/chat-transfer-v2-cbm/flex/remove-participant`,
       {
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
