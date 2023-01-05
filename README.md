@@ -25,8 +25,8 @@ The primary aims of this template are
         1. [Prerequisites](#prerequisites)
         2. [setup](#setup)
         3. [development notes](#development-notes)
-    2. [Setup a project release pipeline](#setup-a-project-with-release-pipeline)
-    3. [Deploying to hosted Flex without a release pipeline](#deploying-to-hosted-flex-without-a-release-pipeline)
+    2. [Setup a project release pipeline (Recommended ~5 mins)](#setup-a-project-with-release-pipeline-recommended)
+    3. [Deploying to hosted Flex without a release pipeline (Not Recommended ~20-30 minutes)](#deploying-to-hosted-flex-without-a-release-pipeline-not-recommended)
     4. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
 3. [Why a template?](#why-a-template)
     1. [One Plugin](#one-plugin-instead-of-a-collection-of-plugins)
@@ -58,6 +58,7 @@ The primary aims of this template are
 | --------| ----------- | ------- | ----------| ----------- |
 | Activity Reservation Handler | _synchronize agent activities to reservation states_ | [Yes](plugin-flex-ts-template/src/feature-library/activity-reservation-handler/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/activity-reservation-handler/README.md)|  | 
 | Activity Skill Filter  | _manage visibility for activities based on agent skills_ | [Yes](plugin-flex-ts-template/src/feature-library/activity-skill-filter/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/activity-skill-filter/README.md) |  |
+| Agent Automation | _adds auto accept and auto wrapup behaviors to agent desktop_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/agent-automation/README.md) | ✅  |
 | Callbacks and Voicemail  | _introduce support for callback and voicemail tasks_ | [Yes](plugin-flex-ts-template/src/feature-library/callbacks/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/callback-and-voicemail/README.md) |  ✅ |
 | Caller ID  | _provide agents with means to select their caller id when dialing out_ | [Yes](plugin-flex-ts-template/src/feature-library/caller-id/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/caller-id/README.md) | ✅ |
 | Chat to Video Escalation  | _provide agents ability to elevate a chat conversation to a video conversation with screen sharing_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/chat-to-video-escalation/README.md) |  |
@@ -76,6 +77,7 @@ The primary aims of this template are
 | Scrollable Activities | _allow the scrolling of the activities list_ | [Yes](plugin-flex-ts-template/src/feature-library/scrollable-activities/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/scrollable-activities/README.md) | ✅ |
 | Supervisor Barge Coach | _introduce advanced supervisor barge and coach features_ | [Yes](plugin-flex-ts-template/src/feature-library/supervisor-barge-coach/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-barge-coach/README.md) | ✅  |
 | Supervisor Capacity | _allow supervisors to update worker capacity configuration within Flex_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-capacity/README.md) |  ✅ |
+| Supervisor Complete Reservation | _allows supervisor to remotely complete agent tasks_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-complete-reservation/README.md) | ✅  |
 | Teams View Filters | _adds additional filtering options to the supervisor teams view_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/teams-view-filters/README.md) | ✅  |
 
 ----
@@ -146,8 +148,8 @@ When running the plugin locally, this template has been set up to pair the plugi
 
 ---
 
-## Setup a project with release pipeline
-
+## Setup a project with release pipeline (Recommended)
+_~5 minutes_
 1. Use the template to create your own repository
 2. Nominate a Twilio account to act as one of dev, qa, test, prod (based on your use case)
 3. Create a twilio api key and secret for your account follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key.
@@ -170,8 +172,8 @@ When running the plugin locally, this template has been set up to pair the plugi
     - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommended you populate the [ui_attributes](/flex-config/) config and manage the domain names through version control at a later date to remove any ambiguity. 
     - for full functionality, review the configuration steps for the disable features and make sure their dependencies are setup.
 
-## Deploying to hosted Flex without a release pipeline
-
+## Deploying to hosted Flex without a release pipeline (Not Recommended)
+_~20-30 minutes_ <br><br>
 For the below steps, where `<environment>` is referenced, you may use `dev`, `test`, `qa`, or `prod`.
 
 First, deploy the serverless functions:

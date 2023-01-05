@@ -25,6 +25,8 @@ import { replaceEndTaskButton } from "../../feature-library/chat-transfer/flex-h
 import { addScheduleManagerToSideNav } from "../../feature-library/schedule-manager/flex-hooks/components/SideNav";
 import { addScheduleManagerView } from "../../feature-library/schedule-manager/flex-hooks/components/ViewCollection";
 import { replaceWorkerDataTableCallsColumnMultiCall } from "../../feature-library/multi-call/flex-hooks/components/WorkersDataTable";
+import { addUpdateReservationToSupervisorTaskCanvasHeader } from "../../feature-library/supervisor-complete-reservation/flex-hooks/components/SupervisorTaskCanvasHeader"
+import { addAutoWrap } from "../../feature-library/agent-automation/flex-hooks/components/TaskCanvasHeader";
 
 const componentHandlers: Components = {
   AgentDesktopView: [],
@@ -52,7 +54,7 @@ const componentHandlers: Components = {
   ],
   ParticipantCanvas: [addConferenceToParticipantCanvas],
   SideNav: [addScheduleManagerToSideNav],
-  TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader, addChatTransferButton, replaceEndTaskButton],
+  TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader, addChatTransferButton, replaceEndTaskButton, addAutoWrap],
   TaskCanvasTabs: [addVideoRoomTabToTaskCanvasTabs, addSupervisorMonitorPanel, addTaskCanvasTabCustomization],
   TaskInfoPanel: [replaceViewForCallbackAndVoicemail],
   TaskListButtons: [],
@@ -63,6 +65,7 @@ const componentHandlers: Components = {
   WorkerDirectory: [],
   WorkerProfile: [replaceWorkerProfileInfo],
   WorkersDataTable: [replaceWorkerDataTableCallsColumnMultiCall],
+  SupervisorTaskCanvasHeader: [addUpdateReservationToSupervisorTaskCanvasHeader]
 };
 
 export default componentHandlers;

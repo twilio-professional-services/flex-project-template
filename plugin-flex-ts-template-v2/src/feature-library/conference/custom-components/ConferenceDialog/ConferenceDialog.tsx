@@ -27,7 +27,7 @@ const ConferenceDialog = (props: OwnProps) => {
   const phoneNumber = useFlexSelector((state: AppState) => state.flex.worker.attributes.phone);
   
   const conferenceDialogState = componentViewStates && componentViewStates.ConferenceDialog;
-  const isOpen = conferenceDialogState && conferenceDialogState.isOpen;
+  const isOpen = (conferenceDialogState && conferenceDialogState.isOpen) || false;
   
   const dispatch = useDispatch();
   const modalHeadingID = useUID();

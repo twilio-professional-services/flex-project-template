@@ -28,6 +28,9 @@ import MultiCallLoaded from "../../feature-library/multi-call/flex-hooks/events/
 import MultiCallTokenUpdated from "../../feature-library/multi-call/flex-hooks/events/tokenUpdated";
 import InternalCallLoaded from "../../feature-library/internal-call/flex-hooks/events/pluginsLoaded";
 import HangUpByLoaded from "../../feature-library/hang-up-by/flex-hooks/events/pluginsLoaded";
+import AgentAutomationLoaded from "../../feature-library/agent-automation/flex-hooks/events/pluginsLoaded";
+import autoSelectAndAcceptTask from "../../feature-library/agent-automation/flex-hooks/events/taskReceived";
+import SupervisorCompleteReservationLoaded from "../../feature-library/supervisor-complete-reservation/flex-hooks/events/pluginsLoaded"
 
 const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
   pluginsLoaded: [
@@ -47,7 +50,9 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     ScheduleManagerLoaded,
     MultiCallLoaded,
     InternalCallLoaded,
-    HangUpByLoaded
+    HangUpByLoaded,
+    AgentAutomationLoaded,
+    SupervisorCompleteReservationLoaded
   ],
   taskAccepted: [
     taskAcceptedHandlerActivityReservationHandler,
@@ -58,7 +63,7 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     taskEndedHandlerActivityReservationHandler,
     HangUpByTaskCompleted
   ],
-  taskReceived: [taskReceivedActivityReservationHandler],
+  taskReceived: [taskReceivedActivityReservationHandler, autoSelectAndAcceptTask],
   taskRejected: [taskEndedHandlerActivityReservationHandler],
   taskRescinded: [taskEndedHandlerActivityReservationHandler],
   taskTimeout: [taskEndedHandlerActivityReservationHandler],
