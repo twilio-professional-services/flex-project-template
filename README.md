@@ -341,6 +341,8 @@ When adding new features to the template, some boilerplate is required. This scr
 - Adds a `pluginsLoaded` event handler
 - Adds the appropriate references to the above files
 - Adds a feature readme file
+- Adds the feature to the `ui_attributes.common.json` config file
+  - By default, the feature is added to the config with `enabled` set to `false`
 
 After cloning the template, simply run the following command from the repository root dir.
 
