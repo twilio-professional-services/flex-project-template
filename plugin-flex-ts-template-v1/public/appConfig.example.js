@@ -10,11 +10,7 @@ var appConfig = {
     serverless_functions_protocol: "http",
     serverless_functions_port: "3001",
     serverless_functions_domain: "localhost",
-    features: {
-      caller_id: {
-        enabled: true
-      }
-    }
+    features: { }
   },
 };
 
