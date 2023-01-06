@@ -3,19 +3,19 @@ import { StringTemplates } from '../strings/ChatTransfer';
 
 // Export the notification IDs an enum for better maintainability when accessing them elsewhere
 export enum ChatTransferNotification {
-  ErrorTransferingChat = 'ErrorTransferingChat',
+  ErrorTransferringChat = 'ErrorTransferringChat',
   ErrorUpdatingTaskForChatTransfer = 'ErrorUpdatingTaskForChatTransfer'
 };
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
-  errorTransferingChat(flex, manager);
+  ErrorTransferringChat(flex, manager);
   warnDuringTransfer(flex, manager);
 }
 
-function errorTransferingChat(flex: typeof Flex, manager: Flex.Manager) {
+function ErrorTransferringChat(flex: typeof Flex, manager: Flex.Manager) {
   flex.Notifications.registerNotification({
-    id: ChatTransferNotification.ErrorTransferingChat,
-    content: StringTemplates.FailedToSumitTransfer,
+    id: ChatTransferNotification.ErrorTransferringChat,
+    content: StringTemplates.FailedToSubmitTransfer,
     type: flex.NotificationType.error,
   });
 }

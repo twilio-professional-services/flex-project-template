@@ -134,7 +134,7 @@ class ChatTransferService extends ApiService {
           Flex.Actions.invokeAction('WrapupTask', { task });
         }
       } else {
-        Flex.Notifications.showNotification(ChatTransferNotification.ErrorTransferingChat, { message });
+        Flex.Notifications.showNotification(ChatTransferNotification.ErrorTransferringChat, { message });
       }
 
       return { success, taskSid: transferTaskSid, message };
@@ -143,7 +143,7 @@ class ChatTransferService extends ApiService {
         error.message = 'Unable to reach host';
       }
       const { message } = error as any;
-      Flex.Notifications.showNotification(ChatTransferNotification.ErrorTransferingChat, { message });
+      Flex.Notifications.showNotification(ChatTransferNotification.ErrorTransferringChat, { message });
       return { success: false, taskSid: '', message: undefined };
     }
   }
@@ -215,7 +215,7 @@ class ChatTransferService extends ApiService {
       Token: encodeURIComponent(manager.user.token),
       taskSid: encodeURIComponent(taskSid),
       transferType: encodeURIComponent(transferType),
-      channelSid: encodeURIComponent(channelSid),
+      channelSid: channelSid ? encodeURIComponent(channelSid) : undefined,
     };
 
     return this.fetchJsonWithReject<CompleteTransferredTaskResponse>(

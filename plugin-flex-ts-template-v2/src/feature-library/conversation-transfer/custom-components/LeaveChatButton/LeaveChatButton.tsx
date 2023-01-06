@@ -1,5 +1,5 @@
 import { Button, ConversationState, Actions } from "@twilio/flex-ui";
-import { LeaveChatActionPayload } from "feature-library/chat-transfer/types/ActionPayloads";
+import { LeaveChatActionPayload } from "feature-library/conversation-transfer/types/ActionPayloads";
 import { useState} from "react"
 
 interface LeaveChatButtonProps {
