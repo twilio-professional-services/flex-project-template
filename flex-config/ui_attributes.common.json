@@ -78,7 +78,7 @@
         "logFilters": true,
         "applied_filters": {
           "email": true,
-          "department" : true,
+          "department": true,
           "queue_no_worker_data": true,
           "queue_worker_data": false,
           "team": true,
@@ -95,7 +95,7 @@
           "Customer Service",
           "Recruiting"
         ],
-        "team_options" :[
+        "team_options": [
           "Blue Team",
           "Red Team",
           "Gold Team",
@@ -121,22 +121,24 @@
       },
       "agent_automation": {
         "enabled": true,
-        "configuration" : [{
-          "channel": "voice",
-          "auto_accept": true,
-          "auto_select": true,
-          "auto_wrapup": true,
-          "required_attributes": [],
-          "wrapup_time" : 30000
-        },
-        {
-          "channel": "chat",
-          "auto_accept": true,
-          "auto_select": true,
-          "auto_wrapup": true,
-          "required_attributes": [],
-          "wrapup_time" : 30000
-        }]
+        "configuration": [
+          {
+            "channel": "voice",
+            "auto_accept": true,
+            "auto_select": true,
+            "auto_wrapup": true,
+            "required_attributes": [],
+            "wrapup_time": 30000
+          },
+          {
+            "channel": "chat",
+            "auto_accept": true,
+            "auto_select": true,
+            "auto_wrapup": true,
+            "required_attributes": [],
+            "wrapup_time": 30000
+          }
+        ]
       },
       "supervisor_complete_reservation": {
         "enabled": true

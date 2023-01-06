@@ -165,6 +165,20 @@ const updateRefs = async () => {
   return success;
 }
 
+// update config file
+const updateConfig = async () => {
+  let configFile = "flex-config/ui_attributes.common.json";
+  try {
+    shell.echo(`Adding feature to ${configFile}`);
+    let fileData = await fs.readFile(configFile, "utf8");
+    let jsonData = JSON.parse(fileData);
+    jsonData.custom_data.features[featureConfigName] = { enabled: false };
+    await fs.writeFile(configFile, JSON.stringify(jsonData, null, 2), 'utf8');
+  } catch (error) {
+    shell.echo(`Failed to update ${configFile}: ${error}`);
+  }
+}
+
 const addFeature = async () => {
   if (!validateInput()) {
     return;
@@ -175,6 +189,8 @@ const addFeature = async () => {
   if (!(await createDir()) || !(await updateNames()) || !(await updateRefs())) {
     return;
   }
+  
+  await updateConfig();
   
   shell.echo("");
   shell.echo(`Feature added: "${featureName}"`);
