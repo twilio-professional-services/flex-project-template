@@ -1,5 +1,6 @@
 import ApiService from "../ApiService";
 import { EncodedParams } from "../../../types/serverless";
+import { TaskAssignmentStatus } from "types/task-router/Task";
 
 export interface Queue {
   targetWorkers: string;
@@ -57,6 +58,18 @@ class TaskRouterService extends ApiService {
     return result.success;
   }
 
+  async updateTaskAssignmentStatus(
+    taskSid: string,
+    assignmentStatus: TaskAssignmentStatus
+  ): Promise<Boolean> {
+    const result = await this.#updateTaskAssignmentStatus(
+      taskSid,
+      assignmentStatus
+    );
+
+    return result.success;
+  }
+
   // does a one time fetch for queues per session
   // since queue configuration seldom changes
   async getQueues(force?: boolean): Promise<Array<Queue> | null> {
@@ -88,6 +101,30 @@ class TaskRouterService extends ApiService {
 
     return result.success;
   }
+
+  #updateTaskAssignmentStatus = (
+    taskSid: string,
+    assignmentStatus: TaskAssignmentStatus
+  ): Promise<UpdateTaskAttributesResponse> => {
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(this.manager.user.token),
+      taskSid: encodeURIComponent(taskSid),
+      assignmentStatus: encodeURIComponent(assignmentStatus),
+    };
+
+    return this.fetchJsonWithReject<UpdateTaskAttributesResponse>(
+      `https://${this.serverlessDomain}/common/flex/taskrouter/update-task-assignment-status`,
+      {
+        method: "post",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: this.buildBody(encodedParams),
+      }
+    ).then((response): UpdateTaskAttributesResponse => {
+      return {
+        ...response,
+      };
+    });
+  };
 
   #updateTaskAttributes = (
     taskSid: string,

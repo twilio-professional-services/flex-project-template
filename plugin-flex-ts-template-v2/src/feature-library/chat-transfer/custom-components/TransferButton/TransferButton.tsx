@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { IconButton, ITask, Actions, styled} from "@twilio/flex-ui"
+import { IconButton, ITask, Actions, styled } from "@twilio/flex-ui"
+import { TransferActionPayload } from '../../types/ActionPayloads'
 
 const IconContainer = styled.div`
   margin: auto;
@@ -11,14 +12,16 @@ interface TransferButtonProps {
 
 
 const TransferButton = ({ task }: TransferButtonProps) => {
-     // All we are doing here is making sure we disable the transfer button after it is clicked
+     // All we are doing here is making sure we disable the transfer button after it is clicked for a cold transfer
     // There is additional complexity as we only want to disable it for the task they click transfer on
     const [disableTransferButtonForTask, setDisableTransferButtonForTask] = useState(false);
     const [taskSidsTransfered, setTaskSidsTransfered] = useState<string[]>([]);
     
-    // if there is a transfer task event for this chat disable the transfer button
-    const handleTransferInitiated = (payload: any) => {
-        setTaskSidsTransfered([...taskSidsTransfered, task.sid])
+    // if there is a transfer task event for this chat disable the transfer button if it was a cold transfer
+    const handleTransferInitiated = (payload: TransferActionPayload) => {
+        if (payload.options?.mode === "COLD") {
+            setTaskSidsTransfered([...taskSidsTransfered, task.sid])
+        }
     }
 
     // only listen for transfer task events when mounted and make sure we clean up the listener
