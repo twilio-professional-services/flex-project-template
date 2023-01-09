@@ -13,7 +13,7 @@ const {
   queue_worker_data = false,
   team = false,
   agent_skills = false
-  } = getFeatureFlags().features?.teams_view_filters.applied_filters || {};
+  } = getFeatureFlags().features?.teams_view_filters?.applied_filters || {};
 
 export const isFeatureEnabled = () => {
   return enabled;
