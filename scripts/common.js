@@ -1,4 +1,6 @@
 const shell = require("shelljs");
+const fs = require("fs");
+const JSON5 = require('json5');
 var { setPluginName, getPaths } = require("./select-plugin");
 
 const serverlessDir = 'serverless-functions';
@@ -271,12 +273,22 @@ exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
 
   var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
   var pluginAppConfig = `./${pluginDir}/public/appConfig.js`
+  var commonFlexConfig = `./flex-config/ui_attributes.common.json`
 
   if(pluginDir && pluginDir != ""){
     try{
 
       if(!shell.test('-e', pluginAppConfig)){
         shell.cp(pluginAppConfigExample, pluginAppConfig);
+        
+        // now that we have a copy of the file, populate it with defaults
+        let appConfigFileData = fs.readFileSync(pluginAppConfig, "utf8");
+        let flexConfigFileData = fs.readFileSync(commonFlexConfig, "utf8");
+        let flexConfigJsonData = JSON.parse(flexConfigFileData);
+        
+        appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
+        
+        fs.writeFileSync(pluginAppConfig, appConfigFileData, 'utf8');
       }
       console.log(`Setting up ${pluginAppConfig}: complete`);
     } catch (error) {
@@ -294,6 +306,15 @@ exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
   
       if(!shell.test('-e', pluginAppConfig)){
         shell.cp(pluginAppConfigExample, pluginAppConfig);
+        
+        // now that we have a copy of the file, populate it with defaults
+        let appConfigFileData = fs.readFileSync(pluginAppConfig, "utf8");
+        let flexConfigFileData = fs.readFileSync(commonFlexConfig, "utf8");
+        let flexConfigJsonData = JSON.parse(flexConfigFileData);
+        
+        appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
+        
+        fs.writeFileSync(pluginAppConfig, appConfigFileData, 'utf8');
       }
       console.log(`Setting up ${pluginAppConfig}: complete`);
     } catch (error) {
