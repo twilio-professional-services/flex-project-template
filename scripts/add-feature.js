@@ -7,7 +7,7 @@ var fs = require("fs").promises;
 
 // defaulting to plugin v2 for just now
 var { getPaths } = require("./select-plugin");
-const { templateDirectory, featureDirectory, pluginSrc } = getPaths("v2");
+const { templateDirectory, featureDirectory, pluginSrc, pluginDir } = getPaths("v2");
 
 var featureName;
 var featureClassName;
@@ -165,7 +165,8 @@ const updateRefs = async () => {
   return success;
 }
 
-// update config file
+// update flex-config, used for deployment to Flex Configuration API
+// default to disabled to allow for planned deployments
 const updateConfig = async () => {
   let configFile = "flex-config/ui_attributes.common.json";
   try {
@@ -177,6 +178,25 @@ const updateConfig = async () => {
   } catch (error) {
     shell.echo(`Failed to update ${configFile}: ${error}`);
   }
+}
+
+// update appConfig, used for local development
+// default this one to enabled to make developer's life easier
+const updateAppConfig = async () => {
+  var success = true;
+  let appConfigFile = `${pluginDir}/public/appConfig.js`;
+  try {
+    await fs.access(appConfigFile);
+    // if this is successful, the appConfig exists (yay!)
+    shell.echo(`Adding feature to ${appConfigFile}`);
+    let appConfigData = await fs.readFile(appConfigFile, "utf8");
+    let newAppConfigData = appConfigData.replace("features: {", `features: {\n      ${featureConfigName}: {\n        enabled: true,\n      },`);
+    await fs.writeFile(appConfigFile, newAppConfigData, 'utf8');
+  } catch (error) {
+    success = false;
+  }
+  
+  return success;
 }
 
 const addFeature = async () => {
@@ -191,10 +211,15 @@ const addFeature = async () => {
   }
   
   await updateConfig();
+  let appConfigUpdated = await updateAppConfig();
   
   shell.echo("");
   shell.echo(`Feature added: "${featureName}"`);
-  shell.echo("Please note that this feature will not be enabled until it is added to flex-config for the appropriate environment.");
+  if (appConfigUpdated) {
+    shell.echo("Please note that this feature has been enabled locally for development. It will not be enabled elsewhere until it is added to flex-config for the appropriate environment.");
+  } else {
+    shell.echo("Please note that this feature will not be enabled until it is added to flex-config for the appropriate environment.");
+  }
   shell.echo("");
 }
 
