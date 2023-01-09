@@ -1,5 +1,6 @@
 const shell = require("shelljs");
 const fs = require("fs");
+const JSON5 = require('json5');
 var { setPluginName, getPaths } = require("./select-plugin");
 
 const serverlessDir = 'serverless-functions';
@@ -285,7 +286,7 @@ exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
         let flexConfigFileData = fs.readFileSync(commonFlexConfig, "utf8");
         let flexConfigJsonData = JSON.parse(flexConfigFileData);
         
-        appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
+        appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
         
         fs.writeFileSync(pluginAppConfig, appConfigFileData, 'utf8');
       }
@@ -311,7 +312,7 @@ exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
         let flexConfigFileData = fs.readFileSync(commonFlexConfig, "utf8");
         let flexConfigJsonData = JSON.parse(flexConfigFileData);
         
-        appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
+        appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
         
         fs.writeFileSync(pluginAppConfig, appConfigFileData, 'utf8');
       }
