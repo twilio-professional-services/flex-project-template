@@ -33,7 +33,7 @@
         "hold_workaround": false
       },
       "enhanced_crm_container": {
-        "enabled": true
+        "enabled": false
       },
       "internal_call": {
         "enabled": false
