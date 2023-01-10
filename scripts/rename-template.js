@@ -19,9 +19,9 @@ shell.echo(`renaming plugin: `, pluginDir);
 shell.echo("");
 
 if(process.argv[2] === undefined || process.argv[2] === "" ){
-  shell.echo("A new asset name was not provided, please try again and provide a new asset name when you run the script.  For example...");
+  shell.echo("A new template name was not provided, please try again and provide a new template name when you run the script.  For example...");
   shell.echo("");
-  shell.echo("npm run rename-assets my-new-asset-name");
+  shell.echo("npm run rename-template my-new-template-name");
   shell.echo("");
   return;
 }

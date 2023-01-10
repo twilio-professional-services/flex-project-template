@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import { ScheduleManagerConfig, UpdateConfigResponse, UpdateConfigStatusResponse, PublishConfigRequest, PublishConfigResponse } from '../types/schedule-manager';
 import { EncodedParams } from '../../../types/serverless';
 import ApiService from '../../../utils/serverless/ApiService';
-import { getServerlessDomain } from '..';
+import { isFeatureEnabled, getServerlessDomain } from '..';
 
 class ScheduleManagerService extends ApiService {
   readonly scheduleManagerServerlessDomain: string;
@@ -12,7 +12,7 @@ class ScheduleManagerService extends ApiService {
     
     this.scheduleManagerServerlessDomain = getServerlessDomain();
     
-    if (!this.scheduleManagerServerlessDomain) {
+    if (isFeatureEnabled() && !this.scheduleManagerServerlessDomain) {
       console.error(
         "schedule_manager serverless_domain is not set in flex config"
       );

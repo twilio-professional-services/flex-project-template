@@ -44,11 +44,12 @@ The primary aims of this template are
     7. [scripts](#scripts)
     8. [.github](#github)
 6. [More Scripts Details](#more-scripts-details)
-    1. [Removing Features](#removing-features)
-    2. [Renaming Template](#renaming-template)
-    3. [show-env-vars](#show-env-vars)
-    4. [setup-local-environment](#setup-local-environment)
-    5. [generate-env](#generate-env)
+    1. [Add Feature](#add-feature)
+    2. [Removing Features](#removing-features)
+    3. [Renaming Template](#renaming-template)
+    4. [show-env-vars](#show-env-vars)
+    5. [setup-local-environment](#setup-local-environment)
+    6. [generate-env](#generate-env)
 7. [Change log](#changelog)
 
 
@@ -67,7 +68,7 @@ The primary aims of this template are
 | Conference (external) | _provide agents the ability to conference in external numbers_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/conference/README.md) | ✅ |
 | Device Manager | _provide agents the ability to select the audio output device_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/device-manager/README.md) | ✅ |
 | Dual Channel Recording | _automatically record both inbound and outbound calls in dual channel_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/dual-channel-recording/README.md) |  |
-| Enhanced CRM Container   | _optimize the CRM container experience_ | [Yes](plugin-flex-ts-template/src/feature-library/enhanced-crm-container/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/enhanced-crm-container/README.md) | ✅ |
+| Enhanced CRM Container | _optimize the CRM container experience_ | [Yes](plugin-flex-ts-template/src/feature-library/enhanced-crm-container/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/enhanced-crm-container/README.md) |  |
 | Hang Up By Reporting | _populates the Hang Up By and Destination attributes in Flex Insights_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/hang-up-by/README.md) |  |
 | Internal Call (Agent to Agent)  | _provide agents the ability to dial each other_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/internal-call/README.md) |  |
 | Multi-call | _allow agents to receive a transferred call while already on a call_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/multi-call/README.md) |  |
@@ -318,6 +319,7 @@ This package contains web application examples that build off feature functional
 
 this package maintains some convenience scripts namely
 
+- [add-feature](#add-feature) - for adding a new feature to the template, adds all of the necessary boilerplate
 - [rename-template](#renaming-template) - for renaming the plugin and serverless packages along with the serverless domain, typically used when making standalone plugins that still want to follow the template structure
 - [remove-features](#removing-features) - for removing the features from the template, again typically used when making standalone plugins that still want to follow the template structure
 
@@ -329,6 +331,26 @@ Lastly, this package manages the github action workflows - with one example bein
 ---
 
 # More Scripts Details
+
+## Add feature
+
+(the following is only applicable when using the flex v2 plugin)
+
+When adding new features to the template, some boilerplate is required. This script does all of that for you, specifically:
+- Creates a feature directory under `feature-library`
+- Adds an interface for feature configuration
+- Adds a `pluginsLoaded` event handler
+- Adds the appropriate references to the above files
+- Adds a feature readme file
+- Adds the feature to the `ui_attributes.common.json` config file
+  - By default, the feature is added to the config with `enabled` set to `false`
+
+After cloning the template, simply run the following command from the repository root dir.
+
+```bash
+npm install
+npm run add-feature my-new-feature-name-goes-here
+```
 
 ## Removing Features
 
