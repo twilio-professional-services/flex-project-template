@@ -8,13 +8,14 @@ import ConferenceLoaded from "../../feature-library/conference/flex-hooks/events
 import OmniChannelCapacityManagementLoaded from "../../feature-library/omni-channel-capacity-management/flex-hooks/events/pluginsLoaded";
 import ScrollableActivitiesLoaded from "../../feature-library/scrollable-activities/flex-hooks/events/pluginsLoaded";
 import EnhancedCRMContainerLoaded from "../../feature-library/enhanced-crm-container/flex-hooks/events/pluginsLoaded";
-import ChatTransferLoaded from "../../feature-library/chat-transfer/flex-hooks/events/pluginsLoaded";
+import ConversationTransferLoaded from "../../feature-library/conversation-transfer/flex-hooks/events/pluginsLoaded";
 import DualChannelRecordingLoaded from "../../feature-library/dual-channel-recording/flex-hooks/events/pluginsLoaded";
 import PauseRecordingLoaded from "../../feature-library/pause-recording/flex-hooks/events/pluginsLoaded";
 import TeamsViewFiltersLoaded from "../../feature-library/teams-view-filters/flex-hooks/events/pluginsLoaded";
 import SupervisorCapacityLoaded from "../../feature-library/supervisor-capacity/flex-hooks/events/pluginsLoaded";
 import ScheduleManagerLoaded from "../../feature-library/schedule-manager/flex-hooks/events/pluginsLoaded";
 import MultiCallLoaded from "../../feature-library/multi-call/flex-hooks/events/pluginsLoaded";
+import ChatTransferLoaded from "../../feature-library/chat-transfer/flex-hooks/events/pluginsLoaded";
 import InternalCallLoaded from "../../feature-library/internal-call/flex-hooks/events/pluginsLoaded";
 import HangUpByLoaded from "../../feature-library/hang-up-by/flex-hooks/events/pluginsLoaded";
 import AgentAutomationLoaded from "../../feature-library/agent-automation/flex-hooks/events/pluginsLoaded";
@@ -43,13 +44,14 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     OmniChannelCapacityManagementLoaded,
     ScrollableActivitiesLoaded,
     EnhancedCRMContainerLoaded,
-    ChatTransferLoaded,
+    ConversationTransferLoaded,
     DualChannelRecordingLoaded,
     PauseRecordingLoaded,
     TeamsViewFiltersLoaded,
     SupervisorCapacityLoaded,
     ScheduleManagerLoaded,
     MultiCallLoaded,
+    ChatTransferLoaded,
     InternalCallLoaded,
     HangUpByLoaded,
     AgentAutomationLoaded,

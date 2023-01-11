@@ -15,13 +15,15 @@ import { addSupervisorBargeCoachButtons } from "../../feature-library/supervisor
 import { addInternalCallToDialerPanel } from "../../feature-library/internal-call/flex-hooks/components/OutboundDialerPanel";
 import { replaceAndSetCustomCRMContainer } from "../../feature-library/enhanced-crm-container/flex-hooks/components/CRMContainer";
 import { addDeviceManagerToMainHeader } from "../../feature-library/device-manager/flex-hooks/components/MainHeader";
-import { addChatTransferButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
+import { addChatTransferButton } from "../../feature-library/conversation-transfer/flex-hooks/components/TaskCanvasHeader";
+import { replaceMessageForNotifications } from "../../feature-library/chat-transfer/flex-hooks/components/MessageListItem";
+import { addTransferButtonToChatTaskView } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
 import { replaceWorkerProfileInfo } from "../../feature-library/activity-skill-filter/flex-hooks/components/WorkerProfile";
 import { addCapacityToWorkerCanvas } from "../../feature-library/supervisor-capacity/flex-hooks/components/WorkerCanvas";
 import { addPauseRecordingButton } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvasActions";
 import { addPauseStatusPanel } from "../../feature-library/pause-recording/flex-hooks/components/CallCanvas";
-import { addTaskCanvasTabCustomization } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasTabs";
-import { replaceEndTaskButton } from "../../feature-library/chat-transfer/flex-hooks/components/TaskCanvasHeader";
+import { addTaskCanvasTabCustomization } from "../../feature-library/conversation-transfer/flex-hooks/components/TaskCanvasTabs";
+import { replaceEndTaskButton } from "../../feature-library/conversation-transfer/flex-hooks/components/TaskCanvasHeader";
 import { addScheduleManagerToSideNav } from "../../feature-library/schedule-manager/flex-hooks/components/SideNav";
 import { addScheduleManagerView } from "../../feature-library/schedule-manager/flex-hooks/components/ViewCollection";
 import { replaceWorkerDataTableCallsColumnMultiCall } from "../../feature-library/multi-call/flex-hooks/components/WorkersDataTable";
@@ -46,7 +48,7 @@ const componentHandlers: Components = {
     addDeviceManagerToMainHeader,
     replaceActivityComponent,
   ],
-  MessageListItem: [],
+  MessageListItem: [replaceMessageForNotifications],
   NoTasksCanvas: [],
   OutboundDialerPanel: [
     addOutboundCallerIdSelectorToMainHeader,
@@ -54,7 +56,13 @@ const componentHandlers: Components = {
   ],
   ParticipantCanvas: [addConferenceToParticipantCanvas],
   SideNav: [addScheduleManagerToSideNav],
-  TaskCanvasHeader: [addSwitchToVideoToTaskCanvasHeader, addChatTransferButton, replaceEndTaskButton, addAutoWrap],
+  TaskCanvasHeader: [
+    addSwitchToVideoToTaskCanvasHeader,
+    addChatTransferButton,
+    addTransferButtonToChatTaskView,
+    replaceEndTaskButton,
+    addAutoWrap
+  ],
   TaskCanvasTabs: [addVideoRoomTabToTaskCanvasTabs, addSupervisorMonitorPanel, addTaskCanvasTabCustomization],
   TaskInfoPanel: [replaceViewForCallbackAndVoicemail],
   TaskListButtons: [],

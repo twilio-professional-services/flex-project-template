@@ -2,7 +2,8 @@ import * as Flex from "@twilio/flex-ui";
 import ActivityReservationHandler from "../../feature-library/activity-reservation-handler/flex-hooks/notifications/ActivityReservationHandler";
 import ActivitySkillFilter from "../../feature-library/activity-skill-filter/flex-hooks/notifications/ActivitySkillFilter";
 import Conference from "../../feature-library/conference/flex-hooks/notifications/Conference";
-import ChatTransfer from "../../feature-library/chat-transfer/flex-hooks/notifications/TransferResult";
+import ChatTransfer from "../../feature-library/conversation-transfer/flex-hooks/notifications/TransferResult";
+import ProgrammableChatTransfer from "../../feature-library/chat-transfer/flex-hooks/notifications/ChatTransfer";
 import DualChannelRecording from "../../feature-library/dual-channel-recording/flex-hooks/notifications/DualChannelRecording";
 import PauseRecording from "../../feature-library/pause-recording/flex-hooks/notifications/PauseRecording";
 import TeamsViewFilters from "../../feature-library/teams-view-filters/flex-hooks/notifications/TeamViewQueueFilter";
@@ -15,6 +16,6 @@ import ChatToVideo from "../../feature-library/chat-to-video-escalation/flex-hoo
 const notificationsToRegister: ((
   flex: typeof Flex,
   manager: Flex.Manager
-) => void)[] = [ActivityReservationHandler, ActivitySkillFilter, Conference, ChatTransfer, DualChannelRecording, PauseRecording, TeamsViewFilters, ScheduleManager, MultiCall, InternalCall, Callback, ChatToVideo];
+) => void)[] = [ActivityReservationHandler, ActivitySkillFilter, Conference, ChatTransfer, DualChannelRecording, PauseRecording, TeamsViewFilters, ScheduleManager, MultiCall, InternalCall, Callback, ChatToVideo, ProgrammableChatTransfer];
 
 export default notificationsToRegister;

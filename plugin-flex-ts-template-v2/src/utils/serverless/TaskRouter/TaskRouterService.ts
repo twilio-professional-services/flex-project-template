@@ -113,7 +113,7 @@ class TaskRouterService extends ApiService {
     };
 
     return this.fetchJsonWithReject<UpdateTaskAttributesResponse>(
-      `https://${this.serverlessDomain}/common/flex/taskrouter/update-task-assignment-status`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/taskrouter/update-task-assignment-status`,
       {
         method: "post",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },

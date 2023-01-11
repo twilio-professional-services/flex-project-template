@@ -19,7 +19,7 @@
       "caller_id": {
         "enabled": true
       },
-      "chat_transfer": {
+      "conversation_transfer": {
         "enabled": false,
         "cold_transfer": true,
         "multi_participant": true
@@ -119,6 +119,9 @@
         "enabled": false
       },
       "hang_up_by": {
+        "enabled": false
+      },
+      "chat_transfer": {
         "enabled": false
       },
       "agent_automation": {

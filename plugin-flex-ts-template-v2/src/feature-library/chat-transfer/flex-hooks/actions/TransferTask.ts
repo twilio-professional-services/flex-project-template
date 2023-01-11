@@ -1,21 +1,31 @@
-import * as Flex from "@twilio/flex-ui";
-import { TaskHelper, Actions } from "@twilio/flex-ui";
-import { isColdTransferEnabled } from "../../index";
-import { TransferActionPayload } from "../../types/ActionPayloads";
+import * as Flex from '@twilio/flex-ui';
+import ChatTransferService from '../../utils/serverless/ChatTransferService';
+import { isFeatureEnabled } from '../../index';
 
-// invoke the custom chatTransferTask action if a cbm task otherwise carry on
-export function handleChatTransfer(flex: typeof Flex, manager: Flex.Manager) {
-  if (!isColdTransferEnabled()) return;
+export interface TransferOptions {
+  attributes: string;
+  mode: string;
+  priority: string;
+}
 
-  Flex.Actions.addListener(
-    "beforeTransferTask",
-    (payload: TransferActionPayload, abortFunction: any) => {
-      if (TaskHelper.isCBMTask(payload.task)) {
-        // native action handler would fail for chat task so abort the action
-        abortFunction();
-        // Execute Chat Transfer Task
-        Flex.Actions.invokeAction("ChatTransferTask", payload);
-      }
+export interface EventPayload {
+  task: Flex.ITask;
+  sid?: string; // taskSid or task is required
+  targetSid: string; // target of worker or queue sid
+  options?: TransferOptions;
+}
+
+// if the task channel is not chat, function defers to existing process
+// otherwise the function creates a new task for transfering the chat
+// and deals with the chat orchestration
+export function interceptTransferOverrideForChatTasks(flex: typeof Flex, manager: Flex.Manager) {
+  if (!isFeatureEnabled()) return;
+
+  Flex.Actions.addListener('beforeTransferTask', async (payload: EventPayload, abortFunction: any) => {
+    if (Flex.TaskHelper.isChatBasedTask(payload.task) && !Flex.TaskHelper.isCBMTask(payload.task)) {
+      abortFunction(payload);
+      // Execute Chat Transfer Task
+      await ChatTransferService.executeChatTransfer(payload.task, payload.targetSid, payload.options);
     }
-  );
+  });
 }

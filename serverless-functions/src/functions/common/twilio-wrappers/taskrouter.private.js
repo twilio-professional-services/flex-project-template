@@ -1,4 +1,4 @@
-const { merge, isString, isObject, isNumber, isBoolean } = require("lodash");
+const { merge, isString, isObject, isNumber, isBoolean, omitBy, isNil } = require("lodash");
 
 const retryHandler = require(Runtime.getFunctions()[
   "common/twilio-wrappers/retry-handler"
@@ -44,11 +44,11 @@ exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
     task.revision = JSON.parse(getResponse.headers.etag);
 
     // merge the objects
-    let updatedTaskAttributes = merge(
+    let updatedTaskAttributes = omitBy(merge(
       {},
       task.attributes,
       JSON.parse(attributesUpdate)
-    );
+    ), isNil);
 
     // if-match the revision number to ensure
     // no update collisions
