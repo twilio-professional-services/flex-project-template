@@ -43,7 +43,7 @@ export const isTeamFilterEnabled = () => {
   return enabled && team;
 }
 
-export const isAgnetSkillsFilterEnabled = () => {
+export const isAgentSkillsFilterEnabled = () => {
   return enabled && agent_skills;
 }
 

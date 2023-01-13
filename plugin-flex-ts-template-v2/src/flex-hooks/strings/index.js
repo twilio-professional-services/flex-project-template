@@ -1,7 +1,15 @@
-import * as Flex from "@twilio/flex-ui";
-import customStrings from "./strings"
+import featureStrings from "../../feature-library/*/flex-hooks/strings/*";
 
-export default (flex: typeof Flex, manager: Flex.Manager) => {
+export default (flex, manager) => {
+  let customStrings = {};
+  
+  featureStrings.forEach((file) => {
+    customStrings = {
+      ...customStrings,
+      ...file.default
+    }
+  });
+  
   manager.strings = {
     // -v- Add custom strings here -v-'
     ...customStrings,
@@ -13,5 +21,5 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
     //WorkerDirectoryAgentsTabLabel: '<span style="font-size: 10px;">Agents</span>',
     //WorkerDirectoryQueuesTabLabel: '<span style="font-size: 10px;">Queues</span>',
     // -^----------------------------------------^-
-  } as any;
+  };
 };

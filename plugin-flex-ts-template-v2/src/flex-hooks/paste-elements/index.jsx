@@ -1,13 +1,21 @@
-import * as Flex from '@twilio/flex-ui';
-import { CustomizationProvider, PasteCustomCSS, CustomizationProviderProps } from "@twilio-paste/core/customization";
-import customPasteElements from "./paste-elements"
+import { CustomizationProvider } from "@twilio-paste/core/customization";
+import featurePasteElements from "../../feature-library/*/flex-hooks/paste-elements/*";
 
-export default (flex: typeof Flex, manager: Flex.Manager) => {
+export default (flex, manager) => {
+  let customPasteElements = {};
+  
+  featurePasteElements.forEach((file) => {
+    customPasteElements = {
+      ...customPasteElements,
+      ...file.default
+    }
+  });
+  
   // Currently the method to customize Paste elements in Flex is somewhat clunky.
   // This is correct for now but may improve. See FLEXEXP-772
   flex.setProviders({
     CustomProvider: (RootComponent) => (props) => {
-      const pasteProviderProps: CustomizationProviderProps & { style: PasteCustomCSS } = {
+      const pasteProviderProps = {
         baseTheme: props.theme?.isLight ? "default" : "dark",
         theme: props.theme?.tokens,
         style: { minWidth: "100%", height: "100%" },

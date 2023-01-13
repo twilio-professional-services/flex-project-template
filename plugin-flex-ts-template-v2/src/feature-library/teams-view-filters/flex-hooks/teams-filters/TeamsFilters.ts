@@ -1,4 +1,4 @@
-import {  isFeatureEnabled, isDepartmentFilterEnabled, isExtensionsFilterEnabled, isQueueNoWorkerDataFilterEnabled, isQueueWorkerDataFilterEnabled, isTeamFilterEnabled, isAgnetSkillsFilterEnabled } from "../../index";
+import {  isFeatureEnabled, isDepartmentFilterEnabled, isExtensionsFilterEnabled, isQueueNoWorkerDataFilterEnabled, isQueueWorkerDataFilterEnabled, isTeamFilterEnabled, isAgentSkillsFilterEnabled } from "../../index";
 
 import { departmentFilter } from "../../filters/departmentFilter";
 import { emailFilter } from "../../filters/emailFilter";
@@ -18,7 +18,7 @@ const getSampleFilters = async () => {
     isQueueNoWorkerDataFilterEnabled() ? enabledFilters.push(await queueNoWorkerDataFilter()) : null;
     isQueueWorkerDataFilterEnabled() ? enabledFilters.push(await queueWorkerDataFilter()) : null
     isTeamFilterEnabled() ? enabledFilters.push(teamFilter()) : null;
-    isAgnetSkillsFilterEnabled() ? enabledFilters.push(agentSkillsFilter()) : null;
+    isAgentSkillsFilterEnabled() ? enabledFilters.push(agentSkillsFilter()) : null;
   }
 
   return enabledFilters;
