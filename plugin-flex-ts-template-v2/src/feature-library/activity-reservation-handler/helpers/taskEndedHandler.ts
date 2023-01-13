@@ -1,13 +1,13 @@
 import * as Flex from "@twilio/flex-ui";
-import FlexHelper from "../../helpers/flexHelper";
-import WorkerActivity from "../../helpers/workerActivityHelper";
+import FlexHelper from "./flexHelper";
+import WorkerActivity from "./workerActivityHelper";
 import {
   systemActivities,
   availableActivity,
-} from "../../helpers/systemActivities";
-import { getPendingActivity } from "../../helpers/pendingActivity";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { isFeatureEnabled } from '../..';
+} from "./systemActivities";
+import { getPendingActivity } from "./pendingActivity";
+import { FlexEvent } from "../../../types/manager/FlexEvent";
+import { isFeatureEnabled } from '..';
 
 const taskEndedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
   if (!isFeatureEnabled()) return;

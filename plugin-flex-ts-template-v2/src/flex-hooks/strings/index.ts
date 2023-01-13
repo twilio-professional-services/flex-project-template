@@ -1,14 +1,18 @@
+import * as Flex from "@twilio/flex-ui";
+// @ts-ignore
 import featureStrings from "../../feature-library/*/flex-hooks/strings/*";
 
-export default (flex, manager) => {
+export default (flex: typeof Flex, manager: Flex.Manager) => {
   let customStrings = {};
   
-  featureStrings.forEach((file) => {
-    customStrings = {
-      ...customStrings,
-      ...file.default
-    }
-  });
+  if (typeof featureStrings !== 'undefined') {
+    featureStrings.forEach((file: any) => {
+      customStrings = {
+        ...customStrings,
+        ...file.default
+      }
+    });
+  }
   
   manager.strings = {
     // -v- Add custom strings here -v-'

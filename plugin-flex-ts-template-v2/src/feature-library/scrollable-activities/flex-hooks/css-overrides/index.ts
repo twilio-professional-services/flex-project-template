@@ -1,7 +1,7 @@
 import * as Flex from "@twilio/flex-ui";
-import { isFeatureEnabled } from '..';
+import { isFeatureEnabled } from '../..';
 
-export default async () => {
+export default (flex: typeof Flex, manager: Flex.Manager) => {
   if (!isFeatureEnabled()) return;
 
   /***
@@ -17,7 +17,7 @@ export default async () => {
    * }}>
    *
    */
-  Flex.Manager.getInstance().updateConfig({
+  manager.updateConfig({
     theme: {
       componentThemeOverrides: {
         MainHeader: {

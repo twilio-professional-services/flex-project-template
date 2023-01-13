@@ -1,6 +1,11 @@
 import * as Flex from "@twilio/flex-ui";
-import css_overrides from "./css-overrides";
+// @ts-ignore
+import featureCssOverrides from "../../feature-library/*/flex-hooks/css-overrides/*";
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {
-  css_overrides.forEach((css_override) => css_override());
+  if (typeof featureCssOverrides !== 'undefined') {
+    featureCssOverrides.forEach((file: any) => {
+      file.default(flex, manager);
+    });
+  }
 };

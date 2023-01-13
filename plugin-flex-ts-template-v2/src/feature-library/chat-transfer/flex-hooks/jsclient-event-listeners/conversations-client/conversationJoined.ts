@@ -7,7 +7,7 @@ import { isFeatureEnabled } from '../../../index';
 
 // when an agent joins a channel for the first time this announces
 // them in the chat channel
-export function announceOnChannelWhenJoined(flex: typeof Flex, manager: Flex.Manager, conversation: Conversation) {
+export default function announceOnChannelWhenJoined(flex: typeof Flex, manager: Flex.Manager, conversation: Conversation) {
 
   if(!isFeatureEnabled()) return;
   
