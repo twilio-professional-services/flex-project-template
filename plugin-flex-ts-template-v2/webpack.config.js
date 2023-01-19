@@ -15,6 +15,7 @@ module.exports = (config, { isProd, isDev, isTest }) => {
     module: {
       ...config.module,
       rules: [
+        ...config.module.rules,
         {
             test: /\.js$/,
             include: [
@@ -43,7 +44,6 @@ module.exports = (config, { isProd, isDev, isTest }) => {
             ],
             use: 'import-glob'
         },
-        ...config.module.rules,
       ]
     }
   };
