@@ -11,10 +11,6 @@ const requiredParameters = [
     key: "numberToCallFrom",
     purpose: "the number to call the customer from",
   },
-  {
-    key: "flexFlowSid",
-    purpose: "the SID of the Flex Flow that triggered this function",
-  },
 ];
 
 exports.handler = prepareStudioFunction(
@@ -32,9 +28,13 @@ exports.handler = prepareStudioFunction(
         conversation_id,
         message,
         utcDateTimeReceived,
+        recordingSid,
         RecordingSid,
+        recordingUrl,
         RecordingUrl,
+        transcriptionSid,
         TranscriptionSid,
+        transcriptionText,
         TranscriptionText,
         isDeleted,
         taskChannel: overriddenTaskChannel,
@@ -48,6 +48,13 @@ exports.handler = prepareStudioFunction(
       const attempts = retryAttempt || 0;
       const taskChannel = overriddenTaskChannel || "voice";
 
+      // use explicitly passed in values or use values from the event
+      const definitiveRecordingSid = recordingSid || RecordingSid;
+      const definitiveRecordingUrl = recordingUrl || RecordingUrl;
+      const definitiveTranscriptionSid = transcriptionSid || TranscriptionSid;
+      const definitiveTranscriptionText =
+        transcriptionText || TranscriptionText;
+
       // setup required task attributes for task
       const attributes = {
         taskType: recordingSid ? "voicemail" : "callback",
@@ -60,10 +67,10 @@ exports.handler = prepareStudioFunction(
           attempts,
           mainTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           utcDateTimeReceived: utcDateTimeReceived || new Date(),
-          recordingSid,
-          recordingUrl,
-          transcriptSid: transcriptionSid,
-          transcriptText: transcriptionText,
+          recordingSid: definitiveRecordingSid,
+          recordingUrl: definitiveRecordingUrl,
+          transcriptSid: definitiveTranscriptionSid,
+          transcriptText: definitiveTranscriptionText,
           isDeleted: isDeleted || false,
         },
         direction: "inbound",
