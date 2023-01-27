@@ -46,9 +46,9 @@ Creating a voicemail involves the same setup as above, however the following add
 - recordingSid: {{widgets.record_voicemail_1.RecordingSid}} - the recording SID from the Record Voicemail widget
 - recordingUrl: {{widgets.record_voicemail_1.RecordingUrl}} - the recording URL from the Record Voicemail widget
 
-Alternatively, if you wish to show the transcription text on the voicemail task, you can invoke the create-callback functon from the Transcription Callback URL on the Record Voicemail widget. Just be sure to include the required params in the URL. e.g.
+Alternatively, if you wish to enable transcriptions and show the transcription text on the voicemail task, you can invoke the create-callback functon from the Transcription Callback URL on the Record Voicemail widget. Just be sure to include the required params in the URL. e.g.
 
-https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callbacks/studio/create-callback?numberToCall={{trigger.call.From}}&numberToCallFrom={{trigger.call.To}}&flexFlowSid={{flow.sid}}
+`https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callbacks/studio/create-callback?numberToCall={{trigger.call.From}}&numberToCallFrom={{trigger.call.To}}&flexFlowSid={{flow.sid}}`
 
 (The recordingSid and recordingUrl are already part of the transcription callback event)
 
