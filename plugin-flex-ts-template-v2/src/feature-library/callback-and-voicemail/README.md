@@ -1,6 +1,6 @@
 # callbacks and voicemail
 
-This feature enables the use of callbacks and voicemails as a custom task type.  It is a generic version intended to accelerate the customization of such a feature for any particular project, providing the main parts of a callback feature in easy to understand and customizable way.  It is inspired by the work in the [twilio solution library](https://www.twilio.com/docs/flex/solutions-library/queued-callback-and-voicemail) however it has a few key aspects that make it a little easier to use
+This feature enables the use of callbacks and voicemails as a custom task type. It is a generic version intended to accelerate the customization of such a feature for any particular project, providing the main parts of a callback feature in easy to understand and customizable way. It is inspired by the work in the [twilio solution library](https://www.twilio.com/docs/flex/solutions-library/queued-callback-and-voicemail) however it has a few key aspects that make it a little easier to use
 
 - the callbacks are placed on the voice channel by default, as its typical projects want callbacks to be threaded in single file with voice calls.
 - there is an API for creating the callback so you just have to create your customer experience then decide when to create the callback instead of peeling apart the sample solution.
@@ -21,7 +21,7 @@ voicemails will look like this
 
 # setup and dependencies
 
-Creating a callback involves creating a task with at a minimum a number to callback and a number to call from.  A sample setup of that is shown here in a studio flow where a number has been wired up to immediately create a callback and hang up.
+Creating a callback involves creating a task with at a minimum a number to callback and a number to call from. A sample setup of that is shown here in a studio flow where a number has been wired up to immediately create a callback and hang up.
 
 ![alt text](screenshots/sample-triggering-callback.png)
 
@@ -33,24 +33,31 @@ here you can see three parameters which are populated from the studio flow
 
 This serverless function can be used from anywhere, not just the studio flow, to create a callback task.
 
-The creation of a task requires a workflow.  You may create a custom workflow, that uses some collected data to organize the tasks into different queues or maybe something more complex.  You may also just want to use the default "Assign To Anyone" workflow that is spawned on a vanilla flex instance.
+The creation of a task requires a workflow. You may create a custom workflow, that uses some collected data to organize the tasks into different queues or maybe something more complex. You may also just want to use the default "Assign To Anyone" workflow that is spawned on a vanilla flex instance.
 
-Once you have decided which workflow you are using, you simply reference it in the environment file for your serverless-functions and make sure it is deployed as well as ensuring the flag is set for the feature in flex-config and that, that is also deployed.  You now have a functioning callback feature!
+Once you have decided which workflow you are using, you simply reference it in the environment file for your serverless-functions and make sure it is deployed as well as ensuring the flag is set for the feature in flex-config and that, that is also deployed. You now have a functioning callback feature!
 
 the variable that you need to make sure is set is
->TWILIO_FLEX_CALLBACK_WORKFLOW_SID=WW....
+
+> TWILIO_FLEX_CALLBACK_WORKFLOW_SID=WW....
 
 Creating a voicemail involves the same setup as above, however the following additional parameters must be passed to the create-callback function from a Record Voicemail widget:
 
 - recordingSid: {{widgets.record_voicemail_1.RecordingSid}} - the recording SID from the Record Voicemail widget
 - recordingUrl: {{widgets.record_voicemail_1.RecordingUrl}} - the recording URL from the Record Voicemail widget
 
+Alternatively, if you wish to enable transcriptions and show the transcription text on the voicemail task, you can invoke the create-callback functon from the Transcription Callback URL on the Record Voicemail widget. Just be sure to include the required params in the URL. e.g.
+
+`https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callbacks/studio/create-callback?numberToCall={{trigger.call.From}}&numberToCallFrom={{trigger.call.To}}&flexFlowSid={{flow.sid}}`
+
+(The recordingSid and recordingUrl are already part of the transcription callback event)
+
 # how does it work?
 
-The feature works be registering custom flex channels for callbacks and voicemails.  These channels are a presentation only layer, on top of the taskrouter channel, which remains voice.
+The feature works be registering custom flex channels for callbacks and voicemails. These channels are a presentation only layer, on top of the taskrouter channel, which remains voice.
 
 when the channel is registered, it renders custom components based on the task attribute; _taskType: callback_ or _taskType: voicemail_
 
 there are two associated serverless functions called _create-callback_
 
-the only difference between these functions is one is intended to be called from flex, the other from anywhere else but typically studio.  The difference is the security model for each function but both do the same thing, taking in task attributes and generating a new callback task.  The flex interface is used for the re-queueing feature.
+the only difference between these functions is one is intended to be called from flex, the other from anywhere else but typically studio. The difference is the security model for each function but both do the same thing, taking in task attributes and generating a new callback task. The flex interface is used for the re-queueing feature.
