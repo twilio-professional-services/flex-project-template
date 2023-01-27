@@ -48,7 +48,7 @@ exports.handler = prepareStudioFunction(
       const attempts = retryAttempt || 0;
       const taskChannel = overriddenTaskChannel || "voice";
 
-      // use explicitly passed in values or use values from the event
+      // use explicitly passed in values or use values from the transcription callback event (if applicable)
       const definitiveRecordingSid = recordingSid || RecordingSid;
       const definitiveRecordingUrl = recordingUrl || RecordingUrl;
       const definitiveTranscriptionSid = transcriptionSid || TranscriptionSid;
@@ -57,8 +57,10 @@ exports.handler = prepareStudioFunction(
 
       // setup required task attributes for task
       const attributes = {
-        taskType: recordingSid ? "voicemail" : "callback",
-        name: (recordingSid ? "Voicemail" : "Callback") + ` (${numberToCall})`,
+        taskType: definitiveRecordingSid ? "voicemail" : "callback",
+        name:
+          (definitiveRecordingSid ? "Voicemail" : "Callback") +
+          ` (${numberToCall})`,
         flow_execution_sid: flexFlowSid,
         message: message || null,
         callBackData: {
