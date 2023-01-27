@@ -32,9 +32,9 @@ exports.handler = prepareStudioFunction(
         RecordingSid,
         recordingUrl,
         RecordingUrl,
-        transcriptSid,
+        transcriptionSid,
         TranscriptionSid,
-        transcriptText,
+        transcriptionText,
         TranscriptionText,
         isDeleted,
         taskChannel: overriddenTaskChannel,
@@ -51,8 +51,9 @@ exports.handler = prepareStudioFunction(
       // use explicitly passed in values or use values from the transcription callback event (if applicable)
       const definitiveRecordingSid = recordingSid || RecordingSid;
       const definitiveRecordingUrl = recordingUrl || RecordingUrl;
-      const definitiveTranscriptionSid = transcriptSid || TranscriptionSid;
-      const definitiveTranscriptionText = transcriptText || TranscriptionText;
+      const definitiveTranscriptionSid = transcriptionSid || TranscriptionSid;
+      const definitiveTranscriptionText =
+        transcriptionText || TranscriptionText;
 
       // setup required task attributes for task
       const attributes = {

@@ -27,9 +27,9 @@ Creating a callback involves creating a task with at a minimum a number to callb
 
 here you can see three parameters which are populated from the studio flow
 
-- `numberToCall: {{trigger.call.From}}` - the number the customer dialed from
-- `numberToCallFrom: {{trigger.call.To}}` - the number the customer tried to dial
-- `flexFlowSid: {{flow.flow_sid}}` - to capture the entry point of this callback, it is stored on the task and is useful for debugging and tracking. (Optional)  
+- numberToCall: {{trigger.call.From}} - the number the customer dialed from
+- numberToCallFrom: {{trigger.call.To}} - the number the customer tried to dial
+- flexFlowSid: {{flow.flow_sid}} - to capture the entry point of this callback, it is stored on the task
 
 This serverless function can be used from anywhere, not just the studio flow, to create a callback task.
 
