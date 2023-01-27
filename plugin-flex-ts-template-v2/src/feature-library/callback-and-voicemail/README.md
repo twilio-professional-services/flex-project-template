@@ -29,7 +29,7 @@ here you can see three parameters which are populated from the studio flow
 
 - `numberToCall: {{trigger.call.From}}` - the number the customer dialed from
 - `numberToCallFrom: {{trigger.call.To}}` - the number the customer tried to dial
-- `flexFlowSid: {{flow.flow_sid}}` - to capture the entry point of this callback, it is stored on the task and is useful for debugging and tracking. (Optional)  
+- `flexFlowSid: {{flow.flow_sid}}` - to capture the entry point of this callback, it is stored on the task and is useful for debugging and tracking. (Optional)
 
 This serverless function can be used from anywhere, not just the studio flow, to create a callback task.
 
@@ -43,8 +43,8 @@ the variable that you need to make sure is set is
 
 Creating a voicemail involves the same setup as above, however the following additional parameters must be passed to the create-callback function from a Record Voicemail widget:
 
-- recordingSid: {{widgets.record_voicemail_1.RecordingSid}} - the recording SID from the Record Voicemail widget
-- recordingUrl: {{widgets.record_voicemail_1.RecordingUrl}} - the recording URL from the Record Voicemail widget
+- `recordingSid: {{widgets.record_voicemail_1.RecordingSid}}` - the recording SID from the Record Voicemail widget
+- `recordingUrl: {{widgets.record_voicemail_1.RecordingUrl}}` - the recording URL from the Record Voicemail widget
 
 Alternatively, if you wish to enable transcriptions and show the transcription text on the voicemail task, you can invoke the create-callback functon from the Transcription Callback URL on the Record Voicemail widget. Just be sure to include the required params in the URL. e.g.
 
