@@ -2,6 +2,7 @@
 exports.handler = async function (context, event, callback) {
   const client = context.getTwilioClient();
 
+  console.log("In transcription completed callback");
   const path =
     Runtime.getFunctions()["features/callbacks/studio/create-callback"].path;
   const createCallbackOrVoicemail = require(path);
