@@ -8,6 +8,7 @@ import {useUID} from '@twilio-paste/core/uid-library';
 import {Box} from '@twilio-paste/core/box';
 import {Button} from '@twilio-paste/core/button';
 import {Input} from '@twilio-paste/core/input';
+import {HelpText} from '@twilio-paste/core/help-text';
 import {Label} from '@twilio-paste/core/label';
 import {Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading} from '@twilio-paste/core/modal';
 import { addConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
@@ -22,6 +23,7 @@ export interface OwnProps {
 
 const ConferenceDialog = (props: OwnProps) => {
   const [conferenceTo, setConferenceTo] = useState('');
+  const [hasError, setHasError] = useState(false);
   
   const componentViewStates = useFlexSelector((state: AppState) => state.flex.view.componentViewStates);
   const phoneNumber = useFlexSelector((state: AppState) => state.flex.worker.attributes.phone);
@@ -48,14 +50,17 @@ const ConferenceDialog = (props: OwnProps) => {
       name: 'ConferenceDialog',
       state: { isOpen: false }
     });
+    setHasError(false);
   }
   
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const key = e.key;
   
     if (key === 'Enter') {
-      addConferenceParticipant();
-      closeDialog();
+      if (checkInput()) {
+        addConferenceParticipant();
+        closeDialog();
+      }
       e.preventDefault();
     }
   }
@@ -66,9 +71,21 @@ const ConferenceDialog = (props: OwnProps) => {
   }
   
   const handleDialButton = (e: React.MouseEvent<HTMLElement>) => {
-    addConferenceParticipant();
-    closeDialog();
+    if (checkInput()) {
+      addConferenceParticipant();
+      closeDialog();
+    }
     e.preventDefault();
+  }
+  
+  const checkInput = (): Boolean => {
+    if (!conferenceTo) {
+      setHasError(true);
+      return false;
+    } else if (hasError) {
+      setHasError(false);
+    }
+    return true;
   }
   
   const addConferenceParticipant = async () => {
@@ -139,7 +156,11 @@ const ConferenceDialog = (props: OwnProps) => {
             onChange={handleChange}
             onKeyPress={handleKeyPress}
             type="text"
+            hasError={hasError}
           />
+          { hasError &&
+            <HelpText variant="error">Enter a phone number to add to the conference.</HelpText>
+          }
         </Box>
       </ModalBody>
       <ModalFooter>
