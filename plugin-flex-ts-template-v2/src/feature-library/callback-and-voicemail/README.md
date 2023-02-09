@@ -29,17 +29,15 @@ here you can see three parameters which are populated from the studio flow
 
 - `numberToCall: {{trigger.call.From}}` - the number the customer dialed from
 - `numberToCallFrom: {{trigger.call.To}}` - the number the customer tried to dial
-- `flexFlowSid: {{flow.flow_sid}}` - to capture the entry point of this callback, it is stored on the task and is useful for debugging and tracking. (Optional)  
+- `flexFlowSid: {{flow.flow_sid}}` - to capture the entry point of this callback, it is stored on the task and is useful for debugging and tracking. (Optional)
 
 This serverless function can be used from anywhere, not just the studio flow, to create a callback task.
 
 The creation of a task requires a workflow. You may create a custom workflow, that uses some collected data to organize the tasks into different queues or maybe something more complex. You may also just want to use the default "Assign To Anyone" workflow that is spawned on a vanilla flex instance.
 
-Once you have decided which workflow you are using, you simply reference it in the environment file for your serverless-functions and make sure it is deployed as well as ensuring the flag is set for the feature in flex-config and that, that is also deployed. You now have a functioning callback feature!
+Once you have decided which workflow you are using, you can either reference it in the environment file for your serverless-functions (`TWILIO_FLEX_CALLBACK_WORKFLOW_SID`), or you can explicitly provide a `workflowSid` in the call to the function.
 
-the variable that you need to make sure is set is
-
-> TWILIO_FLEX_CALLBACK_WORKFLOW_SID=WW....
+Once you've set the flag for the feature in flex-config, and all of that is deployed, you now have a functioning callback feature!
 
 Creating a voicemail involves the same setup as above, however the following additional parameters must be passed to the create-callback function from a Record Voicemail widget:
 
@@ -48,9 +46,9 @@ Creating a voicemail involves the same setup as above, however the following add
 
 Alternatively, if you wish to enable transcriptions and show the transcription text on the voicemail task, you can invoke the create-callback functon from the Transcription Callback URL on the Record Voicemail widget. Just be sure to include the required params in the URL. e.g.
 
-`https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callbacks/studio/create-callback?numberToCall={{trigger.call.From}}&numberToCallFrom={{trigger.call.To}}&flexFlowSid={{flow.sid}}`
+`https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callback-and-voicemail/studio/create-callback?numberToCall={{trigger.call.From}}&numberToCallFrom={{trigger.call.To}}&flexFlowSid={{flow.sid}}`
 
-(The recordingSid and recordingUrl are already part of the transcription callback event)
+(`RecordingSid` and `RecordingUrl` are already part of the transcription callback event)
 
 # how does it work?
 

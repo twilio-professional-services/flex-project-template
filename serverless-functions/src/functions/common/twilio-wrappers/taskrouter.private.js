@@ -1,4 +1,12 @@
-const { merge, isString, isObject, isNumber, isBoolean, omitBy, isNil } = require("lodash");
+const {
+  merge,
+  isString,
+  isObject,
+  isNumber,
+  isBoolean,
+  omitBy,
+  isNil,
+} = require("lodash");
 
 const retryHandler = require(Runtime.getFunctions()[
   "common/twilio-wrappers/retry-handler"
@@ -44,11 +52,10 @@ exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
     task.revision = JSON.parse(getResponse.headers.etag);
 
     // merge the objects
-    let updatedTaskAttributes = omitBy(merge(
-      {},
-      task.attributes,
-      JSON.parse(attributesUpdate)
-    ), isNil);
+    let updatedTaskAttributes = omitBy(
+      merge({}, task.attributes, JSON.parse(attributesUpdate)),
+      isNil
+    );
 
     // if-match the revision number to ensure
     // no update collisions
@@ -156,7 +163,7 @@ exports.updateReservation = async function updateReservation(parameters) {
   if (!isObject(context))
     throw "Invalid parameters object passed. Parameters must contain reason context object";
   if (!isString(status) || (status != "completed" && status != "wrapping"))
-    throw "Invalid parameters object passed. Parameters must contain status to update the reservation to and it must be one of \"completed\" or \"wrapping\""
+    throw 'Invalid parameters object passed. Parameters must contain status to update the reservation to and it must be one of "completed" or "wrapping"';
 
   try {
     const client = context.getTwilioClient();
@@ -301,11 +308,7 @@ exports.getQueues = async function getQueues(parameters) {
  *   worker channel
  */
 exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
-  const {
-    context,
-    attempts,
-    workerSid,
-  } = parameters;
+  const { context, attempts, workerSid } = parameters;
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
@@ -319,8 +322,7 @@ exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
     const workerChannels = await client.taskrouter
       .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
       .workers(workerSid)
-      .workerChannels
-      .list();
+      .workerChannels.list();
 
     return {
       success: true,
@@ -416,7 +418,7 @@ exports.updateTask = async function updateTask(parameters) {
       task: {
         ...task,
         attributes: JSON.parse(task.attributes),
-      }
+      },
     };
   } catch (error) {
     // 20001 error code is returned when the task is not in an assigned state
@@ -474,7 +476,7 @@ exports.fetchTask = async function fetchTask(parameters) {
       task: {
         ...task,
         attributes: JSON.parse(task.attributes),
-      }
+      },
     };
   } catch (error) {
     // 20001 error code is returned when the task is not in an assigned state
@@ -496,6 +498,55 @@ exports.fetchTask = async function fetchTask(parameters) {
         message: error.message,
       };
     }
+    return retryHandler(error, parameters, arguments.callee);
+  }
+};
+
+/**
+ * WARNING: The EvaluateTaskAttributes functionality is havily rate limited to 3 RPS.
+ * Look to map things like CallSid to TaskSid via a database or other storage mechanism,
+ * rather than querying Taskrouter.
+ *
+ * @param {object} parameters the parameters for the function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.evaluation the statement evaluating the attributes
+ * @returns {object} an object containing the matching tasks if successful
+ * @description list tasks
+ */
+exports.listTasksByAttributes = async function listTasksByAttributes(
+  parameters
+) {
+  const { attempts, evaluation, context } = parameters;
+
+  if (!isNumber(attempts))
+    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
+  if (!isString(evaluation))
+    throw "Invalid parameters object passed. Parameters must contain the evaluation string";
+  if (!isObject(context))
+    throw "Invalid parameters object passed. Parameters must contain reason context object";
+
+  try {
+    const client = context.getTwilioClient();
+
+    const tasks = await client.taskrouter
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .tasks.list({
+        evaluateTaskAttributes: evaluation,
+        limit: 20,
+      });
+
+    return {
+      success: true,
+      status: 200,
+      tasks: tasks.map((task) => {
+        return {
+          ...task,
+          attributes: JSON.parse(task.attributes),
+        };
+      }),
+    };
+  } catch (error) {
     return retryHandler(error, parameters, arguments.callee);
   }
 };
