@@ -59,21 +59,24 @@ shell.sed('-i', /.*"name": ".*",/, `  "name": "${fullPluginName}",`, `${pluginDi
 shell.sed('-i', /.*"version": ".*",/, `  "version": "0.0.1",`, `${pluginDir}/package.json`);
 
 // repeat for package-lock
-shell.sed('-i', /.*"name": ".*",/, `  "name": "${fullPluginName}",`, `${pluginDir}/package-lock.json`);
-shell.sed('-i', /.*"version": ".*",/, `  "version": "0.0.1",`, `${pluginDir}/package-lock.json`);
+if(shell.test('-e', `${pluginDir}/package-lock.json`)){
+  shell.sed('-i', /.*"name": ".*",/, `  "name": "${fullPluginName}",`, `${pluginDir}/package-lock.json`);
+  shell.sed('-i', /.*"version": ".*",/, `  "version": "0.0.1",`, `${pluginDir}/package-lock.json`);
+}
 
 // rename the plugin file names
-shell.sed ('-i', /import .*Plugin from '.\/.*Plugin';/, `import ${pluginName} from './${pluginName}';`, `${pluginSrc}/index.ts`);
 shell.sed ('-i', /FlexPlugin.loadPlugin\(.*Plugin\);/, `FlexPlugin.loadPlugin(${pluginName});`, `${pluginSrc}/index.ts`);
-
 shell.sed ('-i', /const PLUGIN_NAME = '.*Plugin';/, `const PLUGIN_NAME = '${pluginName}';`, `${pluginSrc}/*lugin.tsx`);
 shell.sed ('-i', /export default class .*Plugin extends/, `export default class ${pluginName} extends`, `${pluginSrc}/*lugin.tsx`);
 
+// ensuring file name always ends with plugin
 shell.ls(`${pluginSrc}/*lugin.tsx`).forEach(function (file) {
  if(pluginName.endsWith("Plugin") || pluginName.endsWith("plugin")){
    shell.mv(file, `${pluginSrc}/${pluginName}.tsx`);
+   shell.sed ('-i', /import .*lugin from '.\/.*lugin';/, `import ${pluginName} from './${pluginName}';`, `${pluginSrc}/index.ts`);
  } else {
    shell.mv(file, `${pluginSrc}/${pluginName}Plugin.tsx`);
+   shell.sed ('-i', /import .*Plugin from '.\/.*Plugin';/, `import ${pluginName} from './${pluginName}Plugin';`, `${pluginSrc}/index.ts`);
  }
 });
 
