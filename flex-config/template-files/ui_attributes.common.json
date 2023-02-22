@@ -1,3 +1,8 @@
 {
-  "custom_data": {}
+  "sdkOptions": {
+    "voice": {}
+  },
+  "custom_data": {
+    "features": {}
+  }
 }

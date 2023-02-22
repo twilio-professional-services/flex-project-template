@@ -231,8 +231,16 @@ npm run remove-features
 ```bash
 npm run rename-template <template-name>
 ```
-5. Push your changes to your repository - this is your new baseline
-6. You can follow the instructions for [local development setup](#local-setup-and-use) and then [adding a feature](/plugin-flex-ts-template-v2/README.md#adding-a-feature)
+5. ensure the dependencies are updated - this will also generate appConfig.js
+```bash
+npm run install
+```
+6. test everything works
+```bash
+npm run start:local
+```
+7. Push your changes to your repository - this is your new baseline
+8. You can follow the instructions for [local development setup](#local-setup-and-use) and then [adding a feature](/plugin-flex-ts-template-v2/README.md#adding-a-feature)
 
 
 ----
