@@ -58,12 +58,20 @@ const filesToCopy = [
     dst: `${pluginSrc}/flex-hooks/jsclient-event-listeners/`,
   },
   {
+    src: `${templateDirectory}/no-features/flex-hooks/jsclient-event-listeners/conversations-client/*`,
+    dst: `${pluginSrc}/flex-hooks/jsclient-event-listeners/conversations-client/`,
+  },
+  {
     src: `${templateDirectory}/no-features/flex-hooks/jsclient-event-listeners/voice-client/*`,
     dst: `${pluginSrc}/flex-hooks/jsclient-event-listeners/voice-client/`,
   },
   {
     src: `${templateDirectory}/no-features/flex-hooks/jsclient-event-listeners/worker-client/*`,
     dst: `${pluginSrc}/flex-hooks/jsclient-event-listeners/worker-client/`,
+  },
+  {
+    src: `${templateDirectory}/no-features/flex-hooks/chat-orchestrator.ts`,
+    dst: `${pluginSrc}/flex-hooks/chat-orchestrator/index.ts`,
   },
   {
     src: `${templateDirectory}/no-features/types/CustomServiceConfiguration.ts`,
@@ -98,3 +106,8 @@ shell.echo(
   `Deleting schedule-manager serverless package ${scheduleManagerServerlessDir}`
 );
 shell.rm("-rf", `${scheduleManagerServerlessDir}`);
+
+shell.echo(
+  `Deleting web-app-examples`
+);
+shell.rm("-rf", `web-app-examples`);
