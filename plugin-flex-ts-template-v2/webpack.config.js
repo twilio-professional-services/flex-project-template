@@ -17,6 +17,13 @@ module.exports = (config, { isProd, isDev, isTest }) => {
       rules: [
         ...config.module.rules,
         {
+            test: /index\.ts$/,
+            include: [
+              path.join(__dirname, 'src/feature-library/')
+            ],
+            use: 'import-glob'
+        },
+        {
             test: /\.js$/,
             include: [
               path.join(__dirname, 'src/flex-hooks/')
@@ -33,14 +40,16 @@ module.exports = (config, { isProd, isDev, isTest }) => {
         {
             test: /\.ts$/,
             include: [
-              path.join(__dirname, 'src/flex-hooks/')
+              path.join(__dirname, 'src/flex-hooks/'),
+              path.join(__dirname, 'src/utils/feature-loader/')
             ],
             use: 'import-glob'
         },
         {
             test: /\.tsx$/,
             include: [
-              path.join(__dirname, 'src/flex-hooks/')
+              path.join(__dirname, 'src/flex-hooks/'),
+              path.join(__dirname, 'src/utils/feature-loader/')
             ],
             use: 'import-glob'
         },

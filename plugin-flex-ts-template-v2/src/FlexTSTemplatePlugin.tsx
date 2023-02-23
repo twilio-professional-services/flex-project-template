@@ -16,6 +16,8 @@ import CssOverrides from './flex-hooks/css-overrides';
 import CustomizePasteElements from './flex-hooks/paste-elements';
 import Events from "./flex-hooks/events";
 
+import { initFeatures } from './utils/feature-loader';
+
 const PLUGIN_NAME = 'FlexTSTemplatePlugin';
 
 export default class FlexTSTemplatePlugin extends FlexPlugin {
@@ -49,5 +51,8 @@ export default class FlexTSTemplatePlugin extends FlexPlugin {
     ];
 
     initializers.forEach((initializer) => initializer(flex, manager));
+    
+    // NEW!
+    initFeatures();
   }
 }
