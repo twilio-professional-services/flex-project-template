@@ -8,7 +8,7 @@ import {
   ITask,
   useFlexSelector
 } from '@twilio/flex-ui';
-import { AppState } from '../../../../flex-hooks/states';
+import AppState from "../../../../types/manager/AppState";
 
 const ActionsContainer = styled('div')`
   min-width: 88px;

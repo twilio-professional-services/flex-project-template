@@ -2,11 +2,8 @@ import * as Flex from '@twilio/flex-ui';
 import React from 'react';
 import { TaskAttributes } from '../../../../types/task-router/Task';
 import VoicemailIcon from "@material-ui/icons/Voicemail";
-import { isFeatureEnabled } from '../..';
 
-export function createVoicemailChannel(flex: typeof Flex, manager: Flex.Manager) {
-
-  if(!isFeatureEnabled()) return;
+export const channelHook = function createVoicemailChannel(flex: typeof Flex, manager: Flex.Manager) {
 
   const channelDefinition = flex.DefaultTaskChannels.createDefaultTaskChannel(
     'voicemail',
@@ -45,5 +42,5 @@ export function createVoicemailChannel(flex: typeof Flex, manager: Flex.Manager)
   }
 
   // Register Channel
-  flex.TaskChannels.register(VoicemailChannel);
+  return VoicemailChannel;
 }

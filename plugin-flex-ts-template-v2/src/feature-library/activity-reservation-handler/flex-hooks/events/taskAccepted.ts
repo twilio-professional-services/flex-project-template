@@ -5,13 +5,11 @@ import {
   onTaskActivity,
   onTaskNoAcdActivity,
 } from "../../helpers/systemActivities";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { isFeatureEnabled } from '../..';
+import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
 
-const taskAcceptedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled()) return;
-
-  console.log(`activity-handler: handle ${flexEvent} for ${task.sid}`);
+export const eventName = FlexEvent.taskAccepted;
+export const eventHook = (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {
+  console.log(`activity-handler: handle ${eventName} for ${task.sid}`);
 
   storeCurrentActivitySidIfNeeded();
 
@@ -21,5 +19,3 @@ const taskAcceptedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
 
   WorkerActivity.setWorkerActivity(targetActivity?.sid);
 };
-
-export default taskAcceptedHandler;

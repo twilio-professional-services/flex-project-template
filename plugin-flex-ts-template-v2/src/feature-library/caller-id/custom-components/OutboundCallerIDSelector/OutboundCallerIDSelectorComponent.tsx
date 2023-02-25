@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { PhoneNumberItem } from '../../../../utils/serverless/PhoneNumbers/PhoneNumberService';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
-import { Actions } from '../../flex-hooks/states/OutboundCallerIDSelector';
+import AppState from "../../../../types/manager/AppState";
+import { reduxNamespace } from "../../../../utils/state";
+import { Actions, OutboundCallerIDSelectorState } from '../../flex-hooks/states/OutboundCallerIDSelector';
 import { Box } from '@twilio-paste/core/box';
 import { HelpText } from '@twilio-paste/core/help-text';
 import { Label } from '@twilio-paste/core/label';
@@ -16,7 +17,7 @@ const OutboundCallerIDSelectorComponent = () => {
     fetchingPhoneNumbersFailed,
     phoneNumbers,
     selectedCallerId
-  } = useSelector((state: AppState) => state[reduxNamespace].outboundCallerIdSelector);
+  } = useSelector((state: AppState) => state[reduxNamespace].outboundCallerIdSelector as OutboundCallerIDSelectorState);
   
   const [helpText, setHelpText] = useState("Loading phone numbers...");
   const [selectOptions, setSelectOptions] = useState([] as PhoneNumberItem[]);

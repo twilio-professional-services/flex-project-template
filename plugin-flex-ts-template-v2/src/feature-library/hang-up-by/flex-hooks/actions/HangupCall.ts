@@ -1,11 +1,11 @@
 import * as Flex from "@twilio/flex-ui";
-import { isFeatureEnabled } from "../..";
 import * as HangUpByHelper from "../../helpers/hangUpBy";
 import { HangUpBy } from '../../enums/hangUpBy';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
 
-export function reportHangUpByHangupCall(flex: typeof Flex, manager: Flex.Manager) {
-  if (!isFeatureEnabled()) return;
-  
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.HangupCall;
+export const actionHook = function reportHangUpByHangupCall(flex: typeof Flex, manager: Flex.Manager) {
   flex.Actions.addListener('beforeHangupCall', async (payload, abortFunction) => {
     const currentHangUpBy = HangUpByHelper.getHangUpBy()[payload.sid];
     

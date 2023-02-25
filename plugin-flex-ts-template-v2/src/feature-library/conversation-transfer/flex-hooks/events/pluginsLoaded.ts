@@ -1,23 +1,22 @@
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
 import { isColdTransferEnabled, isMultiParticipantEnabled } from "../../index";
 import { registerCustomChatTransferAction } from "../../custom-action/chatTransferTask";
 import { registerLeaveChatAction } from "../../custom-action/leaveChat";
 import { registerRemoveChatParticipant } from "../../custom-action/removeChatParticipant";
 import { registerCancelChatParticipantInvite } from "../../custom-action/cancelChatParticipantInvite";
+import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
 
-const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
+export const eventName = FlexEvent.pluginsLoaded;
+export const eventHook = () => {
   const coldTransferEnabled = isColdTransferEnabled();
   const multiParticipantEnabled = isMultiParticipantEnabled();
 
   if (!(coldTransferEnabled || multiParticipantEnabled)) return;
 
   console.log(
-    `Feature enabled: conversation-transfer cold_transfer=${coldTransferEnabled} multi_participant=${multiParticipantEnabled}`
+    `Feature conversation-transfer settings: cold_transfer=${coldTransferEnabled} multi_participant=${multiParticipantEnabled}`
   );
   registerCustomChatTransferAction();
   registerLeaveChatAction();
   registerRemoveChatParticipant();
   registerCancelChatParticipantInvite();
 };
-
-export default pluginsLoadedHandler;

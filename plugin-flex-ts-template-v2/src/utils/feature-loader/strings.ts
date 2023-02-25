@@ -18,7 +18,7 @@ export const init = (manager: Flex.Manager) => {
 }
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
-  console.info(`Feature ${feature} registered string hook: ${hook.stringHook.name}`);
+  console.info(`Feature ${feature} registered string hook: %c${hook.stringHook.name}`, 'font-weight:bold');
   // Returns dictionary of string definitions to register
   const hookStrings = hook.stringHook(flex, manager);
   customStrings = {

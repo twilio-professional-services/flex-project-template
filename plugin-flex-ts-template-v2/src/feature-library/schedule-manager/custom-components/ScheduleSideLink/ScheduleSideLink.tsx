@@ -1,6 +1,6 @@
 import React from 'react';
-import { SideLink, Actions } from '@twilio/flex-ui';
-import ScheduleManagerStrings, { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
+import { SideLink, Actions, Manager } from '@twilio/flex-ui';
+import { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
 
 interface OwnProps {
   activeView?: string;
@@ -8,6 +8,8 @@ interface OwnProps {
 }
 
 const ScheduleSideLink = (props: OwnProps) => {
+  const ScheduleManagerStrings = Manager.getInstance().strings as any;
+  
   function navigate() {
     Actions.invokeAction('NavigateToView', { viewName: props.viewName });
   };

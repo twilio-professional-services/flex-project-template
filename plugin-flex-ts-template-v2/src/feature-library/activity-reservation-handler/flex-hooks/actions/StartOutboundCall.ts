@@ -5,14 +5,14 @@ import {
   onTaskActivity,
   onTaskNoAcdActivity,
 } from "../../helpers/systemActivities";
-import { isFeatureEnabled } from '../..';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
 
-export function changeWorkerActivityBeforeOutboundCall(
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.StartOutboundCall;
+export const actionHook = function changeWorkerActivityBeforeOutboundCall(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  if (!isFeatureEnabled()) return;
-
   flex.Actions.addListener(
     "beforeStartOutboundCall",
     async (payload, abortFunction) => {

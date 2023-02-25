@@ -6,7 +6,7 @@ import {Text} from '@twilio-paste/core/text';
 import { SectionHeader } from './CapacityContainerStyles';
 import TaskRouterService, { WorkerChannelCapacityResponse } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import { IWorker, Manager } from '@twilio/flex-ui';
-import { getRules } from '../..';
+import { getRules } from '../../config';
 import CapacityChannel from '../CapacityChannel';
 
 export interface OwnProps {

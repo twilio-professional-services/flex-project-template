@@ -10,11 +10,8 @@ export const init = (flex: typeof Flex) => {
 }
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
-  console.info(`Feature ${feature} registered teams filter hook: ${hook.teamsFilterHook.name}`);
+  console.info(`Feature ${feature} registered teams filter hook: %c${hook.teamsFilterHook.name}`, 'font-weight:bold');
   // Returns array of filter definitions to register
   const hookFilters = hook.teamsFilterHook(flex, manager);
-  customFilters = [
-    ...customFilters,
-    ...hookFilters
-  ];
+  customFilters = customFilters.concat(hookFilters);
 }

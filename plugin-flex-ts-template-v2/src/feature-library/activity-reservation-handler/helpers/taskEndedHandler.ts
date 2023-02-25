@@ -6,8 +6,8 @@ import {
   availableActivity,
 } from "./systemActivities";
 import { getPendingActivity } from "./pendingActivity";
-import { FlexEvent } from "../../../types/manager/FlexEvent";
-import { isFeatureEnabled } from '..';
+import { FlexEvent } from "../../../types/feature-loader/FlexEvent";
+import { isFeatureEnabled } from '../config';
 
 const taskEndedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
   if (!isFeatureEnabled()) return;

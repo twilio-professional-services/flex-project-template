@@ -1,17 +1,14 @@
 import * as Flex from '@twilio/flex-ui';
 import { Actions as BargeCoachStatusAction, } from '../../flex-hooks/states/SupervisorBargeCoach';
-import { isFeatureEnabled, isAgentCoachingPanelEnabled } from '../..';
+import { isAgentCoachingPanelEnabled } from '../..';
 
 import { SyncDoc } from '../../utils/sync/Sync';
 import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButtons';
 import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateModeButton';
+import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
 
-
-export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.Manager) {
-
-  if(!isFeatureEnabled()) return;
-
-  
+export const componentName = FlexComponent.TaskOverviewCanvas;
+export const componentHook = function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.Manager) {
   // Add the Barge-in and Coach Option
   flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorBargeCoachButton key="bargecoach-buttons" />);
 

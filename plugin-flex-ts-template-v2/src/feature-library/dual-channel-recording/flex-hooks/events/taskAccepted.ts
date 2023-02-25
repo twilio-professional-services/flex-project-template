@@ -1,11 +1,12 @@
 import * as Flex from "@twilio/flex-ui";
 import { addCallDataToTask, waitForConferenceParticipants, waitForActiveCall } from "../../helpers/dualChannelHelper";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
 import RecordingService from "../../../pause-recording/helpers/RecordingService";
-import { isFeatureEnabled, getChannelToRecord } from '../..';
+import { getChannelToRecord } from '../..';
+import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
 
-const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled() || !Flex.TaskHelper.isCallTask(task)) {
+export const eventName = FlexEvent.taskAccepted;
+export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {
+  if (!Flex.TaskHelper.isCallTask(task)) {
     return;
   }
   
@@ -78,5 +79,3 @@ const taskAcceptedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
     console.error('Unable to start dual channel recording.', error);
   }
 }
-
-export default taskAcceptedHandler;

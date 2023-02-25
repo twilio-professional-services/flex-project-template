@@ -1,14 +1,14 @@
-import * as Flex from "@twilio/flex-ui";
+import { getFeatureFlags } from '../../utils/configuration';
+import { loadFeature } from '../../utils/feature-loader';
+// @ts-ignore
+import hooks from "./flex-hooks/**/*.*";
+import ConversationTransferConfiguration from './types/ServiceConfiguration';
 
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
 const {
   enabled = false,
   cold_transfer = false,
   multi_participant = false,
-} = custom_data?.features?.conversation_transfer || {};
+} = getFeatureFlags()?.features?.conversation_transfer as ConversationTransferConfiguration || {};
 
 export const isColdTransferEnabled = () => {
   return enabled && cold_transfer;
@@ -16,4 +16,9 @@ export const isColdTransferEnabled = () => {
 
 export const isMultiParticipantEnabled = () => {
   return enabled && multi_participant;
+};
+
+export const register = () => {
+  if (!enabled) return;
+  loadFeature("conversation-transfer", hooks);
 };

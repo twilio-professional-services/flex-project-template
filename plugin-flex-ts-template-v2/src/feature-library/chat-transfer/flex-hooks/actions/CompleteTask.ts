@@ -1,17 +1,17 @@
 import * as Flex from '@twilio/flex-ui';
 import ChatTransferService from '../../utils/serverless/ChatTransferService';
-import { isFeatureEnabled } from '../../index';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
 
 export interface EventPayload {
   task?: Flex.ITask;
   sid?: string;
 }
 
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.CompleteTask;
 // when a chat task has been transferred, performs custom complete actions
 // otherwise performs default behaviors
-export const interceptTransferredChatTasks = async (flex: typeof Flex, manager: Flex.Manager) => {
-
-  if(!isFeatureEnabled()) return;
+export const actionHook = async function interceptTransferredChatTasks(flex: typeof Flex, manager: Flex.Manager) {
 
   Flex.Actions.addListener('beforeCompleteTask', async (payload, abortFunction) => {
 

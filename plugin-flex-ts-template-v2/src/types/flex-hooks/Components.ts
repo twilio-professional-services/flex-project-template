@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 
-type ComponentName =
+type ComponentNames =
   | "AgentDesktopView"
   | "CallCanvas"
   | "CallCanvasActions"
@@ -27,4 +27,4 @@ type ComponentName =
 
 type ComponentHandler = (flex: typeof Flex, manager: Flex.Manager) => void;
 
-export type Components = Partial<Record<ComponentName, ComponentHandler[]>>;
+export type Components = Partial<Record<ComponentNames, ComponentHandler[]>>;

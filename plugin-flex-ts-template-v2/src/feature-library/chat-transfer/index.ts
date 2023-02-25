@@ -1,10 +1,16 @@
-import * as Flex from "@twilio/flex-ui";
+import { getFeatureFlags } from '../../utils/configuration';
+import ChatTransferConfiguration from './types/ServiceConfiguration';
+import { loadFeature } from '../../utils/feature-loader';
+// @ts-ignore
+import hooks from "./flex-hooks/**/*.*";
 
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.chat_transfer || {};
+const { enabled = false } = getFeatureFlags()?.features?.chat_transfer as ChatTransferConfiguration || {};
 
 export const isFeatureEnabled = () => {
   return enabled;
+};
+
+export const register = () => {
+  if (!isFeatureEnabled()) return;
+  loadFeature("chat-transfer", hooks);
 };

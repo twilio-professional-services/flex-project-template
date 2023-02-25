@@ -3,6 +3,7 @@ import * as Flex from "@twilio/flex-ui";
 import * as CssOverrides from "./css-overrides";
 import * as Events from "./events";
 import * as JsClientEvents from "./jsclient-event-listeners";
+import * as NotificationEvents from "./notification-events";
 import * as PasteElements from "./paste-elements";
 import * as Reducers from "./reducers";
 import * as Strings from "./strings";
@@ -39,33 +40,33 @@ export const initFeatures = () => {
 
 export const loadFeature = (name: string, hooks: [any]) => {
   // Features invoke this function to register their hooks
-  console.info(`Feature enabled: ${name}`);
+  console.info(`%cFeature enabled: ${name}`, 'background: green; color: white;');
   
   hooks.forEach((hook: any) => {
     // Each hook exports a function or property for us to handle.
     // Register the hook based on the export(s) present.
     
     if (hook.actionHook) {
-      console.info(`Feature ${name} registered action hook: ${hook.actionHook.name}`);
+      console.info(`Feature ${name} registered %c${hook.actionEvent}${hook.actionName} %caction hook: %c${hook.actionHook.name}`, 'font-weight:bold', 'font-weight:normal', 'font-weight:bold');
       hook.actionHook(Flex, manager);
     }
     
-    if (hook.channelsHook) {
-      console.info(`Feature ${name} registered channels hook: ${hook.channelsHook.name}`);
+    if (hook.channelHook) {
+      console.info(`Feature ${name} registered channel hook: %c${hook.channelHook.name}`, 'font-weight:bold');
       // returns a task channel to register
-      const channel = hook.channelsHook(Flex, manager);
+      const channel = hook.channelHook(Flex, manager);
       Flex.TaskChannels.register(channel);
     }
     
     if (hook.chatOrchestratorHook) {
-      console.info(`Feature ${name} registered chat orchestrator hook: ${hook.chatOrchestratorHook.name}`);
+      console.info(`Feature ${name} registered chat orchestrator hook: %c${hook.chatOrchestratorHook.name}`, 'font-weight:bold');
       // returns object with event and handler
       const { event, handler } = hook.chatOrchestratorHook(Flex, manager);
       Flex.ChatOrchestrator.setOrchestrations(event, handler);
     }
     
     if (hook.componentHook) {
-      console.info(`Feature ${name} registered component hook: ${hook.componentHook.name}`);
+      console.info(`Feature ${name} registered %c${hook.componentName} %ccomponent hook: %c${hook.componentHook.name}`, 'font-weight:bold', 'font-weight:normal', 'font-weight:bold');
       hook.componentHook(Flex, manager);
     }
     
@@ -82,12 +83,16 @@ export const loadFeature = (name: string, hooks: [any]) => {
     }
     
     if (hook.notificationHook) {
-      console.info(`Feature ${name} registered notification hook: ${hook.notificationHook.name}`);
+      console.info(`Feature ${name} registered notification hook: %c${hook.notificationHook.name}`, 'font-weight:bold');
       // Returns array of notification definitions to register
       const notifications = hook.notificationHook(Flex, manager) as [Flex.Notification];
       notifications.forEach(notification => {
         Flex.Notifications.registerNotification(notification);
       });
+    }
+    
+    if (hook.notificationEventHook) {
+      NotificationEvents.addHook(Flex, manager, name, hook);
     }
     
     if (hook.pasteElementHook) {

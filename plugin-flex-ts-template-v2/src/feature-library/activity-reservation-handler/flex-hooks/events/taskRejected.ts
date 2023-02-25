@@ -1,12 +1,8 @@
 import * as Flex from "@twilio/flex-ui";
 import taskEndedHandler from "../../helpers/taskEndedHandler";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { isFeatureEnabled } from '../..';
+import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
 
-const taskRejectedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled()) return;
-  
-  taskEndedHandler(task, flexEvent);
+export const eventName = FlexEvent.taskRejected;
+export const eventHook = (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {
+  taskEndedHandler(task, eventName);
 };
-
-export default taskRejectedHandler;

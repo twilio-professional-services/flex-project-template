@@ -1,10 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
 import CallbackAndVoicemail from '../../custom-components/CallbackAndVoicemail';
-import { isFeatureEnabled, isAllowRequeueEnabled, getMaxAttempts } from '../..';
+import { isAllowRequeueEnabled, getMaxAttempts } from '../..';
+import { FlexComponent } from '../../../../types/feature-loader/FlexComponent';
 
-export function replaceViewForCallbackAndVoicemail(flex: typeof Flex, manager: Flex.Manager) {
-  
-  if (!isFeatureEnabled()) return;
+export const componentName = FlexComponent.TaskInfoPanel;
+export const componentHook = function replaceViewForCallbackAndVoicemail(flex: typeof Flex, manager: Flex.Manager) {
 
   Flex.TaskInfoPanel.Content.replace(<CallbackAndVoicemail key="callback-component"  allowRequeue={isAllowRequeueEnabled()} maxAttempts={getMaxAttempts()} />, {
     sortOrder: -1,

@@ -1,11 +1,15 @@
 import { getFeatureFlags } from '../../utils/configuration';
+import TeamViewFiltersConfig from './types/ServiceConfiguration';
+import { loadFeature } from '../../utils/feature-loader';
+// @ts-ignore
+import hooks from "./flex-hooks/**/*.*";
 
 const { 
   enabled = false, 
   logFilters = false,
   department_options = [],
   team_options = []
-} = getFeatureFlags().features?.teams_view_filters || {};
+} = getFeatureFlags().features?.teams_view_filters as TeamViewFiltersConfig || {};
 const {
   email = false,
   department = false,
@@ -54,3 +58,8 @@ export const getDepartmentOptions = () => {
 export const getTeamOptions = () => {
   return team_options;
 }
+
+export const register = () => {
+  if (!isFeatureEnabled()) return;
+  loadFeature("teams-view-filters", hooks);
+};

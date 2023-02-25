@@ -1,8 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
 import WorkerProfileInfo from '../../custom-components/worker-profile-info/';
-import { isFilterTeamsViewEnabled, getRules } from '../..';
+import { isFilterTeamsViewEnabled, getRules } from '../../config';
+import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
 
-export function replaceWorkerProfileInfo(flex: typeof Flex, manager: Flex.Manager) {
+export const componentName = FlexComponent.WorkerProfile;
+export const componentHook = function replaceWorkerProfileInfo(flex: typeof Flex, manager: Flex.Manager) {
   
   if (!isFilterTeamsViewEnabled() || !getRules()) return;
   

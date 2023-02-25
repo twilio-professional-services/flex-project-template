@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ColumnDefinition, DataTable } from '@twilio/flex-ui';
+import { ColumnDefinition, DataTable, Manager } from '@twilio/flex-ui';
 import { Button } from '@twilio-paste/core/button';
 import { Box } from '@twilio-paste/core/box';
 import { PlusIcon } from "@twilio-paste/icons/esm/PlusIcon";
@@ -7,7 +7,7 @@ import { RRule } from 'rrule';
 
 import RuleEditor from '../RuleEditor/RuleEditor';
 import { Rule, Schedule } from '../../types/schedule-manager';
-import ScheduleManagerStrings, { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
+import { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
 import RRuleLanguage from '../../utils/RRuleLanguage';
 
 interface OwnProps {
@@ -21,6 +21,8 @@ const RuleDataTable = (props: OwnProps) => {
   const [ showPanel, setShowPanel ] = useState(false);
   const [ selectedRule, setSelectedRule ] = useState(null as Rule | null);
   const [ openIndexNext, setOpenIndexNext ] = useState(null as number | null);
+  
+  const ScheduleManagerStrings = Manager.getInstance().strings as any;
   
   useEffect(() => {
     if (openIndexNext) {

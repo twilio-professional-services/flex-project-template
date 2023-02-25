@@ -1,7 +1,8 @@
 import * as Flex from "@twilio/flex-ui";
 import { ITask } from "@twilio/flex-ui";
-import { isFeatureEnabled, getMatchingTaskConfiguration } from "../.."
+import { getMatchingTaskConfiguration } from "../.."
 import { TaskQualificationConfig } from "feature-library/agent-automation/types/ServiceConfiguration";
+import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
 
 async function selectAndAcceptTask(task: ITask, taskConfig: TaskQualificationConfig) {
   const {
@@ -17,10 +18,8 @@ async function selectAndAcceptTask(task: ITask, taskConfig: TaskQualificationCon
   if(taskConfig.auto_accept) await Flex.Actions.invokeAction("AcceptTask", { sid });
 }
 
-export default function autoSelectAndAcceptTask(task: ITask){
- 
-  if(!isFeatureEnabled()) return;
-
+export const eventName = FlexEvent.taskReceived;
+export const eventHook = function autoSelectAndAcceptTask(flex: typeof Flex, manager: Flex.Manager, task: ITask){
   const taskConfig = getMatchingTaskConfiguration(task);
   if(taskConfig) selectAndAcceptTask(task, taskConfig);
 }

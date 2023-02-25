@@ -3,11 +3,14 @@ import { isMultiParticipantEnabled } from '../../index'
 import { Tab, TaskHelper } from "@twilio/flex-ui"
 import { ParticipantTabLabel } from "../../custom-components/ParticipantTabLabel"
 import ParticipantsTab from "../../custom-components/ParticipantsTab"
+import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
 
 interface Props {
     task : Flex.ITask
 }
-export function addTaskCanvasTabCustomization(flex: typeof Flex) {
+
+export const componentName = FlexComponent.TaskCanvasTabs;
+export const componentHook = function addTaskCanvasTabCustomization(flex: typeof Flex) {
     if (!isMultiParticipantEnabled()) return;
 
     flex.TaskCanvasTabs.Content.add(

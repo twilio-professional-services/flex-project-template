@@ -1,10 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
 import { Call } from '@twilio/voice-sdk';
 import { handleFlexCallIncoming } from '../../../helpers/MultiCallHelper';
-import { isFeatureEnabled } from '../../..';
+import { FlexJsClient } from "../../../../../types/feature-loader/FlexJsClient";
 
-export default (_flex: typeof Flex, manager: Flex.Manager, call: Call) => {
-  if (!isFeatureEnabled()) return;
-  
+export const clientName = FlexJsClient.voiceClient;
+export const eventName = "incoming";
+export const jsClientHook = (_flex: typeof Flex, manager: Flex.Manager, call: Call) => {
   handleFlexCallIncoming(manager, call);
 }

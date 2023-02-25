@@ -1,5 +1,7 @@
 import * as Flex from "@twilio/flex-ui";
-import { AppState, reduxNamespace } from "../../../../flex-hooks/states";
+import AppState from "../../../../types/manager/AppState";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { reduxNamespace } from "../../../../utils/state";
 import { isAutoSelectTaskEnabled } from '../..';
 
 export interface EventPayload {
@@ -7,11 +9,13 @@ export interface EventPayload {
   sid?: string;
 }
 
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.SelectTask;
 // when an outbound call back completes, select the parent task that initiated it
-export const autoSelectCallbackTaskWhenEndingCall = async (
+export const actionHook = async function autoSelectCallbackTaskWhenEndingCall(
   flex: typeof Flex,
   manager: Flex.Manager
-) => {
+) {
 
   if (!isAutoSelectTaskEnabled()) return;
 

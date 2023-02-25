@@ -24,10 +24,9 @@ export const init = (flex: typeof Flex) => {
 }
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
-  console.info(`Feature ${feature} registered Paste element hook: ${hook.pasteElementHook.name}`);
-  const hookElements = hook.pasteElementHook(flex, manager);
+  console.info(`Feature ${feature} registered Paste element hook`);
   customPasteElements = {
     ...customPasteElements,
-    ...hookElements
+    ...hook.pasteElementHook
   };
 }

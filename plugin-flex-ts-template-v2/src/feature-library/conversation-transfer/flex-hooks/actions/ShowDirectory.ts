@@ -1,7 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
-import { isColdTransferEnabled, isMultiParticipantEnabled } from "../../index";
+import { isMultiParticipantEnabled } from "../../index";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
 
-export function handleChatTransferShowDirectory(
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.ShowDirectory;
+export const actionHook = function handleChatTransferShowDirectory(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {

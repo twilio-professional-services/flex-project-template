@@ -13,7 +13,7 @@ export const init = (manager: Flex.Manager) => {
 }
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
-  console.info(`Feature ${feature} registered CSS override hook: ${hook.cssOverrideHook.name}`);
+  console.info(`Feature ${feature} registered CSS override hook: %c${hook.cssOverrideHook.name}`, 'font-weight:bold');
   const override = hook.cssOverrideHook(flex, manager);
   overrides = {
     ...overrides,

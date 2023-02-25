@@ -1,13 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
 import { NotificationIds } from "../notifications/DualChannelRecording";
-import { isFeatureEnabled, getChannelToRecord } from '../..';
+import { getChannelToRecord } from '../..';
+import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
 
-const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled()) return;
-
-  console.log(`Feature enabled: dual-channel-recording`);
-  
+export const eventName = FlexEvent.pluginsLoaded;
+export const eventHook = () => {
   // Test to make sure the channel config property has been
   // configured correctly. If it has not, throw errors and notifications.
   if (getChannelToRecord() != 'worker' && getChannelToRecord() != 'customer') {
@@ -17,5 +14,3 @@ const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
     );
   }
 };
-
-export default pluginsLoadedHandler;

@@ -1,5 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
-import { FlexJsClient } from "../../types/manager/FlexJsClient";
+import { FlexJsClient } from "../../types/feature-loader/FlexJsClient";
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
   if (!hook.clientName) {
@@ -14,7 +14,7 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
   }
   const event = hook.eventName;
   
-  console.info(`Feature ${feature} registered ${client} ${event} event hook: ${hook.jsClientHook.name}`);
+  console.info(`Feature ${feature} registered %c${client} ${event} %cevent hook: %c${hook.jsClientHook.name}`, 'font-weight:bold', 'font-weight:normal', 'font-weight:bold');
   
   switch (client) {
     case FlexJsClient.conversationsClient:

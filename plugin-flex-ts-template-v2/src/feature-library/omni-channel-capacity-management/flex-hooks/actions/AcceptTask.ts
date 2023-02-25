@@ -1,7 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
 import { Channel } from "../../../../types/task-router";
 import TaskRouterService from "../../../../utils/serverless/TaskRouter/TaskRouterService";
-import { isFeatureEnabled } from '../..';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+
+export const actionEvent = FlexActionEvent.after;
+export const actionName = FlexAction.AcceptTask;
 
 /*
   this function manages channel capacity for chat and is intended to be used in
@@ -32,12 +35,10 @@ import { isFeatureEnabled } from '../..';
 
   Once the next piece of work is recieved, the capacity is reset. 
 */
-export function omniChannelChatCapacityManager(
+export const actionHook = function omniChannelChatCapacityManager(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  if (!isFeatureEnabled()) return;
-
   Flex.Actions.addListener("afterAcceptTask", async () => {
     const workerChanneslMap = manager?.workerClient?.channels;
     const tasksMap = manager.store.getState().flex.worker.tasks;

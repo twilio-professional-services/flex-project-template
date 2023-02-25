@@ -1,11 +1,12 @@
 import * as Flex from "@twilio/flex-ui";
-import { isFeatureEnabled } from '../..';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
 
-export function beforeCompleteVideoEscalatedChatTask(
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.CompleteTask;
+export const actionHook = function beforeCompleteVideoEscalatedChatTask(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  if (!isFeatureEnabled()) return;
 
   flex.Actions.addListener(
     "beforeCompleteTask",

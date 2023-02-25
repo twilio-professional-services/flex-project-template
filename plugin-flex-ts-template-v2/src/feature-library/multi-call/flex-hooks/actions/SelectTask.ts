@@ -1,10 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
 import { FlexDeviceCall, getMyCallSid, SecondDeviceCall } from '../../helpers/MultiCallHelper';
-import { isFeatureEnabled } from '../..';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
 
-export function handleMultiCallSelectTask(flex: typeof Flex, manager: Flex.Manager) {
-  if (!isFeatureEnabled()) return;
-  
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.SelectTask;
+export const actionHook = function handleMultiCallSelectTask(flex: typeof Flex, manager: Flex.Manager) {
   flex.Actions.addListener('beforeSelectTask', async (payload, abortFunction) => {
     let task = null;
     

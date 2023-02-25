@@ -1,12 +1,15 @@
+import { Manager } from '@twilio/flex-ui';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states';
+import AppState from "../../../../types/manager/AppState";
+import { reduxNamespace } from "../../../../utils/state";
 import {
   TaskHelper,
   ITask
 } from '@twilio/flex-ui';
 import {Text} from '@twilio-paste/core/text';
-import PauseRecordingStrings, { StringTemplates } from '../../flex-hooks/strings/PauseRecording';
+import { StringTemplates } from '../../flex-hooks/strings/PauseRecording';
+import { PauseRecordingState } from '../../flex-hooks/states/PauseRecordingSlice';
 
 export interface OwnProps {
   task?: ITask
@@ -15,7 +18,7 @@ export interface OwnProps {
 const PauseStatusPanel = (props: OwnProps) => {
   const [ paused, setPaused ] = useState(false);
   
-  const { pausedRecordings } = useSelector((state: AppState) => state[reduxNamespace].pauseRecording);
+  const { pausedRecordings } = useSelector((state: AppState) => state[reduxNamespace].pauseRecording as PauseRecordingState);
   
   useEffect(() => {
     updatePausedState();
@@ -47,7 +50,7 @@ const PauseStatusPanel = (props: OwnProps) => {
         as='p'
         textAlign='center'
         fontWeight='fontWeightBold'
-        padding='space50'>{PauseRecordingStrings[StringTemplates.RECORDING_PAUSED_LABEL]}</Text>
+        padding='space50'>{(Manager.getInstance().strings as any)[StringTemplates.RECORDING_PAUSED_LABEL]}</Text>
     )}
     </>
   );

@@ -9,7 +9,7 @@ export enum StringTemplates {
   RESUME_TOOLTIP = 'PSResumeRecordingTooltip',
 }
 
-export default {
+export const stringHook = () => ({
   [StringTemplates.RECORDING_PAUSED]: 'Call recording has been paused. Please remember to resume call recording when appropriate.',
   [StringTemplates.RECORDING_PAUSED_LABEL]: 'Call Recording Paused',
   [StringTemplates.RESUME_RECORDING]: 'Resumed recording this call.',
@@ -17,4 +17,4 @@ export default {
   [StringTemplates.RESUME_FAILED]: 'Failed to resume call recording. Please try again.',
   [StringTemplates.PAUSE_TOOLTIP]: 'Pause Recording',
   [StringTemplates.RESUME_TOOLTIP]: 'Resume Recording',
-};
+});

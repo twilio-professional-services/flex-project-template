@@ -5,7 +5,7 @@ import {Flex} from '@twilio-paste/core/flex';
 import {Input} from '@twilio-paste/core/input';
 import {DeleteIcon} from "@twilio-paste/icons/esm/DeleteIcon";
 import { WorkerChannelCapacityResponse } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
-import { getRules } from '../..';
+import { getRules } from '../../config';
 
 export interface OwnProps {
   isSaving: boolean;

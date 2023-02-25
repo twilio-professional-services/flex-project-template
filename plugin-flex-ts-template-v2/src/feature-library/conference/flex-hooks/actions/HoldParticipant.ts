@@ -1,8 +1,11 @@
 import * as Flex from "@twilio/flex-ui";
 import ConferenceService from "../../utils/ConferenceService";
 import { isAddButtonEnabled } from '../..';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
 
-export function handleHoldConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.HoldParticipant;
+export const actionHook = function handleHoldConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
   if (!isAddButtonEnabled()) return;
 
   flex.Actions.addListener("beforeHoldParticipant", async (payload, abortFunction) => {

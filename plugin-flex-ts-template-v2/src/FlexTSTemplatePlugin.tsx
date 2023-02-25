@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { FlexPlugin } from '@twilio/flex-plugin';
 
-import AddReducers from './flex-hooks/redux';
+/*import AddReducers from './flex-hooks/redux';
 import ConfigureFlexStrings from './flex-hooks/strings';
 import CustomizeFlexComponents from './flex-hooks/components';
 import CustomizeFlexActions from './flex-hooks/actions';
@@ -14,7 +14,7 @@ import TeamFilters from './flex-hooks/teams-filters';
 import CustomChatOrchestration from './flex-hooks/chat-orchestrator';
 import CssOverrides from './flex-hooks/css-overrides';
 import CustomizePasteElements from './flex-hooks/paste-elements';
-import Events from "./flex-hooks/events";
+import Events from "./flex-hooks/events";*/
 
 import { initFeatures } from './utils/feature-loader';
 
@@ -34,7 +34,7 @@ export default class FlexTSTemplatePlugin extends FlexPlugin {
    */
   init(flex: typeof Flex, manager: Flex.Manager) {
 
-    const initializers = [
+    /*const initializers = [
       AddReducers,
       ConfigureFlexStrings,
       RegisterCustomChannels,
@@ -48,11 +48,11 @@ export default class FlexTSTemplatePlugin extends FlexPlugin {
       CustomChatOrchestration,
       CssOverrides,
       Events
-    ];
-
-    initializers.forEach((initializer) => initializer(flex, manager));
+    ];*/
     
     // NEW!
     initFeatures();
+
+    //initializers.forEach((initializer) => initializer(flex, manager));
   }
 }

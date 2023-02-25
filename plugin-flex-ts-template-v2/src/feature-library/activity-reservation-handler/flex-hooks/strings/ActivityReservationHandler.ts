@@ -4,7 +4,7 @@ export enum StringTemplates {
   RestrictedActivities = 'PSRestrictedActivities',
 }
 
-export default {
+export const stringHook = () => ({
   [StringTemplates.ActivityChangeDelayed]: 'You will be set to "{{activityName}}" when all tasks are completed',
   [StringTemplates.RestrictedActivities]: 'Status "{{activityName}}" cannot be manually selected',
-};
+});

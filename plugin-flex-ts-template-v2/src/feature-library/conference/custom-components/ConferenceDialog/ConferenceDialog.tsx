@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Actions, Manager, ITask, withTaskContext, useFlexSelector } from '@twilio/flex-ui';
 import { useDispatch } from 'react-redux';
-import { AppState } from '../../../../flex-hooks/states'
+import AppState from "../../../../types/manager/AppState";
 import ConferenceService from '../../utils/ConferenceService';
 
 import {useUID} from '@twilio-paste/core/uid-library';

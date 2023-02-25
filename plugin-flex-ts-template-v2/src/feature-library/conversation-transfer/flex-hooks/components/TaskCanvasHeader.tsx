@@ -4,28 +4,28 @@ import { isColdTransferEnabled, isMultiParticipantEnabled } from '../../index'
 import TransferButton from "../../custom-components/TransferButton"
 import LeaveChatButton from "../../custom-components/LeaveChatButton"
 import { countOfOutstandingInvitesForConversation } from "../../helpers/inviteTracker"
+import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
 
 interface Props {
     task : ITask
 }
 
-export function addChatTransferButton(flex: typeof Flex) {
-    if (!isColdTransferEnabled()) return;
-  
-    flex.TaskCanvasHeader.Content.add(
-        <TransferButton key='conversation-transfer-button' />,
-        {
-            sortOrder: 1,
-            if: ({ task }) =>
-                TaskHelper.isCBMTask(task) &&
-                task.taskStatus === 'assigned'
-        }
-    )
-}
-
-export function replaceEndTaskButton(flex: typeof Flex) {
+export const componentName = FlexComponent.TaskCanvasHeader;
+export const componentHook = function addChatTransferButtons(flex: typeof Flex) {
+    if (isColdTransferEnabled()) {
+        flex.TaskCanvasHeader.Content.add(
+            <TransferButton key='conversation-transfer-button' />,
+            {
+                sortOrder: 1,
+                if: ({ task }) =>
+                    TaskHelper.isCBMTask(task) &&
+                    task.taskStatus === 'assigned'
+            }
+        )
+    }
+    
     if (!isMultiParticipantEnabled()) return;
-
+    
     const replaceEndTaskButton = (task: ITask) => {
         if (TaskHelper.isCBMTask(task) &&
             task.taskStatus === 'assigned')
@@ -40,12 +40,12 @@ export function replaceEndTaskButton(flex: typeof Flex) {
         }       
         return false;
     }
-  
+    
     flex.TaskCanvasHeader.Content.add(
         <LeaveChatButton key='leave-chat' />,
         { if: ({ task} : Props) => replaceEndTaskButton(task) }
     )
-
+    
     flex.TaskCanvasHeader.Content.remove("actions",
         { if: ({ task }: Props) => replaceEndTaskButton(task) }
     )

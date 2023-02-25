@@ -1,10 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
 import { handleUnhold } from '../../helpers/MultiCallHelper';
-import { isFeatureEnabled } from '../..';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
 
-export function handleMultiCallUnholdCall(flex: typeof Flex, manager: Flex.Manager) {
-  if (!isFeatureEnabled()) return;
-  
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.UnholdCall;
+export const actionHook = function handleMultiCallUnholdCall(flex: typeof Flex, manager: Flex.Manager) {
   flex.Actions.addListener('beforeUnholdCall', async (payload, abortFunction) => {
     handleUnhold(payload);
   });

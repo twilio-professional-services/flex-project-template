@@ -1,10 +1,9 @@
 import * as Flex from "@twilio/flex-ui";
 import VideoRoom from "../../custom-components/VideoRoom";
-import { isFeatureEnabled } from '../..';
+import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
 
-export function addVideoRoomTabToTaskCanvasTabs(flex: typeof Flex) {
-  if (!isFeatureEnabled()) return;
-
+export const componentName = FlexComponent.TaskCanvasTabs;
+export const componentHook = function addVideoRoomTabToTaskCanvasTabs(flex: typeof Flex) {
   flex.TaskCanvasTabs.Content.add(
     <Flex.Tab label="Video Room" key="VideoRoom">
       <VideoRoom />

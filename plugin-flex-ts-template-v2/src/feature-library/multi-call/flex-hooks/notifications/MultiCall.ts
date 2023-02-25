@@ -6,16 +6,12 @@ export enum NotificationIds {
   MultiCallBroken = 'PSMultiCallBroken'
 }
 
-export default (flex: typeof Flex, manager: Flex.Manager) => {
-  multiCallBroken(flex, manager);
-};
-
-function multiCallBroken(flex: typeof Flex, manager: Flex.Manager) {
-  flex.Notifications.registerNotification({
+export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+  {
     id: NotificationIds.MultiCallBroken,
     closeButton: true,
     content: StringTemplates.MultiCallBroken,
     timeout: 0,
     type: NotificationType.error,
-  });
-}
+  }
+];
