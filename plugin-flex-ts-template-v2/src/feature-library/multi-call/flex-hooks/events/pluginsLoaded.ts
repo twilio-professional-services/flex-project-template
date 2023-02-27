@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { NotificationIds } from "../notifications/MultiCall";
-import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
+import { FlexEvent } from "../../../../types/feature-loader";
 
 export const eventName = FlexEvent.pluginsLoaded;
 export const eventHook = () => {

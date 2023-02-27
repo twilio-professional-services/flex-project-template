@@ -5,7 +5,7 @@ import ParticipantName from '../../custom-components/ParticipantName';
 import ParticipantStatus from '../../custom-components/ParticipantStatus';
 import ParticipantStatusContainer from '../../custom-components/ParticipantStatusContainer';
 import { isAddButtonEnabled } from '../..';
-import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
+import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.ParticipantCanvas;
 export const componentHook = function addConferenceToParticipantCanvas(flex: typeof Flex) {

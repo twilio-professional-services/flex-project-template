@@ -5,7 +5,7 @@ import {
   onTaskActivity,
   onTaskNoAcdActivity,
 } from "../../helpers/systemActivities";
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.StartOutboundCall;

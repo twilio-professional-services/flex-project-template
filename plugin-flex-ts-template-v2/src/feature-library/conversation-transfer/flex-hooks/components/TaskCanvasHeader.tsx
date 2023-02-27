@@ -4,7 +4,7 @@ import { isColdTransferEnabled, isMultiParticipantEnabled } from '../../index'
 import TransferButton from "../../custom-components/TransferButton"
 import LeaveChatButton from "../../custom-components/LeaveChatButton"
 import { countOfOutstandingInvitesForConversation } from "../../helpers/inviteTracker"
-import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
+import { FlexComponent } from "../../../../types/feature-loader";
 
 interface Props {
     task : ITask

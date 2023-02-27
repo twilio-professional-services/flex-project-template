@@ -1,6 +1,6 @@
 import { getFeatureFlags } from '../../utils/configuration';
 import DualChannelRecordingConfig from './types/ServiceConfiguration';
-import { loadFeature } from '../../utils/feature-loader';
+import { FeatureDefinition } from "../../types/feature-loader";
 // @ts-ignore
 import hooks from "./flex-hooks/**/*.*";
 
@@ -14,7 +14,7 @@ export const getChannelToRecord = () => {
   return channel;
 };
 
-export const register = () => {
-  if (!isFeatureEnabled()) return;
-  loadFeature("dual-channel-recording", hooks);
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "dual-channel-recording", hooks };
 };

@@ -2,7 +2,7 @@ import * as Flex from "@twilio/flex-ui";
 import * as HangUpByHelper from "../../helpers/hangUpBy";
 import { HangUpBy } from '../../enums/hangUpBy';
 import TaskRouterService from "../../../../utils/serverless/TaskRouter/TaskRouterService";
-import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
+import { FlexEvent } from "../../../../types/feature-loader";
 
 export const eventName = FlexEvent.taskWrapup;
 export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {

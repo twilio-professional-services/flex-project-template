@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definition';
-import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
+import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.WorkersDataTable;
 export const componentHook = function replaceWorkerDataTableCallsColumnMultiCall(flex: typeof Flex, manager: Flex.Manager) {

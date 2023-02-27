@@ -5,7 +5,7 @@ import { isAgentCoachingPanelEnabled } from '../..';
 import { SyncDoc } from '../../utils/sync/Sync';
 import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButtons';
 import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateModeButton';
-import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
+import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.TaskOverviewCanvas;
 export const componentHook = function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.Manager) {

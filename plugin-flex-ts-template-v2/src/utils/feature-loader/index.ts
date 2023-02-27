@@ -1,8 +1,13 @@
 import * as Flex from "@twilio/flex-ui";
-
+import { FeatureDefinition } from "../../types/feature-loader";
+import * as Actions from "./actions";
+import * as Channels from "./channels";
+import * as ChatOrchestrator from "./chat-orchestrator";
+import * as Components from "./components";
 import * as CssOverrides from "./css-overrides";
 import * as Events from "./events";
 import * as JsClientEvents from "./jsclient-event-listeners";
+import * as Notifications from "./notifications";
 import * as NotificationEvents from "./notification-events";
 import * as PasteElements from "./paste-elements";
 import * as Reducers from "./reducers";
@@ -12,104 +17,96 @@ import * as TeamsFilters from "./teams-filters";
 // @ts-ignore
 import features from "../../feature-library/*/index.ts";
 
-const manager = Flex.Manager.getInstance();
-
-export const initFeatures = () => {
+export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   if (typeof features === 'undefined') {
     // no features discovered; abort
     return;
   }
   
-  features.forEach((file: any) => {
+  for (const file of features) {
     // Each feature index file should export a `register` function for us to invoke
     if (!file.register) {
       console.error('Feature found, but its index file does not export a `register` function', file);
       return;
     }
     
-    file.register();
-  });
+    const { name, hooks } = file.register() as FeatureDefinition;
+    
+    if (name && hooks) {
+      loadFeature(flex, manager, name, hooks);
+    } else if (name) {
+      console.error(`Feature ${name} found, but it did not return hooks to load`, file);
+    }
+  };
   
   // After all features have initialized, execute deferred hooks
   CssOverrides.init(manager);
-  PasteElements.init(Flex);
+  PasteElements.init(flex);
   Reducers.init(manager);
   Strings.init(manager);
-  TeamsFilters.init(Flex);
+  Components.init(flex, manager);
+  TeamsFilters.init(flex, manager);
 }
 
-export const loadFeature = (name: string, hooks: [any]) => {
+export const loadFeature = (flex: typeof Flex, manager: Flex.Manager, name: string, hooks: any[]) => {
   // Features invoke this function to register their hooks
   console.info(`%cFeature enabled: ${name}`, 'background: green; color: white;');
   
-  hooks.forEach((hook: any) => {
+  for (const hook of hooks) {
     // Each hook exports a function or property for us to handle.
     // Register the hook based on the export(s) present.
     
     if (hook.actionHook) {
-      console.info(`Feature ${name} registered %c${hook.actionEvent}${hook.actionName} %caction hook: %c${hook.actionHook.name}`, 'font-weight:bold', 'font-weight:normal', 'font-weight:bold');
-      hook.actionHook(Flex, manager);
+      Actions.addHook(flex, manager, name, hook);
     }
     
     if (hook.channelHook) {
-      console.info(`Feature ${name} registered channel hook: %c${hook.channelHook.name}`, 'font-weight:bold');
-      // returns a task channel to register
-      const channel = hook.channelHook(Flex, manager);
-      Flex.TaskChannels.register(channel);
+      Channels.addHook(flex, manager, name, hook);
     }
     
     if (hook.chatOrchestratorHook) {
-      console.info(`Feature ${name} registered chat orchestrator hook: %c${hook.chatOrchestratorHook.name}`, 'font-weight:bold');
-      // returns object with event and handler
-      const { event, handler } = hook.chatOrchestratorHook(Flex, manager);
-      Flex.ChatOrchestrator.setOrchestrations(event, handler);
+      ChatOrchestrator.addHook(flex, manager, name, hook);
     }
     
     if (hook.componentHook) {
-      console.info(`Feature ${name} registered %c${hook.componentName} %ccomponent hook: %c${hook.componentHook.name}`, 'font-weight:bold', 'font-weight:normal', 'font-weight:bold');
-      hook.componentHook(Flex, manager);
+      Components.addHook(flex, manager, name, hook);
     }
     
     if (hook.cssOverrideHook) {
-      CssOverrides.addHook(Flex, manager, name, hook);
+      CssOverrides.addHook(flex, manager, name, hook);
     }
     
     if (hook.eventHook) {
-      Events.addHook(Flex, manager, name, hook);
+      Events.addHook(flex, manager, name, hook);
     }
     
     if (hook.jsClientHook) {
-      JsClientEvents.addHook(Flex, manager, name, hook);
+      JsClientEvents.addHook(flex, manager, name, hook);
     }
     
     if (hook.notificationHook) {
-      console.info(`Feature ${name} registered notification hook: %c${hook.notificationHook.name}`, 'font-weight:bold');
-      // Returns array of notification definitions to register
-      const notifications = hook.notificationHook(Flex, manager) as [Flex.Notification];
-      notifications.forEach(notification => {
-        Flex.Notifications.registerNotification(notification);
-      });
+      Notifications.addHook(flex, manager, name, hook);
     }
     
     if (hook.notificationEventHook) {
-      NotificationEvents.addHook(Flex, manager, name, hook);
+      NotificationEvents.addHook(flex, manager, name, hook);
     }
     
     if (hook.pasteElementHook) {
-      PasteElements.addHook(Flex, manager, name, hook);
+      PasteElements.addHook(flex, manager, name, hook);
     }
     
     if (hook.reducerHook) {
-      Reducers.addHook(Flex, manager, name, hook);
+      Reducers.addHook(flex, manager, name, hook);
     }
     
     if (hook.stringHook) {
-      Strings.addHook(Flex, manager, name, hook);
+      Strings.addHook(flex, manager, name, hook);
     }
     
     if (hook.teamsFilterHook) {
-      TeamsFilters.addHook(Flex, manager, name, hook);
+      TeamsFilters.addHook(flex, manager, name, hook);
     }
     
-  })
+  }
 }

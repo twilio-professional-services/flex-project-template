@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import { getWorkerFriendlyName } from '../../../utils/serverless/ChatTransferService';
 import { Worker } from 'types/task-router';
 import { Conversation } from '@twilio/conversations';
-import { FlexJsClient } from "../../../../../types/feature-loader/FlexJsClient";
+import { FlexJsClient } from "../../../../../types/feature-loader";
 
 export const clientName = FlexJsClient.conversationsClient;
 export const eventName = "conversationJoined";

@@ -1,6 +1,6 @@
 import { getFeatureFlags } from '../../utils/configuration';
 import SupervisorCompleteReservation from './types/ServiceConfiguration';
-import { loadFeature } from '../../utils/feature-loader';
+import { FeatureDefinition } from "../../types/feature-loader";
 // @ts-ignore
 import hooks from "./flex-hooks/**/*.*";
 
@@ -10,7 +10,7 @@ export const isFeatureEnabled = () => {
   return enabled;
 };
 
-export const register = () => {
-  if (!isFeatureEnabled()) return;
-  loadFeature("supervisor-complete-reservation", hooks);
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "supervisor-complete-reservation", hooks };
 };

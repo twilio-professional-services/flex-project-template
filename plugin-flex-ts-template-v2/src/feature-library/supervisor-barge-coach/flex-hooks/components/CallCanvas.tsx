@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel'
 import { SyncDoc } from '../../utils/sync/Sync';
 import { isAgentCoachingPanelEnabled } from '../..';
-import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
+import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.CallCanvas;
 export const componentHook = function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Flex.Manager) {

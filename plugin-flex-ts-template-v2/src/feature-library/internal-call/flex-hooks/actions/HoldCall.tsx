@@ -1,7 +1,7 @@
 import * as Flex from "@twilio/flex-ui";
 import ConferenceService from "../../../conference/utils/ConferenceService";
 import { isInternalCall } from '../../helpers/internalCall';
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.HoldCall;

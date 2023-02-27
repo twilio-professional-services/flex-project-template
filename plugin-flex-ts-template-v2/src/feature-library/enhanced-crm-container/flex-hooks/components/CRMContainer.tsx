@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 
 import IFrameCRMContainer from '../../custom-components/IFrameCRMContainer';
-import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
+import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.CRMContainer;
 export const componentHook = function replaceAndSetCustomCRMContainer(flex: typeof Flex, manager: Flex.Manager) {

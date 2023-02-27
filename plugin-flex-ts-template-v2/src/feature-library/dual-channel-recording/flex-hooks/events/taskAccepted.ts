@@ -2,7 +2,7 @@ import * as Flex from "@twilio/flex-ui";
 import { addCallDataToTask, waitForConferenceParticipants, waitForActiveCall } from "../../helpers/dualChannelHelper";
 import RecordingService from "../../../pause-recording/helpers/RecordingService";
 import { getChannelToRecord } from '../..';
-import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
+import { FlexEvent } from "../../../../types/feature-loader";
 
 export const eventName = FlexEvent.taskAccepted;
 export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {

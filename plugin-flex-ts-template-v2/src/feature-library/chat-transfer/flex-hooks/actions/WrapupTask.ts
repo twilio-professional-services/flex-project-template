@@ -3,7 +3,7 @@ import { TaskHelper } from '@twilio/flex-ui'
 import { getWorkerFriendlyName }  from '../../utils/serverless/ChatTransferService';
 import TaskService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import ProgrammableChatService from '../../../../utils/serverless/ProgrammableChat/ProgrammableChatService';
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 import { Worker } from 'types/task-router';
 

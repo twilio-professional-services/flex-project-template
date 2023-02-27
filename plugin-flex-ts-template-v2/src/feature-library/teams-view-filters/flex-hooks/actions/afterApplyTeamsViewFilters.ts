@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { shouldLogFilters } from "../../index";
 import { AppliedFilter } from '@twilio/flex-ui/src/state/Supervisor/SupervisorState.definitions';
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export interface ApplyTeamsViewFiltersPayload {
   extraFilterQuery?:	string	

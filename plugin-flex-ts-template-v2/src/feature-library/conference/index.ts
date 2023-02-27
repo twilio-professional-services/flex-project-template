@@ -1,5 +1,5 @@
 import { getFeatureFlags } from '../../utils/configuration';
-import { loadFeature } from '../../utils/feature-loader';
+import { FeatureDefinition } from "../../types/feature-loader";
 import ConferenceConfig from './types/ServiceConfiguration';
 // @ts-ignore
 import hooks from "./flex-hooks/**/*.*";
@@ -18,7 +18,7 @@ export const isHoldWorkaroundEnabled = () => {
   return enabled && hold_workaround;
 };
 
-export const register = () => {
-  if (!isFeatureEnabled()) return;
-  loadFeature("conference", hooks);
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "conference", hooks };
 };

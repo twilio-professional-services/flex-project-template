@@ -3,7 +3,7 @@ import FlexState from "../../helpers/flexHelper";
 import { delayActivityChange } from "../../config";
 import { NotificationIds } from "../notifications/ActivityReservationHandler";
 import { systemActivities } from "../../helpers/systemActivities";
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.SetActivity;

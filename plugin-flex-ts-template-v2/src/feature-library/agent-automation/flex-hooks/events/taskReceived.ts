@@ -2,7 +2,7 @@ import * as Flex from "@twilio/flex-ui";
 import { ITask } from "@twilio/flex-ui";
 import { getMatchingTaskConfiguration } from "../.."
 import { TaskQualificationConfig } from "feature-library/agent-automation/types/ServiceConfiguration";
-import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
+import { FlexEvent } from "../../../../types/feature-loader";
 
 async function selectAndAcceptTask(task: ITask, taskConfig: TaskQualificationConfig) {
   const {

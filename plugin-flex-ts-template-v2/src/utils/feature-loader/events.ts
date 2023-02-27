@@ -1,5 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
-import { FlexEvent } from "../../types/feature-loader/FlexEvent";
+import { FlexEvent } from "../../types/feature-loader";
 
 const taskEvents = [
   FlexEvent.taskAccepted,

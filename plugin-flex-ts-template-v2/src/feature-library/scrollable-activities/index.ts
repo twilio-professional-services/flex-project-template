@@ -1,6 +1,6 @@
 import { getFeatureFlags } from '../../utils/configuration';
 import ScrollableActivitiesConfig from './types/ServiceConfiguration';
-import { loadFeature } from '../../utils/feature-loader';
+import { FeatureDefinition } from "../../types/feature-loader";
 // @ts-ignore
 import hooks from "./flex-hooks/**/*.*";
 
@@ -10,7 +10,7 @@ export const isFeatureEnabled = () => {
   return enabled;
 };
 
-export const register = () => {
-  if (!isFeatureEnabled()) return;
-  loadFeature("scrollable-activities", hooks);
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "scrollable-activities", hooks };
 };

@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import ConferenceDialog from '../../custom-components/ConferenceDialog';
 import ConferenceMonitor from '../../custom-components/ConferenceMonitor';
 import { isAddButtonEnabled } from '../..';
-import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
+import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.CallCanvas;
 export const componentHook = function addConferenceToCallCanvas(flex: typeof Flex) {

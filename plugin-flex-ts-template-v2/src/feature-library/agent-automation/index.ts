@@ -1,7 +1,7 @@
 import AgentAutomationConfig, { TaskQualificationConfig } from './types/ServiceConfiguration'
 import { getFeatureFlags } from '../../utils/configuration';
 import { ITask } from '@twilio/flex-ui';
-import { loadFeature } from '../../utils/feature-loader';
+import { FeatureDefinition } from "../../types/feature-loader";
 // @ts-ignore
 import hooks from "./flex-hooks/**/*.*";
 
@@ -35,7 +35,7 @@ export const getMatchingTaskConfiguration = (task: ITask) : TaskQualificationCon
   return first_matched_config;
 }
 
-export const register = () => {
-  if (!isFeatureEnabled()) return;
-  loadFeature("agent-automation", hooks);
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "agent-automation", hooks };
 };

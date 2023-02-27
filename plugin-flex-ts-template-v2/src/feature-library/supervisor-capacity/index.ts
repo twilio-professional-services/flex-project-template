@@ -1,9 +1,9 @@
 import { isFeatureEnabled } from './config';
-import { loadFeature } from '../../utils/feature-loader';
+import { FeatureDefinition } from "../../types/feature-loader";
 // @ts-ignore
 import hooks from "./flex-hooks/**/*.*";
 
-export const register = () => {
-  if (!isFeatureEnabled()) return;
-  loadFeature("supervisor-capacity", hooks);
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "supervisor-capacity", hooks };
 };

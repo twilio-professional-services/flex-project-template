@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
+import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.CallCanvasActions;
 export const componentHook = function removeDirectoryFromInternalCalls(flex: typeof Flex) {

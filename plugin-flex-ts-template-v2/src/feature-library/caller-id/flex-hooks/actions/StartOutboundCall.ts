@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import AppState from "../../../../types/manager/AppState";
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 import { reduxNamespace } from "../../../../utils/state";
 
 export const actionEvent = FlexActionEvent.before;

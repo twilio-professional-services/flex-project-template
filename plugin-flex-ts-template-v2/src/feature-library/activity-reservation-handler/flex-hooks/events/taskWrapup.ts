@@ -6,7 +6,7 @@ import {
   wrapupActivity,
   wrapupNoAcdActivity,
 } from "../../helpers/systemActivities";
-import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
+import { FlexEvent } from "../../../../types/feature-loader";
 
 export const eventName = FlexEvent.taskWrapup;
 export const eventHook = (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {

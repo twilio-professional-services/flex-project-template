@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
+import { FlexComponent } from "../../../../types/feature-loader";
 
 import { canShowScheduleManager } from '../../utils/schedule-manager';
 import ScheduleView from '../../custom-components/ScheduleView/ScheduleView';

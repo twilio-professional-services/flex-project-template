@@ -4,7 +4,7 @@ import { isSupervisorMonitorPanelEnabled } from '../..';
 import { reduxNamespace } from "../../../../utils/state";
 // Import to get Sync Doc updates
 import { SyncDoc } from "../../utils/sync/Sync";
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export const actionEvent = FlexActionEvent.after;
 export const actionName = FlexAction.MonitorCall;

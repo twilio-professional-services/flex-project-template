@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { addMissingCallDataIfNeeded } from "../../helpers/dualChannelHelper";
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.CompleteTask;

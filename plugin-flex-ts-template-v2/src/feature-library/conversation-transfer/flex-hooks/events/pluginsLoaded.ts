@@ -3,7 +3,7 @@ import { registerCustomChatTransferAction } from "../../custom-action/chatTransf
 import { registerLeaveChatAction } from "../../custom-action/leaveChat";
 import { registerRemoveChatParticipant } from "../../custom-action/removeChatParticipant";
 import { registerCancelChatParticipantInvite } from "../../custom-action/cancelChatParticipantInvite";
-import { FlexEvent } from "../../../../types/feature-loader/FlexEvent";
+import { FlexEvent } from "../../../../types/feature-loader";
 
 export const eventName = FlexEvent.pluginsLoaded;
 export const eventHook = () => {

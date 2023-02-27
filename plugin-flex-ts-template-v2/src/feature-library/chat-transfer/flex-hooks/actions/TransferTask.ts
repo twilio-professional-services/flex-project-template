@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import ChatTransferService from '../../utils/serverless/ChatTransferService';
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export interface TransferOptions {
   attributes: string;

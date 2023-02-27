@@ -1,5 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
-import { FlexJsClient } from "../../types/feature-loader/FlexJsClient";
+import { FlexJsClient } from "../../types/feature-loader";
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
   if (!hook.clientName) {

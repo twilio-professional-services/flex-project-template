@@ -1,6 +1,6 @@
 import { getFeatureFlags } from '../../utils/configuration';
 import TeamViewFiltersConfig from './types/ServiceConfiguration';
-import { loadFeature } from '../../utils/feature-loader';
+import { FeatureDefinition } from "../../types/feature-loader";
 // @ts-ignore
 import hooks from "./flex-hooks/**/*.*";
 
@@ -59,7 +59,7 @@ export const getTeamOptions = () => {
   return team_options;
 }
 
-export const register = () => {
-  if (!isFeatureEnabled()) return;
-  loadFeature("teams-view-filters", hooks);
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "teams-view-filters", hooks };
 };

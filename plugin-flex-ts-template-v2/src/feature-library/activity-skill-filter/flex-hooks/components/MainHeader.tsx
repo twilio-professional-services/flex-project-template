@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import ActivityWrapperComponent from '../../custom-components/activity-wrapper';
 import { NotificationIds } from '../notifications/ActivitySkillFilter';
 import { getRules } from '../../config';
-import { FlexComponent } from "../../../../types/feature-loader/FlexComponent";
+import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.MainHeader;
 export const componentHook = function replaceActivityComponent(flex: typeof Flex, manager: Flex.Manager) {

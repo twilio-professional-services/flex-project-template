@@ -1,5 +1,5 @@
 import { getFeatureFlags } from '../../utils/configuration';
-import { loadFeature } from '../../utils/feature-loader';
+import { FeatureDefinition } from "../../types/feature-loader";
 // @ts-ignore
 import hooks from "./flex-hooks/**/*.*";
 
@@ -21,7 +21,7 @@ export const getMaxAttempts = () => {
   return max_attempts;
 }
 
-export const register = () => {
-  if (!isFeatureEnabled()) return;
-  loadFeature("callback-and-voicemail", hooks);
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "callback-and-voicemail", hooks };
 };

@@ -3,7 +3,7 @@ import { Actions as BargeCoachStatusAction } from "../../states/SupervisorBargeC
 import { isAgentCoachingPanelEnabled } from '../../..';
 // Import to get Sync Doc updates
 import { SyncDoc } from "../../../utils/sync/Sync";
-import { FlexJsClient } from "../../../../../types/feature-loader/FlexJsClient";
+import { FlexJsClient } from "../../../../../types/feature-loader";
 
 export const clientName = FlexJsClient.workerClient;
 export const eventName = "reservationCreated";

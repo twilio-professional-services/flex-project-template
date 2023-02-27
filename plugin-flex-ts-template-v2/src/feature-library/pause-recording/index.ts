@@ -1,6 +1,6 @@
 import { getFeatureFlags } from '../../utils/configuration';
 import PauseRecordingConfig from './types/ServiceConfiguration';
-import { loadFeature } from '../../utils/feature-loader';
+import { FeatureDefinition } from "../../types/feature-loader";
 // @ts-ignore
 import hooks from "./flex-hooks/**/*.*";
 
@@ -22,7 +22,7 @@ export const isIncludeSilenceEnabled = () => {
   return enabled && include_silence;
 };
 
-export const register = () => {
-  if (!isFeatureEnabled()) return;
-  loadFeature("pause-recording", hooks);
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "pause-recording", hooks };
 };

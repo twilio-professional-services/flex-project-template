@@ -1,7 +1,7 @@
 import * as Flex from "@twilio/flex-ui";
 import { Channel } from "../../../../types/task-router";
 import TaskRouterService from "../../../../utils/serverless/TaskRouter/TaskRouterService";
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export const actionEvent = FlexActionEvent.after;
 export const actionName = FlexAction.AcceptTask;

@@ -1,5 +1,5 @@
 import { getFeatureFlags } from '../../utils/configuration';
-import { loadFeature } from '../../utils/feature-loader';
+import { FeatureDefinition } from "../../types/feature-loader";
 // @ts-ignore
 import hooks from "./flex-hooks/**/*.*";
 import ConversationTransferConfiguration from './types/ServiceConfiguration';
@@ -18,7 +18,7 @@ export const isMultiParticipantEnabled = () => {
   return enabled && multi_participant;
 };
 
-export const register = () => {
-  if (!enabled) return;
-  loadFeature("conversation-transfer", hooks);
+export const register = (): FeatureDefinition => {
+  if (!enabled) return {};
+  return { name: "conversation-transfer", hooks };
 };

@@ -1,7 +1,7 @@
 import * as Flex from "@twilio/flex-ui";
 import * as HangUpByHelper from "../../helpers/hangUpBy";
 import { HangUpBy } from '../../enums/hangUpBy';
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader/FlexAction";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.StartExternalWarmTransfer;
