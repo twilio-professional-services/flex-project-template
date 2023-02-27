@@ -61,5 +61,5 @@ export const getTeamOptions = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "teams-view-filters", hooks };
+  return { name: "teams-view-filters", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

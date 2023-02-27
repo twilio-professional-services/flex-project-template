@@ -12,5 +12,5 @@ export const isFeatureEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "enhanced-crm-container", hooks };
+  return { name: "enhanced-crm-container", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

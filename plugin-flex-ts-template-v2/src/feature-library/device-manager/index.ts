@@ -12,5 +12,5 @@ export const isFeatureEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "device-manager", hooks };
+  return { name: "device-manager", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

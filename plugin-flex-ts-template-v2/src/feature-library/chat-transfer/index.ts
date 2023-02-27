@@ -12,5 +12,5 @@ export const isFeatureEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "chat-transfer", hooks };
+  return { name: "chat-transfer", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

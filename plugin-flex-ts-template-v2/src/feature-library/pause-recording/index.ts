@@ -24,5 +24,5 @@ export const isIncludeSilenceEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "pause-recording", hooks };
+  return { name: "pause-recording", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

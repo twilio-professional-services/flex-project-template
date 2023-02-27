@@ -16,5 +16,5 @@ export const getChannelToRecord = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "dual-channel-recording", hooks };
+  return { name: "dual-channel-recording", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

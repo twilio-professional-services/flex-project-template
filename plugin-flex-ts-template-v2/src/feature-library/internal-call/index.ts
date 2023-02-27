@@ -12,5 +12,5 @@ export const isFeatureEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "internal-call", hooks };
+  return { name: "internal-call", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

@@ -12,5 +12,5 @@ export const isFeatureEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "scrollable-activities", hooks };
+  return { name: "scrollable-activities", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

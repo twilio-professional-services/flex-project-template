@@ -5,5 +5,5 @@ import hooks from "./flex-hooks/**/*.*";
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "activity-reservation-handler", hooks };
+  return { name: "activity-reservation-handler", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

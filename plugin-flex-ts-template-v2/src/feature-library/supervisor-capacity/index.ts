@@ -5,5 +5,5 @@ import hooks from "./flex-hooks/**/*.*";
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "supervisor-capacity", hooks };
+  return { name: "supervisor-capacity", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

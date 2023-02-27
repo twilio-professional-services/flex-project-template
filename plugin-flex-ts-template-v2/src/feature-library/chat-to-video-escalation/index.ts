@@ -12,5 +12,5 @@ export const isFeatureEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "chat-to-video-escalation", hooks };
+  return { name: "chat-to-video-escalation", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

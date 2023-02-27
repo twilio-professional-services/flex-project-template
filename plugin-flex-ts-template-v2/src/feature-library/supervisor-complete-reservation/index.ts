@@ -12,5 +12,5 @@ export const isFeatureEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "supervisor-complete-reservation", hooks };
+  return { name: "supervisor-complete-reservation", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

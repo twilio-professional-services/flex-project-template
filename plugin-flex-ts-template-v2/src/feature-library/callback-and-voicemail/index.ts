@@ -23,5 +23,5 @@ export const getMaxAttempts = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "callback-and-voicemail", hooks };
+  return { name: "callback-and-voicemail", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

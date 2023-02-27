@@ -12,5 +12,5 @@ export const isFeatureEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "omni-channel-capacity-management", hooks };
+  return { name: "omni-channel-capacity-management", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

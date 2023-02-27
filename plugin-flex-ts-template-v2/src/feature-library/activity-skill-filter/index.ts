@@ -5,5 +5,5 @@ import hooks from "./flex-hooks/**/*.*";
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "activity-skill-filter", hooks };
+  return { name: "activity-skill-filter", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

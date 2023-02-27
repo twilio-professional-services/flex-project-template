@@ -12,5 +12,5 @@ export const isFeatureEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "hang-up-by", hooks };
+  return { name: "hang-up-by", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

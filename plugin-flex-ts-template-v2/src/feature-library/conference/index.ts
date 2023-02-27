@@ -20,5 +20,5 @@ export const isHoldWorkaroundEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "conference", hooks };
+  return { name: "conference", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

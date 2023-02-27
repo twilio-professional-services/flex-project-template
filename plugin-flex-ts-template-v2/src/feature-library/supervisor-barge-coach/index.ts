@@ -20,5 +20,5 @@ export const isSupervisorMonitorPanelEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "supervisor-barge-coach", hooks };
+  return { name: "supervisor-barge-coach", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

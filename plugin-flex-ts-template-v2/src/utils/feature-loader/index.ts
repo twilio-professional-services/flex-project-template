@@ -30,12 +30,14 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
       return;
     }
     
-    const { name, hooks } = file.register() as FeatureDefinition;
-    
-    if (name && hooks) {
-      loadFeature(flex, manager, name, hooks);
-    } else if (name) {
-      console.error(`Feature ${name} found, but it did not return hooks to load`, file);
+    try {
+      const feature = file.register() as FeatureDefinition;
+      
+      if (feature && feature.name) {
+        loadFeature(flex, manager, feature);
+      }
+    } catch (error) {
+      console.error('Error loading feature:', error);
     }
   };
   
@@ -48,8 +50,10 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   TeamsFilters.init(flex, manager);
 }
 
-export const loadFeature = (flex: typeof Flex, manager: Flex.Manager, name: string, hooks: any[]) => {
+export const loadFeature = (flex: typeof Flex, manager: Flex.Manager, feature: FeatureDefinition) => {
   // Features invoke this function to register their hooks
+  const name = feature.name ?? "unknown";
+  const hooks = feature.hooks ?? [];
   console.info(`%cFeature enabled: ${name}`, 'background: green; color: white;');
   
   for (const hook of hooks) {

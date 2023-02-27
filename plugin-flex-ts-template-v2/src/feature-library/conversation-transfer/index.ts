@@ -20,5 +20,5 @@ export const isMultiParticipantEnabled = () => {
 
 export const register = (): FeatureDefinition => {
   if (!enabled) return {};
-  return { name: "conversation-transfer", hooks };
+  return { name: "conversation-transfer", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

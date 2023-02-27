@@ -37,5 +37,5 @@ export const getMatchingTaskConfiguration = (task: ITask) : TaskQualificationCon
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: "agent-automation", hooks };
+  return { name: "agent-automation", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };
