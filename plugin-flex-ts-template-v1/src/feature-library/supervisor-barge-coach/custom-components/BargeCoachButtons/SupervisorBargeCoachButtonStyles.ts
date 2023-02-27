@@ -3,7 +3,7 @@ import styled from 'react-emotion';
 export const ButtonContainer = styled('div')`
   display: flex;
   justify-content: center;
-  margin-bottom: 6px;
+  margin-bottom: 24px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

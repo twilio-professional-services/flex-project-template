@@ -55,5 +55,5 @@ export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.
 
   if(!agent_coaching_panel) return;
   // Add the Supervisor Private Mode Toggle
-  flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorPrivateToggle key="supervisorprviate-button" />);
+  // flex.Supervisor.TaskOverviewCanvas.Content.add(<SupervisorPrivateToggle key="supervisorprviate-button" />);
 }
