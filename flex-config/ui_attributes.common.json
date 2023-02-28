@@ -1,7 +1,7 @@
 {
   "sdkOptions": {
     "voice": {
-      "allowIncomingWhileBusy": true
+      "allowIncomingWhileBusy": false
     }
   },
   "custom_data": {
@@ -11,13 +11,13 @@
         "filter_teams_view": false
       },
       "callbacks": {
-        "enabled": true,
+        "enabled": false,
         "allow_requeue": true,
         "max_attempts": 3,
         "auto_select_task": true
       },
       "caller_id": {
-        "enabled": true
+        "enabled": false
       },
       "conversation_transfer": {
         "enabled": false,
@@ -28,7 +28,7 @@
         "enabled": false
       },
       "conference": {
-        "enabled": true,
+        "enabled": false,
         "add_button": true,
         "hold_workaround": false
       },
@@ -42,18 +42,18 @@
         "enabled": false
       },
       "scrollable_activities": {
-        "enabled": true
+        "enabled": false
       },
       "supervisor_barge_coach": {
         "enabled": true,
         "agent_coaching_panel": true,
-        "supervisor_monitor_panel": true
+        "supervisor_monitor_panel": false
       },
       "omni_channel_capacity_management": {
         "enabled": false
       },
       "device_manager": {
-        "enabled": true
+        "enabled": false
       },
       "dual_channel_recording": {
         "enabled": false,
@@ -76,7 +76,7 @@
         }
       },
       "teams_view_filters": {
-        "enabled": true,
+        "enabled": false,
         "logFilters": true,
         "applied_filters": {
           "email": true,
@@ -110,7 +110,7 @@
         ]
       },
       "supervisor_capacity": {
-        "enabled": true
+        "enabled": false
       },
       "schedule_manager": {
         "enabled": false
@@ -122,10 +122,10 @@
         "enabled": false
       },
       "chat_transfer": {
-        "enabled": false
+        "enabled": true
       },
       "agent_automation": {
-        "enabled": true,
+        "enabled": false,
         "configuration": [
           {
             "channel": "voice",
@@ -146,7 +146,7 @@
         ]
       },
       "supervisor_complete_reservation": {
-        "enabled": true
+        "enabled": false
       }
     }
   }
