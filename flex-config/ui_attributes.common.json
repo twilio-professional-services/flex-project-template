@@ -60,7 +60,7 @@
         "channel": "worker"
       },
       "pause_recording": {
-        "enabled": true,
+        "enabled": false,
         "include_silence": false,
         "indicator_banner": false,
         "indicator_permanent": true
