@@ -28,13 +28,13 @@ export const announceOnChannelWhenLeaving = async (flex: typeof Flex, manager: F
 
     // make sure we have a channel sid
     const { channelSid } = task.attributes;
-    if (channelSid) {
-      await Flex.Actions.invokeAction('SendMessage', {
-        channelSid,
-        body: `${getWorkerFriendlyName(manager.workerClient as unknown as Worker)} left the channel`,
-        messageAttributes: { notification: true }
-      });
-    }
+    // if (channelSid) {
+    //   await Flex.Actions.invokeAction('SendMessage', {
+    //     channelSid,
+    //     body: `${getWorkerFriendlyName(manager.workerClient as unknown as Worker)} left the channel`,
+    //     messageAttributes: { notification: true }
+    //   });
+    // }
   });
 }
 

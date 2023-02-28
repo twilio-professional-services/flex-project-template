@@ -18,9 +18,9 @@ export function announceOnChannelWhenJoined(flex: typeof Flex, manager: Flex.Man
     return;
   }
   
-  Flex.Actions.invokeAction('SendMessage', {
-    conversationSid: conversation.sid,
-    body: `${getWorkerFriendlyName(manager.workerClient as unknown as Worker)} joined the channel`,
-    messageAttributes: { notification: true }
-  });
+  // Flex.Actions.invokeAction('SendMessage', {
+  //   conversationSid: conversation.sid,
+  //   body: `${getWorkerFriendlyName(manager.workerClient as unknown as Worker)} joined the channel`,
+  //   messageAttributes: { notification: true }
+  // });
 }

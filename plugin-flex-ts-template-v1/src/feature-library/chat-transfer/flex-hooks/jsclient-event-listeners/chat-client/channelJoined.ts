@@ -13,11 +13,11 @@ export function announceOnChannelWhenJoined(flex: typeof Flex, manager: Flex.Man
 
   if(!enabled) return;
   
-  manager.chatClient.on('channelJoined', (channel) => {
-    Flex.Actions.invokeAction('SendMessage', {
-      channelSid: channel.sid,
-      body: `${getWorkerFriendlyName(manager.workerClient as unknown as Worker)} joined the channel`,
-      messageAttributes: { notification: true }
-    });
-  });
+  // manager.chatClient.on('channelJoined', (channel) => {
+  //   Flex.Actions.invokeAction('SendMessage', {
+  //     channelSid: channel.sid,
+  //     body: `${getWorkerFriendlyName(manager.workerClient as unknown as Worker)} joined the channel`,
+  //     messageAttributes: { notification: true }
+  //   });
+  // });
 }

@@ -110,11 +110,11 @@ class ChatTransferService extends ApiService {
       if (success) {
         // notify the channel that a transfer was started
         const transferTarget = transferTargetSid.startsWith('WK') ? workerFriendlyName : queueName;
-        Flex.Actions.invokeAction('SendMessage', {
-          conversationSid: task.attributes.channelSid,
-          body: `${options?.mode.toLowerCase()} transfer to \"${transferTarget}\" initiated`,
-          messageAttributes: { notification: true },
-        });
+        // Flex.Actions.invokeAction('SendMessage', {
+        //   conversationSid: task.attributes.channelSid,
+        //   body: `${options?.mode.toLowerCase()} transfer to \"${transferTarget}\" initiated`,
+        //   messageAttributes: { notification: true },
+        // });
 
         // if successful update existing task to preserve transfer data
         const updatedTaskAttributes = {
