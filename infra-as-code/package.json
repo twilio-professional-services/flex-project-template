@@ -8,7 +8,7 @@
     "login": "./node_modules/.bin/env-cmd -f .%BRANCH_NAME%.env pulumi login --cloud-url azblob://pulumi-state-files"
   },
   "dependencies": {
-    "@pulumi/pulumi": "^2.0.0",
+    "@pulumi/pulumi": "^2.25.2",
     "env-cmd": "^10.1.0",
     "twilio-pulumi-provider": "^0.0.11"
   },
