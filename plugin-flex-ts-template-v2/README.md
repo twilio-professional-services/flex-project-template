@@ -27,20 +27,20 @@ This plugin defines a package structure to make distributed development easier w
    3. [Extending template on a project](#extending-template-on-a-project)
 4. [Types](#types)
 5. [Utils](#utils)
-   1. [Live Query Helper](#live-query)
-6. [Serverless](#serverless)
-   1. [API Service](#api-service)
-   2. [PhoneNumbers](#phonenumbers)
-   3. [ProgrammableChat](#programmable-chat)
-   4. [TaskRouter](#task-router)
+   1. [live-query](#live-query)
+   2. [serverless](#serverless)
+      1. [API Service](#api-service)
+      2. [PhoneNumbers](#phonenumbers)
+      3. [ProgrammableChat](#programmable-chat)
+      4. [TaskRouter](#task-router)
+
+---
 
 # Overview
 
-The following guide assumes the reader has some familiarity with _Twilio Flex Plugins_, the _Flex Action Framework_ and _Flex React Component Model_ if not you can pop over [here](https://www.twilio.com/docs/flex/developer/ui-and-plugins) and read up on it.
+The following guide assumes the reader has some familiarity with _Twilio Flex Plugins_, the _Flex Action Framework_ and _Flex React Component Model_. If not, you can pop over [here](https://www.twilio.com/docs/flex/developer/ui-and-plugins) and read up on it.
 
-Even though the Flex plugin model allows a lot of extensibility and customization it doesnt offer any opinions on how to structure the code so that its readable and maintainable. The package structure outlined here aims to do that.
-
----
+Even though the Flex plugin model allows a lot of extensibility and customization, it doesn't offer any opinions on how to structure the code so that it is readable and maintainable. The package structure outlined here aims to do that.
 
 # Feature initialization
 
@@ -50,15 +50,13 @@ The plugin logs each hook for each feature as it is loaded. This is particularly
 
 ![](/scripts/screenshots/feature-loader.png)
 
----
-
 # Feature library
 
-The feature library is intended to be a suite of typical features added to flex that can accelerate the launch of a Flex project by showing developers "how-to". Features can easily be turned on or off via the [flex-config](/README.md#flex-config) - or they can easily be removed completely using the [remove-features](/README.md#removing-features) script.
+The feature library is intended to be a suite of typical features added to flex that can accelerate the launch of a Flex project by showing developers "how-to". Features can easily be turned on or off via the [flex-config](/README.md#flex-config) - or they can easily be removed completely by removing the feature directory or using the [remove-features](/README.md#removing-features) script.
 
-each feature in the feature library is self contained, lets look at [Caller ID](/plugin-flex-ts-template-v2/src/feature-library/caller-id) as an example
+Each feature in the feature library is self contained. Let's look at [Caller ID](/plugin-flex-ts-template-v2/src/feature-library/caller-id) as an example.
 
-For this feature, we have `custom-components` that are created for rendering within flex, we can then see from within its own `flex-hooks` sub-folder, what hooks are used to hook in the behavioural changes to Flex. In this case it is the `StartOutboundCall` action, the `OutboundDialerPanel` component, the `pluginLoaded` event and we add our own `state` to redux.
+For this feature, we have a `custom-components` directory, containing components that are created for rendering within Flex (in this case, the Caller ID dropdown). Within the `flex-hooks` directory, we can see which hooks are used to hook in the behavioural changes to Flex. In this case, we can see hooks defined for the `StartOutboundCall` action, the `OutboundDialerPanel` component, the `pluginLoaded` event, and our own Redux `state` namespace.
 
 ![](/scripts/screenshots/caller-id.png)
 
@@ -99,7 +97,7 @@ There are several types of hooks, which should be organized in a directory per t
 │       └── index.ts
 ```
 
-The feature loader determines hook type by the named export(s) in each respective module. The following sections are templates that you can use for each type of hook.
+The feature loader determines hook type by the named export(s) in each respective module. The following sections are templates that you can use as a starting point for each type of hook.
 
 ### actions
 
@@ -492,47 +490,44 @@ export const teamsFilterHook = async function getSampleFilters() {
 };
 ```
 
----
-
 ## Adding a feature
 
-To add a new feature, create a new folder under the [feature-library](/plugin-flex-ts-template-v2/src/feature-library/) directory and lay out your `custom-components`, `flex-hooks` and any supporting `types` and `utils` following the same pattern outlined above. You can use the [add-feature](/README.md#add-feature) script, which does this all for you. Consult with other features in the feature library for further examples. When tested and completed, raise a pull request for submission back into the main branch of the template.
+To add a new feature, use the [add-feature](/README.md#add-feature) script, which will create a new folder under the [feature-library](/plugin-flex-ts-template-v2/src/feature-library/) directory, add the boilerplate required for the feature to load, and set up configuration. Consult with other features in the feature library for further examples. When tested and completed, raise a pull request for submission back into the main branch of the template.
 
 ## Extending template on a project
 
-When modifying behavior of the template on a project (a fork or possible clone of the template) it is less practical to compartmentalize everything into features. It is expected in this case to use the `project-extensions` folder to contain `custom-components` and `flex-hooks` much like a single large feature in the feature library.
+When modifying behavior of the template on a project (such as a fork or possible clone of the template) it is less practical to compartmentalize everything into features. It is expected in this case to use the `project-extensions` folder to contain `custom-components` and `flex-hooks` much like a single large feature in the feature library.
 
 # Types
 
-The types folder contains various object definitions that are used throughout the template, many declare the interface for operations within the serverless functions. Some key types to pay attention to.
+The types folder contains various object definitions that are used throughout the template. Many declare the interface for operations within the serverless functions. Some key types to pay attention to:
 
 - [Task](/plugin-flex-ts-template-v2/src/types/task-router/Task.ts) defines expected object model for customisations to task. It is useful here to annotate what custom conversation measures are used for.
 - [Worker](/plugin-flex-ts-template-v2/src/types/task-router/Worker.ts) defines expected object model for customisations to worker.
-- [CustomServiceConfiguration](/plugin-flex-ts-template-v2/src/types/manager/CustomServiceConfiguration.ts) This is where custom feature configuration models are declared.
 
 # Utils
 
 ## live-query
 
-Its not uncommon to want to leverage the [built in indexes](https://www.twilio.com/docs/sync/live-query#index-name) for custom features in flex. The live query helper is a convenience class for doing just that. Allowing you to hook into one of the four indexes with a query and instantly be able to manage the results.
+It's not uncommon to want to leverage the [built-in indexes](https://www.twilio.com/docs/sync/live-query#index-name) for custom features in Flex. The live query helper is a convenience class for doing just that, allowing you to hook into one of the four indexes with a query, and instantly be able to manage the results.
 
-# serverless
+## serverless
 
-The serverless package contains the interface to the set of common Twilio operations - these can be thought of as wrappers around the direct suite of Twilio APIs, making it easy to leverage these operations without having to rebuild an interface. They come with an example of how retry handling can be built in.
+The serverless directory contains the interface to the set of common Twilio operations - these can be thought of as wrappers around the direct suite of Twilio APIs, making it easy to leverage these operations without having to rebuild an interface. They come with an example of how retry handling can be built in.
 
-## API Service
+### API Service
 
-The common class that implements retry handling, all utilities that act as interfaces to serverless functions should extend this
+The common class that implements retry handling; all utilities that act as interfaces to serverless functions should extend this.
 
-## PhoneNumbers
+### PhoneNumbers
 
 - getAccountPhoneNumbers()
 
-## Programmable Chat
+### Programmable Chat
 
 - updateChannelAttributes(channelSid: string, attributes: object)
 
-## Task Router
+### TaskRouter
 
 - updateTaskAttributes(taskSid: string, attributesUpdate: object)
   - this will merge the attributesUpdate object with existing attributes. It will use the backend to ensure the operation is transactionally safe be checking the ETAG header. This is something not currently done when using the front end SDK.
