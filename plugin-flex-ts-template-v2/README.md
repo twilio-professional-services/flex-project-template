@@ -31,118 +31,13 @@ Even though the Flex plugin model allows a lot of extensibility and customizatio
 
 ---
 
-## flex-hooks
+## init
 
-Whether hooking into the [actions framework](https://www.twilio.com/docs/flex/developer/ui/actions) or [injecting, adding or removing components from the JSX tree](https://www.twilio.com/docs/flex/developer/ui/components) or maybe one of the many of other ways Flex can be customized and extended, its extremely useful to see at a glance what extensions have been made to what hook points. To this end, the package structure is laid out so that all hook points are listed and visible in one place.
+The plugin works by cycling through each of the `feature-library` directories (described below) at initialization, and calling each feature's `register` function, which in turn cycles through each of the modules in the `flex-hooks` directory of the feature.
 
-We can see under `src/flex-hooks/` a list of the ways in which Flex can be extended.
+The plugin logs each hook for each feature as it is loaded. This is particularly useful when layering up multiple features and extensions as we need to see where our custom behaviors might overlap with other custom behaviors.
 
-![](/scripts/screenshots/flex-hooks.png)
-
-### actions
-
-If we take the [actions](/plugin-flex-ts-template-v2/src/flex-hooks/actions/actions.ts) framework as an example, we can see at a glace different behavioural extensions that have been applied. In this case from different features in the [feature-library](#feature-library), both triggering behaviour **before** `StartOutboundCall` action is executed
-
-```ts
-//...
-import { applySelectedCallerIdForDialedNumbers } from "../../feature-library/caller-id/flex-hooks/actions/StartOutboundCall";
-import { changeWorkerActivityBeforeOutboundCall } from "../../feature-library/activity-reservation-handler/flex-hooks/actions/StartOutboundCall";
-//...
-
-const actionsToRegister: Actions = {
-  //...
-  StartOutboundCall: {
-    before: [
-      applySelectedCallerIdForDialedNumbers,
-      changeWorkerActivityBeforeOutboundCall,
-    ],
-    after: [],
-    replace: [],
-  },
-  //...
-};
-```
-
-### components
-
-Or if we take a look at the [components](/plugin-flex-ts-template-v2/src/flex-hooks//components/components.ts) we can see at a glance the Flex components that have been in some way modified. Here we can see the `OutboundDailerPanel` has been in some way modifide by the two features from the feature library, `caller-id` and `internal-call`
-
-```ts
-import { addOutboundCallerIdSelectorToMainHeader } from "../../feature-library/caller-id/flex-hooks/components/OutboundDialerPanel";
-import { addInternalCallToDialerPanel } from "../../feature-library/internal-call/flex-hooks/components/OutboundDialerPanel";
-
-//...
-
-const componentHandlers: Components = {
-  //..
-  OutboundDialerPanel: [
-    addOutboundCallerIdSelectorToMainHeader,
-    addInternalCallToDialerPanel,
-  ],
-  //...
-};
-```
-
-and this pattern continues for the rest of the flex hooks. The plugin works by cycling through each of the flex-hooks folders at initialization, and calling the associated extensions.
-
-### init
-
-```ts
-import * as Flex from "@twilio/flex-ui";
-import { FlexPlugin } from "@twilio/flex-plugin";
-
-import AddReducers from "./flex-hooks/redux";
-import ConfigureFlexStrings from "./flex-hooks/strings";
-import CustomizeFlexComponents from "./flex-hooks/components";
-import CustomizeFlexActions from "./flex-hooks/actions";
-import RegisterCustomChannels from "./flex-hooks/channels";
-import RegisterFlexNotifications from "./flex-hooks/notifications";
-import RegisterJSClientEventListeners from "./flex-hooks/jsclient-event-listeners";
-
-import CreateSdkClientInstances from "./flex-hooks/sdk-clients";
-import TeamFilters from "./flex-hooks/teams-filters";
-import CustomChatOrchestration from "./flex-hooks/chat-orchestrator";
-import CssOverrides from "./flex-hooks/css-overrides";
-import CustomizePasteElements from "./flex-hooks/paste-elements";
-import Events from "./flex-hooks/events";
-
-const PLUGIN_NAME = "FlexTSTemplatePlugin";
-
-export default class FlexTSTemplatePlugin extends FlexPlugin {
-  constructor() {
-    super(PLUGIN_NAME);
-  }
-
-  /**
-   * This code is run when your plugin is being started
-   * Use this to modify any UI components or attach to the actions framework
-   *
-   * @param flex { typeof Flex }
-   * @param manager { Flex.Manager }
-   */
-  init(flex: typeof Flex, manager: Flex.Manager) {
-    const initializers = [
-      AddReducers,
-      ConfigureFlexStrings,
-      RegisterCustomChannels,
-      RegisterFlexNotifications,
-      RegisterJSClientEventListeners,
-      CustomizePasteElements,
-      CustomizeFlexActions,
-      CustomizeFlexComponents,
-      CreateSdkClientInstances,
-      TeamFilters,
-      CustomChatOrchestration,
-      CssOverrides,
-      Events,
-    ];
-
-    initializers.forEach((initializer) => initializer(flex, manager));
-  }
-}
-```
-
-This is particularly useful when layering up multiple features and extensions as we need to see where our custom behaviours might overlap with other custom behaviors.
+![](/scripts/screenshots/feature-loader.png)
 
 ---
 
@@ -156,44 +51,417 @@ For this feature, we have `custom-components` that are created for rendering wit
 
 ![](/scripts/screenshots/caller-id.png)
 
-As we just discussed in the [overview](#overview) These are imported into the associated `flex-hooks` and are called at initilization.
+### flex-hooks
 
-For clarity, lets take a look at our `StartOutboundCall` [action](/plugin-flex-ts-template-v2/src/feature-library/caller-id/flex-hooks/actions/StartOutboundCall.ts) of our `Caller id`
+Whether hooking into the [actions framework](https://www.twilio.com/docs/flex/developer/ui/actions) or [injecting, adding or removing components from the JSX tree](https://www.twilio.com/docs/flex/developer/ui/components) or maybe one of the many of other ways Flex can be customized and extended, its extremely useful to see at a glance what extensions have been made to what hook points. To this end, the plugin dynamically loads and logs each hook in the feature's `flex-hooks` directory, so that all hook points are listed and visible in one place.
 
-```js
-import * as Flex from "@twilio/flex-ui";
-import { AppState, reduxNamespace } from "../../../../flex-hooks/states";
-import { getFeatureFlags } from '../../../../utils/configuration';
+There are several types of hooks, which should be organized in a directory per type. For example, the feature's `flex-hooks` directory should be structured as follows:
 
-const { enabled = false } = getFeatureFlags()?.features?.caller_id || {};
+```
+├── flex-hooks
+│   ├── actions
+│   │   └── CompleteTask.ts
+│   ├── channels
+│   │   └── Callback.tsx
+│   ├── chat-orchestrator
+│   │   └── completed.ts
+│   ├── components
+│   │   └── MainHeader.tsx
+│   ├── css-overrides
+│   │   └── index.ts
+│   ├── events
+│   │   └── taskAccepted.ts
+│   ├── jsclient-event-listeners
+│   │   └── conversations-client
+│   │       └── conversationJoined.ts
+│   ├── notification-events
+│   │   └── beforeAddNotification.ts
+│   ├── notifications
+│   │   └── index.ts
+│   ├── paste-elements
+│   │   └── index.ts
+│   ├── reducers
+│   │   └── slice.ts
+│   ├── strings
+│   │   └── index.ts
+│   └── teams-filters
+│       └── index.ts
+```
 
-export function applySelectedCallerIdForDialedNumbers(
-  flex: typeof Flex,
-  manager: Flex.Manager
-) {
-  if (!enabled) return;
+The feature loader determines hook type by the named export(s) in each respective module. The following sections are templates that you can use for each type of hook.
 
-  flex.Actions.addListener(
-    "beforeStartOutboundCall",
-    async (payload, abortFunction) => {
-      const state = manager.store.getState() as AppState;
-      const selectedCallerId =
-        state[reduxNamespace].outboundCallerIdSelector.selectedCallerId;
+#### actions
 
-      if (!payload.callerId && selectedCallerId)
-        payload.callerId = selectedCallerId;
-    }
-  );
+```ts
+import * as Flex from '@twilio/flex-ui';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
+
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.CompleteTask;
+export const actionHook = function exampleCompleteTaskHook(flex: typeof Flex, manager: Flex.Manager) {
+  
+  Flex.Actions.addListener('beforeCompleteTask', async (payload, abortFunction) => {
+    // your code here
+  })
+  
 }
 ```
 
-As we can see this exports a function `applySelectedCallerIdForDialedNumbers` and as we saw in the [actions overview](#actions) we import this function to declare it in the main `flex-hooks/actions` to provide visibility of our extension.
+Supported values for `actionEvent`:
+```ts
+enum FlexActionEvent {
+  before = "before",
+  after = "after",
+  replace = "replace",
+}
+```
 
-We can also see that the hook also references teh flex configuration data to see if this feature is enabled, otherwise when this function is run it won't do anything.
+Supported values for `actionName`:
+```ts
+enum FlexAction {
+  AcceptTask = "AcceptTask",
+  ApplyTeamsViewFilters = "ApplyTeamsViewFilters",
+  CompleteTask = "CompleteTask",
+  HangupCall = "HangupCall",
+  HoldCall = "HoldCall",
+  UnholdCall = "UnholdCall",
+  HoldParticipant = "HoldParticipant",
+  KickParticipant = "KickParticipant",
+  MonitorCall = "MonitorCall",
+  StopMonitoringCall = "StopMonitoringCall",
+  SelectTask = "SelectTask",
+  SetWorkerActivity = "SetWorkerActivity",
+  StartOutboundCall = "StartOutboundCall",
+  ToggleMute = "ToggleMute",
+  UnHoldParticipant = "UnHoldParticipant",
+  NavigateToView = "NavigateToView",
+  RejectTask = "RejectTask",
+  SetActivity = "SetActivity",
+  StartExternalWarmTransfer = "StartExternalWarmTransfer",
+  ShowDirectory = "ShowDirectory",
+  TransferTask = "TransferTask",
+  WrapUpTask = "WrapUpTask"
+}
+```
+
+#### channels
+
+```ts
+import * as Flex from '@twilio/flex-ui';
+import { TaskAttributes } from '../../../../types/task-router/Task';
+import PhoneCallbackIcon from '@material-ui/icons/PhoneCallback';
+
+export const channelHook = function createCallbackChannel(flex: typeof Flex, manager: Flex.Manager) {
+
+  const channelDefinition = flex.DefaultTaskChannels.createDefaultTaskChannel(
+    'callback',
+    (task) => {
+      const { taskType } = task.attributes as TaskAttributes;
+      return task.taskChannelUniqueName === 'voice' && taskType === 'callback';
+    },
+    'CallbackIcon',
+    'CallbackIcon',
+    'palegreen',
+  );
+
+  const { templates } = channelDefinition;
+  const CallbackChannel: Flex.TaskChannelDefinition = {
+    ...channelDefinition,
+    templates: {
+      ...templates,
+      TaskListItem: {
+        ...templates?.TaskListItem,
+        firstLine: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`
+      },
+      TaskCanvasHeader: {
+        ...templates?.TaskCanvasHeader,
+        title: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`
+      },
+      IncomingTaskCanvas: {
+        ...templates?.IncomingTaskCanvas,
+        firstLine: (task: Flex.ITask) => task.queueName
+      }
+    },
+    icons: {
+      active: <PhoneCallbackIcon key="active-callback-icon" />,
+      list: <PhoneCallbackIcon key="list-callback-icon" />,
+      main: <PhoneCallbackIcon key="main-callback-icon" />,
+    }
+  }
+
+  return CallbackChannel;
+}
+```
+
+#### chat-orchestrator
+
+```ts
+import * as Flex from "@twilio/flex-ui";
+
+export const chatOrchestratorHook = (flex: typeof Flex, manager: Flex.Manager) => ({
+  event: 'completed',
+  handler: handleChatComplete
+})
+
+const handleChatComplete = (task: Flex.ITask): any => {
+  return [Flex.ChatOrchestratorEvent.DeactivateConversation, Flex.ChatOrchestratorEvent.LeaveConversation];
+}
+```
+
+#### components
+
+```ts
+import * as Flex from '@twilio/flex-ui';
+import MyComponentName from '../../custom-components/MyComponentName';
+import { FlexComponent } from "../../../../types/feature-loader";
+
+export const componentName = FlexComponent.CallCanvas;
+export const componentHook = function addMyComponentToCallCanvas(flex: typeof Flex, manager: Flex.Manager) {
+  flex.CallCanvas.Content.add(<MyComponentName key="my-awesome-component" />, {
+    sortOrder: -1
+  });
+}
+```
+
+Supported values for `componentName`:
+```ts
+enum FlexComponent {
+  AgentDesktopView = "AgentDesktopView",
+  CallCanvas = "CallCanvas",
+  CallCanvasActions = "CallCanvasActions",
+  CRMContainer = "CRMContainer",
+  MainHeader = "MainHeader",
+  MessageListItem = "MessageListItem",
+  NoTasksCanvas = "NoTasksCanvas",
+  ParticipantCanvas = "ParticipantCanvas",
+  QueueStats = "QueueStats",
+  SideNav = "SideNav",
+  TaskCanvasHeader = "TaskCanvasHeader",
+  TaskCanvasTabs = "TaskCanvasTabs",
+  TaskListButtons = "TaskListButtons",
+  TaskOverviewCanvas = "TaskOverviewCanvas",
+  TeamsView = "TeamsView",
+  ViewCollection = "ViewCollection",
+  WorkerCanvas = "WorkerCanvas",
+  WorkersDataTable = "WorkersDataTable",
+  WorkerDirectory = "WorkerDirectory",
+  WorkerProfile = "WorkerProfile",
+  OutboundDialerPanel = "OutboundDialerPanel",
+  TaskInfoPanel = "TaskInfoPanel",
+  SupervisorTaskCanvasHeader = "SupervisorTaskCanvasHeader"
+}
+```
+
+#### css-overrides
+
+```ts
+import * as Flex from "@twilio/flex-ui";
+
+export const cssOverrideHook = (flex: typeof Flex, manager: Flex.Manager) => {
+  return {
+    MainHeader: {
+      Container: {
+        ".Twilio-MainHeader-end": {
+          "[data-paste-element='MENU']": {
+            overflowY: "scroll",
+            maxHeight: "90vh",
+          },
+        },
+      },
+    },
+  }
+};
+```
+
+#### events
+
+```ts
+import * as Flex from "@twilio/flex-ui";
+import { FlexEvent } from "../../../../types/feature-loader";
+
+export const eventName = FlexEvent.taskReceived;
+export const eventHook = function exampleTaskReceivedHandler(flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask){
+  // your code here
+}
+```
+
+Supported values for `eventName`:
+```ts
+enum FlexEvent {
+  taskReceived = "taskReceived",
+  taskUpdated = "taskUpdated",
+  taskAccepted = "taskAccepted",
+  taskCanceled = "taskCanceled",
+  taskCompleted = "taskCompleted",
+  taskRejected = "taskRejected",
+  taskRescinded = "taskRescinded",
+  taskTimeout = "taskTimeout",
+  taskWrapup = "taskWrapup",
+  pluginsLoaded = "pluginsLoaded",
+  tokenUpdated = "tokenUpdated",
+}
+```
+
+#### jsclient-event-listeners
+
+```ts
+import * as Flex from '@twilio/flex-ui';
+import { Conversation } from '@twilio/conversations';
+import { FlexJsClient } from "../../../../../types/feature-loader";
+
+export const clientName = FlexJsClient.conversationsClient;
+export const eventName = "conversationJoined";
+export const jsClientHook = function exampleConversationJoinedHandler(flex: typeof Flex, manager: Flex.Manager, conversation: Conversation) {
+  // your code here
+}
+```
+
+Supported values for `clientName`:
+```ts
+enum FlexJsClient {
+  conversationsClient = "conversationsClient",
+  voiceClient = "voiceClient",
+  workerClient = "workerClient",
+}
+```
+
+Supported values for `eventName` depends on the value of `clientName`:
+
+- FlexJsClient.conversationsClient:
+  - `conversationJoined`
+- FlexJsClient.voiceClient:
+  - `incoming`
+- FlexJsClient.workerClient:
+  - `reservationCreated`
+
+Support for additional events may be added to `src/utils/feature-loader/jsclient-event-listeners.ts`. PRs are welcome!
+
+#### notification-events
+
+```ts
+import * as Flex from '@twilio/flex-ui';
+
+export const eventName = Flex.NotificationEvent.beforeAddNotification;
+export const notificationEventHook = (flex: typeof Flex, manager: Flex.Manager, notification: any, cancel: any) => {
+  // your code here
+}
+```
+
+#### notifications
+
+```ts
+import * as Flex from '@twilio/flex-ui';
+import { StringTemplates } from '../strings';
+
+// Export the notification IDs an enum for better maintainability when accessing them elsewhere
+export enum ExampleNotification {
+  MyNotification = 'MyNotification',
+  MyNotification2 = 'MyNotification2',
+};
+
+// Return an array of Flex.Notification
+export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+  {
+    id: ExampleNotification.MyNotification,
+    type: Flex.NotificationType.error,
+    content: StringTemplates.MyString
+  },
+  {
+    id: ExampleNotification.MyNotification2,
+    type: Flex.NotificationType.success,
+    content: StringTemplates.MyString2
+  },
+];
+```
+
+#### paste-elements
+
+```ts
+import { PasteCustomCSS } from "@twilio-paste/customization";
+
+export const pasteElementHook = {
+  MY_CUSTOM_ELEMENT: {
+    paddingLeft: "space40",
+    paddingRight: "space40",
+    paddingTop: "space40",
+  },
+  MY_OTHER_ELEMENT: {
+    paddingBottom: "space40",
+  },
+} as {[key: string]: PasteCustomCSS};
+```
+
+#### reducers
+
+Use this example Redux Toolkit slice as a starting point for keeping Redux state within your feature.
+
+```ts
+import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit'
+
+export interface ExampleState {
+  myValue: boolean;
+  myOtherValue: boolean;
+}
+
+const initialState = {
+  myValue: false,
+  myOtherValue: false
+} as ExampleState
+
+const exampleSlice = createSlice({
+  name: 'exampleStateName',
+  initialState,
+  reducers: {
+    updateMyValue(state, action: PayloadAction<boolean>) {
+      state.myValue = action.payload;
+    },
+    updateMyOtherValue(state, action: PayloadAction<boolean>) {
+      state.myOtherValue = action.payload;
+    },
+  },
+})
+
+export const { updateMyValue, updateMyOtherValue } = exampleSlice.actions
+export const reducerHook = () => ({ exampleStateName: exampleSlice.reducer });
+```
+
+#### strings
+
+```ts
+// Export the template names as an enum for better maintainability when accessing them elsewhere
+export enum StringTemplates {
+  MyString = 'MyString',
+  MyString2 = 'MyString2',
+}
+
+export const stringHook = () => ({
+  [StringTemplates.MyString]: 'Your string here',
+  [StringTemplates.MyString2]: 'Your second string here',
+});
+```
+
+#### teams-filters
+
+```ts
+import { emailFilter } from "../../filters/emailFilter"; // example filter from the teams-view-filters feature
+import { FilterDefinition } from "@twilio/flex-ui";
+
+export const teamsFilterHook = async function getSampleFilters() {
+
+  var enabledFilters = [] as Array<FilterDefinition>;
+  
+  enabledFilters.push(emailFilter());
+
+  return enabledFilters;
+};
+```
+
+---
 
 ### Adding a feature
 
-To add a new feature, create a new folder under the [feature-library](/plugin-flex-ts-template-v2/src/feature-library/) directory and lay out your `custom-components`, `flex-hooks` and any supporting `types` and `utilz` following the same pattern outlined above. Consult with other features in the feature library for further examples. When tested and completed, raise a pull request for submission back into the main branch of the template.
+To add a new feature, create a new folder under the [feature-library](/plugin-flex-ts-template-v2/src/feature-library/) directory and lay out your `custom-components`, `flex-hooks` and any supporting `types` and `utils` following the same pattern outlined above. You can use the [add-feature](/README.md#add-feature) script, which does this all for you. Consult with other features in the feature library for further examples. When tested and completed, raise a pull request for submission back into the main branch of the template.
 
 ### extending template on a project
 
