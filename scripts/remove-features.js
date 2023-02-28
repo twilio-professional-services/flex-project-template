@@ -42,3 +42,8 @@ shell.echo(
   `Deleting schedule-manager serverless package ${scheduleManagerServerlessDir}`
 );
 shell.rm("-rf", `${scheduleManagerServerlessDir}`);
+
+shell.echo(
+  `Deleting web-app-examples`
+);
+shell.rm("-rf", `web-app-examples`);
