@@ -7,13 +7,24 @@ This plugin defines a package structure to make distributed development easier w
 ---
 
 1. [Overview](#overview)
-2. [Flex hooks](#flex-hooks)
-   1. [actions](#actions)
-   2. [components](#components)
-   3. [init](#init)
-3. [Feature Library](#feature-library)
-   1. [Adding a feature](#adding-a-feature)
-   2. [Extending template on a project](#extending-template-on-a-project)
+2. [Feature initialization](#feature-initialization)
+3. [Feature library](#feature-library)
+   1. [flex-hooks](#flex-hooks)
+      1. [actions](#actions)
+      1. [channels](#channels)
+      1. [chat-orchestrator](#chat-orchestrator)
+      1. [components](#components)
+      1. [css-overrides](#css-overrides)
+      1. [events](#events)
+      1. [jsclient-event-listeners](#jsclient-event-listeners)
+      1. [notification-events](#notification-events)
+      1. [notifications](#notifications)
+      1. [paste-elements](#paste-elements)
+      1. [reducers](#reducers)
+      1. [strings](#strings)
+      1. [teams-filters](#teams-filters)
+   2. [Adding a feature](#adding-a-feature)
+   3. [Extending template on a project](#extending-template-on-a-project)
 4. [Types](#types)
 5. [Utils](#utils)
    1. [Live Query Helper](#live-query)
@@ -31,7 +42,7 @@ Even though the Flex plugin model allows a lot of extensibility and customizatio
 
 ---
 
-## init
+# Feature initialization
 
 The plugin works by cycling through each of the `feature-library` directories (described below) at initialization, and calling each feature's `register` function, which in turn cycles through each of the modules in the `flex-hooks` directory of the feature.
 
@@ -41,7 +52,7 @@ The plugin logs each hook for each feature as it is loaded. This is particularly
 
 ---
 
-## feature-library
+# Feature library
 
 The feature library is intended to be a suite of typical features added to flex that can accelerate the launch of a Flex project by showing developers "how-to". Features can easily be turned on or off via the [flex-config](/README.md#flex-config) - or they can easily be removed completely using the [remove-features](/README.md#removing-features) script.
 
@@ -51,7 +62,7 @@ For this feature, we have `custom-components` that are created for rendering wit
 
 ![](/scripts/screenshots/caller-id.png)
 
-### flex-hooks
+## flex-hooks
 
 Whether hooking into the [actions framework](https://www.twilio.com/docs/flex/developer/ui/actions) or [injecting, adding or removing components from the JSX tree](https://www.twilio.com/docs/flex/developer/ui/components) or maybe one of the many of other ways Flex can be customized and extended, its extremely useful to see at a glance what extensions have been made to what hook points. To this end, the plugin dynamically loads and logs each hook in the feature's `flex-hooks` directory, so that all hook points are listed and visible in one place.
 
@@ -90,7 +101,9 @@ There are several types of hooks, which should be organized in a directory per t
 
 The feature loader determines hook type by the named export(s) in each respective module. The following sections are templates that you can use for each type of hook.
 
-#### actions
+### actions
+
+Use an actions hook to register actions in the [Flex Actions Framework](https://www.twilio.com/docs/flex/developer/ui/use-ui-actions).
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
@@ -144,7 +157,9 @@ enum FlexAction {
 }
 ```
 
-#### channels
+### channels
+
+Use a channels hook to register new [task channel definitions](https://www.twilio.com/docs/flex/developer/ui/task-channel-definitions).
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
@@ -193,7 +208,9 @@ export const channelHook = function createCallbackChannel(flex: typeof Flex, man
 }
 ```
 
-#### chat-orchestrator
+### chat-orchestrator
+
+Use a chat orchestrator hook to modify chat orchestration via `ChatOrchestrator.setOrchestrations`.
 
 ```ts
 import * as Flex from "@twilio/flex-ui";
@@ -208,7 +225,9 @@ const handleChatComplete = (task: Flex.ITask): any => {
 }
 ```
 
-#### components
+### components
+
+Use a component hook to [modify or add components](https://www.twilio.com/docs/flex/developer/ui/work-with-components-and-props) to Flex UI.
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
@@ -252,7 +271,9 @@ enum FlexComponent {
 }
 ```
 
-#### css-overrides
+### css-overrides
+
+Use a CSS override hook to set `componentThemeOverrides` for [various Flex UI components](https://assets.flex.twilio.com/docs/releases/flex-ui/2.1.0/theming/Theme/).
 
 ```ts
 import * as Flex from "@twilio/flex-ui";
@@ -273,7 +294,9 @@ export const cssOverrideHook = (flex: typeof Flex, manager: Flex.Manager) => {
 };
 ```
 
-#### events
+### events
+
+Use an event hook to add your own handler for [Flex events](https://assets.flex.twilio.com/docs/releases/flex-ui/2.1.0/ui-actions/FlexEvent/).
 
 ```ts
 import * as Flex from "@twilio/flex-ui";
@@ -302,7 +325,9 @@ enum FlexEvent {
 }
 ```
 
-#### jsclient-event-listeners
+### jsclient-event-listeners
+
+Use a JS client event listener hook to add your own handler for events from the various client SDKs within Flex.
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
@@ -336,7 +361,9 @@ Supported values for `eventName` depends on the value of `clientName`:
 
 Support for additional events may be added to `src/utils/feature-loader/jsclient-event-listeners.ts`. PRs are welcome!
 
-#### notification-events
+### notification-events
+
+Use a notification event hook to add your own handler for various [Flex Notification Manager events](https://assets.flex.twilio.com/docs/releases/flex-ui/2.1.0/nsa/NotificationManager/#exports.NotificationEvent).
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
@@ -347,7 +374,9 @@ export const notificationEventHook = (flex: typeof Flex, manager: Flex.Manager, 
 }
 ```
 
-#### notifications
+### notifications
+
+Use a notification hook to register your own notification definitions for use in your feature.
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
@@ -374,7 +403,9 @@ export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
 ];
 ```
 
-#### paste-elements
+### paste-elements
+
+Use a Paste elements hook to register your own element definitions for usage in your feature's UI built with [Twilio Paste](https://paste.twilio.design/).
 
 ```ts
 import { PasteCustomCSS } from "@twilio-paste/customization";
@@ -391,7 +422,7 @@ export const pasteElementHook = {
 } as {[key: string]: PasteCustomCSS};
 ```
 
-#### reducers
+### reducers
 
 Use this example Redux Toolkit slice as a starting point for keeping Redux state within your feature.
 
@@ -426,7 +457,9 @@ export const { updateMyValue, updateMyOtherValue } = exampleSlice.actions
 export const reducerHook = () => ({ exampleStateName: exampleSlice.reducer });
 ```
 
-#### strings
+### strings
+
+Use a string hook to register your own string definitions for use in your feature.
 
 ```ts
 // Export the template names as an enum for better maintainability when accessing them elsewhere
@@ -441,7 +474,9 @@ export const stringHook = () => ({
 });
 ```
 
-#### teams-filters
+### teams-filters
+
+Use a teams filter hook to register your own [filter definitions](https://www.twilio.com/docs/flex/developer/ui/team-view-filters) in the Teams view.
 
 ```ts
 import { emailFilter } from "../../filters/emailFilter"; // example filter from the teams-view-filters feature
@@ -459,15 +494,15 @@ export const teamsFilterHook = async function getSampleFilters() {
 
 ---
 
-### Adding a feature
+## Adding a feature
 
 To add a new feature, create a new folder under the [feature-library](/plugin-flex-ts-template-v2/src/feature-library/) directory and lay out your `custom-components`, `flex-hooks` and any supporting `types` and `utils` following the same pattern outlined above. You can use the [add-feature](/README.md#add-feature) script, which does this all for you. Consult with other features in the feature library for further examples. When tested and completed, raise a pull request for submission back into the main branch of the template.
 
-### extending template on a project
+## Extending template on a project
 
-When modifiying behavior of the template on a project (a fork or possible clone of the template) it is less practical to compartmentalize everything into features. It is expected in this case to use the `project-extensions` folder to contain `custom-components` and `flex-hooks` much like a single large feature in the feature library.
+When modifying behavior of the template on a project (a fork or possible clone of the template) it is less practical to compartmentalize everything into features. It is expected in this case to use the `project-extensions` folder to contain `custom-components` and `flex-hooks` much like a single large feature in the feature library.
 
-## types
+# Types
 
 The types folder contains various object definitions that are used throughout the template, many declare the interface for operations within the serverless functions. Some key types to pay attention to.
 
@@ -475,15 +510,15 @@ The types folder contains various object definitions that are used throughout th
 - [Worker](/plugin-flex-ts-template-v2/src/types/task-router/Worker.ts) defines expected object model for customisations to worker.
 - [CustomServiceConfiguration](/plugin-flex-ts-template-v2/src/types/manager/CustomServiceConfiguration.ts) This is where custom feature configuration models are declared.
 
-## Utils
+# Utils
 
-# live-query
+## live-query
 
-Its not uncommon to want to levearge the [built in indexes](https://www.twilio.com/docs/sync/live-query#index-name) for custom features in flex. The live query helper is a convenience class for doing just that. Allowing you to hook into one of the four indexes with a query and instantly be able to manage the results.
+Its not uncommon to want to leverage the [built in indexes](https://www.twilio.com/docs/sync/live-query#index-name) for custom features in flex. The live query helper is a convenience class for doing just that. Allowing you to hook into one of the four indexes with a query and instantly be able to manage the results.
 
 # serverless
 
-The serverless package contains the interface to the set of common twilio operations - these can be thought of as wrrappers around the direct suite of Twilio APIs, making it easy to leverrage these operations without having to rebuild an interface. They come with an example of how retry handling can be built in.
+The serverless package contains the interface to the set of common Twilio operations - these can be thought of as wrappers around the direct suite of Twilio APIs, making it easy to leverage these operations without having to rebuild an interface. They come with an example of how retry handling can be built in.
 
 ## API Service
 
