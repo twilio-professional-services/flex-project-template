@@ -24,7 +24,7 @@ This plugin defines a package structure to make distributed development easier w
       1. [strings](#strings)
       1. [teams-filters](#teams-filters)
    2. [Adding a feature](#adding-a-feature)
-   3. [Extending template on a project](#extending-template-on-a-project)
+   3. [Usage for a project or single-purpose plugin](#usage-for-a-project-or-single-purpose-plugin)
 4. [Types](#types)
 5. [Utils](#utils)
    1. [live-query](#live-query)
@@ -494,9 +494,9 @@ export const teamsFilterHook = async function getSampleFilters() {
 
 To add a new feature, use the [add-feature](/README.md#add-feature) script, which will create a new folder under the [feature-library](/plugin-flex-ts-template-v2/src/feature-library/) directory, add the boilerplate required for the feature to load, and set up configuration. Consult with other features in the feature library for further examples. When tested and completed, raise a pull request for submission back into the main branch of the template.
 
-## Extending template on a project
+## Usage for a project or single-purpose plugin
 
-When modifying behavior of the template on a project (such as a fork or possible clone of the template) it is less practical to compartmentalize everything into features. It is expected in this case to use the `project-extensions` folder to contain `custom-components` and `flex-hooks` much like a single large feature in the feature library.
+When modifying behavior of the template (such as in a fork or clone) for use in a project or a single-purpose plugin, it is less practical to compartmentalize everything into features. It is expected in this case to use a single feature directory within `feature-library`, creating a single large feature.
 
 # Types
 
