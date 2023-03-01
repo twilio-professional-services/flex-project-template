@@ -16,7 +16,7 @@ export default (flex: typeof Flex, manager: Flex.Manager) => {
     ...manager.strings,
 
     // -v- Modify strings provided by flex here -v-
-    //WorkerDirectoryAgentsTabLabel: '<span style="font-size: 10px;">Agents</span>',
+    WorkerDirectoryAgentsTabLabel: '<span style="font-size: 12px">Staff</span>',
     //WorkerDirectoryQueuesTabLabel: '<span style="font-size: 10px;">Queues</span>',
     // -^----------------------------------------^-
   } as any;
