@@ -17,6 +17,10 @@ export function replaceQueueTabForChatTransfers(flex: typeof Flex, manager: Flex
     if: (props) => Flex.TaskHelper.isChatBasedTask(props.task)
   });
 
+  flex.WorkerDirectoryTabs.defaultProps.hiddenWorkerFilter = 'data.attributes.roles CONTAINS "admin"'
+
+
+
   // Add new Queues tab
   // flex.WorkerDirectory.Tabs.Content.add(
   //   <flex.Tab key="custom-transfer-directory" label="Queues">
