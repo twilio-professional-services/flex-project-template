@@ -39,7 +39,7 @@
         "enabled": false
       },
       "override_queue_transfer_directory": {
-        "enabled": false
+        "enabled": true
       },
       "scrollable_activities": {
         "enabled": false
