@@ -18,15 +18,15 @@ export function replaceQueueTabForChatTransfers(flex: typeof Flex, manager: Flex
   });
 
   // Add new Queues tab
-  flex.WorkerDirectory.Tabs.Content.add(
-    <flex.Tab key="custom-transfer-directory" label="Queues">
-      <CustomQueueTransferDirectory
-        queueNameEnforcedFilter=""
-        manager={manager}
-      />
-    </flex.Tab>, {
-    if: (props) => Flex.TaskHelper.isChatBasedTask(props.task)
-  }
-  );
+  // flex.WorkerDirectory.Tabs.Content.add(
+  //   <flex.Tab key="custom-transfer-directory" label="Queues">
+  //     <CustomQueueTransferDirectory
+  //       queueNameEnforcedFilter=""
+  //       manager={manager}
+  //     />
+  //   </flex.Tab>, {
+  //   if: (props) => Flex.TaskHelper.isChatBasedTask(props.task)
+  // }
+  // );
 }
 
