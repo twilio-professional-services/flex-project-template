@@ -18,23 +18,12 @@ const options = {
   holdMusicUrl: "/features/callback-and-voicemail/wait-experience-music.mp3",
 };
 
-async function fetchTask(context, taskSid) {
-  const result = await TaskRouterOperations.fetchTask({
-    context,
-    attempts: 0,
-    taskSid,
-  });
-  return result.task;
-}
-
 async function getTaskByCallSid(context, callSid) {
   const result = await TaskRouterOperations.listTasksByAttributes({
     context,
     attempts: 0,
     evaluation: `call_sid = '${callSid}'`,
   });
-  console.log("getTaskByCallSid result: ", result);
-  result.tasks.forEach((task) => console.log("task: ", task));
   return result.tasks?.length > 0 ? result.tasks[0] : null;
 }
 
@@ -75,9 +64,6 @@ exports.handler = async function (context, event, callback) {
 
   // Retrieve event arguments
   const { digits, mode, CallSid, TaskSid } = event;
-
-  console.log("Digits: ", digits);
-  console.log("Mode: ", mode);
 
   let message = "";
 
@@ -123,7 +109,8 @@ exports.handler = async function (context, event, callback) {
       // TODO: Use a more scalable approach to retrieve the taskSid (e.g. set taskSid in Call Annotations)
       task = await getTaskByCallSid(context, CallSid);
 
-      // Redirect Call to Voicemail main menu
+      // Redirect Call to Voicemail main menu. We need to update the call with a new TwiML URL vs using twiml.redirect() - since
+      // we are still in the waitUrl TwiML execution - and it's not possible to use the <Record> verb in here.
       const redirectUrl = `${domain}/features/callback-and-voicemail/studio/wait-url/wait-experience?mode=record-voicemail&taskSid=${task.sid}`;
       const result = await VoiceOperations.updateCall({
         context,
@@ -180,10 +167,7 @@ exports.handler = async function (context, event, callback) {
       return callback(null, twiml);
     case "submit-voicemail":
       //  Submit the voicemail to Taskrouter (and/or to your backend if you have a voicemail handling solution)
-      // task = await fetchTask(context, event.taskSid);
-      // const { taskAttributes } = task;
 
-      console.log(`Caller ${event.Caller} Called ${event.Called}}`);
       //  create the Voicemail task
       // TODO: Pull in a few more things from original task like conversation_id
       await CallbackOperations.createCallbackTask({
@@ -196,21 +180,11 @@ exports.handler = async function (context, event, callback) {
         transcriptText: event.TranscriptionText,
       });
 
-      // const ringBackUrl = VoiceMailAlertTone.startsWith("https://")
-      //   ? VoiceMailAlertTone
-      //   : domain + VoiceMailAlertTone;
-      // await createVoicemailTask(
-      //   event,
-      //   client,
-      //   task,
-      //   context.VOICEMAIL_WORKFLOW_SID,
-      //   ringBackUrl
-      // );
       return callback(null, "");
     default:
       twiml.say(
         sayOptions,
-        "Sorry, invalid mode supplied to wait URL. This is a bug in the code."
+        "Sorry, invalid mode supplied to wait URL. This is a code bug."
       );
       return callback(null, twiml);
   }
