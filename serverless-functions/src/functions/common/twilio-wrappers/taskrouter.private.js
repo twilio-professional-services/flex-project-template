@@ -503,38 +503,30 @@ exports.fetchTask = async function fetchTask(parameters) {
 };
 
 /**
- * WARNING: The EvaluateTaskAttributes functionality is havily rate limited to 3 RPS.
- * Look to map things like CallSid to TaskSid via a database or other storage mechanism,
- * rather than querying Taskrouter.
- *
  * @param {object} parameters the parameters for the function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
- * @param {string} parameters.evaluation the statement evaluating the attributes
- * @returns {object} an object containing the matching tasks if successful
- * @description list tasks
+ * @param {object} parameters.workflowSid (optional) the workflow SID to filter by
+ * @param {object} parameters.assignmentStatus (optional) the assignment status to filter by
+ * @param {object} parameters.ordering (optional) the desired ordering (e.g. DateCreated:desc)
+ * @returns {object} An object containing an array of tasks for the account
+ * @description the following method is used to robustly retrieve
+ *  tasks for the account
  */
-exports.listTasksByAttributes = async function listTasksByAttributes(
-  parameters
-) {
-  const { attempts, evaluation, context } = parameters;
+exports.getTasks = async function getTasks(parameters) {
+  const { context, attempts, workflowSid, assignmentStatus, ordering } =
+    parameters;
 
   if (!isNumber(attempts))
     throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isString(evaluation))
-    throw "Invalid parameters object passed. Parameters must contain the evaluation string";
   if (!isObject(context))
-    throw "Invalid parameters object passed. Parameters must contain reason context object";
+    throw "Invalid parameters object passed. Parameters must contain context object";
 
   try {
     const client = context.getTwilioClient();
-
     const tasks = await client.taskrouter
       .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
-      .tasks.list({
-        evaluateTaskAttributes: evaluation,
-        limit: 20,
-      });
+      .tasks.list({ limit: 1000, workflowSid, assignmentStatus, ordering });
 
     return {
       success: true,
