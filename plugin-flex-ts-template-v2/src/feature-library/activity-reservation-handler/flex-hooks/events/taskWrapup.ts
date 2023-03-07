@@ -15,7 +15,7 @@ const taskEndedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
   console.log(`activity-handler: handle ${flexEvent} for ${task.sid}`);
 
   if (
-    FlexHelper.hasLiveCallTask ||
+    FlexHelper.hasActiveTask ||
     FlexHelper.hasPendingTask ||
     WorkerActivity.activityName === SystemActivityNames.wrapup
   ) {
