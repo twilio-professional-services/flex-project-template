@@ -306,10 +306,11 @@ exports.handler = async function (context, event, callback) {
       return callback(null, twiml);
 
     case "submit-voicemail":
-      //  Submit the voicemail to Taskrouter (and/or to your backend if you have a voicemail handling solution)
+      // Submit the voicemail to Taskrouter (and/or to your backend if you have a voicemail handling solution)
 
-      //  Create the Voicemail task
+      // Create the Voicemail task
       // Option to pull in a few more things from original task like conversation_id or even the workflowSid
+
       await CallbackOperations.createCallbackTask({
         context,
         numberToCall: event.Caller,
