@@ -1,8 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
-import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel'
+import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel';
 import { cleanStateAndSyncUponAgentHangUp } from '../actions/reservation';
 import { SyncDoc } from '../../utils/sync/Sync'
+
+
+import ConferenceMonitor from '../../custom-components/ConferenceMonitor';
 
 const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
 const { enabled, agent_coaching_panel } = custom_data.features.supervisor_barge_coach;
@@ -15,6 +18,11 @@ export function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Fl
   // Adding Coaching Status Panel to notify the agent who is Coaching them
   flex.CallCanvas.Content.add(
     <CoachingStatusPanel key="coaching-status-panel"> </CoachingStatusPanel>, {sortOrder: -1});
+
+  flex.CallCanvas.Content.add(
+    <ConferenceMonitor key="conference-monitor" />,
+    { sortOrder: 999 }
+  );
 
     // If myWorkerSID exists, clear the Agent Sync Doc to account for the refresh
     const myWorkerSID = localStorage.getItem('myWorkerSID');
