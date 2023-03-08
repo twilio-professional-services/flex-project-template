@@ -35,13 +35,10 @@ async function getPendingTaskByCallSid(context, callSid, workflowSid) {
     assignmentStatus: ["pending", "reserved"],
     workflowSid,
     ordering: "DateCreated:desc",
-    pageSize: 50,
-    limit: 50,
+    pageSize: 20,
+    limit: 20,
   });
-  console.log(
-    "getPendingTaskByCallSid: Number of pending tasks found: ",
-    result.tasks ? result.tasks.length : 0
-  );
+
   return result.tasks?.find((task) => task.attributes.call_sid === callSid);
 }
 
@@ -162,10 +159,6 @@ exports.handler = async function (context, event, callback) {
     skipGreeting,
   } = event;
 
-  console.log(
-    `mode: ${mode}, Digits: ${Digits}, CallSid: ${CallSid}, enqueuedWorkflowSid: ${enqueuedWorkflowSid}, enqueuedTaskSid: ${enqueuedTaskSid}, skipGreeting: ${skipGreeting}`
-  );
-
   let message = "";
 
   switch (mode) {
@@ -177,11 +170,21 @@ exports.handler = async function (context, event, callback) {
         CallSid,
         enqueuedWorkflowSid
       );
-      const redirectBaseUrl = `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=main-wait-loop&CallSid=${CallSid}`;
-      twiml.redirect(
-        redirectBaseUrl +
-          (enqueuedTask ? `&enqueuedTaskSid=${enqueuedTask.sid}` : "")
-      );
+
+      const redirectUrlNoTaskFound = `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=main-wait-loop&CallSid=${CallSid}`;
+
+      if (enqueuedTask == null) {
+        // Log an error for our own debugging purposes, but don't fail the call
+        console.error(
+          `Failed to find the pending task with callSid: ${CallSid}. This is potentially due to higher call volume than the API query had accounted for.`
+        );
+        twiml.redirect(redirectUrlNoTaskFound);
+      } else {
+        twiml.redirect(
+          redirectUrlNoTaskFound +
+            (enqueuedTask ? `&enqueuedTaskSid=${enqueuedTask.sid}` : "")
+        );
+      }
       return callback(null, twiml);
 
     case "main-wait-loop":
