@@ -9,7 +9,7 @@ The feature is inspired by the work in the [Queued Callback and Voicemail](https
 - [Creating a callback or voicemail](../../../../serverless-functions/src/functions/features/callback-and-voicemail/studio/create-callback.protected.js) has a little more resiliency built in as it uses a retry handler provided by our common wrappers provided by this template. Maximum retry attempts are configurable under this framework.
 - Callbacks and voicemails use a shared set of components and functions, as voicemails are effectively callbacks with a voicemail recording (and possibly a transcription) attached.
 - The callback or voicemail task can be automatically selected after the outbound call back to the contact ends, allowing for a smoother call wrapup process.
-- _(COMING SOON)_ A more robust wait experience (aka `waitUrl` endpoint) is provided - which uses Call Annotations to store the pending task's Task SID against the call. This addresses the documented scalability issue of the solution library approach - which uses `EvaluateTaskAttributes` for getting the pending task SID (an API that's strictly rate limited to 3 requests per second).
+- A robust wait experience (aka `waitUrl` endpoint) is provided - which uses a more robust Task API query to find the task associated with the Call SID. This addresses the documented scalability issue of the solution library approach - which uses `EvaluateTaskAttributes` for getting the pending task SID (an API that's strictly rate limited to 3 requests per second).
 
 # Flex User Experience
 
