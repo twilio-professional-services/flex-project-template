@@ -10,7 +10,7 @@ export const actionHook = function applySelectedCallerIdForDialedNumbers(
   manager: Flex.Manager
 ) {
   flex.Actions.addListener(
-    "beforeStartOutboundCall",
+    `${actionEvent}${actionName}`,
     async (payload, abortFunction) => {
       const state = manager.store.getState() as AppState;
       const selectedCallerId =

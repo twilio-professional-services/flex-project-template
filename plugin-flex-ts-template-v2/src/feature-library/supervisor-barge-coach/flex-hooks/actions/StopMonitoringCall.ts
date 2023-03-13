@@ -13,7 +13,7 @@ export const actionHook = async function disableBargeCoachButtonsUponMonitor(
 ) {
   // Listening for supervisor to click to unmonitor the call to disable the
   // barge and coach buttons, as well as reset their muted/coaching states
-  flex.Actions.addListener("afterStopMonitoringCall", (payload) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, (payload) => {
     console.log(
       `Unmonitor button triggered, disable the Coach and Barge-In Buttons`
     );

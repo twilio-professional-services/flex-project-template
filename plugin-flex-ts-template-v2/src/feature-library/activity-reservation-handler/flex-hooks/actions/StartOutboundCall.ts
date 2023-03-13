@@ -14,7 +14,7 @@ export const actionHook = function changeWorkerActivityBeforeOutboundCall(
   manager: Flex.Manager
 ) {
   flex.Actions.addListener(
-    "beforeStartOutboundCall",
+    `${actionEvent}${actionName}`,
     async (payload, abortFunction) => {
       storeCurrentActivitySidIfNeeded();
 

@@ -8,7 +8,7 @@ export const actionName = FlexAction.HangupCall;
 export const actionHook = function handleConferenceHangup(flex: typeof Flex, manager: Flex.Manager) {
   if (!isAddButtonEnabled()) return;
 
-  flex.Actions.addListener('beforeHangupCall', async (payload, abortFunction) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     const { conference, taskSid } = payload.task;
     const participantsOnHold = (participant: Flex.ConferenceParticipant) => {
       return participant.onHold && participant.status === "joined";

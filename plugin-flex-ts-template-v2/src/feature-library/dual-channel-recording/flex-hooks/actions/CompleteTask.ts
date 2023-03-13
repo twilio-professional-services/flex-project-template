@@ -8,7 +8,7 @@ export const actionHook = function handleDualChannelCompleteTask(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  flex.Actions.addListener("beforeCompleteTask", async (payload) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
     // Listening for this event as a last resort check to ensure call
     // and conference metadata are captured on the task
     addMissingCallDataIfNeeded(payload.task);

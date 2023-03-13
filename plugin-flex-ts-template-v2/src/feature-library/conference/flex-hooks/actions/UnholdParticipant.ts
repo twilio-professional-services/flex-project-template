@@ -12,7 +12,7 @@ export const actionHook = function handleUnholdConferenceParticipant(
   if (!isAddButtonEnabled()) return;
 
   flex.Actions.addListener(
-    "beforeUnholdParticipant",
+    `${actionEvent}${actionName}`,
     async (payload, abortFunction) => {
       const { participantType, targetSid: participantSid, task } = payload;
 

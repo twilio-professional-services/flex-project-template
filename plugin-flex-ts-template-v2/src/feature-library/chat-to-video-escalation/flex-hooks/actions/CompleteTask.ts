@@ -9,7 +9,7 @@ export const actionHook = function beforeCompleteVideoEscalatedChatTask(
 ) {
 
   flex.Actions.addListener(
-    "beforeCompleteTask",
+    `${actionEvent}${actionName}`,
     async (payload, abortFunction) => {
       const { videoRoom } = payload.task.attributes;
 

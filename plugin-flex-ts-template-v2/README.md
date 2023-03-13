@@ -111,7 +111,7 @@ export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.CompleteTask;
 export const actionHook = function exampleCompleteTaskHook(flex: typeof Flex, manager: Flex.Manager) {
   
-  Flex.Actions.addListener('beforeCompleteTask', async (payload, abortFunction) => {
+  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     // your code here
   })
   

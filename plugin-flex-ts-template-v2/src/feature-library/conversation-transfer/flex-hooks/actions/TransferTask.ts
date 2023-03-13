@@ -10,7 +10,7 @@ export const actionHook = function handleChatTransfer(flex: typeof Flex, manager
   if (!isColdTransferEnabled()) return;
 
   flex.Actions.addListener(
-    "beforeTransferTask",
+    `${actionEvent}${actionName}`,
     (payload: TransferActionPayload, abortFunction: any) => {
       if (flex.TaskHelper.isCBMTask(payload.task)) {
         // native action handler would fail for chat task so abort the action

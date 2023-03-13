@@ -39,7 +39,7 @@ export const actionHook = function omniChannelChatCapacityManager(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  Flex.Actions.addListener("afterAcceptTask", async () => {
+  Flex.Actions.addListener(`${actionEvent}${actionName}`, async () => {
     const workerChanneslMap = manager?.workerClient?.channels;
     const tasksMap = manager.store.getState().flex.worker.tasks;
 

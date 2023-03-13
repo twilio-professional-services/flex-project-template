@@ -7,7 +7,7 @@ import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.CompleteTask;
 export const actionHook = function reportHangUpByCompleteTask(flex: typeof Flex, manager: Flex.Manager) {
-  flex.Actions.addListener('beforeCompleteTask', async (payload, abortFunction) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     let currentHangUpBy = HangUpByHelper.getHangUpBy()[payload.sid];
     
     if (!currentHangUpBy) {

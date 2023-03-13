@@ -17,7 +17,7 @@ export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.WrapUpTask;
 export const actionHook = async function announceOnChannelWhenLeavingAndRemoveChannelSidAndLeaveChatForChatTransfer (flex: typeof Flex, manager: Flex.Manager) {
 
-  Flex.Actions.addListener('beforeWrapupTask', async (payload, abortFunction) => {
+  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
 
     // ensure reference to task and we are wrapping up a chat task
     const task = payload.task || TaskHelper.getTaskByTaskSid(payload.sid || "");

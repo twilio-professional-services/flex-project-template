@@ -11,7 +11,7 @@ export const actionHook = function handleChatTransferShowDirectory(
   if (isMultiParticipantEnabled()) return;
 
   Flex.Actions.addListener(
-    "beforeShowDirectory",
+    `${actionEvent}${actionName}`,
     (payload: any, abortFunction: any) => {
       let display = "flex";
       const taskSid = manager.store.getState().flex.view.selectedTaskSid;

@@ -52,7 +52,7 @@ export const actionHook = function interceptQueueFilter(flex: typeof Flex, manag
 //
 
 function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager) {
-  Flex.Actions.addListener('beforeApplyTeamsViewFilters', async (payload: ApplyTeamsViewFiltersPayload, abortFunction: () => void) => {
+  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload: ApplyTeamsViewFiltersPayload, abortFunction: () => void) => {
 
     const { filters } = payload 
 

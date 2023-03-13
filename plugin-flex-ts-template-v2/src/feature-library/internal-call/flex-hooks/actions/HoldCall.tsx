@@ -6,7 +6,7 @@ import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.HoldCall;
 export const actionHook = function handleInternalHoldCall(flex: typeof Flex, manager: Flex.Manager) {
-  flex.Actions.addListener("beforeHoldCall", async (payload, abortFunction) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     if (!isInternalCall(payload.task)) {
       return;
     }

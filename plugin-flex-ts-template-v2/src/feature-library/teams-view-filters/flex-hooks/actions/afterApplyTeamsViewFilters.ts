@@ -13,7 +13,7 @@ export const actionName = FlexAction.ApplyTeamsViewFilters;
 export const actionHook = function logApplyListFilters(flex: typeof Flex, manager: Flex.Manager) {
   if(!shouldLogFilters()) return;
 
-  Flex.Actions.addListener('afterApplyTeamsViewFilters', async (payload, abortFunction) => {
+  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     console.log("Team view filters applied", payload);
   })
 }

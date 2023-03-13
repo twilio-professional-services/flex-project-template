@@ -21,7 +21,7 @@ export const actionName = FlexAction.TransferTask;
 // otherwise the function creates a new task for transfering the chat
 // and deals with the chat orchestration
 export const actionHook = function interceptTransferOverrideForChatTasks(flex: typeof Flex, manager: Flex.Manager) {
-  Flex.Actions.addListener('beforeTransferTask', async (payload: EventPayload, abortFunction: any) => {
+  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload: EventPayload, abortFunction: any) => {
     if (Flex.TaskHelper.isChatBasedTask(payload.task) && !Flex.TaskHelper.isCBMTask(payload.task)) {
       abortFunction(payload);
       // Execute Chat Transfer Task

@@ -8,7 +8,7 @@ export const actionName = FlexAction.HoldParticipant;
 export const actionHook = function handleHoldConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
   if (!isAddButtonEnabled()) return;
 
-  flex.Actions.addListener("beforeHoldParticipant", async (payload, abortFunction) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     const { participantType, targetSid: participantSid, task } = payload;
     
     if (participantType !== 'unknown') {

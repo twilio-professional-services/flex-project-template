@@ -9,7 +9,7 @@ export const actionHook = function beforeCompleteWorkerTask(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  flex.Actions.addListener("beforeCompleteTask", async () => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async () => {
     const pendingActivity = getPendingActivity();
 
     if (pendingActivity) {

@@ -13,7 +13,7 @@ export const actionName = FlexAction.CompleteTask;
 // otherwise performs default behaviors
 export const actionHook = async function interceptTransferredChatTasks(flex: typeof Flex, manager: Flex.Manager) {
 
-  Flex.Actions.addListener('beforeCompleteTask', async (payload, abortFunction) => {
+  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
 
     const task = payload.task ? payload.task : Flex.TaskHelper.getTaskByTaskSid(payload.sid as string);
 

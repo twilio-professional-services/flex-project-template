@@ -14,7 +14,7 @@ export const actionHook = async function enableBargeCoachButtonsUponMonitor(
 ) {
   // Listening for supervisor to monitor the call to enable the
   // barge and coach buttons, as well as reset their muted/coaching states
-  flex.Actions.addListener("afterMonitorCall", (payload) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, (payload) => {
     console.log(
       `Monitor button triggered, enable the Coach and Barge-In Buttons`
     );

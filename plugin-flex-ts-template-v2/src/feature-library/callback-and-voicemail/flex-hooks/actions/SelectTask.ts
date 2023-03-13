@@ -20,7 +20,7 @@ export const actionHook = async function autoSelectCallbackTaskWhenEndingCall(
   if (!isAutoSelectTaskEnabled()) return;
 
   flex.Actions.addListener(
-    "beforeSelectTask",
+    `${actionEvent}${actionName}`,
     async (payload: EventPayload, abortFunction: () => void) => {
       // when a reservation is removed from state, Flex runs SelectTask with task set to null
       // this means that when an outbound call back to a contact is completed (or canceled)
@@ -44,7 +44,7 @@ export const actionHook = async function autoSelectCallbackTaskWhenEndingCall(
 
       // cancel this action and select the parent task instead
       abortFunction();
-      await flex.Actions.invokeAction("SelectTask", {
+      await flex.Actions.invokeAction(actionName, {
         sid: parentTask,
       });
     }
