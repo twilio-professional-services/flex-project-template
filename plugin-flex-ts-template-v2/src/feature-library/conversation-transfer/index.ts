@@ -10,6 +10,10 @@ const {
   multi_participant = false,
 } = getFeatureFlags()?.features?.conversation_transfer as ConversationTransferConfiguration || {};
 
+export const isFeatureEnabled = () => {
+  return enabled;
+};
+
 export const isColdTransferEnabled = () => {
   return enabled && cold_transfer;
 };
@@ -19,6 +23,6 @@ export const isMultiParticipantEnabled = () => {
 };
 
 export const register = (): FeatureDefinition => {
-  if (!enabled) return {};
+  if (!isFeatureEnabled()) return {};
   return { name: "conversation-transfer", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };
