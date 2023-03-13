@@ -212,9 +212,10 @@ Use a chat orchestrator hook to modify chat orchestration via `ChatOrchestrator.
 
 ```ts
 import * as Flex from "@twilio/flex-ui";
+import { FlexOrchestrationEvent } from "../../../../types/feature-loader";
 
 export const chatOrchestratorHook = (flex: typeof Flex, manager: Flex.Manager) => ({
-  event: 'completed',
+  event: FlexOrchestrationEvent.completed,
   handler: handleChatComplete
 })
 

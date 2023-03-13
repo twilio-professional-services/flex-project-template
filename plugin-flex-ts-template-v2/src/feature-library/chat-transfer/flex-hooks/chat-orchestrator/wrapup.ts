@@ -1,7 +1,8 @@
 import * as Flex from "@twilio/flex-ui";
+import { FlexOrchestrationEvent } from "../../../../types/feature-loader";
 
 export const chatOrchestratorHook = (flex: typeof Flex, manager: Flex.Manager) => ({
-  event: 'wrapup',
+  event: FlexOrchestrationEvent.wrapup,
   handler: handleChatWrapup
 });
 
