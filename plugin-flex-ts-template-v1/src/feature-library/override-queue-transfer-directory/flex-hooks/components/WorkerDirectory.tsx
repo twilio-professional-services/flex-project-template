@@ -14,7 +14,7 @@ export function replaceQueueTabForChatTransfers(flex: typeof Flex, manager: Flex
 
   // remove existing queues tab
   flex.WorkerDirectory.Tabs.Content.remove('queues', {
-    if: (props) => Flex.TaskHelper.isChatBasedTask(props.task)
+    // if: (props) => Flex.TaskHelper.isChatBasedTask(props.task)
   });
 
   flex.WorkerDirectoryTabs.defaultProps.hiddenWorkerFilter = 'data.attributes.roles CONTAINS "admin"'
