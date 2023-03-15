@@ -2,7 +2,6 @@ import * as Flex from "@twilio/flex-ui";
 import { Actions as BargeCoachStatusAction } from "../../flex-hooks/states/SupervisorBargeCoach";
 import { isFeatureEnabled, isAgentCoachingPanelEnabled, isSupervisorMonitorPanelEnabled } from '../..';
 import { reduxNamespace } from "../../../../flex-hooks/states";
-// Import to get Sync Doc updates
 import { SyncDoc } from "../../utils/sync/Sync";
 
 export const enableBargeCoachButtonsUponMonitor = async (
@@ -39,7 +38,7 @@ export const enableBargeCoachButtonsUponMonitor = async (
       manager.store.getState().flex?.worker?.attributes?.full_name;
     const conferenceSID = payload.task?.conference?.conferenceSid;
 
-    SyncDoc.initSyncDoc(
+    SyncDoc.initSyncDocSupervisors(
       agentWorkerSID,
       conferenceSID,
       myWorkerSID,
@@ -76,11 +75,9 @@ export const disableBargeCoachButtonsUponMonitor = async (
     if (!isAgentCoachingPanelEnabled() && !isSupervisorMonitorPanelEnabled()) return;
 
     const myWorkerSID = manager.store.getState().flex?.worker?.worker?.sid;
-    const agentWorkerSID =
-      manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
-    const supervisorFN =
-      manager.store.getState().flex?.worker?.attributes?.full_name;
-    SyncDoc.initSyncDoc(
+    const agentWorkerSID = manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
+    const supervisorFN = manager.store.getState().flex?.worker?.attributes?.full_name;
+    SyncDoc.initSyncDocSupervisors(
       agentWorkerSID,
       "",
       myWorkerSID,

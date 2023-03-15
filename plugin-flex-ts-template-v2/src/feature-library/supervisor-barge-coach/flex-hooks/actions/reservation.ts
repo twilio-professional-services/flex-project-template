@@ -1,7 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { Actions as BargeCoachStatusAction } from "../states/SupervisorBargeCoach";
-import { isAgentCoachingPanelEnabled } from '../..';
-// Import to get Sync Doc updates
+import { isAgentAssistanceEnabled, isAgentCoachingPanelEnabled } from '../..';
 import { SyncDoc } from "../../utils/sync/Sync";
 
 export const cleanStateAndSyncUponAgentHangUp = async (
@@ -12,7 +11,7 @@ export const cleanStateAndSyncUponAgentHangUp = async (
   if (!isAgentCoachingPanelEnabled()) return;
 
   // Listening for agent to hang up the call so we can clear the Sync Doc
-  // for the CoachStatePanel feature
+  // for the CoachStatePanel and Agent Assistance feature
   manager.workerClient?.on("reservationCreated", (reservation: any) => {
     //Register listener for reservation wrapup event
     reservation.on("wrapup", (reservation: any) => {
@@ -23,13 +22,18 @@ export const cleanStateAndSyncUponAgentHangUp = async (
           coaching: false,
           enableBargeinButton: false,
           muted: true,
+          agentAssistanceButton: false,
+          syncSubscribed: false,
+          agentAssistanceSyncSubscribed: false
         })
       );
       const agentWorkerSID = manager.store.getState().flex?.worker?.worker?.sid;
       const agentSyncDoc = `syncDoc.${agentWorkerSID}`;
       // Let's clear the Sync Document and also close/end our subscription to the Document
       SyncDoc.clearSyncDoc(agentSyncDoc);
-      SyncDoc.closeSyncDoc(agentSyncDoc);
+
+      if (!isAgentAssistanceEnabled()) return;
+      SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, "", "", "", "remove");
     });
   });
 };

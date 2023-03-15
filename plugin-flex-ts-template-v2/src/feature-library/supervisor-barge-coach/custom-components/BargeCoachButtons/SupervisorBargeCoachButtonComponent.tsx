@@ -36,15 +36,13 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
   const agent_coaching_panel = isAgentCoachingPanelEnabled();
 
 
-  // Storing teamViewPath and agentSyncDoc to browser cache to help if a refresh happens
-  // will use this in the main plugin file to invoke an action to reset the monitor panel
-  // and clear the Agent's Sync Doc
-  if (teamViewTaskSID != null) {
+  // Storing teamViewPath to browser cache to help if a refresh happens
+  // will use this in the browserRefreshHelper
+  if (teamViewTaskSID != null && agentWorkerSID != null) {
     console.log('Storing teamViewPath to cache');
     localStorage.setItem('teamViewTaskSID',teamViewTaskSID);
-
-    console.log('Storing agentSyncDoc to cache');
-    localStorage.setItem('agentSyncDoc',`syncDoc.${agentWorkerSID}`);
+    console.log('Storing agentWorkerSID to cache');
+    localStorage.setItem('agentWorkerSID', agentWorkerSID);
   }
 
 
@@ -94,7 +92,14 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
         // otherwise we will not update to the Sync Doc
         if (agent_coaching_panel && !privateMode) {
           // Updating the Sync Doc to reflect that we are no longer barging and back into Monitoring
-          SyncDoc.initSyncDoc(agentWorkerSID, conferenceSid, myWorkerSID, supervisorFN, "is Coaching", "update");
+          SyncDoc.initSyncDocSupervisors(
+            agentWorkerSID, 
+            conferenceSid, 
+            myWorkerSID, 
+            supervisorFN, 
+            "is Coaching", 
+            "update"
+          );
         }
       } else {
         dispatch(Actions.setBargeCoachStatus({ 
@@ -105,7 +110,14 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
         // otherwise we will not update to the Sync Doc
         if (agent_coaching_panel && !privateMode) {
           // Updating the Sync Doc to reflect that we are no longer barging and back into Monitoring
-          SyncDoc.initSyncDoc(agentWorkerSID, conferenceSid, myWorkerSID, supervisorFN, "has Joined", "update");
+          SyncDoc.initSyncDocSupervisors(
+            agentWorkerSID, 
+            conferenceSid, 
+            myWorkerSID, 
+            supervisorFN, 
+            "has Joined", 
+            "update"
+          );
         }
       }
     } else {
@@ -177,7 +189,14 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
       // otherwise we will not update to the Sync Doc
       if (agent_coaching_panel && !privateMode) {
         // Updating the Sync Doc to reflect that we are no longer coaching and back into Monitoring
-        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSid, myWorkerSID, supervisorFN, "is Monitoring", "update");
+        SyncDoc.initSyncDocSupervisors(
+          agentWorkerSID, 
+          conferenceSid, 
+          myWorkerSID, 
+          supervisorFN, 
+          "is Monitoring", 
+          "update"
+        );
       }
 
     } else {
@@ -192,7 +211,14 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
       // otherwise we will not update to the Sync Doc
       if (agent_coaching_panel && !privateMode) {
         // Updating the Sync Doc to reflect that we are now coaching the agent
-        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSid, myWorkerSID, supervisorFN, "is Coaching", "update");
+        SyncDoc.initSyncDocSupervisors(
+          agentWorkerSID, 
+          conferenceSid, 
+          myWorkerSID, 
+          supervisorFN, 
+          "is Coaching", 
+          "update"
+        );
       }
     }
   }
@@ -200,6 +226,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
   // Return the coach and barge-in buttons, disable if the call isn't live or
   // if the supervisor isn't monitoring the call, toggle the icon based on coach and barge-in status
   const isLiveCall = TaskHelper.isLiveCall(task);
+
   return (
     <> 
       <Flex hAlignContent="center" vertical>

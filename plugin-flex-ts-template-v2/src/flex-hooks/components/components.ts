@@ -12,6 +12,8 @@ import { addVideoRoomTabToTaskCanvasTabs } from "../../feature-library/chat-to-v
 import { addSupervisorMonitorPanel } from "../../feature-library/supervisor-barge-coach/flex-hooks/components/TaskCanvasTabs";
 import { replaceViewForCallbackAndVoicemail } from "../../feature-library/callback-and-voicemail/flex-hooks/components/TaskInfoPanel";
 import { addSupervisorBargeCoachButtons } from "../../feature-library/supervisor-barge-coach/flex-hooks/components/TaskOverviewCanvas";
+import { addSupervisorAlert } from "../../feature-library/supervisor-barge-coach/flex-hooks/components/MainHeader";
+import { addAgentAssistanceTeamsIcon } from "../../feature-library/supervisor-barge-coach/flex-hooks/components/TeamsView";
 import { addInternalCallToDialerPanel } from "../../feature-library/internal-call/flex-hooks/components/OutboundDialerPanel";
 import { replaceAndSetCustomCRMContainer } from "../../feature-library/enhanced-crm-container/flex-hooks/components/CRMContainer";
 import { addDeviceManagerToMainHeader } from "../../feature-library/device-manager/flex-hooks/components/MainHeader";
@@ -47,6 +49,7 @@ const componentHandlers: Components = {
     addPendingActivityComponent,
     addDeviceManagerToMainHeader,
     replaceActivityComponent,
+    addSupervisorAlert,
   ],
   MessageListItem: [replaceMessageForNotifications],
   NoTasksCanvas: [],
@@ -67,7 +70,7 @@ const componentHandlers: Components = {
   TaskInfoPanel: [replaceViewForCallbackAndVoicemail],
   TaskListButtons: [],
   TaskOverviewCanvas: [addSupervisorBargeCoachButtons],
-  TeamsView: [],
+  TeamsView: [addAgentAssistanceTeamsIcon],
   ViewCollection: [addScheduleManagerView],
   WorkerCanvas: [addCapacityToWorkerCanvas],
   WorkerDirectory: [],

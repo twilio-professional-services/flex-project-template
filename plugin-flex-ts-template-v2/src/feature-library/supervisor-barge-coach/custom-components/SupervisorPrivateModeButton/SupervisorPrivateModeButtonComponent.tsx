@@ -34,22 +34,28 @@ export const SupervisorPrivateToggle = ({task}: SupervisorPrivateToggleProps) =>
 
     // If privateMode is true, toggle to false and update the Sync Doc with the appropriate Supervisor and Status
     if (privateMode) {
+      // Caching this to help with browser refresh recovery
+      console.log('Storing privateMode to cache');
+      localStorage.setItem('privateMode','false');
       dispatch(Actions.setBargeCoachStatus({ 
         privateMode: false, 
       }));
       if (coaching) {
-        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "is Coaching", "add");
+        SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "is Coaching", "add");
       } else if (barge) {
-        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "has Joined", "add");
+        SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "has Joined", "add");
       } else {
-        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "is Monitoring", "add");
+        SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "is Monitoring", "add");
       }
     // If privateMode is false, toggle to true and remove the Supervisor from the Sync Doc
     } else {
+      // Caching this to help with browser refresh recovery
+      console.log('Storing privateMode to cache');
+      localStorage.setItem('privateMode','true');
       dispatch(Actions.setBargeCoachStatus({ 
         privateMode: true, 
       }));
-      SyncDoc.initSyncDoc(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "", "remove");
+      SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "", "remove");
     }
   }
 

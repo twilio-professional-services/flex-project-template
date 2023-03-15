@@ -55,7 +55,7 @@ const eventHandlers: Record<FlexEvent, ((...args: any[]) => void)[]> = {
     InternalCallLoaded,
     HangUpByLoaded,
     AgentAutomationLoaded,
-    SupervisorCompleteReservationLoaded,
+    SupervisorCompleteReservationLoaded
     // add-feature-script: add pluginsLoaded handlers above this line
   ],
   taskAccepted: [
