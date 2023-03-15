@@ -2,10 +2,10 @@ import * as Flex from '@twilio/flex-ui';
 import { getWorkerFriendlyName } from '../../../utils/serverless/ChatTransferService';
 import { Worker } from 'types/task-router';
 import { Conversation } from '@twilio/conversations';
-import { FlexJsClient } from "../../../../../types/feature-loader";
+import { FlexJsClient, ConversationEvent } from "../../../../../types/feature-loader";
 
 export const clientName = FlexJsClient.conversationsClient;
-export const eventName = "conversationJoined";
+export const eventName = ConversationEvent.conversationJoined;
 // when an agent joins a channel for the first time this announces
 // them in the chat channel
 export const jsClientHook = function announceOnChannelWhenJoined(flex: typeof Flex, manager: Flex.Manager, conversation: Conversation) {

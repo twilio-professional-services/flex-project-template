@@ -3,10 +3,10 @@ import { Actions as BargeCoachStatusAction } from "../../states/SupervisorBargeC
 import { isAgentCoachingPanelEnabled } from '../../..';
 // Import to get Sync Doc updates
 import { SyncDoc } from "../../../utils/sync/Sync";
-import { FlexJsClient } from "../../../../../types/feature-loader";
+import { FlexJsClient, WorkerEvent } from "../../../../../types/feature-loader";
 
 export const clientName = FlexJsClient.workerClient;
-export const eventName = "reservationCreated";
+export const eventName = WorkerEvent.reservationCreated;
 // Listening for agent to hang up the call so we can clear the Sync Doc
 // for the CoachStatePanel feature
 export const jsClientHook = async function cleanStateAndSyncUponAgentHangUp(

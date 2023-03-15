@@ -1,5 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
-import { FlexJsClient } from "../../types/feature-loader";
+import { FlexJsClient, ConversationEvent, VoiceEvent, WorkerEvent } from "../../types/feature-loader";
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
   if (!hook.clientName) {
@@ -18,22 +18,22 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
   
   switch (client) {
     case FlexJsClient.conversationsClient:
-      if (event == "conversationJoined") {
-        manager.conversationsClient.on("conversationJoined", conversation => {
+      if (event == ConversationEvent.conversationJoined) {
+        manager.conversationsClient.on(ConversationEvent.conversationJoined, conversation => {
           hook.jsClientHook(flex, manager, conversation);
         });
       }
       break;
     case FlexJsClient.voiceClient:
-      if (event == "incoming") {
-        manager.voiceClient.on("incoming", call => {
+      if (event == VoiceEvent.incoming) {
+        manager.voiceClient.on(VoiceEvent.incoming, call => {
           hook.jsClientHook(flex, manager, call);
         });
       }
       break;
     case FlexJsClient.workerClient:
-      if (event == "reservationCreated") {
-        manager.workerClient?.on("reservationCreated", reservation => {
+      if (event == WorkerEvent.reservationCreated) {
+        manager.workerClient?.on(WorkerEvent.reservationCreated, reservation => {
           hook.jsClientHook(flex, manager, reservation);
         });
       }
