@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import PauseStatusPanel from '../../custom-components/PauseStatusPanel';
-import { isPermanentIndicatorEnabled } from '../..';
+import { isPermanentIndicatorEnabled } from '../../config';
 import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.CallCanvas;

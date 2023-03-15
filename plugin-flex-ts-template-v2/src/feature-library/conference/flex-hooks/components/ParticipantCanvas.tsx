@@ -4,7 +4,7 @@ import ParticipantActionsButtons from '../../custom-components/ParticipantAction
 import ParticipantName from '../../custom-components/ParticipantName';
 import ParticipantStatus from '../../custom-components/ParticipantStatus';
 import ParticipantStatusContainer from '../../custom-components/ParticipantStatusContainer';
-import { isAddButtonEnabled } from '../..';
+import { isAddButtonEnabled } from '../../config';
 import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.ParticipantCanvas;

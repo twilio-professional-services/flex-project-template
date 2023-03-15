@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { NotificationIds } from "../notifications/DualChannelRecording";
-import { getChannelToRecord } from '../..';
+import { getChannelToRecord } from '../../config';
 import { FlexEvent } from "../../../../types/feature-loader";
 
 export const eventName = FlexEvent.pluginsLoaded;

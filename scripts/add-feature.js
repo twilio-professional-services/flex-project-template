@@ -15,9 +15,15 @@ var featureConfigName;
 var newFeatureDirectory;
 
 const featureSubstitutionFiles = [
+  "config.ts",
   "index.ts",
   "README.md",
   "types/ServiceConfiguration.ts"
+];
+
+const createDirs = [
+  "custom-components",
+  "flex-hooks"
 ];
 
 const onlyValidCharacters = (str) => {
@@ -91,6 +97,9 @@ const createDir = async () => {
   } catch {
     shell.echo("Creating feature");
     shell.mkdir(newFeatureDirectory);
+    createDirs.forEach(newDir => {
+      shell.mkdir(`${newFeatureDirectory}/${newDir}`);
+    });
     shell.cp('-R', `${templateDirectory}/feature-template/.`, `${newFeatureDirectory}/`);
     return true;
   }

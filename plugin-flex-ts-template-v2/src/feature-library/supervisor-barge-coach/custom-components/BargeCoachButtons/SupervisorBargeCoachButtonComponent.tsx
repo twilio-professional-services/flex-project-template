@@ -6,7 +6,7 @@ import { reduxNamespace } from '../../../../utils/state';
 import { Actions, SupervisorBargeCoachState } from "../../flex-hooks/states/SupervisorBargeCoach"
 import BargeCoachService from '../../utils/serverless/BargeCoachService';
 import { Flex, Stack } from "@twilio-paste/core";
-import { isAgentCoachingPanelEnabled } from '../..';
+import { isAgentCoachingPanelEnabled } from '../../config';
 
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync'

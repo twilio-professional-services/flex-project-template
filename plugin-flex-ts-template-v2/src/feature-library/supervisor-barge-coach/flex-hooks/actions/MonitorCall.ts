@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { Actions as BargeCoachStatusAction, SupervisorBargeCoachState } from "../../flex-hooks/states/SupervisorBargeCoach";
-import { isSupervisorMonitorPanelEnabled } from '../..';
+import { isSupervisorMonitorPanelEnabled } from '../../config';
 import { reduxNamespace } from "../../../../utils/state";
 // Import to get Sync Doc updates
 import { SyncDoc } from "../../utils/sync/Sync";

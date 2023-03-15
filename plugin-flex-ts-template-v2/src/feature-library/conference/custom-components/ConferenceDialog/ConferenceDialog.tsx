@@ -13,7 +13,7 @@ import {Label} from '@twilio-paste/core/label';
 import {Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading} from '@twilio-paste/core/modal';
 import { addConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
 
-import { isFeatureEnabled } from '../../../hang-up-by';
+import { isFeatureEnabled } from '../../../hang-up-by/config';
 import * as HangUpByHelper from "../../../hang-up-by/helpers/hangUpBy";
 import { HangUpBy } from '../../../hang-up-by/enums/hangUpBy';
 

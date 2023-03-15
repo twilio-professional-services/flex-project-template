@@ -1,5 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
-import { isColdTransferEnabled } from "../../index";
+import { isColdTransferEnabled } from "../../config";
 import { TransferActionPayload } from "../../types/ActionPayloads";
 import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 

@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import CallbackAndVoicemail from '../../custom-components/CallbackAndVoicemail';
-import { isAllowRequeueEnabled, getMaxAttempts } from '../..';
+import { isAllowRequeueEnabled, getMaxAttempts } from '../../config';
 import { FlexComponent } from '../../../../types/feature-loader/FlexComponent';
 
 export const componentName = FlexComponent.TaskInfoPanel;

@@ -1,5 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
-import { isMultiParticipantEnabled } from "../../index";
+import { isMultiParticipantEnabled } from "../../config";
 import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export const actionEvent = FlexActionEvent.before;

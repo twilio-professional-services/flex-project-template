@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { Actions as BargeCoachStatusAction } from "../../states/SupervisorBargeCoach";
-import { isAgentCoachingPanelEnabled } from '../../..';
+import { isAgentCoachingPanelEnabled } from '../../../config';
 // Import to get Sync Doc updates
 import { SyncDoc } from "../../../utils/sync/Sync";
 import { FlexJsClient, WorkerEvent } from "../../../../../types/feature-loader";

@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { ITask } from "@twilio/flex-ui";
-import { getMatchingTaskConfiguration } from "../.."
+import { getMatchingTaskConfiguration } from "../../config"
 import { TaskQualificationConfig } from "feature-library/agent-automation/types/ServiceConfiguration";
 import { FlexEvent } from "../../../../types/feature-loader";
 

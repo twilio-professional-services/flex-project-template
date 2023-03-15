@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import { Actions as BargeCoachStatusAction, } from '../../flex-hooks/states/SupervisorBargeCoach';
-import { isAgentCoachingPanelEnabled } from '../..';
+import { isAgentCoachingPanelEnabled } from '../../config';
 
 import { SyncDoc } from '../../utils/sync/Sync';
 import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButtons';

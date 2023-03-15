@@ -4,8 +4,8 @@ import { NotificationIds } from "../flex-hooks/notifications/PauseRecording";
 import AppState from "../../../types/manager/AppState";
 import { reduxNamespace } from "../../../utils/state";
 import { pause, resume } from "../flex-hooks/states/PauseRecordingSlice";
-import { isBannerIndicatorEnabled, isIncludeSilenceEnabled } from '..';
-import { isFeatureEnabled as isDualChannelEnabled, getChannelToRecord } from '../../dual-channel-recording';
+import { isBannerIndicatorEnabled, isIncludeSilenceEnabled } from '../config';
+import { isFeatureEnabled as isDualChannelEnabled, getChannelToRecord } from '../../dual-channel-recording/config';
 import { PauseRecordingState } from '../flex-hooks/states/PauseRecordingSlice';
 
 const manager = Manager.getInstance();

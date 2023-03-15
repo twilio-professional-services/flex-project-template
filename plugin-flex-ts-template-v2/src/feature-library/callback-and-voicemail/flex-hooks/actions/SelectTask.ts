@@ -2,7 +2,7 @@ import * as Flex from "@twilio/flex-ui";
 import AppState from "../../../../types/manager/AppState";
 import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 import { reduxNamespace } from "../../../../utils/state";
-import { isAutoSelectTaskEnabled } from '../..';
+import { isAutoSelectTaskEnabled } from '../../config';
 
 export interface EventPayload {
   task?: Flex.ITask;

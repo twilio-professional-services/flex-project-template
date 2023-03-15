@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { isMultiParticipantEnabled } from '../../index'
+import { isMultiParticipantEnabled } from '../../config'
 import { Tab, TaskHelper } from "@twilio/flex-ui"
 import { ParticipantTabLabel } from "../../custom-components/ParticipantTabLabel"
 import ParticipantsTab from "../../custom-components/ParticipantsTab"

@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import ConferenceService from "../../utils/ConferenceService";
-import { isAddButtonEnabled } from '../..';
+import { isAddButtonEnabled } from '../../config';
 import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
 export const actionEvent = FlexActionEvent.before;

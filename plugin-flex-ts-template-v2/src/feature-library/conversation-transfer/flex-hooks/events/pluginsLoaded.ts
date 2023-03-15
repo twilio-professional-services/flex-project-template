@@ -1,4 +1,4 @@
-import { isColdTransferEnabled, isMultiParticipantEnabled } from "../../index";
+import { isColdTransferEnabled, isMultiParticipantEnabled } from "../../config";
 import { registerCustomChatTransferAction } from "../../custom-action/chatTransferTask";
 import { registerLeaveChatAction } from "../../custom-action/leaveChat";
 import { registerRemoveChatParticipant } from "../../custom-action/removeChatParticipant";

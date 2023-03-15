@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import { ITask, TaskHelper, StateHelper } from "@twilio/flex-ui";
-import { isColdTransferEnabled, isMultiParticipantEnabled } from '../../index'
+import { isColdTransferEnabled, isMultiParticipantEnabled } from '../../config'
 import TransferButton from "../../custom-components/TransferButton"
 import LeaveChatButton from "../../custom-components/LeaveChatButton"
 import { countOfOutstandingInvitesForConversation } from "../../helpers/inviteTracker"

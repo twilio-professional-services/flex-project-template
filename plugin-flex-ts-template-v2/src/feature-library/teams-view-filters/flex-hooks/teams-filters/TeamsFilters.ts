@@ -1,4 +1,4 @@
-import {  isDepartmentFilterEnabled, isExtensionsFilterEnabled, isQueueNoWorkerDataFilterEnabled, isQueueWorkerDataFilterEnabled, isTeamFilterEnabled, isAgentSkillsFilterEnabled } from "../../index";
+import {  isDepartmentFilterEnabled, isExtensionsFilterEnabled, isQueueNoWorkerDataFilterEnabled, isQueueWorkerDataFilterEnabled, isTeamFilterEnabled, isAgentSkillsFilterEnabled } from "../../config";
 
 import { departmentFilter } from "../../filters/departmentFilter";
 import { emailFilter } from "../../filters/emailFilter";
