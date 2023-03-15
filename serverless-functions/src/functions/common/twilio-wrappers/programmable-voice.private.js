@@ -67,36 +67,6 @@ exports.coldTransfer = async (parameters) => {
  * @param {object} parameters the parameters for the function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
- * @param {string} parameters.callSid the unique call SID to update
- * @param {object} parameters.params call update parameters
- * @returns {Map} The call's properties
- * @description updates the given call
- */
-exports.updateCall = async (parameters) => {
-  const { context, callSid, params } = parameters;
-
-  if (!isObject(context))
-    throw "Invalid parameters object passed. Parameters must contain reason context object";
-  if (!isString(callSid))
-    throw "Invalid parameters object passed. Parameters must contain callSid string";
-  if (!isObject(params))
-    throw "Invalid parameters object passed. Parameters must contain params object";
-
-  try {
-    const client = context.getTwilioClient();
-
-    const call = await client.calls(callSid).update(params);
-
-    return { success: true, call, status: 200 };
-  } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
-  }
-};
-
-/**
- * @param {object} parameters the parameters for the function
- * @param {number} parameters.attempts the number of retry attempts performed
- * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.callSid the unique call SID to fetch
  * @param {object} parameters.params recording creation parameters
  * @returns {Map} The new recording's properties
@@ -146,10 +116,7 @@ exports.updateCallRecording = async (parameters) => {
   try {
     const client = context.getTwilioClient();
 
-    const recording = await client
-      .calls(callSid)
-      .recordings(recordingSid)
-      .update(params);
+    const recording = await client.calls(callSid).recordings(recordingSid).update(params);
 
     return { success: true, recording, status: 200 };
   } catch (error) {
@@ -182,10 +149,7 @@ exports.updateConferenceRecording = async (parameters) => {
   try {
     const client = context.getTwilioClient();
 
-    const recording = await client
-      .conferences(conferenceSid)
-      .recordings(recordingSid)
-      .update(params);
+    const recording = await client.conferences(conferenceSid).recordings(recordingSid).update(params);
 
     return { success: true, recording, status: 200 };
   } catch (error) {
