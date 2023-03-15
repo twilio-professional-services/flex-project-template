@@ -25,14 +25,12 @@ export const SupervisorAlertButton = ({task}: SupervisorAlertButton) => {
       }));
       // If the supervisor disabled the agent assistance alerts, let's cache this
       // to ensure it is set to false if a browser refresh happens
-      console.log('Storing enableAgentAssistanceAlerts to cache');
       localStorage.setItem('cacheAlerts',"false");
     } else {
       dispatch(Actions.setBargeCoachStatus({ 
         enableAgentAssistanceAlerts: true
       }));
       updateTaskAndTriggerAlerts();
-      console.log('Storing enableAgentAssistanceAlerts to cache');
       localStorage.setItem('cacheAlerts',"true");
     }
   }
@@ -45,18 +43,15 @@ export const SupervisorAlertButton = ({task}: SupervisorAlertButton) => {
   // Return the Supervisor Agent Assistance Toggle, this gives the supervisor
   // the option to enable or disable Agent Assistance Alerts
   return (
-    <>
-      <Tooltip text={enableAgentAssistanceAlerts ? "Agent Assistance Alerts Enabled" : "Agent Assistance Alerts Disabled"} placement="right">
-        <Flex vAlignContent="center">
-          <Switch
-            checked={enableAgentAssistanceAlerts} 
-            onChange={() => agentAssistanceAlertToggle()}
-          >
-            {""}
-          </Switch>
-        </Flex>
-       </Tooltip>
-    </>
+    <Tooltip text={enableAgentAssistanceAlerts ? "Agent Assistance Alerts Enabled" : "Agent Assistance Alerts Disabled"} placement="right">
+      <Flex vAlignContent="center">
+        <Switch
+          checked={enableAgentAssistanceAlerts} 
+          onChange={() => agentAssistanceAlertToggle()}
+        >
+          {""}
+        </Switch>
+      </Flex>
+      </Tooltip>
   );
-
 }

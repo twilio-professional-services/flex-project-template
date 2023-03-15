@@ -70,43 +70,39 @@ export const SupervisorMonitorPanel = ({}: SupervisorMonitorPanelProps) => {
   
   if (supervisorArray.length != 0) {
     return (
-      <>
-        <Flex hAlignContent="center" vertical padding="space40">
-          <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-            <Box backgroundColor="colorBackgroundPrimaryWeakest">
-              Active Supervisors:
-              <Box>
-                <ol>
-                  <Text
-                  as="p"
-                  fontWeight="fontWeightMedium"
-                  fontSize="fontSize30"
-                  marginBottom="space40"
-                  color="colorTextSuccess"
-                  >
-                    {supervisorsArray()}
-                  </Text>
-                </ol>
-              </Box>
+      <Flex hAlignContent="center" vertical padding="space40">
+        <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
+          <Box backgroundColor="colorBackgroundPrimaryWeakest">
+            Active Supervisors:
+            <Box>
+              <ol>
+                <Text
+                as="p"
+                fontWeight="fontWeightMedium"
+                fontSize="fontSize30"
+                marginBottom="space40"
+                color="colorTextSuccess"
+                >
+                  {supervisorsArray()}
+                </Text>
+              </ol>
             </Box>
-          </Stack>
-        </Flex>
-      </>
+          </Box>
+        </Stack>
+      </Flex>
     );
   } else {
     return (
-      <>
-        <Flex hAlignContent="center" vertical padding="space40">
-          <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-            <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-              Active Supervisors:
-              <Box>
-                None
-              </Box>
+      <Flex hAlignContent="center" vertical padding="space40">
+        <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
+          <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
+            Active Supervisors:
+            <Box>
+              None
             </Box>
-          </Stack>
-        </Flex>
-      </>
+          </Box>
+        </Stack>
+      </Flex>
     );
   }
 }

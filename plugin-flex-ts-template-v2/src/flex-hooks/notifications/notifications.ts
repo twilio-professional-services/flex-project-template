@@ -12,7 +12,6 @@ import MultiCall from "../../feature-library/multi-call/flex-hooks/notifications
 import InternalCall from "../../feature-library/internal-call/flex-hooks/notifications/InternalCall";
 import Callback from "../../feature-library/callback-and-voicemail/flex-hooks/notifications/Callback";
 import ChatToVideo from "../../feature-library/chat-to-video-escalation/flex-hooks/notifications/ChatToVideo";
-import BargeCoachAssist from "../../feature-library/supervisor-barge-coach/flex-hooks/notifications";
 
 const notificationsToRegister: ((
   flex: typeof Flex,
@@ -31,7 +30,6 @@ const notificationsToRegister: ((
   Callback, 
   ChatToVideo, 
   ProgrammableChatTransfer, 
-  BargeCoachAssist
 ];
 
 export default notificationsToRegister;

@@ -63,7 +63,6 @@ export const CoachingStatusPanel = ({}: CoachingStatusPanelProps) => {
       syncUpdates();
       // Caching this if the browser is refreshed while the agent actively on a call
       // We will use this to clear up the Sync Doc upon browser refresh
-      console.log('Storing myWorkerSID to cache');
       localStorage.setItem('myWorkerSID',`${myWorkerSID}`);
     }
   });
@@ -74,30 +73,28 @@ export const CoachingStatusPanel = ({}: CoachingStatusPanelProps) => {
   if (supervisorArray.length != 0) {
 
     return (
-      <>
-        <Flex hAlignContent="center" vertical padding="space40">
-          <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-            <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-              You are being Coached by: 
-              <Box>
-                <ol>
-                  <Text
-                  as="p"
-                  fontWeight="fontWeightMedium"
-                  fontSize="fontSize30"
-                  marginBottom="space40"
-                  color="colorTextSuccess"
-                  >
-                    {supervisorArray.map((supervisorArray: { supervisor: {} }) => (
-                        <li key={`${Math.random()}`}>{supervisorArray.supervisor}</li>
-                    ))}
-                  </Text>
-                </ol>
-              </Box>
+      <Flex hAlignContent="center" vertical padding="space40">
+        <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
+          <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
+            You are being Coached by: 
+            <Box>
+              <ol>
+                <Text
+                as="p"
+                fontWeight="fontWeightMedium"
+                fontSize="fontSize30"
+                marginBottom="space40"
+                color="colorTextSuccess"
+                >
+                  {supervisorArray.map((supervisorArray: { supervisor: {} }) => (
+                      <li key={`${Math.random()}`}>{supervisorArray.supervisor}</li>
+                  ))}
+                </Text>
+              </ol>
             </Box>
-          </Stack>
-        </Flex>
-      </>
+          </Box>
+        </Stack>
+      </Flex>
       );
   } else {
     return (

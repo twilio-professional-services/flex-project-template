@@ -8,7 +8,7 @@ export function addSupervisorMonitorPanel(flex: typeof Flex, manager: Flex.Manag
   if(!isSupervisorMonitorPanelEnabled()) return;
 
   flex.Supervisor.TaskCanvasTabs.Content.add(
-    <SupervisorMonitorPanel uniqueName="Supervisors Engaged" icon="AgentsBold"  key="supervisoronitorpanel" 
+    <SupervisorMonitorPanel uniqueName="Supervisors Engaged" icon="AgentsBold"  key="SupervisorMonitorPanel" 
     />,
       {if: (props) => props.channelDefinition.capabilities.has('Call')}
   );

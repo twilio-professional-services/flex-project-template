@@ -12,14 +12,12 @@ export const agentBrowserRefresh = () => {
   const myWorkerSID = localStorage.getItem('myWorkerSID');
   const agentSyncDoc = `syncDoc.${myWorkerSID}`;
   if(myWorkerSID != null) {
-    console.log(`Browser Refresh Detected!  Clearing the Sync Doc.`);
     SyncDoc.clearSyncDoc(agentSyncDoc);
   }
   // This is here if the Agent refreshes in the middle of having Agent Assistance on
   // This will clear up the Sync Doc and delete the registered notification
   const cacheAgentAssistState = localStorage.getItem('cacheAgentAssistState');
   if (cacheAgentAssistState == "true") {
-    console.log('Browser Refresh Detected!  Cleaning up Agent Assistance Sync Doc.')
     const agentWorkerSID = state.flex?.worker?.worker?.sid;
     SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, "", "", "", "remove");
   }
@@ -55,7 +53,6 @@ export const supervisorBrowserRefresh = async () => {
   if (stickyWorkerSID == null && teamViewTaskSID != null) {
     // Triggering the invokeAction to force a click to repopulate stickyWorker
     if(!_actionInvoked){
-      console.log(`Triggering the invokeAction`);
       Flex.Actions.invokeAction("NavigateToView", {viewName: "teams"});
       _actionInvoked = true;
     }

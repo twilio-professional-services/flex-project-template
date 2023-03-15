@@ -33,7 +33,6 @@ export const AgentAssistanceButton = ({task}: AgentAssistanceButton) => {
         agentAssistanceButton: false
       }));
       // Caching this to help with browser refresh recovery
-      console.log('Storing agentAssistance to cache');
       localStorage.setItem('cacheAgentAssistState','false');
 
       // Updating the Sync Doc to remove the agent from the assistance array
@@ -51,7 +50,6 @@ export const AgentAssistanceButton = ({task}: AgentAssistanceButton) => {
 
       // Caching this if the browser is refreshed while the agent actively had agent assistance up
       // We will use this to clear up the Sync Doc and the Agent Alert
-      console.log('Storing agentAssistance to cache');
       localStorage.setItem('cacheAgentAssistState',"true");
 
       // Updating the Sync Doc to add the agent from the assistance array
@@ -69,20 +67,18 @@ export const AgentAssistanceButton = ({task}: AgentAssistanceButton) => {
   // Toggle the icon based on agent assistance status
   const isLiveCall = TaskHelper.isLiveCall(task);
   return (
-    <> 
-      <Flex hAlignContent="center" vertical>
-        <Stack orientation="horizontal" spacing="space30" element="AGENT_ASSISTANCE_BUTTON_BOX">
-          <IconButton
-            icon={ agentAssistanceButton ? 'HelpBold' : 'Help' }
-            disabled={!isLiveCall}
-            onClick={agentAssistanceClick}
-            title={ agentAssistanceButton ? "Turn off Assistance" : "Ask for Assistance" }
-            variant="secondary"
-            style={{width:'44px',height:'44px'}}
-          >{ agentAssistanceButton ? "Assistance Required" : "" }</IconButton>
-          { !isLiveCall ? "" : agentAssistanceButton && isLiveCall ? 'Turn off Assistance' : 'Ask for Assistance'}
-        </Stack>
-      </Flex>
-    </>
+    <Flex hAlignContent="center" vertical>
+      <Stack orientation="horizontal" spacing="space30" element="AGENT_ASSISTANCE_BUTTON_BOX">
+        <IconButton
+          icon={ agentAssistanceButton ? 'HelpBold' : 'Help' }
+          disabled={!isLiveCall}
+          onClick={agentAssistanceClick}
+          title={ agentAssistanceButton ? "Turn off Assistance" : "Ask for Assistance" }
+          variant="secondary"
+          style={{width:'44px',height:'44px'}}
+        >{ agentAssistanceButton ? "Assistance Required" : "" }</IconButton>
+        { !isLiveCall ? "" : agentAssistanceButton && isLiveCall ? 'Turn off Assistance' : 'Ask for Assistance'}
+      </Stack>
+    </Flex>
   );
 }

@@ -16,13 +16,11 @@ export const AgentAssistanceTeamsIcon = ({worker}: AgentAssistanceTeamsIcon) => 
   let agentIndex = agentAssistanceArray?.findIndex((a) => a.agentWorkerSID === worker);
   if(agentIndex > -1) {
     return (
-      <>
-        <Tooltip text="Agent Seeking Assistance" placement="left">
-          <Flex vAlignContent="center">
-            <ErrorIcon decorative={true} title="Asking for Assistance"></ErrorIcon>
-          </Flex>
-         </Tooltip>
-      </>
+      <Tooltip text="Agent Seeking Assistance" placement="left">
+        <Flex vAlignContent="center">
+          <ErrorIcon decorative={true} title="Asking for Assistance"></ErrorIcon>
+        </Flex>
+        </Tooltip>
     );
   } else {
     return <></>

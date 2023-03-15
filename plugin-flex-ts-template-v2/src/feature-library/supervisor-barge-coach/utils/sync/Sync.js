@@ -32,7 +32,6 @@ class SyncDocClass {
 			}
 
 			if(updateStatus === 'add') {
-				console.log(`Updating Sync Doc: ${docToUpdate} agent: ${agentFN}'s assistance has been ADDED to the agentAssistance array`);
 				agentAssistanceArray.push(
 				{
 					'conference': conferenceSID,
@@ -48,7 +47,6 @@ class SyncDocClass {
 			// Checking Updated Status we pass during the button click
 			// to update the Supervisor's Status within the Supervisor Array to the Sync Doc
 			} else if (updateStatus === 'remove') {
-				console.log(`Updating Sync Doc: ${docToUpdate}, Agent: ${agentFN}'s assistance has been REMOVED from the agentAssistanceA array`);
 				// Get the index of the Supervisor we need to remove in the array
 				const removeAgentAssistanceIndex = agentAssistanceArray.findIndex((a) => a.agentWorkerSID === agentWorkerSID);
 				// Ensure we get something back, and update the status the supervisor is in
@@ -75,7 +73,6 @@ class SyncDocClass {
 			// to push/add the upervisor from the Supervisor Array within the Sync Doc
 			// adding their Full Name and Conference - the Agent will leverage these values
 			if(updateStatus === 'add') {
-				console.log(`Updating Sync Doc: ${docToUpdate} supervisor: ${supervisorFN} has been ADDED to the supervisor array`);
 				supervisorsArray.push(
 				{
 					'conference': conferenceSID,
@@ -90,7 +87,6 @@ class SyncDocClass {
 			// Checking Updated Status we pass during the button click
 			// to update the Supervisor's Status within the Supervisor Array to the Sync Doc
 			} else if (updateStatus === 'update') {
-				console.log(`Updating Sync Doc: ${docToUpdate}, supervisor: ${supervisorFN} has been REMOVED from the supervisor array`);
 				// Get the index of the Supervisor we need to remove in the array
 				const updateSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
 				// Ensure we get something back, and update the status the supervisor is in
@@ -102,7 +98,6 @@ class SyncDocClass {
 			// Checking Updated Status we pass during button click
 			// to splice/remove the Supervisor from the Supervisor Array within the Sync Doc
 			} else if (updateStatus === 'remove') {
-				console.log(`Updating Sync Doc: ${docToUpdate}, supervisor: ${supervisorFN} has been REMOVED from the supervisor array`);
 				// Get the index of the Supervisor we need to remove in the array
 				const removeSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
 				// Ensure we get something back, let's splice this index where the Supervisor is within the array

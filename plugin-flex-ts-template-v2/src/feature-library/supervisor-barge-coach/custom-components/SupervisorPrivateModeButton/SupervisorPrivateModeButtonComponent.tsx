@@ -35,7 +35,6 @@ export const SupervisorPrivateToggle = ({task}: SupervisorPrivateToggleProps) =>
     // If privateMode is true, toggle to false and update the Sync Doc with the appropriate Supervisor and Status
     if (privateMode) {
       // Caching this to help with browser refresh recovery
-      console.log('Storing privateMode to cache');
       localStorage.setItem('privateMode','false');
       dispatch(Actions.setBargeCoachStatus({ 
         privateMode: false, 
@@ -50,7 +49,6 @@ export const SupervisorPrivateToggle = ({task}: SupervisorPrivateToggleProps) =>
     // If privateMode is false, toggle to true and remove the Supervisor from the Sync Doc
     } else {
       // Caching this to help with browser refresh recovery
-      console.log('Storing privateMode to cache');
       localStorage.setItem('privateMode','true');
       dispatch(Actions.setBargeCoachStatus({ 
         privateMode: true, 
@@ -65,19 +63,17 @@ export const SupervisorPrivateToggle = ({task}: SupervisorPrivateToggleProps) =>
   const isLiveCall = TaskHelper.isLiveCall(task);
 
   return (
-    <>
-      <Flex hAlignContent="center" vertical padding="space30">
-        <Stack orientation="horizontal" spacing="space30" element="SUPERVISOR_PRIVATE_BUTTON_BOX">
-          <IconButton
-            icon={ privateMode ? 'EyeBold' : 'Eye' }
-            disabled={!isLiveCall}
-            onClick={togglePrivateMode}
-            title={ privateMode ? "Disable Private Mode" : "Enable Private Mode" }
-            variant="secondary"
-          />
-          { privateMode ? "Privacy On" : "Privacy Off" }
-        </Stack>
-      </Flex>
-    </>
+    <Flex hAlignContent="center" vertical padding="space30">
+      <Stack orientation="horizontal" spacing="space30" element="SUPERVISOR_PRIVATE_BUTTON_BOX">
+        <IconButton
+          icon={ privateMode ? 'EyeBold' : 'Eye' }
+          disabled={!isLiveCall}
+          onClick={togglePrivateMode}
+          title={ privateMode ? "Disable Private Mode" : "Enable Private Mode" }
+          variant="secondary"
+        />
+        { privateMode ? "Privacy On" : "Privacy Off" }
+      </Stack>
+    </Flex>
   );
 }

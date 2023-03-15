@@ -9,7 +9,6 @@ export function addSupervisorAlert (flex: typeof Flex, manager: Flex.Manager) {
   const myWorkerRoles = manager.store.getState().flex?.worker?.worker?.attributes?.roles;
   // Update the role names if you wish to inlude this feature for more role types
   if(myWorkerRoles.includes('admin' || 'supervisor')) {
-    console.log('Access Granted to the Supervisor Agent Assistance Alerts Feature');
     flex.MainHeader.Content.add(
       <SupervisorAlertButton key="agent-assistance-button"/>, {
         align: 'start'

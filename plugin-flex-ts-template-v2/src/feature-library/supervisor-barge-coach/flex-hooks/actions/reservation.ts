@@ -15,7 +15,6 @@ export const cleanStateAndSyncUponAgentHangUp = async (
   manager.workerClient?.on("reservationCreated", (reservation: any) => {
     //Register listener for reservation wrapup event
     reservation.on("wrapup", (reservation: any) => {
-      console.log(`Hangup button triggered ${reservation}, clear the Sync Doc`);
       manager.store.dispatch(
         BargeCoachStatusAction.setBargeCoachStatus({
           enableCoachButton: false,

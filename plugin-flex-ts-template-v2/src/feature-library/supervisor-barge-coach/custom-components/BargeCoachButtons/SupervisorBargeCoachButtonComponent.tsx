@@ -39,9 +39,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
   // Storing teamViewPath to browser cache to help if a refresh happens
   // will use this in the browserRefreshHelper
   if (teamViewTaskSID != null && agentWorkerSID != null) {
-    console.log('Storing teamViewPath to cache');
     localStorage.setItem('teamViewTaskSID',teamViewTaskSID);
-    console.log('Storing agentWorkerSID to cache');
     localStorage.setItem('agentWorkerSID', agentWorkerSID);
   }
 
@@ -55,7 +53,6 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
     const conference = task && task.conference;
     const conferenceSid = conference?.conferenceSid;
     if (!conferenceSid) {
-      console.log('conferenceSid = null, returning');
       return;
     }
 
@@ -68,12 +65,10 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
       && p.mediaProperties.status === 'joined' 
       && myWorkerSID === p.routingProperties.workerSid);
     const participantSid = supervisorParticipant?.participantSid;
-    console.log(`Current supervisorSID = ${supervisorParticipant?.participantSid}`);
 
     // If the supervisorParticipant.key is null return, this would be rare and best practice to include this
     // before calling any function you do not want to send it null values unless your function is expecting that
     if (!supervisorParticipant || !participantSid) {
-      console.log('supervisorParticipant.key = null, returning');
       return;
     }
     // Barge-in will "unmute" their line if the are muted, else "mute" their line if they are unmuted
@@ -146,7 +141,6 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
     const conference = task && task.conference;
     const conferenceSid = conference?.conferenceSid;
     if (!conferenceSid) {
-      console.log('conferenceSid = null, returning');
       return;
     }
 
@@ -159,21 +153,16 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
       && p.mediaProperties.status === 'joined' 
       && myWorkerSID === p.routingProperties.workerSid);
     const participantSid = supervisorParticipant?.participantSid;
-    console.log(`Current supervisorSID = ${supervisorParticipant?.participantSid}`);
 
     // Pulling the agentSid that we will be coaching on this conference
     // Ensuring they are a worker (IE agent) and it matches the agentWorkerSid we pulled from the props
     let agentParticipant = conference?.participants.find(p => p.participantType === 'worker'
     && agentWorkerSID === p.workerSid);
     const agentSid = agentParticipant?.callSid;
-    
-    console.log(`Current agentWorkerSid = ${agentWorkerSID}`);
-    console.log(`Current agentSid = ${agentSid}`);
 
     // If the agentParticipant.key or supervisorParticipant.key is null return, this would be rare and best practice to include this
     // before calling any function you do not want to send it null values unless your function is expecting that
     if (!agentSid || !participantSid) {
-      console.log('agentParticipant.key or supervisorParticipant.key = null, returning');
       return;
     }
     // Coaching will "enable" their line if they are disabled, else "disable" their line if they are enabled
@@ -228,35 +217,33 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
   const isLiveCall = TaskHelper.isLiveCall(task);
 
   return (
-    <> 
-      <Flex hAlignContent="center" vertical>
-        <Stack orientation="horizontal" spacing="space30" element="BARGE_COACH_BUTTON_BOX">
-          <IconButton
-            icon={ muted ? 'MuteLargeBold' : 'MuteLarge' }
-            disabled={!isLiveCall || !enableBargeinButton || !enableCoachButton || (!barge && !coaching) }
-            onClick={bargeHandleClick}
-            title={ muted ? "Unmute" : "Mute" }
-            variant="secondary"
-            style={{width:'44px',height:'44px'}}
-          ></IconButton>
-          <IconButton
-            icon={ barge ? `IncomingCallBold` :  'IncomingCall' }
-            disabled={!isLiveCall || !enableBargeinButton || coaching }
-            onClick={bargeHandleClick}
-            title={ barge ? 'Barge-Out' : 'Barge-In' }
-            variant={ barge ? 'primary' : 'secondary' }
-            style={{width:'44px',height:'44px'}}
-          />
-          <IconButton
-            icon={ coaching ? `DefaultAvatarBold` : `DefaultAvatar` }
-            disabled={!isLiveCall || !enableCoachButton}
-            onClick={coachHandleClick}
-            title={ coaching ? "Disable Coach Mode" : "Enable Coach Mode" }
-            variant={ coaching ? 'primary' : 'secondary' }
-            style={{width:'44px',height:'44px'}}
-          />
-        </Stack>
-      </Flex>
-    </>
+    <Flex hAlignContent="center" vertical>
+      <Stack orientation="horizontal" spacing="space30" element="BARGE_COACH_BUTTON_BOX">
+        <IconButton
+          icon={ muted ? 'MuteLargeBold' : 'MuteLarge' }
+          disabled={!isLiveCall || !enableBargeinButton || !enableCoachButton || (!barge && !coaching) }
+          onClick={bargeHandleClick}
+          title={ muted ? "Unmute" : "Mute" }
+          variant="secondary"
+          style={{width:'44px',height:'44px'}}
+        ></IconButton>
+        <IconButton
+          icon={ barge ? `IncomingCallBold` :  'IncomingCall' }
+          disabled={!isLiveCall || !enableBargeinButton || coaching }
+          onClick={bargeHandleClick}
+          title={ barge ? 'Barge-Out' : 'Barge-In' }
+          variant={ barge ? 'primary' : 'secondary' }
+          style={{width:'44px',height:'44px'}}
+        />
+        <IconButton
+          icon={ coaching ? `DefaultAvatarBold` : `DefaultAvatar` }
+          disabled={!isLiveCall || !enableCoachButton}
+          onClick={coachHandleClick}
+          title={ coaching ? "Disable Coach Mode" : "Enable Coach Mode" }
+          variant={ coaching ? 'primary' : 'secondary' }
+          style={{width:'44px',height:'44px'}}
+        />
+      </Stack>
+    </Flex>
   );
 }
