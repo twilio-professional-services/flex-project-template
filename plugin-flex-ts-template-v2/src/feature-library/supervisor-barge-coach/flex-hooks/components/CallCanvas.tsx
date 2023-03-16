@@ -19,6 +19,6 @@ export function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Fl
   agentBrowserRefresh();
 
   // Add the Agent Assistance Button to the CallCanvas
-  flex.CallCanvas.Content.add(<AgentAssistanceButton key="agent-assistance-button"> </AgentAssistanceButton>, {sortOrder: 1});
+  flex.CallCanvas.Content.add(<AgentAssistanceButton key="agent-assistance-button"> </AgentAssistanceButton>, {sortOrder: 0});
 }
 

@@ -11,7 +11,8 @@ export function addSupervisorAlert (flex: typeof Flex, manager: Flex.Manager) {
   if(myWorkerRoles.includes('admin' || 'supervisor')) {
     flex.MainHeader.Content.add(
       <SupervisorAlertButton key="agent-assistance-button"/>, {
-        align: 'start'
+        sortOrder: -1,
+        align: 'end'
     });
   }
 }

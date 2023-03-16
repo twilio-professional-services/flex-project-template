@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
-import { ITask } from '@twilio/flex-ui';
+import { ITask, IconButton } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
 import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
-import { Switch, Flex, Tooltip } from "@twilio-paste/core";
+import { Flex, Tooltip } from "@twilio-paste/core";
+import { NotificationIcon } from "@twilio-paste/icons/esm/NotificationIcon";
+import {Button} from '@twilio-paste/core/button';
 import { updateTaskAndTriggerAlerts, syncUpdates } from "../../helpers/supervisorAlertHelper"
 
 type SupervisorAlertButton = {
@@ -19,6 +21,8 @@ export const SupervisorAlertButton = ({task}: SupervisorAlertButton) => {
   } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
 
   const agentAssistanceAlertToggle = () => {
+    //FIXME: Remove Later
+    console.warn('toggle fired');
     if (enableAgentAssistanceAlerts) {
       dispatch(Actions.setBargeCoachStatus({ 
         enableAgentAssistanceAlerts: false
@@ -43,15 +47,14 @@ export const SupervisorAlertButton = ({task}: SupervisorAlertButton) => {
   // Return the Supervisor Agent Assistance Toggle, this gives the supervisor
   // the option to enable or disable Agent Assistance Alerts
   return (
-    <Tooltip text={enableAgentAssistanceAlerts ? "Agent Assistance Alerts Enabled" : "Agent Assistance Alerts Disabled"} placement="right">
+   <Tooltip text={enableAgentAssistanceAlerts ? "Agent Assistance Alerts Enabled" : "Agent Assistance Alerts Disabled"} placement="left">
       <Flex vAlignContent="center">
-        <Switch
-          checked={enableAgentAssistanceAlerts} 
-          onChange={() => agentAssistanceAlertToggle()}
-        >
-          {""}
-        </Switch>
+          <IconButton
+            icon={ enableAgentAssistanceAlerts ? 'BellBold' : 'Bell' }
+            onClick={() => agentAssistanceAlertToggle()}
+            style={{width:'20px',height:'20px'}}
+          />
       </Flex>
-      </Tooltip>
+    </Tooltip>
   );
 }

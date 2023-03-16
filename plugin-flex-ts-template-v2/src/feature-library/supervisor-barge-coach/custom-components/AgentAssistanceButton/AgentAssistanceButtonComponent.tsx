@@ -3,7 +3,7 @@ import { TaskHelper, useFlexSelector, ITask, IconButton } from '@twilio/flex-ui'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
 import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
-import { Flex, Stack } from "@twilio-paste/core";
+import { Flex, Stack, Tooltip } from "@twilio-paste/core";
 
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync'
@@ -67,18 +67,18 @@ export const AgentAssistanceButton = ({task}: AgentAssistanceButton) => {
   // Toggle the icon based on agent assistance status
   const isLiveCall = TaskHelper.isLiveCall(task);
   return (
-    <Flex hAlignContent="center" vertical>
-      <Stack orientation="horizontal" spacing="space30" element="AGENT_ASSISTANCE_BUTTON_BOX">
+    <Flex hAlignContent="center" vertical padding="space100">
+      <Tooltip text={ agentAssistanceButton ? 'Turn off Assistance' : 'Ask for Assistance'} placement="right">
         <IconButton
           icon={ agentAssistanceButton ? 'HelpBold' : 'Help' }
           disabled={!isLiveCall}
           onClick={agentAssistanceClick}
-          title={ agentAssistanceButton ? "Turn off Assistance" : "Ask for Assistance" }
           variant="secondary"
           style={{width:'44px',height:'44px'}}
-        >{ agentAssistanceButton ? "Assistance Required" : "" }</IconButton>
-        { !isLiveCall ? "" : agentAssistanceButton && isLiveCall ? 'Turn off Assistance' : 'Ask for Assistance'}
-      </Stack>
+        >
+          { agentAssistanceButton ? "Assistance Required" : "" }
+        </IconButton>
+      </Tooltip>
     </Flex>
   );
 }
