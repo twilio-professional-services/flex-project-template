@@ -1,11 +1,11 @@
 import * as Flex from "@twilio/flex-ui";
 import { SSOTokenPayload } from "@twilio/flex-ui/src/core/TokenStorage";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
 import { SecondDevice } from '../../helpers/MultiCallHelper';
-import { isFeatureEnabled } from '../..';
+import { FlexEvent } from "../../../../types/feature-loader";
 
-const tokenUpdatedHandler = (tokenPayload: SSOTokenPayload, flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled() || !SecondDevice) return;
+export const eventName = FlexEvent.tokenUpdated;
+export const eventHook = (flex: typeof Flex, manager: Flex.Manager, tokenPayload: SSOTokenPayload) => {
+  if (!SecondDevice) return;
 
   if (SecondDevice?.state === 'destroyed') {
     return;
@@ -15,5 +15,3 @@ const tokenUpdatedHandler = (tokenPayload: SSOTokenPayload, flexEvent: FlexEvent
   
   console.log('MultiCall: Token updated');
 };
-
-export default tokenUpdatedHandler;

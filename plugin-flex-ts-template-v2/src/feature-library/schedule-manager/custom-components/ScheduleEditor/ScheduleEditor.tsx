@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import tzdata from 'tzdata';
-import { ColumnDefinition, DataTable, SidePanel } from '@twilio/flex-ui';
+import { ColumnDefinition, DataTable, Manager, SidePanel } from '@twilio/flex-ui';
 import { Alert } from '@twilio-paste/core/alert';
 import { Button } from '@twilio-paste/core/button';
 import { Box } from '@twilio-paste/core/box';
@@ -17,7 +17,7 @@ import { DeleteIcon } from "@twilio-paste/icons/esm/DeleteIcon";
 
 import { isScheduleUnique, updateScheduleData } from '../../utils/schedule-manager';
 import { Schedule, Rule } from '../../types/schedule-manager';
-import ScheduleManagerStrings, { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
+import { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
 
 interface OwnProps {
   onPanelClosed: () => void;
@@ -38,6 +38,8 @@ const ScheduleEditor = (props: OwnProps) => {
   const [filteredRules, setFilteredRules] = useState([] as Rule[]);
   const [addRuleInput, setAddRuleInput] = useState('');
   const [error, setError] = useState('');
+  
+  const ScheduleManagerStrings = Manager.getInstance().strings as any;
   
   useEffect(() => {
     let zones = [];

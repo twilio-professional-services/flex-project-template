@@ -1,6 +1,6 @@
 import { PasteCustomCSS } from "@twilio-paste/customization";
 
-const customPasteElements = {
+export const pasteElementHook = {
   DEVICE_MGR_BUTTON: {
     backgroundColor: "transparent",
     borderRadius: "borderRadiusCircle",
@@ -15,5 +15,3 @@ const customPasteElements = {
     padding: "space20",
   },
 } as {[key: string]: PasteCustomCSS};
-
-export default customPasteElements;

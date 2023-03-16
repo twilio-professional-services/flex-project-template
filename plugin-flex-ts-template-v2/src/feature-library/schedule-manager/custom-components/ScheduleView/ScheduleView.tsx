@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Notifications, Tab, Tabs } from '@twilio/flex-ui';
+import { Manager, Notifications, Tab, Tabs } from '@twilio/flex-ui';
 import { Button } from '@twilio-paste/core/button';
 import { Heading } from '@twilio-paste/core/heading';
 import { Modal, ModalBody } from '@twilio-paste/core/modal';
@@ -15,7 +15,7 @@ import ScheduleDataTable from '../ScheduleDataTable/ScheduleDataTable';
 import { Rule, Schedule } from '../../types/schedule-manager';
 import { loadScheduleData, publishSchedules } from '../../utils/schedule-manager';
 import { NotificationIds } from "../../flex-hooks/notifications/ScheduleManager";
-import ScheduleManagerStrings, { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
+import { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
 
 const ScheduleView = ({}) => {
   const [ isLoading, setIsLoading ] = useState(true);
@@ -26,6 +26,8 @@ const ScheduleView = ({}) => {
   const [ loadFailed, setLoadFailed ] = useState(false);
   const [ publishState, setPublishState ] = useState(0); // 0: normal; 1: publish in progress; 2: publish version error; 3: publish failed; 4: in available activity
   const [ isDirty, setIsDirty ] = useState(false);
+  
+  const ScheduleManagerStrings = Manager.getInstance().strings as any;
   
   useEffect(() => {
     listSchedules();

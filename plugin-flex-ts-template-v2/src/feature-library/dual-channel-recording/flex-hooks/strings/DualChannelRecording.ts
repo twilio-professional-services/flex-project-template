@@ -3,6 +3,6 @@ export enum StringTemplates {
   DualChannelBroken = 'PSDualChannelBroken',
 }
 
-export default {
+export const stringHook = () => ({
   [StringTemplates.DualChannelBroken]: 'The dual channel recording feature will not work because it has not been configured correctly.',
-};
+});

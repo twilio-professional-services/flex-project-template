@@ -1,13 +1,8 @@
 import * as Flex from "@twilio/flex-ui";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { initialize } from "../../index";
-import { isFeatureEnabled } from '../..';
+import { FlexEvent } from "../../../../types/feature-loader";
+import { initialize } from "../../config";
 
-const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled()) return;
-
-  console.log(`Feature enabled: activity-reservation-handler`);
+export const eventName = FlexEvent.pluginsLoaded;
+export const eventHook = (flex: typeof Flex, manager: Flex.Manager) => {
   initialize();
 };
-
-export default pluginsLoadedHandler;

@@ -4,7 +4,7 @@ export enum StringTemplates {
   OutboundDialingNotEnabled = 'PSCallbackOutboundDialingNotEnabledNotification'
 }
 
-export default {
+export const stringHook = () => ({
   [StringTemplates.ErrorCallingCustomer]: 'Failed to call {{customer}}, please try again',
   [StringTemplates.OutboundDialingNotEnabled]: 'Outbound dialing is not enabled, please notify a systems administrator'
-}
+});

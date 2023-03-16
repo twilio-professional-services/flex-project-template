@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import * as Flex from '@twilio/flex-ui';
-import { ConferenceState } from '@twilio/flex-ui/src/state/Conferences';
+import { ConferenceState as FlexConferenceState } from '@twilio/flex-ui/src/state/Conferences';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states';
-import { removeConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
+import AppState from "../../../../types/manager/AppState";
+import { reduxNamespace } from "../../../../utils/state";
+import { removeConnectingParticipant, ConferenceState } from '../../flex-hooks/states/ConferenceSlice';
 import ConferenceService from '../../utils/ConferenceService';
 import { FetchedCall } from '../../../../types/serverless/twilio-api';
 
 export interface OwnProps {
-  conference?: ConferenceState;
+  conference?: FlexConferenceState;
   task?: Flex.ITask;
 }
 
@@ -16,7 +17,7 @@ const ConnectingParticipants = (props: OwnProps) => {
   const [clock, setClock] = useState(true);
   
   const dispatch = useDispatch();
-  const { connectingParticipants } = useSelector((state: AppState) => state[reduxNamespace].conference);
+  const { connectingParticipants } = useSelector((state: AppState) => state[reduxNamespace].conference as ConferenceState);
   
   useEffect(() => {
     // set up interval for cleaning up disconnected participants

@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { TaskHelper, useFlexSelector, ITask, Manager, IconButton } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
-import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
+import { AppState } from '../../../../types/manager';
+import { reduxNamespace } from '../../../../utils/state';
+import { Actions, SupervisorBargeCoachState } from "../../flex-hooks/states/SupervisorBargeCoach"
 import BargeCoachService from '../../utils/serverless/BargeCoachService';
 import { Flex, Stack } from "@twilio-paste/core";
-import { isAgentCoachingPanelEnabled } from '../..';
+import { isAgentCoachingPanelEnabled } from '../../config';
 
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync'
@@ -25,7 +26,7 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
     coaching, 
     enableCoachButton, 
     privateMode
-  } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
+  } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState);
 
   const teamViewTaskSID = useFlexSelector(state => state?.flex?.view?.selectedTaskInSupervisorSid);
   const agentWorkerSID = useFlexSelector(state => state?.flex?.supervisor?.stickyWorker?.worker?.sid);

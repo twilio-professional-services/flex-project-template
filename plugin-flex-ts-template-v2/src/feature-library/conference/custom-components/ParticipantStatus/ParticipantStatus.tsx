@@ -6,7 +6,7 @@ import {
   ConferenceParticipant,
   useFlexSelector
 } from '@twilio/flex-ui';
-import { AppState } from '../../../../flex-hooks/states';
+import AppState from "../../../../types/manager/AppState";
 
 const Status = styled('div')`
   font-size: 0.75rem;

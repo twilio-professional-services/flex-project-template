@@ -2,7 +2,7 @@ import { Manager, Notifications } from '@twilio/flex-ui';
 import { NotificationIds } from "../flex-hooks/notifications/ScheduleManager";
 import ScheduleManagerService from './ScheduleManagerService';
 import { Rule, Schedule, ScheduleManagerConfig } from '../types/schedule-manager';
-import { isFeatureEnabled } from '..';
+import { isFeatureEnabled } from '../config';
 
 let config = {
   data: {

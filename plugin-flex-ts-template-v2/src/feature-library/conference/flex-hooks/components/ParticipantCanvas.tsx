@@ -4,12 +4,11 @@ import ParticipantActionsButtons from '../../custom-components/ParticipantAction
 import ParticipantName from '../../custom-components/ParticipantName';
 import ParticipantStatus from '../../custom-components/ParticipantStatus';
 import ParticipantStatusContainer from '../../custom-components/ParticipantStatusContainer';
-import { isFeatureEnabled, isAddButtonEnabled } from '../..';
+import { isAddButtonEnabled } from '../../config';
+import { FlexComponent } from "../../../../types/feature-loader";
 
-export function addConferenceToParticipantCanvas(flex: typeof Flex) {
-
-  if(!isFeatureEnabled()) return;
-  
+export const componentName = FlexComponent.ParticipantCanvas;
+export const componentHook = function addConferenceToParticipantCanvas(flex: typeof Flex) {
   const isUnknownParticipant = (props: any) => props.participant.participantType === 'unknown';
   const replaceButtons = (props: any) => {
     // if the add button is disabled, only the customer participant needs replacement buttons

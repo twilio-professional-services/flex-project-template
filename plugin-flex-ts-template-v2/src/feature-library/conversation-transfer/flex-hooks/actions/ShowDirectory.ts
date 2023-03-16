@@ -1,14 +1,17 @@
 import * as Flex from "@twilio/flex-ui";
-import { isColdTransferEnabled, isMultiParticipantEnabled } from "../../index";
+import { isMultiParticipantEnabled } from "../../config";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
-export function handleChatTransferShowDirectory(
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.ShowDirectory;
+export const actionHook = function handleChatTransferShowDirectory(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
   if (isMultiParticipantEnabled()) return;
 
   Flex.Actions.addListener(
-    "beforeShowDirectory",
+    `${actionEvent}${actionName}`,
     (payload: any, abortFunction: any) => {
       let display = "flex";
       const taskSid = manager.store.getState().flex.view.selectedTaskSid;

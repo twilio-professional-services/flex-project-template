@@ -1,13 +1,13 @@
 import * as Flex from "@twilio/flex-ui";
-import { isFeatureEnabled } from "../..";
 import * as HangUpByHelper from "../../helpers/hangUpBy";
 import { HangUpBy } from '../../enums/hangUpBy';
 import TaskRouterService from "../../../../utils/serverless/TaskRouter/TaskRouterService";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
-export function reportHangUpByCompleteTask(flex: typeof Flex, manager: Flex.Manager) {
-  if (!isFeatureEnabled()) return;
-  
-  flex.Actions.addListener('beforeCompleteTask', async (payload, abortFunction) => {
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.CompleteTask;
+export const actionHook = function reportHangUpByCompleteTask(flex: typeof Flex, manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     let currentHangUpBy = HangUpByHelper.getHangUpBy()[payload.sid];
     
     if (!currentHangUpBy) {

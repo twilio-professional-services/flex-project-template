@@ -4,7 +4,7 @@ export enum StringTemplates {
   FailedToUpdateTaskAttributes = 'PSFailedToUpdateTaskAttributesForChatTransferNotification'
 }
 
-export default {
+export const stringHook = () => ({
   [StringTemplates.FailedToSubmitTransfer]: 'Failed to submit transfer. {{message}}; please try again.  If the problem persists, please contact a supervisor.',
   [StringTemplates.FailedToUpdateTaskAttributes]: 'Failed to update task for transfer. You may continue, but please notify a supervisor.',
-}
+});

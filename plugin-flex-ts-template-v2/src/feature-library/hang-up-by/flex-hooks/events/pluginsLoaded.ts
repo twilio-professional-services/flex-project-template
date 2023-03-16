@@ -1,13 +1,7 @@
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { isFeatureEnabled } from "../..";
 import { resetHangUpBy } from '../../helpers/hangUpBy';
+import { FlexEvent } from "../../../../types/feature-loader";
 
-const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled()) return;
-
-  console.log(`Feature enabled: hang-up-by`);
-  
+export const eventName = FlexEvent.pluginsLoaded;
+export const eventHook = () => {
   resetHangUpBy();
 };
-
-export default pluginsLoadedHandler;

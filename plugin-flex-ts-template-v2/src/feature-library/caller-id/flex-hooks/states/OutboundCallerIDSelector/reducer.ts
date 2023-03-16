@@ -37,4 +37,4 @@ const OutboundCallerIDSelectorSlice = createSlice({
   },
 });
 
-export default OutboundCallerIDSelectorSlice.reducer;
+export const reducerHook = () => ({ outboundCallerIdSelector: OutboundCallerIDSelectorSlice.reducer });

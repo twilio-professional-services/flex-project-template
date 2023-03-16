@@ -4,7 +4,7 @@ import { NotificationIds } from "../flex-hooks/notifications/TransferResult";
 import ChatTransferService, {
   buildInviteParticipantAPIPayload,
 } from "../helpers/APIHelper";
-import { isMultiParticipantEnabled } from "..";
+import { isMultiParticipantEnabled } from "../config";
 import { addInviteToConversation } from "../helpers/inviteTracker";
 import { countOfOutstandingInvitesForConversation } from "../helpers/inviteTracker";
 

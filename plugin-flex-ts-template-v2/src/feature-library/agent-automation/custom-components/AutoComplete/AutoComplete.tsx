@@ -2,7 +2,7 @@ import * as Flex from "@twilio/flex-ui";
 import { ITask } from "@twilio/flex-ui";
 import React from 'react';
 import { TaskQualificationConfig } from "feature-library/agent-automation/types/ServiceConfiguration";
-import { getMatchingTaskConfiguration } from "../.."
+import { getMatchingTaskConfiguration } from "../../config"
 
 export type Props = {
   task: ITask;

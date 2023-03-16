@@ -1,22 +1,26 @@
 import * as Flex from "@twilio/flex-ui";
-import { AppState, reduxNamespace } from "../../../../flex-hooks/states";
-import { isAutoSelectTaskEnabled } from '../..';
+import AppState from "../../../../types/manager/AppState";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
+import { reduxNamespace } from "../../../../utils/state";
+import { isAutoSelectTaskEnabled } from '../../config';
 
 export interface EventPayload {
   task?: Flex.ITask;
   sid?: string;
 }
 
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.SelectTask;
 // when an outbound call back completes, select the parent task that initiated it
-export const autoSelectCallbackTaskWhenEndingCall = async (
+export const actionHook = async function autoSelectCallbackTaskWhenEndingCall(
   flex: typeof Flex,
   manager: Flex.Manager
-) => {
+) {
 
   if (!isAutoSelectTaskEnabled()) return;
 
   flex.Actions.addListener(
-    "beforeSelectTask",
+    `${actionEvent}${actionName}`,
     async (payload: EventPayload, abortFunction: () => void) => {
       // when a reservation is removed from state, Flex runs SelectTask with task set to null
       // this means that when an outbound call back to a contact is completed (or canceled)
@@ -40,7 +44,7 @@ export const autoSelectCallbackTaskWhenEndingCall = async (
 
       // cancel this action and select the parent task instead
       abortFunction();
-      await flex.Actions.invokeAction("SelectTask", {
+      await flex.Actions.invokeAction(actionName, {
         sid: parentTask,
       });
     }

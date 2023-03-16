@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { ColumnDefinition, DataTable } from '@twilio/flex-ui';
+import { ColumnDefinition, DataTable, Manager } from '@twilio/flex-ui';
 import { Button } from '@twilio-paste/core/button';
 import { Box } from '@twilio-paste/core/box';
 import { PlusIcon } from "@twilio-paste/icons/esm/PlusIcon";
 
 import ScheduleEditor from '../ScheduleEditor/ScheduleEditor';
 import { Rule, Schedule } from '../../types/schedule-manager';
-import ScheduleManagerStrings, { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
+import { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
 
 interface OwnProps {
   isLoading: boolean;
@@ -23,6 +23,8 @@ const ScheduleDataTable = (props: OwnProps) => {
   const [ selectedSchedule, setSelectedSchedule ] = useState(null as Schedule | null);
   const [ statusTimestamp, setStatusTimestamp ] = useState('');
   const [ openIndexNext, setOpenIndexNext ] = useState(null as number | null);
+  
+  const ScheduleManagerStrings = Manager.getInstance().strings as any;
   
   useEffect(() => {
     setStatusTimestamp(`${props.updated.toLocaleTimeString()} (${Intl.DateTimeFormat().resolvedOptions().timeZone})`);
