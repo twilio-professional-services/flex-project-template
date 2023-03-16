@@ -3,6 +3,6 @@ export enum StringTemplates {
   FailedVideoLinkNotification = 'PS_FailedVideoLink'
 }
 
-export default {
+export const stringHook = () => ({
   [StringTemplates.FailedVideoLinkNotification]: 'Unable to create the video room. Please try again.'
-}
+});

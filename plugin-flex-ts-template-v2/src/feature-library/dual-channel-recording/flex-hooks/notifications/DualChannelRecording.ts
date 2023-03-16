@@ -6,16 +6,12 @@ export enum NotificationIds {
   DualChannelBroken = 'PSDualChannelBroken'
 }
 
-export default (flex: typeof Flex, manager: Flex.Manager) => {
-  dualChannelBroken(flex, manager);
-};
-
-function dualChannelBroken(flex: typeof Flex, manager: Flex.Manager) {
-  flex.Notifications.registerNotification({
+export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+  {
     id: NotificationIds.DualChannelBroken,
     closeButton: true,
     content: StringTemplates.DualChannelBroken,
     timeout: 0,
     type: NotificationType.error,
-  });
-}
+  }
+];

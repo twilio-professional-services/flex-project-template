@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { useFlexSelector } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
-import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
+import { AppState } from '../../../../types/manager';
+import { reduxNamespace } from '../../../../utils/state';
+import { Actions, SupervisorBargeCoachState } from "../../flex-hooks/states/SupervisorBargeCoach"
 import { Flex, Stack, Box, Text } from "@twilio-paste/core";
 
 // Used for Sync Docs
@@ -19,7 +20,7 @@ export const SupervisorMonitorPanel = ({}: SupervisorMonitorPanelProps) => {
   let {
     supervisorArray,
     syncSubscribed
-  } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
+  } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState);
  
   const agentWorkerSID = useFlexSelector(state => state?.flex?.supervisor?.stickyWorker?.worker?.sid);
  

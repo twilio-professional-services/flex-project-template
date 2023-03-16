@@ -22,4 +22,4 @@ const SupervisorCompleteReservationSlice = createSlice({
   },
 });
 
-export default SupervisorCompleteReservationSlice.reducer;
+export const reducerHook = () => ({ supervisorCompleteReservation: SupervisorCompleteReservationSlice.reducer });

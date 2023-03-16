@@ -2,20 +2,19 @@ import * as Flex from "@twilio/flex-ui";
 import FlexHelper from "../../helpers/flexHelper";
 import WorkerState from "../../helpers/workerActivityHelper";
 import { getPendingActivity } from "../../helpers/pendingActivity";
-import { isFeatureEnabled } from '../..';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
-export function beforeCompleteWorkerTask(
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.CompleteTask;
+export const actionHook = function beforeCompleteWorkerTask(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  if (!isFeatureEnabled()) return;
-
-  flex.Actions.addListener("beforeCompleteTask", async () => {
-    
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async () => {
     if (FlexHelper.activeTaskCount > 1) {
       return;
     }
-    
+
     const pendingActivity = getPendingActivity();
 
     if (pendingActivity) {

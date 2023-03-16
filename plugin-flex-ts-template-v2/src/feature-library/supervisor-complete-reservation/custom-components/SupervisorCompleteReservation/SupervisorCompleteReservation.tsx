@@ -2,7 +2,8 @@ import { ITask } from '@twilio/flex-ui';
 import { AlertDialog, Button, Box } from "@twilio-paste/core";
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
+import { AppState } from '../../../../types/manager';
+import { reduxNamespace } from '../../../../utils/state';
 import { Actions } from '../../flex-hooks/states/SupervisorCompleteReservation';
 
 

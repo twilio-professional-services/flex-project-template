@@ -11,7 +11,7 @@ export enum StringTemplates {
   ChatParticipantInviteOutstanding = "ChatParticipantInviteOutstanding",
 }
 
-export default {
+export const stringHook = () => ({
   [StringTemplates.ChatTransferTaskSuccess]: "Conversation transferred",
   [StringTemplates.ChatParticipantInvited]: "Participant invited",
   [StringTemplates.ChatTransferFailedGeneric]:
@@ -26,4 +26,4 @@ export default {
     "Participant invite canceled",
   [StringTemplates.ChatParticipantInviteOutstanding]:
     "Inviting Participant Failed. There is already an outstanding invite for the chat",
-};
+});

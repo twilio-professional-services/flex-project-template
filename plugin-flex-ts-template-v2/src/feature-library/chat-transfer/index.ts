@@ -1,10 +1,9 @@
-import * as Flex from "@twilio/flex-ui";
+import { FeatureDefinition } from "../../types/feature-loader";
+import { isFeatureEnabled } from './config';
+// @ts-ignore
+import hooks from "./flex-hooks/**/*.*";
 
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.chat_transfer || {};
-
-export const isFeatureEnabled = () => {
-  return enabled;
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "chat-transfer", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

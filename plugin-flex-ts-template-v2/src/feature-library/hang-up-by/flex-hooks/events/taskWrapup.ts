@@ -1,13 +1,11 @@
 import * as Flex from "@twilio/flex-ui";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { isFeatureEnabled } from "../..";
 import * as HangUpByHelper from "../../helpers/hangUpBy";
 import { HangUpBy } from '../../enums/hangUpBy';
 import TaskRouterService from "../../../../utils/serverless/TaskRouter/TaskRouterService";
+import { FlexEvent } from "../../../../types/feature-loader";
 
-const taskWrapupHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled()) return;
-  
+export const eventName = FlexEvent.taskWrapup;
+export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {
   if (task.attributes && !task.attributes.conference) {
     // no conference? no call! this functionality is call-specific, so return.
     return;
@@ -66,5 +64,3 @@ const taskWrapupHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
     console.log(`Failed to set conversation attributes for ${task.taskSid}`, error);
   }
 };
-
-export default taskWrapupHandler;

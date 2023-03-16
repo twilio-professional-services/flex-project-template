@@ -1,14 +1,14 @@
 import * as Flex from "@twilio/flex-ui";
 import { addMissingCallDataIfNeeded } from "../../helpers/dualChannelHelper";
-import { isFeatureEnabled } from '../..';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
-export function handleDualChannelCompleteTask(
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.CompleteTask;
+export const actionHook = function handleDualChannelCompleteTask(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  if (!isFeatureEnabled()) return;
-
-  flex.Actions.addListener("beforeCompleteTask", async (payload) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
     // Listening for this event as a last resort check to ensure call
     // and conference metadata are captured on the task
     addMissingCallDataIfNeeded(payload.task);

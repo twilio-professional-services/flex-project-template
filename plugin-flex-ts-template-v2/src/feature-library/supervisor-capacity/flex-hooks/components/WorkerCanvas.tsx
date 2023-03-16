@@ -1,10 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 import CapacityContainer from '../../custom-components/CapacityContainer';
-import { isFeatureEnabled } from '../..';
+import { FlexComponent } from "../../../../types/feature-loader";
 
-export function addCapacityToWorkerCanvas(flex: typeof Flex, manager: Flex.Manager) {
-  
-  if (!isFeatureEnabled()) return;
-  
+export const componentName = FlexComponent.WorkerCanvas;
+export const componentHook = function addCapacityToWorkerCanvas(flex: typeof Flex, manager: Flex.Manager) {
   flex.WorkerCanvas.Content.add(<CapacityContainer key="worker-capacity-container" />);
 }

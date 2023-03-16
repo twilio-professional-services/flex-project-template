@@ -15,39 +15,15 @@ var featureConfigName;
 var newFeatureDirectory;
 
 const featureSubstitutionFiles = [
-  "flex-hooks/events/pluginsLoaded.ts",
+  "config.ts",
   "index.ts",
   "README.md",
   "types/ServiceConfiguration.ts"
 ];
 
-const referenceSubstitutions = [
-  {
-    path: `${pluginSrc}/flex-hooks/events/events.ts`,
-    substitutions: [
-      {
-        find: "// add-feature-script: pluginsLoaded imports",
-        replaceWith: `// add-feature-script: pluginsLoaded imports\nimport FEATURE_CLASS_NAMELoaded from "../../feature-library/FEATURE_NAME/flex-hooks/events/pluginsLoaded";`
-      },
-      {
-        find: "// add-feature-script: add pluginsLoaded handlers above this line",
-        replaceWith: `FEATURE_CLASS_NAMELoaded,\n    // add-feature-script: add pluginsLoaded handlers above this line`
-      }
-    ]
-  },
-  {
-    path: `${pluginSrc}/types/manager/CustomServiceConfiguration.ts`,
-    substitutions: [
-      {
-        find: "// add-feature-script: type imports",
-        replaceWith: `// add-feature-script: type imports\nimport FEATURE_CLASS_NAMEConfig from "../../feature-library/FEATURE_NAME/types/ServiceConfiguration";`
-      },
-      {
-        find: "// add-feature-script: add config definitions above this line",
-        replaceWith: `FEATURE_CONFIG_NAME: FEATURE_CLASS_NAMEConfig;\n  // add-feature-script: add config definitions above this line`
-      }
-    ]
-  }
+const createDirs = [
+  "custom-components",
+  "flex-hooks"
 ];
 
 const onlyValidCharacters = (str) => {
@@ -121,6 +97,9 @@ const createDir = async () => {
   } catch {
     shell.echo("Creating feature");
     shell.mkdir(newFeatureDirectory);
+    createDirs.forEach(newDir => {
+      shell.mkdir(`${newFeatureDirectory}/${newDir}`);
+    });
     shell.cp('-R', `${templateDirectory}/feature-template/.`, `${newFeatureDirectory}/`);
     return true;
   }
@@ -137,27 +116,6 @@ const updateNames = async () => {
       await fs.writeFile(`${newFeatureDirectory}/${file}`, newFileData, 'utf8');
     } catch (error) {
       shell.echo(`Failed to update ${file}: ${error}`);
-      success = false;
-    }
-  }));
-  
-  return success;
-}
-
-// add references to base files
-const updateRefs = async () => {
-  var success = true;
-  
-  await Promise.all(referenceSubstitutions.map(async (reference) => {
-    try {
-      shell.echo(`Adding feature to ${reference.path}`);
-      let fileData = await fs.readFile(reference.path, "utf8");
-      for (const sub of reference.substitutions) {
-        fileData = fileData.replace(sub.find, performSubstitutions(sub.replaceWith));
-      }
-      await fs.writeFile(reference.path, fileData, 'utf8');
-    } catch (error) {
-      shell.echo(`Failed to update ${reference.path}: ${error}`);
       success = false;
     }
   }));
@@ -206,7 +164,7 @@ const addFeature = async () => {
   
   setVars();
   
-  if (!(await createDir()) || !(await updateNames()) || !(await updateRefs())) {
+  if (!(await createDir()) || !(await updateNames())) {
     return;
   }
   

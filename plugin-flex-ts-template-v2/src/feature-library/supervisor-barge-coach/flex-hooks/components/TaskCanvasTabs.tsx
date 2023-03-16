@@ -1,9 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
 import SupervisorMonitorPanel from '../../custom-components/SupervisorMonitorPanel';
 import { SyncDoc } from '../../utils/sync/Sync';
-import { isSupervisorMonitorPanelEnabled } from '../..';
+import { isSupervisorMonitorPanelEnabled } from '../../config';
+import { FlexComponent } from "../../../../types/feature-loader";
 
-export function addSupervisorMonitorPanel(flex: typeof Flex, manager: Flex.Manager) {
+export const componentName = FlexComponent.TaskCanvasTabs;
+export const componentHook = function addSupervisorMonitorPanel(flex: typeof Flex, manager: Flex.Manager) {
 
   if(!isSupervisorMonitorPanelEnabled()) return;
 

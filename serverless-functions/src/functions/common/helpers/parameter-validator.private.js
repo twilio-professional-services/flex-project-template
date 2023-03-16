@@ -15,12 +15,12 @@ exports.validate = function(callingFunctionPath, parameterObject, requiredKeysAr
   requiredKeysArray.forEach(data => {
     if (module.exports.isString(data)) {
       // Support "lazy" requiredKeysArray of just ['propertyName']
-      if (parameterObject[data] === undefined || parameterObject[data] === null) {
+      if (parameterObject[data] === undefined || parameterObject[data] === null || parameterObject[data].length < 1) {
         errorMessage += `(${callingFunctionPath}) Missing ${data}`;
       }
     } else if (module.exports.isObject(data) && data.key && data.purpose) {
       // Support "useful" requiredKeysArray of [{ key: 'propertyName', purpose: 'I need it' }]
-      if (parameterObject[data.key] === undefined || parameterObject[data.key] === null) {
+      if (parameterObject[data.key] === undefined || parameterObject[data.key] === null || parameterObject[data.key].length < 1) {
         errorMessage += `(${callingFunctionPath}) Missing ${data.key}: ${data.purpose}`;
       }
     } else {
