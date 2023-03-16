@@ -13,7 +13,7 @@ export const eventHook = (flex: typeof Flex, manager: Flex.Manager, task: Flex.I
   console.log(`activity-handler: handle ${eventName} for ${task.sid}`);
 
   if (
-    FlexHelper.hasLiveCallTask ||
+    FlexHelper.hasActiveTask ||
     FlexHelper.hasPendingTask ||
     WorkerActivity.activityName === SystemActivityNames.wrapup
   ) {

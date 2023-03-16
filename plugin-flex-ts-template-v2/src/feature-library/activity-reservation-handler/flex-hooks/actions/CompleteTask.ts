@@ -1,4 +1,5 @@
 import * as Flex from "@twilio/flex-ui";
+import FlexHelper from "../../helpers/flexHelper";
 import WorkerState from "../../helpers/workerActivityHelper";
 import { getPendingActivity } from "../../helpers/pendingActivity";
 import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
@@ -10,6 +11,10 @@ export const actionHook = function beforeCompleteWorkerTask(
   manager: Flex.Manager
 ) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, async () => {
+    if (FlexHelper.activeTaskCount > 1) {
+      return;
+    }
+
     const pendingActivity = getPendingActivity();
 
     if (pendingActivity) {
