@@ -9,7 +9,6 @@ const requiredParameters = [
     key: "participantSid",
     purpose: "participant sid to target for conference changes",
   },
-  { key: "agentSid", purpose: "sid of target worker" },
   {
     key: "muted",
     purpose:
