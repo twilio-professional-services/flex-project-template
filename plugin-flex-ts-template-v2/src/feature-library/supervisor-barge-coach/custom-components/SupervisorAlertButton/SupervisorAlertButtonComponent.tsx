@@ -21,8 +21,6 @@ export const SupervisorAlertButton = ({task}: SupervisorAlertButton) => {
   } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
 
   const agentAssistanceAlertToggle = () => {
-    //FIXME: Remove Later
-    console.warn('toggle fired');
     if (enableAgentAssistanceAlerts) {
       dispatch(Actions.setBargeCoachStatus({ 
         enableAgentAssistanceAlerts: false
