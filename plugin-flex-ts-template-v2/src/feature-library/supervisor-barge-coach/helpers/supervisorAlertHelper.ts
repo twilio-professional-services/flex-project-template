@@ -1,4 +1,5 @@
-import { AppState, reduxNamespace } from '../../../flex-hooks/states'
+import { reduxNamespace } from '../../../utils/state';
+import { AppState } from '../../../types/manager';
 import * as Flex from "@twilio/flex-ui";
 import { Actions } from "../flex-hooks/states/SupervisorBargeCoach"
 import { registerNotificaiton, showNotificaiton, registeredNotifications } from '../flex-hooks/notifications/BargeCoachAssist'
@@ -10,7 +11,7 @@ export const alertSupervisorsCheck = () => {
   const {
     agentAssistanceArray
   } = state[reduxNamespace].supervisorBargeCoach;
-  let arrayIndexCheck = agentAssistanceArray.findIndex((agent) => agent.agentFN != "");
+  let arrayIndexCheck = agentAssistanceArray.findIndex((agent: any) => agent.agentFN != "");
   if (arrayIndexCheck > -1) {
     let agentFN = `${agentAssistanceArray[arrayIndexCheck].agentFN}`;
     // Registering the notification with the ID being the Agent's full name and alert string as content

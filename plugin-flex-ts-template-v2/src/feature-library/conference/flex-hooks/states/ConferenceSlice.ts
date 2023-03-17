@@ -26,4 +26,4 @@ const conferenceSlice = createSlice({
 })
 
 export const { addConnectingParticipant, removeConnectingParticipant } = conferenceSlice.actions
-export default conferenceSlice.reducer
+export const reducerHook = () => ({ conference: conferenceSlice.reducer });

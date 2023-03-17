@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { TaskHelper, useFlexSelector, ITask, IconButton } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
+import { reduxNamespace } from '../../../../utils/state';
+import { AppState } from '../../../../types/manager';
 import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
-import { Flex, Stack, Tooltip } from "@twilio-paste/core";
+import { Flex, Tooltip } from "@twilio-paste/core";
 
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync'

@@ -1,23 +1,9 @@
-import { getFeatureFlags } from '../../utils/configuration';
+import { FeatureDefinition } from "../../types/feature-loader";
+import { isFeatureEnabled } from './config';
+// @ts-ignore
+import hooks from "./flex-hooks/**/*.*";
 
-const { enabled = false, agent_coaching_panel = false, supervisor_monitor_panel = false, agent_assistance = false, supervisor_alert_toggle = false } = getFeatureFlags()?.features?.supervisor_barge_coach || {};
-
-export const isFeatureEnabled = () => {
-  return enabled;
-};
-
-export const isAgentCoachingPanelEnabled = () => {
-  return enabled && agent_coaching_panel;
-};
-
-export const isSupervisorMonitorPanelEnabled = () => {
-  return enabled && supervisor_monitor_panel;
-};
-
-export const isAgentAssistanceEnabled = () => {
-  return enabled && agent_assistance;
-};
-
-export const isSupervisorAlertToggleEnabled = () => {
-  return enabled && supervisor_alert_toggle;
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: "supervisor-barge-coach", hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

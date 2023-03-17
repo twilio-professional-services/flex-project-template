@@ -1,11 +1,12 @@
 import * as Flex from '@twilio/flex-ui';
 import { supervisorBrowserRefresh } from '../../helpers/browserRefreshHelper';
-import { isFeatureEnabled, isAgentCoachingPanelEnabled } from '../..';
+import { isFeatureEnabled, isAgentCoachingPanelEnabled } from '../../config';
 import SupervisorBargeCoachButton from '../../custom-components/BargeCoachButtons';
 import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateModeButton';
+import { FlexComponent } from "../../../../types/feature-loader";
 
-
-export function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.Manager) {
+export const componentName = FlexComponent.TaskCanvasTabs;
+export const componentHook = function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.Manager) {
 
   if(!isFeatureEnabled()) return;
 

@@ -1,8 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
 import AgentAssistanceTeamsIcon from "../../custom-components/AgentAssistanceTeamsIcon"
-import { isAgentAssistanceEnabled } from '../..';
+import { isAgentAssistanceEnabled } from '../../config';
+import { FlexComponent } from "../../../../types/feature-loader";
 
-export function addAgentAssistanceTeamsIcon (flex: typeof Flex, manager: Flex.Manager) {
+export const componentName = FlexComponent.CallCanvas;
+export const componentHook = function addAgentAssistanceTeamsIcon(flex: typeof Flex, manager: Flex.Manager) {
 
   if(!isAgentAssistanceEnabled()) return;
     flex.WorkersDataTable.Content.add(

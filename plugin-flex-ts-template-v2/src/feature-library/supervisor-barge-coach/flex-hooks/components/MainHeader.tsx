@@ -1,8 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
 import SupervisorAlertButton from "../../custom-components/SupervisorAlertButton"
-import { isSupervisorAlertToggleEnabled } from '../..';
+import { isSupervisorAlertToggleEnabled } from '../../config';
+import { FlexComponent } from "../../../../types/feature-loader";
 
-export function addSupervisorAlert (flex: typeof Flex, manager: Flex.Manager) {
+export const componentName = FlexComponent.TaskCanvasTabs;
+export const componentHook = function addSupervisorAlert(flex: typeof Flex, manager: Flex.Manager) {
 
   if(!isSupervisorAlertToggleEnabled()) return;
   // Pull back the user roles disable this component if it exists

@@ -5,8 +5,9 @@ import { TaskAttributes } from 'types/task-router/Task';
 import { Button, Box, Heading, Text, Flex as Flex } from "@twilio-paste/core";
 import { InformationIcon } from "@twilio-paste/icons/esm/InformationIcon";
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
-import { Actions } from "../../flex-hooks/states/CallbackAndVoicemail"
+import { AppState } from '../../../../types/manager';
+import { reduxNamespace } from '../../../../utils/state';
+import { Actions, CallbackAndVoicemailState } from "../../flex-hooks/states/CallbackAndVoicemail"
 
 
 type CallbackAndVoicemailProps = {
@@ -21,7 +22,7 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
   const {
     isCompletingCallbackAction,
     isRequeueingCallbackAction
-  } = useSelector((state: AppState) => state[reduxNamespace].callbackAndVoicemail);
+  } = useSelector((state: AppState) => state[reduxNamespace].callbackAndVoicemail as CallbackAndVoicemailState);
 
   const workerActivitySid = useFlexSelector(state => state.flex.worker?.activity?.sid);
   const workerOffline = (workerActivitySid: string) => {return workerActivitySid === Manager.getInstance().serviceConfiguration.taskrouter_offline_activity_sid}

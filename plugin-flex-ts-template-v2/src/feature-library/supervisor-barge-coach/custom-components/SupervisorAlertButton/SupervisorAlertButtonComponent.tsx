@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
 import { ITask, IconButton } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
+import { reduxNamespace } from '../../../../utils/state';
+import { AppState } from '../../../../types/manager';
 import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
 import { Flex, Tooltip } from "@twilio-paste/core";
-import { NotificationIcon } from "@twilio-paste/icons/esm/NotificationIcon";
-import {Button} from '@twilio-paste/core/button';
 import { updateTaskAndTriggerAlerts, syncUpdates } from "../../helpers/supervisorAlertHelper"
 
 type SupervisorAlertButton = {

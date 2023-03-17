@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { TaskHelper, useFlexSelector, ITask, IconButton } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
-import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
+import { AppState } from '../../../../types/manager';
+import { reduxNamespace } from '../../../../utils/state';
+import { Actions, SupervisorBargeCoachState } from "../../flex-hooks/states/SupervisorBargeCoach"
 import { Flex, Stack } from "@twilio-paste/core";
 
 
@@ -20,7 +21,7 @@ export const SupervisorPrivateToggle = ({task}: SupervisorPrivateToggleProps) =>
     barge, 
     coaching, 
     privateMode
-  } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
+  } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState);
 
   const agentWorkerSID = useFlexSelector(state => state?.flex?.supervisor?.stickyWorker?.worker?.sid);
   const myWorkerSID = useFlexSelector(state => state?.flex?.worker?.worker?.sid);

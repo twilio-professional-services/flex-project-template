@@ -1,4 +1,4 @@
-import client from "../../../../flex-hooks/sdk-clients/sync/SyncClient"
+import client from "../../../../utils/sdk-clients/sync/SyncClient"
 
 class SyncDocClass {
 
@@ -70,7 +70,7 @@ class SyncDocClass {
 				supervisorsArray = [...doc.data.supervisors];
 			}
 			// Checking Updated Status we pass during the button click
-			// to push/add the upervisor from the Supervisor Array within the Sync Doc
+			// to push/add the supervisor from the Supervisor Array within the Sync Doc
 			// adding their Full Name and Conference - the Agent will leverage these values
 			if(updateStatus === 'add') {
 				supervisorsArray.push(

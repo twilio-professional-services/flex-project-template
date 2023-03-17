@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import IFrameWrapper from "./IFrameWrapper";
 import { useFlexSelector } from "@twilio/flex-ui";
-import { AppState } from '../../../../flex-hooks/states';
+import AppState from '../../../../types/manager/AppState';
 
 type IFrameCRMComponentProps = {
   baseUrl: string

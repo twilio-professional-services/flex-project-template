@@ -7,23 +7,15 @@ export enum ChatTransferNotification {
   ErrorUpdatingTaskForChatTransfer = 'ErrorUpdatingTaskForChatTransfer'
 };
 
-export default (flex: typeof Flex, manager: Flex.Manager) => {
-  ErrorTransferringChat(flex, manager);
-  warnDuringTransfer(flex, manager);
-}
-
-function ErrorTransferringChat(flex: typeof Flex, manager: Flex.Manager) {
-  flex.Notifications.registerNotification({
+export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+  {
     id: ChatTransferNotification.ErrorTransferringChat,
     content: StringTemplates.FailedToSubmitTransfer,
     type: flex.NotificationType.error,
-  });
-}
-
-function warnDuringTransfer(flex: typeof Flex, manager: Flex.Manager) {
-  flex.Notifications.registerNotification({
+  },
+  {
     id: ChatTransferNotification.ErrorUpdatingTaskForChatTransfer,
     content: StringTemplates.FailedToUpdateTaskAttributes,
     type: flex.NotificationType.warning,
-  });
-}
+  }
+];

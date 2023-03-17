@@ -1,10 +1,12 @@
 import { ITask, Manager, Notifications } from "@twilio/flex-ui";
 import RecordingService from "./RecordingService";
 import { NotificationIds } from "../flex-hooks/notifications/PauseRecording";
-import { AppState, reduxNamespace } from "../../../flex-hooks/states";
+import AppState from "../../../types/manager/AppState";
+import { reduxNamespace } from "../../../utils/state";
 import { pause, resume } from "../flex-hooks/states/PauseRecordingSlice";
-import { isBannerIndicatorEnabled, isIncludeSilenceEnabled } from '..';
-import { isFeatureEnabled as isDualChannelEnabled, getChannelToRecord } from '../../dual-channel-recording';
+import { isBannerIndicatorEnabled, isIncludeSilenceEnabled } from '../config';
+import { isFeatureEnabled as isDualChannelEnabled, getChannelToRecord } from '../../dual-channel-recording/config';
+import { PauseRecordingState } from '../flex-hooks/states/PauseRecordingSlice';
 
 const manager = Manager.getInstance();
 
@@ -40,7 +42,7 @@ const getDualChannelCallSid = (task: ITask): string | null => {
 
 export const pauseRecording = async (task: ITask): Promise<boolean> => {
   const state = manager.store.getState() as AppState;
-  const recordingIndex = state[reduxNamespace].pauseRecording.pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
+  const recordingIndex = (state[reduxNamespace].pauseRecording as PauseRecordingState).pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
   
   if (recordingIndex >= 0) {
     console.error(`Recording already paused for task ${task.sid}`);
@@ -83,7 +85,7 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
 
 export const resumeRecording = async (task: ITask): Promise<boolean> => {
   const state = manager.store.getState() as AppState;
-  const recordingIndex = state[reduxNamespace].pauseRecording.pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
+  const recordingIndex = (state[reduxNamespace].pauseRecording as PauseRecordingState).pausedRecordings.findIndex((pausedRecording) => pausedRecording.reservationSid === task.sid);
   
   if (recordingIndex < 0) {
     console.error(`Unable to find paused recording details for task ${task.sid}`);

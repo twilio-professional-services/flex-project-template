@@ -1,15 +1,16 @@
 import * as Flex from "@twilio/flex-ui";
-import { AppState, reduxNamespace } from "../../../../flex-hooks/states";
-import { isFeatureEnabled } from '../..';
+import AppState from "../../../../types/manager/AppState";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
+import { reduxNamespace } from "../../../../utils/state";
 
-export function applySelectedCallerIdForDialedNumbers(
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.StartOutboundCall;
+export const actionHook = function applySelectedCallerIdForDialedNumbers(
   flex: typeof Flex,
   manager: Flex.Manager
 ) {
-  if (!isFeatureEnabled()) return;
-
   flex.Actions.addListener(
-    "beforeStartOutboundCall",
+    `${actionEvent}${actionName}`,
     async (payload, abortFunction) => {
       const state = manager.store.getState() as AppState;
       const selectedCallerId =

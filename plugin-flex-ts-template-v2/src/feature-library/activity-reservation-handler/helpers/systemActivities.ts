@@ -1,5 +1,8 @@
 import FlexHelper from "./flexHelper";
-import { getSystemActivityNames } from '..';
+import { getFeatureFlags } from '../../../utils/configuration';
+import ActivityReservationHandlerConfig from "../types/ServiceConfiguration";
+
+const { system_activity_names } = getFeatureFlags()?.features?.activity_reservation_handler as ActivityReservationHandlerConfig || {};
 
 const {
   available = "Available",
@@ -7,7 +10,7 @@ const {
   onATaskNoAcd = "On a Task, No ACD",
   wrapup = "Wrap Up",
   wrapupNoAcd = "Wrap Up, No ACD",
-} = getSystemActivityNames() || {};
+} = system_activity_names || {};
 
 const SystemActivityNames = {
   available: available as string,

@@ -1,7 +1,7 @@
 import { ConferenceParticipant, ITask, Manager, TaskHelper } from "@twilio/flex-ui";
 import TaskRouterService from "../../../utils/serverless/TaskRouter/TaskRouterService";
 import { FetchedRecording } from "../../../types/serverless/twilio-api";
-import { getChannelToRecord } from '..';
+import { getChannelToRecord } from '../config';
 
 const manager = Manager.getInstance();
 

@@ -1,4 +1,4 @@
-import { Action } from '../../../../../flex-hooks/states'
+import { Action } from '../../../../../types/manager'
 import { ACTION_SET_BARGE_COACH_STATUS } from './types';
 
 class Actions {

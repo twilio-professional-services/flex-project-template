@@ -1,6 +1,6 @@
 import * as Flex from "@twilio/flex-ui";
 import { Actions as BargeCoachStatusAction } from "../states/SupervisorBargeCoach";
-import { isAgentAssistanceEnabled, isAgentCoachingPanelEnabled } from '../..';
+import { isAgentAssistanceEnabled, isAgentCoachingPanelEnabled } from '../../config';
 import { SyncDoc } from "../../utils/sync/Sync";
 
 export const cleanStateAndSyncUponAgentHangUp = async (

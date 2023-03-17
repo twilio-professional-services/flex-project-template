@@ -1,11 +1,13 @@
 import * as Flex from '@twilio/flex-ui';
 import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel'
 import AgentAssistanceButton from "../../custom-components/AgentAssistanceButton"
-import { cleanStateAndSyncUponAgentHangUp } from '../actions/reservation';
-import { isAgentAssistanceEnabled, isAgentCoachingPanelEnabled } from '../..';
+import { isAgentAssistanceEnabled, isAgentCoachingPanelEnabled } from '../../config';
 import { agentBrowserRefresh } from '../../helpers/browserRefreshHelper';
+import { FlexComponent } from "../../../../types/feature-loader";
+import { cleanStateAndSyncUponAgentHangUp } from '../actions/reservation';
 
-export function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Flex.Manager) {
+export const componentName = FlexComponent.CallCanvas;
+export const componentHook = function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Flex.Manager) {
 
   if(!isAgentCoachingPanelEnabled()) return;
   // Adding Coaching Status Panel to notify the agent who is Coaching them

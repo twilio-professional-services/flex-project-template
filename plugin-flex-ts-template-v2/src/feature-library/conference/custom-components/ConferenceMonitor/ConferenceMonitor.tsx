@@ -1,7 +1,7 @@
 import { Actions, ConferenceParticipant, ITask, Manager } from '@twilio/flex-ui';
 import * as React from 'react';
 import ConferenceService from '../../utils/ConferenceService';
-import { isAddButtonEnabled, isHoldWorkaroundEnabled } from '../..';
+import { isAddButtonEnabled, isHoldWorkaroundEnabled } from '../../config';
 
 export interface OwnProps {
   task?: ITask

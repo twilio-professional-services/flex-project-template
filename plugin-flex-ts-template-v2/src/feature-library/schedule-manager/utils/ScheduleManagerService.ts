@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import { ScheduleManagerConfig, UpdateConfigResponse, UpdateConfigStatusResponse, PublishConfigRequest, PublishConfigResponse } from '../types/schedule-manager';
 import { EncodedParams } from '../../../types/serverless';
 import ApiService from '../../../utils/serverless/ApiService';
-import { isFeatureEnabled, getServerlessDomain } from '..';
+import { isFeatureEnabled, getServerlessDomain } from '../config';
 
 class ScheduleManagerService extends ApiService {
   readonly scheduleManagerServerlessDomain: string;

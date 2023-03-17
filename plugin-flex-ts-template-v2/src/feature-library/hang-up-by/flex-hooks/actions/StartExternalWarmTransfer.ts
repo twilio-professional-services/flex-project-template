@@ -1,12 +1,12 @@
 import * as Flex from "@twilio/flex-ui";
-import { isFeatureEnabled } from "../..";
 import * as HangUpByHelper from "../../helpers/hangUpBy";
 import { HangUpBy } from '../../enums/hangUpBy';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
-export function reportHangUpByStartExternalWarmTransfer(flex: typeof Flex, manager: Flex.Manager) {
-  if (!isFeatureEnabled()) return;
-  
-  flex.Actions.addListener('beforeStartExternalWarmTransfer', async (payload, abortFunction) => {
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.StartExternalWarmTransfer;
+export const actionHook = function reportHangUpByStartExternalWarmTransfer(flex: typeof Flex, manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     let { task, sid, phoneNumber } = payload;
     
     let newHangUpBy = HangUpBy.ExternalWarmTransfer;

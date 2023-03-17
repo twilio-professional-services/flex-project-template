@@ -28,6 +28,15 @@ class FlexHelper {
   get workerTasks(): Map<string, ITask> {
     return this.flexState.worker.tasks;
   }
+  
+  get activeTaskCount(): number {
+    if (!this.workerTasks) return 0;
+  
+    return [...this.workerTasks.values()].filter(
+      (task) =>
+        TaskHelper.isTaskAccepted(task)
+    ).length;
+  }
 
   get hasLiveCallTask(): boolean {
     if (!this.workerTasks) return false;

@@ -1,4 +1,4 @@
-import { AppState } from '../../../flex-hooks/states'
+import { AppState } from '../../../types/manager';
 import * as Flex from "@twilio/flex-ui";
 import { SyncDoc } from '../utils/sync/Sync';
 import { Actions } from "../flex-hooks/states/SupervisorBargeCoach"

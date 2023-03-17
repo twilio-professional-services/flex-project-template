@@ -1,14 +1,16 @@
 import * as Flex from "@twilio/flex-ui";
-import { Actions as BargeCoachStatusAction } from "../../flex-hooks/states/SupervisorBargeCoach";
-import { isFeatureEnabled, isAgentCoachingPanelEnabled, isSupervisorMonitorPanelEnabled } from '../..';
-import { reduxNamespace } from "../../../../flex-hooks/states";
+import { Actions as BargeCoachStatusAction, SupervisorBargeCoachState } from "../../flex-hooks/states/SupervisorBargeCoach";
+import { isFeatureEnabled, isAgentCoachingPanelEnabled, isSupervisorMonitorPanelEnabled } from '../../config';
+import { reduxNamespace } from "../../../../utils/state";
 import { SyncDoc } from "../../utils/sync/Sync";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
-export const enableBargeCoachButtonsUponMonitor = async (
+export const actionEvent = FlexActionEvent.after;
+export const actionName = FlexAction.MonitorCall;
+export const actionHook = async function enableBargeCoachButtonsUponMonitor(
   flex: typeof Flex,
   manager: any
-) => {
-  if (!isFeatureEnabled()) return;
+) {
   // Listening for supervisor to monitor the call to enable the
   // barge and coach buttons, as well as reset their muted/coaching states
   flex.Actions.addListener("afterMonitorCall", (payload) => {
@@ -25,7 +27,7 @@ export const enableBargeCoachButtonsUponMonitor = async (
     // However we do not want to if privateMode is enabled by the Supervisor
     if (!isSupervisorMonitorPanelEnabled()) return;
     const { privateMode } =
-      manager.store.getState()[reduxNamespace].supervisorBargeCoach;
+      manager.store.getState()[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState;
     if (privateMode) return;
 
     const myWorkerSID = manager.store.getState().flex?.worker?.worker?.sid;

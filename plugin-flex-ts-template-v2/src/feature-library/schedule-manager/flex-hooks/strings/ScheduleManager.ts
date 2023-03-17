@@ -104,7 +104,7 @@ export enum StringTemplates {
   END_DATE = 'SchMgrEndDate',
 }
 
-export default {
+export const stringHook = () => ({
   [StringTemplates.SCHEDULE_MANAGER_TITLE]: 'Schedule Manager',
   [StringTemplates.PUBLISH_ABORTED]: 'The schedule publish was aborted. Your changes may not have been saved.',
   [StringTemplates.PUBLISH_INFLIGHT]: 'Another schedule publish is in progress. Publishing now will overwrite other changes.',
@@ -208,4 +208,4 @@ export default {
   [StringTemplates.RESTRICT_DATE_RANGE]: 'Restrict date range',
   [StringTemplates.START_DATE]: 'Start date',
   [StringTemplates.END_DATE]: 'End date',
-};
+});
