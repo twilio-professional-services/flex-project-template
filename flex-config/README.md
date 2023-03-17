@@ -31,3 +31,31 @@ cp ui_attributes.example.json ui_attributes.local.json
 ## To use with release pipeline
 
 follow the instructions for setting up the release pipeline [here](/README.md#setup-a-project-with-release-pipeline);
+
+
+# Configuring skills
+
+The `taskrouter_skills.json` file defines skills that should be automatically deployed. The skills in the file will be merged with any skills existing in the environment. By default this is empty. Here is an example of how you can populate this file:
+
+```json
+[
+    {
+        "minimum": null,
+        "multivalue": false,
+        "name": "billing",
+        "maximum": null
+    },
+    {
+      "minimum": null,
+      "multivalue": false,
+      "name": "support",
+      "maximum": null
+    },
+    {
+      "minimum": null,
+      "multivalue": false,
+      "name": "offline_work",
+      "maximum": null
+    }
+]
+```

@@ -16,15 +16,15 @@ To use this feature first some setup needs to take place.
 
 this feature creates a task when transferring which copies the attributes of the existing task and places them into the new task to be transferred. When we transfer we only know the target, a worker sid or a queue sid.
 
-When creating a task we need to pass it to a taskrouter-workflow and the workflow needs to route it. In the case of a worker sid, this is a single rule as we can use the "known agent routing" option and pass in the variable. In the case of a queue, this is a little more cumbersome as we need to create a rule in the workflow for each queue.
+When creating a task we need to pass it to a TaskRouter workflow and the workflow needs to route it. In the case of a worker sid, this is a single rule as we can use the "known agent routing" option and pass in the variable. In the case of a queue, this is a little more cumbersome as we need to create a rule in the workflow for each queue.
 
-So we need to setup a workflow, similar to this one [here](example-taskrouter-workflow.json) where the first rule matches any worker selected then we have a rule for each queue in the system.
+So we need to setup a workflow, similar to this one [here](example-taskrouter-workflow.json) where the first rule matches any worker selected then we have a rule for each queue in the system. It is recommended to name this "Chat Transfer".
 
 With the workflow setup, we need to update the serverless function environment variable
 
 > TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID
 
-with the new workflow sid for the chat transfer.
+with the new workflow sid for the chat transfer. If your workflow name begins with "Chat Transfer", the `npm install` script, `npm run generate-env` script, and the included CI scripts will automatically populate this SID for you.
 
 # how does it work?
 
