@@ -4,6 +4,9 @@ const { prepareFlexFunction } = require(Runtime.getFunctions()[
 const TaskOperations = require(Runtime.getFunctions()[
   "common/twilio-wrappers/taskrouter"
 ].path);
+const CallbackOperations = require(Runtime.getFunctions()[
+  "features/callback-and-voicemail/common/callback-operations"
+].path);
 
 const requiredParameters = [
   { key: "numberToCall", purpose: "the number of the customer to call" },
@@ -36,46 +39,24 @@ exports.handler = prepareFlexFunction(
         taskChannel: overriddenTaskChannel,
       } = event;
 
-      // use assigned values or use defaults
-      const workflowSid =
-        overriddenWorkflowSid || process.env.TWILIO_FLEX_CALLBACK_WORKFLOW_SID;
-      const timeout = overriddenTimeout || 86400;
-      const priority = overriddenPriority || 0;
-      const attempts = retryAttempt || 0;
-      const taskChannel = overriddenTaskChannel || "voice";
-
-      // setup required task attributes for task
-      const attributes = {
-        taskType: recordingSid ? "voicemail" : "callback",
-        name: (recordingSid ? "Voicemail" : "Callback") + ` (${numberToCall})`,
-        flow_execution_sid: flexFlowSid,
-        message: message || null,
-        callBackData: {
-          numberToCall,
-          numberToCallFrom,
-          attempts,
-          mainTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-          utcDateTimeReceived: utcDateTimeReceived || new Date(),
-          recordingSid,
-          recordingUrl,
-          transcriptSid,
-          transcriptText,
-          isDeleted: isDeleted || false,
-        },
-        direction: "inbound",
-        conversations: {
-          conversation_id,
-        },
-      };
-
-      const result = await TaskOperations.createTask({
+      const result = await CallbackOperations.createCallbackTask({
         context,
-        workflowSid,
-        taskChannel,
-        attributes,
-        priority,
-        timeout,
-        attempts: 0,
+        numberToCall,
+        numberToCallFrom,
+        flexFlowSid,
+        overriddenWorkflowSid,
+        overriddenTimeout,
+        overriddenPriority,
+        retryAttempt,
+        conversation_id,
+        message,
+        utcDateTimeReceived,
+        recordingSid: recordingSid,
+        recordingUrl: recordingUrl,
+        transcriptSid: transcriptSid,
+        transcriptText: transcriptText,
+        isDeleted,
+        overriddenTaskChannel,
       });
       response.setStatusCode(result.status);
       response.setBody({ success: result.success, taskSid: result.taskSid });

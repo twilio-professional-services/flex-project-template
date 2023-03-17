@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states/';
+import { AppState, reduxNamespace } from '../../../../flex-hooks/states';
 import { UIAttributes } from '../../../../types/manager/ServiceConfiguration';
 
 export interface EventPayload {

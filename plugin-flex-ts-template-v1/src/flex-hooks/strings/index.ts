@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import ActivitySkillFilter from '../../feature-library/activity-skill-filter/flex-hooks/strings/ActivitySkillFilter'
-import Callback from '../../feature-library/callbacks/flex-hooks/strings/Callback'
+import Callback from '../../feature-library/callback-and-voicemail/flex-hooks/strings/Callback'
 import ChatTransfer from '../../feature-library/chat-transfer/flex-hooks/strings/ChatTransfer'
 import ActivityHandler from '../../feature-library/activity-reservation-handler/flex-hooks/strings/ActivityReservationHandler'
 

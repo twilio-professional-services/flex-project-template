@@ -19,7 +19,6 @@ const requiredParameters = [
 exports.handler = prepareStudioFunction(
   requiredParameters,
   async (context, event, callback, response, handleError) => {
-    console.log("create-callback");
     try {
       const {
         numberToCall,
