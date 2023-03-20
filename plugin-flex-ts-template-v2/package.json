@@ -52,6 +52,10 @@
     "react-test-renderer": "17.0.2",
     "typescript": "^4"
   },
+  "eslintIgnore": [
+    "*.js",
+    "template-files/"
+  ],
   "jest": {
     "clearMocks": true,
     "automock": false,
