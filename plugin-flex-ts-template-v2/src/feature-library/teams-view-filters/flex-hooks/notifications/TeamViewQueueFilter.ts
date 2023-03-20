@@ -1,27 +1,28 @@
 import * as Flex from '@twilio/flex-ui';
+
 import { StringTemplates } from '../strings/TeamViewQueueFilter';
 
 // Export the notification IDs an enum for better maintainability when accessing them elsewhere
 export enum TeamViewQueueFilterNotification {
   ErrorParsingQueueExpression = 'ErrorParsingQueueExpression',
   ErrorParsingQueueExpressionWithOR = 'ErrorParsingQueueExpressionWithOR',
-  ErrorLoadingQueue = 'ErrorLoadingQueue'
-};
+  ErrorLoadingQueue = 'ErrorLoadingQueue',
+}
 
 export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
   {
     id: TeamViewQueueFilterNotification.ErrorParsingQueueExpression,
     type: Flex.NotificationType.warning,
-    content: StringTemplates.ErrorParsingQueueExpression
+    content: StringTemplates.ErrorParsingQueueExpression,
   },
   {
     id: TeamViewQueueFilterNotification.ErrorParsingQueueExpressionWithOR,
     type: Flex.NotificationType.warning,
-    content: StringTemplates.ErrorParsingQueueExpressionWithOR
+    content: StringTemplates.ErrorParsingQueueExpressionWithOR,
   },
   {
     id: TeamViewQueueFilterNotification.ErrorLoadingQueue,
     type: Flex.NotificationType.warning,
-    content: StringTemplates.ErrorQueueNotFound
-  }
+    content: StringTemplates.ErrorQueueNotFound,
+  },
 ];

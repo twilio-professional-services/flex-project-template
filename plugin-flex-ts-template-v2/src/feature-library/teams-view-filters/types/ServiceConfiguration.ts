@@ -8,7 +8,7 @@ export default interface TeamViewFiltersConfig {
     queue_worker_data: boolean;
     team: boolean;
     agent_skills: boolean;
-  }
-  department_options: Array<String>;
-  team_options: Array<String>;
+  };
+  department_options: Array<string>;
+  team_options: Array<string>;
 }

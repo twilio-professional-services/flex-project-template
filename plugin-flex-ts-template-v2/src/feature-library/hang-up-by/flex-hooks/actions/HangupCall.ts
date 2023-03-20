@@ -1,16 +1,17 @@
-import * as Flex from "@twilio/flex-ui";
-import * as HangUpByHelper from "../../helpers/hangUpBy";
+import * as Flex from '@twilio/flex-ui';
+
+import * as HangUpByHelper from '../../helpers/hangUpBy';
 import { HangUpBy } from '../../enums/hangUpBy';
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.HangupCall;
 export const actionHook = function reportHangUpByHangupCall(flex: typeof Flex, manager: Flex.Manager) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     const currentHangUpBy = HangUpByHelper.getHangUpBy()[payload.sid];
-    
+
     const task = Flex.TaskHelper.getTaskByTaskSid(payload.sid);
-    
+
     if (currentHangUpBy == HangUpBy.ExternalWarmTransfer) {
       if (!HangUpByHelper.hasExternalJoined(task)) {
         // No external participant here, so the xfer must've aborted.
@@ -21,10 +22,10 @@ export const actionHook = function reportHangUpByHangupCall(flex: typeof Flex, m
         // We need this because with external transfers, at the time of wrapup, no participants are joined.
         HangUpByHelper.setHangUpBy(payload.sid, HangUpBy.CompletedExternalWarmTransfer);
       }
-      
+
       return;
     }
-    
+
     if (currentHangUpBy == HangUpBy.WarmTransfer) {
       // Do nothing if there is another joined worker. If no other joined worker, the transfer didn't complete
       // Let's say AgentB hung up or didn't answer, but then we hang up--change it to Agent in this case.
@@ -37,7 +38,7 @@ export const actionHook = function reportHangUpByHangupCall(flex: typeof Flex, m
       HangUpByHelper.setHangUpBy(payload.sid, HangUpBy.Consult);
       return;
     }
-    
+
     HangUpByHelper.setHangUpBy(payload.sid, HangUpBy.Agent);
   });
-}
+};

@@ -1,5 +1,5 @@
-import { Action } from '../../../../../types/manager'
-import SupervisorCompleteReservationService from "../../../utils/SupervisorCompleteReservation";
+import { Action } from '../../../../../types/manager';
+import SupervisorCompleteReservationService from '../../../utils/SupervisorCompleteReservation';
 import { UPDATE_RERSERVATION } from './types';
 
 // Provide task to "pending" action as payload
@@ -11,10 +11,10 @@ class Actions {
       type: UPDATE_RERSERVATION,
       payload: {
         promise: SupervisorCompleteReservationService.updateReservation(taskSid, reservationSid, status),
-        data: {taskSid}
-      }
+        data: { taskSid },
+      },
     };
   };
-};
+}
 
 export default Actions;

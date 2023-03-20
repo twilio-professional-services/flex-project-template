@@ -1,4 +1,5 @@
-import { ParticipantsTab } from "./ParticipantsTab";
-import { withTaskContext } from "@twilio/flex-ui";
+import { withTaskContext } from '@twilio/flex-ui';
+
+import { ParticipantsTab } from './ParticipantsTab';
 
 export default withTaskContext(ParticipantsTab);

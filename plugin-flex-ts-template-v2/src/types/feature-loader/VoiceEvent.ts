@@ -1,3 +1,3 @@
 export enum VoiceEvent {
-  incoming = "incoming",
+  incoming = 'incoming',
 }

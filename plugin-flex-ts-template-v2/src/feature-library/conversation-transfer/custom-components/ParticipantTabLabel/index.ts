@@ -1,4 +1,5 @@
-import { ParticipantTabLabelContainer } from "./ParticipantTabLabel";
-import { withTaskContext } from "@twilio/flex-ui";
+import { withTaskContext } from '@twilio/flex-ui';
+
+import { ParticipantTabLabelContainer } from './ParticipantTabLabel';
 
 export const ParticipantTabLabel = () => ParticipantTabLabelContainer();

@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { CustomWorkerAttributes } from "types/task-router/Worker";
+import { createSlice } from '@reduxjs/toolkit';
+import { CustomWorkerAttributes } from 'types/task-router/Worker';
+
 import { FETCH_PHONE_NUMBERS, SET_CALLER_ID, prefix } from './types';
 import initialState from './initialState';
 
@@ -30,7 +31,7 @@ const OutboundCallerIDSelectorSlice = createSlice({
     [`${SET_CALLER_ID}_FULFILLED`]: (state, action) => {
       state.isUpdatingAttributes = false;
       state.updatingAttributesFailed = false;
-      
+
       if (!action.payload) return;
       state.selectedCallerId = (action.payload.attributes as CustomWorkerAttributes).selectedCallerId;
     },

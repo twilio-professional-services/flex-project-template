@@ -3,8 +3,8 @@
   to tracking video room state
 */
 export function updateTaskAttributesForVideo(task: any, status: string) {
-  let attributes = task.attributes;
-  let updatedAttributes = Object.assign(attributes, {
+  const { attributes } = task;
+  const updatedAttributes = Object.assign(attributes, {
     videoRoom: status,
   });
   task.setAttributes(updatedAttributes);

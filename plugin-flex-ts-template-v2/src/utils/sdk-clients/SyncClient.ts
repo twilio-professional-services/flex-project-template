@@ -1,8 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
+
 import SyncClient from './sync/SyncClient';
 
 interface TokenPayload {
-  token: string
+  token: string;
 }
 
 export default (flex: typeof Flex, manager: Flex.Manager) => {

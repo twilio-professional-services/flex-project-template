@@ -1,41 +1,33 @@
-import * as Flex from "@twilio/flex-ui";
-import { ITask } from "@twilio/flex-ui";
-import { ParticipantDetails } from "../../types/ParticipantDetails";
-import {
-  InvitedParticipantDetails,
-  InvitedParticipants,
-} from "../../types/InvitedParticipantDetails";
-import { ConversationState } from "../../../../types/conversations";
+import * as Flex from '@twilio/flex-ui';
+import { ITask } from '@twilio/flex-ui';
+
+import { ParticipantDetails } from '../../types/ParticipantDetails';
+import { InvitedParticipantDetails, InvitedParticipants } from '../../types/InvitedParticipantDetails';
+import { ConversationState } from '../../../../types/conversations';
 
 const manager = Flex.Manager.getInstance();
 
 // check that the members of the conversation match the participant details
 const participantDetailsUpToDateCheck = (
   conversation: ConversationState,
-  participantDetails: ParticipantDetails[]
+  participantDetails: ParticipantDetails[],
 ): boolean => {
   if (!conversation?.participants || !participantDetails) return false;
 
-  const conversationMemberSids = Array.from(
-    conversation?.participants.values()
-  ).map((participant) => participant.source.sid);
-
-  const participantDetailsMemberSids = participantDetails.map(
-    (participant) => participant.conversationMemberSid
+  const conversationMemberSids = Array.from(conversation?.participants.values()).map(
+    (participant) => participant.source.sid,
   );
 
-  const isEqual =
-    conversationMemberSids.length === participantDetailsMemberSids.length &&
-    conversationMemberSids.every((val) => conversationMemberSids.includes(val));
+  const participantDetailsMemberSids = participantDetails.map((participant) => participant.conversationMemberSid);
 
-  return isEqual;
+  return (
+    conversationMemberSids.length === participantDetailsMemberSids.length &&
+    conversationMemberSids.every((val) => conversationMemberSids.includes(val))
+  );
 };
 
 // There can be a delay in the media properties being up to date for participants joining
-const getCBMParticipantsWrapper = async (
-  task: ITask,
-  flexInteractionChannelSid: string
-): Promise<any[]> => {
+const getCBMParticipantsWrapper = async (task: ITask, flexInteractionChannelSid: string): Promise<any[]> => {
   const wait = (ms: number) =>
     new Promise<void>((resolve) => {
       setTimeout(() => resolve(), ms);
@@ -44,7 +36,7 @@ const getCBMParticipantsWrapper = async (
   let retry = 0;
   let retryTimer = 500;
   while (retry < 5) {
-    let participants = await task.getParticipants(flexInteractionChannelSid);
+    const participants = await task.getParticipants(flexInteractionChannelSid);
     let missingMediaProperties = false;
 
     participants.forEach((participant: any) => {
@@ -53,9 +45,9 @@ const getCBMParticipantsWrapper = async (
 
     if (!missingMediaProperties) return participants;
     retry++;
-    console.log("getCBMParticipantsWrapper retry", retry);
+    console.log('getCBMParticipantsWrapper retry', retry);
     wait(retryTimer);
-    retryTimer = retryTimer * 2;
+    retryTimer *= 2;
   }
 
   return [];
@@ -65,7 +57,7 @@ const getCBMParticipantsWrapper = async (
 export const getUpdatedParticipantDetails = async (
   task: Flex.ITask,
   conversation: ConversationState,
-  participantDetails: ParticipantDetails[]
+  participantDetails: ParticipantDetails[],
 ) => {
   const myIdentity = manager.conversationsClient?.user?.identity;
 
@@ -77,39 +69,26 @@ export const getUpdatedParticipantDetails = async (
   // getParticipants makes a request to twilio via sdk so lets limit this to only call when we need to find a new members details
   // note we do have the participants in the redux store but at the time of writing it isn't always up to date
 
-  if (participantDetailsUpToDateCheck(conversation, participantDetails))
-    return participantDetails;
+  if (participantDetailsUpToDateCheck(conversation, participantDetails)) return participantDetails;
 
   const participants: ParticipantDetails[] = [];
 
-  const intertactionParticipants: any[] = await getCBMParticipantsWrapper(
-    task,
-    flexInteractionChannelSid
-  );
+  const intertactionParticipants: any[] = await getCBMParticipantsWrapper(task, flexInteractionChannelSid);
 
-  if (!intertactionParticipants || !conversation?.participants)
-    return participantDetails;
+  if (!intertactionParticipants || !conversation?.participants) return participantDetails;
 
-  const conversationParticipants = Array.from(
-    conversation?.participants.values()
-  );
+  const conversationParticipants = Array.from(conversation?.participants.values());
 
-  console.log(
-    "getParticipantDetails",
-    conversationParticipants,
-    intertactionParticipants
-  );
+  console.log('getParticipantDetails', conversationParticipants, intertactionParticipants);
 
   conversationParticipants.forEach((conversationParticipant) => {
     const intertactionParticipant = intertactionParticipants.find(
-      (participant) =>
-        participant.mediaProperties?.sid == conversationParticipant.source.sid
+      (participant) => participant.mediaProperties?.sid == conversationParticipant.source.sid,
     );
 
     if (intertactionParticipant) {
       const friendlyName =
-        conversationParticipant.friendlyName ||
-        intertactionParticipant.mediaProperties?.messagingBinding.address;
+        conversationParticipant.friendlyName || intertactionParticipant.mediaProperties?.messagingBinding.address;
       const participantType = intertactionParticipant.type;
       const isMe = conversationParticipant.source.identity === myIdentity;
       const interactionParticipantSid = intertactionParticipant.participantSid;
@@ -128,15 +107,12 @@ export const getUpdatedParticipantDetails = async (
   return participants;
 };
 
-export const getUpdatedInvitedParticipantDetails = (
-  conversation: ConversationState
-) => {
-  const { invites = undefined } =
-    (conversation?.source?.attributes as any as InvitedParticipants) || {};
+export const getUpdatedInvitedParticipantDetails = (conversation: ConversationState) => {
+  const { invites = undefined } = (conversation?.source?.attributes as any as InvitedParticipants) || {};
 
   if (!invites) return [];
 
-  let invitedParticipantsDetails: InvitedParticipantDetails[] = [];
+  const invitedParticipantsDetails: InvitedParticipantDetails[] = [];
 
   Object.entries(invites).forEach(([key, value]) => {
     const invitedParticipantDetails = value as InvitedParticipantDetails;

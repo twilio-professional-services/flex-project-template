@@ -1,4 +1,4 @@
-import { ITask, ConversationState } from "@twilio/flex-ui";
+import { ITask, ConversationState } from '@twilio/flex-ui';
 
 export interface TransferOptions {
   attributes?: string;

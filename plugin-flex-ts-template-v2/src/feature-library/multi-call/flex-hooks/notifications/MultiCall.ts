@@ -1,9 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
 import { NotificationType } from '@twilio/flex-ui';
+
 import { StringTemplates } from '../strings/MultiCall';
 
 export enum NotificationIds {
-  MultiCallBroken = 'PSMultiCallBroken'
+  MultiCallBroken = 'PSMultiCallBroken',
 }
 
 export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
@@ -13,5 +14,5 @@ export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
     content: StringTemplates.MultiCallBroken,
     timeout: 0,
     type: NotificationType.error,
-  }
+  },
 ];

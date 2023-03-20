@@ -4,7 +4,7 @@ export const UPDATE_RERSERVATION = `${prefix}/UPDATE_RERSERVATION`;
 
 // State
 export interface SupervisorCompleteReservationState {
-	isProcessingRequest: { 
-    [taskSid: string]: boolean; 
-  }
-};
+  isProcessingRequest: {
+    [taskSid: string]: boolean;
+  };
+}

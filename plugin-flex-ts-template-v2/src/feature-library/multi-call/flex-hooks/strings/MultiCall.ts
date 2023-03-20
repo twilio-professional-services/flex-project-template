@@ -3,6 +3,7 @@ export enum StringTemplates {
   MultiCallBroken = 'PSMultiCallBroken',
 }
 
-export const stringHook = () =>  ({
-  [StringTemplates.MultiCallBroken]: 'The multi-call feature will not work because it has not been configured correctly.',
+export const stringHook = () => ({
+  [StringTemplates.MultiCallBroken]:
+    'The multi-call feature will not work because it has not been configured correctly.',
 });

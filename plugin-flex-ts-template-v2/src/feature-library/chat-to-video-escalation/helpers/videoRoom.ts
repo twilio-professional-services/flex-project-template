@@ -6,9 +6,9 @@
 export function attachLocalTracks(tracks: any, divId: string) {
   tracks.forEach(function (track: any) {
     if (track.track) track = track.track;
-    let trackDom = track.attach();
-    trackDom.style.maxWidth = "100%";
-    trackDom.style["height"] = "200px";
+    const trackDom = track.attach();
+    trackDom.style.maxWidth = '100%';
+    trackDom.style.height = '200px';
     document.getElementById(divId)?.appendChild(trackDom);
   });
 }
@@ -18,9 +18,9 @@ export function attachRemoteTracks(tracks: any, divId: string) {
   tracks.forEach(function (track: any) {
     if (track.track) track = track.track;
     if (!track.attach) return;
-    let trackDom = track.attach();
-    trackDom.style.width = "100%";
-    trackDom.style["max-height"] = "100%";
+    const trackDom = track.attach();
+    trackDom.style.width = '100%';
+    trackDom.style['max-height'] = '100%';
     document.getElementById(divId)?.appendChild(trackDom);
   });
 }

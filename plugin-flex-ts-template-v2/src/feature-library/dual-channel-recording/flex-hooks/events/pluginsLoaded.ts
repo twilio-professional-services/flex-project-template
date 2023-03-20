@@ -1,7 +1,8 @@
-import * as Flex from "@twilio/flex-ui";
-import { NotificationIds } from "../notifications/DualChannelRecording";
+import * as Flex from '@twilio/flex-ui';
+
+import { NotificationIds } from '../notifications/DualChannelRecording';
 import { getChannelToRecord } from '../../config';
-import { FlexEvent } from "../../../../types/feature-loader";
+import { FlexEvent } from '../../../../types/feature-loader';
 
 export const eventName = FlexEvent.pluginsLoaded;
 export const eventHook = () => {
@@ -10,7 +11,7 @@ export const eventHook = () => {
   if (getChannelToRecord() != 'worker' && getChannelToRecord() != 'customer') {
     Flex.Notifications.showNotification(NotificationIds.DualChannelBroken);
     console.error(
-      'ERROR: dual_channel_recording.channel does not have the correct value. Refer to your ui_attributes to fix.'
+      'ERROR: dual_channel_recording.channel does not have the correct value. Refer to your ui_attributes to fix.',
     );
   }
 };

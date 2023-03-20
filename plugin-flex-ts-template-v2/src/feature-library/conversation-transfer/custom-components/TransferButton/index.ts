@@ -1,3 +1,5 @@
-import TransferButton from "./TransferButton";
-import { withTaskContext } from "@twilio/flex-ui";
+import { withTaskContext } from '@twilio/flex-ui';
+
+import TransferButton from './TransferButton';
+
 export default withTaskContext(TransferButton);

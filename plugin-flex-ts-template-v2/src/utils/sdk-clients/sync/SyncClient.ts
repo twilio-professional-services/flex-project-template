@@ -8,7 +8,7 @@ export default client;
 
 export const getAllSyncMapItems = (syncMap: SyncMap) => {
   return syncMap.getItems().then(_pageHandler);
-}
+};
 
 async function _pageHandler(paginator: Paginator<SyncMapItem>): Promise<SyncMapItem[]> {
   if (paginator.hasNextPage) {

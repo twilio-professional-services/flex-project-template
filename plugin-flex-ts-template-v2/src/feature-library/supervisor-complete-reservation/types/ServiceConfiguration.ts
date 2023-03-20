@@ -1,3 +1,3 @@
 export default interface SupervisorCompleteReservation {
-  enabled: boolean,
+  enabled: boolean;
 }

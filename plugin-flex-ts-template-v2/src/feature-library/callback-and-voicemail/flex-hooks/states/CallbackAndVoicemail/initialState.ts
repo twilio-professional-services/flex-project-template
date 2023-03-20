@@ -2,7 +2,7 @@ import { CallbackAndVoicemailState } from './types';
 
 const initialState: CallbackAndVoicemailState = {
   isCompletingCallbackAction: {},
-  isRequeueingCallbackAction: {}
+  isRequeueingCallbackAction: {},
 };
 
 export default initialState;

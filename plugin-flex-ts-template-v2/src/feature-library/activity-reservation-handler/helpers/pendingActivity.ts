@@ -30,7 +30,7 @@ export const storePendingActivityChange = (activity: any, isUserSelected?: boole
   // a circular structure error in JSON.stringify()
   const pendingActivityChange: PendingActivity = {
     available: activity.available,
-    isUserSelected: !!isUserSelected,
+    isUserSelected: Boolean(isUserSelected),
     name: activity.name,
     sid: activity.sid,
   };

@@ -1,8 +1,8 @@
-import { FilterDefinition } from "@twilio/flex-ui";
+import { FilterDefinition } from '@twilio/flex-ui';
 
 import SelectFilter from '../custom-components/SelectFilter';
 import SelectFilterLabel from '../custom-components/SelectFilterLabel';
-import { getTeamOptions } from '../config'
+import { getTeamOptions } from '../config';
 
 /* 
   This filter is based on the model of the worker attibutes adopted from
@@ -26,17 +26,20 @@ import { getTeamOptions } from '../config'
 
   */
 
-export const teamFilter = () => ({
-  id: 'data.attributes.team_name',
-  title: 'Team',
-  fieldName: 'teams',
-  options: getTeamOptions().sort().map(value => ({
-    value,
-    label: value
-  })),
-  customStructure: {
-    field: <SelectFilter IsMulti={true} />,
-    label: <SelectFilterLabel />
-  },
-  condition: 'IN'
-} as FilterDefinition);
+export const teamFilter = () =>
+  ({
+    id: 'data.attributes.team_name',
+    title: 'Team',
+    fieldName: 'teams',
+    options: getTeamOptions()
+      .sort()
+      .map((value) => ({
+        value,
+        label: value,
+      })),
+    customStructure: {
+      field: <SelectFilter IsMulti={true} />,
+      label: <SelectFilterLabel />,
+    },
+    condition: 'IN',
+  } as FilterDefinition);

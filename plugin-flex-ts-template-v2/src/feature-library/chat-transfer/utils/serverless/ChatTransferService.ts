@@ -153,7 +153,7 @@ class ChatTransferService extends ApiService {
   // as well as ensuring the channelSid is removed from task attributes.
   // If a task is completed with a channelSid attributes - the flex flow
   // janitor (if it is enabled) will close the chat channel.
-  async completeTransferredTask(task: Flex.ITask): Promise<Boolean> {
+  async completeTransferredTask(task: Flex.ITask): Promise<boolean> {
     try {
       const {
         attributes: {

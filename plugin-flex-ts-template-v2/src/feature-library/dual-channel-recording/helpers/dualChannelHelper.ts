@@ -1,6 +1,7 @@
-import { ConferenceParticipant, ITask, Manager, TaskHelper } from "@twilio/flex-ui";
-import TaskRouterService from "../../../utils/serverless/TaskRouter/TaskRouterService";
-import { FetchedRecording } from "../../../types/serverless/twilio-api";
+import { ConferenceParticipant, ITask, Manager, TaskHelper } from '@twilio/flex-ui';
+
+import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
+import { FetchedRecording } from '../../../types/serverless/twilio-api';
 import { getChannelToRecord } from '../config';
 
 const manager = Manager.getInstance();
@@ -65,7 +66,7 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
             ...reservationAttributes,
             [reservationSid]: {
               media: [mediaObj],
-            }
+            },
           },
         };
         break;
@@ -87,9 +88,8 @@ const isTaskActive = (task: ITask) => {
   const { sid: reservationSid, taskStatus } = task;
   if (taskStatus === 'canceled') {
     return false;
-  } else {
-    return manager.workerClient?.reservations.has(reservationSid);
   }
+  return manager.workerClient?.reservations.has(reservationSid);
 };
 
 export const waitForConferenceParticipants = (task: ITask): Promise<ConferenceParticipant[]> =>
@@ -116,12 +116,8 @@ export const waitForConferenceParticipants = (task: ITask): Promise<ConferencePa
       if (Array.isArray(participants) && participants.length < 2) {
         return;
       }
-      const worker = participants.find(
-        (p) => p.participantType === 'worker' && p.isCurrentWorker
-      );
-      const customer = participants.find(
-        (p) => p.participantType === 'customer'
-      );
+      const worker = participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker);
+      const customer = participants.find((p) => p.participantType === 'customer');
 
       if (!worker || !customer) {
         return;
@@ -138,12 +134,8 @@ export const waitForConferenceParticipants = (task: ITask): Promise<ConferencePa
 
     setTimeout(() => {
       if (waitForConferenceInterval) {
-        console.debug(
-          `Customer participant didn't show up within ${
-            maxWaitTimeMs / 1000
-          } seconds`
-        );
-        
+        console.debug(`Customer participant didn't show up within ${maxWaitTimeMs / 1000} seconds`);
+
         if (waitForConferenceInterval) {
           clearInterval(waitForConferenceInterval);
           waitForConferenceInterval = null;
@@ -153,55 +145,50 @@ export const waitForConferenceParticipants = (task: ITask): Promise<ConferencePa
       }
     }, maxWaitTimeMs);
   });
-  
-  export const waitForActiveCall = (task: ITask): Promise<string> =>
-    new Promise((resolve) => {
-      const waitTimeMs = 100;
-      // For internal calls, there is no conference, so we only have the active call to work with.
-      // Wait here for the call to establish.
-      const maxWaitTimeMs = 60000;
-      let waitForCallInterval: null | NodeJS.Timeout = setInterval(async () => {
-  
-        if (!isTaskActive(task)) {
-          console.debug('Call canceled, clearing waitForCallInterval');
-          if (waitForCallInterval) {
-            clearInterval(waitForCallInterval);
-            waitForCallInterval = null;
-          }
-          return;
-        }
-        
-        const activeCall = manager.store.getState().flex.phone.activeCall;
-        
-        if (!activeCall) {
-          return;
-        }
-  
+
+export const waitForActiveCall = (task: ITask): Promise<string> =>
+  new Promise((resolve) => {
+    const waitTimeMs = 100;
+    // For internal calls, there is no conference, so we only have the active call to work with.
+    // Wait here for the call to establish.
+    const maxWaitTimeMs = 60000;
+    let waitForCallInterval: null | NodeJS.Timeout = setInterval(async () => {
+      if (!isTaskActive(task)) {
+        console.debug('Call canceled, clearing waitForCallInterval');
         if (waitForCallInterval) {
           clearInterval(waitForCallInterval);
           waitForCallInterval = null;
         }
-  
-        resolve(activeCall.parameters.CallSid);
-      }, waitTimeMs);
-  
-      setTimeout(() => {
+        return;
+      }
+
+      const { activeCall } = manager.store.getState().flex.phone;
+
+      if (!activeCall) {
+        return;
+      }
+
+      if (waitForCallInterval) {
+        clearInterval(waitForCallInterval);
+        waitForCallInterval = null;
+      }
+
+      resolve(activeCall.parameters.CallSid);
+    }, waitTimeMs);
+
+    setTimeout(() => {
+      if (waitForCallInterval) {
+        console.debug(`Call didn't activate within ${maxWaitTimeMs / 1000} seconds`);
+
         if (waitForCallInterval) {
-          console.debug(
-            `Call didn't activate within ${
-              maxWaitTimeMs / 1000
-            } seconds`
-          );
-          
-          if (waitForCallInterval) {
-            clearInterval(waitForCallInterval);
-            waitForCallInterval = null;
-          }
-  
-          resolve('');
+          clearInterval(waitForCallInterval);
+          waitForCallInterval = null;
         }
-      }, maxWaitTimeMs);
-    });
+
+        resolve('');
+      }
+    }, maxWaitTimeMs);
+  });
 
 export const addMissingCallDataIfNeeded = async (task: ITask) => {
   const { attributes } = task;

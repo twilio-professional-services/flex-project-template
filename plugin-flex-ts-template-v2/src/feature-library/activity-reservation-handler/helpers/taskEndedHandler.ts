@@ -1,12 +1,10 @@
-import * as Flex from "@twilio/flex-ui";
-import FlexHelper from "./flexHelper";
-import WorkerActivity from "./workerActivityHelper";
-import {
-  systemActivities,
-  availableActivity,
-} from "./systemActivities";
-import { getPendingActivity } from "./pendingActivity";
-import { FlexEvent } from "../../../types/feature-loader";
+import * as Flex from '@twilio/flex-ui';
+
+import FlexHelper from './flexHelper';
+import WorkerActivity from './workerActivityHelper';
+import { systemActivities, availableActivity } from './systemActivities';
+import { getPendingActivity } from './pendingActivity';
+import { FlexEvent } from '../../../types/feature-loader';
 import { isFeatureEnabled } from '../config';
 
 const taskEndedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
@@ -26,21 +24,16 @@ const taskEndedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
   }
 
   if (pendingActivity) {
-    console.debug(
-      "handleReservationEnded, Setting worker to pending activity",
-      pendingActivity.name
-    );
+    console.debug('handleReservationEnded, Setting worker to pending activity', pendingActivity.name);
     WorkerActivity.setWorkerActivity(pendingActivity.sid, true);
   } else if (
-    systemActivities
-      .map((a) => a.toLowerCase())
-      .includes((WorkerActivity.activityName as string).toLowerCase())
+    systemActivities.map((a) => a.toLowerCase()).includes((WorkerActivity.activityName as string).toLowerCase())
   ) {
     console.debug(
-      "handleReservationEnded, No pending activity and current activity " +
+      'handleReservationEnded, No pending activity and current activity ' +
         `"${WorkerActivity.activityName}" is a system activity. Setting worker to ` +
-        "default activity:",
-      availableActivity?.name
+        'default activity:',
+      availableActivity?.name,
     );
     WorkerActivity.setWorkerActivity(availableActivity?.sid);
   }

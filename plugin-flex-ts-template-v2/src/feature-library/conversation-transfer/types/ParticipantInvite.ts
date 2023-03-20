@@ -1,4 +1,4 @@
-export type ParticipantInviteType = "Worker" | "Queue";
+export type ParticipantInviteType = 'Worker' | 'Queue';
 
 export interface ParticipantInvite {
   type: ParticipantInviteType;

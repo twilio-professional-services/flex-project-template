@@ -8,11 +8,11 @@ export interface TaskQualificationConfig {
   auto_select: boolean;
   auto_accept: boolean;
   auto_wrapup: boolean;
-  required_attributes: Array<TaskAttributesQualificationConfig>
-  wrapup_time: number
+  required_attributes: Array<TaskAttributesQualificationConfig>;
+  wrapup_time: number;
 }
 
 export default interface AgentAutomationConfig {
   enabled: boolean;
-  configuration : Array<TaskQualificationConfig>
+  configuration: Array<TaskQualificationConfig>;
 }

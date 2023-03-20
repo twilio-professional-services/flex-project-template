@@ -1,8 +1,8 @@
-import * as Flex from "@twilio/flex-ui";
+import * as Flex from '@twilio/flex-ui';
 
-var teamsFilterHooks = [] as any[];
+const teamsFilterHooks = [] as any[];
 
-var customFilters = [] as Array<Flex.FilterDefinition>;
+let customFilters = [] as Array<Flex.FilterDefinition>;
 
 export const init = async (flex: typeof Flex, manager: Flex.Manager) => {
   for (const hook of teamsFilterHooks) {
@@ -11,14 +11,11 @@ export const init = async (flex: typeof Flex, manager: Flex.Manager) => {
     const hookFilters = await hook.teamsFilterHook(flex, manager);
     customFilters = customFilters.concat(hookFilters);
   }
-  
-  flex.TeamsView.defaultProps.filters = [
-    flex.TeamsView.activitiesFilter,
-    ...customFilters
-  ];
-}
+
+  flex.TeamsView.defaultProps.filters = [flex.TeamsView.activitiesFilter, ...customFilters];
+};
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
   console.info(`Feature ${feature} registered teams filter hook: %c${hook.teamsFilterHook.name}`, 'font-weight:bold');
   teamsFilterHooks.push(hook);
-}
+};

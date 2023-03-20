@@ -1,6 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
+
 import ChatTransferService from '../../utils/serverless/ChatTransferService';
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export interface TransferOptions {
   attributes: string;
@@ -28,4 +29,4 @@ export const actionHook = function interceptTransferOverrideForChatTasks(flex: t
       await ChatTransferService.executeChatTransfer(payload.task, payload.targetSid, payload.options);
     }
   });
-}
+};

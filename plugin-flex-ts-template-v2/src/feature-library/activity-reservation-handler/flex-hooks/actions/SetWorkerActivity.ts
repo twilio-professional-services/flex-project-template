@@ -1,9 +1,10 @@
-import * as Flex from "@twilio/flex-ui";
-import FlexState from "../../helpers/flexHelper";
-import { delayActivityChange } from "../../config";
-import { NotificationIds } from "../notifications/ActivityReservationHandler";
-import { systemActivities } from "../../helpers/systemActivities";
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
+import * as Flex from '@twilio/flex-ui';
+
+import FlexState from '../../helpers/flexHelper';
+import { delayActivityChange } from '../../config';
+import { NotificationIds } from '../notifications/ActivityReservationHandler';
+import { systemActivities } from '../../helpers/systemActivities';
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.SetActivity;
@@ -17,22 +18,15 @@ export const actionHook = function beforeSetActivity(flex: typeof Flex, manager:
       return;
     }
 
-    if (
-      systemActivities
-        .map((a) => a.toLowerCase())
-        .includes(activityName.toLowerCase())
-    ) {
+    if (systemActivities.map((a) => a.toLowerCase()).includes(activityName.toLowerCase())) {
       abortFunction();
-      flex.Notifications.showNotification(
-        NotificationIds.RestrictedActivities,
-        {
-          activityName,
-        }
-      );
+      flex.Notifications.showNotification(NotificationIds.RestrictedActivities, {
+        activityName,
+      });
     } else if (FlexState.hasActiveCallTask || FlexState.hasWrappingTask) {
       abortFunction();
       const targetActivity = FlexState.getActivityBySid(activitySid);
       delayActivityChange(targetActivity);
     }
   });
-}
+};

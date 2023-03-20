@@ -1,4 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
+
 import { FlexComponent } from '../../../../types/feature-loader/FlexComponent';
 import OutboundCallerIDSelector from '../../custom-components/OutboundCallerIDSelector';
 
@@ -7,4 +8,4 @@ export const componentHook = function addOutboundCallerIdSelectorToMainHeader(fl
   flex.OutboundDialerPanel.Content.add(<OutboundCallerIDSelector key="outbound-callerid-selector" />, {
     sortOrder: 1,
   });
-}
+};
