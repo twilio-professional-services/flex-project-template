@@ -2,8 +2,9 @@ import { reduxNamespace } from '../../../utils/state';
 import { AppState } from '../../../types/manager';
 import * as Flex from "@twilio/flex-ui";
 import { Actions } from "../flex-hooks/states/SupervisorBargeCoach"
-import { registerNotificaiton, showNotificaiton, registeredNotifications } from '../flex-hooks/notifications/BargeCoachAssist'
 import { SyncDoc } from '../utils/sync/Sync';
+import { StringTemplates } from '../flex-hooks//strings/BargeCoachAssist';
+import { NotificationIds } from '../flex-hooks/notifications/BargeCoachAssist';
 
 // When this is called, we will do checks to validate any new agents that need assistance
 export const alertSupervisorsCheck = () => {
@@ -11,16 +12,10 @@ export const alertSupervisorsCheck = () => {
   const {
     agentAssistanceArray
   } = state[reduxNamespace].supervisorBargeCoach;
-  let arrayIndexCheck = agentAssistanceArray.findIndex((agent: any) => agent.agentFN != "");
+  const arrayIndexCheck = agentAssistanceArray.findIndex((agent: any) => agent.agentFN != "");
   if (arrayIndexCheck > -1) {
-    let agentFN = `${agentAssistanceArray[arrayIndexCheck].agentFN}`;
-    // Registering the notification with the ID being the Agent's full name and alert string as content
-    registerNotificaiton(agentFN);
-    // Fire off the Notification we just registered
-    showNotificaiton(agentFN);
-    // Delete the alert, the alert will still show in the UI but this gives the ability
-    // if the agent happens to toggle assistance off/on again, that a new alert will pop up
-    registeredNotifications(agentFN);
+    const agentFN = `${agentAssistanceArray[arrayIndexCheck].agentFN}`;
+    Flex.Notifications.showNotification(NotificationIds.AGENT_ASSISTANCE, { agentFN: `${agentFN}` } );
   }
   return;
 }

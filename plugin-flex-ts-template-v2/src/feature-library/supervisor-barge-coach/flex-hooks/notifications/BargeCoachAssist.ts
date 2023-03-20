@@ -1,32 +1,21 @@
 import * as Flex from '@twilio/flex-ui';
-import { NotificationType } from '@twilio/flex-ui';
+import { StringTemplates } from '../strings/BargeCoachAssist';
 
 export enum NotificationIds {
-  ALERT = "is seeking assistance."
+  AGENT_ASSISTANCE = 'AgentAssistanceTriggered'
 }
-
-export const registerNotificaiton = (agentFN: string) => {
-  const alertText = `${agentFN} ${NotificationIds.ALERT}`;
-
-  Flex.Notifications.registerNotification({
-    id: agentFN,
+// Return an array of Flex.Notification
+export const notificationHook = (flex: typeof Flex, manager: Flex.Manager, context: any) => [
+  {
+    id: NotificationIds.AGENT_ASSISTANCE,
     closeButton: true,
-    content: alertText,
-    type: NotificationType.warning,
+    content: StringTemplates.AGENT_ASSISTANCE,
+    type: Flex.NotificationType.warning,
     timeout: 8000,
-    onClick: (event) => navigateToTeamsView()
-  });
-  return;
-}
-export const showNotificaiton = (agentFN: string) => {
-  Flex.Notifications.showNotification(agentFN);
-  return;
-}
-
-export const registeredNotifications = (agentFN: string) => {
-  Flex.Notifications.registeredNotifications.delete(agentFN);
-  return;
-}
+    onClick: () => navigateToTeamsView()
+  },
+];
+//${notificationContext} ${StringTemplates.AGENT_ASSISTANCE}
 
 const navigateToTeamsView = () => {
   Flex.Actions.invokeAction("NavigateToView", {viewName: "teams"});
