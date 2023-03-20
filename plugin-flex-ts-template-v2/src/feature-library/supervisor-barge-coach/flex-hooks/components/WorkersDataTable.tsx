@@ -3,22 +3,24 @@ import AgentAssistanceTeamsIcon from "../../custom-components/AgentAssistanceTea
 import { isAgentAssistanceEnabled } from '../../config';
 import { FlexComponent } from "../../../../types/feature-loader";
 
-export const componentName = FlexComponent.CallCanvas;
+export const componentName = FlexComponent.WorkersDataTable;
 export const componentHook = function addAgentAssistanceTeamsIcon(flex: typeof Flex, manager: Flex.Manager) {
 
   if(!isAgentAssistanceEnabled()) return;
     flex.WorkersDataTable.Content.add(
     <Flex.ColumnDefinition 
       key="agent-hand-custom" 
-      header={""} 
+      header={""}
+      style={{ width: "50px" }}
       content={(items: any) => 
         <AgentAssistanceTeamsIcon 
           key={`agent-assistance-icon-${items.worker.sid}`} 
           worker={items.worker.sid}
         />
       }
-    />
-    , {sortOrder:0}
-  );
+    />, {
+      sortOrder: 0,
+      align: 'start'
+  });
 }
 

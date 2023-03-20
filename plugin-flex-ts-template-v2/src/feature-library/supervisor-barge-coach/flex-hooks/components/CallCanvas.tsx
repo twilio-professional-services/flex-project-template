@@ -4,7 +4,6 @@ import AgentAssistanceButton from "../../custom-components/AgentAssistanceButton
 import { isAgentAssistanceEnabled, isAgentCoachingPanelEnabled } from '../../config';
 import { agentBrowserRefresh } from '../../helpers/browserRefreshHelper';
 import { FlexComponent } from "../../../../types/feature-loader";
-import { cleanStateAndSyncUponAgentHangUp } from '../actions/reservation';
 
 export const componentName = FlexComponent.CallCanvas;
 export const componentHook = function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Flex.Manager) {
@@ -12,9 +11,6 @@ export const componentHook = function addSupervisorCoachingPanelToAgent(flex: ty
   if(!isAgentCoachingPanelEnabled()) return;
   // Adding Coaching Status Panel to notify the agent who is Coaching them
   flex.CallCanvas.Content.add(<CoachingStatusPanel key="coaching-status-panel"> </CoachingStatusPanel>, {sortOrder: -1});
-
-  // Add a Listener to ReservationCreated
-  cleanStateAndSyncUponAgentHangUp(flex, manager);
 
   if(!isAgentAssistanceEnabled()) return;
 

@@ -49,7 +49,9 @@ export const SupervisorAlertButton = ({task}: SupervisorAlertButton) => {
           <IconButton
             icon={ enableAgentAssistanceAlerts ? 'BellBold' : 'Bell' }
             onClick={() => agentAssistanceAlertToggle()}
-            style={{width:'20px',height:'20px'}}
+            size="small"
+            style={
+              {backgroundColor:'transparent'}}
           />
       </Flex>
     </Tooltip>

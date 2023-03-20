@@ -3,7 +3,7 @@ import SupervisorAlertButton from "../../custom-components/SupervisorAlertButton
 import { isSupervisorAlertToggleEnabled } from '../../config';
 import { FlexComponent } from "../../../../types/feature-loader";
 
-export const componentName = FlexComponent.TaskCanvasTabs;
+export const componentName = FlexComponent.MainHeader;
 export const componentHook = function addSupervisorAlert(flex: typeof Flex, manager: Flex.Manager) {
 
   if(!isSupervisorAlertToggleEnabled()) return;
