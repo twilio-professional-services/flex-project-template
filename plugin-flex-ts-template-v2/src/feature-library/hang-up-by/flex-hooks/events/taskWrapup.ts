@@ -6,7 +6,7 @@ import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRoute
 import { FlexEvent } from '../../../../types/feature-loader';
 
 export const eventName = FlexEvent.taskWrapup;
-export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {
+export const eventHook = async (_flex: typeof Flex, _manager: Flex.Manager, task: Flex.ITask) => {
   if (task.attributes && !task.attributes.conference) {
     // no conference? no call! this functionality is call-specific, so return.
     return;
@@ -53,6 +53,8 @@ export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: 
         currentHangUpBy = HangUpBy.Customer;
         HangUpByHelper.setHangUpBy(task.sid, currentHangUpBy);
       }
+      break;
+    default:
       break;
   }
 

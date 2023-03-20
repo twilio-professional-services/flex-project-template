@@ -12,13 +12,29 @@ export interface MessageAttributes {
   notification: boolean;
 }
 
+// for a given chat task, mark the task sid
+// on the associated chat channel attributes as complete
+const notifyChatChannelTaskComplete = async (task: Flex.ITask, manager: Flex.Manager) => {
+  const { channelSid } = task.attributes;
+  const chatChannel = await manager.conversationsClient.getConversationBySid(channelSid);
+  const chatAttributes = chatChannel.attributes as any;
+  const associatedTasks = chatAttributes.associatedTasks || {};
+  associatedTasks[task.taskSid] = 'completed';
+  const newChatAttributes = {
+    ...chatAttributes,
+    associatedTasks,
+  };
+
+  await ProgrammableChatService.updateChannelAttributes(channelSid, newChatAttributes);
+};
+
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.WrapUpTask;
 export const actionHook = async function announceOnChannelWhenLeavingAndRemoveChannelSidAndLeaveChatForChatTransfer(
   flex: typeof Flex,
   manager: Flex.Manager,
 ) {
-  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, _abortFunction) => {
     // ensure reference to task and we are wrapping up a chat task
     const task = payload.task || TaskHelper.getTaskByTaskSid(payload.sid || '');
     if (task.taskChannelUniqueName !== 'chat' || Flex.TaskHelper.isCBMTask(payload.task)) return;
@@ -63,20 +79,4 @@ export const actionHook = async function announceOnChannelWhenLeavingAndRemoveCh
       await TaskService.updateTaskAttributes(task.taskSid, attributesUpdate);
     }
   });
-};
-
-// for a given chat task, mark the task sid
-// on the associated chat channel attributes as complete
-const notifyChatChannelTaskComplete = async (task: Flex.ITask, manager: Flex.Manager) => {
-  const { channelSid } = task.attributes;
-  const chatChannel = await manager.conversationsClient.getConversationBySid(channelSid);
-  const chatAttributes = chatChannel.attributes as any;
-  const associatedTasks = chatAttributes.associatedTasks || {};
-  associatedTasks[task.taskSid] = 'completed';
-  const newChatAttributes = {
-    ...chatAttributes,
-    associatedTasks,
-  };
-
-  await ProgrammableChatService.updateChannelAttributes(channelSid, newChatAttributes);
 };

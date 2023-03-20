@@ -8,7 +8,7 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.SetActivity;
-export const actionHook = function beforeSetActivity(flex: typeof Flex, manager: Flex.Manager) {
+export const actionHook = function beforeSetActivity(flex: typeof Flex, _manager: Flex.Manager) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, (payload, abortFunction) => {
     const { activityName, activitySid, isInvokedByPlugin } = payload;
 

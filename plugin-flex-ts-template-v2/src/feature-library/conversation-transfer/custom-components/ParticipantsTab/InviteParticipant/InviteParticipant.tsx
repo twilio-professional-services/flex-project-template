@@ -11,7 +11,7 @@ import {
   QueueParticipantInvite,
   WorkerParticipantInvite,
 } from '../../../types/ParticipantInvite';
-import { TransferActionPayload, TransferOptions } from '../../../types/ActionPayloads';
+import { TransferActionPayload } from '../../../types/ActionPayloads';
 
 interface InviteParticipantProps {
   task: ITask;

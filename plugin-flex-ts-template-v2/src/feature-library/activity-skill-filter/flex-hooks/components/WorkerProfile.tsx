@@ -5,7 +5,7 @@ import { isFilterTeamsViewEnabled, getRules } from '../../config';
 import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.WorkerProfile;
-export const componentHook = function replaceWorkerProfileInfo(flex: typeof Flex, manager: Flex.Manager) {
+export const componentHook = function replaceWorkerProfileInfo(flex: typeof Flex, _manager: Flex.Manager) {
   if (!isFilterTeamsViewEnabled() || !getRules()) return;
 
   flex.WorkerProfile.Content.remove('info');

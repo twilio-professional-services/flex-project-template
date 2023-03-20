@@ -4,7 +4,7 @@ import VoicemailIcon from '@material-ui/icons/Voicemail';
 
 import { TaskAttributes } from '../../../../types/task-router/Task';
 
-export const channelHook = function createVoicemailChannel(flex: typeof Flex, manager: Flex.Manager) {
+export const channelHook = function createVoicemailChannel(flex: typeof Flex, _manager: Flex.Manager) {
   const channelDefinition = flex.DefaultTaskChannels.createDefaultTaskChannel(
     'voicemail',
     (task) => {

@@ -1,15 +1,9 @@
-import { Actions, Notifications, ConversationState } from '@twilio/flex-ui';
+import { Actions, Notifications } from '@twilio/flex-ui';
 
 import TaskService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 import { removeInvitedParticipant } from '../helpers/inviteTracker';
 import { NotificationIds } from '../flex-hooks/notifications/TransferResult';
 import { CancelChatParticipantInviteActionPayload } from '../types/ActionPayloads';
-
-export const registerCancelChatParticipantInvite = () => {
-  Actions.registerAction('CancelChatParticipantInvite', (payload: any) =>
-    handleCancelChatParticipantInvite(payload as CancelChatParticipantInviteActionPayload),
-  );
-};
 
 const handleCancelChatParticipantInvite = async (payload: CancelChatParticipantInviteActionPayload) => {
   const { conversation, invitesTaskSid } = payload;
@@ -24,4 +18,10 @@ const handleCancelChatParticipantInvite = async (payload: CancelChatParticipantI
     console.error('handleCancelChatParticipantInvite API request failed', error);
     Notifications.showNotification(NotificationIds.ChatCancelParticipantInviteFailed);
   }
+};
+
+export const registerCancelChatParticipantInvite = () => {
+  Actions.registerAction('CancelChatParticipantInvite', (payload: any) =>
+    handleCancelChatParticipantInvite(payload as CancelChatParticipantInviteActionPayload),
+  );
 };

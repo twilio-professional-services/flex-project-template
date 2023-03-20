@@ -7,7 +7,7 @@ export enum NotificationIds {
   ActivitySkillRulesNotConfigured = 'PSActivitySkillRulesNotConfigured',
 }
 
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: NotificationIds.ActivitySkillRulesNotConfigured,
     type: Flex.NotificationType.error,

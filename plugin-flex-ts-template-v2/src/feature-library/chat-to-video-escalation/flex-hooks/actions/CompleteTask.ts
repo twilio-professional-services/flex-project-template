@@ -4,7 +4,7 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.CompleteTask;
-export const actionHook = function beforeCompleteVideoEscalatedChatTask(flex: typeof Flex, manager: Flex.Manager) {
+export const actionHook = function beforeCompleteVideoEscalatedChatTask(flex: typeof Flex, _manager: Flex.Manager) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     const { videoRoom } = payload.task.attributes;
 

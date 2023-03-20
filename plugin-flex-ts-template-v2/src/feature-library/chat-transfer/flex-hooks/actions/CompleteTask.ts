@@ -12,8 +12,8 @@ export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.CompleteTask;
 // when a chat task has been transferred, performs custom complete actions
 // otherwise performs default behaviors
-export const actionHook = async function interceptTransferredChatTasks(flex: typeof Flex, manager: Flex.Manager) {
-  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
+export const actionHook = async function interceptTransferredChatTasks(flex: typeof Flex, _manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     const task = payload.task ? payload.task : Flex.TaskHelper.getTaskByTaskSid(payload.sid as string);
 
     // for any tasks that are not chat transfer tasks, complete as normal

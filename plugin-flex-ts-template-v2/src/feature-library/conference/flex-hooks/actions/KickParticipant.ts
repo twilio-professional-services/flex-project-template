@@ -5,7 +5,7 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.KickParticipant;
-export const actionHook = function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
+export const actionHook = function handleKickConferenceParticipant(flex: typeof Flex, _manager: Flex.Manager) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     const { participantType } = payload;
 

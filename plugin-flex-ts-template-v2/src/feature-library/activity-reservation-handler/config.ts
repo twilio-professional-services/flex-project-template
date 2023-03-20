@@ -37,7 +37,7 @@ const validateAndSetWorkerActivity = () => {
   console.debug('otherFlexSessionDetected:', FlexHelper.otherSessionDetected);
 
   if (FlexHelper.otherSessionDetected) {
-    console.warn('Another flex session was detected. ' + 'Not validating or resetting worker activity');
+    console.warn('Another flex session was detected. Not validating or resetting worker activity');
 
     return;
   }
@@ -51,31 +51,27 @@ const validateAndSetWorkerActivity = () => {
     console.log(`Resetting "${targetActivity?.name}" Activity from:`, workerActivityName);
 
     WorkerActivity.setWorkerActivity(targetActivity?.sid);
-  } else if (
-    (workerActivitySid === wrapupActivity?.sid || workerActivitySid === wrapupNoAcdActivity?.sid) &&
-    !FlexHelper.hasWrappingTask
+    return;
+  }
+
+  if (
+    ((workerActivitySid === wrapupActivity?.sid || workerActivitySid === wrapupNoAcdActivity?.sid) &&
+      !FlexHelper.hasWrappingTask) ||
+    ((workerActivitySid === onTaskActivity?.sid || workerActivitySid === onTaskNoAcdActivity?.sid) &&
+      !FlexHelper.hasActiveTask)
   ) {
     const targetActivity = pendingActivity ? pendingActivity : availableActivity;
 
     console.log(
-      `Setting worker from "${workerActivityName}" to ` + `${pendingActivity ? 'pending' : 'default'} activity:`,
+      `Setting worker from "${workerActivityName}" to ${pendingActivity ? 'pending' : 'default'} activity:`,
       targetActivity?.name,
     );
 
     WorkerActivity.setWorkerActivity(targetActivity?.sid, Boolean(pendingActivity));
-  } else if (
-    (workerActivitySid === onTaskActivity?.sid || workerActivitySid === onTaskNoAcdActivity?.sid) &&
-    !FlexHelper.hasActiveTask
-  ) {
-    const targetActivity = pendingActivity ? pendingActivity : availableActivity;
+    return;
+  }
 
-    console.log(
-      `Setting worker from "${workerActivityName}" to ` + `${pendingActivity ? 'pending' : 'default'} activity:`,
-      targetActivity?.name,
-    );
-
-    WorkerActivity.setWorkerActivity(targetActivity?.sid, Boolean(pendingActivity));
-  } else if (workerActivitySid === FlexHelper.offlineActivitySid && !FlexHelper.hasWrappingTask) {
+  if (workerActivitySid === FlexHelper.offlineActivitySid && !FlexHelper.hasWrappingTask) {
     clearPendingActivityChange();
   }
 };

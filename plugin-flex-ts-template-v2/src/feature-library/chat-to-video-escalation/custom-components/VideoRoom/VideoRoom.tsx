@@ -37,39 +37,6 @@ const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
 
-  function connectVideo() {
-    if (task && task.attributes && task.attributes.syncDocument) {
-      setConnecting(true);
-      const body = {
-        DocumentSid: task.attributes.syncDocument,
-        Token: Manager.getInstance().store.getState().flex.session.ssoTokenPayload.token,
-      };
-      const options = {
-        method: 'POST',
-        body: new URLSearchParams(body),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        },
-      };
-      fetch(`${BACKEND_URL}/agent-get-token`, options)
-        .then((res) => res.json())
-        .then((res) => {
-          console.log('IncomingVideoComponent: got token: ', res.token);
-          return Video.connect(res.token);
-        })
-        .then(roomJoined)
-        .catch((err) => {
-          updateTaskAttributesForVideo(task, 'error');
-          alert(`Error joining video: ${err.message}`);
-        })
-        .finally(() => {
-          setConnecting(false);
-        });
-    } else {
-      alert(`Error joining video: the incoming task is invalid. Please send a new link to your client.`);
-    }
-  }
-
   function roomJoined(room: any) {
     console.log('IncomingVideoComponent: room joined: ', room);
     setActiveRoom(room);
@@ -119,13 +86,13 @@ const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
     });
 
     // when a participant adds a track, attach it
-    room.on('trackSubscribed', (track: any, publication: any, participant: any) => {
+    room.on('trackSubscribed', (track: any, _publication: any, participant: any) => {
       console.log(`IncomingVideoComponent: ${participant.identity} added track: ${track.kind}`);
       attachRemoteTracks([track], 'remote-media');
     });
 
     // When a Participant removes a Track, detach it from the DOM.
-    room.on('trackUnsubscribed', (track: any, publication: any, participant: any) => {
+    room.on('trackUnsubscribed', (track: any, _publication: any, participant: any) => {
       console.log(`IncomingVideoComponent: ${participant.identity} removed track: ${track.kind}`);
       detachTracks([track]);
     });
@@ -139,6 +106,39 @@ const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
     room.on('disconnected', () => {
       console.log('IncomingVideoComponent: disconnected');
     });
+  }
+
+  function connectVideo() {
+    if (task && task.attributes && task.attributes.syncDocument) {
+      setConnecting(true);
+      const body = {
+        DocumentSid: task.attributes.syncDocument,
+        Token: Manager.getInstance().store.getState().flex.session.ssoTokenPayload.token,
+      };
+      const options = {
+        method: 'POST',
+        body: new URLSearchParams(body),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        },
+      };
+      fetch(`${BACKEND_URL}/agent-get-token`, options)
+        .then((res) => res.json())
+        .then((res) => {
+          console.log('IncomingVideoComponent: got token: ', res.token);
+          return Video.connect(res.token);
+        })
+        .then(roomJoined)
+        .catch((err) => {
+          updateTaskAttributesForVideo(task, 'error');
+          alert(`Error joining video: ${err.message}`);
+        })
+        .finally(() => {
+          setConnecting(false);
+        });
+    } else {
+      alert(`Error joining video: the incoming task is invalid. Please send a new link to your client.`);
+    }
   }
 
   function mute() {

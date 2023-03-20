@@ -7,7 +7,7 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.CompleteTask;
-export const actionHook = function beforeCompleteWorkerTask(flex: typeof Flex, manager: Flex.Manager) {
+export const actionHook = function beforeCompleteWorkerTask(flex: typeof Flex, _manager: Flex.Manager) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, async () => {
     if (FlexHelper.activeTaskCount > 1) {
       return;

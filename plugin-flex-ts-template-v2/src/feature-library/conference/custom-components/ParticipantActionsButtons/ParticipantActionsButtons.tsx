@@ -148,7 +148,7 @@ const ParticipantActionsButtons = (props: OwnProps) => {
   const renderActions = () => {
     const { participant, task } = props;
 
-    if (!participant || !task) return;
+    if (!participant || !task) return <></>;
 
     const holdParticipantTooltip = participant.onHold ? 'Unhold Participant' : 'Hold Participant';
     const kickParticipantTooltip = 'Remove Participant';
@@ -177,7 +177,7 @@ const ParticipantActionsButtons = (props: OwnProps) => {
     );
   };
 
-  if (view.activeView != 'teams') {
+  if (view.activeView !== 'teams') {
     return props.listMode === true ? (
       <ActionsContainerListItem className="ParticipantCanvas-Actions">
         {isKickConfirmationVisible ? renderKickConfirmation() : renderActions()}

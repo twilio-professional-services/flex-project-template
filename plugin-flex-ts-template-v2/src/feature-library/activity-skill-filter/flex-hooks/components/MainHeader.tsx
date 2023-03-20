@@ -6,7 +6,7 @@ import { getRules } from '../../config';
 import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.MainHeader;
-export const componentHook = function replaceActivityComponent(flex: typeof Flex, manager: Flex.Manager) {
+export const componentHook = function replaceActivityComponent(flex: typeof Flex, _manager: Flex.Manager) {
   if (!getRules()) {
     Flex.Notifications.showNotification(NotificationIds.ActivitySkillRulesNotConfigured);
     return;

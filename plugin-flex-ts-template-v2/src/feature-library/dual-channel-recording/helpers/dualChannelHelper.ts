@@ -76,6 +76,8 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
           media: [mediaObj],
         };
         break;
+      default:
+        break;
     }
   }
 

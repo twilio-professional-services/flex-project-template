@@ -1,10 +1,5 @@
 export type ParticipantInviteType = 'Worker' | 'Queue';
 
-export interface ParticipantInvite {
-  type: ParticipantInviteType;
-  participant: WorkerParticipantInvite | QueueParticipantInvite | null;
-}
-
 export interface WorkerParticipantInvite {
   full_name: string;
   activity_name: string;
@@ -15,4 +10,9 @@ export interface WorkerParticipantInvite {
 export interface QueueParticipantInvite {
   queue_name: string;
   queue_sid: string;
+}
+
+export interface ParticipantInvite {
+  type: ParticipantInviteType;
+  participant: WorkerParticipantInvite | QueueParticipantInvite | null;
 }

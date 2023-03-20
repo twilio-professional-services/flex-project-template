@@ -22,14 +22,13 @@ const IconContainer = styled.div`
   padding-right: 0.8em;
 `;
 
-const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, context, conversation }) => {
+const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, conversation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onClick = async () => {
     setIsLoading(true);
 
     const { taskSid } = task;
-    const channelSid = task.attributes.conversationSid;
 
     const body = {
       Token: Manager.getInstance().store.getState().flex.session.ssoTokenPayload.token,
@@ -67,7 +66,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, cont
           return;
         }
 
-        return Actions.invokeAction('SendMessage', {
+        Actions.invokeAction('SendMessage', {
           body: `Please join me using this unique video link: ${response.full_url}`,
           conversation,
           messageAttributes: {
@@ -90,7 +89,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, cont
         icon="Video"
         key="chat-video-transfer-button"
         disabled={isLoading}
-        onClick={async () => await onClick()}
+        onClick={onClick}
         variant="secondary"
         title="Switch to Video"
       />

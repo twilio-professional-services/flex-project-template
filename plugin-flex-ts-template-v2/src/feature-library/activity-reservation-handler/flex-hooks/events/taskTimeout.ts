@@ -4,6 +4,6 @@ import taskEndedHandler from '../../helpers/taskEndedHandler';
 import { FlexEvent } from '../../../../types/feature-loader';
 
 export const eventName = FlexEvent.taskTimeout;
-export const eventHook = (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {
+export const eventHook = (_flex: typeof Flex, _manager: Flex.Manager, task: Flex.ITask) => {
   taskEndedHandler(task, eventName);
 };

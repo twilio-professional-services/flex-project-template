@@ -7,7 +7,7 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.TransferTask;
 // invoke the custom chatTransferTask action if a cbm task otherwise carry on
-export const actionHook = function handleChatTransfer(flex: typeof Flex, manager: Flex.Manager) {
+export const actionHook = function handleChatTransfer(flex: typeof Flex, _manager: Flex.Manager) {
   if (!isColdTransferEnabled()) return;
 
   flex.Actions.addListener(`${actionEvent}${actionName}`, (payload: TransferActionPayload, abortFunction: any) => {

@@ -9,7 +9,7 @@ export enum CallbackNotification {
   OutboundDialingNotEnabled = 'CallbackOutboundDialingNotEnabled',
 }
 
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: CallbackNotification.ErrorCallingCustomer,
     type: Flex.NotificationType.error,

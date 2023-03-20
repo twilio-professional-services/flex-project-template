@@ -16,7 +16,7 @@ const TransferButton = ({ task }: TransferButtonProps) => {
   const [taskSidsTransfered, setTaskSidsTransfered] = useState<string[]>([]);
 
   // if there is a transfer task event for this chat disable the transfer button
-  const handleTransferInitiated = (payload: any) => {
+  const handleTransferInitiated = (_payload: any) => {
     setTaskSidsTransfered([...taskSidsTransfered, task.sid]);
   };
 

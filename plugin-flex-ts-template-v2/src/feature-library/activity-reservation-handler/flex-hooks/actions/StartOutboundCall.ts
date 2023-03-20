@@ -7,8 +7,8 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.StartOutboundCall;
-export const actionHook = function changeWorkerActivityBeforeOutboundCall(flex: typeof Flex, manager: Flex.Manager) {
-  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
+export const actionHook = function changeWorkerActivityBeforeOutboundCall(flex: typeof Flex, _manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (_payload, _abortFunction) => {
     storeCurrentActivitySidIfNeeded();
 
     const targetActivity = WorkerState.activity?.available ? onTaskActivity : onTaskNoAcdActivity;

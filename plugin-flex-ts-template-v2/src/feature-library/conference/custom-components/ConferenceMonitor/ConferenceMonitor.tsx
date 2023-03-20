@@ -1,4 +1,4 @@
-import { Actions, ConferenceParticipant, ITask, Manager } from '@twilio/flex-ui';
+import { Actions, ConferenceParticipant, ITask } from '@twilio/flex-ui';
 import * as React from 'react';
 
 import ConferenceService from '../../utils/ConferenceService';
@@ -31,14 +31,18 @@ class ConferenceMonitor extends React.Component {
     const liveParticipants = participants.filter((p: ConferenceParticipant) => p.status === 'joined');
     const myActiveParticipant = liveParticipants.find((p: ConferenceParticipant) => p.isCurrentWorker);
 
-    if (liveParticipantCount > 2 && this.state.liveParticipantCount <= 2) {
-      if (this.shouldUpdateParticipants(participants, liveWorkerCount)) {
-        this.handleMoreThanTwoParticipants(task, conferenceSid, liveParticipants);
-      }
-    } else if (liveParticipantCount <= 2 && this.state.liveParticipantCount > 2) {
-      if (this.shouldUpdateParticipants(participants, liveWorkerCount)) {
-        this.handleOnlyTwoParticipants(task, conferenceSid, liveParticipants);
-      }
+    if (
+      liveParticipantCount > 2 &&
+      this.state.liveParticipantCount <= 2 &&
+      this.shouldUpdateParticipants(participants, liveWorkerCount)
+    ) {
+      this.handleMoreThanTwoParticipants(task, conferenceSid, liveParticipants);
+    } else if (
+      liveParticipantCount <= 2 &&
+      this.state.liveParticipantCount > 2 &&
+      this.shouldUpdateParticipants(participants, liveWorkerCount)
+    ) {
+      this.handleOnlyTwoParticipants(task, conferenceSid, liveParticipants);
     }
 
     if (liveParticipantCount !== this.state.liveParticipantCount) {

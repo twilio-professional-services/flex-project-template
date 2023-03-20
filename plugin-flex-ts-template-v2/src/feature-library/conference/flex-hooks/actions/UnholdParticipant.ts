@@ -6,7 +6,7 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.UnHoldParticipant;
-export const actionHook = function handleUnholdConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
+export const actionHook = function handleUnholdConferenceParticipant(flex: typeof Flex, _manager: Flex.Manager) {
   if (!isAddButtonEnabled()) return;
 
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {

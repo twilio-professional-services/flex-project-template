@@ -4,14 +4,7 @@ import { TransferActionPayload } from '../types/ActionPayloads';
 import { NotificationIds } from '../flex-hooks/notifications/TransferResult';
 import ChatTransferService, { buildInviteParticipantAPIPayload } from '../helpers/APIHelper';
 import { isMultiParticipantEnabled } from '../config';
-import { addInviteToConversation } from '../helpers/inviteTracker';
-import { countOfOutstandingInvitesForConversation } from '../helpers/inviteTracker';
-
-export const registerCustomChatTransferAction = () => {
-  Actions.registerAction('ChatTransferTask', (payload: any) =>
-    handleChatTransferAction(payload as TransferActionPayload),
-  );
-};
+import { addInviteToConversation, countOfOutstandingInvitesForConversation } from '../helpers/inviteTracker';
 
 const handleChatTransferAction = async (payload: TransferActionPayload) => {
   const { task, targetSid } = payload;
@@ -48,4 +41,10 @@ const handleChatTransferAction = async (payload: TransferActionPayload) => {
     console.error('transfer API request failed', error);
     Notifications.showNotification(NotificationIds.ChatTransferFailedGeneric);
   }
+};
+
+export const registerCustomChatTransferAction = () => {
+  Actions.registerAction('ChatTransferTask', (payload: any) =>
+    handleChatTransferAction(payload as TransferActionPayload),
+  );
 };

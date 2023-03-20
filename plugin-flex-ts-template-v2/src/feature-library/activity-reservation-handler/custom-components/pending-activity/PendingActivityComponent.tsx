@@ -9,7 +9,7 @@ const PendingActivity = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setClock((clock) => !clock);
+      setClock((currentClock) => !currentClock);
     }, 1000);
 
     return () => clearInterval(interval);

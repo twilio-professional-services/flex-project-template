@@ -7,7 +7,7 @@ export enum ChatToVideoNotification {
   FailedVideoLinkNotification = 'PS_FailedVideoLink',
 }
 
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: ChatToVideoNotification.FailedVideoLinkNotification,
     type: Flex.NotificationType.error,

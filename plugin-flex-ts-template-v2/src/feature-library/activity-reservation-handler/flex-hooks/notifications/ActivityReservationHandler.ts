@@ -7,7 +7,7 @@ export enum NotificationIds {
   RestrictedActivities = 'PSRestrictedActivities',
 }
 
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: NotificationIds.ActivityChangeDelayed,
     closeButton: true,

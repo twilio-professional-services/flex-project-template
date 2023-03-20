@@ -1,12 +1,8 @@
-import { Actions, ConversationState, Notifications } from '@twilio/flex-ui';
+import { Actions, Notifications } from '@twilio/flex-ui';
 
 import ChatTransferService, { buildRemoveMyPartiticipantAPIPayload } from '../helpers/APIHelper';
 import { NotificationIds } from '../flex-hooks/notifications/TransferResult';
 import { LeaveChatActionPayload } from '../types/ActionPayloads';
-
-export const registerLeaveChatAction = () => {
-  Actions.registerAction('LeaveChat', (payload: any) => handleLeaveChatAction(payload as LeaveChatActionPayload));
-};
 
 const handleLeaveChatAction = async (payload: LeaveChatActionPayload) => {
   const { conversation } = payload;
@@ -21,9 +17,13 @@ const handleLeaveChatAction = async (payload: LeaveChatActionPayload) => {
   }
 
   try {
-    const result = await ChatTransferService.removeParticipantAPIRequest(removePartcipantAPIPayload);
+    await ChatTransferService.removeParticipantAPIRequest(removePartcipantAPIPayload);
   } catch (error) {
     console.error('remove participant API request failed', error);
     Notifications.showNotification(NotificationIds.ChatRemoveParticipantFailed);
   }
+};
+
+export const registerLeaveChatAction = () => {
+  Actions.registerAction('LeaveChat', (payload: any) => handleLeaveChatAction(payload as LeaveChatActionPayload));
 };

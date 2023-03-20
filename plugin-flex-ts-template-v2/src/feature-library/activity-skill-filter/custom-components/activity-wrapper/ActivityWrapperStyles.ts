@@ -8,6 +8,17 @@ export interface OwnProps {
 
 export type Props = OwnProps;
 
+const buildActivityCss = (config: ActivityCssConfig) => {
+  const { idx, display, order } = config;
+  // NOTE: idx/order are 0-based, CSS order and nth-of-type are 1-based
+  return `
+    & > div > div > button:nth-of-type(${idx + 1}) {
+      display: ${display};
+      order: ${order + 1};
+    }
+  `;
+};
+
 export const ActivityWrapper = styled('div')<OwnProps>`
   display: flex;
   flex-shrink: 0;
@@ -18,17 +29,6 @@ export const ActivityWrapper = styled('div')<OwnProps>`
   }
 
   ${(props) => {
-    return props.activitiesConfig
-      .map((config) => {
-        const { idx, display, order } = config;
-        // NOTE: idx/order are 0-based, CSS order and nth-of-type are 1-based
-        return `
-        & > div > div > button:nth-of-type(${idx + 1}) {
-          display: ${display};
-          order: ${order + 1};
-        }
-      `;
-      })
-      .join('');
+    return props.activitiesConfig.map(buildActivityCss).join('');
   }}
 `;

@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { useUID } from '@twilio-paste/core/dist/uid-library';
-import { Button, Box } from '@twilio-paste/core';
-import { Modal, ModalHeader, ModalHeading, ModalBody, ModalFooter, ModalFooterActions } from '@twilio-paste/core';
+import {
+  Button,
+  Box,
+  Modal,
+  ModalHeader,
+  ModalHeading,
+  ModalBody,
+  ModalFooter,
+  ModalFooterActions,
+} from '@twilio-paste/core';
 
 import { SelectWorkerToInvite } from './SelectParticipant/SelectWorkerToInvite';
 import { SelectQueueToInvite } from './SelectParticipant/SelectQueueToInvite';

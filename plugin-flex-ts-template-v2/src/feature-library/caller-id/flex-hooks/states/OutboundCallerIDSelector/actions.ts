@@ -20,7 +20,7 @@ class Actions {
   public static setCallerId = (selectedCallerId: string): Action => {
     const { workerClient } = Manager.getInstance();
 
-    if (selectedCallerId == 'placeholder') {
+    if (selectedCallerId === 'placeholder') {
       selectedCallerId = '';
     }
 

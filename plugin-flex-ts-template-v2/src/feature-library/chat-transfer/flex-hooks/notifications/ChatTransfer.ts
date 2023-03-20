@@ -8,7 +8,7 @@ export enum ChatTransferNotification {
   ErrorUpdatingTaskForChatTransfer = 'ErrorUpdatingTaskForChatTransfer',
 }
 
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+export const notificationHook = (flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: ChatTransferNotification.ErrorTransferringChat,
     content: StringTemplates.FailedToSubmitTransfer,

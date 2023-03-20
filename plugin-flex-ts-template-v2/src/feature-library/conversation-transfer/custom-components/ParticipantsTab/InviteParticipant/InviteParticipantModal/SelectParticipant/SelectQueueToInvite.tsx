@@ -22,7 +22,7 @@ const instantQuery = (search: string, callback: (workers: QueueParticipantInvite
 
     q.on('searchResult', (items) => {
       const queues: any[] = [];
-      Object.entries(items).forEach(([key, value]) => {
+      Object.entries(items).forEach(([_key, value]) => {
         queues.push(getQueueDetailsFromSyncObject(value));
       });
       callback(queues);

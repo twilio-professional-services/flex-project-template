@@ -6,8 +6,8 @@ import { getChannelToRecord } from '../../config';
 import { FlexEvent } from '../../../../types/feature-loader';
 
 export const eventName = FlexEvent.taskAccepted;
-export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {
-  if (!Flex.TaskHelper.isCallTask(task)) {
+export const eventHook = async (flex: typeof Flex, _manager: Flex.Manager, task: Flex.ITask) => {
+  if (!flex.TaskHelper.isCallTask(task)) {
     return;
   }
 
@@ -15,7 +15,7 @@ export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: 
   const { client_call, direction, conversations } = attributes;
   let callSid;
 
-  if (conversations && conversations.media && getChannelToRecord() == 'customer') {
+  if (conversations && conversations.media && getChannelToRecord() === 'customer') {
     // This indicates a recording has already been started for this call
     // and all relevant metadata should already be on task attributes
     return;
@@ -46,6 +46,8 @@ export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: 
         participantLeg = participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker);
         break;
       }
+      default:
+        break;
     }
 
     console.debug('Recorded Participant: ', participantLeg);
@@ -55,7 +57,7 @@ export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: 
       return;
     }
 
-    callSid = participantLeg.callSid;
+    ({ callSid } = participantLeg);
   }
 
   if (!callSid) {

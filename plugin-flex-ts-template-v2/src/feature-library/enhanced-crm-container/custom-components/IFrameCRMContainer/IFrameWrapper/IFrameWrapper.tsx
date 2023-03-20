@@ -13,7 +13,7 @@ export const IFrameWrapper = ({ thisTask, task, baseUrl }: Props) => {
   const iFrameRef = useRef<HTMLIFrameElement>(null);
   const [iFrameKey, setIframeKey] = useState(0 as number);
 
-  const handleOnClick = (event: any) => {
+  const handleOnClick = () => {
     setIframeKey(Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER + 1)));
   };
 

@@ -47,7 +47,7 @@ const ParticipantName = (props: OwnProps) => {
       ConferenceService.getCallProperties(participant.callSid)
         .then((response: FetchedCall) => {
           if (response) {
-            setName((response && response.to) || 'Unknown');
+            setName(response.to || 'Unknown');
           }
         })
         .catch((_error) => {

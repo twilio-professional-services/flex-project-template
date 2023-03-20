@@ -4,7 +4,7 @@ import PhoneCallbackIcon from '@material-ui/icons/PhoneCallback';
 
 import { TaskAttributes } from '../../../../types/task-router/Task';
 
-export const channelHook = function createCallbackChannel(flex: typeof Flex, manager: Flex.Manager) {
+export const channelHook = function createCallbackChannel(flex: typeof Flex, _manager: Flex.Manager) {
   const channelDefinition = flex.DefaultTaskChannels.createDefaultTaskChannel(
     'callback',
     (task) => {

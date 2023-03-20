@@ -17,7 +17,7 @@ const conferenceSlice = createSlice({
       state.connectingParticipants.push(action.payload);
     },
     removeConnectingParticipant(state, action: PayloadAction<string>) {
-      const participantIndex = state.connectingParticipants.findIndex((p) => p.callSid == action.payload);
+      const participantIndex = state.connectingParticipants.findIndex((p) => p.callSid === action.payload);
 
       if (participantIndex >= 0) {
         state.connectingParticipants.splice(participantIndex, 1);

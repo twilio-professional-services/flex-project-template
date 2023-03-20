@@ -4,11 +4,7 @@ import { Manager } from '@twilio/flex-ui';
 import { CloseIcon } from '@twilio-paste/icons/esm/CloseIcon';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
 
-import {
-  WorkerParticipantInvite,
-  ParticipantInvite,
-  ParticipantInviteType,
-} from '../../../../../types/ParticipantInvite';
+import { WorkerParticipantInvite, ParticipantInvite } from '../../../../../types/ParticipantInvite';
 
 interface ActivityNameToAvailableFlagMapping {
   [index: string]: boolean;
@@ -41,7 +37,7 @@ const instantQuery = (search: string, callback: (workers: WorkerParticipantInvit
 
     q.on('searchResult', (items) => {
       const workers: any[] = [];
-      Object.entries(items).forEach(([key, value]) => {
+      Object.entries(items).forEach(([_key, value]) => {
         workers.push(getWorkerDetailsFromSyncObject(value));
       });
 
@@ -102,12 +98,12 @@ export const SelectWorkerToInvite = ({ updateSelectedParticipant }: SelectWorker
   const hanldeInputSelectedChange = (selectedItem: WorkerParticipantInvite) => {
     const worker = inputItems.find((item) => item.full_name === selectedItem.full_name) || null;
     if (worker) {
-      if (!worker.available) {
-        setErrorText('Agent is not in an available activity');
-        setSelectedWorker(null);
-      } else {
+      if (worker.available) {
         setErrorText('');
         setSelectedWorker(worker);
+      } else {
+        setErrorText('Agent is not in an available activity');
+        setSelectedWorker(null);
       }
     } else {
       setSelectedWorker(null);

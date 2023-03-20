@@ -7,7 +7,7 @@ import ProgrammableChatService from '../../../utils/serverless/ProgrammableChat/
 const syncClient = Manager.getInstance()?.insightsClient;
 
 const instantQuery = async (targetSid: string, targetType: ParticipantInviteType) => {
-  return new Promise<string>((resolve, reject) => {
+  return new Promise<string>((resolve, _reject) => {
     const index = targetType === 'Worker' ? 'tr-worker' : 'tr-queue';
 
     syncClient.instantQuery(index).then((q) => {
@@ -72,19 +72,6 @@ export const addInviteToConversation = async (task: ITask, invitesTaskSid: strin
     }
 };
 
-// This is to handle removing an invite afer WE join the channel
-export const checkAndRemoveOldInvitedParticipants = async (
-  task: ITask,
-  conversation: ConversationState.ConversationState,
-) => {
-  const currentAttributes = conversation?.source?.attributes;
-  const { invites = {} } = (currentAttributes as any) || {};
-
-  if (invites[task.taskSid]) {
-    await removeInvitedParticipant(conversation, task.taskSid);
-  }
-};
-
 // This is to handle removing any invite by task sid for a channel
 export const removeInvitedParticipant = async (conversation: ConversationState.ConversationState, taskSid: string) => {
   const currentAttributes = conversation?.source?.attributes as object;
@@ -105,6 +92,19 @@ export const removeInvitedParticipant = async (conversation: ConversationState.C
     } catch (error) {
       console.log('Error', error, conversation);
     }
+};
+
+// This is to handle removing an invite afer WE join the channel
+export const checkAndRemoveOldInvitedParticipants = async (
+  task: ITask,
+  conversation: ConversationState.ConversationState,
+) => {
+  const currentAttributes = conversation?.source?.attributes;
+  const { invites = {} } = (currentAttributes as any) || {};
+
+  if (invites[task.taskSid]) {
+    await removeInvitedParticipant(conversation, task.taskSid);
+  }
 };
 
 export const countOfOutstandingInvitesForConversation = (conversation: ConversationState.ConversationState): number => {

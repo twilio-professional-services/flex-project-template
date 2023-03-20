@@ -5,6 +5,22 @@ import HangUpByService from '../utils/HangUpByService';
 
 const STORAGE_KEY = 'hang_up_by';
 
+export const getHangUpBy = () => {
+  const storageValue = localStorage.getItem(STORAGE_KEY);
+
+  if (!storageValue) {
+    return {};
+  }
+
+  const parsedValue = JSON.parse(storageValue);
+
+  if (!parsedValue) {
+    return {};
+  }
+
+  return parsedValue;
+};
+
 export const resetHangUpBy = () => {
   // remove all reservations from hang_up_by that are no longer assigned
   const storageValue = getHangUpBy();
@@ -120,22 +136,6 @@ export const hasCustomerJoined = async (task: Flex.ITask) => {
   }
 
   return false;
-};
-
-export const getHangUpBy = () => {
-  const storageValue = localStorage.getItem(STORAGE_KEY);
-
-  if (!storageValue) {
-    return {};
-  }
-
-  const parsedValue = JSON.parse(storageValue);
-
-  if (!parsedValue) {
-    return {};
-  }
-
-  return parsedValue;
 };
 
 export const setHangUpBy = (reservationSid: string, value: string) => {

@@ -35,15 +35,6 @@ const ConferenceDialog = (props: OwnProps) => {
   const inputRef = React.createRef<HTMLInputElement>();
   const inputID = useUID();
 
-  const handleClose = () => {
-    closeDialog();
-  };
-
-  const handleButtonClose = (e: React.MouseEvent<HTMLElement>) => {
-    closeDialog();
-    if (e) e.preventDefault();
-  };
-
   const closeDialog = () => {
     Actions.invokeAction('SetComponentState', {
       name: 'ConferenceDialog',
@@ -52,29 +43,13 @@ const ConferenceDialog = (props: OwnProps) => {
     setHasError(false);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const { key } = e;
-
-    if (key === 'Enter') {
-      if (checkInput()) {
-        addConferenceParticipant();
-        closeDialog();
-      }
-      e.preventDefault();
-    }
+  const handleClose = () => {
+    closeDialog();
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setConferenceTo(value);
-  };
-
-  const handleDialButton = (e: React.MouseEvent<HTMLElement>) => {
-    if (checkInput()) {
-      addConferenceParticipant();
-      closeDialog();
-    }
-    e.preventDefault();
+  const handleButtonClose = (e: React.MouseEvent<HTMLElement>) => {
+    closeDialog();
+    if (e) e.preventDefault();
   };
 
   const checkInput = (): boolean => {
@@ -133,6 +108,31 @@ const ConferenceDialog = (props: OwnProps) => {
     }
 
     setConferenceTo('');
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const { key } = e;
+
+    if (key === 'Enter') {
+      if (checkInput()) {
+        addConferenceParticipant();
+        closeDialog();
+      }
+      e.preventDefault();
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setConferenceTo(value);
+  };
+
+  const handleDialButton = (e: React.MouseEvent<HTMLElement>) => {
+    if (checkInput()) {
+      addConferenceParticipant();
+      closeDialog();
+    }
+    e.preventDefault();
   };
 
   return (

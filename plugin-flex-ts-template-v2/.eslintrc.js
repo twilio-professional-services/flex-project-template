@@ -10,8 +10,14 @@ module.exports = {
     "import/no-unresolved": "off",
     "import/no-unused-modules": "off",
     "multiline-comment-style": "off",
+    "no-alert": "off",
     "no-console": "off",
+    "no-duplicate-imports": "off",
+    "no-shadow": "off",
+    "prefer-named-capture-group": "off",
     "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-duplicate-imports": ["error"],
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
   }
 };

@@ -7,7 +7,7 @@ export enum ConferenceNotification {
   FailedHangupNotification = 'PS_FailedHangupOnConferenceWithExternalParties',
 }
 
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: ConferenceNotification.FailedHangupNotification,
     type: Flex.NotificationType.error,

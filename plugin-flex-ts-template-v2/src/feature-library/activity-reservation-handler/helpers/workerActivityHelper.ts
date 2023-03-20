@@ -64,7 +64,7 @@ class WorkerActivityHelper {
       console.log('newActivitySid', newActivitySid);
       if (!this.canChangeWorkerActivity(newActivitySid)) {
         console.debug(
-          'setWorkerActivity: Not permitted to change worker activity at this time. ' + 'Target activity:',
+          'setWorkerActivity: Not permitted to change worker activity at this time. Target activity:',
           targetActivity?.name,
         );
         return;

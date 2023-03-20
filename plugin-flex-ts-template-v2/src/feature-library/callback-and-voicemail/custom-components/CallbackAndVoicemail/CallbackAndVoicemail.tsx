@@ -24,8 +24,8 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
   );
 
   const workerActivitySid = useFlexSelector((state) => state.flex.worker?.activity?.sid);
-  const workerOffline = (workerActivitySid: string) => {
-    return workerActivitySid === Manager.getInstance().serviceConfiguration.taskrouter_offline_activity_sid;
+  const workerOffline = (activitySid: string) => {
+    return activitySid === Manager.getInstance().serviceConfiguration.taskrouter_offline_activity_sid;
   };
 
   const taskStatus = task?.taskStatus;
@@ -62,7 +62,7 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
   return (
     <>
       <Flex vertical>
-        {taskType == 'callback' && (
+        {taskType === 'callback' && (
           <Box element="C_AND_V_CONTENT_BOX">
             <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
               Callback Request
@@ -71,7 +71,7 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
           </Box>
         )}
 
-        {taskType == 'voicemail' && (
+        {taskType === 'voicemail' && (
           <Box element="C_AND_V_CONTENT_BOX">
             <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
               Contact Voicemail

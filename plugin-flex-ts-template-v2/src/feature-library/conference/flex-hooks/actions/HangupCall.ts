@@ -6,7 +6,7 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.HangupCall;
-export const actionHook = function handleConferenceHangup(flex: typeof Flex, manager: Flex.Manager) {
+export const actionHook = function handleConferenceHangup(flex: typeof Flex, _manager: Flex.Manager) {
   if (!isAddButtonEnabled()) return;
 
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
@@ -49,7 +49,7 @@ export const actionHook = function handleConferenceHangup(flex: typeof Flex, man
       let { participants } = updatedConference;
       while (participants.some(participantsOnHold) && attempts < 10) {
         await snooze(500);
-        attempts++;
+        attempts += 1;
         updatedConference = getLatestConference(taskSid);
         participants = updatedConference ? updatedConference.participants : [];
       }

@@ -38,10 +38,7 @@ class CallbackService extends ApiService {
     const { outbound_call_flows } = this.manager.serviceConfiguration;
     const enabledOutboundFlows = Object.values(outbound_call_flows).filter((flow) => flow.enabled);
 
-    if (!enabledOutboundFlows.length) {
-      Flex.Notifications.showNotification(CallbackNotification.OutboundDialingNotEnabled);
-      throw new Error('Oubound dialing is not enabled');
-    } else {
+    if (enabledOutboundFlows.length) {
       try {
         // update state with the existing reservation sid so that we can re-select it later
         Flex.Manager.getInstance().store.dispatch(Actions.setLastPlacedCallback(task));
@@ -78,13 +75,16 @@ class CallbackService extends ApiService {
         if (attempts < 5) {
           // there can be some race conditions on invoking outbound call
           // this helps address them silently
-          return await this.callCustomerBack(task, attempts + 1);
+          return this.callCustomerBack(task, attempts + 1);
         }
         Flex.Notifications.showNotification(CallbackNotification.ErrorCallingCustomer, {
           customer: task.defaultFrom,
         });
         throw e;
       }
+    } else {
+      Flex.Notifications.showNotification(CallbackNotification.OutboundDialingNotEnabled);
+      throw new Error('Oubound dialing is not enabled');
     }
     return task;
   }
@@ -143,7 +143,7 @@ class CallbackService extends ApiService {
       isDeleted: request.isDeleted ? encodeURIComponent(request.isDeleted) : undefined,
     };
 
-    return await this.fetchJsonWithReject<CreateCallbackResponse>(
+    return this.fetchJsonWithReject<CreateCallbackResponse>(
       `${this.serverlessProtocol}://${this.serverlessDomain}/features/callbacks/flex/create-callback`,
       {
         method: 'post',

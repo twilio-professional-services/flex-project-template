@@ -4,9 +4,6 @@ import { Action } from '../../../../../types/manager';
 import { CallbackAndVoicemailState, INITIATE_CALLBACK, REQUEUE_CALLBACK, PLACED_CALLBACK } from './types';
 import initialState from './initialState';
 
-// Reducer
-export const reducerHook = () => ({ callbackAndVoicemail: reducer });
-
 const reducer = (state = initialState, action: Action): CallbackAndVoicemailState => {
   switch (action.type) {
     case `${INITIATE_CALLBACK}_PENDING`: {
@@ -21,7 +18,6 @@ const reducer = (state = initialState, action: Action): CallbackAndVoicemailStat
     }
 
     case `${INITIATE_CALLBACK}_REJECTED`:
-
     case `${INITIATE_CALLBACK}_FULFILLED`: {
       const { taskSid } = action.payload as Flex.ITask;
       const isCompletingCallbackAction = { ...state.isCompletingCallbackAction };
@@ -45,7 +41,6 @@ const reducer = (state = initialState, action: Action): CallbackAndVoicemailStat
     }
 
     case `${REQUEUE_CALLBACK}_REJECTED`:
-
     case `${REQUEUE_CALLBACK}_FULFILLED`: {
       const { taskSid } = action.payload as Flex.ITask;
       const isRequeueingCallbackAction = { ...state.isRequeueingCallbackAction };
@@ -69,3 +64,6 @@ const reducer = (state = initialState, action: Action): CallbackAndVoicemailStat
     }
   }
 };
+
+// Reducer
+export const reducerHook = () => ({ callbackAndVoicemail: reducer });

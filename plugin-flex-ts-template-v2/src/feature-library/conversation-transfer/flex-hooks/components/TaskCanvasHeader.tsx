@@ -26,9 +26,11 @@ export const componentHook = function addChatTransferButtons(flex: typeof Flex) 
     if (TaskHelper.isCBMTask(task) && task.taskStatus === 'assigned') {
       // more than two participants or are there any active invites?
       const conversationState = StateHelper.getConversationStateForTask(task);
-      if (conversationState) {
-        if (conversationState.participants.size > 2 || countOfOutstandingInvitesForConversation(conversationState))
-          return true;
+      if (
+        conversationState &&
+        (conversationState.participants.size > 2 || countOfOutstandingInvitesForConversation(conversationState))
+      ) {
+        return true;
       }
     }
     return false;

@@ -4,12 +4,6 @@
   https://github.com/trogers-twilio/plugin-external-conference-warm-transfer
 
 */
-import { ConferenceParticipant } from '@twilio/flex-ui';
-import {
-  ParticipantBase,
-  ParticipantTypes,
-  VoiceProperties,
-} from '@twilio/flex-ui/src/state/Participants/participants.types';
 
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
@@ -142,7 +136,7 @@ class ConferenceService extends ApiService {
           body: this.buildBody(encodedParams),
         },
       )
-        .then((response: RemoveParticipantResponse) => {
+        .then((_response: RemoveParticipantResponse) => {
           console.log(`Participant ${participantSid} removed from conference`);
           resolve(participantSid);
         })

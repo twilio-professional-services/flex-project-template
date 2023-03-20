@@ -44,7 +44,7 @@ const getCBMParticipantsWrapper = async (task: ITask, flexInteractionChannelSid:
     });
 
     if (!missingMediaProperties) return participants;
-    retry++;
+    retry += 1;
     console.log('getCBMParticipantsWrapper retry', retry);
     wait(retryTimer);
     retryTimer *= 2;
@@ -83,7 +83,7 @@ export const getUpdatedParticipantDetails = async (
 
   conversationParticipants.forEach((conversationParticipant) => {
     const intertactionParticipant = intertactionParticipants.find(
-      (participant) => participant.mediaProperties?.sid == conversationParticipant.source.sid,
+      (participant) => participant.mediaProperties?.sid === conversationParticipant.source.sid,
     );
 
     if (intertactionParticipant) {
@@ -114,7 +114,7 @@ export const getUpdatedInvitedParticipantDetails = (conversation: ConversationSt
 
   const invitedParticipantsDetails: InvitedParticipantDetails[] = [];
 
-  Object.entries(invites).forEach(([key, value]) => {
+  Object.entries(invites).forEach(([_key, value]) => {
     const invitedParticipantDetails = value as InvitedParticipantDetails;
     invitedParticipantsDetails.push(invitedParticipantDetails);
   });

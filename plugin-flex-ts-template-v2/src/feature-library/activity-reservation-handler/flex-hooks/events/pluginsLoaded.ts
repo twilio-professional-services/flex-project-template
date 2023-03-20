@@ -4,6 +4,6 @@ import { FlexEvent } from '../../../../types/feature-loader';
 import { initialize } from '../../config';
 
 export const eventName = FlexEvent.pluginsLoaded;
-export const eventHook = (flex: typeof Flex, manager: Flex.Manager) => {
+export const eventHook = (_flex: typeof Flex, _manager: Flex.Manager) => {
   initialize();
 };
