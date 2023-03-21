@@ -21,7 +21,7 @@ Voicemails will look like this
 
 ![alt text](screenshots/flex-user-experience-vm.gif)
 
-And Voicemails created from the Transcription Callback URL will look like this
+And Voicemails created from the Transcription Callback URL will look like this (NOTE: This is a Flex 2.0 screenshot)
 
 ![alt text](screenshots/flex-user-experience-vm-with-trans.gif)
 
