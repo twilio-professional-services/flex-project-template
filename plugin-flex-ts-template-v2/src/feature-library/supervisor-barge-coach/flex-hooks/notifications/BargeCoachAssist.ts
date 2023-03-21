@@ -15,7 +15,6 @@ export const notificationHook = (flex: typeof Flex, manager: Flex.Manager, conte
     onClick: () => navigateToTeamsView()
   },
 ];
-//${notificationContext} ${StringTemplates.AGENT_ASSISTANCE}
 
 const navigateToTeamsView = () => {
   Flex.Actions.invokeAction("NavigateToView", {viewName: "teams"});

@@ -3,7 +3,6 @@ import { AppState } from '../../../types/manager';
 import * as Flex from "@twilio/flex-ui";
 import { Actions } from "../flex-hooks/states/SupervisorBargeCoach"
 import { SyncDoc } from '../utils/sync/Sync';
-import { StringTemplates } from '../flex-hooks//strings/BargeCoachAssist';
 import { NotificationIds } from '../flex-hooks/notifications/BargeCoachAssist';
 
 // When this is called, we will do checks to validate any new agents that need assistance
@@ -16,6 +15,8 @@ export const alertSupervisorsCheck = () => {
   if (arrayIndexCheck > -1) {
     const agentFN = `${agentAssistanceArray[arrayIndexCheck].agentFN}`;
     Flex.Notifications.showNotification(NotificationIds.AGENT_ASSISTANCE, { agentFN: `${agentFN}` } );
+  } else {
+    Flex.Notifications.dismissNotificationById(NotificationIds.AGENT_ASSISTANCE);
   }
   return;
 }
@@ -57,13 +58,12 @@ export const syncUpdates = async () => {
 export const updateTaskAndTriggerAlerts = () => {
   const state = Flex.Manager.getInstance().store.getState() as AppState;
   const {
-    agentAssistanceArray,
     enableAgentAssistanceAlerts,
   } = state[reduxNamespace].supervisorBargeCoach;
 
-  let arrayIndexCheck = agentAssistanceArray?.findIndex((agent: any) => agent.agentFN != "");
-  // Confirm Alerts are enabled and there are agents activity seeking assistance
-  if(enableAgentAssistanceAlerts && arrayIndexCheck > -1) {
+  // let arrayIndexCheck = agentAssistanceArray?.findIndex((agent: any) => agent.agentFN != "");
+  // // Confirm Alerts are enabled and there are agents activity seeking assistance
+  if(enableAgentAssistanceAlerts) {
     // Call the alert check function to alert for any new agents needing assistance
     alertSupervisorsCheck();
   }
