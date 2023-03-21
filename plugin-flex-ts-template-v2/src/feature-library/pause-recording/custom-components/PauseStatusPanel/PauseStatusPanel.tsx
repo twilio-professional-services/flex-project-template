@@ -1,7 +1,6 @@
-import { Manager } from '@twilio/flex-ui';
+import { Manager, TaskHelper, ITask } from '@twilio/flex-ui';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { TaskHelper, ITask } from '@twilio/flex-ui';
 import { Text } from '@twilio-paste/core/text';
 
 import AppState from '../../../../types/manager/AppState';
@@ -20,14 +19,6 @@ const PauseStatusPanel = (props: OwnProps) => {
     (state: AppState) => state[reduxNamespace].pauseRecording as PauseRecordingState,
   );
 
-  useEffect(() => {
-    updatePausedState();
-  }, []);
-
-  useEffect(() => {
-    updatePausedState();
-  }, [pausedRecordings, props.task?.sid]);
-
   const updatePausedState = () => {
     const isLiveCall = props.task ? TaskHelper.isLiveCall(props.task) : false;
 
@@ -45,6 +36,14 @@ const PauseStatusPanel = (props: OwnProps) => {
       setPaused(false);
     }
   };
+
+  useEffect(() => {
+    updatePausedState();
+  }, []);
+
+  useEffect(() => {
+    updatePausedState();
+  }, [pausedRecordings, props.task?.sid]);
 
   return (
     <>

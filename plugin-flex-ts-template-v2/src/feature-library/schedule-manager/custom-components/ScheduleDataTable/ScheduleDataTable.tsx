@@ -92,7 +92,7 @@ const ScheduleDataTable = (props: OwnProps) => {
     const ruleNames = [] as string[];
 
     schedule.rules.forEach((ruleGuid) => {
-      const matchingRule = props.rules.find((rule) => rule.id == ruleGuid);
+      const matchingRule = props.rules.find((rule) => rule.id === ruleGuid);
 
       if (matchingRule) {
         ruleNames.push(matchingRule.name);
@@ -157,7 +157,7 @@ const ScheduleDataTable = (props: OwnProps) => {
           <ColumnDefinition
             key="manually-closed-column"
             header={ScheduleManagerStrings[StringTemplates.COLUMN_MANUALLYCLOSED]}
-            sortingFn={(a: Schedule, b: Schedule) => (a.manualClose ? 1 : -1)}
+            sortingFn={(a: Schedule, _b: Schedule) => (a.manualClose ? 1 : -1)}
             content={(item: Schedule) => (
               <span>
                 {item.manualClose === true

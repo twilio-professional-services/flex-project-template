@@ -37,7 +37,7 @@ export const actionName = FlexAction.AcceptTask;
   Once the next piece of work is recieved, the capacity is reset. 
 */
 export const actionHook = function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.Manager) {
-  Flex.Actions.addListener(`${actionEvent}${actionName}`, async () => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async () => {
     const workerChanneslMap = manager?.workerClient?.channels;
     const tasksMap = manager.store.getState().flex.worker.tasks;
 

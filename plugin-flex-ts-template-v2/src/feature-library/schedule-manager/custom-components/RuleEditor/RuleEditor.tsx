@@ -68,6 +68,30 @@ const RuleEditor = (props: OwnProps) => {
 
   const ScheduleManagerStrings = Manager.getInstance().strings as any;
 
+  const resetView = () => {
+    setError('');
+    setName('');
+    setIsOpen(true);
+    setClosedReason('closed');
+    setAllDay(true);
+    setStartTime('');
+    setEndTime('');
+    setRecurrence('none');
+    setSingleDate('');
+    setDowMonday(false);
+    setDowTuesday(false);
+    setDowWednesday(false);
+    setDowThursday(false);
+    setDowFriday(false);
+    setDowSaturday(false);
+    setDowSunday(false);
+    setDayOfMonth('');
+    setMonth('1');
+    setRestrictDates(false);
+    setStartDate('');
+    setEndDate('');
+  };
+
   useEffect(() => {
     resetView();
 
@@ -165,30 +189,6 @@ const RuleEditor = (props: OwnProps) => {
     }
   }, [props.showPanel]);
 
-  const resetView = () => {
-    setError('');
-    setName('');
-    setIsOpen(true);
-    setClosedReason('closed');
-    setAllDay(true);
-    setStartTime('');
-    setEndTime('');
-    setRecurrence('none');
-    setSingleDate('');
-    setDowMonday(false);
-    setDowTuesday(false);
-    setDowWednesday(false);
-    setDowThursday(false);
-    setDowFriday(false);
-    setDowSaturday(false);
-    setDowSunday(false);
-    setDayOfMonth('');
-    setMonth('1');
-    setRestrictDates(false);
-    setStartDate('');
-    setEndDate('');
-  };
-
   const handleChangeName = (event: React.FormEvent<HTMLInputElement>) => {
     setName(event.currentTarget.value);
   };
@@ -248,6 +248,8 @@ const RuleEditor = (props: OwnProps) => {
       case 'dowSunday':
         setDowSunday(event.target.checked);
         break;
+      default:
+        break;
     }
   };
 
@@ -280,6 +282,23 @@ const RuleEditor = (props: OwnProps) => {
 
   const handleChangeEndDate = (event: React.FormEvent<HTMLInputElement>) => {
     setEndDate(event.currentTarget.value);
+  };
+
+  const copyRule = (rule: Rule) => {
+    const name = `${rule.name} ${ScheduleManagerStrings[StringTemplates.NAME_COPY]}`;
+
+    const ruleCopy = {
+      ...rule,
+      id: uuidv4(),
+      name,
+    };
+
+    while (!isRuleUnique(ruleCopy, null)) {
+      ruleCopy.name += ` ${ScheduleManagerStrings[StringTemplates.NAME_COPY]}`;
+    }
+
+    const ruleCopyData = updateRuleData(ruleCopy, null);
+    props.onUpdateRule(ruleCopyData, ruleCopyData.indexOf(ruleCopy));
   };
 
   const saveRule = (copy: boolean) => {
@@ -347,6 +366,8 @@ const RuleEditor = (props: OwnProps) => {
           setError(ScheduleManagerStrings[StringTemplates.ERROR_DOM_RANGE]);
           return;
         }
+        break;
+      default:
         break;
     }
 
@@ -437,6 +458,8 @@ const RuleEditor = (props: OwnProps) => {
         });
         newRule.dateRRule = yearlyRRule.toString();
         break;
+      default:
+        break;
     }
 
     if (recurrence !== 'none' && restrictDates) {
@@ -456,23 +479,6 @@ const RuleEditor = (props: OwnProps) => {
     } else {
       setError(ScheduleManagerStrings[StringTemplates.ERROR_NAME_UNIQUE]);
     }
-  };
-
-  const copyRule = (rule: Rule) => {
-    const name = `${rule.name} ${ScheduleManagerStrings[StringTemplates.NAME_COPY]}`;
-
-    const ruleCopy = {
-      ...rule,
-      id: uuidv4(),
-      name,
-    };
-
-    while (!isRuleUnique(ruleCopy, null)) {
-      ruleCopy.name += ` ${ScheduleManagerStrings[StringTemplates.NAME_COPY]}`;
-    }
-
-    const ruleCopyData = updateRuleData(ruleCopy, null);
-    props.onUpdateRule(ruleCopyData, ruleCopyData.indexOf(ruleCopy));
   };
 
   const handleSave = () => {

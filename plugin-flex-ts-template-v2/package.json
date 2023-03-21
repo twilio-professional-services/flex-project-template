@@ -55,8 +55,10 @@
     "extends": ["twilio-ts"],
     "rules": {
       "camelcase": "off",
+      "complexity": "off",
       "import/extensions": "off",
       "import/no-extraneous-dependencies": "off",
+      "import/no-mutable-exports": "off",
       "import/no-unresolved": "off",
       "import/no-unused-modules": "off",
       "multiline-comment-style": "off",
@@ -72,7 +74,9 @@
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-duplicate-imports": ["error"],
       "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+      "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+      "@typescript-eslint/no-use-before-define": "off"
     }
   },
   "eslintIgnore": [

@@ -96,7 +96,7 @@ const RuleDataTable = (props: OwnProps) => {
   const getRuleDate = (rule: Rule): string => {
     let dateStr = ScheduleManagerStrings[StringTemplates.ANY_DAY];
 
-    if (rule.startDate && rule.endDate && rule.startDate == rule.endDate) {
+    if (rule.startDate && rule.endDate && rule.startDate === rule.endDate) {
       dateStr = `${rule.startDate}`;
     } else {
       dateStr = '';

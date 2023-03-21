@@ -5,8 +5,8 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.UnHoldParticipant;
-export const actionHook = function handleMultiCallUnholdParticipant(flex: typeof Flex, manager: Flex.Manager) {
-  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
+export const actionHook = function handleMultiCallUnholdParticipant(flex: typeof Flex, _manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, _abortFunction) => {
     handleUnhold(payload);
   });
 };

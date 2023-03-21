@@ -4,10 +4,9 @@ import RecordingService from './RecordingService';
 import { NotificationIds } from '../flex-hooks/notifications/PauseRecording';
 import AppState from '../../../types/manager/AppState';
 import { reduxNamespace } from '../../../utils/state';
-import { pause, resume } from '../flex-hooks/states/PauseRecordingSlice';
+import { PauseRecordingState, pause, resume } from '../flex-hooks/states/PauseRecordingSlice';
 import { isBannerIndicatorEnabled, isIncludeSilenceEnabled } from '../config';
 import { isFeatureEnabled as isDualChannelEnabled, getChannelToRecord } from '../../dual-channel-recording/config';
-import { PauseRecordingState } from '../flex-hooks/states/PauseRecordingSlice';
 
 const manager = Manager.getInstance();
 
@@ -28,6 +27,8 @@ const getDualChannelCallSid = (task: ITask): string | null => {
       participantLeg = participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker);
       break;
     }
+    default:
+      break;
   }
 
   if (!participantLeg || !participantLeg.callSid) {

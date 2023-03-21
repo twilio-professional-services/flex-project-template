@@ -19,18 +19,6 @@ const InternalDialpad = (props: OwnProps) => {
   const [selectedWorker, setSelectedWorker] = useState(null as InstantQueryWorker | null);
   const [workerList, setWorkerList] = useState([] as InstantQueryWorker[]);
 
-  useEffect(() => {
-    setWorkers();
-  }, []);
-
-  useEffect(() => {
-    handleWorkersListUpdate(inputText);
-
-    if (selectedWorker && inputText !== selectedWorker.attributes.full_name) {
-      setSelectedWorker(null);
-    }
-  }, [inputText]);
-
   const setWorkers = async (query = '') => {
     if (!props.manager.workerClient) {
       return;
@@ -44,16 +32,14 @@ const InternalDialpad = (props: OwnProps) => {
       setWorkerList(availableList);
     });
 
-    workerQuery.search(`data.attributes.contact_uri != "${worker_contact_uri}"${query !== '' ? ` AND ${query}` : ''}`);
+    const appendQuery = ` AND ${query}`;
+
+    workerQuery.search(`data.attributes.contact_uri != "${worker_contact_uri}"${query === '' ? '' : appendQuery}`);
   };
 
-  const selectWorker = (selected: InstantQueryWorker) => {
-    setSelectedWorker(selected);
-  };
-
-  const handleInput = (inputValue: string) => {
-    setInputText(inputValue);
-  };
+  useEffect(() => {
+    setWorkers();
+  }, []);
 
   const handleWorkersListUpdate = debounce(
     (e) => {
@@ -65,6 +51,22 @@ const InternalDialpad = (props: OwnProps) => {
     { maxWait: 1000 },
   );
 
+  useEffect(() => {
+    handleWorkersListUpdate(inputText);
+
+    if (selectedWorker && inputText !== selectedWorker.attributes.full_name) {
+      setSelectedWorker(null);
+    }
+  }, [inputText]);
+
+  const selectWorker = (selected: InstantQueryWorker) => {
+    setSelectedWorker(selected);
+  };
+
+  const handleInput = (inputValue: string) => {
+    setInputText(inputValue);
+  };
+
   const handleOpenChange = (isOpen?: boolean) => {
     if (isOpen === true && inputText === '' && workerList.length === 0) {
       setWorkers();
@@ -72,7 +74,7 @@ const InternalDialpad = (props: OwnProps) => {
   };
 
   const makeCall = () => {
-    if (selectedWorker != null) {
+    if (selectedWorker !== null) {
       const { manager } = props;
 
       makeInternalCall(manager, selectedWorker);

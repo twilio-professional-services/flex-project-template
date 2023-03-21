@@ -10,7 +10,7 @@ export enum NotificationIds {
   RESUME_FAILED = 'PSResumeFailed',
 }
 
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: NotificationIds.RECORDING_PAUSED,
     closeButton: true,

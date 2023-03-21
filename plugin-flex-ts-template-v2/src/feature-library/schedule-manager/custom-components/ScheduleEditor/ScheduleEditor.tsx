@@ -47,8 +47,31 @@ const ScheduleEditor = (props: OwnProps) => {
       zones.push(key);
     }
 
-    setTimeZones(zones.sort());
+    setTimeZones(
+      zones.sort((a, b) => {
+        const nameA = a.toUpperCase(); // ignore upper and lowercase
+        const nameB = b.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+
+        // names must be equal
+        return 0;
+      }),
+    );
   }, []);
+
+  const resetView = () => {
+    setName('');
+    setManualClose(false);
+    setTimeZone('');
+    setRules([]);
+    setAddRuleInput('');
+    setError('');
+  };
 
   useEffect(() => {
     resetView();
@@ -64,7 +87,7 @@ const ScheduleEditor = (props: OwnProps) => {
     const rules = [] as Rule[];
 
     props.selectedSchedule.rules.forEach((ruleGuid) => {
-      const matchingRule = props.rules.find((rule) => rule.id == ruleGuid);
+      const matchingRule = props.rules.find((rule) => rule.id === ruleGuid);
 
       if (matchingRule) {
         rules.push(matchingRule);
@@ -95,15 +118,6 @@ const ScheduleEditor = (props: OwnProps) => {
   useEffect(() => {
     setFilteredTimeZones(timeZones);
   }, [timeZones]);
-
-  const resetView = () => {
-    setName('');
-    setManualClose(false);
-    setTimeZone('');
-    setRules([]);
-    setAddRuleInput('');
-    setError('');
-  };
 
   const handleChangeName = (event: React.FormEvent<HTMLInputElement>) => {
     setName(event.currentTarget.value);

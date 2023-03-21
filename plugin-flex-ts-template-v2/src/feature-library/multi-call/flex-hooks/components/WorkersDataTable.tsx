@@ -6,7 +6,7 @@ import { FlexComponent } from '../../../../types/feature-loader';
 export const componentName = FlexComponent.WorkersDataTable;
 export const componentHook = function replaceWorkerDataTableCallsColumnMultiCall(
   flex: typeof Flex,
-  manager: Flex.Manager,
+  _manager: Flex.Manager,
 ) {
   const CallsColumnStyle = Flex.styled('div')`
   .Twilio-TaskCardList {

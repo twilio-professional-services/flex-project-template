@@ -1,7 +1,6 @@
-import { Manager } from '@twilio/flex-ui';
+import { Manager, IconButton, TaskHelper, ITask } from '@twilio/flex-ui';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IconButton, TaskHelper, ITask } from '@twilio/flex-ui';
 
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
@@ -23,14 +22,6 @@ const PauseRecordingButton = (props: OwnProps) => {
 
   const isLiveCall = props.task ? TaskHelper.isLiveCall(props.task) : false;
 
-  useEffect(() => {
-    updatePausedState();
-  }, []);
-
-  useEffect(() => {
-    updatePausedState();
-  }, [pausedRecordings, props.task?.sid]);
-
   const updatePausedState = () => {
     if (!isLiveCall || !props.task) {
       setPaused(false);
@@ -46,6 +37,14 @@ const PauseRecordingButton = (props: OwnProps) => {
       setPaused(false);
     }
   };
+
+  useEffect(() => {
+    updatePausedState();
+  }, []);
+
+  useEffect(() => {
+    updatePausedState();
+  }, [pausedRecordings, props.task?.sid]);
 
   const handleClick = async () => {
     if (!isLiveCall || !props.task) {

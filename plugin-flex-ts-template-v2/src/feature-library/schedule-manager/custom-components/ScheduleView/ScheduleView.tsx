@@ -16,7 +16,7 @@ import { loadScheduleData, publishSchedules } from '../../utils/schedule-manager
 import { NotificationIds } from '../../flex-hooks/notifications/ScheduleManager';
 import { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
 
-const ScheduleView = ({}) => {
+const ScheduleView = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [rules, setRules] = useState([] as Rule[]);
   const [schedules, setSchedules] = useState([] as Schedule[]);
@@ -32,7 +32,7 @@ const ScheduleView = ({}) => {
     listSchedules();
 
     return () => {
-      if (publishState == 1) {
+      if (publishState === 1) {
         Notifications.showNotification(NotificationIds.PUBLISH_ABORTED);
       }
     };
@@ -71,7 +71,7 @@ const ScheduleView = ({}) => {
     const publishResult = await publishSchedules();
     setPublishState(publishResult);
 
-    if (publishResult == 0) {
+    if (publishResult === 0) {
       setIsDirty(false);
       await listSchedules();
     }

@@ -140,13 +140,10 @@ class ConferenceMonitor extends React.Component {
 
     let doWorkaround = false;
 
-    if (participant.onHold) {
+    if (participant.onHold && hold_workaround) {
       // The hold workaround will briefly take a held participant off hold so that we can update endConferenceOnExit.
       // Unfortunately, setting endConferenceOnExit doesn't take effect if done while the participant is held.
-
-      if (hold_workaround) {
-        doWorkaround = true;
-      }
+      doWorkaround = true;
     }
 
     if (doWorkaround) {

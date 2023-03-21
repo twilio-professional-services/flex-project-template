@@ -5,10 +5,10 @@ import ApiService from '../../../utils/serverless/ApiService';
 
 class InternalCallService extends ApiService {
   acceptInternalTask = async (reservation: Reservation, taskSid: string) => {
-    if (typeof reservation.task.attributes.conference !== 'undefined') {
+    if (typeof reservation.task.attributes.conference === 'undefined') {
       reservation.call(
         reservation.task.attributes.from,
-        `${this.serverlessProtocol}://${this.serverlessDomain}/features/internal-call/common/agent-join-conference?conferenceName=${reservation.task.attributes.conference.friendlyName}`,
+        `${this.serverlessProtocol}://${this.serverlessDomain}/features/internal-call/common/agent-outbound-join?taskSid=${taskSid}`,
         {
           accept: true,
         },
@@ -16,7 +16,7 @@ class InternalCallService extends ApiService {
     } else {
       reservation.call(
         reservation.task.attributes.from,
-        `${this.serverlessProtocol}://${this.serverlessDomain}/features/internal-call/common/agent-outbound-join?taskSid=${taskSid}`,
+        `${this.serverlessProtocol}://${this.serverlessDomain}/features/internal-call/common/agent-join-conference?conferenceName=${reservation.task.attributes.conference.friendlyName}`,
         {
           accept: true,
         },
