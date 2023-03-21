@@ -1,9 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
-import { AppState } from 'flex-hooks/states';
+import AppState from 'types/manager/AppState';
 import { sortBy } from 'lodash';
 import { Activity } from 'types/task-router';
 import { ActivitySkillFilterRules } from '../types/ServiceConfiguration';
-import { getRules } from '..';
+import { getRules } from '../config';
 
 export interface ActivityCssConfig {
   idx: number,

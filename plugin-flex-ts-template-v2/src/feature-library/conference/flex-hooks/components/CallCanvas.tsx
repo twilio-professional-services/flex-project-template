@@ -1,12 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
 import ConferenceDialog from '../../custom-components/ConferenceDialog';
 import ConferenceMonitor from '../../custom-components/ConferenceMonitor';
-import { isFeatureEnabled, isAddButtonEnabled } from '../..';
+import { isAddButtonEnabled } from '../../config';
+import { FlexComponent } from "../../../../types/feature-loader";
 
-export function addConferenceToCallCanvas(flex: typeof Flex) {
-
-  if(!isFeatureEnabled()) return;
-  
+export const componentName = FlexComponent.CallCanvas;
+export const componentHook = function addConferenceToCallCanvas(flex: typeof Flex) {
   // This component doesn't render anything to the UI, it just monitors
   // conference changes and takes action as necessary
   flex.CallCanvas.Content.add(<ConferenceMonitor

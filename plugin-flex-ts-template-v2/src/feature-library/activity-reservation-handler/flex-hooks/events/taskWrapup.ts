@@ -6,16 +6,14 @@ import {
   wrapupActivity,
   wrapupNoAcdActivity,
 } from "../../helpers/systemActivities";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { isFeatureEnabled } from '../..';
+import { FlexEvent } from "../../../../types/feature-loader";
 
-const taskEndedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled()) return;
-
-  console.log(`activity-handler: handle ${flexEvent} for ${task.sid}`);
+export const eventName = FlexEvent.taskWrapup;
+export const eventHook = (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {
+  console.log(`activity-handler: handle ${eventName} for ${task.sid}`);
 
   if (
-    FlexHelper.hasLiveCallTask ||
+    FlexHelper.hasActiveTask ||
     FlexHelper.hasPendingTask ||
     WorkerActivity.activityName === SystemActivityNames.wrapup
   ) {
@@ -28,5 +26,3 @@ const taskEndedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
 
   WorkerActivity.setWorkerActivity(targetActivity?.sid);
 };
-
-export default taskEndedHandler;

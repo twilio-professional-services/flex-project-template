@@ -1,12 +1,10 @@
 import * as Flex from "@twilio/flex-ui";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { isFeatureEnabled } from "../..";
 import * as HangUpByHelper from "../../helpers/hangUpBy";
 import { HangUpBy } from '../../enums/hangUpBy';
+import { FlexEvent } from "../../../../types/feature-loader";
 
-const taskCompletedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled()) return;
-  
+export const eventName = FlexEvent.taskCompleted;
+export const eventHook = async (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {
   let currentHangUpBy = HangUpByHelper.getHangUpBy()[task.sid];
   
   if (currentHangUpBy === HangUpBy.ColdTransfer || currentHangUpBy === HangUpBy.WarmTransfer) {
@@ -23,5 +21,3 @@ const taskCompletedHandler = async (task: Flex.ITask, flexEvent: FlexEvent) => {
   // prevent ballooning of storage
   HangUpByHelper.clearHangUpBy(task.sid);
 };
-
-export default taskCompletedHandler;

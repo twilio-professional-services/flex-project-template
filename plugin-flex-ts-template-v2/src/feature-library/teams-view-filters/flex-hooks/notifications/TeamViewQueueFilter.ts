@@ -8,26 +8,20 @@ export enum TeamViewQueueFilterNotification {
   ErrorLoadingQueue = 'ErrorLoadingQueue'
 };
 
-export default (flex: typeof Flex, manager: Flex.Manager) => {
-  errorParsingQueueFilterExpression(flex, manager);
-}
-
-function errorParsingQueueFilterExpression(flex: typeof Flex, manager: Flex.Manager) {
-  flex.Notifications.registerNotification({
+export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+  {
     id: TeamViewQueueFilterNotification.ErrorParsingQueueExpression,
     type: Flex.NotificationType.warning,
     content: StringTemplates.ErrorParsingQueueExpression
-  });
-
-  flex.Notifications.registerNotification({
+  },
+  {
     id: TeamViewQueueFilterNotification.ErrorParsingQueueExpressionWithOR,
     type: Flex.NotificationType.warning,
     content: StringTemplates.ErrorParsingQueueExpressionWithOR
-  });
-
-  flex.Notifications.registerNotification({
+  },
+  {
     id: TeamViewQueueFilterNotification.ErrorLoadingQueue,
     type: Flex.NotificationType.warning,
     content: StringTemplates.ErrorQueueNotFound
-  });
-}
+  }
+];

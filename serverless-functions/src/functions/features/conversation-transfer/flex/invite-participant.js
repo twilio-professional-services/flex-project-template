@@ -28,11 +28,6 @@ const getRequiredParameters = (event) => {
       purpose: "worker or queue sid",
     },
     {
-      key: "transferQueueName",
-      purpose:
-        "friendly name of taskrouter queue - can be empty string if transferTargetSid is a worker sid",
-    },
-    {
       key: "workersToIgnore",
       purpose:
         "json object with key indicating task attribute to set as an array of workers to ignore. eg {'workersToIgnore':['Alice','Bob']}. This gets copied to task attributes.",
@@ -44,11 +39,6 @@ const getRequiredParameters = (event) => {
     {
       key: "flexInteractionChannelSid",
       purpose: "UOxxx sid for interactions API",
-    },
-    {
-      key: "removeFlexInteractionParticipantSid",
-      purpose:
-        "UTxxx sid for interactions API for the transferrring agent to remove them from conversation. Can be empty string if we are adding additional participant and don't want to remove transferring",
     },
   ];
   return requiredParameters;

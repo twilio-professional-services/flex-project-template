@@ -22,4 +22,4 @@ const pauseRecordingSlice = createSlice({
 })
 
 export const { pause, resume } = pauseRecordingSlice.actions
-export default pauseRecordingSlice.reducer
+export const reducerHook = () => ({ pauseRecording: pauseRecordingSlice.reducer });

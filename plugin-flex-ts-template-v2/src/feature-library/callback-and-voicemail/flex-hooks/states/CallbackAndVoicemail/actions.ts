@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { Action } from '../../../../../flex-hooks/states'
+import { Action } from '../../../../../types/manager'
 import CallbackService from '../../../utils/callback/CallbackService'
 import { INITIATE_CALLBACK, REQUEUE_CALLBACK, PLACED_CALLBACK } from './types';
 

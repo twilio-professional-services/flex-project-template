@@ -1,10 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 import InternalDialpad from '../../custom-components/InternalDialpad';
-import { isFeatureEnabled } from '../..';
+import { FlexComponent } from "../../../../types/feature-loader";
 
-export function addInternalCallToDialerPanel(flex: typeof Flex, manager: Flex.Manager) {
-
-  if(!isFeatureEnabled()) return;
-  
+export const componentName = FlexComponent.OutboundDialerPanel;
+export const componentHook = function addInternalCallToDialerPanel(flex: typeof Flex, manager: Flex.Manager) {
   flex.OutboundDialerPanel.Content.add(<InternalDialpad key="select-dialpad" manager={manager} />);
 }

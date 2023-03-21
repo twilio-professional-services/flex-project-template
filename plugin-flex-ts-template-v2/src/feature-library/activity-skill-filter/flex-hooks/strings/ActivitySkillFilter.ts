@@ -3,6 +3,6 @@ export enum StringTemplates {
   ActivitySkillRulesNotConfigured = 'PSActivitySkillRulesNotConfigured'
 }
 
-export default {
+export const stringHook = () => ({
   [StringTemplates.ActivitySkillRulesNotConfigured]: 'Activity skill filter rules are not configured. The activity menu has not been modified.'
-}
+})

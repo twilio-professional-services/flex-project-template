@@ -1,4 +1,4 @@
-import { Action } from '../../../../../flex-hooks/states'
+import { Action } from '../../../../../types/manager'
 import SupervisorCompleteReservationService from "../../../utils/SupervisorCompleteReservation";
 import { UPDATE_RERSERVATION } from './types';
 

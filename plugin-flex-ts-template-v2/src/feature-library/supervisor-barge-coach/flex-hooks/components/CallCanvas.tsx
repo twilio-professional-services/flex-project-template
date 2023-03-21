@@ -1,10 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
 import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel'
-import { cleanStateAndSyncUponAgentHangUp } from '../actions/reservation';
 import { SyncDoc } from '../../utils/sync/Sync';
-import { isAgentCoachingPanelEnabled } from '../..';
+import { isAgentCoachingPanelEnabled } from '../../config';
+import { FlexComponent } from "../../../../types/feature-loader";
 
-export function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Flex.Manager) {
+export const componentName = FlexComponent.CallCanvas;
+export const componentHook = function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Flex.Manager) {
 
   if(!isAgentCoachingPanelEnabled()) return;
   // Adding Coaching Status Panel to notify the agent who is Coaching them
@@ -15,7 +16,4 @@ export function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Fl
     if(myWorkerSID != null) {
       SyncDoc.clearSyncDoc(myWorkerSID);
     }
-
-    // Add a Listener to ReservationCreated
-    cleanStateAndSyncUponAgentHangUp(flex, manager);
 }

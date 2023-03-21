@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SidePanel } from '@twilio/flex-ui';
+import { Manager, SidePanel } from '@twilio/flex-ui';
 import { Alert } from '@twilio-paste/core/alert';
 import { Button } from '@twilio-paste/core/button';
 import { Box } from '@twilio-paste/core/box';
@@ -18,7 +18,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { isRuleUnique, updateRuleData } from '../../utils/schedule-manager';
 import { Rule, Schedule } from '../../types/schedule-manager';
-import ScheduleManagerStrings, { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
+import { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
 
 interface OwnProps {
   onPanelClosed: () => void;
@@ -65,6 +65,8 @@ const RuleEditor = (props: OwnProps) => {
   const [restrictDates, setRestrictDates] = useState(false);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  
+  const ScheduleManagerStrings = Manager.getInstance().strings as any;
   
   useEffect(() => {
     resetView();

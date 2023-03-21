@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import React, { useEffect } from 'react';
 import { ActivityWrapper } from './ActivityWrapperStyles';
 import AgentActivities from '../../utils/AgentActivities';
-import { AppState } from 'flex-hooks/states';
+import AppState from 'types/manager/AppState';
 
 function ActivityWrapperComponent() {
   const workerAttrs = Flex.useFlexSelector((state: AppState) => state.flex.worker.attributes);

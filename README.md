@@ -347,8 +347,6 @@ Lastly, this package manages the github action workflows - with one example bein
 When adding new features to the template, some boilerplate is required. This script does all of that for you, specifically:
 - Creates a feature directory under `feature-library`
 - Adds an interface for feature configuration
-- Adds a `pluginsLoaded` event handler
-- Adds the appropriate references to the above files
 - Adds a feature readme file
 - Adds the feature to the `ui_attributes.common.json` config file
   - By default, the feature is added to the config with `enabled` set to `false`

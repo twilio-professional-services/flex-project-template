@@ -13,7 +13,7 @@ import {
 import { VolumeOnIcon } from "@twilio-paste/icons/esm/VolumeOnIcon";
 import { AgentIcon } from "@twilio-paste/icons/esm/AgentIcon";
 import { SecondDevice } from "../../../multi-call/helpers/MultiCallHelper";
-import { isFeatureEnabled as isMultiCallEnabled } from '../../../multi-call';
+import { isFeatureEnabled as isMultiCallEnabled } from '../../../multi-call/config';
 
 const DeviceManager: React.FunctionComponent = () => {
   const menu = useMenuState();

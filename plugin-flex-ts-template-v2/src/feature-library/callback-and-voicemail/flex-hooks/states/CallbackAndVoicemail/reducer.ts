@@ -1,11 +1,13 @@
 import * as Flex from '@twilio/flex-ui';
-import { Action } from '../../../../../flex-hooks/states'
+import { Action } from '../../../../../types/manager'
 import { CallbackAndVoicemailState, INITIATE_CALLBACK, REQUEUE_CALLBACK, PLACED_CALLBACK } from './types';
 
 import initialState from './initialState';
 
 // Reducer
-export default function (state = initialState, action: Action): CallbackAndVoicemailState {
+export const reducerHook = () => ({ callbackAndVoicemail: reducer });
+
+ const reducer = (state = initialState, action: Action): CallbackAndVoicemailState => {
   switch (action.type) {
 
     case `${INITIATE_CALLBACK}_PENDING`: {

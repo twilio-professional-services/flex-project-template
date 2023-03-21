@@ -1,12 +1,12 @@
 import * as Flex from "@twilio/flex-ui";
 import ConferenceService from "../../../conference/utils/ConferenceService";
 import { isInternalCall } from '../../helpers/internalCall';
-import { isFeatureEnabled } from '../..';
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
-export function handleInternalUnholdCall(flex: typeof Flex, manager: Flex.Manager) {
-  if (!isFeatureEnabled()) return;
-
-  flex.Actions.addListener("beforeUnholdCall", async (payload, abortFunction) => {
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.UnholdCall;
+export const actionHook = function handleInternalUnholdCall(flex: typeof Flex, manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     if (!isInternalCall(payload.task)) {
       return;
     }

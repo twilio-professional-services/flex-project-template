@@ -1,20 +1,22 @@
 import * as Flex from "@twilio/flex-ui";
-import { TaskHelper, Actions } from "@twilio/flex-ui";
-import { isColdTransferEnabled } from "../../index";
+import { isColdTransferEnabled } from "../../config";
 import { TransferActionPayload } from "../../types/ActionPayloads";
+import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
 
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.TransferTask;
 // invoke the custom chatTransferTask action if a cbm task otherwise carry on
-export function handleChatTransfer(flex: typeof Flex, manager: Flex.Manager) {
+export const actionHook = function handleChatTransfer(flex: typeof Flex, manager: Flex.Manager) {
   if (!isColdTransferEnabled()) return;
 
-  Flex.Actions.addListener(
-    "beforeTransferTask",
+  flex.Actions.addListener(
+    `${actionEvent}${actionName}`,
     (payload: TransferActionPayload, abortFunction: any) => {
-      if (TaskHelper.isCBMTask(payload.task)) {
+      if (flex.TaskHelper.isCBMTask(payload.task)) {
         // native action handler would fail for chat task so abort the action
         abortFunction();
         // Execute Chat Transfer Task
-        Flex.Actions.invokeAction("ChatTransferTask", payload);
+        flex.Actions.invokeAction("ChatTransferTask", payload);
       }
     }
   );
