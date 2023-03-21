@@ -30,7 +30,7 @@ class PhoneNumberService extends ApiService {
     return cachedResult.success ? cachedResult : await this.#getAccountPhoneNumbers();
   }
 
-  #getAccountPhoneNumbers = (): Promise<any> => {
+  #getAccountPhoneNumbers = async (): Promise<any> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(this.manager.user.token),
     };

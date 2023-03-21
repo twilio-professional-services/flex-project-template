@@ -18,7 +18,7 @@ class WorkerActivityHelper {
     return this.activity?.sid;
   }
 
-  waitForWorkerActivityChange = (activitySid: string | undefined) =>
+  waitForWorkerActivityChange = async (activitySid: string | undefined) =>
     new Promise((resolve) => {
       if (activitySid && this.activitySid === activitySid) {
         resolve(null);

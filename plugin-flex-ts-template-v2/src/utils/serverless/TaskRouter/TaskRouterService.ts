@@ -86,7 +86,7 @@ class TaskRouterService extends ApiService {
     return result.success;
   }
 
-  #updateTaskAssignmentStatus = (
+  #updateTaskAssignmentStatus = async (
     taskSid: string,
     assignmentStatus: TaskAssignmentStatus,
   ): Promise<UpdateTaskAttributesResponse> => {
@@ -110,7 +110,7 @@ class TaskRouterService extends ApiService {
     });
   };
 
-  #updateTaskAttributes = (taskSid: string, attributesUpdate: string): Promise<UpdateTaskAttributesResponse> => {
+  #updateTaskAttributes = async (taskSid: string, attributesUpdate: string): Promise<UpdateTaskAttributesResponse> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(this.manager.user.token),
       taskSid: encodeURIComponent(taskSid),
@@ -131,7 +131,7 @@ class TaskRouterService extends ApiService {
     });
   };
 
-  #getQueues = (): Promise<GetQueuesResponse> => {
+  #getQueues = async (): Promise<GetQueuesResponse> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(this.manager.user.token),
     };
@@ -148,7 +148,7 @@ class TaskRouterService extends ApiService {
     });
   };
 
-  #getWorkerChannels = (workerSid: string): Promise<GetWorkerChannelsResponse> => {
+  #getWorkerChannels = async (workerSid: string): Promise<GetWorkerChannelsResponse> => {
     const encodedParams: EncodedParams = {
       workerSid: encodeURIComponent(workerSid),
       Token: encodeURIComponent(this.manager.user.token),
@@ -166,7 +166,7 @@ class TaskRouterService extends ApiService {
     });
   };
 
-  #updateWorkerChannel = (
+  #updateWorkerChannel = async (
     workerSid: string,
     workerChannelSid: string,
     capacity: number,

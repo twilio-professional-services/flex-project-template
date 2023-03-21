@@ -57,7 +57,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, conv
       `${serverlessProtocol}://${serverlessDomain}/features/chat-to-video-escalation/generate-unique-code?taskSid=${taskSid}`,
       options,
     )
-      .then((response) => response.json())
+      .then(async (response) => response.json())
       .then((response) => {
         console.log('SwitchToVideo: unique link created:', response);
 

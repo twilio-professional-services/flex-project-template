@@ -94,7 +94,7 @@ const isTaskActive = (task: ITask) => {
   return manager.workerClient?.reservations.has(reservationSid);
 };
 
-export const waitForConferenceParticipants = (task: ITask): Promise<ConferenceParticipant[]> =>
+export const waitForConferenceParticipants = async (task: ITask): Promise<ConferenceParticipant[]> =>
   new Promise((resolve) => {
     const waitTimeMs = 100;
     // For outbound calls, the customer participant doesn't join the conference
@@ -148,7 +148,7 @@ export const waitForConferenceParticipants = (task: ITask): Promise<ConferencePa
     }, maxWaitTimeMs);
   });
 
-export const waitForActiveCall = (task: ITask): Promise<string> =>
+export const waitForActiveCall = async (task: ITask): Promise<string> =>
   new Promise((resolve) => {
     const waitTimeMs = 100;
     // For internal calls, there is no conference, so we only have the active call to work with.

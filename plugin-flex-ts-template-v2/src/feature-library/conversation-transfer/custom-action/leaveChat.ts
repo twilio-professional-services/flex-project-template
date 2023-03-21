@@ -25,5 +25,5 @@ const handleLeaveChatAction = async (payload: LeaveChatActionPayload) => {
 };
 
 export const registerLeaveChatAction = () => {
-  Actions.registerAction('LeaveChat', (payload: any) => handleLeaveChatAction(payload as LeaveChatActionPayload));
+  Actions.registerAction('LeaveChat', async (payload: any) => handleLeaveChatAction(payload as LeaveChatActionPayload));
 };

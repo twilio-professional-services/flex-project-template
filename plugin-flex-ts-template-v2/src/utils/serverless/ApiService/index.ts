@@ -4,7 +4,7 @@ import { random } from 'lodash';
 import { EncodedParams } from '../../../types/serverless';
 import { getFeatureFlags } from '../../configuration';
 
-function delay<T>(ms: number, result?: T) {
+async function delay<T>(ms: number, result?: T) {
   return new Promise((resolve) => setTimeout(() => resolve(result), ms));
 }
 
@@ -47,9 +47,9 @@ export default abstract class ApiService {
     }, '');
   }
 
-  protected fetchJsonWithReject<T>(url: string, config: RequestInit, attempts = 0): Promise<T> {
+  protected async fetchJsonWithReject<T>(url: string, config: RequestInit, attempts = 0): Promise<T> {
     return fetch(url, config)
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
           throw response;
         }

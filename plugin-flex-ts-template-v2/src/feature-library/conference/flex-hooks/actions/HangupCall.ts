@@ -14,7 +14,7 @@ export const actionHook = function handleConferenceHangup(flex: typeof Flex, _ma
     const participantsOnHold = (participant: Flex.ConferenceParticipant) => {
       return participant.onHold && participant.status === 'joined';
     };
-    const snooze = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+    const snooze = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
     const getLatestConference = (taskSid: string) => {
       const updatedTask = Flex.StateHelper.getTaskByTaskrouterTaskSid(taskSid);
       return updatedTask.conference;

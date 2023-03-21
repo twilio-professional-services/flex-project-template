@@ -8,7 +8,7 @@ export interface ParticipantResponse {
 }
 
 class HangUpByService extends ApiService {
-  fetchParticipant = (conferenceSid: string, participantSid: string): Promise<ParticipantResponse> => {
+  fetchParticipant = async (conferenceSid: string, participantSid: string): Promise<ParticipantResponse> => {
     return new Promise((resolve, reject) => {
       const encodedParams: EncodedParams = {
         conference: encodeURIComponent(conferenceSid),

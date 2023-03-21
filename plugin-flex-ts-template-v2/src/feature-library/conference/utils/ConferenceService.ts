@@ -112,15 +112,15 @@ class ConferenceService extends ApiService {
     });
   };
 
-  holdParticipant = (conference: string, participantSid: string): Promise<string> => {
+  holdParticipant = async (conference: string, participantSid: string): Promise<string> => {
     return this._toggleParticipantHold(conference, participantSid, true);
   };
 
-  unholdParticipant = (conference: string, participantSid: string): Promise<string> => {
+  unholdParticipant = async (conference: string, participantSid: string): Promise<string> => {
     return this._toggleParticipantHold(conference, participantSid, false);
   };
 
-  removeParticipant = (conference: string, participantSid: string): Promise<string> => {
+  removeParticipant = async (conference: string, participantSid: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       const encodedParams: EncodedParams = {
         conference: encodeURIComponent(conference),

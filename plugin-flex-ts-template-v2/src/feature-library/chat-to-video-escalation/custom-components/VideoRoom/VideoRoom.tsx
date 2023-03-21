@@ -123,8 +123,8 @@ const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
         },
       };
       fetch(`${BACKEND_URL}/agent-get-token`, options)
-        .then((res) => res.json())
-        .then((res) => {
+        .then(async (res) => res.json())
+        .then(async (res) => {
           console.log('IncomingVideoComponent: got token: ', res.token);
           return Video.connect(res.token);
         })

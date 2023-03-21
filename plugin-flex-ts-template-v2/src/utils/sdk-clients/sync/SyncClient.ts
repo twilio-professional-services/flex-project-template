@@ -6,7 +6,7 @@ const client = new SyncClient(Flex.Manager.getInstance().user.token);
 
 export default client;
 
-export const getAllSyncMapItems = (syncMap: SyncMap) => {
+export const getAllSyncMapItems = async (syncMap: SyncMap) => {
   return syncMap.getItems().then(_pageHandler);
 };
 

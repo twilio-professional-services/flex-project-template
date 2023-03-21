@@ -53,7 +53,7 @@ class BargeCoachService extends ApiService {
     }
   }
 
-  #updateParticipantBargeCoach = (
+  #updateParticipantBargeCoach = async (
     conferenceSid: string,
     participantSid: string,
     agentSid: string,

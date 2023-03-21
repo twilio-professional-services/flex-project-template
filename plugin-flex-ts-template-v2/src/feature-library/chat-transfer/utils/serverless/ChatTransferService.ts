@@ -152,7 +152,7 @@ class ChatTransferService extends ApiService {
     }
   }
 
-  #createTransferTask = (
+  #createTransferTask = async (
     task: Flex.ITask,
     transferTargetSid: string,
     queueName: string,
@@ -184,7 +184,7 @@ class ChatTransferService extends ApiService {
     });
   };
 
-  #completeTransferredTask = (
+  #completeTransferredTask = async (
     taskSid: string,
     transferType: string,
     channelSid: string,

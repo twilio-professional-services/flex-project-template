@@ -154,7 +154,7 @@ export interface RemoveParticipantRESTResponse {
 }
 
 class ChatTransferService extends ApiService {
-  sendTransferChatAPIRequest = (requestPayload: TransferRESTPayload): Promise<TransferRESTResponse> => {
+  sendTransferChatAPIRequest = async (requestPayload: TransferRESTPayload): Promise<TransferRESTResponse> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(manager.user.token),
       taskSid: encodeURIComponent(requestPayload.taskSid),
@@ -182,7 +182,7 @@ class ChatTransferService extends ApiService {
     });
   };
 
-  removeParticipantAPIRequest = (
+  removeParticipantAPIRequest = async (
     requestPayload: RemoveParticipantRESTPayload,
   ): Promise<RemoveParticipantRESTResponse> => {
     const encodedParams: EncodedParams = {

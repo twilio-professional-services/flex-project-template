@@ -28,7 +28,7 @@ const participantDetailsUpToDateCheck = (
 
 // There can be a delay in the media properties being up to date for participants joining
 const getCBMParticipantsWrapper = async (task: ITask, flexInteractionChannelSid: string): Promise<any[]> => {
-  const wait = (ms: number) =>
+  const wait = async (ms: number) =>
     new Promise<void>((resolve) => {
       setTimeout(() => resolve(), ms);
     });

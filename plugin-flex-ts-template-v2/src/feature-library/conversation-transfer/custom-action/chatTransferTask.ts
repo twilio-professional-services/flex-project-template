@@ -44,7 +44,7 @@ const handleChatTransferAction = async (payload: TransferActionPayload) => {
 };
 
 export const registerCustomChatTransferAction = () => {
-  Actions.registerAction('ChatTransferTask', (payload: any) =>
+  Actions.registerAction('ChatTransferTask', async (payload: any) =>
     handleChatTransferAction(payload as TransferActionPayload),
   );
 };

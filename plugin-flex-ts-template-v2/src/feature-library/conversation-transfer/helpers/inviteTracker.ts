@@ -30,11 +30,11 @@ const instantQuery = async (targetSid: string, targetType: ParticipantInviteType
   });
 };
 
-const getWorkerName = (sid: string): Promise<string> => {
+const getWorkerName = async (sid: string): Promise<string> => {
   return instantQuery(sid, 'Worker');
 };
 
-const getQueueName = (sid: string): Promise<string> => {
+const getQueueName = async (sid: string): Promise<string> => {
   return instantQuery(sid, 'Queue');
 };
 

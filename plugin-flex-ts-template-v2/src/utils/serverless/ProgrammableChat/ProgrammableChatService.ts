@@ -17,7 +17,7 @@ class ProgrammableChatService extends ApiService {
     }
   }
 
-  #updateChannelAttributes = (channelSid: string, attributes: any): Promise<UpdateChannelAttributesResponse> => {
+  #updateChannelAttributes = async (channelSid: string, attributes: any): Promise<UpdateChannelAttributesResponse> => {
     const manager = Flex.Manager.getInstance();
 
     const encodedParams: EncodedParams = {

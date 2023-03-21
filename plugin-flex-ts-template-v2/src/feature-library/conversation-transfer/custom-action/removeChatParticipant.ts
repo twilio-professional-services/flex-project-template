@@ -27,7 +27,7 @@ const handleRemoveChatParticipant = async (payload: RemoveChatParticipantActionP
 };
 
 export const registerRemoveChatParticipant = () => {
-  Actions.registerAction('RemoveChatParticipant', (payload: any) =>
+  Actions.registerAction('RemoveChatParticipant', async (payload: any) =>
     handleRemoveChatParticipant(payload as RemoveChatParticipantActionPayload),
   );
 };

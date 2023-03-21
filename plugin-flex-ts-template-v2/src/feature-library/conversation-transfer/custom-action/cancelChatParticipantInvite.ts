@@ -21,7 +21,7 @@ const handleCancelChatParticipantInvite = async (payload: CancelChatParticipantI
 };
 
 export const registerCancelChatParticipantInvite = () => {
-  Actions.registerAction('CancelChatParticipantInvite', (payload: any) =>
+  Actions.registerAction('CancelChatParticipantInvite', async (payload: any) =>
     handleCancelChatParticipantInvite(payload as CancelChatParticipantInviteActionPayload),
   );
 };
