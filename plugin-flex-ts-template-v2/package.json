@@ -10,6 +10,7 @@
     "test:coverage": "jest --silent --coverage && http-server -c-1 ./coverage -o /lcov-report",
     "lint": "eslint --ext ts --ext tsx ./src",
     "lint:fix": "npm run lint -- --fix",
+    "lint:report": "npm run lint -- --output-file eslint_report.json --format json",
     "build": "twilio flex:plugins:build",
     "deploy": "twilio flex:plugins:deploy --version=${npm_package_version}",
     "install-flex-plugin": "twilio plugins:install @twilio-labs/plugin-flex@6.0.2",
