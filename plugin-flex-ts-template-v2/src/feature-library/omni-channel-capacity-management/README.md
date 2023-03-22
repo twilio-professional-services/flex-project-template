@@ -24,7 +24,7 @@ Example delivery of callbacks (on voice channel of capacity 1) and chat tasks (m
 
 &ensp;&ensp;&ensp;&ensp;&ensp;For example for workflows assinging chat work to queues
 <br>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;- worker.channel.voice.available_capacity_percentage == 100
-<br>&ensp;&ensp;&ensp;&ensp;&ensp;For workflows assinging voice woork to queues
+<br>&ensp;&ensp;&ensp;&ensp;&ensp;For workflows assinging voice work to queues
 <br>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;- worker.channel.voice.available_capacity_percentage == 100
 <br>&ensp;&ensp;&ensp;&ensp;&ensp;If other channels are in use, then modify accordingly
 
