@@ -1,11 +1,15 @@
-name: lint
+name: lint_plugin_v2
 
 on:
   pull_request:
     types:
       - opened
+      - reopened
+      - synchronize
     branches:
       - main
+    paths:
+      - 'plugin-flex-ts-template-v2/**'
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -30,10 +34,9 @@ jobs:
       - name: Annotate Code Linting Results
         id: annotate
         uses: ataylorme/eslint-annotate-action@v2
-        working-directory: ./plugin-flex-ts-template-v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          report-json: "eslint_report.json"
+          report-json: "plugin-flex-ts-template-v2/eslint_report.json"
       - uses: mshick/add-pr-comment@v2
         if: always() && steps.annotate.outputs.errorCount > 0
         with:
