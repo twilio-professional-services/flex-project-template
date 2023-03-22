@@ -26,7 +26,7 @@ jobs:
           node-version: '16'
       - name: Install packages
         working-directory: ./plugin-flex-ts-template-v2
-        run: npm ci
+        run: npm install
       - name: Run eslint
         working-directory: ./plugin-flex-ts-template-v2
         run: npm run lint:report
