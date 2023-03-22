@@ -74,6 +74,7 @@ export default function CapacityContainer(props: OwnProps) {
     setIsSaving(true);
 
     await Promise.all(
+      // eslint-disable-next-line @typescript-eslint/promise-function-async
       Object.keys(channelSettings).map((workerChannelSid) => {
         const settings = channelSettings[workerChannelSid];
 
