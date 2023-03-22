@@ -47,7 +47,13 @@ transferQueueName - TaskRouter friendly name for the queue in the case of target
 workerSidsInConversation - string array of workers in the conversation
 ```
 
-A sample workflow showing how to route to the agent, queue and ignore agents in the conversation is [here](example-taskrouter-workflow.json):
+A sample workflow showing how to route to the agent, queue and ignore agents in the conversation is [here](example-taskrouter-workflow.json). It is recommended to name this workflow "Chat Transfer".
+
+With the workflow setup, we need to update the serverless function environment variable
+
+> TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID
+
+with the new workflow SID for conversation transfers. If your workflow name begins with "Chat Transfer", the `npm install` script, `npm run generate-env` script, and the included CI scripts will automatically populate this SID for you.
 
 
 ## Implementation Notes
