@@ -499,3 +499,45 @@ exports.fetchTask = async function fetchTask(parameters) {
     return retryHandler(error, parameters, arguments.callee);
   }
 };
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.workflowSid (optional) the workflow SID to filter by
+ * @param {string} parameters.assignmentStatus (optional) the assignment status to filter by
+ * @param {string} parameters.ordering (optional) the desired ordering (e.g. DateCreated:desc)
+ * @param {number} parameters.limit (optional) the maximum number of tasks to return (default 1000)
+ * @returns {object} An object containing an array of tasks for the account
+ * @description the following method is used to robustly retrieve
+ *  tasks for the account
+ */
+exports.getTasks = async function getTasks(parameters) {
+  const { context, attempts, workflowSid, assignmentStatus, ordering, limit } =
+    parameters;
+
+  if (!isNumber(attempts))
+    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
+  if (!isObject(context))
+    throw "Invalid parameters object passed. Parameters must contain context object";
+
+  try {
+    const client = context.getTwilioClient();
+    const tasks = await client.taskrouter
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .tasks.list({ limit, workflowSid, assignmentStatus, ordering });
+
+    return {
+      success: true,
+      status: 200,
+      tasks: tasks.map((task) => {
+        return {
+          ...task,
+          attributes: JSON.parse(task.attributes),
+        };
+      }),
+    };
+  } catch (error) {
+    return retryHandler(error, parameters, arguments.callee);
+  }
+};

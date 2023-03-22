@@ -144,7 +144,7 @@ class CallbackService extends ApiService {
     };
 
     return this.fetchJsonWithReject<CreateCallbackResponse>(
-      `${this.serverlessProtocol}://${this.serverlessDomain}/features/callbacks/flex/create-callback`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/features/callback-and-voicemail/flex/create-callback`,
       {
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
