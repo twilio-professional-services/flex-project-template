@@ -25,9 +25,9 @@ Example delivery of callbacks (on voice channel of capacity 1) and chat tasks (m
 &ensp;&ensp;&ensp;&ensp;&ensp;For example for workflows assinging chat work to queues
 <br>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;- worker.channel.voice.available_capacity_percentage == 100
 <br>&ensp;&ensp;&ensp;&ensp;&ensp;For workflows assinging voice work to queues
-<br>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;- worker.channel.voice.available_capacity_percentage == 100
+<br>&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;- worker.channel.chat.available_capacity_percentage == 100
 <br>&ensp;&ensp;&ensp;&ensp;&ensp;If other channels are in use, then modify accordingly
 
 # how does it work?
 
-By using the workflow expressions to keep reservations of different channels mutually excluded, the solution works by moving the agents channel capacity to 1 anytime they hit their max capacity. Then this allows taskrouter to assign the next relevant peice of work. As soon as that work is accepted, this feature automatically puts their capacity back to 2. Further enhancements would need to be made to this feature if each agent was to have a different max capacity.
+By using the workflow expressions to keep reservations of different channels mutually excluded, the solution works by moving the agents channel capacity to 1 anytime they hit their max capacity. Then this allows taskrouter to assign the next relevant piece of work. As soon as that work is accepted, this feature automatically puts their capacity back to 2. Further enhancements would need to be made to this feature if each agent was to have a different max capacity.
