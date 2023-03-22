@@ -43,7 +43,7 @@ const ScheduleEditor = (props: OwnProps) => {
 
   useEffect(() => {
     const zones = [];
-    for (const [key, _value] of Object.entries(tzdata.zones)) {
+    for (const [key] of Object.entries(tzdata.zones)) {
       zones.push(key);
     }
 

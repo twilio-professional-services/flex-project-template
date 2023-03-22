@@ -6,11 +6,8 @@ export let SecondDeviceCall: Call | null = null;
 export let FlexDeviceCall: Call | null = null;
 
 const createNewDevice = (manager: Manager) => {
-  const {
-    acceptOptions: _acceptOptions,
-    audioConstraints,
-    ...customDeviceOptions
-  } = manager.configuration.sdkOptions?.voice ?? {};
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { acceptOptions, audioConstraints, ...customDeviceOptions } = manager.configuration.sdkOptions?.voice ?? {};
 
   const deviceOptions = {
     allowIncomingWhileBusy: false,
