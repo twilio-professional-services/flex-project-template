@@ -11,10 +11,10 @@ export interface ApplyTeamsViewFiltersPayload {
 
 export const actionEvent = FlexActionEvent.after;
 export const actionName = FlexAction.ApplyTeamsViewFilters;
-export const actionHook = function logApplyListFilters(flex: typeof Flex, manager: Flex.Manager) {
+export const actionHook = function logApplyListFilters(flex: typeof Flex, _manager: Flex.Manager) {
   if (!shouldLogFilters()) return;
 
-  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, _abortFunction) => {
     console.log('Team view filters applied', payload);
   });
 };

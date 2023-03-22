@@ -14,7 +14,6 @@ import * as PasteElements from './paste-elements';
 import * as Reducers from './reducers';
 import * as Strings from './strings';
 import * as TeamsFilters from './teams-filters';
-
 // @ts-ignore
 import features from '../../feature-library/*';
 

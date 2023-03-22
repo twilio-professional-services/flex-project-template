@@ -9,11 +9,11 @@ async function delay<T>(ms: number, result?: T) {
 }
 
 export default abstract class ApiService {
-  protected manager = Flex.Manager.getInstance();
-
   readonly serverlessDomain: string;
 
   readonly serverlessProtocol: string;
+
+  protected manager = Flex.Manager.getInstance();
 
   constructor() {
     const custom_data = getFeatureFlags() || {};

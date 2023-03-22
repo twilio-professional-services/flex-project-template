@@ -107,7 +107,15 @@ const ScheduleView = () => {
           <RuleDataTable isLoading={isLoading} rules={rules} schedules={schedules} updateRules={updateRules} />
         </Tab>
       </Tabs>
-      <Modal isOpen={publishState === 1} onDismiss={() => {}} size="default" ariaLabelledby="">
+      <Modal
+        isOpen={publishState === 1}
+        onDismiss={
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          () => {}
+        }
+        size="default"
+        ariaLabelledby=""
+      >
         <ModalBody>
           <PublishModalContent>
             <Stack orientation="horizontal" spacing="space60">
@@ -122,7 +130,15 @@ const ScheduleView = () => {
           </PublishModalContent>
         </ModalBody>
       </Modal>
-      <Modal isOpen={loadFailed} onDismiss={() => {}} size="default" ariaLabelledby="">
+      <Modal
+        isOpen={loadFailed}
+        onDismiss={
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          () => {}
+        }
+        size="default"
+        ariaLabelledby=""
+      >
         <ModalBody>
           <PublishModalContent>
             <Stack orientation="vertical" spacing="space20">

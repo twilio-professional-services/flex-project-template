@@ -17,17 +17,17 @@ export interface ListPhoneNumbersResponse {
 class PhoneNumberService extends ApiService {
   private flex_service_instance_sid = Manager.getInstance().serviceConfiguration.flex_service_instance_sid;
 
-  STORAGE_KEY = `FLEX_PHONE_NUMBERS_${this.flex_service_instance_sid}`;
+  private STORAGE_KEY = `FLEX_PHONE_NUMBERS_${this.flex_service_instance_sid}`;
 
-  EXPIRY = 86400000; // 1 day
+  private EXPIRY = 86400000; // 1 day
 
-  async getAccountPhoneNumbers(attempts: number): Promise<ListPhoneNumbersResponse> {
+  async getAccountPhoneNumbers(): Promise<ListPhoneNumbersResponse> {
     // look for value in storage first
     const cachedResult = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
     // if storage value has expired, discard
     if (cachedResult.expiry < new Date().getTime()) cachedResult.success = false;
     // if we have a valid storage value use it, otherwise get from backend.
-    return cachedResult.success ? cachedResult : await this.#getAccountPhoneNumbers();
+    return cachedResult.success ? cachedResult : this.#getAccountPhoneNumbers();
   }
 
   #getAccountPhoneNumbers = async (): Promise<any> => {

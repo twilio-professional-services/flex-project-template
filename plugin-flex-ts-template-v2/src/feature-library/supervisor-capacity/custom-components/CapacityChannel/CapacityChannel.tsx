@@ -26,12 +26,12 @@ export default function CapacityChannel(props: OwnProps) {
 
   useEffect(() => {
     const isChanged = !(
-      available == props.workerChannel.available && capacity == String(props.workerChannel.configuredCapacity)
+      available === props.workerChannel.available && capacity === String(props.workerChannel.configuredCapacity)
     );
     setChanged(isChanged);
 
     // notify the parent of the new settings
-    props.channelSettingsChanged(props.workerChannel.sid, isChanged, available, parseInt(capacity));
+    props.channelSettingsChanged(props.workerChannel.sid, isChanged, available, parseInt(capacity, 10));
   }, [available, capacity]);
 
   const reset = () => {
@@ -52,12 +52,12 @@ export default function CapacityChannel(props: OwnProps) {
       max = rules[props.workerChannel.taskChannelUniqueName].max;
     }
 
-    const value = parseInt(event.target.value);
+    const value = parseInt(event.target.value, 10);
 
     if (!min) min = 0;
     if (!max) max = 50;
 
-    if (String(value) != event.target.value) {
+    if (String(value) !== event.target.value) {
       // value is not a number
       setCapacity(String(props.workerChannel.configuredCapacity));
       return;
@@ -71,8 +71,8 @@ export default function CapacityChannel(props: OwnProps) {
   };
 
   const onCapacityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const numValue = parseInt(event.target.value);
-    if (String(numValue) == event.target.value) {
+    const numValue = parseInt(event.target.value, 10);
+    if (String(numValue) === event.target.value) {
       // value is a number
       setCapacity(event.target.value);
     } else {

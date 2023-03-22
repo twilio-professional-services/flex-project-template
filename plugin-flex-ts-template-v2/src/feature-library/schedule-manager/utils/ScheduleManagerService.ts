@@ -40,7 +40,7 @@ class ScheduleManagerService extends ApiService {
       console.log('Unable to update config', error);
 
       // TODO: Modify request util to return status too.
-      if (error == 'Provided version SID is not the latest deployed asset version SID') {
+      if (error === 'Provided version SID is not the latest deployed asset version SID') {
         return {
           success: false,
           buildSid: 'versionError',
@@ -129,7 +129,7 @@ class ScheduleManagerService extends ApiService {
       Token: encodeURIComponent(manager.user.token),
     };
 
-    return await this.fetchJsonWithReject<UpdateConfigStatusResponse>(
+    return this.fetchJsonWithReject<UpdateConfigStatusResponse>(
       `https://${this.scheduleManagerServerlessDomain}/admin/update-status`,
       {
         method: 'post',
@@ -147,7 +147,7 @@ class ScheduleManagerService extends ApiService {
       Token: encodeURIComponent(manager.user.token),
     };
 
-    return await this.fetchJsonWithReject<PublishConfigResponse>(
+    return this.fetchJsonWithReject<PublishConfigResponse>(
       `https://${this.scheduleManagerServerlessDomain}/admin/publish`,
       {
         method: 'post',

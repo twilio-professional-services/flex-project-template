@@ -13,7 +13,7 @@ const FilterContainer = styled('div')`
 `;
 
 export type OwnProps = {
-  handleChange?: (newValue: Array<any> | string) => {};
+  handleChange?: (newValue: Array<any> | string) => unknown;
   options?: Array<FilterDefinitionOption>;
   name?: string;
   currentValue?: string[];
@@ -58,7 +58,7 @@ export const MultiSelectFilter = (props: OwnProps) => {
     }),
   };
 
-  const _handleChange = (e: any, v: any) => {
+  const _handleChange = (e: any, _v: any) => {
     let newValue;
 
     if (props.IsMulti) {

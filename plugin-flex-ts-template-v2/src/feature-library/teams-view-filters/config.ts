@@ -24,7 +24,7 @@ export const shouldLogFilters = () => {
   return enabled && logFilters;
 };
 
-export const isExtensionsFilterEnabled = () => {
+export const isEmailFilterEnabled = () => {
   return enabled && email;
 };
 

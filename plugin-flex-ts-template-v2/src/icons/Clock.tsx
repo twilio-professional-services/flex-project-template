@@ -1,5 +1,4 @@
 import React, { Component, CSSProperties } from 'react';
-import { Icon } from '@twilio/flex-ui';
 
 export interface OwnProps {
   isActive?: boolean;

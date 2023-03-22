@@ -3,7 +3,7 @@ import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
 import { Stack } from '@twilio-paste/core/stack';
 import { Text } from '@twilio-paste/core/text';
-import { IWorker, Manager } from '@twilio/flex-ui';
+import { IWorker } from '@twilio/flex-ui';
 
 import { SectionHeader } from './CapacityContainerStyles';
 import TaskRouterService, {
@@ -79,7 +79,7 @@ export default function CapacityContainer(props: OwnProps) {
 
         if (!settings.changed || !props.worker) {
           // only make the API call if something actually changed
-          return;
+          return null;
         }
 
         return TaskRouterService.updateWorkerChannel(

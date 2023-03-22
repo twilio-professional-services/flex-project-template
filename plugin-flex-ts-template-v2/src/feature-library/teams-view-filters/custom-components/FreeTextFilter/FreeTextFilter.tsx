@@ -8,7 +8,7 @@ const FilterContainer = styled('div')`
 
 export type OwnProps = {
   currentValue?: string;
-  handleChange?: (newValue: Array<any> | string) => {};
+  handleChange?: (newValue: Array<any> | string) => unknown;
   fieldName?: string;
 };
 

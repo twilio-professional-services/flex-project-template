@@ -12,7 +12,7 @@ class Actions {
     return {
       type: FETCH_PHONE_NUMBERS,
       payload: {
-        promise: PhoneNumberService.getAccountPhoneNumbers(0),
+        promise: PhoneNumberService.getAccountPhoneNumbers(),
       },
     };
   };

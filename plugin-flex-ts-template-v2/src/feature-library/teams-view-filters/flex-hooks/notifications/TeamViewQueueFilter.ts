@@ -9,7 +9,7 @@ export enum TeamViewQueueFilterNotification {
   ErrorLoadingQueue = 'ErrorLoadingQueue',
 }
 
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: TeamViewQueueFilterNotification.ErrorParsingQueueExpression,
     type: Flex.NotificationType.warning,

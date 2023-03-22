@@ -50,10 +50,10 @@ export const actionHook = function interceptQueueFilter(flex: typeof Flex, manag
 // data.attributes.queues IN [<queue-sid>]
 //
 
-function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager) {
-  Flex.Actions.addListener(
+function replaceQueueFiltersForTeamView(flex: typeof Flex, _manager: Flex.Manager) {
+  flex.Actions.addListener(
     `${actionEvent}${actionName}`,
-    async (payload: ApplyTeamsViewFiltersPayload, abortFunction: () => void) => {
+    async (payload: ApplyTeamsViewFiltersPayload, _abortFunction: () => void) => {
       const { filters } = payload;
 
       let queueEligibilityFilter = null as AppliedFilter | null;

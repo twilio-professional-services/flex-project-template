@@ -18,6 +18,12 @@ export default abstract class LiveQueryHelper<T> {
 
   #initializing?: Promise<LiveQuery>;
 
+  // For queryExpression syntax, see: https://www.twilio.com/docs/sync/live-query
+  constructor(indexName: string, queryExpression: string) {
+    this.indexName = indexName;
+    this.queryExpression = queryExpression;
+  }
+
   protected get liveQuery() {
     if (this.#initializing === undefined) {
       this.#initializing = this.#initLiveQuery();
@@ -31,12 +37,6 @@ export default abstract class LiveQueryHelper<T> {
   protected onItemUpdated?(event: LiveQueryUpdatedEvent<T>): void;
 
   protected onItemRemoved?(event: LiveQueryRemovedEvent): void;
-
-  // For queryExpression syntax, see: https://www.twilio.com/docs/sync/live-query
-  constructor(indexName: string, queryExpression: string) {
-    this.indexName = indexName;
-    this.queryExpression = queryExpression;
-  }
 
   protected async startLiveQuery(): Promise<{ [key: string]: T }> {
     await this.liveQuery;
@@ -77,11 +77,11 @@ export default abstract class LiveQueryHelper<T> {
     const data = { ...this.#items };
     const existingItem = Object.keys(data).includes(event.key);
     this.#items = { ...data, [event.key]: event.value };
-    if (existingItem) {
-      this.onItemUpdated && this.onItemUpdated(event);
-    } else {
+    if (existingItem && this.onItemUpdated) {
+      this.onItemUpdated(event);
+    } else if (this.onItemAdded) {
       const addedEvent: LiveQueryAddedEvent<T> = { ...event };
-      this.onItemAdded && this.onItemAdded(addedEvent);
+      this.onItemAdded(addedEvent);
     }
   };
 
@@ -89,6 +89,8 @@ export default abstract class LiveQueryHelper<T> {
     const data = { ...this.#items };
     delete data[event.key];
     this.#items = { ...data };
-    this.onItemRemoved && this.onItemRemoved(event);
+    if (this.onItemRemoved) {
+      this.onItemRemoved(event);
+    }
   };
 }

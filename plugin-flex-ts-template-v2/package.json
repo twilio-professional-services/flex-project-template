@@ -67,6 +67,7 @@
       "no-duplicate-imports": "off",
       "prefer-destructuring": "off",
       "prefer-named-capture-group": "off",
+      "prefer-promise-reject-errors": "off",
       "sonarjs/cognitive-complexity": "off",
       "sonarjs/no-identical-functions": "off",
       "sonarjs/no-duplicate-string": "off",
@@ -76,7 +77,8 @@
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-floating-promises": "off",
       "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-      "@typescript-eslint/no-use-before-define": "off"
+      "@typescript-eslint/no-use-before-define": "off",
+      "@typescript-eslint/require-array-sort-compare": "off"
     }
   },
   "eslintIgnore": [
@@ -84,7 +86,8 @@
     "*.test.ts",
     "*.test.tsx",
     "./**/__mocks__/*.ts",
-    "./**/__mocks__/*.tsx"
+    "./**/__mocks__/*.tsx",
+    "supervisor-barge-coach"
   ],
   "jest": {
     "clearMocks": true,

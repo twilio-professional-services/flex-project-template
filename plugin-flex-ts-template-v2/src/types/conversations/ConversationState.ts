@@ -8,7 +8,7 @@ interface ParticipantState {
 }
 type ParticipantType = Map<string, ParticipantState>;
 
-interface MessageState<CustomAttributesType = undefined> {
+interface MessageState {
   readonly isFromMe: boolean;
   readonly groupWithNext: boolean;
   readonly groupWithPrevious: boolean;

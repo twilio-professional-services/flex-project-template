@@ -2,7 +2,7 @@ import { FilterDefinition } from '@twilio/flex-ui';
 
 import {
   isDepartmentFilterEnabled,
-  isExtensionsFilterEnabled,
+  isEmailFilterEnabled,
   isQueueNoWorkerDataFilterEnabled,
   isQueueWorkerDataFilterEnabled,
   isTeamFilterEnabled,
@@ -18,12 +18,29 @@ import { agentSkillsFilter } from '../../filters/agentSkillsFilter';
 export const teamsFilterHook = async function getSampleFilters() {
   const enabledFilters = [] as Array<FilterDefinition>;
 
-  isDepartmentFilterEnabled() ? enabledFilters.push(departmentFilter()) : null;
-  isExtensionsFilterEnabled() ? enabledFilters.push(emailFilter()) : null;
-  isQueueNoWorkerDataFilterEnabled() ? enabledFilters.push(await queueNoWorkerDataFilter()) : null;
-  isQueueWorkerDataFilterEnabled() ? enabledFilters.push(await queueWorkerDataFilter()) : null;
-  isTeamFilterEnabled() ? enabledFilters.push(teamFilter()) : null;
-  isAgentSkillsFilterEnabled() ? enabledFilters.push(agentSkillsFilter()) : null;
+  if (isDepartmentFilterEnabled()) {
+    enabledFilters.push(departmentFilter());
+  }
+
+  if (isEmailFilterEnabled()) {
+    enabledFilters.push(emailFilter());
+  }
+
+  if (isQueueNoWorkerDataFilterEnabled()) {
+    enabledFilters.push(await queueNoWorkerDataFilter());
+  }
+
+  if (isQueueWorkerDataFilterEnabled()) {
+    enabledFilters.push(await queueWorkerDataFilter());
+  }
+
+  if (isTeamFilterEnabled()) {
+    enabledFilters.push(teamFilter());
+  }
+
+  if (isAgentSkillsFilterEnabled()) {
+    enabledFilters.push(agentSkillsFilter());
+  }
 
   return enabledFilters;
 };

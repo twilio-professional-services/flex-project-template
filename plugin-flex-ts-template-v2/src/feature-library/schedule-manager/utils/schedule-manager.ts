@@ -14,7 +14,7 @@ let config = {
 } as ScheduleManagerConfig;
 
 const delay = async (ms: number): Promise<void> => {
-  return await new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
 export const canShowScheduleManager = (manager: Manager) => {
@@ -82,20 +82,20 @@ export const isScheduleUnique = (newSchedule: Schedule, existingSchedule: Schedu
   if (existingSchedule !== null) {
     const otherSchedules = config.data.schedules.filter((item) => existingSchedule.name !== item.name);
     const matchingSchedules = otherSchedules.filter((item) => newSchedule.name === item.name);
-    return matchingSchedules.length == 0;
+    return matchingSchedules.length === 0;
   }
   const matchingSchedules = config.data.schedules.filter((item) => newSchedule.name === item.name);
-  return matchingSchedules.length == 0;
+  return matchingSchedules.length === 0;
 };
 
 export const isRuleUnique = (newRule: Rule, existingRule: Rule | null): boolean => {
   if (existingRule !== null) {
     const otherRules = config.data.rules.filter((item) => existingRule.id !== item.id);
     const matchingRules = otherRules.filter((item) => newRule.name === item.name);
-    return matchingRules.length == 0;
+    return matchingRules.length === 0;
   }
   const matchingRules = config.data.rules.filter((item) => newRule.name === item.name);
-  return matchingRules.length == 0;
+  return matchingRules.length === 0;
 };
 
 export const publishSchedules = async (): Promise<number> => {
@@ -110,7 +110,7 @@ export const publishSchedules = async (): Promise<number> => {
   if (!updateResponse.success) {
     console.log('Schedule update failed', updateResponse);
 
-    if (updateResponse.buildSid == 'versionError') {
+    if (updateResponse.buildSid === 'versionError') {
       Notifications.showNotification(NotificationIds.PUBLISH_FAILED_OTHER_UPDATE);
       return 2;
     }

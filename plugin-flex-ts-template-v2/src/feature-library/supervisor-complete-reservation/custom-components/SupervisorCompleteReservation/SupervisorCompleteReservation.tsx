@@ -31,7 +31,7 @@ const SupervisorCompleteReservation = ({ task }: OwnProps) => {
   return (
     <Box padding="space20" paddingBottom="space0">
       <Button
-        disabled={isTaskProcessingRequest || task.status != 'wrapping'}
+        disabled={isTaskProcessingRequest || task.status !== 'wrapping'}
         onClick={handleOpen}
         title={'Remotely complete the task reservation on behalf of the agent'}
         variant="destructive"

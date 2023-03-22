@@ -12,7 +12,7 @@ export enum NotificationIds {
   PUBLISH_SUCCESS = 'SchMgrPublishSuccess',
 }
 
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: NotificationIds.PUBLISH_ABORTED,
     closeButton: true,

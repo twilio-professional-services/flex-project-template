@@ -1,3 +1,3 @@
-import FreeTextFilterLabel from './FreeTextFilterLabel';
+import FreeTextFilterLabelComponent from './FreeTextFilterLabel';
 
-export default FreeTextFilterLabel;
+export default FreeTextFilterLabelComponent;
