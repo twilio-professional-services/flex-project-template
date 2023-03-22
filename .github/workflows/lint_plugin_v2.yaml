@@ -17,6 +17,7 @@ jobs:
   lint_plugin_v2:
     runs-on: ubuntu-latest
     permissions:
+      checks: write
       pull-requests: write
     steps:
       - uses: actions/checkout@v3
