@@ -1,9 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
-
-import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel';
-import { SyncDoc } from '../../utils/sync/Sync';
-import { isAgentCoachingPanelEnabled } from '../../config';
-import { FlexComponent } from '../../../../types/feature-loader';
+import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel'
+import AgentAssistanceButton from "../../custom-components/AgentAssistanceButton"
+import { isAgentAssistanceEnabled, isAgentCoachingPanelEnabled } from '../../config';
+import { agentBrowserRefresh } from '../../helpers/browserRefreshHelper';
+import { FlexComponent } from "../../../../types/feature-loader";
 
 export const componentName = FlexComponent.CallCanvas;
 export const componentHook = function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Flex.Manager) {
@@ -13,9 +13,10 @@ export const componentHook = function addSupervisorCoachingPanelToAgent(flex: ty
     sortOrder: -1,
   });
 
-  // If myWorkerSID exists, clear the Agent Sync Doc to account for the refresh
-  const myWorkerSID = localStorage.getItem('myWorkerSID');
-  if (myWorkerSID != null) {
-    SyncDoc.clearSyncDoc(myWorkerSID);
-  }
-};
+  if(!isAgentAssistanceEnabled()) return;
+
+  agentBrowserRefresh();
+
+  // Add the Agent Assistance Button to the CallCanvas
+  flex.CallCanvas.Content.add(<AgentAssistanceButton key="agent-assistance-button"> </AgentAssistanceButton>, {sortOrder: 0});
+}

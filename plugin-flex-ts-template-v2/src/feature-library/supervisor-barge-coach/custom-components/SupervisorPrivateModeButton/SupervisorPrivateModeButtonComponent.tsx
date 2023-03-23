@@ -33,26 +33,26 @@ export const SupervisorPrivateToggle = ({ task }: SupervisorPrivateToggleProps) 
 
     // If privateMode is true, toggle to false and update the Sync Doc with the appropriate Supervisor and Status
     if (privateMode) {
-      dispatch(
-        Actions.setBargeCoachStatus({
-          privateMode: false,
-        }),
-      );
+      // Caching this to help with browser refresh recovery
+      localStorage.setItem('privateMode','false');
+      dispatch(Actions.setBargeCoachStatus({ 
+        privateMode: false, 
+      }));
       if (coaching) {
-        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSID, myWorkerSID, supervisorFN, 'is Coaching', 'add');
+        SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "is Coaching", "add");
       } else if (barge) {
-        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSID, myWorkerSID, supervisorFN, 'has Joined', 'add');
+        SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "has Joined", "add");
       } else {
-        SyncDoc.initSyncDoc(agentWorkerSID, conferenceSID, myWorkerSID, supervisorFN, 'is Monitoring', 'add');
+        SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "is Monitoring", "add");
       }
       // If privateMode is false, toggle to true and remove the Supervisor from the Sync Doc
     } else {
-      dispatch(
-        Actions.setBargeCoachStatus({
-          privateMode: true,
-        }),
-      );
-      SyncDoc.initSyncDoc(agentWorkerSID, conferenceSID, myWorkerSID, supervisorFN, '', 'remove');
+      // Caching this to help with browser refresh recovery
+      localStorage.setItem('privateMode','true');
+      dispatch(Actions.setBargeCoachStatus({ 
+        privateMode: true, 
+      }));
+      SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID ,supervisorFN, "", "remove");
     }
   };
 
@@ -62,19 +62,17 @@ export const SupervisorPrivateToggle = ({ task }: SupervisorPrivateToggleProps) 
   const isLiveCall = TaskHelper.isLiveCall(task);
 
   return (
-    <>
-      <Flex hAlignContent="center" vertical padding="space30">
-        <Stack orientation="horizontal" spacing="space30" element="SUPERVISOR_PRIVATE_BUTTON_BOX">
-          <IconButton
-            icon={privateMode ? 'EyeBold' : 'Eye'}
-            disabled={!isLiveCall}
-            onClick={togglePrivateMode}
-            title={privateMode ? 'Disable Private Mode' : 'Enable Private Mode'}
-            variant="secondary"
-          />
-          {privateMode ? 'Privacy On' : 'Privacy Off'}
-        </Stack>
-      </Flex>
-    </>
+    <Flex hAlignContent="center" vertical padding="space30">
+      <Stack orientation="horizontal" spacing="space30" element="SUPERVISOR_PRIVATE_BUTTON_BOX">
+        <IconButton
+          icon={ privateMode ? 'EyeBold' : 'Eye' }
+          disabled={!isLiveCall}
+          onClick={togglePrivateMode}
+          title={ privateMode ? "Disable Private Mode" : "Enable Private Mode" }
+          variant="secondary"
+        />
+        { privateMode ? "Privacy On" : "Privacy Off" }
+      </Stack>
+    </Flex>
   );
 };

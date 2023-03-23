@@ -13,14 +13,14 @@ export enum FlexAction {
   SetWorkerActivity = 'SetWorkerActivity',
   StartOutboundCall = 'StartOutboundCall',
   ToggleMute = 'ToggleMute',
-  UnHoldParticipant = 'UnHoldParticipant',
+  UnholdParticipant = 'UnholdParticipant',
   NavigateToView = 'NavigateToView',
   RejectTask = 'RejectTask',
   SetActivity = 'SetActivity',
   StartExternalWarmTransfer = 'StartExternalWarmTransfer',
   ShowDirectory = 'ShowDirectory',
   TransferTask = 'TransferTask',
-  WrapUpTask = 'WrapUpTask',
+  WrapupTask = 'WrapupTask',
 }
 
 export enum FlexActionEvent {
