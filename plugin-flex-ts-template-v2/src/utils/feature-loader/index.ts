@@ -14,6 +14,8 @@ import * as Reducers from "./reducers";
 import * as Strings from "./strings";
 import * as TeamsFilters from "./teams-filters";
 
+import * as SyncClientTokenUpdated from '../sdk-clients/sync/tokenUpdated';
+
 // @ts-ignore
 import features from "../../feature-library/*/index.ts";
 
@@ -40,6 +42,9 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
       console.error('Error loading feature:', error);
     }
   };
+  
+  // Register built-in hooks
+  Events.addHook(flex, manager, "built-in Sync client", SyncClientTokenUpdated);
   
   // After all features have initialized, execute deferred hooks
   CssOverrides.init(manager);

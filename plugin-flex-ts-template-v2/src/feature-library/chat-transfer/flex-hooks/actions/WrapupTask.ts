@@ -14,7 +14,7 @@ export interface MessageAttributes {
 }
 
 export const actionEvent = FlexActionEvent.before;
-export const actionName = FlexAction.WrapUpTask;
+export const actionName = FlexAction.WrapupTask;
 export const actionHook = async function announceOnChannelWhenLeavingAndRemoveChannelSidAndLeaveChatForChatTransfer (flex: typeof Flex, manager: Flex.Manager) {
 
   Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
