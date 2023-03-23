@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from "react";
 import { useFlexSelector } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../../../types/manager';
@@ -24,7 +24,7 @@ export const SupervisorMonitorPanel = ({}: SupervisorMonitorPanelProps) => {
  
   const agentWorkerSID = useFlexSelector(state => state?.flex?.supervisor?.stickyWorker?.worker?.sid);
  
- const supervisorsArray = () => {
+  const supervisorsArray = () => {
     
     return (
       supervisorArray.map(supervisorArray => (
@@ -34,80 +34,76 @@ export const SupervisorMonitorPanel = ({}: SupervisorMonitorPanelProps) => {
         </tr>
       ))
     )
- }
- const syncUpdates = () => {
-
-  if (agentWorkerSID != null && syncSubscribed != true) {
-
-    // Let's subscribe to the sync doc as an agent/worker and check
-    // if we are being coached, if we are, render that in the UI
-    // otherwise leave it blank
-    const mySyncDoc = `syncDoc.${agentWorkerSID}`;
-    SyncDoc.getSyncDoc(mySyncDoc)
-    .then(doc => {
-      // We are subscribing to Sync Doc updates here and logging anytime that happens
-      doc.on("updated", (updatedDoc: string) => {
-        if (doc.data.supervisors != null) {
-          supervisorArray = [...doc.data.supervisors];
-        } else {
-          supervisorArray = [];
-        }
-
-        // Set Supervisor's name that is coaching into props
-        dispatch(Actions.setBargeCoachStatus({ 
-          supervisorArray: supervisorArray
-        }));
-      })
-    });
-    dispatch(Actions.setBargeCoachStatus({ 
-      syncSubscribed: true,
-    }));
   }
+  const syncUpdates = () => {
+    if (agentWorkerSID != null) {
+      // Let's subscribe to the sync doc as an agent/worker and check
+      // if we are being coached, if we are, render that in the UI
+      // otherwise leave it blank
+      const mySyncDoc = `syncDoc.${agentWorkerSID}`;
+      SyncDoc.getSyncDoc(mySyncDoc)
+      .then(doc => {
+        // We are subscribing to Sync Doc updates here and logging anytime that happens
+        doc.on("updated", (updatedDoc: string) => {
+          if (doc.data.supervisors != null) {
+            supervisorArray = [...doc.data.supervisors];
+          } else {
+            supervisorArray = [];
+          }
+
+          // Set Supervisor's name that is coaching into props
+          dispatch(Actions.setBargeCoachStatus({ 
+            supervisorArray: supervisorArray
+          }));
+        })
+      });
+      dispatch(Actions.setBargeCoachStatus({ 
+        syncSubscribed: true,
+      }));
+    }
     
    return;
- }
+  }
 
-  syncUpdates();
+  useEffect(() => {
+    if(!syncSubscribed) {syncUpdates();}
+  });
   
   if (supervisorArray.length != 0) {
     return (
-      <>
-        <Flex hAlignContent="center" vertical>
-          <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-            <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-              Active Supervisors:
-              <Box>
-                <ol>
-                  <Text
-                  as="p"
-                  fontWeight="fontWeightMedium"
-                  fontSize="fontSize30"
-                  marginBottom="space40"
-                  color="colorTextSuccess"
-                  >
-                    {supervisorsArray()}
-                  </Text>
-                </ol>
-              </Box>
+      <Flex hAlignContent="center" vertical padding="space40">
+        <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
+          <Box backgroundColor="colorBackgroundPrimaryWeakest">
+            Active Supervisors:
+            <Box>
+              <ol>
+                <Text
+                as="p"
+                fontWeight="fontWeightMedium"
+                fontSize="fontSize30"
+                marginBottom="space40"
+                color="colorTextSuccess"
+                >
+                  {supervisorsArray()}
+                </Text>
+              </ol>
             </Box>
-          </Stack>
-        </Flex>
-      </>
+          </Box>
+        </Stack>
+      </Flex>
     );
   } else {
     return (
-      <>
-        <Flex hAlignContent="center" vertical>
-          <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-            <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-              Active Supervisors:
-              <Box>
-                None
-              </Box>
+      <Flex hAlignContent="center" vertical padding="space40">
+        <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
+          <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
+            Active Supervisors:
+            <Box>
+              None
             </Box>
-          </Stack>
-        </Flex>
-      </>
+          </Box>
+        </Stack>
+      </Flex>
     );
   }
 }
