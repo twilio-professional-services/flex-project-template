@@ -9,7 +9,11 @@ const initialState: SupervisorBargeCoachState = {
     enableBargeinButton: false,
     supervisorArray: [],
     privateMode: false,
-    syncSubscribed: false
+    syncSubscribed: false,
+    agentAssistanceButton: false,
+    agentAssistanceSyncSubscribed: false,
+    enableAgentAssistanceAlerts: true,
+    agentAssistanceArray: []
 };
 
 export default initialState;

@@ -11,5 +11,9 @@ export interface SupervisorBargeCoachState {
     enableBargeinButton: boolean,
     supervisorArray: Array<any>,
     privateMode: boolean,
-    syncSubscribed: boolean
+    syncSubscribed: boolean,
+    agentAssistanceButton: boolean,
+    enableAgentAssistanceAlerts: boolean,
+    agentAssistanceSyncSubscribed: boolean,
+    agentAssistanceArray: Array<any>
 };
