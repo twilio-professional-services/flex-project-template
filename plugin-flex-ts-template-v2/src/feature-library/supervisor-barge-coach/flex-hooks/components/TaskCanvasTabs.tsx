@@ -6,12 +6,8 @@ import { FlexComponent } from "../../../../types/feature-loader";
 import { supervisorBrowserRefresh } from '../../helpers/browserRefreshHelper';
 
 export const componentName = FlexComponent.TaskCanvasTabs;
-export const componentHook = function addSupervisorMonitorPanel(flex: typeof Flex, manager: Flex.Manager) {
+export const componentHook = function addSupervisorMonitorPanel(flex: typeof Flex, _manager: Flex.Manager) {
   if (!isSupervisorMonitorPanelEnabled()) return;
-
-  flex.Supervisor.TaskCanvasTabs.Content.add(
-    <SupervisorMonitorPanel uniqueName="Supervisors Engaged" icon="AgentsBold" key="supervisoronitorpanel" />,
-  );
 
   flex.Supervisor.TaskCanvasTabs.Content.add(
     <SupervisorMonitorPanel uniqueName="Supervisors Engaged" icon="AgentsBold"  key="SupervisorMonitorPanel" 
