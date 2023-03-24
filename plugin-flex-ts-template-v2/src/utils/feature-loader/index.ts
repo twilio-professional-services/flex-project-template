@@ -41,10 +41,10 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
       console.error('Error loading feature:', error);
     }
   }
-  
+
   // Register built-in hooks
   Events.addHook(flex, manager, 'built-in Sync client', SyncClientTokenUpdated);
-  
+
   // After all features have initialized, execute deferred hooks
   CssOverrides.init(manager);
   PasteElements.init(flex);
