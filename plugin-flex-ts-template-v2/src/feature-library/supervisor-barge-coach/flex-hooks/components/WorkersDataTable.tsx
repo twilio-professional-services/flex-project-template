@@ -5,7 +5,7 @@ import { isAgentAssistanceEnabled } from '../../config';
 import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.WorkersDataTable;
-export const componentHook = function addAgentAssistanceTeamsIcon(flex: typeof Flex, manager: Flex.Manager) {
+export const componentHook = function addAgentAssistanceTeamsIcon(flex: typeof Flex, _manager: Flex.Manager) {
   if (!isAgentAssistanceEnabled()) return;
   flex.WorkersDataTable.Content.add(
     <Flex.ColumnDefinition

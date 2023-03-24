@@ -6,7 +6,6 @@ import { Flex, Stack } from '@twilio-paste/core';
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoach';
-
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
 

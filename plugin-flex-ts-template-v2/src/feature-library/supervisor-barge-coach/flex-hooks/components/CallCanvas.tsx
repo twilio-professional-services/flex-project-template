@@ -7,7 +7,7 @@ import { agentBrowserRefresh } from '../../helpers/browserRefreshHelper';
 import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.CallCanvas;
-export const componentHook = function addSupervisorCoachingPanelToAgent(flex: typeof Flex, manager: Flex.Manager) {
+export const componentHook = function addSupervisorCoachingPanelToAgent(flex: typeof Flex, _manager: Flex.Manager) {
   if (!isAgentCoachingPanelEnabled()) return;
   // Adding Coaching Status Panel to notify the agent who is Coaching them
   flex.CallCanvas.Content.add(<CoachingStatusPanel key="coaching-status-panel"> </CoachingStatusPanel>, {

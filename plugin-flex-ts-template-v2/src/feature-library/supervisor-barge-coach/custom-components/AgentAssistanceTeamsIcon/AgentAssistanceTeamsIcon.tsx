@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux';
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
 
-type AgentAssistanceTeamsIcon = {
+type AgentAssistanceTeamsIconProps = {
   worker: string;
 };
 
-export const AgentAssistanceTeamsIcon = ({ worker }: AgentAssistanceTeamsIcon) => {
+export const AgentAssistanceTeamsIcon = ({ worker }: AgentAssistanceTeamsIconProps) => {
   const { agentAssistanceArray } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
 
   const agentIndex = agentAssistanceArray?.findIndex((a: any) => a.agentWorkerSID === worker);

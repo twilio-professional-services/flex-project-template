@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ITask, IconButton } from '@twilio/flex-ui';
+import { IconButton } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex, Tooltip } from '@twilio-paste/core';
 
@@ -8,11 +8,7 @@ import { AppState } from '../../../../types/manager';
 import { Actions } from '../../flex-hooks/states/SupervisorBargeCoach';
 import { updateTaskAndTriggerAlerts, syncUpdates } from '../../helpers/supervisorAlertHelper';
 
-type SupervisorAlertButton = {
-  task: ITask;
-};
-
-export const SupervisorAlertButton = ({ task }: SupervisorAlertButton) => {
+export const SupervisorAlertButton = () => {
   const dispatch = useDispatch();
 
   const { enableAgentAssistanceAlerts, agentAssistanceSyncSubscribed } = useSelector(

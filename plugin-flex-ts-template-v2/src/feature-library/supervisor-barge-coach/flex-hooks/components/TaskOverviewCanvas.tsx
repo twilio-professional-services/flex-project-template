@@ -7,7 +7,7 @@ import SupervisorPrivateToggle from '../../custom-components/SupervisorPrivateMo
 import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.TaskOverviewCanvas;
-export const componentHook = function addSupervisorBargeCoachButtons(flex: typeof Flex, manager: Flex.Manager) {
+export const componentHook = function addSupervisorBargeCoachButtons(flex: typeof Flex, _manager: Flex.Manager) {
   supervisorBrowserRefresh();
 
   // Add the Barge-in and Coach Option

@@ -6,7 +6,7 @@ export enum NotificationIds {
   AGENT_ASSISTANCE = 'AgentAssistanceTriggered',
 }
 // Return an array of Flex.Notification
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager, context: any) => [
+export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: NotificationIds.AGENT_ASSISTANCE,
     closeButton: true,

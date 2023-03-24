@@ -6,16 +6,16 @@ import { Flex, Stack, Box, Text } from '@twilio-paste/core';
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoach';
-
 // Import to get Sync Doc updates
 import { SyncDoc } from '../../utils/sync/Sync';
 
-type CoachingStatusPanelProps = {};
-
-export const CoachingStatusPanel = ({}: CoachingStatusPanelProps) => {
+export const CoachingStatusPanel = () => {
   const dispatch = useDispatch();
 
-  let { supervisorArray, syncSubscribed } = useSelector(
+  let { supervisorArray } = useSelector(
+    (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
+  );
+  const { syncSubscribed } = useSelector(
     (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
   );
 
@@ -30,14 +30,14 @@ export const CoachingStatusPanel = ({}: CoachingStatusPanelProps) => {
     SyncDoc.getSyncDoc(mySyncDoc).then((doc) => {
       // We are subscribing to Sync Doc updates here and logging anytime that happens
       doc.on('updated', (doc: any) => {
-        if (doc.data.supervisors != null) {
+        if (doc.data.supervisors) {
           supervisorArray = [...doc.data.supervisors];
           // Current verion of this feature will only show the Agent they are being coached
           // This could be updated by removing the below logic and including Monitoring and Joined (barged)
           for (let i = 0; i < supervisorArray.length; i++) {
-            if (supervisorArray[i].status == 'is Monitoring' || supervisorArray[i].status == 'has Joined') {
+            if (supervisorArray[i].status === 'is Monitoring' || supervisorArray[i].status === 'has Joined') {
               supervisorArray.splice(i, 1);
-              i--;
+              i -= 1;
             }
           }
         } else {
@@ -71,7 +71,7 @@ export const CoachingStatusPanel = ({}: CoachingStatusPanelProps) => {
   // If the supervisor array has value in it, that means someone is coaching
   // We will map each of the supervisors that may be actively coaching
   // Otherwise we will not display anything if no one is actively coaching
-  if (supervisorArray.length != 0) {
+  if (supervisorArray.length !== 0) {
     return (
       <Flex hAlignContent="center" vertical padding="space40">
         <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
@@ -86,7 +86,7 @@ export const CoachingStatusPanel = ({}: CoachingStatusPanelProps) => {
                   marginBottom="space40"
                   color="colorTextSuccess"
                 >
-                  {supervisorArray.map((supervisorArray: { supervisor: {} }) => (
+                  {supervisorArray.map((supervisorArray: { supervisor: string }) => (
                     <li key={`${Math.random()}`}>{supervisorArray.supervisor}</li>
                   ))}
                 </Text>

@@ -96,8 +96,7 @@
     "*.test.ts",
     "*.test.tsx",
     "./**/__mocks__/*.ts",
-    "./**/__mocks__/*.tsx",
-    "supervisor-barge-coach"
+    "./**/__mocks__/*.tsx"
   ],
   "jest": {
     "clearMocks": true,

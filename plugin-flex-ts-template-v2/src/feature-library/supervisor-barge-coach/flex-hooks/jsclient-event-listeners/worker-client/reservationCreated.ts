@@ -8,7 +8,7 @@ import { FlexJsClient, WorkerEvent } from '../../../../../types/feature-loader';
 export const clientName = FlexJsClient.workerClient;
 export const eventName = WorkerEvent.reservationCreated;
 export const jsClientHook = async function cleanStateAndSyncUponAgentHangUp(
-  flex: typeof Flex,
+  _flex: typeof Flex,
   manager: Flex.Manager,
   reservation: any,
 ) {
@@ -18,7 +18,7 @@ export const jsClientHook = async function cleanStateAndSyncUponAgentHangUp(
   // Listening for agent to hang up the call so we can clear the Sync Doc
   // for the CoachStatePanel and Agent Assistance feature
   // Register listener for reservation wrapup event
-  reservation.on('wrapup', (reservation: any) => {
+  reservation.on('wrapup', (_reservation: any) => {
     manager.store.dispatch(
       BargeCoachStatusAction.setBargeCoachStatus({
         enableCoachButton: false,

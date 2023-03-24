@@ -12,13 +12,13 @@ export const agentBrowserRefresh = () => {
   // If myWorkerSID exists, clear the Agent Sync Docs to account for the refresh
   const myWorkerSID = localStorage.getItem('myWorkerSID');
   const agentSyncDoc = `syncDoc.${myWorkerSID}`;
-  if (myWorkerSID != null) {
+  if (myWorkerSID) {
     SyncDoc.clearSyncDoc(agentSyncDoc);
   }
   // This is here if the Agent refreshes in the middle of having Agent Assistance on
   // This will clear up the Sync Doc and delete the registered notification
   const cacheAgentAssistState = localStorage.getItem('cacheAgentAssistState');
-  if (cacheAgentAssistState == 'true') {
+  if (cacheAgentAssistState === 'true') {
     const agentWorkerSID = state.flex?.worker?.worker?.sid;
     SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, '', '', '', 'remove');
   }
@@ -40,7 +40,7 @@ export const supervisorBrowserRefresh = async () => {
   // If the Supervisor refreshes and has private mode set to true we will store that
   // By default private mode is set to false
   const cachedPrivateMode = localStorage.getItem('privateMode');
-  if (cachedPrivateMode == 'true') {
+  if (cachedPrivateMode === 'true') {
     Flex.Manager.getInstance().store.dispatch(
       Actions.setBargeCoachStatus({
         privateMode: true,
@@ -54,7 +54,7 @@ export const supervisorBrowserRefresh = async () => {
   const teamViewTaskSID = localStorage.getItem('teamViewTaskSID');
 
   // Check that the stickyWorker is null and that we are attempting to restore the last worker they monitored
-  if (stickyWorkerSID == null && teamViewTaskSID != null) {
+  if (!stickyWorkerSID && teamViewTaskSID) {
     // Triggering the invokeAction to force a click to repopulate stickyWorker
     if (!_actionInvoked) {
       Flex.Actions.invokeAction('NavigateToView', { viewName: 'teams' });

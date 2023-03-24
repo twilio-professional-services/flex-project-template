@@ -10,7 +10,7 @@ export const actionEvent = FlexActionEvent.after;
 export const actionHook = async function disableBargeCoachButtonsUponMonitor(flex: typeof Flex, manager: Flex.Manager) {
   // Listening for supervisor to click to unmonitor the call to disable the
   // barge and coach buttons, as well as reset their muted/coaching states
-  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (_payload) => {
     manager.store.dispatch(
       BargeCoachStatusAction.setBargeCoachStatus({
         enableCoachButton: false,

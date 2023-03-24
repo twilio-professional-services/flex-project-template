@@ -6,7 +6,6 @@ import { Flex, Stack, Box, Text } from '@twilio-paste/core';
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoach';
-
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
 
@@ -15,10 +14,13 @@ type SupervisorMonitorPanelProps = {
   uniqueName: string;
 };
 
-export const SupervisorMonitorPanel = ({}: SupervisorMonitorPanelProps) => {
+export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
   const dispatch = useDispatch();
 
-  let { supervisorArray, syncSubscribed } = useSelector(
+  let { supervisorArray } = useSelector(
+    (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
+  );
+  const { syncSubscribed } = useSelector(
     (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
   );
 
@@ -33,15 +35,15 @@ export const SupervisorMonitorPanel = ({}: SupervisorMonitorPanelProps) => {
     ));
   };
   const syncUpdates = () => {
-    if (agentWorkerSID != null) {
+    if (agentWorkerSID) {
       // Let's subscribe to the sync doc as an agent/worker and check
       // if we are being coached, if we are, render that in the UI
       // otherwise leave it blank
       const mySyncDoc = `syncDoc.${agentWorkerSID}`;
       SyncDoc.getSyncDoc(mySyncDoc).then((doc) => {
         // We are subscribing to Sync Doc updates here and logging anytime that happens
-        doc.on('updated', (updatedDoc: string) => {
-          if (doc.data.supervisors != null) {
+        doc.on('updated', (_updatedDoc: string) => {
+          if (doc.data.supervisors) {
             supervisorArray = [...doc.data.supervisors];
           } else {
             supervisorArray = [];
@@ -69,7 +71,7 @@ export const SupervisorMonitorPanel = ({}: SupervisorMonitorPanelProps) => {
     }
   });
 
-  if (supervisorArray.length != 0) {
+  if (supervisorArray.length > 0) {
     return (
       <Flex hAlignContent="center" vertical padding="space40">
         <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">

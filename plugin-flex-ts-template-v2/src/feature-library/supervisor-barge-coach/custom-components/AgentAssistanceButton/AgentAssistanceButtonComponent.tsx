@@ -6,15 +6,14 @@ import { Flex, Tooltip } from '@twilio-paste/core';
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
 import { Actions } from '../../flex-hooks/states/SupervisorBargeCoach';
-
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
 
-type AgentAssistanceButton = {
+type AgentAssistanceButtonProps = {
   task: ITask;
 };
 
-export const AgentAssistanceButton = ({ task }: AgentAssistanceButton) => {
+export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
   const dispatch = useDispatch();
 
   const { agentAssistanceButton } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);

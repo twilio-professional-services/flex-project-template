@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TaskHelper, useFlexSelector, ITask, Manager, IconButton } from '@twilio/flex-ui';
+import { TaskHelper, useFlexSelector, ITask, IconButton } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex, Stack } from '@twilio-paste/core';
 import { ParticipantTypes } from '@twilio/flex-ui/src/state/Participants/participants.types';
@@ -9,7 +9,6 @@ import { reduxNamespace } from '../../../../utils/state';
 import { Actions, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoach';
 import BargeCoachService from '../../utils/serverless/BargeCoachService';
 import { isAgentCoachingPanelEnabled } from '../../config';
-
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
 
@@ -34,7 +33,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
 
   // Storing teamViewPath to browser cache to help if a refresh happens
   // will use this in the browserRefreshHelper
-  if (teamViewTaskSID != null && agentWorkerSID != null) {
+  if (teamViewTaskSID && agentWorkerSID) {
     localStorage.setItem('teamViewTaskSID', teamViewTaskSID);
     localStorage.setItem('agentWorkerSID', agentWorkerSID);
   }
