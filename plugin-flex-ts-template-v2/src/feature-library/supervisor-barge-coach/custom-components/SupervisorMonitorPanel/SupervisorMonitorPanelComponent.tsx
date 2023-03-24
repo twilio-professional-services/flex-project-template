@@ -42,7 +42,7 @@ export const SupervisorMonitorPanel = ({}: SupervisorMonitorPanelProps) => {
       // otherwise leave it blank
       const mySyncDoc = `syncDoc.${agentWorkerSID}`;
       SyncDoc.getSyncDoc(mySyncDoc)
-      .then(doc => {
+      .then((doc: any)=> {
         // We are subscribing to Sync Doc updates here and logging anytime that happens
         doc.on("updated", (updatedDoc: string) => {
           if (doc.data.supervisors != null) {

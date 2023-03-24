@@ -9,7 +9,7 @@ let _actionInvoked = false;
 export const agentBrowserRefresh = () => {
   const state = Flex.Manager.getInstance().store.getState() as AppState;
   // If myWorkerSID exists, clear the Agent Sync Docs to account for the refresh
-  const myWorkerSID = localStorage.getItem('myWorkerSID');
+  const myWorkerSID = localStorage.getItem('myWorkerSID') || null;
   const agentSyncDoc = `syncDoc.${myWorkerSID}`;
   if(myWorkerSID != null) {
     SyncDoc.clearSyncDoc(agentSyncDoc);
@@ -17,8 +17,8 @@ export const agentBrowserRefresh = () => {
   // This is here if the Agent refreshes in the middle of having Agent Assistance on
   // This will clear up the Sync Doc and delete the registered notification
   const cacheAgentAssistState = localStorage.getItem('cacheAgentAssistState');
-  if (cacheAgentAssistState == "true") {
-    const agentWorkerSID = state.flex?.worker?.worker?.sid;
+  const agentWorkerSID = state.flex?.worker?.worker?.sid || null;
+  if (cacheAgentAssistState == "true" && agentWorkerSID != null) {
     SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, "", "", "", "remove");
   }
   return;
@@ -56,18 +56,19 @@ export const supervisorBrowserRefresh = async () => {
       Flex.Actions.invokeAction("NavigateToView", {viewName: "teams"});
       _actionInvoked = true;
     }
-    const agentWorkerSID = localStorage.getItem('agentWorkerSID')
-    const myWorkerSID = state.flex?.worker?.worker?.sid;
-    const supervisorFN = state.flex?.worker?.attributes?.full_name;
-
-    SyncDoc.initSyncDocSupervisors(
-      agentWorkerSID,
-      "",
-      myWorkerSID,
-      supervisorFN,
-      "",
-      "remove"
-    );
+    const agentWorkerSID = localStorage.getItem('agentWorkerSID') || null;
+    if (agentWorkerSID != null){
+      const myWorkerSID = state.flex?.worker?.worker?.sid || "";
+      const supervisorFN = state.flex?.worker?.attributes?.full_name || "";
+      SyncDoc.initSyncDocSupervisors(
+        agentWorkerSID,
+        "",
+        myWorkerSID,
+        supervisorFN,
+        "",
+        "remove"
+      );
+    }
   }
   // This is here if the Supervisor refreshes and has toggled alerts to false
   // By default alerts set to true

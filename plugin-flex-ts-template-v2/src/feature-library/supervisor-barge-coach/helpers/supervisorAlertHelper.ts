@@ -30,7 +30,7 @@ export const syncUpdates = async () => {
 
   if(enableAgentAssistanceAlerts && !agentAssistanceSyncSubscribed) {
     SyncDoc.getSyncDoc('Agent-Assistance')
-    .then(doc => {
+    .then((doc: any) => {
       // Update the redux store/state with the latest array of agents needing assistance
       Flex.Manager.getInstance().store.dispatch(Actions.setBargeCoachStatus({ 
         agentAssistanceArray: doc.data.agentAssistance
