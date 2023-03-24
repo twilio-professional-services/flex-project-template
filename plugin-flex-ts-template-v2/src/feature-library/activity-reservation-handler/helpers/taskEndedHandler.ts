@@ -18,7 +18,7 @@ const taskEndedHandler = (task: Flex.ITask, flexEvent: FlexEvent) => {
 
   if (
     flexEvent === FlexEvent.taskTimeout ||
-    FlexHelper.hasActiveTask ||
+    FlexHelper.activeTaskCount > 1 ||
     FlexHelper.hasWrappingTask ||
     WorkerActivity.activitySid === pendingActivity?.sid
   ) {

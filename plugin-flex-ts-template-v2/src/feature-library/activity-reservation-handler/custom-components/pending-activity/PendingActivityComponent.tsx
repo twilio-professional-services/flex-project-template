@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getPendingActivity } from '../../helpers/pendingActivity'
+import { getPendingActivity } from '../../helpers/pendingActivity';
+import WorkerActivity from '../../helpers/workerActivityHelper';
 import { Flex, Text } from "@twilio-paste/core"
  
 const PendingActivity = () => {
@@ -19,7 +20,7 @@ const PendingActivity = () => {
   }, [clock])
   
   return <>
-    {pendingActivity && pendingActivity.name &&
+    {pendingActivity && pendingActivity.name && WorkerActivity.activitySid !== pendingActivity.sid &&
       (
         <Flex vertical marginRight="space20" hAlignContent="center">
           <Text as="p" color="colorTextInverse" fontSize="fontSize20" fontWeight="fontWeightBold">Pending Activity</Text>
