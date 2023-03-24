@@ -23,8 +23,8 @@ export const isSupervisorMonitorPanelEnabled = () => {
 
 export const isAgentAssistanceEnabled = () => {
   return enabled && agent_assistance;
-}
+};
 
 export const isSupervisorAlertToggleEnabled = () => {
   return enabled && supervisor_alert_toggle;
-}
+};

@@ -353,6 +353,12 @@ Before pushing changes, run the following command from the `plugin-flex-ts-templ
 npm run lint
 ```
 
+Many linter issues can be fixed automatically. To do that, run this command:
+
+```bash
+npm run lint:fix
+```
+
 ## Add feature
 
 (the following is only applicable when using the flex v2 plugin)

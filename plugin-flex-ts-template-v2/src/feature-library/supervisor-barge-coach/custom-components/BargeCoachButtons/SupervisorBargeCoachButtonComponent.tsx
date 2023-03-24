@@ -35,7 +35,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
   // Storing teamViewPath to browser cache to help if a refresh happens
   // will use this in the browserRefreshHelper
   if (teamViewTaskSID != null && agentWorkerSID != null) {
-    localStorage.setItem('teamViewTaskSID',teamViewTaskSID);
+    localStorage.setItem('teamViewTaskSID', teamViewTaskSID);
     localStorage.setItem('agentWorkerSID', agentWorkerSID);
   }
 
@@ -88,12 +88,12 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
         if (agent_coaching_panel && !privateMode) {
           // Updating the Sync Doc to reflect that we are no longer barging and back into Monitoring
           SyncDoc.initSyncDocSupervisors(
-            agentWorkerSID, 
-            conferenceSid, 
-            myWorkerSID, 
-            supervisorFN, 
-            "is Coaching", 
-            "update"
+            agentWorkerSID,
+            conferenceSid,
+            myWorkerSID,
+            supervisorFN,
+            'is Coaching',
+            'update',
           );
         }
       } else {
@@ -108,12 +108,12 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
         if (agent_coaching_panel && !privateMode) {
           // Updating the Sync Doc to reflect that we are no longer barging and back into Monitoring
           SyncDoc.initSyncDocSupervisors(
-            agentWorkerSID, 
-            conferenceSid, 
-            myWorkerSID, 
-            supervisorFN, 
-            "has Joined", 
-            "update"
+            agentWorkerSID,
+            conferenceSid,
+            myWorkerSID,
+            supervisorFN,
+            'has Joined',
+            'update',
           );
         }
       }
@@ -191,12 +191,12 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
       if (agent_coaching_panel && !privateMode) {
         // Updating the Sync Doc to reflect that we are no longer coaching and back into Monitoring
         SyncDoc.initSyncDocSupervisors(
-          agentWorkerSID, 
-          conferenceSid, 
-          myWorkerSID, 
-          supervisorFN, 
-          "is Monitoring", 
-          "update"
+          agentWorkerSID,
+          conferenceSid,
+          myWorkerSID,
+          supervisorFN,
+          'is Monitoring',
+          'update',
         );
       }
     } else {
@@ -214,12 +214,12 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
       if (agent_coaching_panel && !privateMode) {
         // Updating the Sync Doc to reflect that we are now coaching the agent
         SyncDoc.initSyncDocSupervisors(
-          agentWorkerSID, 
-          conferenceSid, 
-          myWorkerSID, 
-          supervisorFN, 
-          "is Coaching", 
-          "update"
+          agentWorkerSID,
+          conferenceSid,
+          myWorkerSID,
+          supervisorFN,
+          'is Coaching',
+          'update',
         );
       }
     }
@@ -233,28 +233,28 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
     <Flex hAlignContent="center" vertical>
       <Stack orientation="horizontal" spacing="space30" element="BARGE_COACH_BUTTON_BOX">
         <IconButton
-          icon={ muted ? 'MuteLargeBold' : 'MuteLarge' }
-          disabled={!isLiveCall || !enableBargeinButton || !enableCoachButton || (!barge && !coaching) }
+          icon={muted ? 'MuteLargeBold' : 'MuteLarge'}
+          disabled={!isLiveCall || !enableBargeinButton || !enableCoachButton || (!barge && !coaching)}
           onClick={bargeHandleClick}
-          title={ muted ? "Unmute" : "Mute" }
+          title={muted ? 'Unmute' : 'Mute'}
           variant="secondary"
-          style={{width:'44px',height:'44px'}}
+          style={{ width: '44px', height: '44px' }}
         ></IconButton>
         <IconButton
-          icon={ barge ? `IncomingCallBold` :  'IncomingCall' }
-          disabled={!isLiveCall || !enableBargeinButton || coaching }
+          icon={barge ? `IncomingCallBold` : 'IncomingCall'}
+          disabled={!isLiveCall || !enableBargeinButton || coaching}
           onClick={bargeHandleClick}
-          title={ barge ? 'Barge-Out' : 'Barge-In' }
-          variant={ barge ? 'primary' : 'secondary' }
-          style={{width:'44px',height:'44px'}}
+          title={barge ? 'Barge-Out' : 'Barge-In'}
+          variant={barge ? 'primary' : 'secondary'}
+          style={{ width: '44px', height: '44px' }}
         />
         <IconButton
-          icon={ coaching ? `DefaultAvatarBold` : `DefaultAvatar` }
+          icon={coaching ? `DefaultAvatarBold` : `DefaultAvatar`}
           disabled={!isLiveCall || !enableCoachButton}
           onClick={coachHandleClick}
-          title={ coaching ? "Disable Coach Mode" : "Enable Coach Mode" }
-          variant={ coaching ? 'primary' : 'secondary' }
-          style={{width:'44px',height:'44px'}}
+          title={coaching ? 'Disable Coach Mode' : 'Enable Coach Mode'}
+          variant={coaching ? 'primary' : 'secondary'}
+          style={{ width: '44px', height: '44px' }}
         />
       </Stack>
     </Flex>
