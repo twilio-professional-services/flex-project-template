@@ -73,16 +73,13 @@ const DeviceManager: React.FunctionComponent = () => {
         </MenuButton>
         <Menu {...menu} aria-label="Actions">
           <MenuGroup label="Select an Audio Device" icon={<VolumeOnIcon decorative />}>
-            {devices.map((device) => {
-              if (device.kind === 'audiooutput') {
-                return (
-                  <MenuItem {...menu} onClick={() => selectedDevice(device)} key={device.deviceId}>
-                    {device.label}
-                  </MenuItem>
-                );
-              }
-              return <></>;
-            })}
+            {devices
+              .filter((device) => device.kind === 'audiooutput')
+              .map((device) => (
+                <MenuItem {...menu} onClick={() => selectedDevice(device)} key={device.deviceId}>
+                  {device.label}
+                </MenuItem>
+              ))}
           </MenuGroup>
         </Menu>
         <Toaster {...toaster} />
