@@ -426,13 +426,19 @@ convenience script for showing the SIDs of key services on your twilio account v
 
 ## setup-local-environment
 
-convenience script for simplyfying local setup and development, triggered as part of an `npm install` at the root of the repository
+convenience script for simplifying local setup and development, triggered as part of an `npm install` at the root of the repository
 
 ## generate-env
 
 convenience script that does the same as setup-local-environment except it won't install npm packages again.  Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
 
 # CHANGELOG
+- 1.0.4
+    - Added `add-feature` script for creating new features
+    - Modified v2 plugin to load features dynamically
+    - Modified v2 plugin to use Twilio linter rules
+    - Updated GitHub Actions to auto bump plugin package version
+    - Updated GitHub Actions to run linter on pull requests
 - 1.0.3
     - *BREAKING CHANGE* renamed plugin packages to plugin-flex-ts-template-v1 and plugin-flex-ts-template-v2 to explicitly separate plugins
     - updated README to account for v1 plugins in scripts
@@ -445,7 +451,7 @@ convenience script that does the same as setup-local-environment except it won't
 - 1.0.1
     - Updated readmes with instructions for various use cases
     - Updated remove-features scripts to account for schedule manager
-    - Modified plugin API strructure to leverage use of appConfig for easier local configuration
+    - Modified plugin API structure to leverage use of appConfig for easier local configuration
     - Updated github actions release scripts to attempt to infer environment variables if placeholders still in place
     - Updated github actions release scripts to break into multiple jobs decreasing the time taken to perform a release
 
