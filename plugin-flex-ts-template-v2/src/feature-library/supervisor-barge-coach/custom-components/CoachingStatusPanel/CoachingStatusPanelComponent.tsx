@@ -27,9 +27,8 @@ export const CoachingStatusPanel = ({}: CoachingStatusPanelProps) => {
     // if we are being coached, if we are, render that in the UI
     // otherwise leave it blank
     const mySyncDoc = `syncDoc.${myWorkerSID}`;
-    
     SyncDoc.getSyncDoc(mySyncDoc)
-    .then(doc => {
+    .then((doc: any) => {
       // We are subscribing to Sync Doc updates here and logging anytime that happens
       doc.on("updated", (doc: any) => {
         if (doc.data.supervisors != null) {

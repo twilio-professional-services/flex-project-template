@@ -29,7 +29,7 @@ export const jsClientHook = async function cleanStateAndSyncUponAgentHangUp(
         agentAssistanceSyncSubscribed: false
       })
     );
-    const agentWorkerSID = manager.store.getState().flex?.worker?.worker?.sid;
+    const agentWorkerSID = manager.store.getState().flex?.worker?.worker?.sid || "";
     const agentSyncDoc = `syncDoc.${agentWorkerSID}`;
     // Let's clear the Sync Document and also close/end our subscription to the Document
     SyncDoc.clearSyncDoc(agentSyncDoc);

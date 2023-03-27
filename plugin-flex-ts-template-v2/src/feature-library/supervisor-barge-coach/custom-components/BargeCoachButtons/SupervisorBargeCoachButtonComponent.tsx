@@ -28,10 +28,10 @@ export const SupervisorBargeCoachButtons = ({task}: SupervisorBargeCoachProps) =
     privateMode
   } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState);
 
-  const teamViewTaskSID = useFlexSelector(state => state?.flex?.view?.selectedTaskInSupervisorSid);
-  const agentWorkerSID = useFlexSelector(state => state?.flex?.supervisor?.stickyWorker?.worker?.sid);
-  const myWorkerSID = useFlexSelector(state => state?.flex?.worker?.worker?.sid);
-  const supervisorFN = useFlexSelector(state => state?.flex?.worker?.attributes?.full_name);
+  const teamViewTaskSID = useFlexSelector(state => state?.flex?.view?.selectedTaskInSupervisorSid) || "";
+  const agentWorkerSID = useFlexSelector(state => state?.flex?.supervisor?.stickyWorker?.worker?.sid) || "";
+  const myWorkerSID = useFlexSelector(state => state?.flex?.worker?.worker?.sid) || "";
+  const supervisorFN = useFlexSelector(state => state?.flex?.worker?.attributes?.full_name) || "";
 
   // Confirming if Agent Coaching Panel is enabled, we will use this in the Supervisor Barge Coach component
   const agent_coaching_panel = isAgentCoachingPanelEnabled();

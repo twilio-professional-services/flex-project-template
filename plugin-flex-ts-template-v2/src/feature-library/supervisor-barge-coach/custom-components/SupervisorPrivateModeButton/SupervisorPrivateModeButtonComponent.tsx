@@ -23,15 +23,15 @@ export const SupervisorPrivateToggle = ({task}: SupervisorPrivateToggleProps) =>
     privateMode
   } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState);
 
-  const agentWorkerSID = useFlexSelector(state => state?.flex?.supervisor?.stickyWorker?.worker?.sid);
-  const myWorkerSID = useFlexSelector(state => state?.flex?.worker?.worker?.sid);
-  const supervisorFN = useFlexSelector(state => state?.flex?.worker?.attributes?.full_name);
+  const agentWorkerSID = useFlexSelector(state => state?.flex?.supervisor?.stickyWorker?.worker?.sid) || "";
+  const myWorkerSID = useFlexSelector(state => state?.flex?.worker?.worker?.sid) || "";
+  const supervisorFN = useFlexSelector(state => state?.flex?.worker?.attributes?.full_name) || "";
 
   // We will toggle the private mode on/off based on the button click and the state
   // of the coachingStatusPanel along with udpating the Sync Doc appropriately
   const togglePrivateMode = () => {
     const conference = task && task.conference;
-    const conferenceSID = conference?.conferenceSid;
+    const conferenceSID = conference?.conferenceSid || "";
 
     // If privateMode is true, toggle to false and update the Sync Doc with the appropriate Supervisor and Status
     if (privateMode) {
