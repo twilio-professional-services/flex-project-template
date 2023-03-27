@@ -9,10 +9,11 @@ import { NotificationIds } from '../flex-hooks/notifications/BargeCoachAssist';
 export const alertSupervisorsCheck = () => {
   const state = Flex.Manager.getInstance().store.getState() as AppState;
   const {
-    agentAssistanceArray
+    agentAssistanceArray,
+    enableAgentAssistanceAlerts
   } = state[reduxNamespace].supervisorBargeCoach;
   const arrayIndexCheck = agentAssistanceArray.findIndex((agent: any) => agent.agentFN != "");
-  if (arrayIndexCheck > -1) {
+  if (arrayIndexCheck > -1 && enableAgentAssistanceAlerts) {
     const agentFN = `${agentAssistanceArray[arrayIndexCheck].agentFN}`;
     Flex.Notifications.showNotification(NotificationIds.AGENT_ASSISTANCE, { agentFN: `${agentFN}` } );
   } else {
@@ -35,7 +36,7 @@ export const syncUpdates = async () => {
       Flex.Manager.getInstance().store.dispatch(Actions.setBargeCoachStatus({ 
         agentAssistanceArray: doc.data.agentAssistance
       }));
-      updateTaskAndTriggerAlerts();
+      alertSupervisorsCheck();
 
       // We are subscribing to Sync Doc updates here and logging anytime that happens
       doc.on("updated", (doc: any) => {
@@ -44,28 +45,13 @@ export const syncUpdates = async () => {
         Flex.Manager.getInstance().store.dispatch(Actions.setBargeCoachStatus({ 
           agentAssistanceArray: doc.data.agentAssistance
         }));
-        updateTaskAndTriggerAlerts();
+        alertSupervisorsCheck();
       })
     })
     // Setting agentAssistanceSyncSubscribed to true so we don't attempt more sync update/subscribes
     Flex.Manager.getInstance().store.dispatch(Actions.setBargeCoachStatus({ 
       agentAssistanceSyncSubscribed: true
     }));
-  }
-  return;
-}
-
-export const updateTaskAndTriggerAlerts = () => {
-  const state = Flex.Manager.getInstance().store.getState() as AppState;
-  const {
-    enableAgentAssistanceAlerts,
-  } = state[reduxNamespace].supervisorBargeCoach;
-
-  // let arrayIndexCheck = agentAssistanceArray?.findIndex((agent: any) => agent.agentFN != "");
-  // // Confirm Alerts are enabled and there are agents activity seeking assistance
-  if(enableAgentAssistanceAlerts) {
-    // Call the alert check function to alert for any new agents needing assistance
-    alertSupervisorsCheck();
   }
   return;
 }
