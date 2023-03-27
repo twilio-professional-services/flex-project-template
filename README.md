@@ -44,12 +44,13 @@ The primary aims of this template are
     7. [scripts](#scripts)
     8. [.github](#github)
 6. [More Scripts Details](#more-scripts-details)
-    1. [Add Feature](#add-feature)
-    2. [Removing Features](#removing-features)
-    3. [Renaming Template](#renaming-template)
-    4. [show-env-vars](#show-env-vars)
-    5. [setup-local-environment](#setup-local-environment)
-    6. [generate-env](#generate-env)
+    1. [Lint](#lint)
+    2. [Add Feature](#add-feature)
+    3. [Removing Features](#removing-features)
+    4. [Renaming Template](#renaming-template)
+    5. [show-env-vars](#show-env-vars)
+    6. [setup-local-environment](#setup-local-environment)
+    7. [generate-env](#generate-env)
 7. [Change log](#changelog)
 
 
@@ -339,6 +340,24 @@ Lastly, this package manages the github action workflows - with one example bein
 ---
 
 # More Scripts Details
+
+## Lint
+
+(the following is only applicable when using the flex v2 plugin)
+
+ESLint is configured for the v2 plugin, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
+
+Before pushing changes, run the following command from the `plugin-flex-ts-template-v2` dir to see the linter results.
+
+```bash
+npm run lint
+```
+
+Many linter issues can be fixed automatically. To do that, run this command:
+
+```bash
+npm run lint:fix
+```
 
 ## Add feature
 

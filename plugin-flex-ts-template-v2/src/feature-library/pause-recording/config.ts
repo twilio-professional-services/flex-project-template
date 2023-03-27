@@ -1,7 +1,12 @@
 import { getFeatureFlags } from '../../utils/configuration';
 import PauseRecordingConfig from './types/ServiceConfiguration';
 
-const { enabled = false, indicator_permanent = false, indicator_banner = false, include_silence = false } = getFeatureFlags()?.features?.pause_recording as PauseRecordingConfig || {};
+const {
+  enabled = false,
+  indicator_permanent = false,
+  indicator_banner = false,
+  include_silence = false,
+} = (getFeatureFlags()?.features?.pause_recording as PauseRecordingConfig) || {};
 
 export const isFeatureEnabled = () => {
   return enabled;

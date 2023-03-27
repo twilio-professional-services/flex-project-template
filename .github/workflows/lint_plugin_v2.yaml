@@ -1,0 +1,61 @@
+name: lint_plugin_v2
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    branches:
+      - main
+    paths:
+      - 'plugin-flex-ts-template-v2/**'
+  # Enable running this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  lint_plugin_v2:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install packages
+        working-directory: ./plugin-flex-ts-template-v2
+        run: npm install
+      - name: Run eslint
+        working-directory: ./plugin-flex-ts-template-v2
+        run: npm run lint:report
+        continue-on-error: true
+      - name: Annotate Code Linting Results
+        id: annotate
+        uses: ataylorme/eslint-annotate-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          report-json: "plugin-flex-ts-template-v2/eslint_report.json"
+      - name: Comment on error
+        uses: mshick/add-pr-comment@v2
+        if: always() && steps.annotate.outputs.errorCount > 0
+        with:
+          message: |
+            ${{steps.annotate.outputs.summary}}
+            :rotating_light: Errors must be resolved before merging, and have been annotated in the "Files changed" tab. Run `npm run lint` from the plugin directory if you would like to see results locally.
+      - name: Comment on warning
+        uses: mshick/add-pr-comment@v2
+        if: always() && steps.annotate.outputs.errorCount < 1 && steps.annotate.outputs.warningCount > 0
+        with:
+          message: |
+            ${{steps.annotate.outputs.summary}}
+            :warning: Merging is still possible with these warnings, but please fix them if possible! Annotations are available in the "Files changed" tab. Run `npm run lint` from the plugin directory if you would like to see results locally.
+      - name: Comment on no issues
+        uses: mshick/add-pr-comment@v2
+        if: always() && steps.annotate.outputs.errorCount < 1 && steps.annotate.outputs.warningCount < 1
+        with:
+          message: |
+            ${{steps.annotate.outputs.summary}}
+            :white_check_mark: No issues found!

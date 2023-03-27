@@ -1,3 +1,3 @@
-import SelectFilterLabel from './SelectFilterLabel';
+import SelectFilterLabelComponent from './SelectFilterLabel';
 
-export default SelectFilterLabel;
+export default SelectFilterLabelComponent;

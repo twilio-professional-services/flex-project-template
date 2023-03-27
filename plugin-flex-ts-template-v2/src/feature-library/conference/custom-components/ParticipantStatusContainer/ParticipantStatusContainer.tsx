@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {
-  styled
-} from '@twilio/flex-ui';
+import { styled } from '@twilio/flex-ui';
+
 import ParticipantName from '../ParticipantName';
 import ParticipantStatus from '../ParticipantStatus';
 

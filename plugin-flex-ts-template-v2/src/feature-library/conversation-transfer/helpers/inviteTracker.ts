@@ -1,73 +1,48 @@
-import {
-  ITask,
-  StateHelper,
-  Manager,
-  ConversationState,
-} from "@twilio/flex-ui";
-import {
-  InvitedParticipantDetails,
-  InvitedParticipants,
-} from "../types/InvitedParticipantDetails";
-import { ParticipantInviteType } from "../types/ParticipantInvite";
-import ProgrammableChatService from "../../../utils/serverless/ProgrammableChat/ProgrammableChatService";
+import { ITask, StateHelper, Manager, ConversationState } from '@twilio/flex-ui';
+
+import { InvitedParticipantDetails, InvitedParticipants } from '../types/InvitedParticipantDetails';
+import { ParticipantInviteType } from '../types/ParticipantInvite';
+import ProgrammableChatService from '../../../utils/serverless/ProgrammableChat/ProgrammableChatService';
 
 const syncClient = Manager.getInstance()?.insightsClient;
 
-const instantQuery = async (
-  targetSid: string,
-  targetType: ParticipantInviteType
-) => {
-  return new Promise<string>((resolve, reject) => {
-    const index = targetType === "Worker" ? "tr-worker" : "tr-queue";
+const instantQuery = async (targetSid: string, targetType: ParticipantInviteType) => {
+  return new Promise<string>((resolve, _reject) => {
+    const index = targetType === 'Worker' ? 'tr-worker' : 'tr-queue';
 
     syncClient.instantQuery(index).then((q) => {
-      const search =
-        targetType === "Worker"
-          ? `data.worker_sid eq "${targetSid}"`
-          : `data.queue_sid eq "${targetSid}"`;
+      const search = targetType === 'Worker' ? `data.worker_sid eq "${targetSid}"` : `data.queue_sid eq "${targetSid}"`;
 
       q.search(search);
 
-      q.on("searchResult", (items) => {
+      q.on('searchResult', (items) => {
         if (items) {
           Object.entries(items).forEach(([key, value]) => {
-            console.log("instantQuery", key, value);
-            const name =
-              targetType === "Worker"
-                ? (value as any).attributes.full_name
-                : (value as any).queue_name;
+            console.log('instantQuery', key, value);
+            const name = targetType === 'Worker' ? (value as any).attributes.full_name : (value as any).queue_name;
             resolve(name);
           });
         } else {
-          console.log(
-            "Invite participant name instantQuery failed for ",
-            targetSid
-          );
+          console.log('Invite participant name instantQuery failed for ', targetSid);
         }
       });
     });
   });
 };
 
-const getWorkerName = (sid: string): Promise<string> => {
-  return instantQuery(sid, "Worker");
+const getWorkerName = async (sid: string): Promise<string> => {
+  return instantQuery(sid, 'Worker');
 };
 
-const getQueueName = (sid: string): Promise<string> => {
-  return instantQuery(sid, "Queue");
+const getQueueName = async (sid: string): Promise<string> => {
+  return instantQuery(sid, 'Queue');
 };
 
-export const addInviteToConversation = async (
-  task: ITask,
-  invitesTaskSid: string,
-  targetSid: string
-) => {
-  const inviteTargetType = targetSid.startsWith("WK") ? "Worker" : "Queue";
-  const targetName = await (targetSid.startsWith("WK")
-    ? getWorkerName(targetSid)
-    : getQueueName(targetSid));
+export const addInviteToConversation = async (task: ITask, invitesTaskSid: string, targetSid: string) => {
+  const inviteTargetType = targetSid.startsWith('WK') ? 'Worker' : 'Queue';
+  const targetName = await (targetSid.startsWith('WK') ? getWorkerName(targetSid) : getQueueName(targetSid));
 
-  console.log("addInviteToConversation", targetName);
+  console.log('addInviteToConversation', targetName);
   const invite: InvitedParticipantDetails = {
     invitesTaskSid,
     targetSid,
@@ -91,36 +66,17 @@ export const addInviteToConversation = async (
 
   if (conversation.sid)
     try {
-      await ProgrammableChatService.updateChannelAttributes(
-        conversation.sid,
-        updatedAttributes
-      );
+      await ProgrammableChatService.updateChannelAttributes(conversation.sid, updatedAttributes);
     } catch (error) {
-      console.log("Error", error, conversation);
+      console.log('Error', error, conversation);
     }
 };
 
-// This is to handle removing an invite afer WE join the channel
-export const checkAndRemoveOldInvitedParticipants = async (
-  task: ITask,
-  conversation: ConversationState.ConversationState
-) => {
-  const currentAttributes = conversation?.source?.attributes;
-  let { invites = {} } = (currentAttributes as any) || {};
-
-  if (invites[task.taskSid]) {
-    await removeInvitedParticipant(conversation, task.taskSid);
-  }
-};
-
 // This is to handle removing any invite by task sid for a channel
-export const removeInvitedParticipant = async (
-  conversation: ConversationState.ConversationState,
-  taskSid: string
-) => {
+export const removeInvitedParticipant = async (conversation: ConversationState.ConversationState, taskSid: string) => {
   const currentAttributes = conversation?.source?.attributes as object;
 
-  let { invites = {} } = (currentAttributes as any) || {};
+  const { invites = {} } = (currentAttributes as any) || {};
 
   const updatedInvites = JSON.parse(JSON.stringify(invites));
   delete updatedInvites[taskSid];
@@ -132,19 +88,26 @@ export const removeInvitedParticipant = async (
 
   if (conversation?.source?.sid)
     try {
-      await ProgrammableChatService.updateChannelAttributes(
-        conversation?.source?.sid,
-        updatedAttributes
-      );
+      await ProgrammableChatService.updateChannelAttributes(conversation?.source?.sid, updatedAttributes);
     } catch (error) {
-      console.log("Error", error, conversation);
+      console.log('Error', error, conversation);
     }
 };
 
-export const countOfOutstandingInvitesForConversation = (
-  conversation: ConversationState.ConversationState
-): number => {
-  const { invites = undefined } =
-    (conversation?.source?.attributes as any as InvitedParticipants) || {};
+// This is to handle removing an invite afer WE join the channel
+export const checkAndRemoveOldInvitedParticipants = async (
+  task: ITask,
+  conversation: ConversationState.ConversationState,
+) => {
+  const currentAttributes = conversation?.source?.attributes;
+  const { invites = {} } = (currentAttributes as any) || {};
+
+  if (invites[task.taskSid]) {
+    await removeInvitedParticipant(conversation, task.taskSid);
+  }
+};
+
+export const countOfOutstandingInvitesForConversation = (conversation: ConversationState.ConversationState): number => {
+  const { invites = undefined } = (conversation?.source?.attributes as any as InvitedParticipants) || {};
   return Object.keys(invites || {}).length;
 };

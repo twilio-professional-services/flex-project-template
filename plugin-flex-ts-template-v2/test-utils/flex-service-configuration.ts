@@ -1,6 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
-import { UIAttributes } from '../src/types/manager/ServiceConfiguration';
 import { mergeWith, unset } from 'lodash';
+
+import { UIAttributes } from '../src/types/manager/ServiceConfiguration';
 
 // NOTE: Not sure a great way to "set" the Flex serviceConfiguration value per test
 //       So the __mocks__/@twilio/flex-ui.js file will use this variable as value
@@ -45,25 +46,25 @@ let mockedServiceConfiguration: ServiceConfiguration = {
   taskrouter_workspace_sid: 'mockTaskrouterWorkspaceSid',
   ui_attributes: {
     serverless_functions_domain: 'mockServerlessFunctionsDomain',
-    custom_data: {}
+    custom_data: {},
   },
   ui_language: 'mockUiLanguage',
   ui_version: 'mockUiVersion',
   url: 'mockUrl',
   markdown: {
     enabled: false,
-    mode: 'readOnly'
+    mode: 'readOnly',
   },
   notifications: {
     enabled: false,
-    mode: 'whenNotInFocus'
+    mode: 'whenNotInFocus',
   },
   call_recording_webhook_url: '',
   flex_service_instance_sid: '',
   plugin_service_enabled: false,
   public_attributes: undefined,
   serverless_service_sids: [],
-  ui_dependencies: {}
+  ui_dependencies: {},
 };
 
 export const getMockedServiceConfiguration = () => mockedServiceConfiguration as Flex.ServiceConfiguration;
@@ -97,31 +98,31 @@ export const resetServiceConfiguration = () => {
     taskrouter_workspace_sid: 'mockTaskrouterWorkspaceSid',
     ui_attributes: {
       serverless_functions_domain: 'mockServerlessFunctionsDomain',
-      custom_data: {}
+      custom_data: {},
     },
     ui_language: 'mockUiLanguage',
     ui_version: 'mockUiVersion',
     url: 'mockUrl',
     markdown: {
       enabled: false,
-      mode: 'readOnly'
+      mode: 'readOnly',
     },
     notifications: {
       enabled: false,
-      mode: 'whenNotInFocus'
+      mode: 'whenNotInFocus',
     },
     call_recording_webhook_url: '',
     flex_service_instance_sid: '',
     plugin_service_enabled: false,
     public_attributes: undefined,
     serverless_service_sids: [],
-    ui_dependencies: {}
+    ui_dependencies: {},
   };
-}
+};
 export const setServiceConfiguration = (serviceConfiguration: Partial<ServiceConfigurationUpdate>) => {
   mergeWith(mockedServiceConfiguration, serviceConfiguration, (objValue, srcValue, key, obj) => {
     if (srcValue === undefined) {
       unset(obj, key);
     }
   });
-}
+};

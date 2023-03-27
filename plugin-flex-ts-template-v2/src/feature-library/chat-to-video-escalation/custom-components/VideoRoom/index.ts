@@ -1,4 +1,5 @@
-import VideoRoom from "./VideoRoom";
-import { withTaskContext } from "@twilio/flex-ui";
+import { withTaskContext } from '@twilio/flex-ui';
+
+import VideoRoom from './VideoRoom';
 
 export default withTaskContext(VideoRoom);

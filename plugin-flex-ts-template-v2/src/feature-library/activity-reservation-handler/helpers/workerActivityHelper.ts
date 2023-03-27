@@ -1,6 +1,7 @@
-import { Manager, Actions } from "@twilio/flex-ui";
-import FlexHelper from "./flexHelper";
-import { clearPendingActivityChange } from "./pendingActivity";
+import { Manager, Actions } from '@twilio/flex-ui';
+
+import FlexHelper from './flexHelper';
+import { clearPendingActivityChange } from './pendingActivity';
 
 class WorkerActivityHelper {
   workerClient = Manager.getInstance().workerClient;
@@ -17,15 +18,12 @@ class WorkerActivityHelper {
     return this.activity?.sid;
   }
 
-  waitForWorkerActivityChange = (activitySid: string | undefined) =>
+  waitForWorkerActivityChange = async (activitySid: string | undefined) =>
     new Promise((resolve) => {
       if (activitySid && this.activitySid === activitySid) {
         resolve(null);
       } else {
-        console.debug(
-          "WorkerState, waitForWorkerActivityChange, waiting for worker activity SID to be",
-          activitySid
-        );
+        console.debug('WorkerState, waitForWorkerActivityChange, waiting for worker activity SID to be', activitySid);
         // Arbitrary maxWaitTime value. Trying to balance allowing for an unexpected
         // delay updating worker activity while not holding up the calling function too long
         const maxWaitTime = 3000;
@@ -33,10 +31,7 @@ class WorkerActivityHelper {
         let activityCheckCount = 0;
         const activityCheckInterval = setInterval(() => {
           if (waitBetweenChecks * activityCheckCount > maxWaitTime) {
-            console.warn(
-              "Timed out waiting for worker activity SID to be",
-              activitySid
-            );
+            console.warn('Timed out waiting for worker activity SID to be', activitySid);
             clearInterval(activityCheckInterval);
             resolve(null);
           } else if (this.activitySid === activitySid) {
@@ -54,36 +49,31 @@ class WorkerActivityHelper {
     // TaskRouter will not allow a worker to change from an available activity
     // to any other activity if the worker has a pending reservation without
     //  rejecting that reservation, which isn't what we want to do in this use case
-    if (
-      FlexHelper.isAnAvailableActivityBySid(targetActivitySid) &&
-      FlexHelper.hasPendingTask
-    ) {
+    if (FlexHelper.isAnAvailableActivityBySid(targetActivitySid) && FlexHelper.hasPendingTask) {
       canChange = false;
     }
 
     return canChange;
   };
+
   setWorkerActivity = (newActivitySid?: any, clearPendingActivity?: any) => {
     try {
       const targetActivity = FlexHelper.getActivityBySid(newActivitySid);
-      console.log("FlexState", FlexHelper);
-      console.log("targetActivity", targetActivity);
-      console.log("newActivitySid", newActivitySid);
+      console.log('FlexState', FlexHelper);
+      console.log('targetActivity', targetActivity);
+      console.log('newActivitySid', newActivitySid);
       if (!this.canChangeWorkerActivity(newActivitySid)) {
         console.debug(
-          "setWorkerActivity: Not permitted to change worker activity at this time. " +
-            "Target activity:",
-          targetActivity?.name
+          'setWorkerActivity: Not permitted to change worker activity at this time. Target activity:',
+          targetActivity?.name,
         );
         return;
       }
       if (this.activitySid === newActivitySid) {
-        console.debug(
-          `setWorkerActivity: Worker already in activity "${targetActivity?.name}". No change needed.`
-        );
+        console.debug(`setWorkerActivity: Worker already in activity "${targetActivity?.name}". No change needed.`);
       } else {
-        console.log("setWorkerActivity: ", targetActivity?.name);
-        Actions.invokeAction("SetActivity", {
+        console.log('setWorkerActivity: ', targetActivity?.name);
+        Actions.invokeAction('SetActivity', {
           activitySid: newActivitySid,
           isInvokedByPlugin: true,
         });
@@ -92,10 +82,7 @@ class WorkerActivityHelper {
         clearPendingActivityChange();
       }
     } catch (error) {
-      console.error(
-        "setWorkerActivity: Error setting worker activity SID",
-        error
-      );
+      console.error('setWorkerActivity: Error setting worker activity SID', error);
     }
   };
 }

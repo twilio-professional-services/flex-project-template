@@ -1,5 +1,5 @@
 export enum FlexOrchestrationEvent {
-  accepted = "accepted",
-  wrapup = "wrapup",
-  completed = "completed",
+  accepted = 'accepted',
+  wrapup = 'wrapup',
+  completed = 'completed',
 }

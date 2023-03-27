@@ -1,6 +1,6 @@
 export type OwnProps = {
   currentValue?: string[];
-}
+};
 
 export const SelectFilterLabel = (props: OwnProps) => {
   let label = 'Any';
@@ -10,7 +10,7 @@ export const SelectFilterLabel = (props: OwnProps) => {
   if (props.currentValue && props.currentValue.length > 1) {
     label = `${props.currentValue.length} selected`;
   }
-  return (<>{label}</>);
+  return <>{label}</>;
 };
 
 export default SelectFilterLabel;

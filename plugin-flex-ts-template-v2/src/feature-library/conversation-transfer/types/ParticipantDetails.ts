@@ -1,4 +1,4 @@
-export type ParticipantType = "agent" | "worker";
+export type ParticipantType = 'agent' | 'worker';
 
 export interface ParticipantDetails {
   friendlyName: string;

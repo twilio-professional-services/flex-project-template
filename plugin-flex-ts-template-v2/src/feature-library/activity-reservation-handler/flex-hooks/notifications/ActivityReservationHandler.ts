@@ -1,4 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
+
 import { StringTemplates } from '../strings/ActivityReservationHandler';
 
 export enum NotificationIds {
@@ -6,7 +7,7 @@ export enum NotificationIds {
   RestrictedActivities = 'PSRestrictedActivities',
 }
 
-export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
+export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: NotificationIds.ActivityChangeDelayed,
     closeButton: true,
@@ -20,5 +21,5 @@ export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
     content: StringTemplates.RestrictedActivities,
     type: Flex.NotificationType.warning,
     timeout: 5000,
-  }
-]
+  },
+];

@@ -6,9 +6,9 @@ const client = new SyncClient(Flex.Manager.getInstance().user.token);
 
 export default client;
 
-export const getAllSyncMapItems = (syncMap: SyncMap) => {
+export const getAllSyncMapItems = async (syncMap: SyncMap) => {
   return syncMap.getItems().then(_pageHandler);
-}
+};
 
 async function _pageHandler(paginator: Paginator<SyncMapItem>): Promise<SyncMapItem[]> {
   if (paginator.hasNextPage) {

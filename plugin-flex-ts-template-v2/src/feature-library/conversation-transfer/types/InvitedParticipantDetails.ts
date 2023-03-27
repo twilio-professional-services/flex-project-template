@@ -1,4 +1,4 @@
-import { ParticipantInviteType } from "./ParticipantInvite"
+import { ParticipantInviteType } from './ParticipantInvite';
 
 export interface InvitedParticipantDetails {
   invitesTaskSid: string;
@@ -9,5 +9,5 @@ export interface InvitedParticipantDetails {
 }
 
 export interface InvitedParticipants {
-  invites: (InvitedParticipantDetails | undefined)[]
+  invites: (InvitedParticipantDetails | undefined)[];
 }

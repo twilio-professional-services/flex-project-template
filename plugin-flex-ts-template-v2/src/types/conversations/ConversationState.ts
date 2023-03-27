@@ -1,5 +1,5 @@
-import { Paginator } from "twilio-chat/lib/interfaces/paginator";
-import { Conversation, Message, Participant } from "@twilio/conversations";
+import { Paginator } from 'twilio-chat/lib/interfaces/paginator';
+import { Conversation, Message, Participant } from '@twilio/conversations';
 
 interface ParticipantState {
   readonly source: Participant;
@@ -8,7 +8,7 @@ interface ParticipantState {
 }
 type ParticipantType = Map<string, ParticipantState>;
 
-interface MessageState<CustomAttributesType = undefined> {
+interface MessageState {
   readonly isFromMe: boolean;
   readonly groupWithNext: boolean;
   readonly groupWithPrevious: boolean;

@@ -1,12 +1,13 @@
-import * as Flex from "@twilio/flex-ui";
-import { ITask } from "@twilio/flex-ui";
+import * as Flex from '@twilio/flex-ui';
+import { ITask } from '@twilio/flex-ui';
 import React from 'react';
-import { TaskQualificationConfig } from "feature-library/agent-automation/types/ServiceConfiguration";
-import { getMatchingTaskConfiguration } from "../../config"
+import { TaskQualificationConfig } from 'feature-library/agent-automation/types/ServiceConfiguration';
+
+import { getMatchingTaskConfiguration } from '../../config';
 
 export type Props = {
   task: ITask;
-}
+};
 
 // this component is intended to execute an autocomplete
 // and as such should only added to the canvas when a task is in wrapping
@@ -18,36 +19,37 @@ export type Props = {
 // the task will auto wrap
 
 export interface OwnProps {
-  task: ITask
+  task: ITask;
 }
 
-const autoCompleteTask = async  (task: ITask, taskConfig: TaskQualificationConfig) => {
-  const { sid } = task
+const autoCompleteTask = async (task: ITask, taskConfig: TaskQualificationConfig) => {
+  const { sid } = task;
 
   try {
-    const scheduledTime = (task.dateUpdated.getTime() + taskConfig.wrapup_time);
-    const currentTime = (new Date()).getTime()
-    const timeout =  scheduledTime - currentTime > 0 ? scheduledTime - currentTime : 0;
+    const scheduledTime = task.dateUpdated.getTime() + taskConfig.wrapup_time;
+    const currentTime = new Date().getTime();
+    const timeout = scheduledTime - currentTime > 0 ? scheduledTime - currentTime : 0;
 
     setTimeout(() => {
       if (task && Flex.TaskHelper.isInWrapupMode(task)) {
-        Flex.Actions.invokeAction("CompleteTask", { sid });
+        Flex.Actions.invokeAction('CompleteTask', { sid });
       }
-    }, timeout)
+    }, timeout);
   } catch (error) {
     console.error(`Error attempting to set wrap up timeout for reservation: ${sid}`, error);
   }
-}
+};
 
 class AutoComplete extends React.PureComponent<OwnProps> {
-
   componentDidMount() {
     const { task } = this.props;
     const taskConfig = getMatchingTaskConfiguration(task);
-    if(taskConfig && taskConfig.auto_wrapup) autoCompleteTask(task, taskConfig);
+    if (taskConfig && taskConfig.auto_wrapup) autoCompleteTask(task, taskConfig);
   }
 
-  render() {return null}
+  render() {
+    return null;
+  }
 }
 
 export default AutoComplete;

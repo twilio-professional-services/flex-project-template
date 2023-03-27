@@ -1,6 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
+
 import ChatTransferService from '../../utils/serverless/ChatTransferService';
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export interface TransferOptions {
   attributes: string;
@@ -20,12 +21,12 @@ export const actionName = FlexAction.TransferTask;
 // if the task channel is not chat, function defers to existing process
 // otherwise the function creates a new task for transfering the chat
 // and deals with the chat orchestration
-export const actionHook = function interceptTransferOverrideForChatTasks(flex: typeof Flex, manager: Flex.Manager) {
-  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload: EventPayload, abortFunction: any) => {
+export const actionHook = function interceptTransferOverrideForChatTasks(flex: typeof Flex, _manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload: EventPayload, abortFunction: any) => {
     if (Flex.TaskHelper.isChatBasedTask(payload.task) && !Flex.TaskHelper.isCBMTask(payload.task)) {
       abortFunction(payload);
       // Execute Chat Transfer Task
       await ChatTransferService.executeChatTransfer(payload.task, payload.targetSid, payload.options);
     }
   });
-}
+};

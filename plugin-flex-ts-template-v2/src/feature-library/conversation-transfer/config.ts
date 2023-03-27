@@ -5,7 +5,7 @@ const {
   enabled = false,
   cold_transfer = false,
   multi_participant = false,
-} = getFeatureFlags()?.features?.conversation_transfer as ConversationTransferConfiguration || {};
+} = (getFeatureFlags()?.features?.conversation_transfer as ConversationTransferConfiguration) || {};
 
 export const isFeatureEnabled = () => {
   return enabled;

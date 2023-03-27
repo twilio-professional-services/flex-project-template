@@ -9,6 +9,19 @@ const shouldStoreCurrentActivitySid = () => {
   return !systemActivities.map((a) => a.toLowerCase()).includes((WorkerActivity.activityName as string).toLowerCase());
 };
 
+export const storePendingActivityChange = (activity: any, isUserSelected?: boolean) => {
+  // Pulling out only the relevant activity properties to avoid
+  // a circular structure error in JSON.stringify()
+  const pendingActivityChange: PendingActivity = {
+    available: activity.available,
+    isUserSelected: Boolean(isUserSelected),
+    name: activity.name,
+    sid: activity.sid,
+  };
+
+  localStorage.setItem(pendingActivityChangeItemKey, JSON.stringify(pendingActivityChange));
+};
+
 export const storeCurrentActivitySidIfNeeded = () => {
   if (shouldStoreCurrentActivitySid()) {
     const { activity: workerActivity } = WorkerActivity;
@@ -23,19 +36,6 @@ export const getPendingActivity = (): PendingActivity => {
 
   const pendingActivity: PendingActivity = item && JSON.parse(item);
   return pendingActivity;
-};
-
-export const storePendingActivityChange = (activity: any, isUserSelected?: boolean) => {
-  // Pulling out only the relevant activity properties to avoid
-  // a circular structure error in JSON.stringify()
-  const pendingActivityChange: PendingActivity = {
-    available: activity.available,
-    isUserSelected: !!isUserSelected,
-    name: activity.name,
-    sid: activity.sid,
-  };
-
-  localStorage.setItem(pendingActivityChangeItemKey, JSON.stringify(pendingActivityChange));
 };
 
 export const clearPendingActivityChange = () => {

@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { UPDATE_RERSERVATION, prefix} from './types';
-import initialState from './initialState'
+import { createSlice } from '@reduxjs/toolkit';
+
+import { UPDATE_RERSERVATION, prefix } from './types';
+import initialState from './initialState';
 
 const SupervisorCompleteReservationSlice = createSlice({
   name: prefix,
@@ -18,7 +19,7 @@ const SupervisorCompleteReservationSlice = createSlice({
     [`${UPDATE_RERSERVATION}_FULFILLED`]: (state, action) => {
       const { taskSid } = action.payload;
       state.isProcessingRequest[taskSid] = false;
-    }
+    },
   },
 });
 

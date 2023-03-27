@@ -1,16 +1,17 @@
-import { NotificationType } from "@twilio/flex-ui";
-import { StringTemplates } from "../strings/ChatTransferStrings";
+import { NotificationType } from '@twilio/flex-ui';
+
+import { StringTemplates } from '../strings/ChatTransferStrings';
 
 export enum NotificationIds {
-  ChatTransferTaskSuccess = "ChatTransferTaskSuccess",
-  ChatParticipantInvited = "ChatParticipantInvited",
-  ChatTransferFailedGeneric = "ChatTransferFailed",
-  ChatTransferFailedConsultNotSupported = "ChatTransferFailedConsultNotSupported",
-  ChatRemoveParticipantFailed = "ChatRemoveParticipantFailed",
-  ChatRemoveParticipantSuccess = "ChatRemoveParticipantSuccess",
-  ChatCancelParticipantInviteFailed = "ChatCancelParticipantInviteFailed",
-  ChatCancelParticipantInviteSuccess = "ChatCancelParticipantInviteSuccess",
-  ChatCancelParticipantInviteFailedInviteOutstanding = "ChatCancelParticipantInviteFailedInviteOutstanding",
+  ChatTransferTaskSuccess = 'ChatTransferTaskSuccess',
+  ChatParticipantInvited = 'ChatParticipantInvited',
+  ChatTransferFailedGeneric = 'ChatTransferFailed',
+  ChatTransferFailedConsultNotSupported = 'ChatTransferFailedConsultNotSupported',
+  ChatRemoveParticipantFailed = 'ChatRemoveParticipantFailed',
+  ChatRemoveParticipantSuccess = 'ChatRemoveParticipantSuccess',
+  ChatCancelParticipantInviteFailed = 'ChatCancelParticipantInviteFailed',
+  ChatCancelParticipantInviteSuccess = 'ChatCancelParticipantInviteSuccess',
+  ChatCancelParticipantInviteFailedInviteOutstanding = 'ChatCancelParticipantInviteFailedInviteOutstanding',
 }
 
 export const notificationHook = () => [
@@ -76,5 +77,5 @@ export const notificationHook = () => [
     content: StringTemplates.ChatParticipantInviteOutstanding,
     timeout: 3000,
     type: NotificationType.error,
-  }
+  },
 ];

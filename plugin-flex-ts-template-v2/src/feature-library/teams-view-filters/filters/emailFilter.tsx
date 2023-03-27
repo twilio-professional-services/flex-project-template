@@ -1,4 +1,4 @@
-import { FilterDefinition } from "@twilio/flex-ui";
+import { FilterDefinition } from '@twilio/flex-ui';
 
 import FreeTextFilter from '../custom-components/FreeTextFilter';
 import FreeTextFilterLabel from '../custom-components/FreeTextFilterLabel';
@@ -12,13 +12,14 @@ import FreeTextFilterLabel from '../custom-components/FreeTextFilterLabel';
   The filter does a partial match on the free form typed email string
 */
 
-export const emailFilter = () => ({
-  id: 'data.attributes.email',
-  fieldName: 'email',
-  title: 'Email Address',
-  customStructure: {
-    field: <FreeTextFilter />,
-    label: <FreeTextFilterLabel />
-  },
-  condition: 'CONTAINS'
-}) as FilterDefinition
+export const emailFilter = () =>
+  ({
+    id: 'data.attributes.email',
+    fieldName: 'email',
+    title: 'Email Address',
+    customStructure: {
+      field: <FreeTextFilter />,
+      label: <FreeTextFilterLabel />,
+    },
+    condition: 'CONTAINS',
+  } as FilterDefinition);

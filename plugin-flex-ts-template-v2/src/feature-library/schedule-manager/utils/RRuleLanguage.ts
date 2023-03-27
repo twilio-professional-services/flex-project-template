@@ -1,15 +1,7 @@
-import { Language } from "rrule/dist/esm/nlp/i18n";
+import { Language } from 'rrule/dist/esm/nlp/i18n';
 
 export default {
-  dayNames: [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ],
+  dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
   monthNames: [
     'January',
     'February',

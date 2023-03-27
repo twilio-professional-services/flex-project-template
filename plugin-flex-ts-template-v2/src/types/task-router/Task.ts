@@ -1,15 +1,9 @@
-import IncomingTransfer from "./IncomingTransfer";
-import OutgoingTransfer from "./OutgoingTransfer";
+import IncomingTransfer from './IncomingTransfer';
+import OutgoingTransfer from './OutgoingTransfer';
 
 // https://twilio.github.io/twilio-taskrouter.js/Task.html
 
-export type TaskAssignmentStatus =
-  | "reserved"
-  | "assigned"
-  | "canceled"
-  | "wrapping"
-  | "completed"
-  | "transferring";
+export type TaskAssignmentStatus = 'reserved' | 'assigned' | 'canceled' | 'wrapping' | 'completed' | 'transferring';
 
 export default interface Task {
   addOns: any;

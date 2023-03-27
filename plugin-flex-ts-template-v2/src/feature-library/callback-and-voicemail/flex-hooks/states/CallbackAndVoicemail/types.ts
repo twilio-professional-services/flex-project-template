@@ -6,7 +6,7 @@ export const PLACED_CALLBACK = `${prefix}/PLACED_CALLBACK`;
 
 // State
 export interface CallbackAndVoicemailState {
-	isCompletingCallbackAction: { [taskSid: string]: boolean; };
-	isRequeueingCallbackAction: { [taskSid: string]: boolean; };
-	lastPlacedReservationSid?: string;
-};
+  isCompletingCallbackAction: { [taskSid: string]: boolean };
+  isRequeueingCallbackAction: { [taskSid: string]: boolean };
+  lastPlacedReservationSid?: string;
+}

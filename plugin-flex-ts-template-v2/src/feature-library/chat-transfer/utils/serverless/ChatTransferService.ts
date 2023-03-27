@@ -33,28 +33,11 @@ export interface Queue {
   workspace_sid: string;
 }
 
-/**
- * Currently not in use because of issue where TaskQueues will not show up
- * if they have not had a task assigned to them within the last 30 days...
- */
-const QueueInstantQuery = (queryExpression: string): Promise<{ [queueSid: string]: Queue }> => {
+const WorkerInstantQuery = async (queryExpression: string): Promise<{ [workerSid: string]: any }> => {
   const { insightsClient } = Flex.Manager.getInstance();
-  return new Promise(async (resolve, reject) => {
+  const query = await insightsClient.instantQuery('tr-worker');
+  return new Promise((resolve, reject) => {
     try {
-      const query = await insightsClient.instantQuery('tr-queue');
-      query.once('searchResult', (queues) => resolve(queues));
-      query.search(queryExpression);
-    } catch (e) {
-      reject(e);
-    }
-  });
-};
-
-const WorkerInstantQuery = (queryExpression: string): Promise<{ [workerSid: string]: any }> => {
-  const { insightsClient } = Flex.Manager.getInstance();
-  return new Promise(async (resolve, reject) => {
-    try {
-      const query = await insightsClient.instantQuery('tr-worker');
       query.once('searchResult', (queues) => resolve(queues));
       query.search(queryExpression);
     } catch (e) {
@@ -90,9 +73,6 @@ class ChatTransferService extends ApiService {
        * days to show up in query
        */
 
-      // const queueResult = await QueueInstantQuery(`data.queue_sid EQ "${transferTargetSid}"`);
-      // const queueName = queueResult[transferTargetSid]?.queue_name || task.queueName;
-
       const queues = await TaskService.getQueues();
       const queueResult = queues
         ? queues.find((queue) => {
@@ -112,7 +92,7 @@ class ChatTransferService extends ApiService {
         const transferTarget = transferTargetSid.startsWith('WK') ? workerFriendlyName : queueName;
         Flex.Actions.invokeAction('SendMessage', {
           conversationSid: task.attributes.channelSid,
-          body: `${options?.mode.toLowerCase()} transfer to \"${transferTarget}\" initiated`,
+          body: `${options?.mode.toLowerCase()} transfer to "${transferTarget}" initiated`,
           messageAttributes: { notification: true },
         });
 
@@ -124,8 +104,8 @@ class ChatTransferService extends ApiService {
             transferType: options?.mode,
           },
         };
-        const success = await TaskService.updateTaskAttributes(task.taskSid, updatedTaskAttributes);
-        if (!success) {
+        const updateSuccess = await TaskService.updateTaskAttributes(task.taskSid, updatedTaskAttributes);
+        if (!updateSuccess) {
           // in the unlikely event we were unable to update the task notify the user
           Flex.Notifications.showNotification(ChatTransferNotification.ErrorUpdatingTaskForChatTransfer);
         }
@@ -153,7 +133,7 @@ class ChatTransferService extends ApiService {
   // as well as ensuring the channelSid is removed from task attributes.
   // If a task is completed with a channelSid attributes - the flex flow
   // janitor (if it is enabled) will close the chat channel.
-  async completeTransferredTask(task: Flex.ITask): Promise<Boolean> {
+  async completeTransferredTask(task: Flex.ITask): Promise<boolean> {
     try {
       const {
         attributes: {
@@ -172,7 +152,7 @@ class ChatTransferService extends ApiService {
     }
   }
 
-  #createTransferTask = (
+  #createTransferTask = async (
     task: Flex.ITask,
     transferTargetSid: string,
     queueName: string,
@@ -204,7 +184,7 @@ class ChatTransferService extends ApiService {
     });
   };
 
-  #completeTransferredTask = (
+  #completeTransferredTask = async (
     taskSid: string,
     transferType: string,
     channelSid: string,

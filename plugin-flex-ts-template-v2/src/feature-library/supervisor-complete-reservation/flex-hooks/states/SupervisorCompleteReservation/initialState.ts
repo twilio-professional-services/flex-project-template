@@ -1,7 +1,7 @@
 import { SupervisorCompleteReservationState } from './types';
 
 const initialState: SupervisorCompleteReservationState = {
-  isProcessingRequest: {}
+  isProcessingRequest: {},
 };
 
 export default initialState;

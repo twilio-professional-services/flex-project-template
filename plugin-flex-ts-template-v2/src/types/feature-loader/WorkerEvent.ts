@@ -1,3 +1,3 @@
 export enum WorkerEvent {
-  reservationCreated = "reservationCreated",
+  reservationCreated = 'reservationCreated',
 }

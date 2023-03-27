@@ -1,7 +1,12 @@
 import { getFeatureFlags } from '../../utils/configuration';
 import CallbackAndVoicemailConfig from './types/ServiceConfiguration';
 
-const { enabled = false, allow_requeue = false, max_attempts = 1, auto_select_task = false } = getFeatureFlags()?.features?.callbacks as CallbackAndVoicemailConfig || {};
+const {
+  enabled = false,
+  allow_requeue = false,
+  max_attempts = 1,
+  auto_select_task = false,
+} = (getFeatureFlags()?.features?.callbacks as CallbackAndVoicemailConfig) || {};
 
 export const isFeatureEnabled = () => {
   return enabled;
@@ -17,4 +22,4 @@ export const isAutoSelectTaskEnabled = () => {
 
 export const getMaxAttempts = () => {
   return max_attempts;
-}
+};

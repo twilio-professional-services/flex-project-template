@@ -1,5 +1,6 @@
-import * as Flex from "@twilio/flex-ui";
-import { FlexEvent } from "../../types/feature-loader";
+import * as Flex from '@twilio/flex-ui';
+
+import { FlexEvent } from '../../types/feature-loader';
 
 const taskEvents = [
   FlexEvent.taskAccepted,
@@ -23,20 +24,25 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
     return;
   }
   const event = hook.eventName as FlexEvent;
-  
-  console.info(`Feature ${feature} registered %c${event} %cevent hook: %c${hook.eventHook.name}`, 'font-weight:bold', 'font-weight:normal', 'font-weight:bold');
-  
-  if (event == FlexEvent.pluginsLoaded) {
+
+  console.info(
+    `Feature ${feature} registered %c${event} %cevent hook: %c${hook.eventHook.name}`,
+    'font-weight:bold',
+    'font-weight:normal',
+    'font-weight:bold',
+  );
+
+  if (event === FlexEvent.pluginsLoaded) {
     manager.events.addListener(event, () => {
       hook.eventHook(flex, manager);
     });
-  } else if (event == FlexEvent.tokenUpdated) {
-    manager.events.addListener(event, tokenPayload => {
+  } else if (event === FlexEvent.tokenUpdated) {
+    manager.events.addListener(event, (tokenPayload) => {
       hook.eventHook(flex, manager, tokenPayload);
     });
   } else if (isTaskEvent(event)) {
-    manager.events.addListener(event, task => {
+    manager.events.addListener(event, (task) => {
       hook.eventHook(flex, manager, task);
     });
   }
-}
+};
