@@ -73,3 +73,8 @@ jobs:
       - name: Run tests
         working-directory: ./plugin-flex-ts-template-v2
         run: npm run test:ci
+      - name: Publish test results
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: './plugin-flex-ts-template-v2/test-results/junit.xml'
