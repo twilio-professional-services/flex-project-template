@@ -1,6 +1,6 @@
 import React from 'react';
 import { EventEmitter } from 'events';
-import { getMockedServiceConfiguration } from '../../test-utils/flex-service-configuration';
+import { getMockedServiceConfiguration, getMockedUiAttributes } from '../../test-utils/flex-service-configuration';
 import { getMockedReduxState } from '../../test-utils/flex-redux';
 
 // We need to mock anything our plugin uses from @twilio/flex-ui here
@@ -19,6 +19,10 @@ class WorkerClient extends EventEmitter {
 class Manager {
   get serviceConfiguration() {
     return getMockedServiceConfiguration();
+  }
+  
+  get configuration() {
+    return getMockedUiAttributes();
   }
 
   constructor() {

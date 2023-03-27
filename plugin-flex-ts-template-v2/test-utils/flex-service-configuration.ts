@@ -17,6 +17,15 @@ interface ServiceConfigurationUpdate extends Flex.ServiceConfiguration {
   ui_attributes: Partial<UIAttributes>;
 }
 
+const mockedUiAttributes: UIAttributes = {
+  custom_data: {
+    serverless_functions_protocol: 'https',
+    serverless_functions_port: '443',
+    serverless_functions_domain: 'mockServerlessFunctionsDomain',
+    features: {}
+  }
+};
+
 let mockedServiceConfiguration: ServiceConfiguration = {
   account_sid: 'mockAccountSid',
   attributes: {},
@@ -51,14 +60,7 @@ let mockedServiceConfiguration: ServiceConfiguration = {
   taskrouter_worker_attributes: null,
   taskrouter_worker_channels: null,
   taskrouter_workspace_sid: 'mockTaskrouterWorkspaceSid',
-  ui_attributes: {
-    custom_data: {
-      serverless_functions_protocol: 'https',
-      serverless_functions_port: '443',
-      serverless_functions_domain: 'mockServerlessFunctionsDomain',
-      features: {}
-    }
-  },
+  ui_attributes: mockedUiAttributes,
   ui_language: 'mockUiLanguage',
   ui_version: 'mockUiVersion',
   url: 'mockUrl',
@@ -79,6 +81,7 @@ let mockedServiceConfiguration: ServiceConfiguration = {
 };
 
 export const getMockedServiceConfiguration = () => mockedServiceConfiguration as Flex.ServiceConfiguration;
+export const getMockedUiAttributes = () => mockedUiAttributes as Flex.Config;
 export const resetServiceConfiguration = () => {
   mockedServiceConfiguration = {
     account_sid: 'mockAccountSid',
@@ -114,14 +117,7 @@ export const resetServiceConfiguration = () => {
     taskrouter_worker_attributes: null,
     taskrouter_worker_channels: null,
     taskrouter_workspace_sid: 'mockTaskrouterWorkspaceSid',
-    ui_attributes: {
-      custom_data: {
-        serverless_functions_protocol: 'https',
-        serverless_functions_port: '443',
-        serverless_functions_domain: 'mockServerlessFunctionsDomain',
-        features: {}
-      }
-    },
+    ui_attributes: mockedUiAttributes,
     ui_language: 'mockUiLanguage',
     ui_version: 'mockUiVersion',
     url: 'mockUrl',
