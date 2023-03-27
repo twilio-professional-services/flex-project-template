@@ -92,7 +92,6 @@
     }
   },
   "eslintIgnore": [
-    "*.js",
     "*.test.ts",
     "*.test.tsx",
     "./**/__mocks__/*.ts",
