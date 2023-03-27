@@ -24,9 +24,9 @@ export const actionHook = async function disableBargeCoachButtonsUponMonitor(fle
     // We need to update the Sync Doc to remove the Supervisor after they unmonitor the call
     if (!isAgentCoachingPanelEnabled() && !isSupervisorMonitorPanelEnabled()) return;
 
-    const myWorkerSID = manager.store.getState().flex?.worker?.worker?.sid;
-    const agentWorkerSID = manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
-    const supervisorFN = manager.store.getState().flex?.worker?.attributes?.full_name;
+    const myWorkerSID = manager.store.getState().flex?.worker?.worker?.sid || '';
+    const agentWorkerSID = manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid || '';
+    const supervisorFN = manager.store.getState().flex?.worker?.attributes?.full_name || '';
     SyncDoc.initSyncDocSupervisors(agentWorkerSID, '', myWorkerSID, supervisorFN, '', 'remove');
   });
 };

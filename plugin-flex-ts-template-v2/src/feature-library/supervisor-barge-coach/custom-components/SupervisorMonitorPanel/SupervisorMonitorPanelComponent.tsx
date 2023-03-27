@@ -40,7 +40,7 @@ export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
       // if we are being coached, if we are, render that in the UI
       // otherwise leave it blank
       const mySyncDoc = `syncDoc.${agentWorkerSID}`;
-      SyncDoc.getSyncDoc(mySyncDoc).then((doc) => {
+      SyncDoc.getSyncDoc(mySyncDoc).then((doc: any) => {
         // We are subscribing to Sync Doc updates here and logging anytime that happens
         doc.on('updated', (_updatedDoc: string) => {
           if (doc.data.supervisors) {

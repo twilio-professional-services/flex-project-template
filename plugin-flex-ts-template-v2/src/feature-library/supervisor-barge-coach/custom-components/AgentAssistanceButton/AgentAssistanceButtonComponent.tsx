@@ -18,15 +18,15 @@ export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
 
   const { agentAssistanceButton } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
 
-  const agentWorkerSID = useFlexSelector((state) => state?.flex?.worker?.worker?.sid);
-  const agentFN = useFlexSelector((state) => state?.flex?.worker?.attributes?.full_name);
-  const selectedTaskSID = useFlexSelector((state) => state?.flex?.view?.selectedTaskSid);
+  const agentWorkerSID = useFlexSelector((state) => state?.flex?.worker?.worker?.sid) || '';
+  const agentFN = useFlexSelector((state) => state?.flex?.worker?.attributes?.full_name) || '';
+  const selectedTaskSID = useFlexSelector((state) => state?.flex?.view?.selectedTaskSid) || '';
 
   // On click we will be pulling the conference SID, toggling the agent assistance button respectively,
   // and updating the sync doc with the agent's asssistance status (either adding or removing them)
   const agentAssistanceClick = () => {
     const conference = task && task.conference;
-    const conferenceSID = conference?.conferenceSid;
+    const conferenceSID = conference?.conferenceSid || '';
     if (agentAssistanceButton) {
       dispatch(
         Actions.setBargeCoachStatus({

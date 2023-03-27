@@ -6,7 +6,7 @@ import { Flex, Tooltip } from '@twilio-paste/core';
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
 import { Actions } from '../../flex-hooks/states/SupervisorBargeCoach';
-import { updateTaskAndTriggerAlerts, syncUpdates } from '../../helpers/supervisorAlertHelper';
+import { alertSupervisorsCheck, syncUpdates } from '../../helpers/supervisorAlertHelper';
 
 export const SupervisorAlertButton = () => {
   const dispatch = useDispatch();
@@ -24,6 +24,7 @@ export const SupervisorAlertButton = () => {
       );
       // If the supervisor disabled the agent assistance alerts, let's cache this
       // to ensure it is set to false if a browser refresh happens
+      alertSupervisorsCheck();
       localStorage.setItem('cacheAlerts', 'false');
     } else {
       dispatch(
@@ -31,7 +32,7 @@ export const SupervisorAlertButton = () => {
           enableAgentAssistanceAlerts: true,
         }),
       );
-      updateTaskAndTriggerAlerts();
+      alertSupervisorsCheck();
       localStorage.setItem('cacheAlerts', 'true');
     }
   };

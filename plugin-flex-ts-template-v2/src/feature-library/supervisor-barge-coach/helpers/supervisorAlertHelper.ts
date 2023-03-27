@@ -9,9 +9,9 @@ import { NotificationIds } from '../flex-hooks/notifications/BargeCoachAssist';
 // When this is called, we will do checks to validate any new agents that need assistance
 export const alertSupervisorsCheck = () => {
   const state = Flex.Manager.getInstance().store.getState() as AppState;
-  const { agentAssistanceArray } = state[reduxNamespace].supervisorBargeCoach;
+  const { agentAssistanceArray, enableAgentAssistanceAlerts } = state[reduxNamespace].supervisorBargeCoach;
   const arrayIndexCheck = agentAssistanceArray.findIndex((agent: any) => agent.agentFN !== '');
-  if (arrayIndexCheck > -1) {
+  if (arrayIndexCheck > -1 && enableAgentAssistanceAlerts) {
     const agentFN = `${agentAssistanceArray[arrayIndexCheck].agentFN}`;
     Flex.Notifications.showNotification(NotificationIds.AGENT_ASSISTANCE, { agentFN: `${agentFN}` });
   } else {
@@ -24,14 +24,14 @@ export const syncUpdates = async () => {
   const { enableAgentAssistanceAlerts, agentAssistanceSyncSubscribed } = state[reduxNamespace].supervisorBargeCoach;
 
   if (enableAgentAssistanceAlerts && !agentAssistanceSyncSubscribed) {
-    SyncDoc.getSyncDoc('Agent-Assistance').then((doc) => {
+    SyncDoc.getSyncDoc('Agent-Assistance').then((doc: any) => {
       // Update the redux store/state with the latest array of agents needing assistance
       Flex.Manager.getInstance().store.dispatch(
         Actions.setBargeCoachStatus({
           agentAssistanceArray: doc.data.agentAssistance,
         }),
       );
-      updateTaskAndTriggerAlerts();
+      alertSupervisorsCheck();
 
       // We are subscribing to Sync Doc updates here and logging anytime that happens
       doc.on('updated', (doc: any) => {
@@ -42,7 +42,7 @@ export const syncUpdates = async () => {
             agentAssistanceArray: doc.data.agentAssistance,
           }),
         );
-        updateTaskAndTriggerAlerts();
+        alertSupervisorsCheck();
       });
     });
     // Setting agentAssistanceSyncSubscribed to true so we don't attempt more sync update/subscribes
@@ -51,17 +51,5 @@ export const syncUpdates = async () => {
         agentAssistanceSyncSubscribed: true,
       }),
     );
-  }
-};
-
-export const updateTaskAndTriggerAlerts = () => {
-  const state = Flex.Manager.getInstance().store.getState() as AppState;
-  const { enableAgentAssistanceAlerts } = state[reduxNamespace].supervisorBargeCoach;
-
-  // let arrayIndexCheck = agentAssistanceArray?.findIndex((agent: any) => agent.agentFN != "");
-  // // Confirm Alerts are enabled and there are agents activity seeking assistance
-  if (enableAgentAssistanceAlerts) {
-    // Call the alert check function to alert for any new agents needing assistance
-    alertSupervisorsCheck();
   }
 };
