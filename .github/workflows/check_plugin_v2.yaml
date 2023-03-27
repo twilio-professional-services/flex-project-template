@@ -1,4 +1,4 @@
-name: lint_plugin_v2
+name: check_plugin_v2
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  lint_plugin_v2:
+  lint:
     runs-on: ubuntu-latest
     permissions:
       checks: write
@@ -59,3 +59,17 @@ jobs:
           message: |
             ${{steps.annotate.outputs.summary}}
             :white_check_mark: No issues found!
+    test:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - name: setup node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: '16'
+        - name: Install packages
+          working-directory: ./plugin-flex-ts-template-v2
+          run: npm install
+        - name: Run tests
+          working-directory: ./plugin-flex-ts-template-v2
+          run: npm run test:ci
