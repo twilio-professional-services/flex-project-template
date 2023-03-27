@@ -426,7 +426,7 @@ convenience script for showing the SIDs of key services on your twilio account v
 
 ## setup-local-environment
 
-convenience script for simplyfying local setup and development, triggered as part of an `npm install` at the root of the repository
+convenience script for simplifying local setup and development, triggered as part of an `npm install` at the root of the repository
 
 ## generate-env
 
