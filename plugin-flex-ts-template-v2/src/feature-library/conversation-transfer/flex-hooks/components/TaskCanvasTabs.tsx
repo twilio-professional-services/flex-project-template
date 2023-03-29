@@ -15,7 +15,7 @@ export const componentHook = function addTaskCanvasTabCustomization(flex: typeof
   if (!isMultiParticipantEnabled()) return;
 
   flex.TaskCanvasTabs.Content.add(
-    <Tab label={ParticipantTabLabel()} key="participant-tab">
+    <Tab label={ParticipantTabLabel()} key="participant-tab" uniqueName="ConversationTransferParticipants">
       <ParticipantsTab />
     </Tab>,
     { if: ({ task }: Props) => TaskHelper.isCBMTask(task) && task.status === 'accepted' },
