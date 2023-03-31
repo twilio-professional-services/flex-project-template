@@ -1,47 +1,41 @@
-const TokenValidator = require("twilio-flex-token-validator").functionValidator;
-const ParameterValidator = require(Runtime.getFunctions()[
-  "common/helpers/parameter-validator"
-].path);
-const TaskOperations = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/taskrouter"
-].path);
-const InteractionsOperations = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/interactions"
-].path);
+const TokenValidator = require('twilio-flex-token-validator').functionValidator;
+
+const ParameterValidator = require(Runtime.getFunctions()['common/helpers/parameter-validator'].path);
+const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
+const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
 
 const getRequiredParameters = (event) => {
-  const requiredParameters = [
+  return [
     {
-      key: "taskSid",
-      purpose: "task sid of transferring task",
+      key: 'taskSid',
+      purpose: 'task sid of transferring task',
     },
     {
-      key: "conversationId",
-      purpose: "for linking transfer task in insights (CHxxx or WTxxx sid)",
+      key: 'conversationId',
+      purpose: 'for linking transfer task in insights (CHxxx or WTxxx sid)',
     },
     {
-      key: "jsonAttributes",
-      purpose: "string representation of transferring task",
+      key: 'jsonAttributes',
+      purpose: 'string representation of transferring task',
     },
     {
-      key: "transferTargetSid",
-      purpose: "worker or queue sid",
+      key: 'transferTargetSid',
+      purpose: 'worker or queue sid',
     },
     {
-      key: "workersToIgnore",
+      key: 'workersToIgnore',
       purpose:
         "json object with key indicating task attribute to set as an array of workers to ignore. eg {'workersToIgnore':['Alice','Bob']}. This gets copied to task attributes.",
     },
     {
-      key: "flexInteractionSid",
-      purpose: "KDxxx sid for inteactions API",
+      key: 'flexInteractionSid',
+      purpose: 'KDxxx sid for inteactions API',
     },
     {
-      key: "flexInteractionChannelSid",
-      purpose: "UOxxx sid for interactions API",
+      key: 'flexInteractionChannelSid',
+      purpose: 'UOxxx sid for interactions API',
     },
   ];
-  return requiredParameters;
 };
 
 const getRoutingParams = (
@@ -50,7 +44,7 @@ const getRoutingParams = (
   jsonAttributes,
   transferTargetSid,
   transferQueueName,
-  workersToIgnore
+  workersToIgnore,
 ) => {
   const originalTaskAttributes = JSON.parse(jsonAttributes);
   const newAttributes = {
@@ -58,59 +52,45 @@ const getRoutingParams = (
     ...JSON.parse(workersToIgnore),
     transferTargetSid,
     transferQueueName,
-    transferTargetType: transferTargetSid.startsWith("WK") ? "worker" : "queue",
+    transferTargetType: transferTargetSid.startsWith('WK') ? 'worker' : 'queue',
     conversations: {
       ...originalTaskAttributes.conversations,
       conversation_id: conversationId,
     },
   };
 
-  const routingParams = {
+  return {
     properties: {
-      task_channel_unique_name: "chat",
+      task_channel_unique_name: 'chat',
       workspace_sid: context.TWILIO_FLEX_WORKSPACE_SID,
       workflow_sid: context.TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID,
       attributes: newAttributes,
     },
   };
-
-  return routingParams;
 };
 
-exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
-  context,
-  event,
-  callback
-) {
+exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, event, callback) {
   const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
 
   const requiredParameters = getRequiredParameters(event);
-  const parameterError = ParameterValidator.validate(
-    context.PATH,
-    event,
-    requiredParameters
-  );
+  const parameterError = ParameterValidator.validate(context.PATH, event, requiredParameters);
 
-  response.appendHeader("Access-Control-Allow-Origin", "*");
-  response.appendHeader("Access-Control-Allow-Methods", "OPTIONS POST");
-  response.appendHeader("Content-Type", "application/json");
-  response.appendHeader("Access-Control-Allow-Headers", "Content-Type");
+  response.appendHeader('Access-Control-Allow-Origin', '*');
+  response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST');
+  response.appendHeader('Content-Type', 'application/json');
+  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (Object.keys(event).length === 0) {
-    console.log("Empty event object, likely an OPTIONS request");
+    console.log('Empty event object, likely an OPTIONS request');
     return callback(null, response);
   }
 
-  if (
-    !context.TWILIO_FLEX_WORKSPACE_SID ||
-    !context.TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID
-  ) {
+  if (!context.TWILIO_FLEX_WORKSPACE_SID || !context.TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID) {
     response.setStatusCode(400);
     response.setBody({
       data: null,
-      message:
-        "TWILIO_FLEX_WORKSPACE_SID and TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID required enviroment variables",
+      message: 'TWILIO_FLEX_WORKSPACE_SID and TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID required enviroment variables',
     });
     callback(null, response);
   }
@@ -138,7 +118,7 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
         jsonAttributes,
         transferTargetSid,
         transferQueueName,
-        workersToIgnore
+        workersToIgnore,
       );
 
       const participantCreateInviteParams = {
@@ -150,14 +130,12 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
         attempts: 0,
       };
 
-      let {
+      const {
         success,
         status,
-        message = "",
+        message = '',
         participantInvite = null,
-      } = await InteractionsOperations.participantCreateInvite(
-        participantCreateInviteParams
-      );
+      } = await InteractionsOperations.participantCreateInvite(participantCreateInviteParams);
 
       // if this failed bail out so we don't remove the agent from the conversation and no one else joins
       if (!success) {
@@ -166,7 +144,7 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
 
       if (removeFlexInteractionParticipantSid)
         await InteractionsOperations.participantUpdate({
-          status: "closed",
+          status: 'closed',
           interactionSid: flexInteractionSid,
           channelSid: flexInteractionChannelSid,
           participantSid: removeFlexInteractionParticipantSid,
@@ -176,11 +154,11 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
         });
 
       console.log(
-        "participantInvite",
+        'participantInvite',
         participantInvite,
         JSON.stringify(participantInvite.routing),
         JSON.stringify(participantInvite.routing.reservation),
-        JSON.stringify(participantInvite.routing.properties)
+        JSON.stringify(participantInvite.routing.properties),
       );
 
       response.setStatusCode(201);

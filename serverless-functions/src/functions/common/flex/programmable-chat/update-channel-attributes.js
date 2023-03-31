@@ -1,11 +1,9 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()["common/helpers/prepare-function"].path);
-const ChatOperations = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/programmable-chat"
-].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const ChatOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-chat'].path);
 
 const requiredParameters = [
-  { key: "channelSid", purpose: "channel to be updated" },
-  { key: "attributes", purpose: "new attributes" },
+  { key: 'channelSid', purpose: 'channel to be updated' },
+  { key: 'attributes', purpose: 'new attributes' },
 ];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
@@ -18,7 +16,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       attributes,
       attempts: 0,
     });
-    
+
     response.setStatusCode(result.status);
     response.setBody({ success: result.success });
     callback(null, response);

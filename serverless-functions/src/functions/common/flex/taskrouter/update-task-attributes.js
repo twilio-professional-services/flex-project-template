@@ -1,13 +1,11 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()["common/helpers/prepare-function"].path);
-const TaskRouterOperations = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/taskrouter"
-].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 const requiredParameters = [
-  { key: "taskSid", purpose: "unique ID of task to update" },
+  { key: 'taskSid', purpose: 'unique ID of task to update' },
   {
-    key: "attributesUpdate",
-    purpose: "object to overwrite on existing task attributes",
+    key: 'attributesUpdate',
+    purpose: 'object to overwrite on existing task attributes',
   },
 ];
 

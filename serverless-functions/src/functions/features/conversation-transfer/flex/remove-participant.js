@@ -1,51 +1,39 @@
-const TokenValidator = require("twilio-flex-token-validator").functionValidator;
-const ParameterValidator = require(Runtime.getFunctions()[
-  "common/helpers/parameter-validator"
-].path);
-const InteractionsOperations = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/interactions"
-].path);
+const TokenValidator = require('twilio-flex-token-validator').functionValidator;
+
+const ParameterValidator = require(Runtime.getFunctions()['common/helpers/parameter-validator'].path);
+const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
 
 const getRequiredParameters = (event) => {
-  const requiredParameters = [
+  return [
     {
-      key: "flexInteractionSid",
-      purpose: "KDxxx sid for inteactions API",
+      key: 'flexInteractionSid',
+      purpose: 'KDxxx sid for inteactions API',
     },
     {
-      key: "flexInteractionChannelSid",
-      purpose: "UOxxx sid for interactions API",
+      key: 'flexInteractionChannelSid',
+      purpose: 'UOxxx sid for interactions API',
     },
     {
-      key: "flexInteractionParticipantSid",
-      purpose: "UTxxx sid for interactions API",
+      key: 'flexInteractionParticipantSid',
+      purpose: 'UTxxx sid for interactions API',
     },
   ];
-  return requiredParameters;
 };
 
-exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
-  context,
-  event,
-  callback
-) {
+exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, event, callback) {
   const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
 
   const requiredParameters = getRequiredParameters(event);
-  const parameterError = ParameterValidator.validate(
-    context.PATH,
-    event,
-    requiredParameters
-  );
+  const parameterError = ParameterValidator.validate(context.PATH, event, requiredParameters);
 
-  response.appendHeader("Access-Control-Allow-Origin", "*");
-  response.appendHeader("Access-Control-Allow-Methods", "OPTIONS POST");
-  response.appendHeader("Content-Type", "application/json");
-  response.appendHeader("Access-Control-Allow-Headers", "Content-Type");
+  response.appendHeader('Access-Control-Allow-Origin', '*');
+  response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST');
+  response.appendHeader('Content-Type', 'application/json');
+  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   if (Object.keys(event).length === 0) {
-    console.log("Empty event object, likely an OPTIONS request");
+    console.log('Empty event object, likely an OPTIONS request');
     return callback(null, response);
   }
 
@@ -55,14 +43,10 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(
     callback(null, response);
   } else {
     try {
-      const {
-        flexInteractionSid,
-        flexInteractionChannelSid,
-        flexInteractionParticipantSid,
-      } = event;
+      const { flexInteractionSid, flexInteractionChannelSid, flexInteractionParticipantSid } = event;
 
       await InteractionsOperations.participantUpdate({
-        status: "closed",
+        status: 'closed',
         interactionSid: flexInteractionSid,
         channelSid: flexInteractionChannelSid,
         participantSid: flexInteractionParticipantSid,

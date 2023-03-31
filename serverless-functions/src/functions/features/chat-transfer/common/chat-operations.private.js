@@ -1,11 +1,9 @@
-const { isString, isObject, isNumber } = require("lodash");
+const { isString, isObject, isNumber } = require('lodash');
 
-const retryHandler = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/retry-handler"
-].path).retryHandler;
+const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
 
-const INFLIGHT = "inflight";
-const COMPLETED = "completed";
+const INFLIGHT = 'inflight';
+const COMPLETED = 'completed';
 
 /**
  * @param {object} parameters the parameters for the function
@@ -22,26 +20,19 @@ const COMPLETED = "completed";
 exports.addTaskToChannel = async function (parameters) {
   const { attempts, context, channelSid, taskSid } = parameters;
 
-  if (!isNumber(attempts))
-    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isObject(context))
-    throw "Invalid parameters object passed. Parameters must contain context object";
-  if (!isString(channelSid))
-    throw "Invalid parameters object passed. Parameters must contain channelSid string";
-  if (!isString(taskSid))
-    throw "Invalid parameters object passed. Parameters must contain taskSid string";
+  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
+  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isString(channelSid)) throw 'Invalid parameters object passed. Parameters must contain channelSid string';
+  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain taskSid string';
 
   try {
     const client = context.getTwilioClient();
-    const channel = await client.chat
-      .services(context.TWILIO_FLEX_CHAT_SERVICE_SID)
-      .channels(channelSid)
-      .fetch();
+    const channel = await client.chat.services(context.TWILIO_FLEX_CHAT_SERVICE_SID).channels(channelSid).fetch();
 
-    if (!channel) return { success: false, message: "channel not found" };
+    if (!channel) return { success: false, message: 'channel not found' };
 
     const currentAttributes = JSON.parse(channel.attributes);
-    let associatedTasks = currentAttributes.associatedTasks || {};
+    const associatedTasks = currentAttributes.associatedTasks || {};
     associatedTasks[taskSid] = INFLIGHT;
     const newAttributes = {
       ...currentAttributes,
@@ -77,26 +68,19 @@ exports.addTaskToChannel = async function (parameters) {
 exports.setTaskToCompleteOnChannel = async function (parameters) {
   const { attempts, context, channelSid, taskSid } = parameters;
 
-  if (!isNumber(attempts))
-    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isObject(context))
-    throw "Invalid parameters object passed. Parameters must contain context object";
-  if (!isString(channelSid))
-    throw "Invalid parameters object passed. Parameters must contain channelSid string";
-  if (!isString(taskSid))
-    throw "Invalid parameters object passed. Parameters must contain taskSid string";
+  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
+  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isString(channelSid)) throw 'Invalid parameters object passed. Parameters must contain channelSid string';
+  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain taskSid string';
 
   try {
     const client = context.getTwilioClient();
-    const channel = await client.chat
-      .services(context.TWILIO_FLEX_CHAT_SERVICE_SID)
-      .channels(channelSid)
-      .fetch();
+    const channel = await client.chat.services(context.TWILIO_FLEX_CHAT_SERVICE_SID).channels(channelSid).fetch();
 
-    if (!channel) return { success: false, message: "channel not found" };
+    if (!channel) return { success: false, message: 'channel not found' };
 
     const currentAttributes = JSON.parse(channel.attributes);
-    let associatedTasks = currentAttributes.associatedTasks || {};
+    const associatedTasks = currentAttributes.associatedTasks || {};
     associatedTasks[taskSid] = COMPLETED;
     const newAttributes = {
       ...currentAttributes,
@@ -129,23 +113,18 @@ exports.setTaskToCompleteOnChannel = async function (parameters) {
  *  janitor will clean up chat channels if a task is completed that has
  *  a channel sid.
  */
-exports.removeChannelSidFromTask = async function removeChannelSidFromTask(
-  parameters
-) {
+exports.removeChannelSidFromTask = async function removeChannelSidFromTask(parameters) {
   const { attempts, context, taskSid } = parameters;
 
-  if (!isNumber(attempts))
-    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isObject(context))
-    throw "Invalid parameters object passed. Parameters must contain context object";
-  if (!isString(taskSid))
-    throw "Invalid parameters object passed. Parameters must contain taskSid string";
+  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
+  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain taskSid string';
 
   try {
-    const axios = require("axios");
+    const axios = require('axios');
 
     const taskContextURL = `https://taskrouter.twilio.com/v1/Workspaces/${process.env.TWILIO_FLEX_WORKSPACE_SID}/Tasks/${taskSid}`;
-    let config = {
+    const config = {
       auth: {
         username: context.ACCOUNT_SID,
         password: context.AUTH_TOKEN,
@@ -160,14 +139,14 @@ exports.removeChannelSidFromTask = async function removeChannelSidFromTask(
     task.revision = JSON.parse(getResponse.headers.etag);
 
     // merge the objects
-    let updatedTaskAttributes = task.attributes;
+    const updatedTaskAttributes = task.attributes;
     delete updatedTaskAttributes.channelSid;
 
     // if-match the revision number to ensure
     // no update collisions
     config.headers = {
-      "If-Match": task.revision,
-      "content-type": "application/x-www-form-urlencoded",
+      'If-Match': task.revision,
+      'content-type': 'application/x-www-form-urlencoded',
     };
 
     data = new URLSearchParams({
