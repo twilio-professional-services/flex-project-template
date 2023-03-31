@@ -1,0 +1,46 @@
+{
+  "task_routing": {
+    "filters": [
+      {
+        "filter_friendly_name": "Assign to Worker",
+        "expression": "transferTargetType == 'worker'",
+        "targets": [
+          {
+            "queue": "WQaaaaa",
+            "known_worker_sid": "task.transferTargetSid"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Assign to Queue - Everyone",
+        "expression": "transferQueueName == 'Everyone'",
+        "targets": [
+          {
+            "queue": "WQbbbb",
+            "expression": "worker.sid NOT IN task.workerSidsInConversation"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Assign To Queue - Parked Calls",
+        "expression": "transferQueueName == 'Parked Calls'",
+        "targets": [
+          {
+            "queue": "WQcccc",
+            "expression": "worker.sid NOT IN task.workerSidsInConversation"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Assign To Queue Outbound",
+        "expression": "transferQueueName == 'Outbound'",
+        "targets": [
+          {
+            "queue": "WQdddd",
+            "expression": "worker.sid NOT IN task.workerSidsInConversation"
+          }
+        ]
+      }
+    ]
+  }
+}
