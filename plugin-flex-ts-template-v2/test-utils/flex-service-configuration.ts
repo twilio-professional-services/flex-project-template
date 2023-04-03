@@ -17,10 +17,20 @@ interface ServiceConfigurationUpdate extends Flex.ServiceConfiguration {
   ui_attributes: Partial<UIAttributes>;
 }
 
+const mockedUiAttributes: UIAttributes = {
+  custom_data: {
+    serverless_functions_protocol: 'https',
+    serverless_functions_port: '443',
+    serverless_functions_domain: 'mockServerlessFunctionsDomain',
+    features: {}
+  }
+};
+
 let mockedServiceConfiguration: ServiceConfiguration = {
   account_sid: 'mockAccountSid',
   attributes: {},
   call_recording_enabled: false,
+  channel_configs: [],
   chat_service_instance_sid: 'mockChatServiceInstanceSid',
   crm_attributes: null,
   crm_callback_url: 'mockCrmCallbackUrl',
@@ -29,6 +39,12 @@ let mockedServiceConfiguration: ServiceConfiguration = {
   crm_type: 'mockCrmType',
   date_created: new Date().toISOString(),
   date_updated: new Date().toISOString(),
+  debugger_integration: {
+    enabled: true
+  },
+  flex_ui_status_report: {
+    enabled: true
+  },
   messaging_service_instance_sid: 'mockMessagingServiceInstanceSid',
   outbound_call_flows: {},
   plugin_service_attributes: {},
@@ -44,10 +60,7 @@ let mockedServiceConfiguration: ServiceConfiguration = {
   taskrouter_worker_attributes: null,
   taskrouter_worker_channels: null,
   taskrouter_workspace_sid: 'mockTaskrouterWorkspaceSid',
-  ui_attributes: {
-    serverless_functions_domain: 'mockServerlessFunctionsDomain',
-    custom_data: {},
-  },
+  ui_attributes: mockedUiAttributes,
   ui_language: 'mockUiLanguage',
   ui_version: 'mockUiVersion',
   url: 'mockUrl',
@@ -62,17 +75,19 @@ let mockedServiceConfiguration: ServiceConfiguration = {
   call_recording_webhook_url: '',
   flex_service_instance_sid: '',
   plugin_service_enabled: false,
-  public_attributes: undefined,
+  public_attributes: {},
   serverless_service_sids: [],
   ui_dependencies: {},
 };
 
 export const getMockedServiceConfiguration = () => mockedServiceConfiguration as Flex.ServiceConfiguration;
+export const getMockedUiAttributes = () => mockedUiAttributes as Flex.Config;
 export const resetServiceConfiguration = () => {
   mockedServiceConfiguration = {
     account_sid: 'mockAccountSid',
     attributes: {},
     call_recording_enabled: false,
+    channel_configs: [],
     chat_service_instance_sid: 'mockChatServiceInstanceSid',
     crm_attributes: null,
     crm_callback_url: 'mockCrmCallbackUrl',
@@ -81,6 +96,12 @@ export const resetServiceConfiguration = () => {
     crm_type: 'mockCrmType',
     date_created: new Date().toISOString(),
     date_updated: new Date().toISOString(),
+    debugger_integration: {
+      enabled: true
+    },
+    flex_ui_status_report: {
+      enabled: true
+    },
     messaging_service_instance_sid: 'mockMessagingServiceInstanceSid',
     outbound_call_flows: {},
     plugin_service_attributes: {},
@@ -96,10 +117,7 @@ export const resetServiceConfiguration = () => {
     taskrouter_worker_attributes: null,
     taskrouter_worker_channels: null,
     taskrouter_workspace_sid: 'mockTaskrouterWorkspaceSid',
-    ui_attributes: {
-      serverless_functions_domain: 'mockServerlessFunctionsDomain',
-      custom_data: {},
-    },
+    ui_attributes: mockedUiAttributes,
     ui_language: 'mockUiLanguage',
     ui_version: 'mockUiVersion',
     url: 'mockUrl',
@@ -114,13 +132,13 @@ export const resetServiceConfiguration = () => {
     call_recording_webhook_url: '',
     flex_service_instance_sid: '',
     plugin_service_enabled: false,
-    public_attributes: undefined,
+    public_attributes: {},
     serverless_service_sids: [],
     ui_dependencies: {},
   };
 };
 export const setServiceConfiguration = (serviceConfiguration: Partial<ServiceConfigurationUpdate>) => {
-  mergeWith(mockedServiceConfiguration, serviceConfiguration, (objValue, srcValue, key, obj) => {
+  mergeWith(mockedServiceConfiguration, serviceConfiguration, (_objValue, srcValue, key, obj) => {
     if (srcValue === undefined) {
       unset(obj, key);
     }
