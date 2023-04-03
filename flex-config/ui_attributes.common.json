@@ -149,6 +149,9 @@
       },
       "supervisor_complete_reservation": {
         "enabled": true
+      },
+      "keyboard_shortcuts": {
+        "enabled": false
       }
     }
   }
