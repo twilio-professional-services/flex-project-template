@@ -23,7 +23,6 @@
     "@twilio-paste/icons": "^9.4.2",
     "@twilio/flex-dev-utils": "^5.1.3",
     "@twilio/flex-plugin-scripts": "6.0.3",
-    "@types/jest": "^26.0.20",
     "lodash": "^4.17.20",
     "luxon": "^3.1.1",
     "prop-types": "^15.7.2",
@@ -39,6 +38,7 @@
     "@babel/plugin-proposal-private-methods": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
     "@twilio/flex-ui": "^2",
+    "@types/jest": "^26.0.20",
     "@types/luxon": "^3.1.0",
     "@types/react-redux": "^7.1.1",
     "@types/uuid": "^8.3.4",
@@ -92,7 +92,6 @@
     }
   },
   "eslintIgnore": [
-    "*.js",
     "*.test.ts",
     "*.test.tsx",
     "./**/__mocks__/*.ts",

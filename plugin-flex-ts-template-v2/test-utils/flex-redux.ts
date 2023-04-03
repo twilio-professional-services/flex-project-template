@@ -1,7 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 import { mergeWith, unset } from 'lodash';
 
-import { AppState, reduxNamespace } from '../src/flex-hooks/states';
+import { AppState } from '../src/types/manager';
+import { reduxNamespace } from '../src/utils/state';
 
 // NOTE: Not sure a great way to "set" the Flex redux store value
 //       So the __mocks__/@twilio/flex-ui.js file will use this variable as value
@@ -19,14 +20,14 @@ export const resetReduxState = () => {
   };
 };
 export const setFlexReduxState = (appState: Partial<Flex.AppState>) => {
-  mergeWith(mockedReduxState, { flex: appState }, (objValue, srcValue, key, obj) => {
+  mergeWith(mockedReduxState, { flex: appState }, (_objValue, srcValue, key, obj) => {
     if (srcValue === undefined) {
       unset(obj, key);
     }
   });
 };
 export const setCustomReduxState = (appState: Partial<AppState[typeof reduxNamespace]>) => {
-  mergeWith(mockedReduxState, { [reduxNamespace]: appState }, (objValue, srcValue, key, obj) => {
+  mergeWith(mockedReduxState, { [reduxNamespace]: appState }, (_objValue, srcValue, key, obj) => {
     if (srcValue === undefined) {
       unset(obj, key);
     }

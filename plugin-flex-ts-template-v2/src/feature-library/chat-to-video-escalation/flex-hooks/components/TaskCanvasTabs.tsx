@@ -6,7 +6,7 @@ import { FlexComponent } from '../../../../types/feature-loader';
 export const componentName = FlexComponent.TaskCanvasTabs;
 export const componentHook = function addVideoRoomTabToTaskCanvasTabs(flex: typeof Flex) {
   flex.TaskCanvasTabs.Content.add(
-    <Flex.Tab label="Video Room" key="VideoRoom">
+    <Flex.Tab label="Video Room" key="VideoRoom" uniqueName="VideoRoom">
       <VideoRoom />
     </Flex.Tab>,
     {
