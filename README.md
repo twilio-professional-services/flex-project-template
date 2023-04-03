@@ -345,9 +345,9 @@ Lastly, this package manages the github action workflows - with one example bein
 
 (the following is only applicable when using the flex v2 plugin)
 
-ESLint is configured for the v2 plugin, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
+ESLint is configured for the v2 plugin and the serverless-functions package, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
 
-Before pushing changes, run the following command from the `plugin-flex-ts-template-v2` dir to see the linter results.
+Before pushing changes, run the following command from the `plugin-flex-ts-template-v2` dir and/or the `serverless-functions` dir to see the linter results.
 
 ```bash
 npm run lint
