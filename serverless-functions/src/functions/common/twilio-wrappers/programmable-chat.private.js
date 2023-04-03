@@ -33,6 +33,6 @@ exports.updateChannelAttributes = async (parameters) => {
 
     return { success: true, status: 200, channel: updatedChannel };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateChannelAttributes);
   }
 };

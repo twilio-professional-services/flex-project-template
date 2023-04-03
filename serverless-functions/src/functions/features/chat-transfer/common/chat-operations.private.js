@@ -51,7 +51,7 @@ exports.addTaskToChannel = async (parameters) => {
       channel: updatedChannel,
     };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.addTaskToChannel);
   }
 };
 
@@ -99,7 +99,7 @@ exports.setTaskToCompleteOnChannel = async (parameters) => {
       channel: updatedChannel,
     };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.setTaskToCompleteOnChannel);
   }
 };
 
@@ -163,6 +163,6 @@ exports.removeChannelSidFromTask = async function removeChannelSidFromTask(param
       },
     };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.removeChannelSidFromTask);
   }
 };

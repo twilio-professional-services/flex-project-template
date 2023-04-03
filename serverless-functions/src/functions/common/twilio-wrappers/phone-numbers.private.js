@@ -21,6 +21,6 @@ exports.listPhoneNumbers = async function listPhoneNumbers(parameters) {
 
     return { success: true, phoneNumbers, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.listPhoneNumbers);
   }
 };

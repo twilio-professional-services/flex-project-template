@@ -21,7 +21,6 @@ const getRequiredParameters = () => {
 };
 
 exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, event, callback) {
-  const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
 
   const requiredParameters = getRequiredParameters();
@@ -51,7 +50,6 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
       interactionSid: flexInteractionSid,
       channelSid: flexInteractionChannelSid,
       participantSid: flexInteractionParticipantSid,
-      scriptName,
       context,
       attempts: 0,
     });

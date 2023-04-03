@@ -23,7 +23,7 @@ exports.fetchProperties = async (parameters) => {
 
     return { success: true, callProperties, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.fetchProperties);
   }
 };
 
@@ -52,7 +52,7 @@ exports.coldTransfer = async (parameters) => {
 
     return { success: true, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.coldTransfer);
   }
 };
 
@@ -78,7 +78,7 @@ exports.createRecording = async (parameters) => {
 
     return { success: true, recording, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.createRecording);
   }
 };
 
@@ -107,7 +107,7 @@ exports.updateCallRecording = async (parameters) => {
 
     return { success: true, recording, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateCallRecording);
   }
 };
 
@@ -136,7 +136,7 @@ exports.updateConferenceRecording = async (parameters) => {
 
     return { success: true, recording, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateConferenceRecording);
   }
 };
 
@@ -163,6 +163,6 @@ exports.updateCall = async (parameters) => {
 
     return { success: true, call, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateCall);
   }
 };

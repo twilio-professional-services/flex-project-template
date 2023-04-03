@@ -28,7 +28,7 @@ exports.deleteMapItem = async (parameters) => {
 
     return { success: true, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.deleteMapItem);
   }
 };
 
@@ -58,7 +58,7 @@ exports.fetchMapItem = async (parameters) => {
 
     return { success: true, status: 200, mapItem };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.fetchMapItem);
   }
 };
 
@@ -101,7 +101,7 @@ exports.createMapItem = async (parameters) => {
 
     return { success: true, status: 200, mapItem };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.createMapItem);
   }
 };
 
@@ -138,7 +138,7 @@ exports.createDocument = async (parameters) => {
 
     return { success: true, status: 200, document };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.createDocument);
   }
 };
 
@@ -165,7 +165,7 @@ exports.fetchDocument = async (parameters) => {
 
     return { success: true, status: 200, document };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.fetchDocument);
   }
 };
 
@@ -197,6 +197,6 @@ exports.updateDocumentData = async (parameters) => {
 
     return { success: true, status: 200, document: documentUpdate };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateDocumentData);
   }
 };

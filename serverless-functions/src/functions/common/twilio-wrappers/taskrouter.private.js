@@ -63,7 +63,7 @@ exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
       },
     };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateTaskAttributes);
   }
 };
 
@@ -107,14 +107,14 @@ exports.completeTask = async function completeTask(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      console.warn(`${context.PATH}.${arguments.callee.name}(): ${error.message}`);
+      console.warn(`${context.PATH}.completeTask(): ${error.message}`);
       return {
         success: true,
         status: 200,
         message: error.message,
       };
     }
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.completeTask);
   }
 };
 
@@ -136,7 +136,7 @@ exports.updateReservation = async function updateReservation(parameters) {
   if (!isString(reservationSid))
     throw 'Invalid parameters object passed. Parameters must contain reservationSid string';
   if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(status) || (status != 'completed' && status != 'wrapping'))
+  if (!isString(status) || (status !== 'completed' && status !== 'wrapping'))
     throw 'Invalid parameters object passed. Parameters must contain status to update the reservation to and it must be one of "completed" or "wrapping"';
 
   try {
@@ -163,14 +163,14 @@ exports.updateReservation = async function updateReservation(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      console.warn(`${context.PATH}.${arguments.callee.name}(): ${error.message}`);
+      console.warn(`${context.PATH}.updateReservation(): ${error.message}`);
       return {
         success: true,
         status: 200,
         message: error.message,
       };
     }
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateReservation);
   }
 };
 
@@ -228,7 +228,7 @@ exports.createTask = async function createTask(parameters) {
       status: 200,
     };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.createTask);
   }
 };
 
@@ -258,7 +258,7 @@ exports.getQueues = async function getQueues(parameters) {
       queues,
     };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.getQueues);
   }
 };
 
@@ -291,7 +291,7 @@ exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
       workerChannels,
     };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.getWorkerChannels);
   }
 };
 
@@ -328,7 +328,7 @@ exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
       workerChannelCapacity,
     };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateWorkerChannel);
   }
 };
 
@@ -375,14 +375,14 @@ exports.updateTask = async function updateTask(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      console.warn(`${context.PATH}.${arguments.callee.name}(): ${error.message}`);
+      console.warn(`${context.PATH}.updateTask(): ${error.message}`);
       return {
         success: true,
         status: 200,
         message: error.message,
       };
     }
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateTask);
   }
 };
 
@@ -424,14 +424,14 @@ exports.fetchTask = async function fetchTask(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      console.warn(`${context.PATH}.${arguments.callee.name}(): ${error.message}`);
+      console.warn(`${context.PATH}.fetchTask(): ${error.message}`);
       return {
         success: true,
         status: 200,
         message: error.message,
       };
     }
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.fetchTask);
   }
 };
 
@@ -470,6 +470,6 @@ exports.getTasks = async function getTasks(parameters) {
       }),
     };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.getTasks);
   }
 };

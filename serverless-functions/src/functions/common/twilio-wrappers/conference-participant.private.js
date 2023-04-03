@@ -36,7 +36,7 @@ exports.coachToggle = async function coachToggle(parameters) {
     });
     return { success: true, updatedConference, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.coachToggle);
   }
 };
 
@@ -68,7 +68,7 @@ exports.bargeToggle = async function bargeToggle(parameters) {
     });
     return { success: true, updatedConference, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.bargeToggle);
   }
 };
 
@@ -102,7 +102,7 @@ exports.addParticipant = async (parameters) => {
 
     return { success: true, participantsResponse, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.addParticipant);
   }
 };
 
@@ -133,7 +133,7 @@ exports.holdParticipant = async (parameters) => {
 
     return { success: true, participantsResponse, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.holdParticipant);
   }
 };
 
@@ -160,7 +160,7 @@ exports.removeParticipant = async (parameters) => {
 
     return { success: true, participantsResponse, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.removeParticipant);
   }
 };
 
@@ -187,7 +187,7 @@ exports.fetchParticipant = async (parameters) => {
 
     return { success: true, participantsResponse, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.fetchParticipant);
   }
 };
 
@@ -219,7 +219,7 @@ exports.updateParticipant = async (parameters) => {
 
     return { success: true, participantsResponse, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateParticipant);
   }
 };
 
@@ -252,7 +252,7 @@ exports.fetchByTask = async (parameters) => {
 
     return { success: true, conferences, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.fetchByTask);
   }
 };
 
@@ -279,6 +279,6 @@ exports.updateConference = async (parameters) => {
 
     return { success: true, conferencesResponse, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateConference);
   }
 };

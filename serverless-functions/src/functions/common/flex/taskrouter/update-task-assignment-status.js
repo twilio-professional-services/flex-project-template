@@ -4,7 +4,6 @@ const ParameterValidator = require(Runtime.getFunctions()['common/helpers/parame
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 exports.handler = TokenValidator(async function updateTaskAttributes(context, event, callback) {
-  const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
   const requiredParameters = [
     { key: 'taskSid', purpose: 'unique ID of task to update' },
@@ -35,7 +34,6 @@ exports.handler = TokenValidator(async function updateTaskAttributes(context, ev
   try {
     const { taskSid, assignmentStatus } = event;
     const result = await TaskOperations.updateTask({
-      scriptName,
       context,
       taskSid,
       updateParams: { assignmentStatus },

@@ -31,7 +31,7 @@ exports.participantCreateInvite = async (parameters) => {
 
     return { success: true, status: 200, participantInvite };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.participantCreateInvite);
   }
 };
 
@@ -68,6 +68,6 @@ exports.participantUpdate = async (parameters) => {
 
     return { success: true, status: 200, updatedParticipant };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.participantUpdate);
   }
 };
