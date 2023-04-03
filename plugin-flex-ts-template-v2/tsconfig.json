@@ -4,11 +4,7 @@
     "rootDir": ".",
     "outDir": "build",
     "target": "esnext",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -24,13 +20,6 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "./**/*.test.ts",
-    "./**/*.test.tsx",
-    "./**/__mocks__/*.ts",
-    "./**/__mocks__/*.tsx"
-  ]
+  "include": ["./src/**/*"],
+  "exclude": ["./**/*.test.ts", "./**/*.test.tsx", "./**/__mocks__/*.ts", "./**/__mocks__/*.tsx"]
 }
