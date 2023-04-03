@@ -1,8 +1,6 @@
-const TaskOperations = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/taskrouter"
-].path);
+const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
-exports.createCallbackTask = async function (parameters) {
+exports.createCallbackTask = async (parameters) => {
   const {
     context,
     numberToCall,
@@ -24,17 +22,16 @@ exports.createCallbackTask = async function (parameters) {
   } = parameters;
 
   // use assigned values or use defaults
-  const workflowSid =
-    overriddenWorkflowSid || process.env.TWILIO_FLEX_CALLBACK_WORKFLOW_SID;
+  const workflowSid = overriddenWorkflowSid || process.env.TWILIO_FLEX_CALLBACK_WORKFLOW_SID;
   const timeout = overriddenTimeout || 86400;
   const priority = overriddenPriority || 0;
   const attempts = retryAttempt || 0;
-  const taskChannel = overriddenTaskChannel || "voice";
+  const taskChannel = overriddenTaskChannel || 'voice';
 
   // setup required task attributes for task
   const attributes = {
-    taskType: recordingSid ? "voicemail" : "callback",
-    name: (recordingSid ? "Voicemail" : "Callback") + ` (${numberToCall})`,
+    taskType: recordingSid ? 'voicemail' : 'callback',
+    name: `${recordingSid ? 'Voicemail' : 'Callback'} (${numberToCall})`,
     flow_execution_sid: flexFlowSid,
     message: message || null,
     callBackData: {
@@ -49,13 +46,13 @@ exports.createCallbackTask = async function (parameters) {
       transcriptText,
       isDeleted: isDeleted || false,
     },
-    direction: "inbound",
+    direction: 'inbound',
     conversations: {
       conversation_id,
     },
   };
 
-  const result = await TaskOperations.createTask({
+  return TaskOperations.createTask({
     context,
     workflowSid,
     taskChannel,
@@ -64,5 +61,4 @@ exports.createCallbackTask = async function (parameters) {
     timeout,
     attempts: 0,
   });
-  return result;
 };

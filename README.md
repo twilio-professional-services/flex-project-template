@@ -67,6 +67,7 @@ The primary aims of this template are
 | Chat Transfer  | _introduce programmable chat transfer functionality for agents_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/chat-transfer/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/chat-transfer/README.md) |  |
 | Conversation Transfer  | _introduce conversation-based messaging transfer functionality for agents_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/conversation-transfer/README.md) |  |
 | Conference (external) | _provide agents the ability to conference in external numbers_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/conference/README.md) | ✅ |
+| Custom Hold Music  | _customize the experience when an agent places a call on hold_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/custom-hold-music/README.md) |  |
 | Device Manager | _provide agents the ability to select the audio output device_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/device-manager/README.md) | ✅ |
 | Dual Channel Recording | _automatically record both inbound and outbound calls in dual channel_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/dual-channel-recording/README.md) |  |
 | Enhanced CRM Container | _optimize the CRM container experience_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/enhanced-crm-container/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/enhanced-crm-container/README.md) |  |
@@ -345,9 +346,9 @@ Lastly, this package manages the github action workflows - with one example bein
 
 (the following is only applicable when using the flex v2 plugin)
 
-ESLint is configured for the v2 plugin, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
+ESLint is configured for the v2 plugin and the serverless-functions package, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
 
-Before pushing changes, run the following command from the `plugin-flex-ts-template-v2` dir to see the linter results.
+Before pushing changes, run the following command from the `plugin-flex-ts-template-v2` dir and/or the `serverless-functions` dir to see the linter results.
 
 ```bash
 npm run lint
