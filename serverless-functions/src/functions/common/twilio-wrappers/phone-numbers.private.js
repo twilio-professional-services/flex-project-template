@@ -11,7 +11,8 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
  *   the phone numbers for the account
  */
 exports.listPhoneNumbers = async function listPhoneNumbers(parameters) {
-  if (!isObject(parameters.context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isObject(parameters.context))
+    throw new Error('Invalid parameters object passed. Parameters must contain context object');
 
   try {
     const client = parameters.context.getTwilioClient();

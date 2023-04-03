@@ -14,12 +14,13 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
 exports.deleteMapItem = async (parameters) => {
   const { attempts, context, mapSid, key } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(mapSid) && !isString(mapSid))
-    throw 'Invalid parameters object passed. Parameters must contain mapSid string value';
+    throw new Error('Invalid parameters object passed. Parameters must contain mapSid string value');
   if (Boolean(key) && !isString(key))
-    throw 'Invalid parameters object passed. Parameters must contain key string value';
+    throw new Error('Invalid parameters object passed. Parameters must contain key string value');
 
   try {
     const client = context.getTwilioClient();
@@ -44,12 +45,13 @@ exports.deleteMapItem = async (parameters) => {
 exports.fetchMapItem = async (parameters) => {
   const { attempts, context, mapSid, key } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(mapSid) && !isString(mapSid))
-    throw 'Invalid parameters object passed. Parameters must contain context object';
+    throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(key) && !isString(key))
-    throw 'Invalid parameters object passed. Parameters must contain uniqueName string value';
+    throw new Error('Invalid parameters object passed. Parameters must contain uniqueName string value');
 
   try {
     const client = context.getTwilioClient();
@@ -76,15 +78,17 @@ exports.fetchMapItem = async (parameters) => {
 exports.createMapItem = async (parameters) => {
   const { attempts, context, mapSid, key, ttl, data } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(mapSid) && !isString(mapSid))
-    throw 'Invalid parameters object passed. Parameters must contain context object';
+    throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(key) && !isString(key))
-    throw 'Invalid parameters object passed. Parameters must contain uniqueName string value';
+    throw new Error('Invalid parameters object passed. Parameters must contain uniqueName string value');
   if (Boolean(ttl) && !isString(ttl))
-    throw 'Invalid parameters object passed. Parameters must contain ttl integer value';
-  if (Boolean(data) && !isObject(data)) throw 'Invalid parameters object passed. Parameters must contain data object';
+    throw new Error('Invalid parameters object passed. Parameters must contain ttl integer value');
+  if (Boolean(data) && !isObject(data))
+    throw new Error('Invalid parameters object passed. Parameters must contain data object');
 
   try {
     const client = context.getTwilioClient();
@@ -118,13 +122,15 @@ exports.createMapItem = async (parameters) => {
 exports.createDocument = async (parameters) => {
   const { attempts, context, uniqueName, ttl, data } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(uniqueName) && !isString(uniqueName))
-    throw 'Invalid parameters object passed. Parameters must contain uniqueName string value';
+    throw new Error('Invalid parameters object passed. Parameters must contain uniqueName string value');
   if (Boolean(ttl) && !isString(ttl))
-    throw 'Invalid parameters object passed. Parameters must contain ttl integer value';
-  if (Boolean(data) && !isObject(data)) throw 'Invalid parameters object passed. Parameters must contain data object';
+    throw new Error('Invalid parameters object passed. Parameters must contain ttl integer value');
+  if (Boolean(data) && !isObject(data))
+    throw new Error('Invalid parameters object passed. Parameters must contain data object');
 
   try {
     const client = context.getTwilioClient();
@@ -153,10 +159,11 @@ exports.createDocument = async (parameters) => {
 exports.fetchDocument = async (parameters) => {
   const { attempts, context, documentSid } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(documentSid))
-    throw 'Invalid parameters object passed. Parameters must contain documentSid string value';
+    throw new Error('Invalid parameters object passed. Parameters must contain documentSid string value');
 
   try {
     const client = context.getTwilioClient();
@@ -181,11 +188,13 @@ exports.fetchDocument = async (parameters) => {
 exports.updateDocumentData = async (parameters) => {
   const { attempts, context, documentSid, updateData } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(documentSid))
-    throw 'Invalid parameters object passed. Parameters must contain documentSid string value';
-  if (!isObject(updateData)) throw 'Invalid parameters object passed. Parameters must contain updateData object';
+    throw new Error('Invalid parameters object passed. Parameters must contain documentSid string value');
+  if (!isObject(updateData))
+    throw new Error('Invalid parameters object passed. Parameters must contain updateData object');
 
   try {
     const client = context.getTwilioClient();

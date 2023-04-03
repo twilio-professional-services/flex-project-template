@@ -52,6 +52,7 @@
       "multiline-comment-style": "off",
       "no-alert": "off",
       "no-console": "off",
+      "no-multi-str": "off",
       "no-use-before-define": "off",
       "prefer-destructuring": "off",
       "prefer-named-capture-group": "off",

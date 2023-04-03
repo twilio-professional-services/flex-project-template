@@ -15,12 +15,14 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
 exports.participantCreateInvite = async (parameters) => {
   const { attempts, context, interactionSid, channelSid, routing } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(interactionSid))
-    throw 'Invalid parameters object passed. Parameters must contain interactionSid string value';
-  if (!isString(channelSid)) throw 'Invalid parameters object passed. Parameters must contain channelSid string value';
-  if (!isObject(routing)) throw 'Invalid parameters object passed. Parameters must contain routing object';
+    throw new Error('Invalid parameters object passed. Parameters must contain interactionSid string value');
+  if (!isString(channelSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain channelSid string value');
+  if (!isObject(routing)) throw new Error('Invalid parameters object passed. Parameters must contain routing object');
 
   try {
     const client = context.getTwilioClient();
@@ -49,14 +51,17 @@ exports.participantCreateInvite = async (parameters) => {
 exports.participantUpdate = async (parameters) => {
   const { attempts, context, interactionSid, channelSid, participantSid, status } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(interactionSid))
-    throw 'Invalid parameters object passed. Parameters must contain interactionSid string value';
-  if (!isString(channelSid)) throw 'Invalid parameters object passed. Parameters must contain channelSid string value';
+    throw new Error('Invalid parameters object passed. Parameters must contain interactionSid string value');
+  if (!isString(channelSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain channelSid string value');
   if (!isString(participantSid))
-    throw 'Invalid parameters object passed. Parameters must contain participantSid string value';
-  if (!isString(status)) throw 'Invalid parameters object passed. Parameters must contain status string value';
+    throw new Error('Invalid parameters object passed. Parameters must contain participantSid string value');
+  if (!isString(status))
+    throw new Error('Invalid parameters object passed. Parameters must contain status string value');
 
   try {
     const client = context.getTwilioClient();

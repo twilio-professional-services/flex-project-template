@@ -17,10 +17,12 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
 exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
   const { attempts, taskSid, attributesUpdate } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain the taskSid string';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isString(taskSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain the taskSid string');
   if (!isString(attributesUpdate))
-    throw 'Invalid parameters object passed. Parameters must contain attributesUpdate JSON string';
+    throw new Error('Invalid parameters object passed. Parameters must contain attributesUpdate JSON string');
 
   try {
     const taskContextURL = `https://taskrouter.twilio.com/v1/Workspaces/${process.env.TWILIO_FLEX_WORKSPACE_SID}/Tasks/${taskSid}`;
@@ -79,10 +81,12 @@ exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
 exports.completeTask = async function completeTask(parameters) {
   const { attempts, taskSid, reason, context } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain the taskSid string';
-  if (!isString(reason)) throw 'Invalid parameters object passed. Parameters must contain reason string';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isString(taskSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain the taskSid string');
+  if (!isString(reason)) throw new Error('Invalid parameters object passed. Parameters must contain reason string');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
 
   try {
     const client = context.getTwilioClient();
@@ -131,13 +135,18 @@ exports.completeTask = async function completeTask(parameters) {
 exports.updateReservation = async function updateReservation(parameters) {
   const { attempts, context, taskSid, reservationSid, status } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain the taskSid string';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isString(taskSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain the taskSid string');
   if (!isString(reservationSid))
-    throw 'Invalid parameters object passed. Parameters must contain reservationSid string';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
+    throw new Error('Invalid parameters object passed. Parameters must contain reservationSid string');
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
   if (!isString(status) || (status !== 'completed' && status !== 'wrapping'))
-    throw 'Invalid parameters object passed. Parameters must contain status to update the reservation to and it must be one of "completed" or "wrapping"';
+    throw new Error(
+      'Invalid parameters object passed. Parameters must contain status to update the reservation to and it must be one of "completed" or "wrapping"',
+    );
 
   try {
     const client = context.getTwilioClient();
@@ -197,13 +206,15 @@ exports.createTask = async function createTask(parameters) {
     attempts,
   } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(workflowSid) || workflowSid.length === 0)
-    throw 'Invalid parameters object passed. Parameters must contain workflowSid string';
+    throw new Error('Invalid parameters object passed. Parameters must contain workflowSid string');
   if (!isString(taskChannel) || taskChannel.length === 0)
-    throw 'Invalid parameters object passed. Parameters must contain taskChannel string';
-  if (!isObject(attributes)) throw 'Invalid parameters object passed. Parameters must contain attributes object';
+    throw new Error('Invalid parameters object passed. Parameters must contain taskChannel string');
+  if (!isObject(attributes))
+    throw new Error('Invalid parameters object passed. Parameters must contain attributes object');
 
   const timeout = overriddenTimeout || 86400;
   const priority = overriddenPriority || 0;
@@ -243,8 +254,9 @@ exports.createTask = async function createTask(parameters) {
 exports.getQueues = async function getQueues(parameters) {
   const { context, attempts } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
 
   try {
     const client = context.getTwilioClient();
@@ -274,9 +286,11 @@ exports.getQueues = async function getQueues(parameters) {
 exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
   const { context, attempts, workerSid } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
-  if (!isString(workerSid)) throw 'Invalid parameters object passed. Parameters must contain workerSid string';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(workerSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain workerSid string');
 
   try {
     const client = context.getTwilioClient();
@@ -306,13 +320,16 @@ exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
 exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
   const { context, attempts, workerSid, workerChannelSid, capacity, available } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
-  if (!isString(workerSid)) throw 'Invalid parameters object passed. Parameters must contain workerSid string';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(workerSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain workerSid string');
   if (!isString(workerChannelSid))
-    throw 'Invalid parameters object passed. Parameters must contain workerChannelSid string';
-  if (!isNumber(capacity)) throw 'Invalid parameters object passed. Parameters must contain capacity number';
-  if (!isBoolean(available)) throw 'Invalid parameters object passed. Parameters must contain available boolean';
+    throw new Error('Invalid parameters object passed. Parameters must contain workerChannelSid string');
+  if (!isNumber(capacity)) throw new Error('Invalid parameters object passed. Parameters must contain capacity number');
+  if (!isBoolean(available))
+    throw new Error('Invalid parameters object passed. Parameters must contain available boolean');
 
   try {
     const client = context.getTwilioClient();
@@ -344,10 +361,14 @@ exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
 exports.updateTask = async function updateTask(parameters) {
   const { attempts, taskSid, updateParams, context } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain the taskSid string';
-  if (!isObject(updateParams)) throw 'Invalid parameters object passed. Parameters must contain updateParams object';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isString(taskSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain the taskSid string');
+  if (!isObject(updateParams))
+    throw new Error('Invalid parameters object passed. Parameters must contain updateParams object');
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
 
   try {
     const client = context.getTwilioClient();
@@ -397,9 +418,12 @@ exports.updateTask = async function updateTask(parameters) {
 exports.fetchTask = async function fetchTask(parameters) {
   const { attempts, taskSid, context } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain the taskSid string';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isString(taskSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain the taskSid string');
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
 
   try {
     const client = context.getTwilioClient();
@@ -450,8 +474,9 @@ exports.fetchTask = async function fetchTask(parameters) {
 exports.getTasks = async function getTasks(parameters) {
   const { context, attempts, workflowSid, assignmentStatus, ordering, limit } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
 
   try {
     const client = context.getTwilioClient();

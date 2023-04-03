@@ -25,7 +25,7 @@ snooze = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  */
 exports.retryHandler = async (error, parameters, callback) => {
   if (!isNumber(parameters.attempts))
-    throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
 
   const { TWILIO_SERVICE_MAX_BACKOFF, TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_RETRY_LIMIT } = process.env;
   const { attempts, context } = parameters;

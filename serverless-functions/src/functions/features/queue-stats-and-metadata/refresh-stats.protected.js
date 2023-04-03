@@ -50,7 +50,7 @@
  *                                            requests to sync
  */
 
-exports.handler = function refreshStats(context, event, callback) {
+exports.handler = async function refreshStats(context, event, callback) {
   const client = context.getTwilioClient();
   const syncService = client.sync.services(context.TWILIO_FLEX_SYNC_SID);
   const response = new Twilio.Response();
@@ -606,8 +606,15 @@ exports.handler = function refreshStats(context, event, callback) {
   // As there is a maximum size of 16KB per sync map item, minimize the text in the object to minimize the footprint on the object
   const minimizeRealTimeStats = function (realTimeStats) {
     if (realTimeStats) {
-      const result = {};
-      result.activityStatistics = [];
+      const result = {
+        oldestTask: 0,
+        tasksByPriority: {},
+        tasksByStatus: {},
+        availableWorkers: 0,
+        eligibleWorkers: 0,
+        totalTasks: 0,
+        activityStatistics: [],
+      };
 
       realTimeStats.activityStatistics.forEach((activity) => {
         result.activityStatistics.push({
@@ -665,69 +672,64 @@ exports.handler = function refreshStats(context, event, callback) {
   // batch up the promises and update the sync map in batches with a backoff and retry period set in the configuration
   // finally remove from the sync map and items that appear that arent in the queue list (queue has been deleted)
   if (validateParameters()) {
-    fetchAllQueueStatistics(client)
-      .then((queueStatsArray) => {
-        fetchSyncMapItems(QUEUE_STATS_MAP_NAME, 0, 0)
-          .then((items) => {
-            const updateSyncMapPromiseArray = [];
-            const itemsToDeleteArray = [];
+    try {
+      const queueStatsArray = await fetchAllQueueStatistics(client);
+      try {
+        const items = await fetchSyncMapItems(QUEUE_STATS_MAP_NAME, 0, 0);
 
-            items.forEach((item) => {
-              const matchingQueueStats = queueStatsArray.find((queue) => queue.sid === item.key);
-              if (matchingQueueStats) {
-                // Copy over customQueueConfiguration property to queueStats object
-                matchingQueueStats.customQueueConfiguration = item.data.customQueueConfiguration;
-              } else {
-                // Delete any SyncMap Items for queues that no longer exist in TaskRouter
-                itemsToDeleteArray.push(deleteSyncMapItem(QUEUE_STATS_MAP_NAME, item, 0, 0));
-              }
-            });
+        const updateSyncMapPromiseArray = [];
+        const itemsToDeleteArray = [];
 
-            queueStatsArray.forEach((queueItem) => {
-              const { sid, friendlyName, customQueueConfiguration } = queueItem;
-              const matchingSyncMapItem = items.find((item) => item.key === sid);
+        items.forEach((item) => {
+          const matchingQueueStats = queueStatsArray.find((queue) => queue.sid === item.key);
+          if (matchingQueueStats) {
+            // Copy over customQueueConfiguration property to queueStats object
+            matchingQueueStats.customQueueConfiguration = item.data.customQueueConfiguration;
+          } else {
+            // Delete any SyncMap Items for queues that no longer exist in TaskRouter
+            itemsToDeleteArray.push(deleteSyncMapItem(QUEUE_STATS_MAP_NAME, item, 0, 0));
+          }
+        });
 
-              // Create any missing SyncMap Items for queues that were added to TaskRouter since last refresh
-              if (matchingSyncMapItem === undefined) {
-                const newSyncMapItemData = { sid, friendlyName, customQueueConfiguration };
-                updateSyncMapPromiseArray.push(
-                  updateOrCreateSyncMapItem(QUEUE_STATS_MAP_NAME, newSyncMapItemData, true, 0, 0),
-                );
-              }
+        queueStatsArray.forEach((queueItem) => {
+          const { sid, friendlyName, customQueueConfiguration } = queueItem;
+          const matchingSyncMapItem = items.find((item) => item.key === sid);
 
-              // Update any SyncMap Items for queues that have been changed in TaskRouter since last refresh
-              if (matchingSyncMapItem !== undefined && matchingSyncMapItem.data.friendlyName !== friendlyName) {
-                const updatedSyncMapItemData = { ...matchingSyncMapItem.data, friendlyName };
-                updateSyncMapPromiseArray.push(
-                  updateOrCreateSyncMapItem(QUEUE_STATS_MAP_NAME, updatedSyncMapItemData, false, 0, 0),
-                );
-              }
-            });
+          // Create any missing SyncMap Items for queues that were added to TaskRouter since last refresh
+          if (matchingSyncMapItem === undefined) {
+            const newSyncMapItemData = { sid, friendlyName, customQueueConfiguration };
+            updateSyncMapPromiseArray.push(
+              updateOrCreateSyncMapItem(QUEUE_STATS_MAP_NAME, newSyncMapItemData, true, 0, 0),
+            );
+          }
 
-            let batchedArrays = chunkArray(updateSyncMapPromiseArray, QUEUE_STATS_SYNC_MAP_UPDATE_BATCH_SIZE);
-            processPromiseBatchArray(batchedArrays.reverse()).then(() => {
-              response.setBody(queueStatsArray);
-              // chunk the items to be deleted into batches and delete them
-              if (itemsToDeleteArray.length > 0) {
-                batchedArrays = chunkArray(itemsToDeleteArray, QUEUE_STATS_SYNC_MAP_UPDATE_BATCH_SIZE);
-                processPromiseBatchArray(batchedArrays.reverse()).finally(() => {
-                  return callback(null, response);
-                });
-              } else {
-                return callback(null, response);
-              }
-            });
-          })
-          .catch(() => {
-            response.setBody(queueStatsArray);
-            return callback(null, response);
-          });
-      })
-      .catch((err) => {
-        console.error(err);
+          // Update any SyncMap Items for queues that have been changed in TaskRouter since last refresh
+          if (matchingSyncMapItem !== undefined && matchingSyncMapItem.data.friendlyName !== friendlyName) {
+            const updatedSyncMapItemData = { ...matchingSyncMapItem.data, friendlyName };
+            updateSyncMapPromiseArray.push(
+              updateOrCreateSyncMapItem(QUEUE_STATS_MAP_NAME, updatedSyncMapItemData, false, 0, 0),
+            );
+          }
+        });
+
+        let batchedArrays = chunkArray(updateSyncMapPromiseArray, QUEUE_STATS_SYNC_MAP_UPDATE_BATCH_SIZE);
+        await processPromiseBatchArray(batchedArrays.reverse());
+        response.setBody(queueStatsArray);
+        // chunk the items to be deleted into batches and delete them
+        if (itemsToDeleteArray.length > 0) {
+          batchedArrays = chunkArray(itemsToDeleteArray, QUEUE_STATS_SYNC_MAP_UPDATE_BATCH_SIZE);
+          const batchResponse = await processPromiseBatchArray(batchedArrays.reverse());
+          return callback(null, batchResponse);
+        }
+        return callback(null, response);
+      } catch (err) {
         // an error occurred somewhere in the promise chain
-        return callback(null, { success: false, message: err });
-      });
+        response.setBody(queueStatsArray);
+        return callback(null, response);
+      }
+    } catch (err) {
+      return callback(null, { success: false, message: err });
+    }
   } else {
     // An error occurred checking valid environment variables were setup
     return callback(null, { success: false, message: errorMessages });

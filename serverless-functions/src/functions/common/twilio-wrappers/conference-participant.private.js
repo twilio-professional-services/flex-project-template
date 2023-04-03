@@ -18,14 +18,18 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
 exports.coachToggle = async function coachToggle(parameters) {
   const { context, conferenceSid, participantSid, agentSid, muted, coaching, attempts } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conferenceSid)) throw 'Invalid parameters object passed. Parameters must contain conferenceSid string';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(conferenceSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain conferenceSid string');
   if (!isString(participantSid))
-    throw 'Invalid parameters object passed. Parameters must contain participantSid string';
-  if (!isString(agentSid)) throw 'Invalid parameters object passed. Parameters must contain agentSid string';
-  if (!isString(muted)) throw 'Invalid parameters object passed. Parameters must contain muted boolean';
-  if (!isString(coaching)) throw 'Invalid parameters object passed. Parameters must contain coaching boolean';
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
+    throw new Error('Invalid parameters object passed. Parameters must contain participantSid string');
+  if (!isString(agentSid)) throw new Error('Invalid parameters object passed. Parameters must contain agentSid string');
+  if (!isString(muted)) throw new Error('Invalid parameters object passed. Parameters must contain muted boolean');
+  if (!isString(coaching))
+    throw new Error('Invalid parameters object passed. Parameters must contain coaching boolean');
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   try {
     const client = context.getTwilioClient();
 
@@ -54,12 +58,15 @@ exports.coachToggle = async function coachToggle(parameters) {
 exports.bargeToggle = async function bargeToggle(parameters) {
   const { context, conferenceSid, participantSid, muted, attempts } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conferenceSid)) throw 'Invalid parameters object passed. Parameters must contain conferenceSid string';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(conferenceSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain conferenceSid string');
   if (!isString(participantSid))
-    throw 'Invalid parameters object passed. Parameters must contain participantSid string';
-  if (!isString(muted)) throw 'Invalid parameters object passed. Parameters must contain muted boolean';
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
+    throw new Error('Invalid parameters object passed. Parameters must contain participantSid string');
+  if (!isString(muted)) throw new Error('Invalid parameters object passed. Parameters must contain muted boolean');
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   try {
     const client = context.getTwilioClient();
 
@@ -85,10 +92,11 @@ exports.bargeToggle = async function bargeToggle(parameters) {
 exports.addParticipant = async (parameters) => {
   const { context, taskSid, to, from } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain taskSid string';
-  if (!isString(to)) throw 'Invalid parameters object passed. Parameters must contain to string';
-  if (!isString(from)) throw 'Invalid parameters object passed. Parameters must contain from string';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(taskSid)) throw new Error('Invalid parameters object passed. Parameters must contain taskSid string');
+  if (!isString(to)) throw new Error('Invalid parameters object passed. Parameters must contain to string');
+  if (!isString(from)) throw new Error('Invalid parameters object passed. Parameters must contain from string');
 
   try {
     const client = context.getTwilioClient();
@@ -119,10 +127,13 @@ exports.addParticipant = async (parameters) => {
 exports.holdParticipant = async (parameters) => {
   const { context, conference, participant, hold } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conference)) throw 'Invalid parameters object passed. Parameters must contain conference string';
-  if (!isString(participant)) throw 'Invalid parameters object passed. Parameters must contain participant string';
-  if (!isBoolean(hold)) throw 'Invalid parameters object passed. Parameters must contain hold boolean';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(conference))
+    throw new Error('Invalid parameters object passed. Parameters must contain conference string');
+  if (!isString(participant))
+    throw new Error('Invalid parameters object passed. Parameters must contain participant string');
+  if (!isBoolean(hold)) throw new Error('Invalid parameters object passed. Parameters must contain hold boolean');
 
   try {
     const client = context.getTwilioClient();
@@ -149,9 +160,12 @@ exports.holdParticipant = async (parameters) => {
 exports.removeParticipant = async (parameters) => {
   const { context, conference, participant } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conference)) throw 'Invalid parameters object passed. Parameters must contain conference string';
-  if (!isString(participant)) throw 'Invalid parameters object passed. Parameters must contain participant string';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(conference))
+    throw new Error('Invalid parameters object passed. Parameters must contain conference string');
+  if (!isString(participant))
+    throw new Error('Invalid parameters object passed. Parameters must contain participant string');
 
   try {
     const client = context.getTwilioClient();
@@ -176,9 +190,12 @@ exports.removeParticipant = async (parameters) => {
 exports.fetchParticipant = async (parameters) => {
   const { context, conference, participant } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conference)) throw 'Invalid parameters object passed. Parameters must contain conference string';
-  if (!isString(participant)) throw 'Invalid parameters object passed. Parameters must contain participant string';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(conference))
+    throw new Error('Invalid parameters object passed. Parameters must contain conference string');
+  if (!isString(participant))
+    throw new Error('Invalid parameters object passed. Parameters must contain participant string');
 
   try {
     const client = context.getTwilioClient();
@@ -204,11 +221,14 @@ exports.fetchParticipant = async (parameters) => {
 exports.updateParticipant = async (parameters) => {
   const { context, conference, participant, endConferenceOnExit } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conference)) throw 'Invalid parameters object passed. Parameters must contain conference string';
-  if (!isString(participant)) throw 'Invalid parameters object passed. Parameters must contain participant string';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(conference))
+    throw new Error('Invalid parameters object passed. Parameters must contain conference string');
+  if (!isString(participant))
+    throw new Error('Invalid parameters object passed. Parameters must contain participant string');
   if (!isBoolean(endConferenceOnExit))
-    throw 'Invalid parameters object passed. Parameters must contain endConferenceOnExit boolean';
+    throw new Error('Invalid parameters object passed. Parameters must contain endConferenceOnExit boolean');
 
   try {
     const client = context.getTwilioClient();
@@ -236,10 +256,11 @@ exports.updateParticipant = async (parameters) => {
 exports.fetchByTask = async (parameters) => {
   const { context, taskSid, status, limit } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain taskSid string';
-  if (!isString(status)) throw 'Invalid parameters object passed. Parameters must contain status string';
-  if (!isNumber(limit)) throw 'Invalid parameters object passed. Parameters must contain limit number';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(taskSid)) throw new Error('Invalid parameters object passed. Parameters must contain taskSid string');
+  if (!isString(status)) throw new Error('Invalid parameters object passed. Parameters must contain status string');
+  if (!isNumber(limit)) throw new Error('Invalid parameters object passed. Parameters must contain limit number');
 
   try {
     const client = context.getTwilioClient();
@@ -268,9 +289,12 @@ exports.fetchByTask = async (parameters) => {
 exports.updateConference = async (parameters) => {
   const { context, conference, updateParams } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conference)) throw 'Invalid parameters object passed. Parameters must contain conference string';
-  if (!isObject(updateParams)) throw 'Invalid parameters object passed. Parameters must contain updateParams object';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(conference))
+    throw new Error('Invalid parameters object passed. Parameters must contain conference string');
+  if (!isObject(updateParams))
+    throw new Error('Invalid parameters object passed. Parameters must contain updateParams object');
 
   try {
     const client = context.getTwilioClient();

@@ -15,10 +15,13 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
 exports.updateChannelAttributes = async (parameters) => {
   const { attempts, context, channelSid, attributes } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
-  if (!isString(channelSid)) throw 'Invalid parameters object passed. Parameters must contain channelSid string';
-  if (!isString(attributes)) throw 'Invalid parameters object passed. Parameters must contain attributes string';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(channelSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain channelSid string');
+  if (!isString(attributes))
+    throw new Error('Invalid parameters object passed. Parameters must contain attributes string');
 
   try {
     const client = context.getTwilioClient();

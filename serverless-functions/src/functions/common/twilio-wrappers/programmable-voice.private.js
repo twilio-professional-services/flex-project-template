@@ -13,8 +13,9 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
 exports.fetchProperties = async (parameters) => {
   const { context, callSid } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(callSid)) throw 'Invalid parameters object passed. Parameters must contain callSid string';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(callSid)) throw new Error('Invalid parameters object passed. Parameters must contain callSid string');
 
   try {
     const client = context.getTwilioClient();
@@ -39,9 +40,10 @@ exports.fetchProperties = async (parameters) => {
 exports.coldTransfer = async (parameters) => {
   const { context, callSid, to } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(callSid)) throw 'Invalid parameters object passed. Parameters must contain callSid string';
-  if (!isString(to)) throw 'Invalid parameters object passed. Parameters must contain to string';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(callSid)) throw new Error('Invalid parameters object passed. Parameters must contain callSid string');
+  if (!isString(to)) throw new Error('Invalid parameters object passed. Parameters must contain to string');
 
   try {
     const client = context.getTwilioClient();
@@ -68,8 +70,9 @@ exports.coldTransfer = async (parameters) => {
 exports.createRecording = async (parameters) => {
   const { context, callSid, params } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(callSid)) throw 'Invalid parameters object passed. Parameters must contain callSid string';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(callSid)) throw new Error('Invalid parameters object passed. Parameters must contain callSid string');
 
   try {
     const client = context.getTwilioClient();
@@ -95,10 +98,12 @@ exports.createRecording = async (parameters) => {
 exports.updateCallRecording = async (parameters) => {
   const { context, callSid, recordingSid, params } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(callSid)) throw 'Invalid parameters object passed. Parameters must contain callSid string';
-  if (!isString(recordingSid)) throw 'Invalid parameters object passed. Parameters must contain recordingSid string';
-  if (!isObject(params)) throw 'Invalid parameters object passed. Parameters must contain params object';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(callSid)) throw new Error('Invalid parameters object passed. Parameters must contain callSid string');
+  if (!isString(recordingSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain recordingSid string');
+  if (!isObject(params)) throw new Error('Invalid parameters object passed. Parameters must contain params object');
 
   try {
     const client = context.getTwilioClient();
@@ -124,10 +129,13 @@ exports.updateCallRecording = async (parameters) => {
 exports.updateConferenceRecording = async (parameters) => {
   const { context, conferenceSid, recordingSid, params } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(conferenceSid)) throw 'Invalid parameters object passed. Parameters must contain conferenceSid string';
-  if (!isString(recordingSid)) throw 'Invalid parameters object passed. Parameters must contain recordingSid string';
-  if (!isObject(params)) throw 'Invalid parameters object passed. Parameters must contain params object';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(conferenceSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain conferenceSid string');
+  if (!isString(recordingSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain recordingSid string');
+  if (!isObject(params)) throw new Error('Invalid parameters object passed. Parameters must contain params object');
 
   try {
     const client = context.getTwilioClient();
@@ -152,9 +160,10 @@ exports.updateConferenceRecording = async (parameters) => {
 exports.updateCall = async (parameters) => {
   const { context, callSid, params } = parameters;
 
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain reason context object';
-  if (!isString(callSid)) throw 'Invalid parameters object passed. Parameters must contain callSid string';
-  if (!isObject(params)) throw 'Invalid parameters object passed. Parameters must contain params object';
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(callSid)) throw new Error('Invalid parameters object passed. Parameters must contain callSid string');
+  if (!isObject(params)) throw new Error('Invalid parameters object passed. Parameters must contain params object');
 
   try {
     const client = context.getTwilioClient();
