@@ -21,19 +21,17 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     if (!latestBuildResult.success) {
       response.setStatusCode(latestBuildResult.status);
       response.setBody({ message: latestBuildResult.message });
-      callback(null, response);
-      return;
+      return callback(null, response);
     }
 
     const { latestBuild } = latestBuildResult;
 
     // get the data asset version sid from the latest build
-    const version = latestBuild.assetVersions.find((asset) => asset.path == assetPath)?.sid;
+    const version = latestBuild.assetVersions.find((asset) => asset.path === assetPath)?.sid;
 
     if (!version) {
       // error, no data asset in latest build
-      callback('Missing asset in latest build');
-      return;
+      return callback('Missing asset in latest build');
     }
 
     // now validate that this build is what is deployed
@@ -42,8 +40,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     if (!latestDeploymentResult.success) {
       response.setStatusCode(latestDeploymentResult.status);
       response.setBody({ message: latestDeploymentResult.message });
-      callback(null, response);
-      return;
+      return callback(null, response);
     }
 
     const { latestDeployment } = latestDeploymentResult;
@@ -65,8 +62,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     };
 
     response.setBody(returnData);
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

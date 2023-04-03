@@ -44,7 +44,7 @@ const checkDate = (rule, now) => {
     let matchFound = false;
 
     rrule.all().forEach((occurrence) => {
-      if (now.valueOf() == occurrence.valueOf()) {
+      if (now.valueOf() === occurrence.valueOf()) {
         console.log(`Rule ${rule.name} occurrence matched`, occurrence);
         matchFound = true;
       }
@@ -68,7 +68,7 @@ const checkTime = (rule, nowTz) => {
       return false;
     }
 
-    if (nowTz.hour == startTime.hour && nowTz.minute < startTime.minute) {
+    if (nowTz.hour === startTime.hour && nowTz.minute < startTime.minute) {
       console.log(`Rule ${rule.name} doesn't match: before start minute`, startTime.minute);
       return false;
     }
@@ -82,7 +82,7 @@ const checkTime = (rule, nowTz) => {
       return false;
     }
 
-    if (nowTz.hour == endTime.hour && nowTz.minute >= endTime.minute) {
+    if (nowTz.hour === endTime.hour && nowTz.minute >= endTime.minute) {
       console.log(`Rule ${rule.name} doesn't match: after end minute`, endTime.minute);
       return false;
     }
@@ -99,7 +99,7 @@ exports.evaluateSchedule = (name, simulate) => {
   };
 
   // find schedule by name
-  const schedule = scheduleData.schedules.find((schedule) => schedule.name == name);
+  const schedule = scheduleData.schedules.find((configSchedule) => configSchedule.name === name);
 
   if (!schedule) {
     return {
@@ -133,7 +133,7 @@ exports.evaluateSchedule = (name, simulate) => {
 
   // evaluate each schedule rule to see if it is currently matching
   schedule.rules.forEach((ruleId) => {
-    const rule = scheduleData.rules.find((rule) => rule.id == ruleId);
+    const rule = scheduleData.rules.find((configRule) => configRule.id === ruleId);
     if (rule && checkDate(rule, now) && checkTime(rule, nowTz)) {
       console.log(`Rule ${rule.name} matched`, nowTz.toString());
       matchingRules.push(rule);

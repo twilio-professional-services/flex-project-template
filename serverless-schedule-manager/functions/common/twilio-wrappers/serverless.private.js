@@ -12,12 +12,13 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
  * @returns {object} An object containing the deployment sid
  * @description the following method is used to deploy a given build in this environment
  */
-exports.deployBuild = async function (parameters) {
+exports.deployBuild = async (parameters) => {
   const { attempts, context, buildSid } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
-  if (!isString(buildSid)) throw 'Invalid parameters object passed. Parameters must contain buildSid string';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(buildSid)) throw new Error('Invalid parameters object passed. Parameters must contain buildSid string');
 
   try {
     const client = context.getTwilioClient();
@@ -32,7 +33,7 @@ exports.deployBuild = async function (parameters) {
 
     return { success: true, status: 200, deploymentSid: deployment.sid };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.deployBuild);
   }
 };
 
@@ -44,12 +45,13 @@ exports.deployBuild = async function (parameters) {
  * @returns {object} An object containing the deployment sid
  * @description the following method is used to fetch build status for this service
  */
-exports.fetchBuildStatus = async function (parameters) {
+exports.fetchBuildStatus = async (parameters) => {
   const { attempts, context, buildSid } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
-  if (!isString(buildSid)) throw 'Invalid parameters object passed. Parameters must contain buildSid string';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(buildSid)) throw new Error('Invalid parameters object passed. Parameters must contain buildSid string');
 
   try {
     const client = context.getTwilioClient();
@@ -65,7 +67,7 @@ exports.fetchBuildStatus = async function (parameters) {
 
     return { success: true, status: 200, buildStatus: build.status };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.fetchBuildStatus);
   }
 };
 
@@ -76,11 +78,12 @@ exports.fetchBuildStatus = async function (parameters) {
  * @returns {object} An object containing the deployment sid
  * @description the following method is used to fetch the latest build for this service
  */
-exports.fetchLatestBuild = async function (parameters) {
+exports.fetchLatestBuild = async (parameters) => {
   const { attempts, context } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
 
   try {
     const client = context.getTwilioClient();
@@ -96,7 +99,7 @@ exports.fetchLatestBuild = async function (parameters) {
 
     return { success: true, status: 200, latestBuild: builds[0] };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.fetchLatestBuild);
   }
 };
 
@@ -107,11 +110,12 @@ exports.fetchLatestBuild = async function (parameters) {
  * @returns {object} The latest deployment
  * @description the following method is used to fetch the latest deployment for this service
  */
-exports.fetchLatestDeployment = async function (parameters) {
+exports.fetchLatestDeployment = async (parameters) => {
   const { attempts, context } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
 
   try {
     const client = context.getTwilioClient();
@@ -131,7 +135,7 @@ exports.fetchLatestDeployment = async function (parameters) {
 
     return { success: true, status: 200, latestDeployment: deployments[0] };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.fetchLatestDeployment);
   }
 };
 
@@ -145,15 +149,18 @@ exports.fetchLatestDeployment = async function (parameters) {
  * @returns {object} An object containing the build sid
  * @description the following method is used to create a new build in this service
  */
-exports.createBuild = async function (parameters) {
+exports.createBuild = async (parameters) => {
   const { attempts, context, assetVersions, dependencies, functionVersions } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
-  if (!isArray(assetVersions)) throw 'Invalid parameters object passed. Parameters must contain assetVersions array';
-  if (!isArray(dependencies)) throw 'Invalid parameters object passed. Parameters must contain dependencies array';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isArray(assetVersions))
+    throw new Error('Invalid parameters object passed. Parameters must contain assetVersions array');
+  if (!isArray(dependencies))
+    throw new Error('Invalid parameters object passed. Parameters must contain dependencies array');
   if (!isArray(functionVersions))
-    throw 'Invalid parameters object passed. Parameters must contain functionVersions array';
+    throw new Error('Invalid parameters object passed. Parameters must contain functionVersions array');
 
   try {
     const client = context.getTwilioClient();
@@ -167,7 +174,7 @@ exports.createBuild = async function (parameters) {
 
     return { success: true, status: 200, buildSid: build.sid };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.createBuild);
   }
 };
 
@@ -181,14 +188,17 @@ exports.createBuild = async function (parameters) {
  * @returns {object} An object containing the new asset version sid
  * @description the following method is used to upload a new version of an asset in this service
  */
-exports.uploadAsset = async function (parameters) {
+exports.uploadAsset = async (parameters) => {
   const { attempts, context, assetSid, assetPath, assetData } = parameters;
 
-  if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
-  if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
-  if (!isString(assetSid)) throw 'Invalid parameters object passed. Parameters must contain assetSid string';
-  if (!isString(assetPath)) throw 'Invalid parameters object passed. Parameters must contain assetPath string';
-  if (!isObject(assetData)) throw 'Invalid parameters object passed. Parameters must contain assetData object';
+  if (!isNumber(attempts))
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(assetSid)) throw new Error('Invalid parameters object passed. Parameters must contain assetSid string');
+  if (!isString(assetPath))
+    throw new Error('Invalid parameters object passed. Parameters must contain assetPath string');
+  if (!isObject(assetData))
+    throw new Error('Invalid parameters object passed. Parameters must contain assetData object');
 
   try {
     const apiKey = context.ACCOUNT_SID;
@@ -226,6 +236,6 @@ exports.uploadAsset = async function (parameters) {
 
     return { success: true, status: 200, assetVersionSid: newVersionSid };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.uploadAsset);
   }
 };

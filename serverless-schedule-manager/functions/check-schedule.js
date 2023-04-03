@@ -15,14 +15,13 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       // fail open to be as graceful as possible
       response.setBody({ isOpen: true, closedReason: 'error', error });
 
-      callback(null, response);
-      return;
+      return callback(null, response);
     }
 
     console.log(`Schedule ${name} result`, returnData);
     response.setBody(returnData);
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

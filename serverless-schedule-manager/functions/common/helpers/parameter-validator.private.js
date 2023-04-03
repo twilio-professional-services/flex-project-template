@@ -10,7 +10,7 @@
  * if an array of strings is provided instead of the key and purpose objects
  */
 
-exports.validate = function (callingFunctionPath, parameterObject, requiredKeysArray) {
+exports.validate = (callingFunctionPath, parameterObject, requiredKeysArray) => {
   let errorMessage = '';
   requiredKeysArray.forEach((data) => {
     if (module.exports.isString(data)) {
@@ -31,7 +31,7 @@ exports.validate = function (callingFunctionPath, parameterObject, requiredKeysA
   return errorMessage;
 };
 
-exports.isBoolean = function (data) {
+exports.isBoolean = (data) => {
   let valueToCheck = data;
   if (module.exports.isString(valueToCheck)) {
     valueToCheck = Boolean(data);
@@ -43,10 +43,10 @@ exports.isBoolean = function (data) {
   );
 };
 
-exports.isString = function (data) {
+exports.isString = (data) => {
   return typeof data === 'string' || data instanceof String;
 };
 
-exports.isObject = function (data) {
+exports.isObject = (data) => {
   return Object.prototype.toString.call(data) === '[object Object]';
 };

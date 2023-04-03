@@ -9,8 +9,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   if (TokenResult.roles.indexOf('admin') < 0) {
     response.setStatusCode(403);
     response.setBody('Not authorized');
-    callback(null, response);
-    return;
+    return callback(null, response);
   }
 
   try {
@@ -19,8 +18,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     response.setStatusCode(buildStatusResult.status);
     response.setBody(buildStatusResult);
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

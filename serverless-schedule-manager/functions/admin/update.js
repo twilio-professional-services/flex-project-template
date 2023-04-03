@@ -18,8 +18,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   if (TokenResult.roles.indexOf('admin') < 0) {
     response.setStatusCode(403);
     response.setBody('Not authorized');
-    callback(null, response);
-    return;
+    return callback(null, response);
   }
 
   try {
@@ -29,27 +28,24 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     if (!latestBuildResult.success) {
       response.setStatusCode(latestBuildResult.status);
       response.setBody({ message: latestBuildResult.message });
-      callback(null, response);
-      return;
+      return callback(null, response);
     }
 
     const { latestBuild } = latestBuildResult;
 
     // compare latest asset version sid to provided version sid
-    const assetVersion = latestBuild.assetVersions.find((asset) => asset.path == assetPath);
+    const assetVersion = latestBuild.assetVersions.find((asset) => asset.path === assetPath);
 
     if (!assetVersion) {
       // error, no asset to update
-      callback('Missing asset from latest build');
-      return;
+      return callback('Missing asset from latest build');
     }
 
-    if (assetVersion.sid != version) {
+    if (assetVersion.sid !== version) {
       // error, someone else made an update
       response.setStatusCode(409);
       response.setBody('Provided version SID is not the latest deployed asset version SID');
-      callback(null, response);
-      return;
+      return callback(null, response);
     }
 
     // upload new asset version
@@ -64,15 +60,14 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     if (!uploadResult.success) {
       response.setStatusCode(uploadResult.status);
       response.setBody({ message: uploadResult.message });
-      callback(null, response);
-      return;
+      return callback(null, response);
     }
 
     const newVersionSid = uploadResult.assetVersionSid;
 
     // create new build with the new asset, but with functions and dependencies from the latest build
     const assetVersions = [newVersionSid];
-    const functionVersions = latestBuild.functionVersions.map((version) => version.sid);
+    const functionVersions = latestBuild.functionVersions.map((functionVersion) => functionVersion.sid);
     const dependencies = latestBuild.dependencies;
 
     const buildResult = await ServerlessOperations.createBuild({
@@ -85,8 +80,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     response.setStatusCode(buildResult.status);
     response.setBody(buildResult);
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });
