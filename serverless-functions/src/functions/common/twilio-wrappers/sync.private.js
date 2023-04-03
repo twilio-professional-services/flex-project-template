@@ -11,7 +11,7 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
  * @returns {object} success
  * @description the following method is used to remove a Sync Map Item
  */
-exports.deleteMapItem = async function (parameters) {
+exports.deleteMapItem = async (parameters) => {
   const { attempts, context, mapSid, key } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
@@ -24,11 +24,7 @@ exports.deleteMapItem = async function (parameters) {
   try {
     const client = context.getTwilioClient();
 
-    const mapItem = await client.sync
-      .services(context.TWILIO_FLEX_SYNC_SID)
-      .syncMaps(mapSid)
-      .syncMapItems(key)
-      .remove();
+    await client.sync.services(context.TWILIO_FLEX_SYNC_SID).syncMaps(mapSid).syncMapItems(key).remove();
 
     return { success: true, status: 200 };
   } catch (error) {
@@ -45,7 +41,7 @@ exports.deleteMapItem = async function (parameters) {
  * @returns {object} An existing Sync Map Item
  * @description the following method is used to fetch a Sync Map Item
  */
-exports.fetchMapItem = async function (parameters) {
+exports.fetchMapItem = async (parameters) => {
   const { attempts, context, mapSid, key } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
@@ -77,7 +73,7 @@ exports.fetchMapItem = async function (parameters) {
  * @returns {object} A new Sync Map Item
  * @description the following method is used to create a Sync Map Item
  */
-exports.createMapItem = async function (parameters) {
+exports.createMapItem = async (parameters) => {
   const { attempts, context, mapSid, key, ttl, data } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
@@ -119,7 +115,7 @@ exports.createMapItem = async function (parameters) {
  * @returns {object} A new Sync document
  * @description the following method is used to create a sync document
  */
-exports.createDocument = async function (parameters) {
+exports.createDocument = async (parameters) => {
   const { attempts, context, uniqueName, ttl, data } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
@@ -154,7 +150,7 @@ exports.createDocument = async function (parameters) {
  * @returns {object} A Sync document
  * @description the following method is used to fetch a sync document
  */
-exports.fetchDocument = async function (parameters) {
+exports.fetchDocument = async (parameters) => {
   const { attempts, context, documentSid } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
@@ -182,7 +178,7 @@ exports.fetchDocument = async function (parameters) {
  * @returns {object} A Sync document
  * @description the following method is used to fetch a sync document
  */
-exports.updateDocumentData = async function (parameters) {
+exports.updateDocumentData = async (parameters) => {
   const { attempts, context, documentSid, updateData } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';

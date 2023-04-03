@@ -1,4 +1,5 @@
 const { merge, isString, isObject, isNumber, isBoolean, omitBy, isNil } = require('lodash');
+const axios = require('axios');
 
 const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
 
@@ -22,8 +23,6 @@ exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
     throw 'Invalid parameters object passed. Parameters must contain attributesUpdate JSON string';
 
   try {
-    const axios = require('axios');
-
     const taskContextURL = `https://taskrouter.twilio.com/v1/Workspaces/${process.env.TWILIO_FLEX_WORKSPACE_SID}/Tasks/${taskSid}`;
     const config = {
       auth: {
@@ -108,7 +107,6 @@ exports.completeTask = async function completeTask(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      const { context } = parameters;
       console.warn(`${context.PATH}.${arguments.callee.name}(): ${error.message}`);
       return {
         success: true,
@@ -165,7 +163,6 @@ exports.updateReservation = async function updateReservation(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      const { context } = parameters;
       console.warn(`${context.PATH}.${arguments.callee.name}(): ${error.message}`);
       return {
         success: true,
@@ -202,9 +199,9 @@ exports.createTask = async function createTask(parameters) {
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
   if (!isObject(context)) throw 'Invalid parameters object passed. Parameters must contain context object';
-  if (!isString(workflowSid) || workflowSid.length == 0)
+  if (!isString(workflowSid) || workflowSid.length === 0)
     throw 'Invalid parameters object passed. Parameters must contain workflowSid string';
-  if (!isString(taskChannel) || taskChannel.length == 0)
+  if (!isString(taskChannel) || taskChannel.length === 0)
     throw 'Invalid parameters object passed. Parameters must contain taskChannel string';
   if (!isObject(attributes)) throw 'Invalid parameters object passed. Parameters must contain attributes object';
 
@@ -378,7 +375,6 @@ exports.updateTask = async function updateTask(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      const { context } = parameters;
       console.warn(`${context.PATH}.${arguments.callee.name}(): ${error.message}`);
       return {
         success: true,
@@ -428,7 +424,6 @@ exports.fetchTask = async function fetchTask(parameters) {
     // in which case it is also assumed to be completed
     // https://www.twilio.com/docs/api/errors/20404
     if (error.code === 20001 || error.code === 20404) {
-      const { context } = parameters;
       console.warn(`${context.PATH}.${arguments.callee.name}(): ${error.message}`);
       return {
         success: true,

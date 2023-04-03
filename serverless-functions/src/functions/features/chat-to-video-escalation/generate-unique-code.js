@@ -57,8 +57,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       full_url: `https://${context.DOMAIN_NAME}/features/chat-to-video/index.html?code=${unique_code}`,
     });
 
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

@@ -1,6 +1,6 @@
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
-exports.createCallbackTask = async function (parameters) {
+exports.createCallbackTask = async (parameters) => {
   const {
     context,
     numberToCall,
@@ -52,7 +52,7 @@ exports.createCallbackTask = async function (parameters) {
     },
   };
 
-  return await TaskOperations.createTask({
+  return TaskOperations.createTask({
     context,
     workflowSid,
     taskChannel,

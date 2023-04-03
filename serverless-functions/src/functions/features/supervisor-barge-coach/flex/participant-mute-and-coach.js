@@ -22,7 +22,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const { conferenceSid, participantSid, agentSid, muted, coaching } = event;
 
     // If agentSid isn't null/blank, we know we are updating the conference coaching status
-    if (agentSid != '') {
+    if (agentSid && agentSid !== '') {
       const result = await ConferenceOperations.coachToggle({
         context,
         conferenceSid,
@@ -53,8 +53,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         conference: result.conferenceSid,
       });
     }
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

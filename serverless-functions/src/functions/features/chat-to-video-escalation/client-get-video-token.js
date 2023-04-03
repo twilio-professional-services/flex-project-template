@@ -58,8 +58,8 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
     */
     response.setBody({ token: token.toJwt() });
 
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

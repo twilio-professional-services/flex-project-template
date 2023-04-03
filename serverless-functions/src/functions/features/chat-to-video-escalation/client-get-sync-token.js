@@ -38,7 +38,6 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       .documents(code)
       .documentPermissions(client_identity)
       .update({ read: true, write: false, manage: false })
-      .then((document_permission) => true)
       .catch((reason) => {
         console.error(`Error giving permission to ${code}: ${reason}`);
         return null;
@@ -60,8 +59,8 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       - Frontend JS can subscribe to the SYNC document and get notified when the agent connects
     */
     response.setBody({ token: token.toJwt() });
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

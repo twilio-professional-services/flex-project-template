@@ -90,8 +90,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     response.setStatusCode(createTaskStatus);
     response.setBody({ success: createTaskSuccess, taskSid: newTask.sid });
 
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

@@ -117,5 +117,5 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
     }
   }
 
-  callback(null);
+  return callback(null);
 };

@@ -12,7 +12,7 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
  * @description the following method is used to apply attributes
  *    to the channel object
  */
-exports.updateChannelAttributes = async function (parameters) {
+exports.updateChannelAttributes = async (parameters) => {
   const { attempts, context, channelSid, attributes } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';

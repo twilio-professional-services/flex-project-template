@@ -16,8 +16,8 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       attempts: 0,
     });
     response.setBody({ success });
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

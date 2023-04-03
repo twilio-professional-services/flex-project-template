@@ -1,10 +1,9 @@
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 
 const ParameterValidator = require(Runtime.getFunctions()['common/helpers/parameter-validator'].path);
-const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
 
-const getRequiredParameters = (event) => {
+const getRequiredParameters = () => {
   return [
     {
       key: 'taskSid',
@@ -73,7 +72,7 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
   const scriptName = arguments.callee.name;
   const response = new Twilio.Response();
 
-  const requiredParameters = getRequiredParameters(event);
+  const requiredParameters = getRequiredParameters();
   const parameterError = ParameterValidator.validate(context.PATH, event, requiredParameters);
 
   response.appendHeader('Access-Control-Allow-Origin', '*');
@@ -92,89 +91,89 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
       data: null,
       message: 'TWILIO_FLEX_WORKSPACE_SID and TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID required enviroment variables',
     });
-    callback(null, response);
+    return callback(null, response);
   }
 
   if (parameterError) {
     response.setStatusCode(400);
     response.setBody({ data: null, message: parameterError });
-    callback(null, response);
-  } else {
-    try {
-      const {
-        conversationId,
-        jsonAttributes,
-        transferTargetSid,
-        transferQueueName,
-        workersToIgnore,
-        flexInteractionSid,
-        flexInteractionChannelSid,
-        removeFlexInteractionParticipantSid,
-      } = event;
+    return callback(null, response);
+  }
 
-      const routingParams = getRoutingParams(
-        context,
-        conversationId,
-        jsonAttributes,
-        transferTargetSid,
-        transferQueueName,
-        workersToIgnore,
-      );
+  try {
+    const {
+      conversationId,
+      jsonAttributes,
+      transferTargetSid,
+      transferQueueName,
+      workersToIgnore,
+      flexInteractionSid,
+      flexInteractionChannelSid,
+      removeFlexInteractionParticipantSid,
+    } = event;
 
-      const participantCreateInviteParams = {
-        routing: routingParams,
+    const routingParams = getRoutingParams(
+      context,
+      conversationId,
+      jsonAttributes,
+      transferTargetSid,
+      transferQueueName,
+      workersToIgnore,
+    );
+
+    const participantCreateInviteParams = {
+      routing: routingParams,
+      interactionSid: flexInteractionSid,
+      channelSid: flexInteractionChannelSid,
+      context,
+      scriptName,
+      attempts: 0,
+    };
+
+    const {
+      success,
+      status,
+      message = '',
+      participantInvite = null,
+    } = await InteractionsOperations.participantCreateInvite(participantCreateInviteParams);
+
+    // if this failed bail out so we don't remove the agent from the conversation and no one else joins
+    if (!success) {
+      return sendErrorReply(callback, response, scriptName, status, message);
+    }
+
+    if (removeFlexInteractionParticipantSid)
+      await InteractionsOperations.participantUpdate({
+        status: 'closed',
         interactionSid: flexInteractionSid,
         channelSid: flexInteractionChannelSid,
-        context,
+        participantSid: removeFlexInteractionParticipantSid,
         scriptName,
+        context,
         attempts: 0,
-      };
-
-      const {
-        success,
-        status,
-        message = '',
-        participantInvite = null,
-      } = await InteractionsOperations.participantCreateInvite(participantCreateInviteParams);
-
-      // if this failed bail out so we don't remove the agent from the conversation and no one else joins
-      if (!success) {
-        return sendErrorReply(callback, response, scriptName, status, message);
-      }
-
-      if (removeFlexInteractionParticipantSid)
-        await InteractionsOperations.participantUpdate({
-          status: 'closed',
-          interactionSid: flexInteractionSid,
-          channelSid: flexInteractionChannelSid,
-          participantSid: removeFlexInteractionParticipantSid,
-          scriptName,
-          context,
-          attempts: 0,
-        });
-
-      console.log(
-        'participantInvite',
-        participantInvite,
-        JSON.stringify(participantInvite.routing),
-        JSON.stringify(participantInvite.routing.reservation),
-        JSON.stringify(participantInvite.routing.properties),
-      );
-
-      response.setStatusCode(201);
-      response.setBody({
-        success: true,
-        message: `Participant invite ${participantInvite.sid}`,
-        participantInviteSid: participantInvite.sid,
-        invitesTaskSid: participantInvite.routing.properties.sid,
       });
-      callback(null, response);
-    } catch (error) {
-      console.error(`Unexpected error occurred in ${scriptName}: ${error}`);
-      response.setStatusCode(500);
-      response.setBody({ success: false, message: error });
-      callback(null, response);
-    }
+
+    console.log(
+      'participantInvite',
+      participantInvite,
+      JSON.stringify(participantInvite.routing),
+      JSON.stringify(participantInvite.routing.reservation),
+      JSON.stringify(participantInvite.routing.properties),
+    );
+
+    response.setStatusCode(201);
+    response.setBody({
+      success: true,
+      message: `Participant invite ${participantInvite.sid}`,
+      participantInviteSid: participantInvite.sid,
+      invitesTaskSid: participantInvite.routing.properties.sid,
+    });
+    return callback(null, response);
+  } catch (error) {
+    console.error(`Unexpected error occurred in ${scriptName}: ${error}`);
+    response.setStatusCode(500);
+    response.setBody({ success: false, message: error });
+    return callback(null, response);
   }
 });
 
@@ -182,5 +181,5 @@ const sendErrorReply = (callback, response, scriptName, status, message) => {
   console.error(`Unexpected error occurred in ${scriptName}: ${message}`);
   response.setStatusCode(status);
   response.setBody({ success: false, message });
-  callback(null, response);
+  return callback(null, response);
 };

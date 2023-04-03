@@ -29,25 +29,25 @@ exports.handler = TokenValidator(async function updateTaskAttributes(context, ev
     console.error('update-assignment status invalid parameters passed');
     response.setStatusCode(400);
     response.setBody({ data: null, message: parameterError });
-    callback(null, response);
-  } else {
-    try {
-      const { taskSid, assignmentStatus } = event;
-      const result = await TaskOperations.updateTask({
-        scriptName,
-        context,
-        taskSid,
-        updateParams: { assignmentStatus },
-        attempts: 0,
-      });
-      response.setStatusCode(result.status);
-      response.setBody({ success: result.success });
-      callback(null, response);
-    } catch (error) {
-      console.log(error);
-      response.setStatusCode(500);
-      response.setBody({ data: null, message: error.message });
-      callback(null, response);
-    }
+    return callback(null, response);
+  }
+
+  try {
+    const { taskSid, assignmentStatus } = event;
+    const result = await TaskOperations.updateTask({
+      scriptName,
+      context,
+      taskSid,
+      updateParams: { assignmentStatus },
+      attempts: 0,
+    });
+    response.setStatusCode(result.status);
+    response.setBody({ success: result.success });
+    return callback(null, response);
+  } catch (error) {
+    console.log(error);
+    response.setStatusCode(500);
+    response.setBody({ data: null, message: error.message });
+    return callback(null, response);
   }
 });

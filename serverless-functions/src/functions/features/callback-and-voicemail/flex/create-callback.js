@@ -1,5 +1,4 @@
 const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
-const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const CallbackOperations = require(Runtime.getFunctions()['features/callback-and-voicemail/common/callback-operations']
   .path);
 
@@ -53,8 +52,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     });
     response.setStatusCode(result.status);
     response.setBody({ success: result.success, taskSid: result.taskSid });
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

@@ -73,7 +73,7 @@ exports.handler = function refreshStats(context, event, callback) {
   response.appendHeader('Content-Type', 'application/json');
   response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const validateParameters = function (context, event) {
+  const validateParameters = () => {
     errorMessages = '';
     errorMessages += context.TWILIO_FLEX_WORKSPACE_SID
       ? ''
@@ -129,7 +129,7 @@ exports.handler = function refreshStats(context, event, callback) {
     const result = [];
     for (value of array) {
       const lastArray = result[result.length - 1];
-      if (!lastArray || lastArray.length == size) {
+      if (!lastArray || lastArray.length === size) {
         result.push([value]);
       } else {
         lastArray.push(value);
@@ -139,7 +139,7 @@ exports.handler = function refreshStats(context, event, callback) {
   };
 
   const listQueues = function (twilioClient) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve) => {
       twilioClient.taskrouter
         .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
         .taskQueues.list()
@@ -176,7 +176,7 @@ exports.handler = function refreshStats(context, event, callback) {
   //   customQueueConfiguration: {} // configuration object for the custom queue meta data such as open and close times
   // }
   const fetchAllQueueStatistics = function (twilioClient) {
-    return new Promise(async function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
       listQueues(twilioClient)
         .then((result) => {
           if (result.success) {
@@ -224,7 +224,7 @@ exports.handler = function refreshStats(context, event, callback) {
 
   // Generic function for processing a batched array of promise arrays
   const processPromiseBatchArray = function (promiseBatchArray) {
-    return new Promise(async function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
       const batch = promiseBatchArray.pop();
       if (batch) {
         Promise.all(batch)
@@ -238,7 +238,8 @@ exports.handler = function refreshStats(context, event, callback) {
             }
           })
           .catch((err) => {
-            console.log(`ERROR DURING processing BATCH`);
+            console.log(`ERROR DURING processing BATCH`, err);
+            reject();
           });
       } else {
         console.log(`batch empty`);
@@ -249,11 +250,11 @@ exports.handler = function refreshStats(context, event, callback) {
 
   // function for retrieving or creating sync map which will retry recursively
   const fetchOrCreateSyncMap = function (mapName, create, delay, retryAttempts) {
-    return new Promise(async function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
       // delay random backoff period
       await snooze(delay);
 
-      if (create == false) {
+      if (create === false) {
         syncService
           .syncMaps(mapName)
           .fetch()
@@ -263,14 +264,14 @@ exports.handler = function refreshStats(context, event, callback) {
           .catch((err) => {
             // 20404 item not found https://www.twilio.com/docs/api/errors/20404
             // attempt to create it
-            if (err.code == 20404) {
+            if (err.code === 20404) {
               console.log(`syncMap ${mapName} not found, attempting to create it`);
               fetchOrCreateSyncMap(mapName, true, delay, retryAttempts + 1)
                 .then((syncMap) => {
                   resolve(syncMap);
                 })
-                .catch((err) => {
-                  reject(err);
+                .catch((err1) => {
+                  reject(err1);
                 });
             }
             // sync rate limit exceeded https://www.twilio.com/docs/api/errors/54009
@@ -286,8 +287,8 @@ exports.handler = function refreshStats(context, event, callback) {
                 .then((syncMap) => {
                   resolve(syncMap);
                 })
-                .catch((err) => {
-                  reject(err);
+                .catch((err1) => {
+                  reject(err1);
                 });
             } else {
               // too many retry attempts
@@ -314,8 +315,8 @@ exports.handler = function refreshStats(context, event, callback) {
                 .then((syncMap) => {
                   resolve(syncMap);
                 })
-                .catch((err) => {
-                  reject(err);
+                .catch((err1) => {
+                  reject(err1);
                 });
             } else {
               // too many retry attempts
@@ -329,7 +330,7 @@ exports.handler = function refreshStats(context, event, callback) {
 
   // function for retrieving sync map items which will retry recursively
   const fetchSyncMapItems = function (mapName, delay, retryAttempts) {
-    return new Promise(async function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
       // delay random backoff period
       await snooze(delay);
 
@@ -341,20 +342,20 @@ exports.handler = function refreshStats(context, event, callback) {
         })
         .catch((err) => {
           // if map doesnt exist create it first then retry
-          if (err.code == 20404) {
+          if (err.code === 20404) {
             console.log(`syncMap ${mapName} not found, attempting to create it`);
             fetchOrCreateSyncMap(mapName, true, 0, 0)
-              .then((syncMap) => {
+              .then(() => {
                 fetchSyncMapItems(mapName, 0, retryAttempts + 1)
                   .then((syncMapItems) => {
                     resolve(syncMapItems);
                   })
-                  .catch((err) => {
-                    reject(err);
+                  .catch((err1) => {
+                    reject(err1);
                   });
               })
-              .catch((err) => {
-                reject(err);
+              .catch((err1) => {
+                reject(err1);
               });
           }
           // sync rate limit exceeded https://www.twilio.com/docs/api/errors/54009
@@ -371,8 +372,8 @@ exports.handler = function refreshStats(context, event, callback) {
               .then((syncMapItems) => {
                 resolve(syncMapItems);
               })
-              .catch((err) => {
-                reject(err);
+              .catch((err1) => {
+                reject(err1);
               });
           } else {
             // too many retry attempts
@@ -385,11 +386,11 @@ exports.handler = function refreshStats(context, event, callback) {
 
   // function for updating or creating an item in a given sync map which will retry recursively
   const updateOrCreateSyncMapItem = function (mapName, queueItem, create, delay, retryAttempts) {
-    return new Promise(async function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
       // delay random backoff period
       await snooze(delay);
 
-      if (create == false) {
+      if (create === false) {
         syncService
           .syncMaps(mapName)
           .syncMapItems(queueItem.sid)
@@ -400,14 +401,14 @@ exports.handler = function refreshStats(context, event, callback) {
           .catch((err) => {
             // 20404 item not found https://www.twilio.com/docs/api/errors/20404
             // attempt to create it
-            if (err.code == 20404) {
+            if (err.code === 20404) {
               console.log(`syncItem ${mapName}:${queueItem.sid} not found, attempting to create it`);
               updateOrCreateSyncMapItem(mapName, queueItem, true, delay, retryAttempts + 1)
                 .then((item) => {
                   resolve(item);
                 })
-                .catch((err) => {
-                  reject(err);
+                .catch((err1) => {
+                  reject(err1);
                 });
             } else if (retryAttempts < TWILIO_SERVICE_RETRY_LIMIT) {
               console.log(
@@ -425,8 +426,8 @@ exports.handler = function refreshStats(context, event, callback) {
                 .then((item) => {
                   resolve(item);
                 })
-                .catch((err) => {
-                  reject(err);
+                .catch((err1) => {
+                  reject(err1);
                 });
             } else {
               // too many retry attempts
@@ -464,8 +465,8 @@ exports.handler = function refreshStats(context, event, callback) {
                 .then((item) => {
                   resolve(item);
                 })
-                .catch((err) => {
-                  reject(err);
+                .catch((err1) => {
+                  reject(err1);
                 });
             } else {
               // too many retry attempts
@@ -479,7 +480,7 @@ exports.handler = function refreshStats(context, event, callback) {
 
   // function for deleting an item in a given sync map which will retry recursively
   const deleteSyncMapItem = function (mapName, item, delay, retryAttempts) {
-    return new Promise(async function (resolve, reject) {
+    return new Promise(async (resolve, reject) => {
       // delay random backoff period
       await snooze(delay);
 
@@ -494,7 +495,7 @@ exports.handler = function refreshStats(context, event, callback) {
         .catch((err) => {
           // 20404 item not found https://www.twilio.com/docs/api/errors/20404
           // already removed
-          if (err.code == 20404) {
+          if (err.code === 20404) {
             console.log(`Already removed sync item ${mapName}:${item.key}`);
             resolve(item);
           } else if (retryAttempts < TWILIO_SERVICE_RETRY_LIMIT) {
@@ -510,8 +511,8 @@ exports.handler = function refreshStats(context, event, callback) {
               .then(() => {
                 resolve(item);
               })
-              .catch((err) => {
-                reject(err);
+              .catch((err1) => {
+                reject(err1);
               });
           } else {
             // too many retry attempts
@@ -524,7 +525,7 @@ exports.handler = function refreshStats(context, event, callback) {
 
   // given a queue item from the listQueues function, query the realtime stats API and place it on the queue object.
   const populateRealTimeStatsForQueueItem = function (twilioClient, queueItem, taskChannel, delay, retryAttempts) {
-    return new Promise(async function (resolve) {
+    return new Promise(async (resolve) => {
       await snooze(delay);
 
       twilioClient.taskrouter
@@ -533,7 +534,7 @@ exports.handler = function refreshStats(context, event, callback) {
         .realTimeStatistics()
         .fetch({ taskChannel: taskChannel ? taskChannel : undefined })
         .then((result) => {
-          taskChannel = !taskChannel ? 'all' : taskChannel;
+          taskChannel = taskChannel ? taskChannel : 'all';
           queueItem.realTimeStats[taskChannel] = minimizeRealTimeStats(result);
           queueItem.realTimeStats[taskChannel].error = null;
           resolve(queueItem);
@@ -562,7 +563,7 @@ exports.handler = function refreshStats(context, event, callback) {
 
   // given a queue item from the listQueues function, query the cumulative stats API and place it on the queue object.
   const populateCumulativeStatsForQueueItem = function (twilioClient, queueItem, taskChannel, delay, retryAttempts) {
-    return new Promise(async function (resolve) {
+    return new Promise(async (resolve) => {
       await snooze(delay);
 
       twilioClient.taskrouter
@@ -575,7 +576,7 @@ exports.handler = function refreshStats(context, event, callback) {
           splitByWaitTime: QUEUE_STATS_SLA_SPLIT_PERIODS,
         })
         .then((result) => {
-          taskChannel = !taskChannel ? 'all' : taskChannel;
+          taskChannel = taskChannel ? taskChannel : 'all';
           queueItem.cumulativeStats[taskChannel] = minimizeCumulativeStats(result);
           queueItem.cumulativeStats[taskChannel].error = null;
           resolve(queueItem);
@@ -663,7 +664,7 @@ exports.handler = function refreshStats(context, event, callback) {
   // then for each queue item, generate a promise to update or create it in the sync map
   // batch up the promises and update the sync map in batches with a backoff and retry period set in the configuration
   // finally remove from the sync map and items that appear that arent in the queue list (queue has been deleted)
-  if (validateParameters(context, event)) {
+  if (validateParameters()) {
     fetchAllQueueStatistics(client)
       .then((queueStatsArray) => {
         fetchSyncMapItems(QUEUE_STATS_MAP_NAME, 0, 0)
@@ -696,7 +697,6 @@ exports.handler = function refreshStats(context, event, callback) {
 
               // Update any SyncMap Items for queues that have been changed in TaskRouter since last refresh
               if (matchingSyncMapItem !== undefined && matchingSyncMapItem.data.friendlyName !== friendlyName) {
-                const { friendlyName } = queueItem;
                 const updatedSyncMapItemData = { ...matchingSyncMapItem.data, friendlyName };
                 updateSyncMapPromiseArray.push(
                   updateOrCreateSyncMapItem(QUEUE_STATS_MAP_NAME, updatedSyncMapItemData, false, 0, 0),
@@ -711,25 +711,25 @@ exports.handler = function refreshStats(context, event, callback) {
               if (itemsToDeleteArray.length > 0) {
                 batchedArrays = chunkArray(itemsToDeleteArray, QUEUE_STATS_SYNC_MAP_UPDATE_BATCH_SIZE);
                 processPromiseBatchArray(batchedArrays.reverse()).finally(() => {
-                  callback(null, response);
+                  return callback(null, response);
                 });
               } else {
-                callback(null, response);
+                return callback(null, response);
               }
             });
           })
           .catch(() => {
             response.setBody(queueStatsArray);
-            callback(null, response);
+            return callback(null, response);
           });
       })
       .catch((err) => {
         console.error(err);
         // an error occurred somewhere in the promise chain
-        callback(null, { success: false, message: err });
+        return callback(null, { success: false, message: err });
       });
   } else {
     // An error occurred checking valid environment variables were setup
-    callback(null, { success: false, message: errorMessages });
+    return callback(null, { success: false, message: errorMessages });
   }
 };

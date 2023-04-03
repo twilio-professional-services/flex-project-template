@@ -15,8 +15,7 @@ const prepareFunction = (context, event, callback, requiredParameters, handlerFn
     console.error(`(${context.PATH}) invalid parameters passed`);
     response.setStatusCode(400);
     response.setBody({ data: null, message: parameterError });
-    callback(null, response);
-    return;
+    return callback(null, response);
   }
 
   const handleError = (error) => {
@@ -26,7 +25,7 @@ const prepareFunction = (context, event, callback, requiredParameters, handlerFn
       success: false,
       message: error,
     });
-    callback(null, response);
+    return callback(null, response);
   };
 
   return handlerFn(context, event, callback, response, handleError);

@@ -10,5 +10,5 @@ exports.handler = (context, event, callback) => {
     event.taskSid,
   );
 
-  callback(null, twiml);
+  return callback(null, twiml);
 };

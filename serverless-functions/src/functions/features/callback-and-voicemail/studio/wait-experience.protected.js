@@ -3,7 +3,6 @@
  * They can - at any point - press the star key to leave a voicemail and abandon the ongoing call.
  *
  */
-const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
 const CallbackOperations = require(Runtime.getFunctions()['features/callback-and-voicemail/common/callback-operations']
   .path);
@@ -84,7 +83,7 @@ async function cancelTask(context, task, cancelReason) {
     },
   };
 
-  return await TaskRouterOperations.updateTask({
+  return TaskRouterOperations.updateTask({
     context,
     taskSid: task.sid,
     updateParams: {
@@ -144,7 +143,7 @@ async function handleCallbackOrVoicemailSelected(context, isVoicemail, callSid, 
   return '';
 }
 
-exports.handler = async function (context, event, callback) {
+exports.handler = async (context, event, callback) => {
   const twiml = new Twilio.twiml.VoiceResponse();
   const domain = `https://${context.DOMAIN_NAME}`;
   let holdMusicUrl = options.holdMusicUrl;
@@ -157,8 +156,6 @@ exports.handler = async function (context, event, callback) {
 
   const { Digits, CallSid, enqueuedWorkflowSid, mode, enqueuedTaskSid, skipGreeting } = event;
 
-  const message = '';
-
   switch (mode) {
     case 'initialize':
       // Initial logic to find the associated task for the call, and propagate it through to the rest of the TwiML execution
@@ -167,14 +164,14 @@ exports.handler = async function (context, event, callback) {
 
       const redirectBaseUrl = `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=main-wait-loop&CallSid=${CallSid}`;
 
-      if (enqueuedTask == null) {
+      if (enqueuedTask) {
+        twiml.redirect(redirectBaseUrl + (enqueuedTask ? `&enqueuedTaskSid=${enqueuedTask.sid}` : ''));
+      } else {
         // Log an error for our own debugging purposes, but don't fail the call
         console.error(
           `Failed to find the pending task with callSid: ${CallSid}. This is potentially due to higher call volume than the API query had accounted for.`,
         );
         twiml.redirect(redirectBaseUrl);
-      } else {
-        twiml.redirect(redirectBaseUrl + (enqueuedTask ? `&enqueuedTaskSid=${enqueuedTask.sid}` : ''));
       }
       return callback(null, twiml);
 
@@ -182,7 +179,7 @@ exports.handler = async function (context, event, callback) {
       if (skipGreeting !== 'true') {
         twiml.say(options.sayOptions, options.messages.initialGreeting);
       }
-      if (enqueuedTaskSid != null) {
+      if (enqueuedTaskSid) {
         // Nest the <Say>/<Play> within the <Gather> to allow the caller to press a key at any time during the nested verbs' execution.
         const initialGather = twiml.gather({
           input: 'dtmf',

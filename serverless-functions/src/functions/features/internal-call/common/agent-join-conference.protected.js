@@ -8,5 +8,5 @@ exports.handler = (context, event, callback) => {
     event.conferenceName,
   );
 
-  callback(null, twiml);
+  return callback(null, twiml);
 };

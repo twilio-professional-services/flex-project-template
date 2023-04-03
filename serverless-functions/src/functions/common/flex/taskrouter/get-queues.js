@@ -18,8 +18,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       : null;
     response.setStatusCode(status);
     response.setBody({ success, queues, message });
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

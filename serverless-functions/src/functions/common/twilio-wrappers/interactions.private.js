@@ -12,7 +12,7 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
  * @returns {object} An object containing details about the interaction channel invite
  * @description the following method is used to create an Interaction Channel Invite
  */
-exports.participantCreateInvite = async function (parameters) {
+exports.participantCreateInvite = async (parameters) => {
   const { attempts, context, interactionSid, channelSid, routing } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
@@ -46,7 +46,7 @@ exports.participantCreateInvite = async function (parameters) {
  * @returns {object} An object containing an array of queues for the account
  * @description the following method is used to update/modify a channel participant
  */
-exports.participantUpdate = async function (parameters) {
+exports.participantUpdate = async (parameters) => {
   const { attempts, context, interactionSid, channelSid, participantSid, status } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';

@@ -48,7 +48,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
             updateData: new_document_data,
           }),
         )
-        .catch((reason) => false);
+        .catch();
 
       if (!room_created) {
         response.setStatusCode(503);
@@ -83,8 +83,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     // Respond to the AGENT frontend with a dual-use token (sync + video)
     response.setBody({ token: token.toJwt() });
 
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

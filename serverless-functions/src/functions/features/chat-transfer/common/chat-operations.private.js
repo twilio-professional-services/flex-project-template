@@ -1,4 +1,5 @@
 const { isString, isObject, isNumber } = require('lodash');
+const axios = require('axios');
 
 const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
 
@@ -17,7 +18,7 @@ const COMPLETED = 'completed';
  *  channel data and marked as being "inflight".  Later setTaskToCompleteOnChannel
  *  is called which marks the task as "completed"
  */
-exports.addTaskToChannel = async function (parameters) {
+exports.addTaskToChannel = async (parameters) => {
   const { attempts, context, channelSid, taskSid } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
@@ -65,7 +66,7 @@ exports.addTaskToChannel = async function (parameters) {
  *  the chat channel attributes.  When called, the task sid is updated/added on the
  *  channel data and marked as being "complete".
  */
-exports.setTaskToCompleteOnChannel = async function (parameters) {
+exports.setTaskToCompleteOnChannel = async (parameters) => {
   const { attempts, context, channelSid, taskSid } = parameters;
 
   if (!isNumber(attempts)) throw 'Invalid parameters object passed. Parameters must contain the number of attempts';
@@ -121,8 +122,6 @@ exports.removeChannelSidFromTask = async function removeChannelSidFromTask(param
   if (!isString(taskSid)) throw 'Invalid parameters object passed. Parameters must contain taskSid string';
 
   try {
-    const axios = require('axios');
-
     const taskContextURL = `https://taskrouter.twilio.com/v1/Workspaces/${process.env.TWILIO_FLEX_WORKSPACE_SID}/Tasks/${taskSid}`;
     const config = {
       auth: {

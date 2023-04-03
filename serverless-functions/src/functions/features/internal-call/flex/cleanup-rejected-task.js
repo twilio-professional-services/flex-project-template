@@ -16,8 +16,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     });
 
     if (!conferencesResponse.success) {
-      callback(null, assets.response('json', {}));
-      return;
+      return callback(null, assets.response('json', {}));
     }
 
     await Promise.all(
@@ -32,8 +31,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     );
 
     response.setBody({});
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });
