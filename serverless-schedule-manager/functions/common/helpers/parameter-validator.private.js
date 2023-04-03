@@ -4,15 +4,15 @@
  * @param {Array} requiredKeysArray
  * @returns {string}
  * @description Convenience method to validate properties exist on an object
- * requiredKeysArray should be an array of strings or objects, 
+ * requiredKeysArray should be an array of strings or objects,
  *   { key: 'propertyName', purpose: 'describe need' }
- * error handling will fallback to less useful messages 
+ * error handling will fallback to less useful messages
  * if an array of strings is provided instead of the key and purpose objects
  */
 
-exports.validate = function(callingFunctionPath, parameterObject, requiredKeysArray) {
+exports.validate = function (callingFunctionPath, parameterObject, requiredKeysArray) {
   let errorMessage = '';
-  requiredKeysArray.forEach(data => {
+  requiredKeysArray.forEach((data) => {
     if (module.exports.isString(data)) {
       // Support "lazy" requiredKeysArray of just ['propertyName']
       if (parameterObject[data] === undefined || parameterObject[data] === null) {
@@ -29,20 +29,24 @@ exports.validate = function(callingFunctionPath, parameterObject, requiredKeysAr
     }
   });
   return errorMessage;
-}
+};
 
-exports.isBoolean = function(data) {
+exports.isBoolean = function (data) {
   let valueToCheck = data;
   if (module.exports.isString(valueToCheck)) {
     valueToCheck = Boolean(data);
   }
-  return valueToCheck === true || valueToCheck === false || Object.prototype.toString.call(valueToCheck) === '[object Boolean]';
-}
+  return (
+    valueToCheck === true ||
+    valueToCheck === false ||
+    Object.prototype.toString.call(valueToCheck) === '[object Boolean]'
+  );
+};
 
-exports.isString = function(data) {
+exports.isString = function (data) {
   return typeof data === 'string' || data instanceof String;
-}
+};
 
-exports.isObject = function(data) {
+exports.isObject = function (data) {
   return Object.prototype.toString.call(data) === '[object Object]';
-}
+};
