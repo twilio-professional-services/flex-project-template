@@ -10,7 +10,7 @@ import { NotificationIds } from '../flex-hooks/notifications/BargeCoachAssist';
 export const alertSupervisorsCheck = () => {
   const state = Flex.Manager.getInstance().store.getState() as AppState;
   const { agentAssistanceArray, enableAgentAssistanceAlerts } = state[reduxNamespace].supervisorBargeCoach;
-  const arrayIndexCheck = agentAssistanceArray.findIndex((agent: any) => agent.agentFN !== '');
+  const arrayIndexCheck = agentAssistanceArray?.findIndex((agent: any) => agent.agentFN !== '');
   if (arrayIndexCheck > -1 && enableAgentAssistanceAlerts) {
     const agentFN = `${agentAssistanceArray[arrayIndexCheck].agentFN}`;
     Flex.Notifications.showNotification(NotificationIds.AGENT_ASSISTANCE, { agentFN: `${agentFN}` });
