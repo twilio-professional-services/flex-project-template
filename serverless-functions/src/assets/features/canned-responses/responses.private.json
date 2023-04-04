@@ -1,0 +1,27 @@
+{
+  "categories": [
+    {
+      "section": "Sales",
+      "responses": [
+        {
+          "label": "Cost",
+          "text": "We have multiple billing options. You can pay yearly and save 10%"
+        },
+        {
+          "label": "Promotion",
+          "text": "We do offer discounts for our best customers."
+        }
+      ]
+    },
+    {
+      "section": "Support",
+      "responses": [
+        { "label": "Login", "text": "You can login at https://example.com" },
+        {
+          "label": "Forgot Password",
+          "text": "You can reset your password here at https://example.com/passwordreset"
+        }
+      ]
+    }
+  ]
+}

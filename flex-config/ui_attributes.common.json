@@ -149,6 +149,12 @@
       },
       "supervisor_complete_reservation": {
         "enabled": true
+      },
+      "canned_responses": {
+        "enabled": true,
+        "configuration": {
+          "location": "CRM"
+        }
       }
     }
   }
