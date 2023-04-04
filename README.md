@@ -58,6 +58,7 @@ The primary aims of this template are
 
 ## Feature library Information
 
+<<<<<<< HEAD
 | Feature                           | Description                                                                                         | Flex V1 Plugin                                                                                 | Flex V2 Plugin                                                                                   | Enabled By Default |
 | --------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------ |
 | Activity Reservation Handler      | _synchronize agent activities to reservation states_                                                | [Yes](plugin-flex-ts-template/src/feature-library/activity-reservation-handler/README.md)      | [Yes](plugin-flex-ts-template-v2/src/feature-library/activity-reservation-handler/README.md)     |                    |
@@ -85,6 +86,35 @@ The primary aims of this template are
 | Supervisor Capacity               | _allow supervisors to update worker capacity configuration within Flex_                             | No                                                                                             | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-capacity/README.md)              | ✅                 |
 | Supervisor Complete Reservation   | _allows supervisor to remotely complete agent tasks_                                                | No                                                                                             | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-complete-reservation/README.md)  | ✅                 |
 | Teams View Filters                | _adds additional filtering options to the supervisor teams view_                                    | No                                                                                             | [Yes](plugin-flex-ts-template-v2/src/feature-library/teams-view-filters/README.md)               | ✅                 |
+=======
+| Feature | Description | Flex V1 Plugin |  Flex V2 Plugin | Enabled By Default |
+| --------| ----------- | ------- | ----------| ----------- |
+| Activity Reservation Handler | _synchronize agent activities to reservation states_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/activity-reservation-handler/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/activity-reservation-handler/README.md)|  | 
+| Activity Skill Filter  | _manage visibility for activities based on agent skills_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/activity-skill-filter/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/activity-skill-filter/README.md) |  |
+| Agent Automation | _adds auto accept and auto wrapup behaviors to agent desktop_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/agent-automation/README.md) | ✅  |
+| Callbacks and Voicemail  | _introduce support for callback and voicemail tasks_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/callback-and-voicemail/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/callback-and-voicemail/README.md) |  ✅ |
+| Caller ID  | _provide agents with means to select their caller id when dialing out_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/caller-id/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/caller-id/README.md) | ✅ |
+| Chat to Video Escalation  | _provide agents ability to elevate a chat conversation to a video conversation with screen sharing_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/chat-to-video-escalation/README.md) |  |
+| Chat Transfer  | _introduce programmable chat transfer functionality for agents_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/chat-transfer/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/chat-transfer/README.md) |  |
+| Conversation Transfer  | _introduce conversation-based messaging transfer functionality for agents_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/conversation-transfer/README.md) |  |
+| Conference (external) | _provide agents the ability to conference in external numbers_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/conference/README.md) | ✅ |
+| Custom Hold Music  | _customize the experience when an agent places a call on hold_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/custom-hold-music/README.md) |  |
+| Device Manager | _provide agents the ability to select the audio output device_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/device-manager/README.md) | ✅ |
+| Dual Channel Recording | _automatically record both inbound and outbound calls in dual channel_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/dual-channel-recording/README.md) |  |
+| Enhanced CRM Container | _optimize the CRM container experience_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/enhanced-crm-container/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/enhanced-crm-container/README.md) |  |
+| Hang Up By Reporting | _populates the Hang Up By and Destination attributes in Flex Insights_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/hang-up-by/README.md) |  |
+| Internal Call (Agent to Agent)  | _provide agents the ability to dial each other_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/internal-call/README.md) |  |
+| Multi-call | _allow agents to receive a transferred call while already on a call_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/multi-call/README.md) |  |
+| Override Queue Transfer Directory | _a template for modifying the transfer directories_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/override-queue-transfer-directory/README.md) | No |   |
+| Omni Channel Management | _method for mixing chat and voice channels_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/omni-channel-capacity-management/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/omni-channel-capacity-management/README.md)|   |
+| Pause Recording | _provide agents the ability to temporarily pause and resume call recording_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/pause-recording/README.md) | ✅ |
+| Schedule Manager | _a flexible, robust, and scalable way to manage open and closed hours for Twilio Flex applications_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/schedule-manager/README.md) |  |
+| Scrollable Activities | _allow the scrolling of the activities list_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/scrollable-activities/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/scrollable-activities/README.md) | ✅ |
+| Supervisor Barge Coach | _introduce advanced supervisor barge and coach features_ | [Yes](plugin-flex-ts-template-v1/src/feature-library/supervisor-barge-coach/README.md) | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-barge-coach/README.md) | ✅  |
+| Supervisor Capacity | _allow supervisors to update worker capacity configuration within Flex_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-capacity/README.md) |  ✅ |
+| Supervisor Complete Reservation | _allows supervisor to remotely complete agent tasks_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-complete-reservation/README.md) | ✅  |
+| Teams View Filters | _adds additional filtering options to the supervisor teams view_ | No | [Yes](plugin-flex-ts-template-v2/src/feature-library/teams-view-filters/README.md) | ✅  |
+>>>>>>> main
 
 ---
 
@@ -374,9 +404,9 @@ Lastly, this package manages the github action workflows - with one example bein
 
 (the following is only applicable when using the flex v2 plugin)
 
-ESLint is configured for the v2 plugin, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
+ESLint is configured for the v2 plugin and the serverless-functions package, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
 
-Before pushing changes, run the following command from the `plugin-flex-ts-template-v2` dir to see the linter results.
+Before pushing changes, run the following command from the `plugin-flex-ts-template-v2` dir and/or the `serverless-functions` dir to see the linter results.
 
 ```bash
 npm run lint

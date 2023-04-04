@@ -1,4 +1,4 @@
-name: lint_plugin_v2
+name: check_serverless
 
 on:
   pull_request:
@@ -9,12 +9,12 @@ on:
     branches:
       - main
     paths:
-      - 'plugin-flex-ts-template-v2/**'
+      - 'serverless-functions/**'
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
-  lint_plugin_v2:
+  lint:
     runs-on: ubuntu-latest
     permissions:
       checks: write
@@ -26,10 +26,10 @@ jobs:
         with:
           node-version: '16'
       - name: Install packages
-        working-directory: ./plugin-flex-ts-template-v2
+        working-directory: ./serverless-functions
         run: npm install
       - name: Run eslint
-        working-directory: ./plugin-flex-ts-template-v2
+        working-directory: ./serverless-functions
         run: npm run lint:report
         continue-on-error: true
       - name: Annotate Code Linting Results
@@ -37,25 +37,28 @@ jobs:
         uses: ataylorme/eslint-annotate-action@v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          report-json: "plugin-flex-ts-template-v2/eslint_report.json"
+          report-json: "serverless-functions/eslint_report.json"
       - name: Comment on error
         uses: mshick/add-pr-comment@v2
         if: always() && steps.annotate.outputs.errorCount > 0
         with:
           message: |
+            Linter results for serverless-functions:
             ${{steps.annotate.outputs.summary}}
-            :rotating_light: Errors must be resolved before merging, and have been annotated in the "Files changed" tab. Run `npm run lint` from the plugin directory if you would like to see results locally.
+            :rotating_light: Errors must be resolved before merging, and have been annotated in the "Files changed" tab. Run `npm run lint` from the serverless-functions directory if you would like to see results locally.
       - name: Comment on warning
         uses: mshick/add-pr-comment@v2
         if: always() && steps.annotate.outputs.errorCount < 1 && steps.annotate.outputs.warningCount > 0
         with:
           message: |
+            Linter results for serverless-functions:
             ${{steps.annotate.outputs.summary}}
-            :warning: Merging is still possible with these warnings, but please fix them if possible! Annotations are available in the "Files changed" tab. Run `npm run lint` from the plugin directory if you would like to see results locally.
+            :warning: Merging is still possible with these warnings, but please fix them if possible! Annotations are available in the "Files changed" tab. Run `npm run lint` from the serverless-functions directory if you would like to see results locally.
       - name: Comment on no issues
         uses: mshick/add-pr-comment@v2
         if: always() && steps.annotate.outputs.errorCount < 1 && steps.annotate.outputs.warningCount < 1
         with:
           message: |
+            Linter results for serverless-functions:
             ${{steps.annotate.outputs.summary}}
             :white_check_mark: No issues found!

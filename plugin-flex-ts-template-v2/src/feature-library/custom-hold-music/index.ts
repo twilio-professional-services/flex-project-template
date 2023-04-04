@@ -5,5 +5,5 @@ import hooks from './flex-hooks/**/*.*';
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: 'FEATURE_NAME', hooks: typeof hooks === 'undefined' ? [] : hooks };
+  return { name: 'custom-hold-music', hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

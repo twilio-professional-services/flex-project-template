@@ -1,7 +1,6 @@
-const { isObject } = require("lodash");
-const retryHandler = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/retry-handler"
-].path).retryHandler;
+const { isObject } = require('lodash');
+
+const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
 
 /**
  * @param {object} parameters the parameters for the function
@@ -13,7 +12,7 @@ const retryHandler = require(Runtime.getFunctions()[
  */
 exports.listPhoneNumbers = async function listPhoneNumbers(parameters) {
   if (!isObject(parameters.context))
-    throw "Invalid parameters object passed. Parameters must contain context object";
+    throw new Error('Invalid parameters object passed. Parameters must contain context object');
 
   try {
     const client = parameters.context.getTwilioClient();
@@ -23,6 +22,6 @@ exports.listPhoneNumbers = async function listPhoneNumbers(parameters) {
 
     return { success: true, phoneNumbers, status: 200 };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.listPhoneNumbers);
   }
 };

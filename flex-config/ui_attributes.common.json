@@ -150,8 +150,14 @@
       "supervisor_complete_reservation": {
         "enabled": true
       },
+<<<<<<< HEAD
       "keyboard_shortcuts": {
         "enabled": false
+=======
+      "custom_hold_music": {
+        "enabled": false,
+        "url": ""
+>>>>>>> main
       }
     }
   }
