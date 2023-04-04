@@ -37,7 +37,7 @@ jobs:
         uses: ataylorme/eslint-annotate-action@v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          report-json: "serverless-functions/eslint_report.json"
+          report-json: "serverless-schedule-manager/eslint_report.json"
       - name: Comment on error
         uses: mshick/add-pr-comment@v2
         if: always() && steps.annotate.outputs.errorCount > 0
