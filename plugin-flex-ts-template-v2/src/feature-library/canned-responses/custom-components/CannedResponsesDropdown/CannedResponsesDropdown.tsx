@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Actions, TaskContext } from '@twilio/flex-ui';
+import { Actions, ITask, useFlexSelector } from '@twilio/flex-ui';
 import { Box } from '@twilio-paste/core/box';
-import { Text } from '@twilio-paste/text';
+import { Tooltip } from '@twilio-paste/tooltip';
 import { Menu, MenuButton, MenuItem, MenuGroup, useMenuState } from '@twilio-paste/core/menu';
 import { SkeletonLoader } from '@twilio-paste/core/skeleton-loader';
 import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
+import { ErrorIcon } from '@twilio-paste/icons/esm/ErrorIcon';
 
 import {
   CannedResponse,
@@ -12,18 +13,35 @@ import {
   ResponseCategory,
 } from '../../../../feature-library/canned-responses/types/CannedResponses';
 import CannedResponsesService from '../../../../feature-library/canned-responses/utils/CannedResponsesService';
-import { ErrorText, TextCopy } from '../../../../feature-library/canned-responses/utils/constants';
+import { Button } from '@twilio-paste/button';
 
-const CannedResponsesDropdown: React.FunctionComponent = () => {
+interface CannedResponsesDropdownProps {
+  task: ITask;
+}
+
+const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownProps> = ({ task }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [responseCategories, setResponseCategories] = useState<undefined | CannedResponseCategories>(undefined);
+  const inputState = useFlexSelector(
+    (state) => state.flex.chat.conversationInput[task.attributes.conversationSid].inputText,
+  );
 
-  const insertMessage = (conversationSid: string | undefined, text: any) => {
-    if (!conversationSid) return;
-    Actions.invokeAction('SetInputText', { body: text, conversationSid });
+  const menu = useMenuState({
+    placement: 'top-start',
+    wrap: 'horizontal',
+  });
+
+  const onClickInsert = (text: string) => {
+    if (!task.attributes.conversationSid) return;
+    let currentInput = inputState;
+    if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
+      currentInput += ' ';
+    }
+    Actions.invokeAction('SetInputText', {
+      body: currentInput + text,
+      conversationSid: task.attributes.conversationSid,
+    });
   };
-
-  const menu = useMenuState();
 
   useEffect(() => {
     async function getResponses() {
@@ -40,44 +58,42 @@ const CannedResponsesDropdown: React.FunctionComponent = () => {
   }, []);
 
   return (
-    <Box paddingBottom="space60" margin="auto">
-      <TaskContext.Consumer>
-        {(context) => (
-          <>
-            {isLoading ? (
-              <SkeletonLoader color="textPrimary" />
-            ) : !!responseCategories ? (
-              <>
-                <MenuButton {...menu} variant="primary" fullWidth={true}>
-                  <ChatIcon decorative /> {TextCopy.HEADING}
-                </MenuButton>
-                <Menu {...menu} aria-label="Preferences">
-                  {responseCategories.categories.map((category: ResponseCategory) => (
-                    <div key={category.section}>
-                      <MenuGroup {...menu} label={category.section}>
-                        {category.responses.map((response: CannedResponse) => (
-                          <MenuItem
-                            {...menu}
-                            key={response.text}
-                            onClick={() => {
-                              insertMessage(context.conversation?.source?.sid, response.text);
-                              menu.hide();
-                            }}
-                          >
-                            {response.text}
-                          </MenuItem>
-                        ))}
-                      </MenuGroup>
-                    </div>
+    <Box>
+      {isLoading ? (
+        <SkeletonLoader color="textPrimary" />
+      ) : !!responseCategories ? (
+        <>
+          <MenuButton {...menu} variant={'primary_icon'}>
+            <ChatIcon decorative />
+          </MenuButton>
+          <Menu {...menu} aria-label="canned-responses" element="CANNED_RESPONSES_MENU">
+            {responseCategories.categories.map((category: ResponseCategory) => (
+              <div key={category.section}>
+                <MenuGroup {...menu} label={category.section}>
+                  {category.responses.map((response: CannedResponse) => (
+                    <MenuItem
+                      {...menu}
+                      key={response.text}
+                      onClick={() => {
+                        onClickInsert(response.text);
+                        menu.hide();
+                      }}
+                    >
+                      {response.text}
+                    </MenuItem>
                   ))}
-                </Menu>
-              </>
-            ) : (
-              <Text as="p">{ErrorText.LOADING_ERROR}</Text>
-            )}
-          </>
-        )}
-      </TaskContext.Consumer>
+                </MenuGroup>
+              </div>
+            ))}
+          </Menu>
+        </>
+      ) : (
+        <Tooltip text="There was an error fetching responses. Please reload the page.">
+          <Button variant={'destructive_icon'}>
+            <ErrorIcon decorative />
+          </Button>
+        </Tooltip>
+      )}
     </Box>
   );
 };

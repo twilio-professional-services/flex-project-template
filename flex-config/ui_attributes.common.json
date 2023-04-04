@@ -152,9 +152,7 @@
       },
       "canned_responses": {
         "enabled": true,
-        "configuration": {
-          "location": "CRM"
-        }
+        "location": "CRM"
       }
     }
   }

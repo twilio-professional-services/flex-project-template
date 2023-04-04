@@ -1,47 +1,66 @@
 import React from 'react';
-import { Actions, TaskContext } from '@twilio/flex-ui';
+import { Actions, ITask, useFlexSelector } from '@twilio/flex-ui';
 
 import { Text } from '@twilio-paste/text';
 import { Button } from '@twilio-paste/core/button';
-import { CopyIcon } from '@twilio-paste/icons/esm/CopyIcon';
+import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
 import { SendIcon } from '@twilio-paste/icons/esm/SendIcon';
-import { Stack } from '@twilio-paste/core/stack';
+import { Tr, Td } from '@twilio-paste/table';
+import { Flex } from '@twilio-paste/flex';
+import { Tooltip } from '@twilio-paste/tooltip';
 
 interface ResponseProps {
   label: string;
   text: string;
+  task: ITask;
 }
 
-const Response: React.FunctionComponent<ResponseProps> = ({ text }) => {
-  const onClickSend = (conversationSid: string | undefined) => {
-    if (!conversationSid) return;
-    Actions.invokeAction('SendMessage', { body: text, conversationSid });
+const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
+  const inputState = useFlexSelector(
+    (state) => state.flex.chat.conversationInput[task.attributes.conversationSid].inputText,
+  );
+
+  const onClickSend = () => {
+    if (!task.attributes.conversationSid) return;
+    Actions.invokeAction('SendMessage', { body: text, conversationSid: task.attributes.conversationSid });
   };
 
-  const onClickCopy = (conversationSid: string | undefined) => {
-    if (!conversationSid) return;
-    Actions.invokeAction('SetInputText', { body: text, conversationSid });
+  const onClickInsert = () => {
+    if (!task.attributes.conversationSid) return;
+    let currentInput = inputState;
+    if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
+      currentInput += ' ';
+    }
+    Actions.invokeAction('SetInputText', {
+      body: currentInput + text,
+      conversationSid: task.attributes.conversationSid,
+    });
   };
+
   return (
-    <TaskContext.Consumer>
-      {(context: any) => (
-        <>
-          <Text as="p" color="colorText" marginBottom="space30" marginTop="space30">
-            {text}
-          </Text>
-          <Stack orientation="horizontal" spacing="space60">
-            <Button variant="secondary" onClick={() => onClickCopy(context.conversation?.source?.sid)}>
-              <CopyIcon decorative title="Insert pre-canned response" />
-              Insert
+    <Tr>
+      <Td>
+        <Text as="p" color="colorText" marginBottom="space10" marginTop="space10">
+          {text}
+        </Text>
+      </Td>
+      <Td>
+        <Flex width="100%" hAlignContent={'right'}>
+          <Flex marginRight="space40">
+            <Tooltip text="Insert">
+              <Button variant="secondary" onClick={() => onClickInsert()} size="circle_small">
+                <EditIcon decorative title="Insert response" />
+              </Button>
+            </Tooltip>
+          </Flex>
+          <Tooltip text="Send">
+            <Button variant="primary" onClick={() => onClickSend()} size="circle_small">
+              <SendIcon decorative title="Send response" />
             </Button>
-            <Button variant="primary" onClick={() => onClickSend(context.conversation?.source?.sid)}>
-              <SendIcon decorative title="Send pre-canned response" />
-              Send
-            </Button>
-          </Stack>
-        </>
-      )}
-    </TaskContext.Consumer>
+          </Tooltip>
+        </Flex>
+      </Td>
+    </Tr>
   );
 };
 

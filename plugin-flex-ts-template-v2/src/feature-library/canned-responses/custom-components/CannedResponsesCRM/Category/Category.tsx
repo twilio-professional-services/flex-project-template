@@ -1,11 +1,10 @@
 import React from 'react';
-
-import { Separator } from '@twilio-paste/core/separator';
 import { Text } from '@twilio-paste/text';
 import { Box } from '@twilio-paste/core/box';
 
 import Response from '../Response';
 import { CannedResponse } from 'feature-library/canned-responses/types/CannedResponses';
+import { Table, THead, Tr, Th, TBody } from '@twilio-paste/table';
 
 interface CategoryProps {
   section: string;
@@ -14,14 +13,24 @@ interface CategoryProps {
 
 const Category: React.FunctionComponent<CategoryProps> = ({ section, responses }) => {
   return (
-    <Box as="div" backgroundColor="colorBackgroundBody" padding="space60" borderRadius="borderRadius30">
-      <Text as="h2" color="colorText" fontWeight="fontWeightSemibold" fontSize="fontSize60">
-        {section}
-      </Text>
-      <Separator orientation="horizontal" verticalSpacing="space40" />
-      {responses.map((q) => {
-        return <Response key={q.text} label={q.label} text={q.text} />;
-      })}
+    <Box as="div" backgroundColor="colorBackgroundBody" padding="space40" borderRadius="borderRadius30">
+      <Table>
+        <THead>
+          <Tr>
+            <Th>
+              <Text as="h4" color="colorText" fontWeight="fontWeightSemibold" fontSize="fontSize40">
+                {section}
+              </Text>
+            </Th>
+            <Th></Th>
+          </Tr>
+        </THead>
+        <TBody>
+          {responses.map((response: CannedResponse) => {
+            return <Response key={response.text} label={response.label} text={response.text} />;
+          })}
+        </TBody>
+      </Table>
     </Box>
   );
 };
