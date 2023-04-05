@@ -48,6 +48,7 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
         setIsLoading(false);
       } catch (e) {
         setIsLoading(false);
+        setError(true);
       }
     }
 
