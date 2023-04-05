@@ -97,7 +97,7 @@ class SyncDocClass {
           // to update the Supervisor's Status within the Supervisor Array to the Sync Doc
         } else if (updateStatus === 'update') {
           // Get the index of the Supervisor we need to remove in the array
-          const updateSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
+          const updateSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID == supervisorSID);
           // Ensure we get something back, and update the status the supervisor is in
           if (updateSupervisorIndex > -1) {
             supervisorsArray[updateSupervisorIndex].status = supervisorStatus;
@@ -108,7 +108,7 @@ class SyncDocClass {
           // to splice/remove the Supervisor from the Supervisor Array within the Sync Doc
         } else if (updateStatus === 'remove') {
           // Get the index of the Supervisor we need to remove in the array
-          const removeSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
+          const removeSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID == supervisorSID);
           // Ensure we get something back, let's splice this index where the Supervisor is within the array
           if (removeSupervisorIndex > -1) {
             supervisorsArray.splice(removeSupervisorIndex, 1);
