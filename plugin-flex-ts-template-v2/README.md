@@ -68,33 +68,33 @@ There are several types of hooks, which should be organized in a directory per t
 
 ```
 ├── flex-hooks
-│   ├── actions
-│   │   └── CompleteTask.ts
-│   ├── channels
-│   │   └── Callback.tsx
-│   ├── chat-orchestrator
-│   │   └── completed.ts
-│   ├── components
-│   │   └── MainHeader.tsx
-│   ├── css-overrides
-│   │   └── index.ts
-│   ├── events
-│   │   └── taskAccepted.ts
-│   ├── jsclient-event-listeners
-│   │   └── conversations-client
-│   │       └── conversationJoined.ts
-│   ├── notification-events
-│   │   └── beforeAddNotification.ts
-│   ├── notifications
-│   │   └── index.ts
-│   ├── paste-elements
-│   │   └── index.ts
-│   ├── reducers
-│   │   └── slice.ts
-│   ├── strings
-│   │   └── index.ts
-│   └── teams-filters
-│       └── index.ts
+│   ├── actions
+│   │   └── CompleteTask.ts
+│   ├── channels
+│   │   └── Callback.tsx
+│   ├── chat-orchestrator
+│   │   └── completed.ts
+│   ├── components
+│   │   └── MainHeader.tsx
+│   ├── css-overrides
+│   │   └── index.ts
+│   ├── events
+│   │   └── taskAccepted.ts
+│   ├── jsclient-event-listeners
+│   │   └── conversations-client
+│   │       └── conversationJoined.ts
+│   ├── notification-events
+│   │   └── beforeAddNotification.ts
+│   ├── notifications
+│   │   └── index.ts
+│   ├── paste-elements
+│   │   └── index.ts
+│   ├── reducers
+│   │   └── slice.ts
+│   ├── strings
+│   │   └── index.ts
+│   └── teams-filters
+│       └── index.ts
 ```
 
 The feature loader determines hook type by the named export(s) in each respective module. The following sections are templates that you can use as a starting point for each type of hook.
@@ -260,6 +260,7 @@ enum FlexComponent {
   CRMContainer = 'CRMContainer',
   MainHeader = 'MainHeader',
   MessageListItem = 'MessageListItem',
+  MessageInputActions = 'MessageInputActions',
   NoTasksCanvas = 'NoTasksCanvas',
   ParticipantCanvas = 'ParticipantCanvas',
   QueueStats = 'QueueStats',
