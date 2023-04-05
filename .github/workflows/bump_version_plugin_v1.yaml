@@ -3,7 +3,7 @@ name: bump_version_plugin_v1
 on:
   pull_request:
     types:
-      - opened
+      - closed
     branches:
       - main
     paths:
@@ -13,6 +13,7 @@ on:
 
 jobs:
   bump-version:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: write
