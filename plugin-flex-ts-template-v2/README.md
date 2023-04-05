@@ -68,33 +68,33 @@ There are several types of hooks, which should be organized in a directory per t
 
 ```
 ├── flex-hooks
-│   ├── actions
-│   │   └── CompleteTask.ts
-│   ├── channels
-│   │   └── Callback.tsx
-│   ├── chat-orchestrator
-│   │   └── completed.ts
-│   ├── components
-│   │   └── MainHeader.tsx
-│   ├── css-overrides
-│   │   └── index.ts
-│   ├── events
-│   │   └── taskAccepted.ts
-│   ├── jsclient-event-listeners
-│   │   └── conversations-client
-│   │       └── conversationJoined.ts
-│   ├── notification-events
-│   │   └── beforeAddNotification.ts
-│   ├── notifications
-│   │   └── index.ts
-│   ├── paste-elements
-│   │   └── index.ts
-│   ├── reducers
-│   │   └── slice.ts
-│   ├── strings
-│   │   └── index.ts
-│   └── teams-filters
-│       └── index.ts
+│   ├── actions
+│   │   └── CompleteTask.ts
+│   ├── channels
+│   │   └── Callback.tsx
+│   ├── chat-orchestrator
+│   │   └── completed.ts
+│   ├── components
+│   │   └── MainHeader.tsx
+│   ├── css-overrides
+│   │   └── index.ts
+│   ├── events
+│   │   └── taskAccepted.ts
+│   ├── jsclient-event-listeners
+│   │   └── conversations-client
+│   │       └── conversationJoined.ts
+│   ├── notification-events
+│   │   └── beforeAddNotification.ts
+│   ├── notifications
+│   │   └── index.ts
+│   ├── paste-elements
+│   │   └── index.ts
+│   ├── reducers
+│   │   └── slice.ts
+│   ├── strings
+│   │   └── index.ts
+│   └── teams-filters
+│       └── index.ts
 ```
 
 The feature loader determines hook type by the named export(s) in each respective module. The following sections are templates that you can use as a starting point for each type of hook.
@@ -105,6 +105,7 @@ Use an actions hook to register actions in the [Flex Actions Framework](https://
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
+
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
@@ -117,7 +118,6 @@ export const actionHook = function exampleCompleteTaskHook(flex: typeof Flex, ma
 ```
 
 Supported values for `actionEvent`:
-
 ```ts
 enum FlexActionEvent {
   before = 'before',
@@ -127,7 +127,6 @@ enum FlexActionEvent {
 ```
 
 Supported values for `actionName`:
-
 ```ts
 enum FlexAction {
   AcceptTask = 'AcceptTask',
@@ -212,6 +211,7 @@ Use a chat orchestrator hook to modify chat orchestration via `ChatOrchestrator.
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
+
 import { FlexOrchestrationEvent } from '../../../../types/feature-loader';
 
 export const chatOrchestratorHook = (flex: typeof Flex, manager: Flex.Manager) => ({
@@ -225,7 +225,6 @@ const handleChatComplete = (task: Flex.ITask): any => {
 ```
 
 Supported values for `event`:
-
 ```ts
 enum FlexOrchestrationEvent {
   accepted = 'accepted',
@@ -253,7 +252,6 @@ export const componentHook = function addMyComponentToCallCanvas(flex: typeof Fl
 ```
 
 Supported values for `componentName`:
-
 ```ts
 enum FlexComponent {
   AgentDesktopView = 'AgentDesktopView',
@@ -312,6 +310,7 @@ Use an event hook to add your own handler for [Flex events](https://assets.flex.
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
+
 import { FlexEvent } from '../../../../types/feature-loader';
 
 export const eventName = FlexEvent.taskReceived;
@@ -325,7 +324,6 @@ export const eventHook = function exampleTaskReceivedHandler(
 ```
 
 Supported values for `eventName`:
-
 ```ts
 enum FlexEvent {
   taskReceived = 'taskReceived',
@@ -349,6 +347,7 @@ Use a JS client event listener hook to add your own handler for events from the 
 ```ts
 import * as Flex from '@twilio/flex-ui';
 import { Conversation } from '@twilio/conversations';
+
 import { FlexJsClient, ConversationEvent } from '../../../../../types/feature-loader';
 
 export const clientName = FlexJsClient.conversationsClient;
@@ -363,7 +362,6 @@ export const jsClientHook = function exampleConversationJoinedHandler(
 ```
 
 Supported values for `clientName`:
-
 ```ts
 enum FlexJsClient {
   conversationsClient = 'conversationsClient',
@@ -373,7 +371,6 @@ enum FlexJsClient {
 ```
 
 Supported values for `eventName`:
-
 ```ts
 enum ConversationEvent {
   conversationJoined = 'conversationJoined',
