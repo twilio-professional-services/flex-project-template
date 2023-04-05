@@ -153,6 +153,10 @@
       "canned_responses": {
         "enabled": true,
         "location": "CRM"
+      },
+      "custom_hold_music": {
+        "enabled": false,
+        "url": ""
       }
     }
   }

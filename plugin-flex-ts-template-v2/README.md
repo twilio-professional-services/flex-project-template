@@ -110,7 +110,7 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.CompleteTask;
 export const actionHook = function exampleCompleteTaskHook(flex: typeof Flex, manager: Flex.Manager) {
-  Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     // your code here
   });
 };
@@ -161,8 +161,9 @@ Use a channels hook to register new [task channel definitions](https://www.twili
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
-import { TaskAttributes } from '../../../../types/task-router/Task';
 import PhoneCallbackIcon from '@material-ui/icons/PhoneCallback';
+
+import { TaskAttributes } from '../../../../types/task-router/Task';
 
 export const channelHook = function createCallbackChannel(flex: typeof Flex, manager: Flex.Manager) {
   const channelDefinition = flex.DefaultTaskChannels.createDefaultTaskChannel(
@@ -223,12 +224,23 @@ const handleChatComplete = (task: Flex.ITask): any => {
 };
 ```
 
+Supported values for `event`:
+
+```ts
+enum FlexOrchestrationEvent {
+  accepted = 'accepted',
+  wrapup = 'wrapup',
+  completed = 'completed',
+}
+```
+
 ### components
 
 Use a component hook to [modify or add components](https://www.twilio.com/docs/flex/developer/ui/work-with-components-and-props) to Flex UI.
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
+
 import MyComponentName from '../../custom-components/MyComponentName';
 import { FlexComponent } from '../../../../types/feature-loader';
 
@@ -404,6 +416,7 @@ Use a notification hook to register your own notification definitions for use in
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
+
 import { StringTemplates } from '../strings';
 
 // Export the notification IDs an enum for better maintainability when accessing them elsewhere
@@ -503,11 +516,12 @@ export const stringHook = () => ({
 Use a teams filter hook to register your own [filter definitions](https://www.twilio.com/docs/flex/developer/ui/team-view-filters) in the Teams view.
 
 ```ts
-import { emailFilter } from '../../filters/emailFilter'; // example filter from the teams-view-filters feature
 import { FilterDefinition } from '@twilio/flex-ui';
 
+import { emailFilter } from '../../filters/emailFilter'; // example filter from the teams-view-filters feature
+
 export const teamsFilterHook = async function getSampleFilters() {
-  var enabledFilters = [] as Array<FilterDefinition>;
+  const enabledFilters = [] as Array<FilterDefinition>;
 
   enabledFilters.push(emailFilter());
 

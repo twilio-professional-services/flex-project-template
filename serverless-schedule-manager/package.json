@@ -10,7 +10,10 @@
     "deploy:dev": "TWILIO_PROFILE=dev npm run deploy",
     "deploy:test": "TWILIO_PROFILE=test npm run deploy",
     "deploy:qa": "TWILIO_PROFILE=qa npm run deploy",
-    "deploy:prod": "TWILIO_PROFILE=prod npm run deploy"
+    "deploy:prod": "TWILIO_PROFILE=prod npm run deploy",
+    "lint": "eslint --ext js ./functions",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:report": "npm run lint -- --output-file eslint_report.json --format json"
   },
   "dependencies": {
     "@twilio/runtime-handler": "1.2.5",
@@ -23,10 +26,38 @@
     "twilio-flex-token-validator": "^1.5.6"
   },
   "devDependencies": {
+    "eslint": "^8.37.0",
+    "eslint-config-twilio": "^2.0.0",
     "twilio-cli": "^5.2.0",
     "twilio-run": "^3.4.2"
   },
   "engines": {
     "node": "14"
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "twilio"
+    ],
+    "rules": {
+      "camelcase": "off",
+      "complexity": "off",
+      "import/extensions": "off",
+      "import/no-extraneous-dependencies": "off",
+      "import/no-mutable-exports": "off",
+      "import/no-unresolved": "off",
+      "import/no-unused-modules": "off",
+      "multiline-comment-style": "off",
+      "no-alert": "off",
+      "no-console": "off",
+      "no-multi-str": "off",
+      "no-use-before-define": "off",
+      "prefer-destructuring": "off",
+      "prefer-named-capture-group": "off",
+      "prefer-promise-reject-errors": "off",
+      "sonarjs/cognitive-complexity": "off",
+      "sonarjs/no-identical-functions": "off",
+      "sonarjs/no-duplicate-string": "off"
+    }
   }
 }

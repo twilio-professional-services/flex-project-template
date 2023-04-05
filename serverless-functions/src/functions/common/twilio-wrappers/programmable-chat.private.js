@@ -1,8 +1,6 @@
-const { isString, isObject, isNumber } = require("lodash");
+const { isString, isObject, isNumber } = require('lodash');
 
-const retryHandler = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/retry-handler"
-].path).retryHandler;
+const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
 
 /**
  * @param {object} parameters the parameters for the function
@@ -14,34 +12,30 @@ const retryHandler = require(Runtime.getFunctions()[
  * @description the following method is used to apply attributes
  *    to the channel object
  */
-exports.updateChannelAttributes = async function (parameters) {
+exports.updateChannelAttributes = async (parameters) => {
   const { attempts, context, channelSid, attributes } = parameters;
 
   if (!isNumber(attempts))
-    throw "Invalid parameters object passed. Parameters must contain the number of attempts";
-  if (!isObject(context))
-    throw "Invalid parameters object passed. Parameters must contain context object";
+    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(channelSid))
-    throw "Invalid parameters object passed. Parameters must contain channelSid string";
+    throw new Error('Invalid parameters object passed. Parameters must contain channelSid string');
   if (!isString(attributes))
-    throw "Invalid parameters object passed. Parameters must contain attributes string";
+    throw new Error('Invalid parameters object passed. Parameters must contain attributes string');
 
   try {
     const client = context.getTwilioClient();
-    const channel = await client.chat
-      .services(context.TWILIO_FLEX_CHAT_SERVICE_SID)
-      .channels(channelSid)
-      .fetch();
+    const channel = await client.chat.services(context.TWILIO_FLEX_CHAT_SERVICE_SID).channels(channelSid).fetch();
 
-    if (!channel) return { success: false, message: "channel not found" };
+    if (!channel) return { success: false, message: 'channel not found' };
 
     const updatedChannel = await client.chat
       .services(context.TWILIO_FLEX_CHAT_SERVICE_SID)
       .channels(channelSid)
-      .update({ attributes: attributes });
+      .update({ attributes });
 
     return { success: true, status: 200, channel: updatedChannel };
   } catch (error) {
-    return retryHandler(error, parameters, arguments.callee);
+    return retryHandler(error, parameters, exports.updateChannelAttributes);
   }
 };
