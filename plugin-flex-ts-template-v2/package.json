@@ -8,7 +8,7 @@
     "test:precommit": "jest",
     "test:ci": "jest --silent --ci --coverage --coverageReporters=cobertura --reporters=default --reporters=jest-junit --testResultsProcessor=jest-junit",
     "test:coverage": "jest --silent --coverage && http-server -c-1 ./coverage -o /lcov-report",
-    "lint": "eslint --ext ts --ext tsx ./src",
+    "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "lint:report": "npm run lint -- --output-file eslint_report.json --format json",
     "build": "twilio flex:plugins:build",
@@ -51,52 +51,6 @@
     "react-test-renderer": "17.0.2",
     "typescript": "^4"
   },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "twilio-ts"
-    ],
-    "rules": {
-      "camelcase": "off",
-      "complexity": "off",
-      "import/extensions": "off",
-      "import/no-extraneous-dependencies": "off",
-      "import/no-mutable-exports": "off",
-      "import/no-unresolved": "off",
-      "import/no-unused-modules": "off",
-      "multiline-comment-style": "off",
-      "no-alert": "off",
-      "no-console": "off",
-      "no-duplicate-imports": "off",
-      "prefer-destructuring": "off",
-      "prefer-named-capture-group": "off",
-      "prefer-promise-reject-errors": "off",
-      "sonarjs/cognitive-complexity": "off",
-      "sonarjs/no-identical-functions": "off",
-      "sonarjs/no-duplicate-string": "off",
-      "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/explicit-module-boundary-types": "off",
-      "@typescript-eslint/no-duplicate-imports": [
-        "error"
-      ],
-      "@typescript-eslint/no-explicit-any": "off",
-      "@typescript-eslint/no-floating-promises": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        {
-          "argsIgnorePattern": "^_"
-        }
-      ],
-      "@typescript-eslint/no-use-before-define": "off",
-      "@typescript-eslint/require-array-sort-compare": "off"
-    }
-  },
-  "eslintIgnore": [
-    "*.test.ts",
-    "*.test.tsx",
-    "./**/__mocks__/*.ts",
-    "./**/__mocks__/*.tsx"
-  ],
   "jest": {
     "clearMocks": true,
     "automock": false,
