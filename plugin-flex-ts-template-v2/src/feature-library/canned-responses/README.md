@@ -21,7 +21,7 @@ By default, when this features is enabled within the `flex-config`, the canned r
 
 ![alt text](screenshots/MessageInputAction-UI.gif)
 
-By default, when this features is enabled within the `flex-config`, the canned responses will render in the CRM Panel on the righthand side of Flex. The responses are separated by categories, with the individual responses housing two buttons:
+The second option for the canned responses will render them within the `Message Input Actions` below the `Message Input`. The responses are still separated by categories, with the action performing an `insert` which will append the canned response to any pre-existing text in the `Message Input`.
 
 # setup and dependencies
 

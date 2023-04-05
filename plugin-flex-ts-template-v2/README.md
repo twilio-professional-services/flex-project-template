@@ -105,53 +105,53 @@ Use an actions hook to register actions in the [Flex Actions Framework](https://
 
 ```ts
 import * as Flex from '@twilio/flex-ui';
-import { FlexActionEvent, FlexAction } from "../../../../types/feature-loader";
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.CompleteTask;
 export const actionHook = function exampleCompleteTaskHook(flex: typeof Flex, manager: Flex.Manager) {
-  
   Flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     // your code here
-  })
-  
-}
+  });
+};
 ```
 
 Supported values for `actionEvent`:
+
 ```ts
 enum FlexActionEvent {
-  before = "before",
-  after = "after",
-  replace = "replace",
+  before = 'before',
+  after = 'after',
+  replace = 'replace',
 }
 ```
 
 Supported values for `actionName`:
+
 ```ts
 enum FlexAction {
-  AcceptTask = "AcceptTask",
-  ApplyTeamsViewFilters = "ApplyTeamsViewFilters",
-  CompleteTask = "CompleteTask",
-  HangupCall = "HangupCall",
-  HoldCall = "HoldCall",
-  UnholdCall = "UnholdCall",
-  HoldParticipant = "HoldParticipant",
-  KickParticipant = "KickParticipant",
-  MonitorCall = "MonitorCall",
-  StopMonitoringCall = "StopMonitoringCall",
-  SelectTask = "SelectTask",
-  SetWorkerActivity = "SetWorkerActivity",
-  StartOutboundCall = "StartOutboundCall",
-  ToggleMute = "ToggleMute",
-  UnholdParticipant = "UnholdParticipant",
-  NavigateToView = "NavigateToView",
-  RejectTask = "RejectTask",
-  SetActivity = "SetActivity",
-  StartExternalWarmTransfer = "StartExternalWarmTransfer",
-  ShowDirectory = "ShowDirectory",
-  TransferTask = "TransferTask",
-  WrapupTask = "WrapupTask"
+  AcceptTask = 'AcceptTask',
+  ApplyTeamsViewFilters = 'ApplyTeamsViewFilters',
+  CompleteTask = 'CompleteTask',
+  HangupCall = 'HangupCall',
+  HoldCall = 'HoldCall',
+  UnholdCall = 'UnholdCall',
+  HoldParticipant = 'HoldParticipant',
+  KickParticipant = 'KickParticipant',
+  MonitorCall = 'MonitorCall',
+  StopMonitoringCall = 'StopMonitoringCall',
+  SelectTask = 'SelectTask',
+  SetWorkerActivity = 'SetWorkerActivity',
+  StartOutboundCall = 'StartOutboundCall',
+  ToggleMute = 'ToggleMute',
+  UnholdParticipant = 'UnholdParticipant',
+  NavigateToView = 'NavigateToView',
+  RejectTask = 'RejectTask',
+  SetActivity = 'SetActivity',
+  StartExternalWarmTransfer = 'StartExternalWarmTransfer',
+  ShowDirectory = 'ShowDirectory',
+  TransferTask = 'TransferTask',
+  WrapupTask = 'WrapupTask',
 }
 ```
 
@@ -165,7 +165,6 @@ import { TaskAttributes } from '../../../../types/task-router/Task';
 import PhoneCallbackIcon from '@material-ui/icons/PhoneCallback';
 
 export const channelHook = function createCallbackChannel(flex: typeof Flex, manager: Flex.Manager) {
-
   const channelDefinition = flex.DefaultTaskChannels.createDefaultTaskChannel(
     'callback',
     (task) => {
@@ -184,26 +183,26 @@ export const channelHook = function createCallbackChannel(flex: typeof Flex, man
       ...templates,
       TaskListItem: {
         ...templates?.TaskListItem,
-        firstLine: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`
+        firstLine: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`,
       },
       TaskCanvasHeader: {
         ...templates?.TaskCanvasHeader,
-        title: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`
+        title: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`,
       },
       IncomingTaskCanvas: {
         ...templates?.IncomingTaskCanvas,
-        firstLine: (task: Flex.ITask) => task.queueName
-      }
+        firstLine: (task: Flex.ITask) => task.queueName,
+      },
     },
     icons: {
       active: <PhoneCallbackIcon key="active-callback-icon" />,
       list: <PhoneCallbackIcon key="list-callback-icon" />,
       main: <PhoneCallbackIcon key="main-callback-icon" />,
-    }
-  }
+    },
+  };
 
   return CallbackChannel;
-}
+};
 ```
 
 ### chat-orchestrator
@@ -211,17 +210,17 @@ export const channelHook = function createCallbackChannel(flex: typeof Flex, man
 Use a chat orchestrator hook to modify chat orchestration via `ChatOrchestrator.setOrchestrations`.
 
 ```ts
-import * as Flex from "@twilio/flex-ui";
-import { FlexOrchestrationEvent } from "../../../../types/feature-loader";
+import * as Flex from '@twilio/flex-ui';
+import { FlexOrchestrationEvent } from '../../../../types/feature-loader';
 
 export const chatOrchestratorHook = (flex: typeof Flex, manager: Flex.Manager) => ({
   event: FlexOrchestrationEvent.completed,
-  handler: handleChatComplete
-})
+  handler: handleChatComplete,
+});
 
 const handleChatComplete = (task: Flex.ITask): any => {
   return [Flex.ChatOrchestratorEvent.DeactivateConversation, Flex.ChatOrchestratorEvent.LeaveConversation];
-}
+};
 ```
 
 ### components
@@ -231,42 +230,44 @@ Use a component hook to [modify or add components](https://www.twilio.com/docs/f
 ```ts
 import * as Flex from '@twilio/flex-ui';
 import MyComponentName from '../../custom-components/MyComponentName';
-import { FlexComponent } from "../../../../types/feature-loader";
+import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.CallCanvas;
 export const componentHook = function addMyComponentToCallCanvas(flex: typeof Flex, manager: Flex.Manager) {
   flex.CallCanvas.Content.add(<MyComponentName key="my-awesome-component" />, {
-    sortOrder: -1
+    sortOrder: -1,
   });
-}
+};
 ```
 
 Supported values for `componentName`:
+
 ```ts
 enum FlexComponent {
-  AgentDesktopView = "AgentDesktopView",
-  CallCanvas = "CallCanvas",
-  CallCanvasActions = "CallCanvasActions",
-  CRMContainer = "CRMContainer",
-  MainHeader = "MainHeader",
-  MessageListItem = "MessageListItem",
-  NoTasksCanvas = "NoTasksCanvas",
-  ParticipantCanvas = "ParticipantCanvas",
-  QueueStats = "QueueStats",
-  SideNav = "SideNav",
-  TaskCanvasHeader = "TaskCanvasHeader",
-  TaskCanvasTabs = "TaskCanvasTabs",
-  TaskListButtons = "TaskListButtons",
-  TaskOverviewCanvas = "TaskOverviewCanvas",
-  TeamsView = "TeamsView",
-  ViewCollection = "ViewCollection",
-  WorkerCanvas = "WorkerCanvas",
-  WorkersDataTable = "WorkersDataTable",
-  WorkerDirectory = "WorkerDirectory",
-  WorkerProfile = "WorkerProfile",
-  OutboundDialerPanel = "OutboundDialerPanel",
-  TaskInfoPanel = "TaskInfoPanel",
-  SupervisorTaskCanvasHeader = "SupervisorTaskCanvasHeader"
+  AgentDesktopView = 'AgentDesktopView',
+  CallCanvas = 'CallCanvas',
+  CallCanvasActions = 'CallCanvasActions',
+  CRMContainer = 'CRMContainer',
+  MainHeader = 'MainHeader',
+  MessageListItem = 'MessageListItem',
+  MessageInputActions = 'MessageInputActions',
+  NoTasksCanvas = 'NoTasksCanvas',
+  ParticipantCanvas = 'ParticipantCanvas',
+  QueueStats = 'QueueStats',
+  SideNav = 'SideNav',
+  TaskCanvasHeader = 'TaskCanvasHeader',
+  TaskCanvasTabs = 'TaskCanvasTabs',
+  TaskListButtons = 'TaskListButtons',
+  TaskOverviewCanvas = 'TaskOverviewCanvas',
+  TeamsView = 'TeamsView',
+  ViewCollection = 'ViewCollection',
+  WorkerCanvas = 'WorkerCanvas',
+  WorkersDataTable = 'WorkersDataTable',
+  WorkerDirectory = 'WorkerDirectory',
+  WorkerProfile = 'WorkerProfile',
+  OutboundDialerPanel = 'OutboundDialerPanel',
+  TaskInfoPanel = 'TaskInfoPanel',
+  SupervisorTaskCanvasHeader = 'SupervisorTaskCanvasHeader',
 }
 ```
 
@@ -275,21 +276,21 @@ enum FlexComponent {
 Use a CSS override hook to set `componentThemeOverrides` for [various Flex UI components](https://assets.flex.twilio.com/docs/releases/flex-ui/2.1.0/theming/Theme/).
 
 ```ts
-import * as Flex from "@twilio/flex-ui";
+import * as Flex from '@twilio/flex-ui';
 
 export const cssOverrideHook = (flex: typeof Flex, manager: Flex.Manager) => {
   return {
     MainHeader: {
       Container: {
-        ".Twilio-MainHeader-end": {
+        '.Twilio-MainHeader-end': {
           "[data-paste-element='MENU']": {
-            overflowY: "scroll",
-            maxHeight: "90vh",
+            overflowY: 'scroll',
+            maxHeight: '90vh',
           },
         },
       },
     },
-  }
+  };
 };
 ```
 
@@ -298,29 +299,34 @@ export const cssOverrideHook = (flex: typeof Flex, manager: Flex.Manager) => {
 Use an event hook to add your own handler for [Flex events](https://assets.flex.twilio.com/docs/releases/flex-ui/2.1.0/ui-actions/FlexEvent/).
 
 ```ts
-import * as Flex from "@twilio/flex-ui";
-import { FlexEvent } from "../../../../types/feature-loader";
+import * as Flex from '@twilio/flex-ui';
+import { FlexEvent } from '../../../../types/feature-loader';
 
 export const eventName = FlexEvent.taskReceived;
-export const eventHook = function exampleTaskReceivedHandler(flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask){
+export const eventHook = function exampleTaskReceivedHandler(
+  flex: typeof Flex,
+  manager: Flex.Manager,
+  task: Flex.ITask,
+) {
   // your code here
-}
+};
 ```
 
 Supported values for `eventName`:
+
 ```ts
 enum FlexEvent {
-  taskReceived = "taskReceived",
-  taskUpdated = "taskUpdated",
-  taskAccepted = "taskAccepted",
-  taskCanceled = "taskCanceled",
-  taskCompleted = "taskCompleted",
-  taskRejected = "taskRejected",
-  taskRescinded = "taskRescinded",
-  taskTimeout = "taskTimeout",
-  taskWrapup = "taskWrapup",
-  pluginsLoaded = "pluginsLoaded",
-  tokenUpdated = "tokenUpdated",
+  taskReceived = 'taskReceived',
+  taskUpdated = 'taskUpdated',
+  taskAccepted = 'taskAccepted',
+  taskCanceled = 'taskCanceled',
+  taskCompleted = 'taskCompleted',
+  taskRejected = 'taskRejected',
+  taskRescinded = 'taskRescinded',
+  taskTimeout = 'taskTimeout',
+  taskWrapup = 'taskWrapup',
+  pluginsLoaded = 'pluginsLoaded',
+  tokenUpdated = 'tokenUpdated',
 }
 ```
 
@@ -331,34 +337,40 @@ Use a JS client event listener hook to add your own handler for events from the 
 ```ts
 import * as Flex from '@twilio/flex-ui';
 import { Conversation } from '@twilio/conversations';
-import { FlexJsClient, ConversationEvent } from "../../../../../types/feature-loader";
+import { FlexJsClient, ConversationEvent } from '../../../../../types/feature-loader';
 
 export const clientName = FlexJsClient.conversationsClient;
 export const eventName = ConversationEvent.conversationJoined;
-export const jsClientHook = function exampleConversationJoinedHandler(flex: typeof Flex, manager: Flex.Manager, conversation: Conversation) {
+export const jsClientHook = function exampleConversationJoinedHandler(
+  flex: typeof Flex,
+  manager: Flex.Manager,
+  conversation: Conversation,
+) {
   // your code here
-}
+};
 ```
 
 Supported values for `clientName`:
+
 ```ts
 enum FlexJsClient {
-  conversationsClient = "conversationsClient",
-  voiceClient = "voiceClient",
-  workerClient = "workerClient",
+  conversationsClient = 'conversationsClient',
+  voiceClient = 'voiceClient',
+  workerClient = 'workerClient',
 }
 ```
 
 Supported values for `eventName`:
+
 ```ts
 enum ConversationEvent {
-  conversationJoined = "conversationJoined",
+  conversationJoined = 'conversationJoined',
 }
 enum VoiceEvent {
-  incoming = "incoming",
+  incoming = 'incoming',
 }
 enum WorkerEvent {
-  reservationCreated = "reservationCreated",
+  reservationCreated = 'reservationCreated',
 }
 ```
 
@@ -383,7 +395,7 @@ import * as Flex from '@twilio/flex-ui';
 export const eventName = Flex.NotificationEvent.beforeAddNotification;
 export const notificationEventHook = (flex: typeof Flex, manager: Flex.Manager, notification: any, cancel: any) => {
   // your code here
-}
+};
 ```
 
 ### notifications
@@ -398,19 +410,19 @@ import { StringTemplates } from '../strings';
 export enum ExampleNotification {
   MyNotification = 'MyNotification',
   MyNotification2 = 'MyNotification2',
-};
+}
 
 // Return an array of Flex.Notification
 export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
   {
     id: ExampleNotification.MyNotification,
     type: Flex.NotificationType.error,
-    content: StringTemplates.MyString
+    content: StringTemplates.MyString,
   },
   {
     id: ExampleNotification.MyNotification2,
     type: Flex.NotificationType.success,
-    content: StringTemplates.MyString2
+    content: StringTemplates.MyString2,
   },
 ];
 ```
@@ -420,18 +432,18 @@ export const notificationHook = (flex: typeof Flex, manager: Flex.Manager) => [
 Use a Paste elements hook to register your own element definitions for usage in your feature's UI built with [Twilio Paste](https://paste.twilio.design/).
 
 ```ts
-import { PasteCustomCSS } from "@twilio-paste/customization";
+import { PasteCustomCSS } from '@twilio-paste/customization';
 
 export const pasteElementHook = {
   MY_CUSTOM_ELEMENT: {
-    paddingLeft: "space40",
-    paddingRight: "space40",
-    paddingTop: "space40",
+    paddingLeft: 'space40',
+    paddingRight: 'space40',
+    paddingTop: 'space40',
   },
   MY_OTHER_ELEMENT: {
-    paddingBottom: "space40",
+    paddingBottom: 'space40',
   },
-} as {[key: string]: PasteCustomCSS};
+} as { [key: string]: PasteCustomCSS };
 ```
 
 ### reducers
@@ -439,8 +451,8 @@ export const pasteElementHook = {
 Use this example Redux Toolkit slice as a starting point for keeping Redux state within your feature.
 
 ```ts
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface ExampleState {
   myValue: boolean;
@@ -449,8 +461,8 @@ export interface ExampleState {
 
 const initialState = {
   myValue: false,
-  myOtherValue: false
-} as ExampleState
+  myOtherValue: false,
+} as ExampleState;
 
 const exampleSlice = createSlice({
   name: 'exampleStateName',
@@ -463,9 +475,9 @@ const exampleSlice = createSlice({
       state.myOtherValue = action.payload;
     },
   },
-})
+});
 
-export const { updateMyValue, updateMyOtherValue } = exampleSlice.actions
+export const { updateMyValue, updateMyOtherValue } = exampleSlice.actions;
 export const reducerHook = () => ({ exampleStateName: exampleSlice.reducer });
 ```
 
@@ -491,13 +503,12 @@ export const stringHook = () => ({
 Use a teams filter hook to register your own [filter definitions](https://www.twilio.com/docs/flex/developer/ui/team-view-filters) in the Teams view.
 
 ```ts
-import { emailFilter } from "../../filters/emailFilter"; // example filter from the teams-view-filters feature
-import { FilterDefinition } from "@twilio/flex-ui";
+import { emailFilter } from '../../filters/emailFilter'; // example filter from the teams-view-filters feature
+import { FilterDefinition } from '@twilio/flex-ui';
 
 export const teamsFilterHook = async function getSampleFilters() {
-
   var enabledFilters = [] as Array<FilterDefinition>;
-  
+
   enabledFilters.push(emailFilter());
 
   return enabledFilters;

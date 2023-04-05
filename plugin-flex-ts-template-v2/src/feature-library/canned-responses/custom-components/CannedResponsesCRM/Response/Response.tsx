@@ -20,9 +20,13 @@ const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
     (state) => state.flex.chat.conversationInput[task.attributes.conversationSid].inputText,
   );
 
-  const onClickSend = () => {
+  const onClickSend = async () => {
     if (!task.attributes.conversationSid) return;
-    Actions.invokeAction('SendMessage', { body: text, conversationSid: task.attributes.conversationSid });
+    await Actions.invokeAction('SendMessage', { body: text, conversationSid: task.attributes.conversationSid });
+    Actions.invokeAction('SetInputText', {
+      body: inputState,
+      conversationSid: task.attributes.conversationSid,
+    });
   };
 
   const onClickInsert = () => {
@@ -49,13 +53,13 @@ const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
           <Flex marginRight="space40">
             <Tooltip text="Insert">
               <Button variant="secondary" onClick={() => onClickInsert()} size="circle_small">
-                <EditIcon decorative title="Insert response" />
+                <EditIcon decorative />
               </Button>
             </Tooltip>
           </Flex>
           <Tooltip text="Send">
             <Button variant="primary" onClick={() => onClickSend()} size="circle_small">
-              <SendIcon decorative title="Send response" />
+              <SendIcon decorative />
             </Button>
           </Tooltip>
         </Flex>
