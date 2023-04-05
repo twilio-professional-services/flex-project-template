@@ -27,7 +27,8 @@ jobs:
         uses: 'phips28/gh-action-bump-version@master'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PACKAGEJSON_DIR:  'plugin-flex-ts-template-v2'
+          PACKAGEJSON_DIR: 'plugin-flex-ts-template-v2'
         with:
           skip-tag: 'true'
+          target-branch: 'main'
           version-type: 'patch'
