@@ -1,3 +1,3 @@
-import FreeTextFilter from './FreeTextFilter';
+import FreeTextFilterComponent from './FreeTextFilter';
 
-export default FreeTextFilter;
+export default FreeTextFilterComponent;

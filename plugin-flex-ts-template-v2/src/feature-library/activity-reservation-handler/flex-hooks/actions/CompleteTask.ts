@@ -1,28 +1,24 @@
-import * as Flex from "@twilio/flex-ui";
-import WorkerState from "../../helpers/workerActivityHelper";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-import { getPendingActivity } from "../../helpers/pendingActivity";
+import * as Flex from '@twilio/flex-ui';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } =
-  custom_data?.features.activity_reservation_handler || {};
+import FlexHelper from '../../helpers/flexHelper';
+import WorkerState from '../../helpers/workerActivityHelper';
+import { getPendingActivity } from '../../helpers/pendingActivity';
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
-export function beforeCompleteWorkerTask(
-  flex: typeof Flex,
-  manager: Flex.Manager
-) {
-  if (!enabled) return;
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.CompleteTask;
+export const actionHook = function beforeCompleteWorkerTask(flex: typeof Flex, _manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async () => {
+    if (FlexHelper.activeTaskCount > 1) {
+      return;
+    }
 
-  flex.Actions.addListener("beforeCompleteTask", async () => {
     const pendingActivity = getPendingActivity();
 
     if (pendingActivity) {
-      console.debug(
-        "beforeCompleteTask, Setting worker to pending activity",
-        pendingActivity.name
-      );
+      console.debug('beforeCompleteTask, Setting worker to pending activity', pendingActivity.name);
       WorkerState.setWorkerActivity(pendingActivity.sid, true);
       await WorkerState.waitForWorkerActivityChange(pendingActivity.sid);
     }
   });
-}
+};

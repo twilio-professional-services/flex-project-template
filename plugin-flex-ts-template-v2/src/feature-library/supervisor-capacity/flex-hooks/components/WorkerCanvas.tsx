@@ -1,13 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
+
 import CapacityContainer from '../../custom-components/CapacityContainer';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { FlexComponent } from '../../../../types/feature-loader';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes || {};
-const { enabled = false } = custom_data?.features?.supervisor_capacity || {};
-
-export function addCapacityToWorkerCanvas(flex: typeof Flex, manager: Flex.Manager) {
-  
-  if (!enabled) return;
-  
+export const componentName = FlexComponent.WorkerCanvas;
+export const componentHook = function addCapacityToWorkerCanvas(flex: typeof Flex, _manager: Flex.Manager) {
   flex.WorkerCanvas.Content.add(<CapacityContainer key="worker-capacity-container" />);
-}
+};

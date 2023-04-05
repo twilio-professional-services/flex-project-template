@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
-import ApiService from './';
+
+import ApiService from '.';
 import { EncodedParams } from '../../../types/serverless';
 import { UIAttributes } from '../../../types/manager/ServiceConfiguration';
 
@@ -24,16 +25,19 @@ describe('utils/common/ApiService', () => {
   });
 
   it('should provide access to the configured serverless domain', () => {
-    const { serviceConfiguration: { ui_attributes } } = Flex.Manager.getInstance();
-    const { serverless_functions_domain } = ui_attributes as UIAttributes;
-    expect(TestService.serverlessDomain).toBe(serverless_functions_domain);
+    const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
+    const {
+      serverless_functions_domain,
+      serverless_functions_port,
+    } = custom_data;
+    expect(TestService.serverlessDomain).toBe(`${serverless_functions_domain}:${serverless_functions_port}`);
   });
 
   it('should build encoded params into a string to use as the body for serverless reqeusts', () => {
     const encodedParams: EncodedParams = {
       testParam1: encodeURIComponent('testParam1ToBeEncoded'),
       testParam2: encodeURIComponent('testParam2ToBeEncoded'),
-      testParamToDrop: undefined
+      testParamToDrop: undefined,
     };
 
     const body = TestService.testBuildBody(encodedParams);

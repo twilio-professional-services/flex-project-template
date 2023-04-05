@@ -1,21 +1,32 @@
-import * as Flex from "@twilio/flex-ui";
-import { TaskHelper, Actions } from "@twilio/flex-ui";
-import { isFeatureEnabled } from "../../index";
-import { EventPayload } from "../../types/TransferOptions";
+import * as Flex from '@twilio/flex-ui';
 
-// invoke the custom chatTransferTask action if a cbm task otherwise carry on
-export function handleChatTransfer(flex: typeof Flex, manager: Flex.Manager) {
-  if (!isFeatureEnabled()) return;
+import ChatTransferService from '../../utils/serverless/ChatTransferService';
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
-  Flex.Actions.addListener(
-    "beforeTransferTask",
-    (payload: EventPayload, abortFunction: any) => {
-      if (TaskHelper.isCBMTask(payload.task)) {
-        // native action handler would fail for chat task so abort the action
-        abortFunction();
-        // Execute Chat Transfer Task
-        Flex.Actions.invokeAction("ChatTransferTask", payload);
-      }
-    }
-  );
+export interface TransferOptions {
+  attributes: string;
+  mode: string;
+  priority: string;
 }
+
+export interface EventPayload {
+  task: Flex.ITask;
+  sid?: string; // taskSid or task is required
+  targetSid: string; // target of worker or queue sid
+  options?: TransferOptions;
+}
+
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.TransferTask;
+// if the task channel is not chat, function defers to existing process
+// otherwise the function creates a new task for transfering the chat
+// and deals with the chat orchestration
+export const actionHook = function interceptTransferOverrideForChatTasks(flex: typeof Flex, _manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload: EventPayload, abortFunction: any) => {
+    if (Flex.TaskHelper.isChatBasedTask(payload.task) && !Flex.TaskHelper.isCBMTask(payload.task)) {
+      abortFunction(payload);
+      // Execute Chat Transfer Task
+      await ChatTransferService.executeChatTransfer(payload.task, payload.targetSid, payload.options);
+    }
+  });
+};

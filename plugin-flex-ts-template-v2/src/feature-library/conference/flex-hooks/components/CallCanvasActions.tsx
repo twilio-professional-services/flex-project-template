@@ -1,16 +1,12 @@
 import * as Flex from '@twilio/flex-ui';
+
 import ConferenceButton from '../../custom-components/ConferenceButton';
+import { isAddButtonEnabled } from '../../config';
+import { FlexComponent } from '../../../../types/feature-loader';
 
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+export const componentName = FlexComponent.CallCanvasActions;
+export const componentHook = function addConferenceToCallCanvasActions(flex: typeof Flex) {
+  if (!isAddButtonEnabled()) return;
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes || {}
-const { enabled = false, add_button = true } = custom_data?.features?.conference || {};
-
-export function addConferenceToCallCanvasActions(flex: typeof Flex) {
-
-  if(!enabled || !add_button) return;
-  
-  flex.CallCanvasActions.Content.add(<ConferenceButton
-    key="conference"
-  />, { sortOrder: 2 });
-}
+  flex.CallCanvasActions.Content.add(<ConferenceButton key="conference" />, { sortOrder: 2 });
+};

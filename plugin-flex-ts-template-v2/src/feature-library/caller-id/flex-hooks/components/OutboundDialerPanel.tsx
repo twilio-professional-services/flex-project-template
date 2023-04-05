@@ -1,16 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
-import OutboundCallerIDSelector from '../../custom-components/OutboundCallerIDSelector'
 
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { FlexComponent } from '../../../../types/feature-loader/FlexComponent';
+import OutboundCallerIDSelector from '../../custom-components/OutboundCallerIDSelector';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } = custom_data?.features?.caller_id || {}
-
-export function addOutboundCallerIdSelectorToMainHeader(flex: typeof Flex) {
-
-  if(!enabled) return;
-  
+export const componentName = FlexComponent.OutboundDialerPanel;
+export const componentHook = function addOutboundCallerIdSelectorToMainHeader(flex: typeof Flex) {
   flex.OutboundDialerPanel.Content.add(<OutboundCallerIDSelector key="outbound-callerid-selector" />, {
     sortOrder: 1,
   });
-}
+};

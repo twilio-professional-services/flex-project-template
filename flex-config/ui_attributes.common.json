@@ -19,10 +19,10 @@
       "caller_id": {
         "enabled": true
       },
-      "chat_transfer": {
-        "enabled": true,
+      "conversation_transfer": {
+        "enabled": false,
         "cold_transfer": true,
-        "multi_participant": false
+        "multi_participant": true
       },
       "chat_to_video_escalation": {
         "enabled": false
@@ -33,7 +33,7 @@
         "hold_workaround": false
       },
       "enhanced_crm_container": {
-        "enabled": true
+        "enabled": false
       },
       "internal_call": {
         "enabled": false
@@ -47,7 +47,9 @@
       "supervisor_barge_coach": {
         "enabled": true,
         "agent_coaching_panel": true,
-        "supervisor_monitor_panel": true
+        "supervisor_monitor_panel": true,
+        "agent_assistance": true,
+        "supervisor_alert_toggle": true
       },
       "omni_channel_capacity_management": {
         "enabled": false
@@ -80,7 +82,7 @@
         "logFilters": true,
         "applied_filters": {
           "email": true,
-          "department" : true,
+          "department": true,
           "queue_no_worker_data": true,
           "queue_worker_data": false,
           "team": true,
@@ -97,7 +99,7 @@
           "Customer Service",
           "Recruiting"
         ],
-        "team_options" :[
+        "team_options": [
           "Blue Team",
           "Red Team",
           "Gold Team",
@@ -117,6 +119,40 @@
       },
       "multi_call": {
         "enabled": false
+      },
+      "hang_up_by": {
+        "enabled": false
+      },
+      "chat_transfer": {
+        "enabled": false
+      },
+      "agent_automation": {
+        "enabled": true,
+        "configuration": [
+          {
+            "channel": "voice",
+            "auto_accept": false,
+            "auto_select": false,
+            "auto_wrapup": false,
+            "required_attributes": [],
+            "wrapup_time": 30000
+          },
+          {
+            "channel": "chat",
+            "auto_accept": false,
+            "auto_select": false,
+            "auto_wrapup": false,
+            "required_attributes": [],
+            "wrapup_time": 30000
+          }
+        ]
+      },
+      "supervisor_complete_reservation": {
+        "enabled": true
+      },
+      "custom_hold_music": {
+        "enabled": false,
+        "url": ""
       }
     }
   }

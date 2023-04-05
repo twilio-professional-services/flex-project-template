@@ -104,11 +104,13 @@ export enum StringTemplates {
   END_DATE = 'SchMgrEndDate',
 }
 
-export default {
+export const stringHook = () => ({
   [StringTemplates.SCHEDULE_MANAGER_TITLE]: 'Schedule Manager',
   [StringTemplates.PUBLISH_ABORTED]: 'The schedule publish was aborted. Your changes may not have been saved.',
-  [StringTemplates.PUBLISH_INFLIGHT]: 'Another schedule publish is in progress. Publishing now will overwrite other changes.',
-  [StringTemplates.PUBLISH_FAILED_OTHER_UPDATE]: 'Schedule was updated by someone else and cannot be published. Please reload and try again.',
+  [StringTemplates.PUBLISH_INFLIGHT]:
+    'Another schedule publish is in progress. Publishing now will overwrite other changes.',
+  [StringTemplates.PUBLISH_FAILED_OTHER_UPDATE]:
+    'Schedule was updated by someone else and cannot be published. Please reload and try again.',
   [StringTemplates.PUBLISH_FAILED]: 'Schedule publish failed.',
   [StringTemplates.PUBLISH_FAILED_ACTIVITY]: 'Switch to a non-available activity to publish.',
   [StringTemplates.PUBLISH_SUCCESS]: 'Successfully published schedules.',
@@ -129,7 +131,8 @@ export default {
   [StringTemplates.COLUMN_STATUS_ASOF]: 'as of',
   [StringTemplates.COLUMN_RULE]: 'Rule',
   [StringTemplates.RULES]: 'Rules',
-  [StringTemplates.RULES_TEXT]: 'If an open rule matches and no closed rules match, the schedule is open. If a closed rule matches, the topmost match in the list is used.',
+  [StringTemplates.RULES_TEXT]:
+    'If an open rule matches and no closed rules match, the schedule is open. If a closed rule matches, the topmost match in the list is used.',
   [StringTemplates.TIMEZONE]: 'Time zone',
   [StringTemplates.COLUMN_MANUALLYCLOSED]: 'Manually closed',
   [StringTemplates.MANUALLYCLOSE]: 'Manually close',
@@ -208,4 +211,4 @@ export default {
   [StringTemplates.RESTRICT_DATE_RANGE]: 'Restrict date range',
   [StringTemplates.START_DATE]: 'Start date',
   [StringTemplates.END_DATE]: 'End date',
-};
+});

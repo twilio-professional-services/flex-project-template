@@ -1,26 +1,20 @@
 import * as Flex from '@twilio/flex-ui';
+
 import ActivityWrapperComponent from '../../custom-components/activity-wrapper';
 import { NotificationIds } from '../notifications/ActivitySkillFilter';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { getRules } from '../../config';
+import { FlexComponent } from '../../../../types/feature-loader';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled, rules } = custom_data.features.activity_skill_filter;
-
-export function replaceActivityComponent(flex: typeof Flex, manager: Flex.Manager) {
-  
-  if (!enabled) return;
-  
-  if (!rules) {
+export const componentName = FlexComponent.MainHeader;
+export const componentHook = function replaceActivityComponent(flex: typeof Flex, _manager: Flex.Manager) {
+  if (!getRules()) {
     Flex.Notifications.showNotification(NotificationIds.ActivitySkillRulesNotConfigured);
     return;
   }
-  
+
   flex.MainHeader.Content.remove('activity');
-  flex.MainHeader.Content.add(
-    <ActivityWrapperComponent key="activity-wrapper" />,
-      {
-        sortOrder: 2,
-        align: 'end'
-      }
-  );
-}
+  flex.MainHeader.Content.add(<ActivityWrapperComponent key="activity-wrapper" />, {
+    sortOrder: 2,
+    align: 'end',
+  });
+};

@@ -1,7 +1,8 @@
-import { FilterDefinition } from "@twilio/flex-ui";
-import SelectFilter from "../custom-components/SelectFilter";
-import SelectFilterLabel from "../custom-components/SelectFilterLabel";
-import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService'
+import { FilterDefinition } from '@twilio/flex-ui';
+
+import SelectFilter from '../custom-components/SelectFilter';
+import SelectFilterLabel from '../custom-components/SelectFilterLabel';
+import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 
 /* 
     this filter only works when a supporting backend solution is keeping
@@ -10,13 +11,14 @@ import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterSe
 */
 
 export const queueWorkerDataFilter = async () => {
-  
   const queueOptions = await TaskRouterService.getQueues();
-  const options = queueOptions? queueOptions.map((queue: any) => ({
-    value: queue.sid,
-    label: queue.friendlyName,
-    default: false
-  })) : [];
+  const options = queueOptions
+    ? queueOptions.map((queue: any) => ({
+        value: queue.sid,
+        label: queue.friendlyName,
+        default: false,
+      }))
+    : [];
 
   return {
     id: 'data.attributes.queues',
@@ -24,9 +26,9 @@ export const queueWorkerDataFilter = async () => {
     fieldName: 'queues',
     customStructure: {
       label: <SelectFilterLabel />,
-      field: <SelectFilter IsMulti={true}/>,
+      field: <SelectFilter IsMulti={true} />,
     },
-    options: options,
-    condition: 'IN'
+    options,
+    condition: 'IN',
   } as FilterDefinition;
-}
+};

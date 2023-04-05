@@ -1,14 +1,15 @@
-import { Manager, TaskHelper, ITask } from "@twilio/flex-ui";
-import Activity from "../../../types/task-router/Activity";
+import { Manager, TaskHelper, ITask } from '@twilio/flex-ui';
+
+import Activity from '../../../types/task-router/Activity';
 
 class FlexHelper {
-  //#region Static Properties
+  // #region Static Properties
   _manager = Manager.getInstance();
 
   accountSid: any;
-  //#endregion Static Properties
+  // #endregion Static Properties
 
-  //#region Dynamic Properties
+  // #region Dynamic Properties
   get flexState() {
     return this._manager.store.getState().flex;
   }
@@ -29,12 +30,16 @@ class FlexHelper {
     return this.flexState.worker.tasks;
   }
 
+  get activeTaskCount(): number {
+    if (!this.workerTasks) return 0;
+
+    return [...this.workerTasks.values()].filter((task) => TaskHelper.isTaskAccepted(task)).length;
+  }
+
   get hasLiveCallTask(): boolean {
     if (!this.workerTasks) return false;
 
-    return [...this.workerTasks.values()].some((task) =>
-      TaskHelper.isLiveCall(task)
-    );
+    return [...this.workerTasks.values()].some((task) => TaskHelper.isLiveCall(task));
   }
 
   /**
@@ -44,10 +49,7 @@ class FlexHelper {
     if (!this.workerTasks) return false;
 
     return [...this.workerTasks.values()].some((task) => {
-      return (
-        TaskHelper.isCallTask(task) &&
-        (TaskHelper.isPending(task) || TaskHelper.isLiveCall(task))
-      );
+      return TaskHelper.isCallTask(task) && (TaskHelper.isPending(task) || TaskHelper.isLiveCall(task));
     });
   }
 
@@ -55,29 +57,24 @@ class FlexHelper {
     if (!this.workerTasks) return false;
 
     return [...this.workerTasks.values()].some(
-      (task) =>
-        TaskHelper.isTaskAccepted(task) && !TaskHelper.isInWrapupMode(task)
+      (task) => TaskHelper.isTaskAccepted(task) && !TaskHelper.isInWrapupMode(task),
     );
   }
 
   get hasWrappingTask(): boolean {
     if (!this.workerTasks) return false;
 
-    return [...this.workerTasks.values()].some((task) =>
-      TaskHelper.isInWrapupMode(task)
-    );
+    return [...this.workerTasks.values()].some((task) => TaskHelper.isInWrapupMode(task));
   }
 
   get hasPendingTask(): boolean {
     if (!this.workerTasks) return false;
 
-    return [...this.workerTasks.values()].some((task) =>
-      TaskHelper.isPending(task)
-    );
+    return [...this.workerTasks.values()].some((task) => TaskHelper.isPending(task));
   }
-  //#endregion Dynamic Properties
+  // #endregion Dynamic Properties
 
-  //#region Class Methods
+  // #region Class Methods
   initialize = (): void => {
     // Setting accountSid as a static property so it survives after
     // logout when several flexState objects are cleared
@@ -90,15 +87,13 @@ class FlexHelper {
 
   getActivityByName = (activityName: string): Activity | undefined => {
     const activities = [...this.workerActivities.values()];
-    return activities.find(
-      (a) => a?.name?.toLowerCase() === activityName.toLowerCase()
-    );
+    return activities.find((a) => a?.name?.toLowerCase() === activityName.toLowerCase());
   };
 
   isAnAvailableActivityBySid = (activitySid: string): boolean => {
-    return !!this.getActivityBySid(activitySid)?.available;
+    return Boolean(this.getActivityBySid(activitySid)?.available);
   };
-  //#endregion Class Methods
+  // #endregion Class Methods
 }
 
 const FlexHelperSingleton = new FlexHelper();

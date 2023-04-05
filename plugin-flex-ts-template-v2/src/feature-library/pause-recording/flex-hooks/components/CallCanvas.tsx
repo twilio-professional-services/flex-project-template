@@ -1,15 +1,14 @@
 import * as Flex from '@twilio/flex-ui';
+
 import PauseStatusPanel from '../../custom-components/PauseStatusPanel';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { isPermanentIndicatorEnabled } from '../../config';
+import { FlexComponent } from '../../../../types/feature-loader';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false, indicator_permanent = false } = custom_data?.features?.pause_recording || {}
-
-export function addPauseStatusPanel(flex: typeof Flex, manager: Flex.Manager) {
-  
-  if (!enabled || !indicator_permanent) return;
+export const componentName = FlexComponent.CallCanvas;
+export const componentHook = function addPauseStatusPanel(flex: typeof Flex, _manager: Flex.Manager) {
+  if (!isPermanentIndicatorEnabled()) return;
 
   flex.CallCanvas.Content.add(<PauseStatusPanel key="pause-status-panel" />, {
-    sortOrder: -1
+    sortOrder: -1,
   });
-}
+};

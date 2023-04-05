@@ -1,5 +1,6 @@
 const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPlugins } = require ('./common');
 const prompt = require('prompt');
+prompt.colors = false;
 
 const installNpm = process.argv[2]? process.argv[2] == false: true;
 
@@ -84,7 +85,7 @@ getActiveTwilioProfile().then((profile_result) => {
         console.log("");
         console.log("For Flex v1 execute:");
         console.log("\tnpm run start:local:v1");
-        console.log("For Flex v1 execute:");
+        console.log("For Flex v2 execute:");
         console.log("\tnpm run start:local:v2");
         console.log("Or if you have renamed the template");
         console.log("\tnpm run start:local");
@@ -98,7 +99,7 @@ getActiveTwilioProfile().then((profile_result) => {
         console.log("");
         console.log("For Flex v1 execute:");
         console.log("\tnpm run start:local:v1");
-        console.log("For Flex v1 execute:");
+        console.log("For Flex v2 execute:");
         console.log("\tnpm run start:local:v2");
         console.log("Or if you have renamed the plugin");
         console.log("\tnpm run start:local");

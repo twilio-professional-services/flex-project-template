@@ -1,41 +1,43 @@
-# Chat Transfer
+# chat-transfer
 
-This feature implements cold transfer of Flex Conversations Based Messaging (CBM) to a specific agent or to a queue.
+This feature enables chat users to perform warm and cold transfers to individual agents or queues. It also introduces notifications into the chat channel for users joining or leaving chat, or starting a warm or cold transfer.
 
-It makes use of the existing worker directory but note that it removes the warm/consult transfer functionality as this is out of scope for this plugin.
+If using the notification feature it is advised that you copy the custom components over to the customer facing chat react app to be re-used, so the custom messages with message-attributes indicating a notification can be rendered the same as they will be in flex.
 
-![alt text](screenshots/chat-transfer.gif)
+# flex-user-experience
 
-## Setup
+An example using warm transfer
 
-A new task is created for each transfer in a configurable TaskRouter workflow. For correct routing the workflow should implement logic to route the task to a specific worker or to a queue based on queue name.
+![alt text](screenshots/flex-user-experience-warm-transfer-full.gif)
 
-The TaskRouter workflow sid (WWxxx) should be added to the .env file in the serverless directory before deploying the service to Twilio.
+# setup and dependencies
 
-```
-# CHAT TRANSFER
-TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID=WWxxx
-```
+To use this feature first some setup needs to take place.
 
-Task attributes have the following attributes added to the transferring Task:
+this feature creates a task when transferring which copies the attributes of the existing task and places them into the new task to be transferred. When we transfer we only know the target, a worker sid or a queue sid.
 
-```
-transferTargetType - set to either worker or queue
-transferTargetSid - will be set to the worker sid in the case of target type == worker
-transferQueueName - TaskRouter friendly name for the queue in the case of target type == queue
-```
+When creating a task we need to pass it to a TaskRouter workflow and the workflow needs to route it. In the case of a worker sid, this is a single rule as we can use the "known agent routing" option and pass in the variable. In the case of a queue, this is a little more cumbersome as we need to create a rule in the workflow for each queue.
 
-We then need to setup a workflow, similar to this one [here](example-taskrouter-workflow.json) where the first rule matches any worker selected then we have a rule for each queue in the system.
+So we need to setup a workflow, similar to this one [here](example-taskrouter-workflow.json) where the first rule matches any worker selected then we have a rule for each queue in the system. It is recommended to name this "Chat Transfer".
 
-## Implementation Notes
+With the workflow setup, we need to update the serverless function environment variable
 
-Flex 2.x used [Conversation Based Messaging (CBM)](https://www.twilio.com/docs/flex/conversations) for Chat (webchat, SMS, whatsApp). CBM makes use of the [Interactions API](https://www.twilio.com/docs/flex/developer/conversations/interactions-api) to orchestrate Conversations and Tasks.
+> TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID
 
-This plugin makes use of the Interaction API [Invite](https://www.twilio.com/docs/flex/developer/conversations/interactions-api/invites-subresource) and [Participants](https://www.twilio.com/docs/flex/developer/conversations/interactions-api/interaction-channel-participants) endpoints.
+with the new workflow sid for the chat transfer. If your workflow name begins with "Chat Transfer", the `npm install` script, `npm run generate-env` script, and the included CI scripts will automatically populate this SID for you.
 
-When the plugin makes a request to the supporting Twilio Serverless Function it passes the details about the type of transfer and the transfer target. The Twilio Serverless Function uses the Invite endpoint to create a new task for the transfer that is linked to the underlying Conversation. The Function then uses the Participants endpoint to remove the transferring agent from the Conversation. Removing the participant completes the original task. 
-Note that unlike the default behavior when the agent is removed the Conversation remains active as the Conversation is waiting for the new agent to accept the reservation and join the conversation.
+# how does it work?
 
-This plugin also copies all of the existing task attributes from the original task to the transferring task. The tasks conversations.conversations_id is updated to link the tasks for reporting purposes. 
+When enabled, the feature renders a "transfer" button at the top of the TaskCanvas.
 
-The transferring task also has the agents contact_uri added to the transffering task attribute 'ignoreWorkerContactUri'. This allows the workflow to ensure that in the case of a transfer to a queue the transferring agent can be ignored for routing purposes so they don't just get the same conversation.
+When this button is selected, it invokes the [ShowDirectory](https://assets.flex.twilio.com/docs/releases/flex-ui/1.31.2/Actions.html#.ShowDirectory) action
+
+When we select a worker or a queue, it invokes the [TransferTask](https://assets.flex.twilio.com/docs/releases/flex-ui/1.31.2/Actions.html#.TransferTask) action which is replaced with some custom logic that recognizes if the task is a chat task and performs our custom behaviors, otherwise, it does what it does OOTB.
+
+The custom behaviors then handle the orchestration of creating a new task, posting notification messages (normal messages with message attributes that allow the message to be rendered as a notification instead of a conversational message). They also handle the management of the chatOrchestrator and the channel janitor.
+
+# known issues
+
+The channel is ended (marked INACTIVE) only by the last agent that received the transfer. That means if _Agent-A_ does a warm transfer to _Agent-B_ and _Agent-B_ completes the task, then it will end the chat for _Agent-A_ also. However if _Agent-A_ ends the chat first, _Agent-B_ can continue the conversation as normal.
+
+If this is a problem, a solution lies in a [provided utility](../../../../serverless-functions/src/functions/features/chat-transfer/studio/add-task-to-chat-channel-data.protected.js) that can be called from the studio flow that creates the first task. After creating the task, you can pass the task Sid and channel sid to this serverless function and it will track the task sid on the channelAttributes. All subsequent task sids are also tracked as either being inflight or closed. This will allow a more robust logic being applied at wrap up to determine whether the task being wrapped up is the last task to wrap up or not but this will have to be implemented manually as the logic for this hasnt been created yet.

@@ -1,30 +1,29 @@
 import * as Flex from '@twilio/flex-ui';
-import { AppState } from 'flex-hooks/states';
+import AppState from 'types/manager/AppState';
 import { sortBy } from 'lodash';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { Activity } from 'types/task-router';
-import { ActivitySkillFilterRules } from '../types/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
+import { ActivitySkillFilterRules } from '../types/ServiceConfiguration';
+import { getRules } from '../config';
 
 export interface ActivityCssConfig {
-  idx: number,
-  display: string,
-  order: number
+  idx: number;
+  display: string;
+  order: number;
 }
 
 class AgentActivities {
   manager: Flex.Manager;
-  config: ActivitySkillFilterRules
+
+  config: ActivitySkillFilterRules;
 
   constructor() {
     this.manager = Flex.Manager.getInstance();
-  
-    // the supporting configuration for this utility is expected to be set 
+
+    // the supporting configuration for this utility is expected to be set
     // as a custom element on the ui_attributes of the flex configuration
     // see README for more details
-    const { rules } = custom_data.features.activity_skill_filter;
-    this.config = rules;
+    this.config = getRules();
   }
 
   // NOTE: This will hide any TR activities that are NOT set in the flex config
@@ -34,10 +33,10 @@ class AgentActivities {
     const { attributes, activities } = flex.worker;
     const { routing = { skills: [], levels: {} } } = attributes;
     const skills = routing.skills || [];
-  
+
     return Array.from(activities.values()).reduce((results, activity, idx) => {
       // default the cssConfig to hide this element
-      let cssConfig: ActivityCssConfig = { idx, display: 'none', order: idx };
+      const cssConfig: ActivityCssConfig = { idx, display: 'none', order: idx };
       // fetch activity from the config stored in ui_attributes.agentActivityRules
       const activityRule = this.config[activity.sid];
       // if the activity exists
@@ -56,7 +55,6 @@ class AgentActivities {
     }, [] as Array<ActivityCssConfig>);
   }
 
-
   // NOTE: This will hide any TR activities that are NOT set in the flex config
   // So make sure the deployed flex config contains all activities you'd like to appear in this menu
   // This will also include the worker's current activity even if it is not an allowed one, so that the menu can render the current state correctly
@@ -65,12 +63,12 @@ class AgentActivities {
     const { attributes, activities } = flex.worker;
     const { routing = { skills: [], levels: {} } } = attributes;
     let skills = routing.skills || [];
-  
+
     if (worker) {
       const { routing: agentRouting = { skills: [], levels: {} } } = worker.attributes;
       skills = agentRouting.skills || [];
     }
-    
+
     const eligibleSkills = Array.from(activities.values()).reduce((results: any, activity) => {
       const activityRule = this.config[activity.sid];
       if (activityRule) {
@@ -83,8 +81,8 @@ class AgentActivities {
       }
       return results;
     }, []);
-  
-    return sortBy(eligibleSkills, 'sort_order').map(result => result.activity);
+
+    return sortBy(eligibleSkills, 'sort_order').map((result) => result.activity);
   }
 }
 

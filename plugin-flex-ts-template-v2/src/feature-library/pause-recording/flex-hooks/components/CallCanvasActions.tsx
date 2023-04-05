@@ -1,15 +1,14 @@
 import * as Flex from '@twilio/flex-ui';
+
 import PauseRecordingButton from '../../custom-components/PauseRecordingButton';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { FlexComponent } from '../../../../types/feature-loader';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } = custom_data?.features?.pause_recording || {}
-
-export function addPauseRecordingButton(flex: typeof Flex, manager: Flex.Manager) {
-  
-  if (!enabled) return;
+export const componentName = FlexComponent.CallCanvasActions;
+export const componentHook = function addPauseRecordingButton(flex: typeof Flex, _manager: Flex.Manager) {
+  const isNotInternalCall = (props: any) => props.task.attributes.client_call !== true;
 
   flex.CallCanvasActions.Content.add(<PauseRecordingButton key="pause-recording-button" />, {
-    sortOrder: 2
+    sortOrder: 2,
+    if: isNotInternalCall,
   });
-}
+};

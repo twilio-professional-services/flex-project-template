@@ -1,26 +1,17 @@
-import * as Flex from "@twilio/flex-ui";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-import { NotificationIds } from "../notifications/DualChannelRecording";
-const { custom_data } =
-  (Flex.Manager.getInstance().serviceConfiguration
-    .ui_attributes as UIAttributes) || {};
-const { enabled = false, channel } =
-  custom_data?.features?.dual_channel_recording || {};
+import * as Flex from '@twilio/flex-ui';
 
-const pluginsLoadedHandler = (flexEvent: FlexEvent) => {
-  if (!enabled) return;
+import { NotificationIds } from '../notifications/DualChannelRecording';
+import { getChannelToRecord } from '../../config';
+import { FlexEvent } from '../../../../types/feature-loader';
 
-  console.log(`Feature enabled: dual-channel-recording`);
-  
+export const eventName = FlexEvent.pluginsLoaded;
+export const eventHook = () => {
   // Test to make sure the channel config property has been
   // configured correctly. If it has not, throw errors and notifications.
-  if (channel != 'worker' && channel != 'customer') {
+  if (getChannelToRecord() !== 'worker' && getChannelToRecord() !== 'customer') {
     Flex.Notifications.showNotification(NotificationIds.DualChannelBroken);
     console.error(
-      'ERROR: dual_channel_recording.channel does not have the correct value. Refer to your ui_attributes to fix.'
+      'ERROR: dual_channel_recording.channel does not have the correct value. Refer to your ui_attributes to fix.',
     );
   }
 };
-
-export default pluginsLoadedHandler;

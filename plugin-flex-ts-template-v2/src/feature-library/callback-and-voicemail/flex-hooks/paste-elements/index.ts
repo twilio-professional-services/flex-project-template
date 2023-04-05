@@ -1,17 +1,15 @@
-import { PasteCustomCSS } from "@twilio-paste/customization";
+import { PasteCustomCSS } from '@twilio-paste/customization';
 
-const customPasteElements = {
+export const pasteElementHook = {
   C_AND_V_BUTTON_BOX: {
-    paddingLeft: "space40",
-    paddingRight: "space40",
-    paddingTop: "space40",
+    paddingLeft: 'space40',
+    paddingRight: 'space40',
+    paddingTop: 'space40',
   },
   C_AND_V_CONTENT_BOX: {
-    paddingBottom: "space40",
+    paddingBottom: 'space40',
   },
   C_AND_V_CONTENT_HEADING: {
-    marginBottom: "space0",
+    marginBottom: 'space0',
   },
-} as {[key: string]: PasteCustomCSS};
-
-export default customPasteElements;
+} as { [key: string]: PasteCustomCSS };

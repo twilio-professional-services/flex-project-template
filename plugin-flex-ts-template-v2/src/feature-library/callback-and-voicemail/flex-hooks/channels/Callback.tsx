@@ -1,16 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
 import React from 'react';
-import { TaskAttributes } from '../../../../types/task-router/Task';
 import PhoneCallbackIcon from '@material-ui/icons/PhoneCallback';
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes || {}
-const { enabled = false } = custom_data?.features?.callbacks || {}
+import { TaskAttributes } from '../../../../types/task-router/Task';
 
-export function createCallbackChannel(flex: typeof Flex, manager: Flex.Manager) {
-
-  if(!enabled) return;
-
+export const channelHook = function createCallbackChannel(flex: typeof Flex, _manager: Flex.Manager) {
   const channelDefinition = flex.DefaultTaskChannels.createDefaultTaskChannel(
     'callback',
     (task) => {
@@ -29,25 +23,24 @@ export function createCallbackChannel(flex: typeof Flex, manager: Flex.Manager) 
       ...templates,
       TaskListItem: {
         ...templates?.TaskListItem,
-        firstLine: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`
+        firstLine: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`,
       },
       TaskCanvasHeader: {
         ...templates?.TaskCanvasHeader,
-        title: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`
+        title: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`,
       },
       IncomingTaskCanvas: {
         ...templates?.IncomingTaskCanvas,
-        firstLine: (task: Flex.ITask) => task.queueName
-      }
+        firstLine: (task: Flex.ITask) => task.queueName,
+      },
     },
     icons: {
       active: <PhoneCallbackIcon key="active-callback-icon" />,
       list: <PhoneCallbackIcon key="list-callback-icon" />,
       main: <PhoneCallbackIcon key="main-callback-icon" />,
-    }
-  }
+    },
+  };
 
   // Register Channel
-  //CallbackChannel.capabilities.add(Flex.TaskChannelCapability.Wrapup);
-  flex.TaskChannels.register(CallbackChannel);
-}
+  return CallbackChannel;
+};

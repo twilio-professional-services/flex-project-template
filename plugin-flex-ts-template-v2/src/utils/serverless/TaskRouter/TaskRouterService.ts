@@ -1,5 +1,7 @@
-import ApiService from "../ApiService";
-import { EncodedParams } from "../../../types/serverless";
+import { TaskAssignmentStatus } from 'types/task-router/Task';
+
+import ApiService from '../ApiService';
+import { EncodedParams } from '../../../types/serverless';
 
 export interface Queue {
   targetWorkers: string;
@@ -45,14 +47,14 @@ interface UpdateWorkerChannelResponse {
 let queues = null as null | Array<Queue>;
 
 class TaskRouterService extends ApiService {
-  async updateTaskAttributes(
-    taskSid: string,
-    attributesUpdate: object
-  ): Promise<Boolean> {
-    const result = await this.#updateTaskAttributes(
-      taskSid,
-      JSON.stringify(attributesUpdate)
-    );
+  async updateTaskAttributes(taskSid: string, attributesUpdate: object): Promise<boolean> {
+    const result = await this.#updateTaskAttributes(taskSid, JSON.stringify(attributesUpdate));
+
+    return result.success;
+  }
+
+  async updateTaskAssignmentStatus(taskSid: string, assignmentStatus: TaskAssignmentStatus): Promise<boolean> {
+    const result = await this.#updateTaskAssignmentStatus(taskSid, assignmentStatus);
 
     return result.success;
   }
@@ -66,7 +68,7 @@ class TaskRouterService extends ApiService {
     if (response.success) queues = response.queues;
     return queues;
   }
-  
+
   async getWorkerChannels(workerSid: string): Promise<Array<WorkerChannelCapacityResponse>> {
     const response = await this.#getWorkerChannels(workerSid);
     if (response.success) return response.workerChannels;
@@ -77,22 +79,38 @@ class TaskRouterService extends ApiService {
     workerSid: string,
     workerChannelSid: string,
     capacity: number,
-    available: boolean
-  ): Promise<Boolean> {
-    const result = await this.#updateWorkerChannel(
-      workerSid,
-      workerChannelSid,
-      capacity,
-      available
-    );
+    available: boolean,
+  ): Promise<boolean> {
+    const result = await this.#updateWorkerChannel(workerSid, workerChannelSid, capacity, available);
 
     return result.success;
   }
 
-  #updateTaskAttributes = (
+  #updateTaskAssignmentStatus = async (
     taskSid: string,
-    attributesUpdate: string
+    assignmentStatus: TaskAssignmentStatus,
   ): Promise<UpdateTaskAttributesResponse> => {
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(this.manager.user.token),
+      taskSid: encodeURIComponent(taskSid),
+      assignmentStatus: encodeURIComponent(assignmentStatus),
+    };
+
+    return this.fetchJsonWithReject<UpdateTaskAttributesResponse>(
+      `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/taskrouter/update-task-assignment-status`,
+      {
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      },
+    ).then((response): UpdateTaskAttributesResponse => {
+      return {
+        ...response,
+      };
+    });
+  };
+
+  #updateTaskAttributes = async (taskSid: string, attributesUpdate: string): Promise<UpdateTaskAttributesResponse> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(this.manager.user.token),
       taskSid: encodeURIComponent(taskSid),
@@ -102,10 +120,10 @@ class TaskRouterService extends ApiService {
     return this.fetchJsonWithReject<UpdateTaskAttributesResponse>(
       `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/taskrouter/update-task-attributes`,
       {
-        method: "post",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.buildBody(encodedParams),
-      }
+      },
     ).then((response): UpdateTaskAttributesResponse => {
       return {
         ...response,
@@ -113,7 +131,7 @@ class TaskRouterService extends ApiService {
     });
   };
 
-  #getQueues = (): Promise<GetQueuesResponse> => {
+  #getQueues = async (): Promise<GetQueuesResponse> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(this.manager.user.token),
     };
@@ -121,38 +139,38 @@ class TaskRouterService extends ApiService {
     return this.fetchJsonWithReject<GetQueuesResponse>(
       `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/taskrouter/get-queues`,
       {
-        method: "post",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.buildBody(encodedParams),
-      }
+      },
     ).then((response): GetQueuesResponse => {
       return response;
     });
   };
-  
-  #getWorkerChannels = (workerSid: string): Promise<GetWorkerChannelsResponse> => {
+
+  #getWorkerChannels = async (workerSid: string): Promise<GetWorkerChannelsResponse> => {
     const encodedParams: EncodedParams = {
       workerSid: encodeURIComponent(workerSid),
       Token: encodeURIComponent(this.manager.user.token),
     };
-  
+
     return this.fetchJsonWithReject<GetWorkerChannelsResponse>(
       `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/taskrouter/get-worker-channels`,
       {
-        method: "post",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.buildBody(encodedParams),
-      }
+      },
     ).then((response): GetWorkerChannelsResponse => {
       return response;
     });
   };
 
-  #updateWorkerChannel = (
+  #updateWorkerChannel = async (
     workerSid: string,
     workerChannelSid: string,
     capacity: number,
-    available: boolean
+    available: boolean,
   ): Promise<UpdateWorkerChannelResponse> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(this.manager.user.token),
@@ -165,10 +183,10 @@ class TaskRouterService extends ApiService {
     return this.fetchJsonWithReject<UpdateWorkerChannelResponse>(
       `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/taskrouter/update-worker-channel`,
       {
-        method: "post",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: this.buildBody(encodedParams),
-      }
+      },
     ).then((response): UpdateWorkerChannelResponse => {
       return response;
     });

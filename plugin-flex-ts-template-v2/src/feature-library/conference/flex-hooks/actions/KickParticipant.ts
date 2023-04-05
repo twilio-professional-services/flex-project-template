@@ -1,17 +1,20 @@
-import * as Flex from "@twilio/flex-ui";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-import ConferenceService from "../../utils/ConferenceService";
+import * as Flex from '@twilio/flex-ui';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled = false } = custom_data?.features.conference || {};
+import ConferenceService from '../../utils/ConferenceService';
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
-export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex.Manager) {
-  if (!enabled) return;
-
-  flex.Actions.addListener("beforeKickParticipant", async (payload, abortFunction) => {
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.KickParticipant;
+export const actionHook = function handleKickConferenceParticipant(flex: typeof Flex, _manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     const { participantType } = payload;
 
-    if (participantType && participantType !== "transfer" && participantType !== "external" && participantType !== "worker") {
+    if (
+      participantType &&
+      participantType !== 'transfer' &&
+      participantType !== 'external' &&
+      participantType !== 'worker'
+    ) {
       abortFunction();
 
       const { task, targetSid } = payload;
@@ -24,4 +27,4 @@ export function handleKickConferenceParticipant(flex: typeof Flex, manager: Flex
       await ConferenceService.removeParticipant(conference, participantSid);
     }
   });
-}
+};

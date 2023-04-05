@@ -1,34 +1,19 @@
-import * as Flex from "@twilio/flex-ui";
-import WorkerState from "../../helpers/workerActivityHelper";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
-import { storeCurrentActivitySidIfNeeded } from "../../helpers/pendingActivity";
-import {
-  onTaskActivity,
-  onTaskNoAcdActivity,
-} from "../../helpers/systemActivities";
+import * as Flex from '@twilio/flex-ui';
 
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } =
-  custom_data?.features?.activity_reservation_handler || {};
+import WorkerState from '../../helpers/workerActivityHelper';
+import { storeCurrentActivitySidIfNeeded } from '../../helpers/pendingActivity';
+import { onTaskActivity, onTaskNoAcdActivity } from '../../helpers/systemActivities';
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
-export function changeWorkerActivityBeforeOutboundCall(
-  flex: typeof Flex,
-  manager: Flex.Manager
-) {
-  if (!enabled) return;
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.StartOutboundCall;
+export const actionHook = function changeWorkerActivityBeforeOutboundCall(flex: typeof Flex, _manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (_payload, _abortFunction) => {
+    storeCurrentActivitySidIfNeeded();
 
-  flex.Actions.addListener(
-    "beforeStartOutboundCall",
-    async (payload, abortFunction) => {
-      storeCurrentActivitySidIfNeeded();
+    const targetActivity = WorkerState.activity?.available ? onTaskActivity : onTaskNoAcdActivity;
 
-      const targetActivity = WorkerState.activity?.available
-        ? onTaskActivity
-        : onTaskNoAcdActivity;
-
-      WorkerState.setWorkerActivity(targetActivity?.sid);
-      await WorkerState.waitForWorkerActivityChange(targetActivity?.sid);
-    }
-  );
-}
+    WorkerState.setWorkerActivity(targetActivity?.sid);
+    await WorkerState.waitForWorkerActivityChange(targetActivity?.sid);
+  });
+};

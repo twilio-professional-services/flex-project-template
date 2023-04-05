@@ -1,41 +1,38 @@
-import * as Flex from "@twilio/flex-ui";
-import { EncodedParams } from "../../../types/serverless";
-import { UIAttributes } from "../../../types/manager/ServiceConfiguration";
-import { random } from "lodash";
+import * as Flex from '@twilio/flex-ui';
+import { random } from 'lodash';
 
-function delay<T>(ms: number, result?: T) {
+import { EncodedParams } from '../../../types/serverless';
+import { getFeatureFlags } from '../../configuration';
+
+async function delay<T>(ms: number, result?: T) {
   return new Promise((resolve) => setTimeout(() => resolve(result), ms));
 }
 
 export default abstract class ApiService {
-  protected manager = Flex.Manager.getInstance();
   readonly serverlessDomain: string;
+
   readonly serverlessProtocol: string;
 
+  protected manager = Flex.Manager.getInstance();
+
   constructor() {
-    const { custom_data } = this.manager.configuration as UIAttributes;
+    const custom_data = getFeatureFlags() || {};
 
     // use serverless_functions_domain from ui_attributes, or .env or set as undefined
 
-    this.serverlessProtocol = "https";
-    this.serverlessDomain = "";
+    this.serverlessProtocol = 'https';
+    this.serverlessDomain = '';
 
     if (process.env?.FLEX_APP_SERVERLESS_FUNCTONS_DOMAIN)
       this.serverlessDomain = process.env?.FLEX_APP_SERVERLESS_FUNCTONS_DOMAIN;
 
-    if (custom_data?.serverless_functions_domain)
-      this.serverlessDomain = custom_data.serverless_functions_domain;
-    
-    if(custom_data?.serverless_functions_protocol)
-      this.serverlessProtocol = custom_data.serverless_functions_protocol;
+    if (custom_data?.serverless_functions_domain) this.serverlessDomain = custom_data.serverless_functions_domain;
 
-    if(custom_data?.serverless_functions_port)
-      this.serverlessDomain += ":" + custom_data.serverless_functions_port
+    if (custom_data?.serverless_functions_protocol) this.serverlessProtocol = custom_data.serverless_functions_protocol;
 
-    if (!this.serverlessDomain)
-      console.error(
-        "serverless_functions_domain is not set in flex config or env file"
-      );
+    if (custom_data?.serverless_functions_port) this.serverlessDomain += `:${custom_data.serverless_functions_port}`;
+
+    if (!this.serverlessDomain) console.error('serverless_functions_domain is not set in flex config or env file');
   }
 
   protected buildBody(encodedParams: EncodedParams): string {
@@ -47,16 +44,12 @@ export default abstract class ApiService {
         return `${result}&${paramName}=${encodedParams[paramName]}`;
       }
       return `${paramName}=${encodedParams[paramName]}`;
-    }, "");
+    }, '');
   }
 
-  protected fetchJsonWithReject<T>(
-    url: string,
-    config: RequestInit,
-    attempts = 0
-  ): Promise<T> {
+  protected async fetchJsonWithReject<T>(url: string, config: RequestInit, attempts = 0): Promise<T> {
     return fetch(url, config)
-      .then((response) => {
+      .then(async (response) => {
         if (!response.ok) {
           throw response;
         }

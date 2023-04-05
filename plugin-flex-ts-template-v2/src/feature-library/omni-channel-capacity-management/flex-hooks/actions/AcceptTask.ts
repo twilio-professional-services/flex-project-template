@@ -1,12 +1,11 @@
-import * as Flex from "@twilio/flex-ui";
-import { Channel } from "../../../../types/task-router";
-import TaskRouterService from "../../../../utils/serverless/TaskRouter/TaskRouterService";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import * as Flex from '@twilio/flex-ui';
 
-const { custom_data } = Flex.Manager.getInstance().serviceConfiguration
-  .ui_attributes as UIAttributes;
-const { enabled = false } =
-  custom_data?.features?.omni_channel_capacity_management || {};
+import { Channel } from '../../../../types/task-router';
+import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+
+export const actionEvent = FlexActionEvent.after;
+export const actionName = FlexAction.AcceptTask;
 
 /*
   this function manages channel capacity for chat and is intended to be used in
@@ -37,22 +36,15 @@ const { enabled = false } =
 
   Once the next piece of work is recieved, the capacity is reset. 
 */
-export function omniChannelChatCapacityManager(
-  flex: typeof Flex,
-  manager: Flex.Manager
-) {
-  if (!enabled) return;
-
-  Flex.Actions.addListener("afterAcceptTask", async () => {
+export const actionHook = function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async () => {
     const workerChanneslMap = manager?.workerClient?.channels;
     const tasksMap = manager.store.getState().flex.worker.tasks;
 
-    const workerChannelsArray = workerChanneslMap
-      ? Array.from(workerChanneslMap.values())
-      : null;
+    const workerChannelsArray = workerChanneslMap ? Array.from(workerChanneslMap.values()) : null;
     const chatChannel: Channel | undefined = workerChannelsArray
       ? workerChannelsArray.find((channel) => {
-          return channel?.taskChannelUniqueName === "chat";
+          return channel?.taskChannelUniqueName === 'chat';
         })
       : undefined;
 
@@ -65,10 +57,10 @@ export function omniChannelChatCapacityManager(
 
     const tasksArray = Array.from(tasksMap.values());
     const chatTasks: Array<any>[] | any = tasksArray.filter((task: any) => {
-      return task.taskChannelUniqueName === "chat";
+      return task.taskChannelUniqueName === 'chat';
     });
 
-    const workerSid = manager?.workerClient?.sid || "";
+    const workerSid = manager?.workerClient?.sid || '';
 
     if (workerSid && currentChatCapacity === 1 && chatTasks.length < 2) {
       // we're assuming chat capacity has been artificially reduced
@@ -76,27 +68,13 @@ export function omniChannelChatCapacityManager(
       /* 
           TODO: - add logic to derive max capacity instead of hard coded 2
         */
-      TaskRouterService.updateWorkerChannel(
-        workerSid,
-        workerChannelSid,
-        2,
-        true
-      );
+      TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 2, true);
     }
 
-    if (
-      workerSid &&
-      chatTasks.length > 1 &&
-      chatTasks.length === currentChatCapacity
-    ) {
+    if (workerSid && chatTasks.length > 1 && chatTasks.length === currentChatCapacity) {
       // we're saturated
       // reduce capacity on chat channel to 1
-      TaskRouterService.updateWorkerChannel(
-        workerSid,
-        workerChannelSid,
-        1,
-        true
-      );
+      TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 1, true);
     }
   });
-}
+};

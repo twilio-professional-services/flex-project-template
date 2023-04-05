@@ -1,8 +1,8 @@
-import { FilterDefinition } from "@twilio/flex-ui";
+import { FilterDefinition } from '@twilio/flex-ui';
 
 import SelectFilter from '../custom-components/SelectFilter';
 import SelectFilterLabel from '../custom-components/SelectFilterLabel';
-import { getDepartmentOptions } from '../index'
+import { getDepartmentOptions } from '../config';
 
 /* 
   This filter is based on the model of the worker attibutes adopted from
@@ -26,17 +26,20 @@ import { getDepartmentOptions } from '../index'
 
   */
 
-export const departmentFilter = () => ({
-  id: 'data.attributes.department_name',
-  title: 'Departments',
-  fieldName: 'department_name',
-  options: getDepartmentOptions().sort().map(value => ({
-    value,
-    label: value
-  })),
-  customStructure: {
-    field: <SelectFilter IsMulti={true} />,
-    label: <SelectFilterLabel />
-  },
-  condition: 'IN'
-} as FilterDefinition);
+export const departmentFilter = () =>
+  ({
+    id: 'data.attributes.department_name',
+    title: 'Departments',
+    fieldName: 'department_name',
+    options: getDepartmentOptions()
+      .sort()
+      .map((value) => ({
+        value,
+        label: value,
+      })),
+    customStructure: {
+      field: <SelectFilter IsMulti={true} />,
+      label: <SelectFilterLabel />,
+    },
+    condition: 'IN',
+  } as FilterDefinition);

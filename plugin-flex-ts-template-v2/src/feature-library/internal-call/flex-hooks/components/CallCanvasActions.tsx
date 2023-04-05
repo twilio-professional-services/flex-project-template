@@ -1,14 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
 
-import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { FlexComponent } from '../../../../types/feature-loader';
 
-const { custom_data } = Flex.Manager.getInstance().configuration as UIAttributes;
-const { enabled } = custom_data?.features?.internal_call || {}
-
-export function removeDirectoryFromInternalCalls(flex: typeof Flex) {
-
-  if(!enabled) return;
-  
+export const componentName = FlexComponent.CallCanvasActions;
+export const componentHook = function removeDirectoryFromInternalCalls(flex: typeof Flex) {
   const isInternalCall = (props: any) => props.task.attributes.client_call === true;
-  flex.CallCanvasActions.Content.remove("directory", { if: isInternalCall });
-}
+  flex.CallCanvasActions.Content.remove('directory', { if: isInternalCall });
+};

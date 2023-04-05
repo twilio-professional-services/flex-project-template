@@ -1,11 +1,7 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()["common/helpers/prepare-function"].path);
-const TaskRouterOperations = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/taskrouter"
-].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
-const requiredParameters = [
-  { key: "workerSid", purpose: "unique ID of the worker" },
-];
+const requiredParameters = [{ key: 'workerSid', purpose: 'unique ID of the worker' }];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
@@ -16,11 +12,11 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       workerSid,
     });
     const { success, status, workerChannels } = result;
-    
+
     response.setStatusCode(status);
     response.setBody({ success, workerChannels });
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

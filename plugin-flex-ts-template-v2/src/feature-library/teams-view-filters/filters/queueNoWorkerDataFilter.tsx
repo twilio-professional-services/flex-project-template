@@ -1,7 +1,8 @@
-import { FilterDefinition } from "@twilio/flex-ui";
-import SelectFilter from "../custom-components/SelectFilter";
-import SelectFilterLabel from "../custom-components/SelectFilterLabel";
-import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService'
+import { FilterDefinition } from '@twilio/flex-ui';
+
+import SelectFilter from '../custom-components/SelectFilter';
+import SelectFilterLabel from '../custom-components/SelectFilterLabel';
+import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 
 /* 
     this filter works by injecting a temporary placeholder into the filters
@@ -21,13 +22,14 @@ import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterSe
 */
 
 export const queueNoWorkerDataFilter = async () => {
-  
   const queueOptions = await TaskRouterService.getQueues();
-  const options = queueOptions? queueOptions.map((queue: any) => ({
-    value: queue.friendlyName,
-    label: queue.friendlyName,
-    default: false
-  })) : [];
+  const options = queueOptions
+    ? queueOptions.map((queue: any) => ({
+        value: queue.friendlyName,
+        label: queue.friendlyName,
+        default: false,
+      }))
+    : [];
 
   return {
     id: 'queue-replacement',
@@ -35,9 +37,9 @@ export const queueNoWorkerDataFilter = async () => {
     fieldName: 'queue',
     customStructure: {
       label: <SelectFilterLabel />,
-      field: <SelectFilter IsMulti={false}/>,
+      field: <SelectFilter IsMulti={false} />,
     },
-    options: options,
-    condition: 'IN'
+    options,
+    condition: 'IN',
   } as FilterDefinition;
-}
+};

@@ -1,5 +1,7 @@
-import { WorkerAttributes } from '@twilio/flex-ui';
 import { EventEmitter } from 'events';
+
+import { WorkerAttributes } from '@twilio/flex-ui';
+
 import Activity from './Activity';
 import Reservation from './Reservation';
 import Channel from './Channel';
@@ -31,7 +33,7 @@ export interface CustomWorkerAttributes extends WorkerAttributes {
   // used to override name seen on webchat
   public_identity: string;
 
-  //caller-id feature
+  // caller-id feature
   selectedCallerId: string;
 
   // Flex insights references the following elements

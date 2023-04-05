@@ -6,4 +6,3 @@ export default interface ActivityReservationHandlerConfig {
   enabled: boolean;
   system_activity_names: SystemActivityNames;
 }
-

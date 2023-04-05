@@ -1,26 +1,16 @@
-import * as Flex from "@twilio/flex-ui";
-import { AppState, reduxNamespace } from "../../../../flex-hooks/states";
-import { UIAttributes } from "types/manager/ServiceConfiguration";
+import * as Flex from '@twilio/flex-ui';
 
-const { custom_data } =
-  (Flex.Manager.getInstance().configuration as UIAttributes) || {};
-const { enabled = false } = custom_data?.features?.caller_id || {};
+import AppState from '../../../../types/manager/AppState';
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import { reduxNamespace } from '../../../../utils/state';
 
-export function applySelectedCallerIdForDialedNumbers(
-  flex: typeof Flex,
-  manager: Flex.Manager
-) {
-  if (!enabled) return;
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.StartOutboundCall;
+export const actionHook = function applySelectedCallerIdForDialedNumbers(flex: typeof Flex, manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, _abortFunction) => {
+    const state = manager.store.getState() as AppState;
+    const { selectedCallerId } = state[reduxNamespace].outboundCallerIdSelector;
 
-  flex.Actions.addListener(
-    "beforeStartOutboundCall",
-    async (payload, abortFunction) => {
-      const state = manager.store.getState() as AppState;
-      const selectedCallerId =
-        state[reduxNamespace].outboundCallerIdSelector.selectedCallerId;
-
-      if (!payload.callerId && selectedCallerId)
-        payload.callerId = selectedCallerId;
-    }
-  );
-}
+    if (!payload.callerId && selectedCallerId) payload.callerId = selectedCallerId;
+  });
+};
