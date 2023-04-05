@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 
 import CannedResponsesCRM from '../../custom-components/CannedResponsesCRM';
 import { FlexComponent } from '../../../../types/feature-loader';
-import { getUILocation } from '../../../../feature-library/canned-responses/config';
+import { getUILocation } from '../../config';
 
 export const componentName = FlexComponent.CRMContainer;
 export const componentHook = function addCannedResponsesCRMContainer(flex: typeof Flex, _manager: Flex.Manager) {
@@ -13,12 +13,11 @@ export const componentHook = function addCannedResponsesCRMContainer(flex: typeo
       // When completing the task, selectedTaskSid still exist but the task in the map has been removed, so we have to check the size of it
       if (props.task) {
         return Flex.TaskHelper.isChatBasedTask(props.task);
-      } else {
-        if (props.selectedTaskSid && props.tasks.size > 0) {
-          return Flex.TaskHelper.isChatBasedTask(props.tasks.get(props.selectedTaskSid));
-        }
-        return false;
       }
+      if (props.selectedTaskSid && props.tasks.size > 0) {
+        return Flex.TaskHelper.isChatBasedTask(props.tasks.get(props.selectedTaskSid));
+      }
+      return false;
     },
     sortOrder: -1,
   };

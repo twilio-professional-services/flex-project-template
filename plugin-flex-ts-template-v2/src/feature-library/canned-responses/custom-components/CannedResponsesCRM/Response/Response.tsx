@@ -1,6 +1,5 @@
 import React from 'react';
 import { Actions, ITask, useFlexSelector } from '@twilio/flex-ui';
-
 import { Text } from '@twilio-paste/text';
 import { Button } from '@twilio-paste/core/button';
 import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
@@ -58,7 +57,7 @@ const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
             </Tooltip>
           </Flex>
           <Tooltip text="Send">
-            <Button variant="primary" onClick={() => onClickSend()} size="circle_small">
+            <Button variant="primary" onClick={async () => onClickSend()} size="circle_small">
               <SendIcon decorative />
             </Button>
           </Tooltip>

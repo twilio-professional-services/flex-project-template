@@ -5,13 +5,14 @@ import { SkeletonLoader } from '@twilio-paste/core/skeleton-loader';
 import { Column, Grid } from '@twilio-paste/core/grid';
 import { Stack } from '@twilio-paste/stack';
 import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
+import { CannedResponseCategories, ResponseCategory } from 'feature-library/canned-responses/types/CannedResponses';
 
 import Category from './Category';
-import CannedResponsesService from '../../../../feature-library/canned-responses/utils/CannedResponsesService';
-import { CannedResponseCategories, ResponseCategory } from 'feature-library/canned-responses/types/CannedResponses';
+import CannedResponsesService from '../../utils/CannedResponsesService';
 
 const CannedResponsesCRM: React.FunctionComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [responseCategories, setResponseCategories] = useState<undefined | CannedResponseCategories>(undefined);
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const CannedResponsesCRM: React.FunctionComponent = () => {
         setIsLoading(false);
       } catch (e) {
         setIsLoading(false);
+        setError(true);
       }
     }
 
@@ -36,11 +38,10 @@ const CannedResponsesCRM: React.FunctionComponent = () => {
           Canned Chat Responses
         </Text>
       </Stack>
-      {isLoading ? (
-        <SkeletonLoader />
-      ) : !!responseCategories ? (
+      {isLoading && <SkeletonLoader />}
+      {Boolean(responseCategories) && !isLoading && (
         <>
-          {responseCategories.categories.map((category: ResponseCategory) => (
+          {responseCategories?.categories.map((category: ResponseCategory) => (
             <Grid gutter="space30" vertical key={category.section}>
               <Column>
                 <Category {...category} />
@@ -48,9 +49,8 @@ const CannedResponsesCRM: React.FunctionComponent = () => {
             </Grid>
           ))}
         </>
-      ) : (
-        <Text as="p">There was an error fetching responses. Please reload the page.</Text>
       )}
+      {error && <Text as="p">There was an error fetching responses. Please reload the page.</Text>}
     </Box>
   );
 };

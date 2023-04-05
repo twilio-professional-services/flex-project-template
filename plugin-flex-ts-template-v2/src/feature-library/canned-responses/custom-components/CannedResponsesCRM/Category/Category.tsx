@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text } from '@twilio-paste/text';
 import { Box } from '@twilio-paste/core/box';
-
-import Response from '../Response';
 import { CannedResponse } from 'feature-library/canned-responses/types/CannedResponses';
 import { Table, THead, Tr, Th, TBody } from '@twilio-paste/table';
+
+import Response from '../Response';
 
 interface CategoryProps {
   section: string;

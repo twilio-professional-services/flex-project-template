@@ -6,14 +6,10 @@ import { Menu, MenuButton, MenuItem, MenuGroup, useMenuState } from '@twilio-pas
 import { SkeletonLoader } from '@twilio-paste/core/skeleton-loader';
 import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 import { ErrorIcon } from '@twilio-paste/icons/esm/ErrorIcon';
-
-import {
-  CannedResponse,
-  CannedResponseCategories,
-  ResponseCategory,
-} from '../../../../feature-library/canned-responses/types/CannedResponses';
-import CannedResponsesService from '../../../../feature-library/canned-responses/utils/CannedResponsesService';
 import { Button } from '@twilio-paste/button';
+
+import { CannedResponse, CannedResponseCategories, ResponseCategory } from '../../types/CannedResponses';
+import CannedResponsesService from '../../utils/CannedResponsesService';
 
 interface CannedResponsesDropdownProps {
   task: ITask;
@@ -21,6 +17,7 @@ interface CannedResponsesDropdownProps {
 
 const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownProps> = ({ task }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [responseCategories, setResponseCategories] = useState<undefined | CannedResponseCategories>(undefined);
   const inputState = useFlexSelector(
     (state) => state.flex.chat.conversationInput[task.attributes.conversationSid].inputText,
@@ -59,15 +56,14 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
 
   return (
     <Box>
-      {isLoading ? (
-        <SkeletonLoader color="textPrimary" />
-      ) : !!responseCategories ? (
+      {isLoading && <SkeletonLoader />}
+      {Boolean(responseCategories) && !isLoading && (
         <>
           <MenuButton {...menu} variant={'primary_icon'}>
             <ChatIcon decorative />
           </MenuButton>
           <Menu {...menu} aria-label="canned-responses" element="CANNED_RESPONSES_MENU">
-            {responseCategories.categories.map((category: ResponseCategory) => (
+            {responseCategories?.categories.map((category: ResponseCategory) => (
               <div key={category.section}>
                 <MenuGroup {...menu} label={category.section}>
                   {category.responses.map((response: CannedResponse) => (
@@ -87,7 +83,8 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
             ))}
           </Menu>
         </>
-      ) : (
+      )}
+      {error && (
         <Tooltip text="There was an error fetching responses. Please reload the page.">
           <Button variant={'destructive_icon'}>
             <ErrorIcon decorative />

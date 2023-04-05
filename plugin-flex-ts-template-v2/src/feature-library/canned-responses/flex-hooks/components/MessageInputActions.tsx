@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 
 import CannedResponsesDropdown from '../../custom-components/CannedResponsesDropdown';
 import { FlexComponent } from '../../../../types/feature-loader';
-import { getUILocation } from '../../../../feature-library/canned-responses/config';
+import { getUILocation } from '../../config';
 
 export const componentName = FlexComponent.MessageInputActions;
 export const componentHook = function addCannedResponsesDropdownToMessageInputActions(
