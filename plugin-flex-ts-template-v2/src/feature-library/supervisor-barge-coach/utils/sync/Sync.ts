@@ -47,9 +47,9 @@ class SyncDocClass {
 
           // Checking Updated Status we pass during the button click
           // to update the Supervisor's Status within the Supervisor Array to the Sync Doc
-        } if (updateStatus === 'remove' && agentAssistanceArray.length > 0) {
+        } else if (updateStatus == 'remove') {
           // Get the index of the Supervisor we need to remove in the array
-          const removeAgentAssistanceIndex = agentAssistanceArray?.findIndex((a: any) => a.agentWorkerSID === agentWorkerSID);
+          const removeAgentAssistanceIndex = agentAssistanceArray?.findIndex((a: any) => a.agentWorkerSID == agentWorkerSID);
           // Ensure we get something back, and update the status the supervisor is in
           if (removeAgentAssistanceIndex > -1) {
             agentAssistanceArray.splice(removeAgentAssistanceIndex, 1);
