@@ -226,6 +226,9 @@ export const handleFlexCallIncoming = (manager: Manager, call: Call) => {
   // register listeners for the new SecondDevice
   SecondDevice?.on('incoming', handleSecondCallIncoming);
   SecondDevice?.on('registered', handleSecondDeviceRegistered);
+  SecondDevice?.on('error', (error) => {
+    console.log('MultiCall: Error in SecondDevice', error);
+  });
 
   // register the new device with Twilio
   SecondDevice?.register();
