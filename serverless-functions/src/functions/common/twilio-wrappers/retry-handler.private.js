@@ -29,8 +29,14 @@ exports.retryHandler = async (error, parameters, callback) => {
 
   const { TWILIO_SERVICE_MAX_BACKOFF, TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_RETRY_LIMIT } = process.env;
   const { attempts, context } = parameters;
-  const { response, message: errorMessage } = error;
-  const status = response ? response.status : 500;
+  const {
+    response,
+    message: errorMessage,
+    status: errorStatus,
+    moreInfo: twilioDocPage,
+    code: twilioErrorCode,
+  } = error;
+  const status = errorStatus ? errorStatus : response ? response.status : 500;
   const logWarning = attempts === 1 ? `${parameters.attempts} retry attempt` : `${parameters.attempts} retry attempts`;
   const message = errorMessage ? errorMessage : error;
 
@@ -47,7 +53,7 @@ exports.retryHandler = async (error, parameters, callback) => {
     return callback(updatedParameters);
   }
   console.error(
-    `retrying ${context.PATH}.${callback.name}() failed after ${logWarning}, status code: ${status}, message: ${message}`,
+    `retrying ${context.PATH}.${callback.name}() failed after ${logWarning}, status code: ${status}, message: ${message}, twilioErrorCode: ${twilioErrorCode}, twilioDocPage: ${twilioDocPage}`,
   );
-  return { success: false, message, status };
+  return { success: false, message, status, twilioErrorCode, twilioDocPage };
 };
