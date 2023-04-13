@@ -55,7 +55,7 @@ After the above requirements have been met:
    ```
 
    ```
-   SERVERLESS_FUNCTIONS_DOMAIN=https://xxxxx
+   NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN=https://xxxxx
    ACCOUNT_SID=ACxxxxxxxxxx
    AUTH_TOKEN=xxxxxxxxxx
    ```
