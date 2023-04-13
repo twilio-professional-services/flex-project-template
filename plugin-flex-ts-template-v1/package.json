@@ -1,6 +1,6 @@
 {
   "name": "plugin-flex-ts-template-v1",
-  "version": "8.0.13",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
@@ -11,7 +11,7 @@
     "lint": "eslint --ext js --ext ts --ext tsx ./src/*.*",
     "lint:fix": "npm run lint -- --fix",
     "build": "twilio flex:plugins:build",
-    "deploy": "twilio flex:plugins:deploy --version=${npm_package_version}",
+    "deploy": "twilio flex:plugins:deploy",
     "install-flex-plugin": "twilio plugins:install @twilio-labs/plugin-flex@6.0.2",
     "release": "twilio flex:plugins:release --plugin ${npm_package_name}@${npm_package_version}",
     "start": "twilio flex:plugins:start",

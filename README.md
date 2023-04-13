@@ -228,7 +228,7 @@ Start the plugin deployment (example is v2, substitute for v1 if you're using v1
 
 ```bash
 cd ../plugin-flex-ts-template-v2
-twilio flex:plugins:deploy --major --changelog "Initial deploy" --description "Flex project template"
+npm run deploy -- --changelog "Initial deploy" --description "Flex project template"
 ```
 
 After your deployment runs you will receive instructions for releasing your plugin from the bash prompt. You can use this or skip this step and release your plugin from the Flex plugin dashboard here https://flex.twilio.com/admin/plugins
@@ -464,6 +464,8 @@ convenience script that does the same as setup-local-environment except it won't
 
 # CHANGELOG
 
+- 1.0.5
+  - Removed plugin versioning from repo, instead relying on automatic versioning by the Flex Plugins CLI.
 - 1.0.4
   - Added `add-feature` script for creating new features
   - Modified v2 plugin to load features dynamically
