@@ -29,7 +29,13 @@ exports.retryHandler = async (error, parameters, callback) => {
 
   const { TWILIO_SERVICE_MAX_BACKOFF, TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_RETRY_LIMIT } = process.env;
   const { attempts, context } = parameters;
-  const { response, message: errorMessage, status: errorStatus, moreInfo: twilioDocPage, code: twilioErrorCode  } = error;
+  const {
+    response,
+    message: errorMessage,
+    status: errorStatus,
+    moreInfo: twilioDocPage,
+    code: twilioErrorCode,
+  } = error;
   const status = errorStatus ? errorStatus : response ? response.status : 500;
   const logWarning = attempts === 1 ? `${parameters.attempts} retry attempt` : `${parameters.attempts} retry attempts`;
   const message = errorMessage ? errorMessage : error;
