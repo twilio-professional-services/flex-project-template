@@ -1,6 +1,6 @@
 {
   "name": "flex-project-template",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "This repository provides development teams with a starting point for flex projects or developing flex features.",
   "scripts": {
     "postinstall": "node scripts/setup-local-environment.js",
