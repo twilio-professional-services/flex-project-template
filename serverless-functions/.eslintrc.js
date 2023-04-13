@@ -15,6 +15,7 @@ module.exports = {
     'no-console': 'off',
     'no-multi-str': 'off',
     'no-use-before-define': 'off',
+    'no-nested-ternary': 'off',
     'prefer-destructuring': 'off',
     'prefer-named-capture-group': 'off',
     'prefer-promise-reject-errors': 'off',
