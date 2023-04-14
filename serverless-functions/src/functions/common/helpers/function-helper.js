@@ -1,3 +1,4 @@
+const { isObject, isString } = require('lodash');
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 
 const prepareFunction = (context, event, callback, requiredParameters, handlerFn) => {
@@ -44,12 +45,12 @@ const prepareFunction = (context, event, callback, requiredParameters, handlerFn
 exports.validateParameters = (callingFunctionPath, parameterObject, requiredKeysArray) => {
   let errorMessage = '';
   requiredKeysArray.forEach((data) => {
-    if (module.exports.isString(data)) {
+    if (isString(data)) {
       // Support "lazy" requiredKeysArray of just ['propertyName']
       if (parameterObject[data] === undefined || parameterObject[data] === null || parameterObject[data].length < 1) {
         errorMessage += `(${callingFunctionPath}) Missing ${data}`;
       }
-    } else if (module.exports.isObject(data) && data.key && data.purpose) {
+    } else if (isObject(data) && data.key && data.purpose) {
       // Support "useful" requiredKeysArray of [{ key: 'propertyName', purpose: 'I need it' }]
       if (
         parameterObject[data.key] === undefined ||
@@ -64,26 +65,6 @@ exports.validateParameters = (callingFunctionPath, parameterObject, requiredKeys
     }
   });
   return errorMessage;
-};
-
-exports.isBoolean = (data) => {
-  let valueToCheck = data;
-  if (module.exports.isString(valueToCheck)) {
-    valueToCheck = Boolean(data);
-  }
-  return (
-    valueToCheck === true ||
-    valueToCheck === false ||
-    Object.prototype.toString.call(valueToCheck) === '[object Boolean]'
-  );
-};
-
-exports.isString = (data) => {
-  return typeof data === 'string' || data instanceof String;
-};
-
-exports.isObject = (data) => {
-  return Object.prototype.toString.call(data) === '[object Object]';
 };
 
 /**
