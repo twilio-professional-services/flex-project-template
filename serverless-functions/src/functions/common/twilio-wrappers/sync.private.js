@@ -11,7 +11,7 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  * @returns {object} success
  * @description the following method is used to remove a Sync Map Item
  */
-exports.deleteMapItem = async (parameters) => {
+exports.deleteMapItem = async function deleteMapItem(parameters) {
   const { attempts, context, mapSid, key } = parameters;
 
   if (!isNumber(attempts))
@@ -42,7 +42,7 @@ exports.deleteMapItem = async (parameters) => {
  * @returns {object} An existing Sync Map Item
  * @description the following method is used to fetch a Sync Map Item
  */
-exports.fetchMapItem = async (parameters) => {
+exports.fetchMapItem = async function fetchMapItem(parameters) {
   const { attempts, context, mapSid, key } = parameters;
 
   if (!isNumber(attempts))
@@ -75,7 +75,7 @@ exports.fetchMapItem = async (parameters) => {
  * @returns {object} A new Sync Map Item
  * @description the following method is used to create a Sync Map Item
  */
-exports.createMapItem = async (parameters) => {
+exports.createMapItem = async function createMapItem(parameters) {
   const { attempts, context, mapSid, key, ttl, data } = parameters;
 
   if (!isNumber(attempts))
@@ -119,7 +119,7 @@ exports.createMapItem = async (parameters) => {
  * @returns {object} A new Sync document
  * @description the following method is used to create a sync document
  */
-exports.createDocument = async (parameters) => {
+exports.createDocument = async function createDocument(parameters) {
   const { attempts, context, uniqueName, ttl, data } = parameters;
 
   if (!isNumber(attempts))
@@ -156,7 +156,7 @@ exports.createDocument = async (parameters) => {
  * @returns {object} A Sync document
  * @description the following method is used to fetch a sync document
  */
-exports.fetchDocument = async (parameters) => {
+exports.fetchDocument = async function fetchDocument(parameters) {
   const { attempts, context, documentSid } = parameters;
 
   if (!isNumber(attempts))
@@ -185,7 +185,7 @@ exports.fetchDocument = async (parameters) => {
  * @returns {object} A Sync document
  * @description the following method is used to fetch a sync document
  */
-exports.updateDocumentData = async (parameters) => {
+exports.updateDocumentData = async function updateDocumentData(parameters) {
   const { attempts, context, documentSid, updateData } = parameters;
 
   if (!isNumber(attempts))

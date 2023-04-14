@@ -12,7 +12,7 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  * @returns {object} An object containing details about the interaction channel invite
  * @description the following method is used to create an Interaction Channel Invite
  */
-exports.participantCreateInvite = async (parameters) => {
+exports.participantCreateInvite = async function participantCreateInvite(parameters) {
   const { attempts, context, interactionSid, channelSid, routing } = parameters;
 
   if (!isNumber(attempts))
@@ -48,7 +48,7 @@ exports.participantCreateInvite = async (parameters) => {
  * @returns {object} An object containing an array of queues for the account
  * @description the following method is used to update/modify a channel participant
  */
-exports.participantUpdate = async (parameters) => {
+exports.participantUpdate = async function participantUpdate(parameters) {
   const { attempts, context, interactionSid, channelSid, participantSid, status } = parameters;
 
   if (!isNumber(attempts))

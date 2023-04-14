@@ -12,7 +12,7 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  * @description the following method is used to apply attributes
  *    to the channel object
  */
-exports.updateChannelAttributes = async (parameters) => {
+exports.updateChannelAttributes = async function updateChannelAttributes(parameters) {
   const { attempts, context, channelSid, attributes } = parameters;
 
   if (!isNumber(attempts))

@@ -67,7 +67,7 @@ exports.coldTransfer = async (parameters) => {
  * @returns {Map} The new recording's properties
  * @description creates recording for the given call SID
  */
-exports.createRecording = async (parameters) => {
+exports.createRecording = async function createRecording(parameters) {
   const { context, callSid, params } = parameters;
 
   if (!isObject(context))
@@ -95,7 +95,7 @@ exports.createRecording = async (parameters) => {
  * @returns {Map} The recording's properties
  * @description updates the given recording for the given call
  */
-exports.updateCallRecording = async (parameters) => {
+exports.updateCallRecording = async function updateCallRecording(parameters) {
   const { context, callSid, recordingSid, params } = parameters;
 
   if (!isObject(context))
@@ -126,7 +126,7 @@ exports.updateCallRecording = async (parameters) => {
  * @returns {Map} The recording's properties
  * @description updates the given recording for the given call
  */
-exports.updateConferenceRecording = async (parameters) => {
+exports.updateConferenceRecording = async function updateConferenceRecording(parameters) {
   const { context, conferenceSid, recordingSid, params } = parameters;
 
   if (!isObject(context))
@@ -157,7 +157,7 @@ exports.updateConferenceRecording = async (parameters) => {
  * @returns {Map} The call's properties
  * @description updates the given call
  */
-exports.updateCall = async (parameters) => {
+exports.updateCall = async function updateCall(parameters) {
   const { context, callSid, params } = parameters;
 
   if (!isObject(context))
