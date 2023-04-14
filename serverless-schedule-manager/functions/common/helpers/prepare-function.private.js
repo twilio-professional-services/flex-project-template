@@ -1,10 +1,10 @@
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 
-const ParameterValidator = require(Runtime.getFunctions()['common/helpers/parameter-validator'].path);
+const FunctionHelper = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 
 const prepareFunction = (context, event, callback, requiredParameters, handlerFn) => {
   const response = new Twilio.Response();
-  const parameterError = ParameterValidator.validate(context.PATH, event, requiredParameters);
+  const parameterError = FunctionHelper.validateParameters(context.PATH, event, requiredParameters);
 
   response.appendHeader('Access-Control-Allow-Origin', '*');
   response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST GET');

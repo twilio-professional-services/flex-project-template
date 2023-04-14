@@ -1,6 +1,6 @@
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 
-const ParameterValidator = require(Runtime.getFunctions()['common/helpers/parameter-validator'].path);
+const FunctionHelper = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 exports.handler = TokenValidator(async function updateTaskAttributes(context, event, callback) {
@@ -12,7 +12,7 @@ exports.handler = TokenValidator(async function updateTaskAttributes(context, ev
       purpose: 'Set task to assignemnt status of: pending, reserved, assigned, canceled, wrapping, or completed',
     },
   ];
-  const parameterError = ParameterValidator.validate(context.PATH, event, requiredParameters);
+  const parameterError = FunctionHelper.validateParameters(context.PATH, event, requiredParameters);
 
   response.appendHeader('Access-Control-Allow-Origin', '*');
   response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST');

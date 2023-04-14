@@ -10,7 +10,7 @@
  * if an array of strings is provided instead of the key and purpose objects
  */
 
-exports.validate = (callingFunctionPath, parameterObject, requiredKeysArray) => {
+exports.validateParameters = (callingFunctionPath, parameterObject, requiredKeysArray) => {
   let errorMessage = '';
   requiredKeysArray.forEach((data) => {
     if (module.exports.isString(data)) {
