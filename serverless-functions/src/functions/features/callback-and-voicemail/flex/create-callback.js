@@ -1,5 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
-  .path);
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const CallbackOperations = require(Runtime.getFunctions()['features/callback-and-voicemail/common/callback-operations']
   .path);
 

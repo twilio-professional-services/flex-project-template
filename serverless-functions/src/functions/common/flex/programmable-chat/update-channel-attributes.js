@@ -1,5 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
-  .path);
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const ChatOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-chat'].path);
 
 const requiredParameters = [

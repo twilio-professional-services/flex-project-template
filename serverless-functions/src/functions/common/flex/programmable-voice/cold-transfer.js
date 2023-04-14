@@ -1,5 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
-  .path);
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
 
 const requiredParameters = [
