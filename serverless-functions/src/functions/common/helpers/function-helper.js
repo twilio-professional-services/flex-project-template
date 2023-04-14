@@ -110,3 +110,13 @@ exports.prepareFlexFunction = (requiredParameters, handlerFn) => {
 exports.prepareStudioFunction = (requiredParameters, handlerFn) => {
   return (context, event, callback) => prepareFunction(context, event, callback, requiredParameters, handlerFn);
 };
+
+/**
+ * @param {object} object
+ * @returns {object}
+ * @description convenience method to safely extract the standad elements in the response back to flex from serverless functions.  This can be used with any object that is returrned from any twilio-wrapper function.
+ */
+exports.returnStandardResponse = (object) => {
+  const { success, message, twilioDocPage, twilioErrorCode } = object;
+  return { success, message, twilioDocPage, twilioErrorCode };
+};

@@ -1,4 +1,4 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 const requiredParameters = [{ key: 'workerSid', purpose: 'unique ID of the worker' }];
