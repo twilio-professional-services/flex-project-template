@@ -1,7 +1,7 @@
 const AccessToken = require('twilio').jwt.AccessToken;
 
 const { SyncGrant, VideoGrant } = AccessToken;
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sync'].path);
 
 const requiredParameters = [{ key: 'DocumentSid', purpose: 'used for sync document' }];
