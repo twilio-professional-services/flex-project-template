@@ -1,4 +1,5 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+  .path);
 const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
 
 const requiredParameters = [{ key: 'callSid', purpose: 'unique ID of call to fetch' }];
@@ -13,10 +14,10 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       attempts: 0,
     });
 
-    const { success, callProperties, status, message, twilioDocPage, twilioErrorCode } = result;
+    const { callProperties, status } = result;
 
     response.setStatusCode(status);
-    response.setBody({ success, callProperties, message, twilioDocPage, twilioErrorCode });
+    response.setBody({ callProperties, ...returnStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

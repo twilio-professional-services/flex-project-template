@@ -1,4 +1,5 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+  .path);
 const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 const requiredParameters = [{ key: 'workerSid', purpose: 'unique ID of the worker' }];
@@ -14,7 +15,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const { success, status, workerChannels, message, twilioDocPage, twilioErrorCode } = result;
 
     response.setStatusCode(status);
-    response.setBody({ success, workerChannels, message, twilioDocPage, twilioErrorCode });
+    response.setBody({ workerChannels, ...returnStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

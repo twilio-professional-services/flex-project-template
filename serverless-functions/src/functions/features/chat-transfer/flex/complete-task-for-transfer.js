@@ -1,4 +1,5 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+  .path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const ChatOperations = require(Runtime.getFunctions()['features/chat-transfer/common/chat-operations'].path);
 
@@ -19,17 +20,18 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (channelSid) {
       // remove channel sid from task to prevent janitor from closing chat channel
-      const {
-        success: removeSidSuccess,
-        message,
-        twilioDocPage,
-        twilioErrorCode,
-      } = await ChatOperations.removeChannelSidFromTask({
+      const removeChannelSidResult = await ChatOperations.removeChannelSidFromTask({
         context,
         taskSid,
         attempts: 0,
       });
-      if (!removeSidSuccess) return { success: removeSidSuccess, message, twilioDocPage, twilioErrorCode };
+
+      // if it fails, abandon process and return error messages
+      if (!removeSidSuccess) {
+        response.setStatusCode(removeChannelSidResult.status);
+        response.setBody({ ...returnStandardResponse(removeChannelSidResult) });
+        return callback(null, response);
+      }
 
       // update task data in channel to show this task is no longer in flight
       // this is not critical so if it fails log error and carry on
@@ -47,18 +49,15 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     // move the task to completed
     const reason = `Task ${transferType} Transfered to new task`;
-    const {
-      success: completeTaskSuccess,
-      message: completeTaskMessage,
-      twilioDocPage,
-      twilioErrorCode,
-    } = await TaskOperations.completeTask({
+    const completeTaskResult = await TaskOperations.completeTask({
       context,
       taskSid,
       reason,
       attempts: 0,
     });
-    response.setBody({ success: completeTaskSuccess, completeTaskMessage, twilioDocPage, twilioErrorCode });
+
+    response.setStatusCode(completeTaskResult.status);
+    response.setBody({ ...returnStandardResponse(completeTaskResult) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

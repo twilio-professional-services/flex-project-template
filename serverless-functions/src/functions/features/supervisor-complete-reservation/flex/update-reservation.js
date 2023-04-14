@@ -1,4 +1,5 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+  .path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 const requiredParameters = [
@@ -34,10 +35,10 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       status: taskStatus,
     });
 
-    const { success, status, reservation, message, twilioErrorCode, twilioDocPage } = result;
+    const { status, reservation } = result;
 
     response.setStatusCode(status);
-    response.setBody({ success, reservation, message, twilioErrorCode, twilioDocPage });
+    response.setBody({ reservation, ...returnStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

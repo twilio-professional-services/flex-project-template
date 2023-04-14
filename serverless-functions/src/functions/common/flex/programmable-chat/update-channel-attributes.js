@@ -1,4 +1,5 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+  .path);
 const ChatOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-chat'].path);
 
 const requiredParameters = [
@@ -17,10 +18,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       attempts: 0,
     });
 
-    const { status, success, message, twilioDocPage, twilioErrorCode } = result;
-
-    response.setStatusCode(status);
-    response.setBody({ success, message, twilioDocPage, twilioErrorCode });
+    response.setStatusCode(result.status);
+    response.setBody({ ...returnStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

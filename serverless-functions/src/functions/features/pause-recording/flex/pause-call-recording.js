@@ -1,4 +1,5 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+  .path);
 const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
 
 const requiredParameters = [{ key: 'callSid', purpose: 'unique ID of call to pause recording' }];
@@ -18,10 +19,10 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       attempts: 0,
     });
 
-    const { success, recording, status, message, twilioErrorCode, twilioDocPage } = result;
+    const { recording, status } = result;
 
     response.setStatusCode(status);
-    response.setBody({ success, recording, message, twilioErrorCode, twilioDocPage });
+    response.setBody({ recording, ...returnStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

@@ -1,4 +1,5 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+  .path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const ChatOperations = require(Runtime.getFunctions()['features/chat-transfer/common/chat-operations'].path);
 
@@ -58,14 +59,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     };
 
     // create task for transfer
-    const {
-      success: createTaskSuccess,
-      task: newTask,
-      status: createTaskStatus,
-      message,
-      twilioDocPage,
-      twilioErrorCode,
-    } = await TaskOperations.createTask({
+    const result = await TaskOperations.createTask({
       context,
       workflowSid,
       taskChannel: 'chat',
@@ -79,7 +73,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     // the customer front end can trigger cancelling tasks associated to the chat channel
     // this is not critical to transfer but is ideal
     try {
-      if (createTaskSuccess)
+      if (result.success)
         await ChatOperations.addTaskToChannel({
           context,
           taskSid: newTask.sid,
@@ -90,8 +84,12 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       console.error('Error updating chat channel with task sid created for it');
     }
 
-    response.setStatusCode(createTaskStatus);
-    response.setBody({ success: createTaskSuccess, taskSid: newTask.sid, message, twilioDocPage, twilioErrorCode });
+    const {
+      status,
+      task: { sid: taskSid },
+    } = result;
+    response.setStatusCode(status);
+    response.setBody({ taskSid, ...returnStandardResponse(result) });
 
     return callback(null, response);
   } catch (error) {

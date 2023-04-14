@@ -1,4 +1,5 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+  .path);
 const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 const requiredParameters = [
@@ -29,10 +30,10 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       capacity: Number(capacity),
       available: available === 'true',
     });
-    const { success, message, status, workerChannelCapacity, twilioDocPage, twilioErrorCode } = result;
+    const { status, workerChannelCapacity } = result;
 
     response.setStatusCode(status);
-    response.setBody({ success, message, workerChannelCapacity, twilioDocPage, twilioErrorCode });
+    response.setBody({ workerChannelCapacity, ...returnStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);
