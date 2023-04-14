@@ -2,7 +2,7 @@ const { isString, isObject, isNumber, isArray } = require('lodash');
 const FormData = require('form-data');
 const axios = require('axios');
 
-const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
+const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handler'].path).retryHandler;
 
 /**
  * @param {object} parameters the parameters for the function
