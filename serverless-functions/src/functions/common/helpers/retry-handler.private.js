@@ -1,4 +1,4 @@
-const { random, isNumber, isString } = require('lodash');
+const { random, isNumber } = require('lodash');
 
 snooze = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
