@@ -27,7 +27,8 @@ exports.retryHandler = async (error, parameters, callback) => {
   if (!isNumber(parameters.attempts))
     throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
 
-  const { TWILIO_SERVICE_MAX_BACKOFF, TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_RETRY_LIMIT, IS_LOCAL } = process.env;
+  const { TWILIO_SERVICE_MAX_BACKOFF, TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_RETRY_LIMIT, ENABLE_LOCAL_LOGGING } =
+    process.env;
   const { attempts, context } = parameters;
   const {
     response,
@@ -56,7 +57,7 @@ exports.retryHandler = async (error, parameters, callback) => {
     return callback(updatedParameters);
   }
 
-  if (IS_LOCAL) {
+  if (ENABLE_LOCAL_LOGGING) {
     const logMessage = `\n\n${context.PATH}.${callback.name}() failed after ${retryAttemptsMessage},\n http-status-code\t: ${status},\n twilio-error-code\t: ${twilioErrorCode},\n twilio-doc-page\t: ${twilioDocPage},\n error-message\t\t: ${message}`;
     console.error(logMessage);
   }
