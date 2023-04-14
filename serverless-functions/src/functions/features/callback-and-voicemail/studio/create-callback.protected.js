@@ -1,4 +1,6 @@
-const { prepareStudioFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareStudioFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const CallbackOperations = require(Runtime.getFunctions()['features/callback-and-voicemail/common/callback-operations']
   .path);
 
@@ -55,9 +57,9 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       overriddenTaskChannel,
     });
 
-    const { status, success, taskSid, message: errorMessage, twilioDocPage, twilioErrorCode } = result;
+    const { status, taskSid } = result;
     response.setStatusCode(status);
-    response.setBody({ success, taskSid, errorMessage, twilioDocPage, twilioErrorCode });
+    response.setBody({ taskSid, ...extractStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);
