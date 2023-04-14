@@ -52,12 +52,13 @@ exports.retryHandler = async (error, parameters, callback) => {
     const updatedParameters = { ...parameters, attempts: updatedAttempts };
     return callback(updatedParameters);
   }
-  console.error(
-    `${context.PATH}.${callback.name}() failed after ${logWarning},
-      http-status-code\t: ${status},
-      twilio-error-code : ${twilioErrorCode}, 
-      twilio-doc-page\t: ${twilioDocPage},
-      error-message\t: ${message}`,
-  );
+
+  // console.error(
+  //   `${context.PATH}.${callback.name}() failed after ${logWarning},
+  //     http-status-code\t: ${status},
+  //     twilio-error-code : ${twilioErrorCode},
+  //     twilio-doc-page\t: ${twilioDocPage},
+  //     error-message\t: ${message}`,
+  // );
   return { success: false, message, status, twilioErrorCode, twilioDocPage };
 };
