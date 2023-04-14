@@ -1,4 +1,4 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
   .path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const ChatOperations = require(Runtime.getFunctions()['features/chat-transfer/common/chat-operations'].path);
@@ -89,7 +89,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       task: { sid: taskSid },
     } = result;
     response.setStatusCode(status);
-    response.setBody({ taskSid, ...returnStandardResponse(result) });
+    response.setBody({ taskSid, ...extractStandardResponse(result) });
 
     return callback(null, response);
   } catch (error) {

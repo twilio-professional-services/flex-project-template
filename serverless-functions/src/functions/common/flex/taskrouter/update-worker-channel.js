@@ -1,4 +1,4 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
   .path);
 const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
@@ -33,7 +33,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const { status, workerChannelCapacity } = result;
 
     response.setStatusCode(status);
-    response.setBody({ workerChannelCapacity, ...returnStandardResponse(result) });
+    response.setBody({ workerChannelCapacity, ...extractStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

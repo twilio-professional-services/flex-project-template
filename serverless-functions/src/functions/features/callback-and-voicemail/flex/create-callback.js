@@ -1,4 +1,4 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
   .path);
 const CallbackOperations = require(Runtime.getFunctions()['features/callback-and-voicemail/common/callback-operations']
   .path);
@@ -54,7 +54,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     const { status, taskSid } = result;
     response.setStatusCode(status);
-    response.setBody({ taskSid, ...returnStandardResponse(result) });
+    response.setBody({ taskSid, ...extractStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

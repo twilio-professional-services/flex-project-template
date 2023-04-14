@@ -1,4 +1,4 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
   .path);
 const PhoneNumberOpertions = require(Runtime.getFunctions()['common/twilio-wrappers/phone-numbers'].path);
 
@@ -20,7 +20,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       : null;
 
     response.setStatusCode(result.status);
-    response.setBody({ phoneNumbers, ...returnStandardResponse(result) });
+    response.setBody({ phoneNumbers, ...extractStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

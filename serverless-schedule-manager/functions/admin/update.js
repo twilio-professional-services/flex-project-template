@@ -27,7 +27,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (!latestBuildResult.success) {
       response.setStatusCode(latestBuildResult.status);
-      response.setBody({ ...returnStandardResponse(latestBuildResult) });
+      response.setBody({ ...extractStandardResponse(latestBuildResult) });
       return callback(null, response);
     }
 
@@ -59,7 +59,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (!uploadResult.success) {
       response.setStatusCode(uploadResult.status);
-      response.setBody({ ...returnStandardResponse(uploadResult) });
+      response.setBody({ ...extractStandardResponse(uploadResult) });
       return callback(null, response);
     }
 

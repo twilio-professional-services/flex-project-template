@@ -1,4 +1,4 @@
-const { prepareFlexFunction, returnStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper']
   .path);
 const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
 
@@ -17,7 +17,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const { callProperties, status } = result;
 
     response.setStatusCode(status);
-    response.setBody({ callProperties, ...returnStandardResponse(result) });
+    response.setBody({ callProperties, ...extractStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

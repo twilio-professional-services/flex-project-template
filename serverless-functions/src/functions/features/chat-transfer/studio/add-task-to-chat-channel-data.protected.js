@@ -1,4 +1,4 @@
-const { prepareStudioFunction, returnStandardResponse } = require(Runtime.getFunctions()[
+const { prepareStudioFunction, extractStandardResponse } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
 const ChatOperations = require(Runtime.getFunctions()['features/chat-transfer/common/chat-operations'].path);
@@ -19,7 +19,7 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
     });
 
     response.setStatusCode(result.status);
-    response.setBody({ ...returnStandardResponse(result) });
+    response.setBody({ ...extractStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);
