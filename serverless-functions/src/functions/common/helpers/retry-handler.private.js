@@ -53,7 +53,11 @@ exports.retryHandler = async (error, parameters, callback) => {
     return callback(updatedParameters);
   }
   console.error(
-    `retrying ${context.PATH}.${callback.name}() failed after ${logWarning}, status code: ${status}, message: ${message}, twilioErrorCode: ${twilioErrorCode}, twilioDocPage: ${twilioDocPage}`,
+    `${context.PATH}.${callback.name}() failed after ${logWarning},
+      http-status-code\t: ${status},
+      twilio-error-code : ${twilioErrorCode}, 
+      twilio-doc-page\t: ${twilioDocPage},
+      error-message\t: ${message}`,
   );
   return { success: false, message, status, twilioErrorCode, twilioDocPage };
 };
