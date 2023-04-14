@@ -19,14 +19,20 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (channelSid) {
       // remove channel sid from task to prevent janitor from closing chat channel
-      const { success: removeSidSuccess, message } = await ChatOperations.removeChannelSidFromTask({
+      const {
+        success: removeSidSuccess,
+        message,
+        twilioDocPage,
+        twilioErrorCode,
+      } = await ChatOperations.removeChannelSidFromTask({
         context,
         taskSid,
         attempts: 0,
       });
-      if (!removeSidSuccess) return { success: removeSidSuccess, message };
+      if (!removeSidSuccess) return { success: removeSidSuccess, message, twilioDocPage, twilioErrorCode };
 
       // update task data in channel to show this task is no longer in flight
+      // this is not critical so if it fails log error and carry on
       try {
         await ChatOperations.setTaskToCompleteOnChannel({
           context,
@@ -41,13 +47,18 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     // move the task to completed
     const reason = `Task ${transferType} Transfered to new task`;
-    const { success: completeTaskSuccess, message: completeTaskMessage } = await TaskOperations.completeTask({
+    const {
+      success: completeTaskSuccess,
+      message: completeTaskMessage,
+      twilioDocPage,
+      twilioErrorCode,
+    } = await TaskOperations.completeTask({
       context,
       taskSid,
       reason,
       attempts: 0,
     });
-    response.setBody({ success: completeTaskSuccess, completeTaskMessage });
+    response.setBody({ success: completeTaskSuccess, completeTaskMessage, twilioDocPage, twilioErrorCode });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

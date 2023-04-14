@@ -10,7 +10,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       attempts: 0,
     });
 
-    const { success, phoneNumbers: fullPhoneNumberList, status } = result;
+    const { success, phoneNumbers: fullPhoneNumberList, status, message, twilioDocPage, twilioErrorCode } = result;
     const phoneNumbers = fullPhoneNumberList
       ? fullPhoneNumberList.map((number) => {
           const { friendlyName, phoneNumber } = number;
@@ -19,7 +19,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       : null;
 
     response.setStatusCode(status);
-    response.setBody({ success, phoneNumbers });
+    response.setBody({ success, phoneNumbers, message, twilioDocPage, twilioErrorCode });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

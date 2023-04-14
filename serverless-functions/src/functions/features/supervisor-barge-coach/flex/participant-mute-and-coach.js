@@ -47,10 +47,15 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         muted,
         attempts: 0,
       });
-      response.setStatusCode(result.status);
+
+      const { status, success, conferenceSid: conference, message, twilioErrorCode, twilioDocPage } = result;
+      response.setStatusCode(status);
       response.setBody({
-        success: result.success,
-        conference: result.conferenceSid,
+        success,
+        conference,
+        message,
+        twilioErrorCode,
+        twilioDocPage,
       });
     }
     return callback(null, response);

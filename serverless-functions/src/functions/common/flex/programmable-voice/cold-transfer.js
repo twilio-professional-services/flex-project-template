@@ -17,10 +17,10 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       attempts: 0,
     });
 
-    const { success, status } = result;
+    const { success, status, message, twilioDocPage, twilioErrorCode } = result;
 
     response.setStatusCode(status);
-    response.setBody({ success });
+    response.setBody({ success, message, twilioDocPage, twilioErrorCode });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

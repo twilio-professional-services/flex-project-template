@@ -9,7 +9,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       context,
       attempts: 0,
     });
-    const { success, queues: fullQueueData, message, status } = result;
+    const { success, queues: fullQueueData, message, status, twilioDocPage, twilioErrorCode } = result;
     const queues = fullQueueData
       ? fullQueueData.map((queue) => {
           const { targetWorkers, friendlyName, sid } = queue;
@@ -17,7 +17,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         })
       : null;
     response.setStatusCode(status);
-    response.setBody({ success, queues, message });
+    response.setBody({ success, queues, message, twilioDocPage, twilioErrorCode });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

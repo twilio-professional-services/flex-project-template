@@ -62,6 +62,9 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       success: createTaskSuccess,
       task: newTask,
       status: createTaskStatus,
+      message,
+      twilioDocPage,
+      twilioErrorCode,
     } = await TaskOperations.createTask({
       context,
       workflowSid,
@@ -88,7 +91,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     }
 
     response.setStatusCode(createTaskStatus);
-    response.setBody({ success: createTaskSuccess, taskSid: newTask.sid });
+    response.setBody({ success: createTaskSuccess, taskSid: newTask.sid, message, twilioDocPage, twilioErrorCode });
 
     return callback(null, response);
   } catch (error) {

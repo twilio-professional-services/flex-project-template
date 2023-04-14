@@ -54,8 +54,10 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       isDeleted,
       overriddenTaskChannel,
     });
-    response.setStatusCode(result.status);
-    response.setBody({ success: result.success, taskSid: result.taskSid });
+
+    const { status, success, taskSid, message: errorMessage, twilioDocPage, twilioErrorCode } = result;
+    response.setStatusCode(status);
+    response.setBody({ success, taskSid, errorMessage, twilioDocPage, twilioErrorCode });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

@@ -9,13 +9,13 @@ const requiredParameters = [
 exports.handler = prepareStudioFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
     const { taskSid, channelSid } = event;
-    const { success } = await ChatOperations.addTaskToChannel({
+    const { success, message, twilioErrorCode, twilioDocPage } = await ChatOperations.addTaskToChannel({
       context,
       taskSid,
       channelSid,
       attempts: 0,
     });
-    response.setBody({ success });
+    response.setBody({ success, message, twilioErrorCode, twilioDocPage });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

@@ -11,10 +11,10 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       attempts: 0,
       workerSid,
     });
-    const { success, status, workerChannels } = result;
+    const { success, status, workerChannels, message, twilioDocPage, twilioErrorCode } = result;
 
     response.setStatusCode(status);
-    response.setBody({ success, workerChannels });
+    response.setBody({ success, workerChannels, message, twilioDocPage, twilioErrorCode });
     return callback(null, response);
   } catch (error) {
     return handleError(error);
