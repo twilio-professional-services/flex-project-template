@@ -27,7 +27,7 @@ exports.retryHandler = async (error, parameters, callback) => {
   if (!isNumber(parameters.attempts))
     throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
 
-  const { TWILIO_SERVICE_MAX_BACKOFF, TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_RETRY_LIMIT } = process.env;
+  const { TWILIO_SERVICE_MAX_BACKOFF, TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_RETRY_LIMIT, IS_LOCAL } = process.env;
   const { attempts, context } = parameters;
   const {
     response,
@@ -37,7 +37,8 @@ exports.retryHandler = async (error, parameters, callback) => {
     code: twilioErrorCode,
   } = error;
   const status = errorStatus ? errorStatus : response ? response.status : 500;
-  const logWarning = attempts === 1 ? `${parameters.attempts} retry attempt` : `${parameters.attempts} retry attempts`;
+  const retryAttemptsMessage =
+    attempts === 1 ? `${parameters.attempts} retry attempt` : `${parameters.attempts} retry attempts`;
   const message = errorMessage ? errorMessage : error;
 
   if (
@@ -45,7 +46,9 @@ exports.retryHandler = async (error, parameters, callback) => {
     isNumber(attempts) &&
     attempts < TWILIO_SERVICE_RETRY_LIMIT
   ) {
-    console.warn(`retrying ${context.PATH}.${callback.name}() after ${logWarning}, status code: ${status}`);
+    console.warn(
+      `retrying ${context.PATH}.${callback.name}() after ${retryAttemptsMessage}, http-status-code: ${status}`,
+    );
     if (status === 429 || status === 503) await snooze(random(TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_MAX_BACKOFF));
 
     const updatedAttempts = attempts + 1;
@@ -53,12 +56,9 @@ exports.retryHandler = async (error, parameters, callback) => {
     return callback(updatedParameters);
   }
 
-  // console.error(
-  //   `${context.PATH}.${callback.name}() failed after ${logWarning},
-  //     http-status-code\t: ${status},
-  //     twilio-error-code : ${twilioErrorCode},
-  //     twilio-doc-page\t: ${twilioDocPage},
-  //     error-message\t: ${message}`,
-  // );
+  if (IS_LOCAL) {
+    const logMessage = `\n\n${context.PATH}.${callback.name}() failed after ${retryAttemptsMessage},\n http-status-code\t: ${status},\n twilio-error-code\t: ${twilioErrorCode},\n twilio-doc-page\t: ${twilioDocPage},\n error-message\t\t: ${message}`;
+    console.error(logMessage);
+  }
   return { success: false, message, status, twilioErrorCode, twilioDocPage };
 };
