@@ -10,7 +10,7 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  * @returns {Map} The given call's properties
  * @description fetches the given call SID's properties
  */
-exports.fetchProperties = async (parameters) => {
+exports.fetchProperties = async function fetchProperties(parameters) {
   const { context, callSid } = parameters;
 
   if (!isObject(context))
@@ -37,7 +37,7 @@ exports.fetchProperties = async (parameters) => {
  * @returns {object} generic response object
  * @description cold transfers the given call SID to the given phone number
  */
-exports.coldTransfer = async (parameters) => {
+exports.coldTransfer = async function coldTransfer(parameters) {
   const { context, callSid, to } = parameters;
 
   if (!isObject(context))
