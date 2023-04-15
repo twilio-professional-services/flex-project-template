@@ -13,7 +13,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       attempts: 0,
       workerSid,
     });
-    const { success, status, workerChannels, message, twilioDocPage, twilioErrorCode } = result;
+    const { status, workerChannels } = result;
 
     response.setStatusCode(status);
     response.setBody({ workerChannels, ...extractStandardResponse(result) });

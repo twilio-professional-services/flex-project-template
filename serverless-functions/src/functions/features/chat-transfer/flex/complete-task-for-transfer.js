@@ -28,7 +28,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       });
 
       // if it fails, abandon process and return error messages
-      if (!removeSidSuccess) {
+      if (!removeChannelSidResult.success) {
         response.setStatusCode(removeChannelSidResult.status);
         response.setBody({ ...extractStandardResponse(removeChannelSidResult) });
         return callback(null, response);
