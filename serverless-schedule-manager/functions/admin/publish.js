@@ -1,4 +1,4 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const ServerlessOperations = require(Runtime.getFunctions()['common/twilio-wrappers/serverless'].path);
 
 const requiredParameters = [{ key: 'buildSid', purpose: 'build SID to deploy' }];

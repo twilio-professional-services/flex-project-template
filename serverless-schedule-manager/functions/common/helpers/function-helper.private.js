@@ -1,10 +1,9 @@
+const { isObject, isString } = require('lodash');
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
-
-const ParameterValidator = require(Runtime.getFunctions()['common/helpers/parameter-validator'].path);
 
 const prepareFunction = (context, event, callback, requiredParameters, handlerFn) => {
   const response = new Twilio.Response();
-  const parameterError = ParameterValidator.validate(context.PATH, event, requiredParameters);
+  const parameterError = module.exports.validateParameters(context.PATH, event, requiredParameters);
 
   response.appendHeader('Access-Control-Allow-Origin', '*');
   response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST GET');
@@ -32,6 +31,43 @@ const prepareFunction = (context, event, callback, requiredParameters, handlerFn
 };
 
 /**
+ * @param {string} callingFunctionPath
+ * @param {object} parameterObject
+ * @param {Array} requiredKeysArray
+ * @returns {string}
+ * @description Convenience method to validate properties exist on an object
+ * requiredKeysArray should be an array of strings or objects,
+ *   { key: 'propertyName', purpose: 'describe need' }
+ * error handling will fallback to less useful messages
+ * if an array of strings is provided instead of the key and purpose objects
+ */
+
+exports.validateParameters = (callingFunctionPath, parameterObject, requiredKeysArray) => {
+  let errorMessage = '';
+  requiredKeysArray.forEach((data) => {
+    if (isString(data)) {
+      // Support "lazy" requiredKeysArray of just ['propertyName']
+      if (parameterObject[data] === undefined || parameterObject[data] === null || parameterObject[data].length < 1) {
+        errorMessage += `(${callingFunctionPath}) Missing ${data}`;
+      }
+    } else if (isObject(data) && data.key && data.purpose) {
+      // Support "useful" requiredKeysArray of [{ key: 'propertyName', purpose: 'I need it' }]
+      if (
+        parameterObject[data.key] === undefined ||
+        parameterObject[data.key] === null ||
+        parameterObject[data.key].length < 1
+      ) {
+        errorMessage += `(${callingFunctionPath}) Missing ${data.key}: ${data.purpose}`;
+      }
+    } else {
+      // No supported way for us to check parameter
+      errorMessage += 'Invalid data provided to Parameter Validator function';
+    }
+  });
+  return errorMessage;
+};
+
+/**
  * Prepares the function for execution. Validates the token and other required parameters, then prepares
  * the response object with the appropriate headers, as well as an error handling function.
  *
@@ -54,4 +90,14 @@ exports.prepareFlexFunction = (requiredParameters, handlerFn) => {
  */
 exports.prepareStudioFunction = (requiredParameters, handlerFn) => {
   return (context, event, callback) => prepareFunction(context, event, callback, requiredParameters, handlerFn);
+};
+
+/**
+ * @param {object} object
+ * @returns {object}
+ * @description convenience method to safely extract the standad elements in the response back to flex from serverless functions.  This can be used with any object that is returrned from any twilio-wrapper function.
+ */
+exports.extractStandardResponse = (object) => {
+  const { success, message, twilioDocPage, twilioErrorCode } = object;
+  return { success, message, twilioDocPage, twilioErrorCode };
 };

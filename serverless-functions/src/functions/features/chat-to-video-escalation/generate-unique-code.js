@@ -1,4 +1,4 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sync'].path);
 const randomstring = require('randomstring');

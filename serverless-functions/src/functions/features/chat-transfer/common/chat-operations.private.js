@@ -1,7 +1,7 @@
 const { isString, isObject, isNumber } = require('lodash');
 const axios = require('axios');
 
-const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
+const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handler'].path).retryHandler;
 
 const INFLIGHT = 'inflight';
 const COMPLETED = 'completed';
