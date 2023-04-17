@@ -114,7 +114,7 @@ export const waitForConferenceParticipants = async (task: ITask): Promise<Confer
       if (conference === undefined) {
         return;
       }
-      const { participants } = conference;
+      let { participants } = conference;
       if (Array.isArray(participants) && participants.length < 2) {
         return;
       }
@@ -123,6 +123,26 @@ export const waitForConferenceParticipants = async (task: ITask): Promise<Confer
 
       if (!worker || !customer) {
         return;
+      }
+
+      if (!worker?.callSid || !customer?.callSid) {
+        console.debug('Looking for call SID');
+        // Flex sometimes does not provide callSid in task conference participants, check if it is in the Redux store instead
+        const storeConference = manager.store.getState().flex.conferences.states.get(task.taskSid);
+
+        if (!storeConference || !storeConference.source) {
+          return;
+        }
+
+        participants = storeConference.source.participants;
+
+        const storeWorker = participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker);
+        const storeCustomer = participants.find((p) => p.participantType === 'customer');
+
+        if (!storeWorker?.callSid || !storeCustomer?.callSid) {
+          console.debug('Worker and customer participants joined conference, waiting for call SID');
+          return;
+        }
       }
 
       console.debug('Worker and customer participants joined conference');
