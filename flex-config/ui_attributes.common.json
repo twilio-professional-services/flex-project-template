@@ -86,7 +86,7 @@
           "queue_no_worker_data": true,
           "queue_worker_data": false,
           "team": true,
-          "agent_skills": true
+          "agent_skills": false
         },
         "department_options": [
           "General Management",

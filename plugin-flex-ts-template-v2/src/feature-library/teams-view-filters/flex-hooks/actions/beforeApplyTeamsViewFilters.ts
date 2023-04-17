@@ -5,6 +5,7 @@ import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRoute
 import { TeamViewQueueFilterNotification } from '../notifications/TeamViewQueueFilter';
 import { isQueueNoWorkerDataFilterEnabled } from '../../config';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import { selectQueue } from '../../flex-hooks/states/QueueNoWorkerDataFilterSlice';
 
 export interface ApplyTeamsViewFiltersPayload {
   extraFilterQuery?: string;
@@ -50,7 +51,7 @@ export const actionHook = function interceptQueueFilter(flex: typeof Flex, manag
 // data.attributes.queues IN [<queue-sid>]
 //
 
-function replaceQueueFiltersForTeamView(flex: typeof Flex, _manager: Flex.Manager) {
+function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager) {
   flex.Actions.addListener(
     `${actionEvent}${actionName}`,
     async (payload: ApplyTeamsViewFiltersPayload, _abortFunction: () => void) => {
@@ -64,7 +65,11 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, _manager: Flex.Manage
       });
 
       // if no queue filters return
-      if (!queueEligibilityFilter || queueEligibilityFilter.values.length < 1) return;
+      if (!queueEligibilityFilter || queueEligibilityFilter.values.length < 1) {
+        // clear any selected queue in state, since we know none are selected
+        manager.store.dispatch(selectQueue(''));
+        return;
+      }
 
       // remove the replacement filter
       const newFilter = filters.filter((filter: AppliedFilter) => filter.name !== 'queue-replacement');
@@ -142,6 +147,9 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, _manager: Flex.Manage
 
         payload.filters = [...newFilter, ...queueFiltersArray];
       }
+      
+      // store selected queue in state so that the UI can display it properly
+      manager.store.dispatch(selectQueue(queue.friendlyName));
     },
   );
 }
