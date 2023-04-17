@@ -19,6 +19,7 @@ module.exports = {
     'no-alert': 'off',
     'no-console': 'off',
     'no-duplicate-imports': 'off',
+    'no-nested-ternary': 'off',
     'prefer-destructuring': 'off',
     'prefer-named-capture-group': 'off',
     'prefer-promise-reject-errors': 'off',
