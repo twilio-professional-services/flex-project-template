@@ -5,7 +5,7 @@ import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRoute
 import { TeamViewQueueFilterNotification } from '../notifications/TeamViewQueueFilter';
 import { isQueueNoWorkerDataFilterEnabled } from '../../config';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
-import { selectQueue } from '../../flex-hooks/states/QueueNoWorkerDataFilterSlice';
+import { selectQueue } from '../states/QueueNoWorkerDataFilterSlice';
 
 export interface ApplyTeamsViewFiltersPayload {
   extraFilterQuery?: string;
@@ -147,7 +147,7 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
 
         payload.filters = [...newFilter, ...queueFiltersArray];
       }
-      
+
       // store selected queue in state so that the UI can display it properly
       manager.store.dispatch(selectQueue(queue.friendlyName));
     },

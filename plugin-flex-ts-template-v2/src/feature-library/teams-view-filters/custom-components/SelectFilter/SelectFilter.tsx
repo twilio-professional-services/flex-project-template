@@ -25,11 +25,11 @@ export type OwnProps = {
 export const MultiSelectFilter = (props: OwnProps) => {
   const pillState = useFormPillState();
   const [selectedItems, setSelectedItems] = useState([] as string[]);
-  
+
   const { selectedQueue } = useSelector(
     (state: AppState) => state[reduxNamespace].queueNoWorkerDataFilter as QueueNoWorkerDataFilterState,
   );
-  
+
   useEffect(() => {
     if (props.handleChange) {
       props.handleChange(selectedItems);
@@ -47,7 +47,7 @@ export const MultiSelectFilter = (props: OwnProps) => {
         setSelectedItems([selectedQueue]);
         return;
       }
-      
+
       setSelectedItems([]);
     }
   }, [props.currentValue]);

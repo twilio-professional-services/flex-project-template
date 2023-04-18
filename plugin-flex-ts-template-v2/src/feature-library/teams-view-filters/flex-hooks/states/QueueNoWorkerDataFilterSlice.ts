@@ -13,7 +13,7 @@ const queueNoWorkerDataFilterSlice = createSlice({
   reducers: {
     selectQueue(state, action: PayloadAction<string>) {
       state.selectedQueue = action.payload;
-    }
+    },
   },
 });
 
