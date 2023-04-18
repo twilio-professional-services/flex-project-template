@@ -66,7 +66,21 @@ export default abstract class ApiService {
             return await this.fetchJsonWithReject<T>(url, config, attempts + 1);
           }
           return error.json().then((response: any) => {
-            throw response;
+            if (typeof response === 'object' && Object.keys(response).length > 0) {
+              // Error response body is an actual JSON object with keys; return them all
+              // eslint-disable-next-line no-throw-literal
+              throw {
+                status: error.status,
+                ...response,
+              };
+            } else {
+              // Error response body is not JSON
+              // eslint-disable-next-line no-throw-literal
+              throw {
+                status: error.status,
+                message: response,
+              };
+            }
           });
         } catch (e) {
           throw error;

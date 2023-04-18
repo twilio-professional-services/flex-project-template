@@ -110,7 +110,7 @@ export const stringHook = () => ({
   [StringTemplates.PUBLISH_INFLIGHT]:
     'Another schedule publish is in progress. Publishing now will overwrite other changes.',
   [StringTemplates.PUBLISH_FAILED_OTHER_UPDATE]:
-    'Schedule was updated by someone else and cannot be published. Please reload and try again.',
+    'Schedules were updated by someone else and cannot be published. Please reload and try again.',
   [StringTemplates.PUBLISH_FAILED]: 'Schedule publish failed.',
   [StringTemplates.PUBLISH_FAILED_ACTIVITY]: 'Switch to a non-available activity to publish.',
   [StringTemplates.PUBLISH_SUCCESS]: 'Successfully published schedules.',
