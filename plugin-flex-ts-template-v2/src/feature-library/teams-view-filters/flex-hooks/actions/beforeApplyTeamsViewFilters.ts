@@ -5,7 +5,7 @@ import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRoute
 import { TeamViewQueueFilterNotification } from '../notifications/TeamViewQueueFilter';
 import { isQueueNoWorkerDataFilterEnabled } from '../../config';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
-import { selectQueue } from '../states/QueueNoWorkerDataFilterSlice';
+import { selectQueue, ResetQueuePlaceholder } from '../states/QueueNoWorkerDataFilterSlice';
 
 export interface ApplyTeamsViewFiltersPayload {
   extraFilterQuery?: string;
@@ -87,6 +87,8 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
       // if there is no queue found notify user
       if (!queue) {
         Flex.Notifications.showNotification(TeamViewQueueFilterNotification.ErrorLoadingQueue);
+        // clear any selected queue in state
+        manager.store.dispatch(selectQueue(ResetQueuePlaceholder));
         return;
       }
       const { targetWorkers } = queue;
@@ -102,13 +104,18 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
         // validate expressions have been parsed and that there are no OR'd statements
         if (!expressionComponents || expressionComponents.length === 0) {
           Flex.Notifications.showNotification(TeamViewQueueFilterNotification.ErrorParsingQueueExpression);
+          // clear any selected queue in state
+          manager.store.dispatch(selectQueue(ResetQueuePlaceholder));
           return;
         } else if (containsORs) {
           Flex.Notifications.showNotification(TeamViewQueueFilterNotification.ErrorParsingQueueExpressionWithOR);
+          // clear any selected queue in state
+          manager.store.dispatch(selectQueue(ResetQueuePlaceholder));
           return;
         }
 
         // for each expression break it down and create a filter
+        let parseFailure = false;
         expressionComponents.forEach((expression) => {
           const tempName = RegExp(/(\b(?:\.)+\S+\b|\b(?:\S+)+\S+\b)/, 'i').exec(expression);
           const tempCondition = RegExp(/( HAS |==|!=| CONTAINS | IN | NOT IN )/, 'i').exec(expression);
@@ -142,8 +149,15 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
             queueFiltersArray.push(tempFilter);
           } else {
             Flex.Notifications.showNotification(TeamViewQueueFilterNotification.ErrorParsingQueueExpression);
+            parseFailure = true;
           }
         });
+
+        if (parseFailure) {
+          // clear any selected queue in state
+          manager.store.dispatch(selectQueue(ResetQueuePlaceholder));
+          return;
+        }
 
         payload.filters = [...newFilter, ...queueFiltersArray];
       }

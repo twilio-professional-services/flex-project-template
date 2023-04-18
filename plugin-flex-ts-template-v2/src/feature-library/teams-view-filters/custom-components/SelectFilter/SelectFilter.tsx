@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { styled } from '@twilio/flex-ui';
 import { Select, Option } from '@twilio-paste/core/select';
 import { Stack } from '@twilio-paste/core/stack';
@@ -8,7 +8,11 @@ import { useFormPillState, FormPillGroup, FormPill } from '@twilio-paste/core/fo
 import { FilterDefinitionOption } from '../../types/FilterDefinitionOption';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
-import { QueueNoWorkerDataFilterState } from '../../flex-hooks/states/QueueNoWorkerDataFilterSlice';
+import {
+  QueueNoWorkerDataFilterState,
+  selectQueue,
+  ResetQueuePlaceholder,
+} from '../../flex-hooks/states/QueueNoWorkerDataFilterSlice';
 
 const FilterContainer = styled('div')`
   margin-left: 16px;
@@ -24,6 +28,7 @@ export type OwnProps = {
 
 export const MultiSelectFilter = (props: OwnProps) => {
   const pillState = useFormPillState();
+  const dispatch = useDispatch();
   const [selectedItems, setSelectedItems] = useState([] as string[]);
 
   const { selectedQueue } = useSelector(
@@ -43,7 +48,7 @@ export const MultiSelectFilter = (props: OwnProps) => {
       // our component's value is 'reset' by Flex. The beforeApplyTeamsViewFilters logic saves and resets the selected queue
       // in state, so we can rely on that to know when to persist the selected queue versus when to actually reset.
       // The name 'queue' is unique to the queueNoWorkerDataFilter (queueWorkerDataFilter uses the name 'queues' instead).
-      if (props.name === 'queue' && selectedQueue !== '') {
+      if (props.name === 'queue' && selectedQueue !== '' && selectedQueue !== ResetQueuePlaceholder) {
         setSelectedItems([selectedQueue]);
         return;
       }
@@ -51,6 +56,18 @@ export const MultiSelectFilter = (props: OwnProps) => {
       setSelectedItems([]);
     }
   }, [props.currentValue]);
+
+  useEffect(() => {
+    // Part 2 to the above hack: When selecting a queue with a filter we cannot parse, the queue should be reset.
+    // If a 'bad' queue is selected twice in a row, there is no state change the second time, so no change is triggered
+    // for us to reset upon. Therefore, when this scenario is encountered, beforeApplyTeamsViewFilters changes the selected
+    // queue to equal ResetQueuePlaceholder, which is a bespoke value we catch here to trigger the reset.
+    // Here, we then change state again, so that if an invalid queue is selected again, there is a state change to trigger reset.
+    if (props.name === 'queue' && selectedQueue === ResetQueuePlaceholder) {
+      setSelectedItems([]);
+      dispatch(selectQueue(''));
+    }
+  }, [selectedQueue]);
 
   const elementId = `${props.name}-select`;
 

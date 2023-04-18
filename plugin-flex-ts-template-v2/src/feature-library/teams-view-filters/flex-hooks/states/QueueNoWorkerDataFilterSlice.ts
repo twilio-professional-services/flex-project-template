@@ -5,6 +5,8 @@ export interface QueueNoWorkerDataFilterState {
   selectedQueue: string;
 }
 
+export const ResetQueuePlaceholder = '__PS_QUEUE_FILTER_RESET__';
+
 const initialState = { selectedQueue: '' } as QueueNoWorkerDataFilterState;
 
 const queueNoWorkerDataFilterSlice = createSlice({
