@@ -52,7 +52,9 @@
         "supervisor_alert_toggle": true
       },
       "omni_channel_capacity_management": {
-        "enabled": false
+        "enabled": false,
+        "channel": "chat",
+        "default_max_capacity": 2
       },
       "device_manager": {
         "enabled": true
