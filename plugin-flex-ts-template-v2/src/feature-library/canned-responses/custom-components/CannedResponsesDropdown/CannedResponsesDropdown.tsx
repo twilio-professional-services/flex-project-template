@@ -20,7 +20,8 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
   const [error, setError] = useState(false);
   const [responseCategories, setResponseCategories] = useState<undefined | CannedResponseCategories>(undefined);
   const inputState = useFlexSelector(
-    (state) => state.flex.chat.conversationInput[task.attributes.conversationSid].inputText,
+    (state) =>
+      state.flex.chat.conversationInput[task.attributes.conversationSid ?? task.attributes.channelSid].inputText,
   );
 
   const menu = useMenuState({
@@ -29,14 +30,14 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
   });
 
   const onClickInsert = (text: string) => {
-    if (!task.attributes.conversationSid) return;
+    if (!task.attributes.conversationSid && !task.attributes.channelSid) return;
     let currentInput = inputState;
     if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
       currentInput += ' ';
     }
     Actions.invokeAction('SetInputText', {
       body: currentInput + text,
-      conversationSid: task.attributes.conversationSid,
+      conversationSid: task.attributes.conversationSid ?? task.attributes.channelSid,
     });
   };
 
