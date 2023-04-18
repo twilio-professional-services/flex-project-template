@@ -5,6 +5,7 @@ import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRoute
 import { TeamViewQueueFilterNotification } from '../notifications/TeamViewQueueFilter';
 import { isQueueNoWorkerDataFilterEnabled } from '../../config';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import { selectQueue, ResetQueuePlaceholder } from '../states/QueueNoWorkerDataFilterSlice';
 
 export interface ApplyTeamsViewFiltersPayload {
   extraFilterQuery?: string;
@@ -50,7 +51,7 @@ export const actionHook = function interceptQueueFilter(flex: typeof Flex, manag
 // data.attributes.queues IN [<queue-sid>]
 //
 
-function replaceQueueFiltersForTeamView(flex: typeof Flex, _manager: Flex.Manager) {
+function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager) {
   flex.Actions.addListener(
     `${actionEvent}${actionName}`,
     async (payload: ApplyTeamsViewFiltersPayload, _abortFunction: () => void) => {
@@ -64,7 +65,11 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, _manager: Flex.Manage
       });
 
       // if no queue filters return
-      if (!queueEligibilityFilter || queueEligibilityFilter.values.length < 1) return;
+      if (!queueEligibilityFilter || queueEligibilityFilter.values.length < 1) {
+        // clear any selected queue in state, since we know none are selected
+        manager.store.dispatch(selectQueue(''));
+        return;
+      }
 
       // remove the replacement filter
       const newFilter = filters.filter((filter: AppliedFilter) => filter.name !== 'queue-replacement');
@@ -82,6 +87,8 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, _manager: Flex.Manage
       // if there is no queue found notify user
       if (!queue) {
         Flex.Notifications.showNotification(TeamViewQueueFilterNotification.ErrorLoadingQueue);
+        // clear any selected queue in state
+        manager.store.dispatch(selectQueue(ResetQueuePlaceholder));
         return;
       }
       const { targetWorkers } = queue;
@@ -97,13 +104,18 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, _manager: Flex.Manage
         // validate expressions have been parsed and that there are no OR'd statements
         if (!expressionComponents || expressionComponents.length === 0) {
           Flex.Notifications.showNotification(TeamViewQueueFilterNotification.ErrorParsingQueueExpression);
+          // clear any selected queue in state
+          manager.store.dispatch(selectQueue(ResetQueuePlaceholder));
           return;
         } else if (containsORs) {
           Flex.Notifications.showNotification(TeamViewQueueFilterNotification.ErrorParsingQueueExpressionWithOR);
+          // clear any selected queue in state
+          manager.store.dispatch(selectQueue(ResetQueuePlaceholder));
           return;
         }
 
         // for each expression break it down and create a filter
+        let parseFailure = false;
         expressionComponents.forEach((expression) => {
           const tempName = RegExp(/(\b(?:\.)+\S+\b|\b(?:\S+)+\S+\b)/, 'i').exec(expression);
           const tempCondition = RegExp(/( HAS |==|!=| CONTAINS | IN | NOT IN )/, 'i').exec(expression);
@@ -137,11 +149,21 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, _manager: Flex.Manage
             queueFiltersArray.push(tempFilter);
           } else {
             Flex.Notifications.showNotification(TeamViewQueueFilterNotification.ErrorParsingQueueExpression);
+            parseFailure = true;
           }
         });
 
+        if (parseFailure) {
+          // clear any selected queue in state
+          manager.store.dispatch(selectQueue(ResetQueuePlaceholder));
+          return;
+        }
+
         payload.filters = [...newFilter, ...queueFiltersArray];
       }
+
+      // store selected queue in state so that the UI can display it properly
+      manager.store.dispatch(selectQueue(queue.friendlyName));
     },
   );
 }
