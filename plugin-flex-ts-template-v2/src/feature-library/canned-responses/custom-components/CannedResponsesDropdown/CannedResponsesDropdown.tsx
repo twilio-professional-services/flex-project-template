@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Actions, ITask, useFlexSelector } from '@twilio/flex-ui';
+import { Actions, ITask, useFlexSelector, TaskHelper } from '@twilio/flex-ui';
 import { Box } from '@twilio-paste/core/box';
 import { Tooltip } from '@twilio-paste/tooltip';
 import { Menu, MenuButton, MenuItem, MenuGroup, useMenuState } from '@twilio-paste/core/menu';
@@ -19,10 +19,8 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [responseCategories, setResponseCategories] = useState<undefined | CannedResponseCategories>(undefined);
-  const inputState = useFlexSelector(
-    (state) =>
-      state.flex.chat.conversationInput[task.attributes.conversationSid ?? task.attributes.channelSid].inputText,
-  );
+  const conversationSid = task.attributes.conversationSid ?? task.attributes.channelSid;
+  const inputState = useFlexSelector((state) => state.flex.chat.conversationInput[conversationSid]?.inputText);
 
   const menu = useMenuState({
     placement: 'top-start',
@@ -30,14 +28,14 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
   });
 
   const onClickInsert = (text: string) => {
-    if (!task.attributes.conversationSid && !task.attributes.channelSid) return;
+    if (!conversationSid) return;
     let currentInput = inputState;
     if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
       currentInput += ' ';
     }
     Actions.invokeAction('SetInputText', {
       body: currentInput + text,
-      conversationSid: task.attributes.conversationSid ?? task.attributes.channelSid,
+      conversationSid,
     });
   };
 
@@ -61,7 +59,7 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
       {isLoading && <SkeletonLoader />}
       {Boolean(responseCategories) && !isLoading && (
         <>
-          <MenuButton {...menu} variant={'primary_icon'}>
+          <MenuButton {...menu} variant={'primary_icon'} disabled={TaskHelper.isInWrapupMode(task)}>
             <ChatIcon decorative />
           </MenuButton>
           <Menu {...menu} aria-label="canned-responses" element="CANNED_RESPONSES_MENU">

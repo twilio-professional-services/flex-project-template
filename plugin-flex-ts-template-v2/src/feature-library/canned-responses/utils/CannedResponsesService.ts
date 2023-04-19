@@ -7,8 +7,15 @@ export interface CannedResponsesReponse {
 }
 
 class CannedResponsesService extends ApiService {
+  cannedResponseCache: CannedResponsesReponse | null = null;
+
   fetchCannedResponses = async (): Promise<CannedResponsesReponse> => {
     return new Promise((resolve, reject) => {
+      if (this.cannedResponseCache) {
+        resolve(this.cannedResponseCache);
+        return;
+      }
+
       const encodedParams: EncodedParams = {
         Token: encodeURIComponent(this.manager.store.getState().flex.session.ssoTokenPayload.token),
       };
@@ -22,6 +29,7 @@ class CannedResponsesService extends ApiService {
         },
       )
         .then((response) => {
+          this.cannedResponseCache = response;
           resolve(response);
         })
         .catch((error) => {

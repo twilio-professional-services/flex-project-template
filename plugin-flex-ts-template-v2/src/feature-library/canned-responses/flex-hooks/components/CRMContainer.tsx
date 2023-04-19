@@ -12,10 +12,11 @@ export const componentHook = function addCannedResponsesCRMContainer(flex: typeo
       // In the AgentDesktopView, we don't, however we have access to all the tasks and the selected one that we could retrieve
       // When completing the task, selectedTaskSid still exist but the task in the map has been removed, so we have to check the size of it
       if (props.task) {
-        return Flex.TaskHelper.isChatBasedTask(props.task);
+        return Flex.TaskHelper.isChatBasedTask(props.task) && !Flex.TaskHelper.isInWrapupMode(props.task);
       }
       if (props.selectedTaskSid && props.tasks.size > 0) {
-        return Flex.TaskHelper.isChatBasedTask(props.tasks.get(props.selectedTaskSid));
+        const selectedTaskSid = props.tasks.get(props.selectedTaskSid);
+        return Flex.TaskHelper.isChatBasedTask(selectedTaskSid) && !Flex.TaskHelper.isInWrapupMode(selectedTaskSid);
       }
       return false;
     },
