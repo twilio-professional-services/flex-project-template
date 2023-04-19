@@ -5,13 +5,13 @@
   "scripts": {
     "test": "echo 'Tests to come'; exit 1",
     "start": "twilio serverless:start",
-    "deploy": "twilio serverless:deploy --override-existing-project --env \".env.$TWILIO_PROFILE\" --runtime node14",
+    "deploy": "twilio serverless:deploy --override-existing-project --env \".env.$TWILIO_PROFILE\" --runtime node16",
     "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v2",
     "deploy:dev": "TWILIO_PROFILE=dev npm run deploy",
     "deploy:test": "TWILIO_PROFILE=test npm run deploy",
     "deploy:qa": "TWILIO_PROFILE=qa npm run deploy",
     "deploy:prod": "TWILIO_PROFILE=prod npm run deploy",
-    "lint": "eslint --ext js ./functions",
+    "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "lint:report": "npm run lint -- --output-file eslint_report.json --format json"
   },
@@ -32,32 +32,6 @@
     "twilio-run": "^3.4.2"
   },
   "engines": {
-    "node": "14"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "twilio"
-    ],
-    "rules": {
-      "camelcase": "off",
-      "complexity": "off",
-      "import/extensions": "off",
-      "import/no-extraneous-dependencies": "off",
-      "import/no-mutable-exports": "off",
-      "import/no-unresolved": "off",
-      "import/no-unused-modules": "off",
-      "multiline-comment-style": "off",
-      "no-alert": "off",
-      "no-console": "off",
-      "no-multi-str": "off",
-      "no-use-before-define": "off",
-      "prefer-destructuring": "off",
-      "prefer-named-capture-group": "off",
-      "prefer-promise-reject-errors": "off",
-      "sonarjs/cognitive-complexity": "off",
-      "sonarjs/no-identical-functions": "off",
-      "sonarjs/no-duplicate-string": "off"
-    }
+    "node": "16"
   }
 }

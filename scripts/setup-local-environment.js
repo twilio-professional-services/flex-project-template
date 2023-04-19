@@ -1,4 +1,4 @@
-const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPlugins } = require ('./common');
+const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, installNPMServerlessSchmgrFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPlugins } = require ('./common');
 const prompt = require('prompt');
 prompt.colors = false;
 
@@ -67,6 +67,7 @@ getActiveTwilioProfile().then((profile_result) => {
 
       if(installNpm){
         installNPMServerlessFunctions();
+        installNPMServerlessSchmgrFunctions();
         installNPMFlexConfig();
         installNPMPlugin();
         console.log("");

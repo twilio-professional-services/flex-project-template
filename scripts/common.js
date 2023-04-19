@@ -117,6 +117,13 @@ exports.installNPMServerlessFunctions = function installNPMServerlessFunctions()
   shell.cd("..");
 }
 
+exports.installNPMServerlessSchmgrFunctions = function installNPMServerlessSchmgrFunctions() {
+  console.log("Installing npm dependencies for serverless schedule manager..");
+  shell.cd("./serverless-schedule-manager")
+  shell.exec("npm install", {silent:true});
+  shell.cd("..");
+}
+
 exports.installNPMFlexConfig = function installNPMFlexConfig() {
   console.log("Installing npm dependencies for flex-config...");
   shell.cd("./flex-config");

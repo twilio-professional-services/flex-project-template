@@ -52,7 +52,9 @@
         "supervisor_alert_toggle": true
       },
       "omni_channel_capacity_management": {
-        "enabled": false
+        "enabled": false,
+        "channel": "chat",
+        "default_max_capacity": 2
       },
       "device_manager": {
         "enabled": true
@@ -86,7 +88,7 @@
           "queue_no_worker_data": true,
           "queue_worker_data": false,
           "team": true,
-          "agent_skills": true
+          "agent_skills": false
         },
         "department_options": [
           "General Management",
@@ -149,6 +151,10 @@
       },
       "supervisor_complete_reservation": {
         "enabled": true
+      },
+      "canned_responses": {
+        "enabled": true,
+        "location": "CRM"
       },
       "custom_hold_music": {
         "enabled": false,

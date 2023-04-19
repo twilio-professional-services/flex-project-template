@@ -1,4 +1,6 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const ScheduleUtils = require(Runtime.getFunctions()['common/helpers/schedule-utils'].path);
 const ServerlessOperations = require(Runtime.getFunctions()['common/twilio-wrappers/serverless'].path);
 
@@ -20,7 +22,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (!latestBuildResult.success) {
       response.setStatusCode(latestBuildResult.status);
-      response.setBody({ message: latestBuildResult.message });
+      response.setBody({ ...extractStandardResponse(latestBuildResult) });
       return callback(null, response);
     }
 
@@ -39,7 +41,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (!latestDeploymentResult.success) {
       response.setStatusCode(latestDeploymentResult.status);
-      response.setBody({ message: latestDeploymentResult.message });
+      response.setBody({ ...extractStandardResponse(latestDeploymentResult) });
       return callback(null, response);
     }
 

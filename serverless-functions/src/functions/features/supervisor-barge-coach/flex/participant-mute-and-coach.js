@@ -1,4 +1,6 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const ConferenceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conference-participant'].path);
 
 const requiredParameters = [
@@ -34,8 +36,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       });
       response.setStatusCode(result.status);
       response.setBody({
-        success: result.success,
         conference: result.conferenceSid,
+        ...extractStandardResponse(result),
       });
     }
     // If the agentSid is null/blank, we know we are updating the conference muted status
@@ -47,10 +49,12 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         muted,
         attempts: 0,
       });
-      response.setStatusCode(result.status);
+
+      const { status, conferenceSid: conference } = result;
+      response.setStatusCode(status);
       response.setBody({
-        success: result.success,
-        conference: result.conferenceSid,
+        conference,
+        ...extractStandardResponse(result),
       });
     }
     return callback(null, response);
