@@ -4,6 +4,7 @@
  *
  */
 const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
+const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path)
 const CallbackOperations = require(Runtime.getFunctions()['features/callback-and-voicemail/common/callback-operations']
   .path);
 
@@ -154,12 +155,13 @@ exports.handler = async (context, event, callback) => {
     holdMusicUrl = domain + holdMusicUrl;
   }
 
-  const { Digits, CallSid, enqueuedWorkflowSid, mode, enqueuedTaskSid, skipGreeting } = event;
+  const { Digits, CallSid, QueueSid, mode, enqueuedTaskSid, skipGreeting } = event;
 
   switch (mode) {
     case 'initialize':
       // Initial logic to find the associated task for the call, and propagate it through to the rest of the TwiML execution
       // If the lookup fails to find the task, the remaining TwiML logic will not offer any callback or voicemail options.
+      const enqueuedWorkflowSid = await VoiceOperations.fetchVoiceQueue({ context, queueSid: QueueSid }).friendlyName;
       const enqueuedTask = await getPendingTaskByCallSid(context, CallSid, enqueuedWorkflowSid);
 
       const redirectBaseUrl = `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=main-wait-loop&CallSid=${CallSid}`;
