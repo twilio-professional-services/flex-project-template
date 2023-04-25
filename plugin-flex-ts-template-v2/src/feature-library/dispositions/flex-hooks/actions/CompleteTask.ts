@@ -1,0 +1,77 @@
+import * as Flex from '@twilio/flex-ui';
+
+import { isNotesEnabled, isRequireDispositionEnabled } from '../../config';
+import AppState from '../../../../types/manager/AppState';
+import { reduxNamespace } from '../../../../utils/state';
+import { DispositionsState } from '../states';
+import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import { DispositionsNotification } from '../notifications';
+import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
+
+const handleAbort = (flex: typeof Flex, abortFunction: any) => {
+  flex.Notifications.showNotification(DispositionsNotification.DispositionRequired);
+
+  flex.Actions.invokeAction('SetComponentState', {
+    name: 'AgentTaskCanvasTabs',
+    state: { selectedTabName: 'disposition' },
+  });
+
+  abortFunction();
+};
+
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.CompleteTask;
+export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof Flex, manager: Flex.Manager) {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
+    if (!payload.task?.taskSid) {
+      return;
+    }
+
+    // TODO: Check if no dispositions are configured, and return if so.
+
+    // First, check if a disposition and/or notes are set.
+    const { tasks } = (manager.store.getState() as AppState)[reduxNamespace].dispositions as DispositionsState;
+
+    if (!tasks || !tasks[payload.task.taskSid]) {
+      if (isRequireDispositionEnabled()) {
+        handleAbort(flex, abortFunction);
+      }
+      return;
+    }
+
+    const taskDisposition = tasks[payload.task.taskSid];
+    let newConvAttributes = {};
+
+    if (isRequireDispositionEnabled() && !taskDisposition.disposition) {
+      handleAbort(flex, abortFunction);
+      return;
+    }
+
+    if (!taskDisposition.disposition && (!isNotesEnabled() || !taskDisposition.notes)) {
+      // Nothing for us to do, and it's okay!
+      return;
+    }
+
+    if (taskDisposition.disposition) {
+      newConvAttributes = {
+        ...newConvAttributes,
+        outcome: taskDisposition.disposition,
+      };
+    }
+
+    if (isNotesEnabled() && taskDisposition.notes) {
+      newConvAttributes = {
+        ...newConvAttributes,
+        content: taskDisposition.notes,
+      };
+    }
+
+    try {
+      await TaskRouterService.updateTaskAttributes(payload.task.taskSid, {
+        conversations: newConvAttributes,
+      });
+    } catch (error) {
+      console.log(`Failed to set disposition attributes for ${payload.task.taskSid} to ${newConvAttributes}`, error);
+    }
+  });
+};
