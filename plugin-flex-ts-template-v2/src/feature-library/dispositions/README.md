@@ -6,7 +6,7 @@ Dispositions are available in Flex Insights under "Outcome", and notes are avail
 
 # flex-user-experience
 
-
+![Dispositions demo](screenshots/dispositions.gif)
 
 # setup and dependencies
 
