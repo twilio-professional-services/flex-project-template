@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Actions, ITask, withTaskContext } from '@twilio/flex-ui';
+import { Actions, ITask, Manager, Template, templates, withTaskContext } from '@twilio/flex-ui';
 import { Radio, RadioGroup } from '@twilio-paste/core/radio-group';
 import { Stack } from '@twilio-paste/core/stack';
 import { TextArea } from '@twilio-paste/core/textarea';
@@ -13,6 +13,7 @@ import { getDispositionsForQueue, isNotesEnabled, isRequireDispositionEnabled } 
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { updateDisposition, DispositionsState } from '../../flex-hooks/states';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 export interface OwnProps {
   task?: ITask;
@@ -26,7 +27,7 @@ const DispositionTab = (props: OwnProps) => {
   const dispatch = useDispatch();
   const { tasks } = useSelector((state: AppState) => state[reduxNamespace].dispositions as DispositionsState);
 
-  // TODO: Manager strings
+  const strings = Manager.getInstance().strings as any;
 
   const updateStore = () => {
     if (!props.task) return;
@@ -94,28 +95,30 @@ const DispositionTab = (props: OwnProps) => {
   return (
     <Box padding="space80">
       <Stack orientation="vertical" spacing="space80">
-        <RadioGroup
-          name={`${props.task?.sid}-disposition`}
-          value={disposition}
-          legend="Select a disposition"
-          helpText="The selected disposition will be saved when you complete this task."
-          onChange={(value) => setDisposition(value)}
-          required={isRequireDispositionEnabled()}
-        >
-          {getDispositionsForQueue(props.task?.queueSid ?? '').map((disp) => (
-            <Radio
-              id={`${props.task?.sid}-disposition-${disp}`}
-              value={disp}
-              name={`${props.task?.sid}-disposition`}
-              key={`${props.task?.sid}-disposition-${disp}`}
-            >
-              {disp}
-            </Radio>
-          ))}
-        </RadioGroup>
+        {getDispositionsForQueue(props.task?.queueSid ?? '').length > 0 && (
+          <RadioGroup
+            name={`${props.task?.sid}-disposition`}
+            value={disposition}
+            legend={strings[StringTemplates.SelectDispositionTitle]}
+            helpText={strings[StringTemplates.SelectDispositionHelpText]}
+            onChange={(value) => setDisposition(value)}
+            required={isRequireDispositionEnabled()}
+          >
+            {getDispositionsForQueue(props.task?.queueSid ?? '').map((disp) => (
+              <Radio
+                id={`${props.task?.sid}-disposition-${disp}`}
+                value={disp}
+                name={`${props.task?.sid}-disposition`}
+                key={`${props.task?.sid}-disposition-${disp}`}
+              >
+                {disp}
+              </Radio>
+            ))}
+          </RadioGroup>
+        )}
         {isNotesEnabled() && (
           <>
-            <Label htmlFor="notes">Notes</Label>
+            <Label htmlFor="notes">{strings[StringTemplates.NotesTitle]}</Label>
             <TextArea
               onChange={(e) => setNotes(e.target.value)}
               aria-describedby="notes_help_text"
@@ -124,7 +127,12 @@ const DispositionTab = (props: OwnProps) => {
               value={notes}
               maxLength={NOTES_MAX_LENGTH}
             />
-            <HelpText id="notes_help_text">{NOTES_MAX_LENGTH - notes.length} characters remaining</HelpText>
+            <HelpText id="notes_help_text">
+              <Template
+                source={templates[StringTemplates.NotesCharactersRemaining]}
+                characters={NOTES_MAX_LENGTH - notes.length}
+              />
+            </HelpText>
           </>
         )}
       </Stack>

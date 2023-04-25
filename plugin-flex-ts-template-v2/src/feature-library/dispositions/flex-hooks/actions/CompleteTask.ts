@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
-import { isNotesEnabled, isRequireDispositionEnabled } from '../../config';
+import { getDispositionsForQueue, isNotesEnabled, isRequireDispositionEnabled } from '../../config';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { DispositionsState } from '../states';
@@ -27,13 +27,18 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
       return;
     }
 
-    // TODO: Check if no dispositions are configured, and return if so.
+    const numDispositions = getDispositionsForQueue(payload.task?.queueSid ?? '').length;
+
+    // If notes disabled, and no dispositions are configured, return.
+    if (numDispositions < 1 && !isNotesEnabled()) {
+      return;
+    }
 
     // First, check if a disposition and/or notes are set.
     const { tasks } = (manager.store.getState() as AppState)[reduxNamespace].dispositions as DispositionsState;
 
     if (!tasks || !tasks[payload.task.taskSid]) {
-      if (isRequireDispositionEnabled()) {
+      if (isRequireDispositionEnabled() && numDispositions > 0) {
         handleAbort(flex, abortFunction);
       }
       return;
@@ -42,7 +47,7 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     const taskDisposition = tasks[payload.task.taskSid];
     let newConvAttributes = {};
 
-    if (isRequireDispositionEnabled() && !taskDisposition.disposition) {
+    if (isRequireDispositionEnabled() && !taskDisposition.disposition && numDispositions > 0) {
       handleAbort(flex, abortFunction);
       return;
     }

@@ -161,20 +161,20 @@
         "url": ""
       },
       "dispositions": {
-        "enabled": false
-        "enable_notes": true;
-        "require_disposition": true;
+        "enabled": false,
+        "enable_notes": true,
+        "require_disposition": true,
         "global_dispositions": [
           "Billing Question",
           "Support Inquiry",
           "Transfer"
-        ];
+        ],
         "per_queue_dispositions": {
           "exampleQueueSid": [
             "Promotional Sale",
             "Renewal"
           ]
-        };
+        }
       }
     }
   }
