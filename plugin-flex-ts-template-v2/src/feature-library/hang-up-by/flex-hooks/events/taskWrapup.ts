@@ -65,7 +65,7 @@ export const eventHook = async (_flex: typeof Flex, _manager: Flex.Manager, task
   };
 
   try {
-    await TaskRouterService.updateTaskAttributes(task.taskSid, attributes, false);
+    await TaskRouterService.updateTaskAttributes(task.taskSid, attributes);
     console.log(`Set conversation attributes for ${task.taskSid}`, attributes);
   } catch (error) {
     console.log(`Failed to set conversation attributes for ${task.taskSid}`, error);

@@ -107,7 +107,7 @@ class TaskRouterService extends ApiService {
   async updateTaskAttributes(
     taskSid: string,
     attributesUpdate: object,
-    deferUpdates: boolean = true,
+    deferUpdates: boolean = false,
   ): Promise<boolean> {
     if (deferUpdates) {
       // Defer update; merge new attrs into local storage

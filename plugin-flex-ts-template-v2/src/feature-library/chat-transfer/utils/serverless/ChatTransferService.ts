@@ -104,7 +104,7 @@ class ChatTransferService extends ApiService {
             transferType: options?.mode,
           },
         };
-        const updateSuccess = await TaskService.updateTaskAttributes(task.taskSid, updatedTaskAttributes, false);
+        const updateSuccess = await TaskService.updateTaskAttributes(task.taskSid, updatedTaskAttributes);
         if (!updateSuccess) {
           // in the unlikely event we were unable to update the task notify the user
           Flex.Notifications.showNotification(ChatTransferNotification.ErrorUpdatingTaskForChatTransfer);

@@ -77,7 +77,7 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
   }
 
   if (shouldUpdateTaskAttributes) {
-    await TaskRouterService.updateTaskAttributes(task.taskSid, newAttributes, false);
+    await TaskRouterService.updateTaskAttributes(task.taskSid, newAttributes);
   }
 };
 

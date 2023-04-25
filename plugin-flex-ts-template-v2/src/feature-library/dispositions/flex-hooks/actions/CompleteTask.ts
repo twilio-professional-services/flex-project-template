@@ -72,9 +72,13 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     }
 
     try {
-      await TaskRouterService.updateTaskAttributes(payload.task.taskSid, {
-        conversations: newConvAttributes,
-      });
+      await TaskRouterService.updateTaskAttributes(
+        payload.task.taskSid,
+        {
+          conversations: newConvAttributes,
+        },
+        true,
+      );
     } catch (error) {
       console.log(`Failed to set disposition attributes for ${payload.task.taskSid} to ${newConvAttributes}`, error);
     }

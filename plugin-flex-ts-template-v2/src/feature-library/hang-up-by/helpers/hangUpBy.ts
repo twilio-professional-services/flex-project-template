@@ -183,7 +183,7 @@ export const setHangUpByAttribute = async (
   }
 
   try {
-    await TaskRouterService.updateTaskAttributes(taskSid, newAttributes, false);
+    await TaskRouterService.updateTaskAttributes(taskSid, newAttributes);
   } catch (error) {
     console.log(`Failed to set hang_up_by attribute for ${taskSid} to ${value}`, error);
   }
