@@ -1,4 +1,6 @@
 import { TaskAssignmentStatus } from 'types/task-router/Task';
+import { merge } from 'lodash';
+import { TaskHelper } from '@twilio/flex-ui';
 
 import ApiService from '../ApiService';
 import { EncodedParams } from '../../../types/serverless';
@@ -44,11 +46,88 @@ interface UpdateWorkerChannelResponse {
   workerChannelCapacity: WorkerChannelCapacityResponse;
 }
 
+const STORAGE_KEY = 'pending_task_updates';
 let queues = null as null | Array<Queue>;
 
 class TaskRouterService extends ApiService {
-  async updateTaskAttributes(taskSid: string, attributesUpdate: object): Promise<boolean> {
-    const result = await this.#updateTaskAttributes(taskSid, JSON.stringify(attributesUpdate));
+  addToLocalStorage(taskSid: string, attributesUpdate: object): void {
+    const storageValue = localStorage.getItem(STORAGE_KEY);
+    let storageObject = {} as { [taskSid: string]: any };
+
+    if (storageValue) {
+      storageObject = JSON.parse(storageValue);
+    }
+
+    if (!storageObject[taskSid]) {
+      storageObject[taskSid] = {};
+    }
+
+    storageObject[taskSid] = merge({}, storageObject[taskSid], attributesUpdate);
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(storageObject));
+  }
+
+  fetchFromLocalStorage(taskSid: string): any {
+    const storageValue = localStorage.getItem(STORAGE_KEY);
+    let storageObject = {} as { [taskSid: string]: any };
+
+    if (storageValue) {
+      storageObject = JSON.parse(storageValue);
+    }
+
+    if (!storageObject[taskSid]) {
+      storageObject[taskSid] = {};
+    }
+
+    return storageObject[taskSid];
+  }
+
+  removeFromLocalStorage(taskSid: string): void {
+    const storageValue = localStorage.getItem(STORAGE_KEY);
+    let storageObject = {} as { [taskSid: string]: any };
+
+    if (storageValue) {
+      storageObject = JSON.parse(storageValue);
+    }
+
+    if (storageObject[taskSid]) {
+      delete storageObject[taskSid];
+    }
+
+    // Janitor - clean up any tasks that we don't have
+    for (const [key] of Object.entries(storageObject)) {
+      if (!TaskHelper.getTaskByTaskSid(key)) {
+        delete storageObject[key];
+      }
+    }
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(storageObject));
+  }
+
+  async updateTaskAttributes(
+    taskSid: string,
+    attributesUpdate: object,
+    deferUpdates: boolean = true,
+  ): Promise<boolean> {
+    if (deferUpdates) {
+      // Defer update; merge new attrs into local storage
+      this.addToLocalStorage(taskSid, attributesUpdate);
+      return true;
+    }
+
+    // Fetch attrs from local storage and merge into the provided attrs
+    const mergedAttributesUpdate = merge({}, this.fetchFromLocalStorage(taskSid), attributesUpdate);
+    if (Object.keys(mergedAttributesUpdate).length < 1) {
+      // No attributes provided to update
+      return true;
+    }
+
+    const result = await this.#updateTaskAttributes(taskSid, JSON.stringify(mergedAttributesUpdate));
+
+    if (result.success) {
+      // we've pushed updates; remove pending attributes
+      this.removeFromLocalStorage(taskSid);
+    }
 
     return result.success;
   }

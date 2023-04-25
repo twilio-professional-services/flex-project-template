@@ -1,6 +1,8 @@
-# dispositions
+# Dispositions / wrap-up codes
 
+Dispositions are useful for tracking the outcomes of various tasks. This feature allows you to provide a custom list of dispositions that agents may select before completing their task. Disposition selection may be optional or required, and dispositions may be global or queue-specific. You may also optionally enable a free-form notes field.
 
+Dispositions are available in Flex Insights under "Outcome", and notes are available under "Content".
 
 # flex-user-experience
 
@@ -8,7 +10,23 @@
 
 # setup and dependencies
 
+Within your `ui_attributes` file, there are several settings for the `dispositions` feature:
 
+- `enable` - set this to true to enable the feature
+- `enable_notes` - set this to true to enable a free-form notes field in addition to disposition selection
+- `require_disposition` - set this to true to require the agent to select a disposition in order to complete the task
+- `global_dispositions` - provide a string array of dispositions to list for tasks from any queue
+- `per_queue_dispositions` - allows you to set dispositions that are only listed for tasks from the provided queue SID(s)
+
+> **Note**
+> If both global and per-queue dispositions are configured, the agent will be see a combined list.
+
+Once your updated flex-config is deployed, the feature is enabled and ready to use.
 
 # how does it work?
 
+This feature adds a disposition tab to `TaskCanvasTabs`. When the task enters the wrapping state, the disposition tab is automatically selected. The user's selected disposition and/or notes are stored in state. When the Complete Task button is pressed, the selected values are read from state and written to task attributes. The disposition is stored in the `conversations.outcome` attribute, and notes are stored in the `conversations.content` attribute.
+
+If `require_disposition` is enabled, and there are dispositions configured, the agent will not be allowed to complete the task until one is selected.
+
+If no dispositions are configured, and notes are not enabled, the dispositions tab will not be added.

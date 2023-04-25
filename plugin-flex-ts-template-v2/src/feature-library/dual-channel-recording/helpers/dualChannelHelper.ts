@@ -7,9 +7,9 @@ import { getChannelToRecord } from '../config';
 const manager = Manager.getInstance();
 
 export const addCallDataToTask = async (task: ITask, callSid: string | null, recording: FetchedRecording | null) => {
-  const { attributes, conference } = task;
+  const { conference } = task;
 
-  let newAttributes = { ...attributes };
+  let newAttributes = {} as any;
   let shouldUpdateTaskAttributes = false;
 
   if (TaskHelper.isOutboundCallTask(task)) {
@@ -29,7 +29,6 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
   if (recording) {
     const { dateUpdated, sid: reservationSid } = task;
     shouldUpdateTaskAttributes = true;
-    const conversations = attributes.conversations || {};
 
     const state = manager.store.getState();
     const flexState = state && state.flex;
@@ -39,8 +38,6 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
     const { sid: recordingSid } = recording;
     const twilioApiBase = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}`;
     const recordingUrl = `${twilioApiBase}/Recordings/${recordingSid}`;
-
-    const reservationAttributes = attributes.reservation_attributes || {};
 
     // Using one second before task updated time to workaround a Flex Insights
     // bug if the recording start time is after the reservation.accepted event
@@ -61,9 +58,8 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
     switch (getChannelToRecord()) {
       case 'worker':
         newAttributes = {
-          ...attributes,
+          ...newAttributes,
           reservation_attributes: {
-            ...reservationAttributes,
             [reservationSid]: {
               media: [mediaObj],
             },
@@ -72,7 +68,6 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
         break;
       case 'customer':
         newAttributes.conversations = {
-          ...conversations,
           media: [mediaObj],
         };
         break;
@@ -82,7 +77,7 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
   }
 
   if (shouldUpdateTaskAttributes) {
-    await TaskRouterService.updateTaskAttributes(task.taskSid, newAttributes);
+    await TaskRouterService.updateTaskAttributes(task.taskSid, newAttributes, false);
   }
 };
 

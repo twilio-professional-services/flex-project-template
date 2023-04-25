@@ -76,7 +76,7 @@ export const actionHook = async function announceOnChannelWhenLeavingAndRemoveCh
       } catch (e) {
         console.warn(`Unable to update chat channel that task is complete: ${task.taskSid} and ${channelSid}`);
       }
-      await TaskService.updateTaskAttributes(task.taskSid, attributesUpdate);
+      await TaskService.updateTaskAttributes(task.taskSid, attributesUpdate, false);
     }
   });
 };
