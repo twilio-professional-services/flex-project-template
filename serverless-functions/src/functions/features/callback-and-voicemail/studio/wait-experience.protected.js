@@ -161,7 +161,9 @@ exports.handler = async (context, event, callback) => {
     case 'initialize':
       // Initial logic to find the associated task for the call, and propagate it through to the rest of the TwiML execution
       // If the lookup fails to find the task, the remaining TwiML logic will not offer any callback or voicemail options.
-      const enqueuedWorkflowSid = await VoiceOperations.fetchVoiceQueue({ context, queueSid: QueueSid }).friendlyName;
+      const enqueuedWorkflowSid = (await VoiceOperations.fetchVoiceQueue({ context, queueSid: QueueSid, attempts: 0 }))
+        .queueProperties.friendlyName;
+      console.log(`Enqueued workflow sid: ${enqueuedWorkflowSid}`);
       const enqueuedTask = await getPendingTaskByCallSid(context, CallSid, enqueuedWorkflowSid);
 
       const redirectBaseUrl = `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=main-wait-loop&CallSid=${CallSid}`;
@@ -240,6 +242,7 @@ exports.handler = async (context, event, callback) => {
         context,
         numberToCall: event.Caller,
         numberToCallFrom: event.Called,
+        attempts: 0,
       });
 
       // End the interaction. Hangup the call.
@@ -285,6 +288,7 @@ exports.handler = async (context, event, callback) => {
         recordingUrl: event.RecordingUrl,
         transcriptSid: event.TranscriptionSid,
         transcriptText: event.TranscriptionText,
+        attempts: 0,
       });
 
       return callback(null, '');
