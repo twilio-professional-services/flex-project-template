@@ -4,7 +4,7 @@
  *
  */
 const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
-const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path)
+const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const CallbackOperations = require(Runtime.getFunctions()['features/callback-and-voicemail/common/callback-operations']
   .path);
 
