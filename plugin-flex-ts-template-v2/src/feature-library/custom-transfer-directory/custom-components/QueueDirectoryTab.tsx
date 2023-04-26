@@ -168,24 +168,22 @@ const QueueDirectoryTab = (props: OwnProps) => {
 
   return (
     <Flex vertical wrap={false} grow={1} shrink={1}>
-      <Stack element="TRANSFER_DIR_COMMON_TAB_CONTAINER" orientation="vertical" spacing="space0">
-        <SearchBox onInputChange={onQueueSearchInputChange} />
-        <Flex vertical grow={3} shrink={3} wrap={true}>
-          <Stack element="TRANSFER_DIR_COMMON_ROWS_CONTAINER" orientation="vertical" spacing="space20">
-            {Array.from(queues).map((queue: IQueue<any>) => {
-              return (
-                <QueueItem
-                  task={props.task}
-                  queue={queue}
-                  key={queue.sid}
-                  isWarmTransferEnabled={true}
-                  onTransferClick={onTransferQueueClick(queue)}
-                />
-              );
-            })}
-          </Stack>
-        </Flex>
-      </Stack>
+      <SearchBox onInputChange={onQueueSearchInputChange} />
+      <Flex vertical grow={1} shrink={1} wrap={true} element="TRANSFER_DIR_COMMON_ROWS_CONTAINER">
+        <Stack orientation="vertical" spacing="space20">
+          {Array.from(queues).map((queue: IQueue<any>) => {
+            return (
+              <QueueItem
+                task={props.task}
+                queue={queue}
+                key={queue.sid}
+                isWarmTransferEnabled={true}
+                onTransferClick={onTransferQueueClick(queue)}
+              />
+            );
+          })}
+        </Stack>
+      </Flex>
     </Flex>
   );
 };

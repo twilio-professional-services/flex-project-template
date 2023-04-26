@@ -23,7 +23,6 @@ export const pasteElementHook = {
   },
   TRANSFER_DIR_COMMON_ROWS_CONTAINER: {
     fontWeight: '700',
-    maxHeight: '600px',
     overflowY: 'auto',
   },
   TRANSFER_DIR_COMMON_TOOLTIP: {
