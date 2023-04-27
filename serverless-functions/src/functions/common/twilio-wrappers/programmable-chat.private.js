@@ -13,10 +13,8 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  *    to the channel object
  */
 exports.updateChannelAttributes = async function updateChannelAttributes(parameters) {
-  const { attempts, context, channelSid, attributes } = parameters;
+  const { context, channelSid, attributes } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(channelSid))
     throw new Error('Invalid parameters object passed. Parameters must contain channelSid string');

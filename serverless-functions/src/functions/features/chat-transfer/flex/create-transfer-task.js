@@ -67,7 +67,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       attributes: newAttributes,
       priority,
       timeout,
-      attempts: 0,
     });
 
     const {
@@ -88,7 +87,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
           context,
           taskSid,
           channelSid,
-          attempts: 0,
         });
     } catch (error) {
       console.error('Error updating chat channel with task sid created for it');

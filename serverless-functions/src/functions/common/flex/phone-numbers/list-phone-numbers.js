@@ -9,7 +9,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   try {
     const result = await PhoneNumberOpertions.listPhoneNumbers({
       context,
-      attempts: 0,
     });
 
     const { phoneNumbers: fullPhoneNumberList } = result;

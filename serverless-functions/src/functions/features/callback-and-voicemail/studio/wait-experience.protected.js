@@ -43,7 +43,6 @@ async function getPendingTaskByCallSid(context, callSid, workflowSid) {
   // Fine tuning of this value can be done based on anticipated call volume and validated through load testing.
   const result = await TaskRouterOperations.getTasks({
     context,
-    attempts: 0,
     assignmentStatus: ['pending', 'reserved'],
     workflowSid,
     ordering: 'DateCreated:desc',
@@ -63,7 +62,6 @@ async function fetchTask(context, taskSid) {
   const result = await TaskRouterOperations.fetchTask({
     context,
     taskSid,
-    attempts: 0,
   });
   return result.task;
 }
@@ -92,7 +90,6 @@ async function cancelTask(context, task, cancelReason) {
       reason: cancelReason,
       attributes: JSON.stringify(newAttributes),
     },
-    attempts: 0,
   });
 }
 
@@ -126,7 +123,6 @@ async function handleCallbackOrVoicemailSelected(context, isVoicemail, callSid, 
       method: 'POST',
       url: `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=${mode}&CallSid=${callSid}&enqueuedTaskSid=${taskSid}`,
     },
-    attempts: 0,
   });
   const { success, status } = result;
 
@@ -161,7 +157,7 @@ exports.handler = async (context, event, callback) => {
     case 'initialize':
       // Initial logic to find the associated task for the call, and propagate it through to the rest of the TwiML execution
       // If the lookup fails to find the task, the remaining TwiML logic will not offer any callback or voicemail options.
-      const enqueuedWorkflowSid = (await VoiceOperations.fetchVoiceQueue({ context, queueSid: QueueSid, attempts: 0 }))
+      const enqueuedWorkflowSid = (await VoiceOperations.fetchVoiceQueue({ context, queueSid: QueueSid }))
         .queueProperties.friendlyName;
       console.log(`Enqueued workflow sid: ${enqueuedWorkflowSid}`);
       const enqueuedTask = await getPendingTaskByCallSid(context, CallSid, enqueuedWorkflowSid);
@@ -242,7 +238,6 @@ exports.handler = async (context, event, callback) => {
         context,
         numberToCall: event.Caller,
         numberToCallFrom: event.Called,
-        attempts: 0,
       });
 
       // End the interaction. Hangup the call.
@@ -288,7 +283,6 @@ exports.handler = async (context, event, callback) => {
         recordingUrl: event.RecordingUrl,
         transcriptSid: event.TranscriptionSid,
         transcriptText: event.TranscriptionText,
-        attempts: 0,
       });
 
       return callback(null, '');

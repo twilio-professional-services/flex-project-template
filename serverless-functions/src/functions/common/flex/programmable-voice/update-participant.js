@@ -21,7 +21,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       conference,
       participant,
       endConferenceOnExit: endConferenceOnExit === 'true',
-      attempts: 0,
     });
 
     const { participantsResponse, status } = result;

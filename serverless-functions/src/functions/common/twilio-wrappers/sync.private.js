@@ -12,10 +12,8 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  * @description the following method is used to remove a Sync Map Item
  */
 exports.deleteMapItem = async function deleteMapItem(parameters) {
-  const { attempts, context, mapSid, key } = parameters;
+  const { context, mapSid, key } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(mapSid) && !isString(mapSid))
     throw new Error('Invalid parameters object passed. Parameters must contain mapSid string value');
@@ -43,10 +41,8 @@ exports.deleteMapItem = async function deleteMapItem(parameters) {
  * @description the following method is used to fetch a Sync Map Item
  */
 exports.fetchMapItem = async function fetchMapItem(parameters) {
-  const { attempts, context, mapSid, key } = parameters;
+  const { context, mapSid, key } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(mapSid) && !isString(mapSid))
     throw new Error('Invalid parameters object passed. Parameters must contain context object');
@@ -76,10 +72,8 @@ exports.fetchMapItem = async function fetchMapItem(parameters) {
  * @description the following method is used to create a Sync Map Item
  */
 exports.createMapItem = async function createMapItem(parameters) {
-  const { attempts, context, mapSid, key, ttl, data } = parameters;
+  const { context, mapSid, key, ttl, data } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(mapSid) && !isString(mapSid))
     throw new Error('Invalid parameters object passed. Parameters must contain context object');
@@ -120,10 +114,8 @@ exports.createMapItem = async function createMapItem(parameters) {
  * @description the following method is used to create a sync document
  */
 exports.createDocument = async function createDocument(parameters) {
-  const { attempts, context, uniqueName, ttl, data } = parameters;
+  const { context, uniqueName, ttl, data } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(uniqueName) && !isString(uniqueName))
     throw new Error('Invalid parameters object passed. Parameters must contain uniqueName string value');
@@ -157,10 +149,8 @@ exports.createDocument = async function createDocument(parameters) {
  * @description the following method is used to fetch a sync document
  */
 exports.fetchDocument = async function fetchDocument(parameters) {
-  const { attempts, context, documentSid } = parameters;
+  const { context, documentSid } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(documentSid))
     throw new Error('Invalid parameters object passed. Parameters must contain documentSid string value');
@@ -186,10 +176,8 @@ exports.fetchDocument = async function fetchDocument(parameters) {
  * @description the following method is used to fetch a sync document
  */
 exports.updateDocumentData = async function updateDocumentData(parameters) {
-  const { attempts, context, documentSid, updateData } = parameters;
+  const { context, documentSid, updateData } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(documentSid))
     throw new Error('Invalid parameters object passed. Parameters must contain documentSid string value');

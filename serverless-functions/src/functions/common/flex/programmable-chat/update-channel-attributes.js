@@ -16,7 +16,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       context,
       channelSid,
       attributes,
-      attempts: 0,
     });
 
     response.setStatusCode(result.status);

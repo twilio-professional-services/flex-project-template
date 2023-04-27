@@ -16,7 +16,7 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  *      within the defined conference
  */
 exports.coachToggle = async function coachToggle(parameters) {
-  const { context, conferenceSid, participantSid, agentSid, muted, coaching, attempts } = parameters;
+  const { context, conferenceSid, participantSid, agentSid, muted, coaching } = parameters;
 
   if (!isObject(context))
     throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
@@ -28,8 +28,6 @@ exports.coachToggle = async function coachToggle(parameters) {
   if (!isString(muted)) throw new Error('Invalid parameters object passed. Parameters must contain muted boolean');
   if (!isString(coaching))
     throw new Error('Invalid parameters object passed. Parameters must contain coaching boolean');
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   try {
     const client = context.getTwilioClient();
 
@@ -56,7 +54,7 @@ exports.coachToggle = async function coachToggle(parameters) {
  *      within the defined conference
  */
 exports.bargeToggle = async function bargeToggle(parameters) {
-  const { context, conferenceSid, participantSid, muted, attempts } = parameters;
+  const { context, conferenceSid, participantSid, muted } = parameters;
 
   if (!isObject(context))
     throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
@@ -65,8 +63,6 @@ exports.bargeToggle = async function bargeToggle(parameters) {
   if (!isString(participantSid))
     throw new Error('Invalid parameters object passed. Parameters must contain participantSid string');
   if (!isString(muted)) throw new Error('Invalid parameters object passed. Parameters must contain muted boolean');
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   try {
     const client = context.getTwilioClient();
 

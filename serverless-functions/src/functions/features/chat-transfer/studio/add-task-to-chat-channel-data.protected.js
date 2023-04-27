@@ -15,7 +15,6 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       context,
       taskSid,
       channelSid,
-      attempts: 0,
     });
 
     response.setStatusCode(result.status);
