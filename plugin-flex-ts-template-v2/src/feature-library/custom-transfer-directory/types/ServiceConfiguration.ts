@@ -1,5 +1,6 @@
 export default interface CustomTransferDirectoryConfig {
   enabled: boolean;
+  use_legacy_search_icon: boolean;
   worker: {
     enabled: boolean;
   };

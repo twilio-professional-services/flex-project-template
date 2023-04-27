@@ -5,7 +5,6 @@ export const pasteElementHook = {
     fontWeight: '700px',
     overflow: 'hidden',
   },
-
   TRANSFER_DIR_COMMON_SEARCH_BOX: {
     visibility: 'visible',
   },

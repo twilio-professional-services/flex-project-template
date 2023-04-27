@@ -1,9 +1,13 @@
 import { Manager, styled } from '@twilio/flex-ui';
 import { Box, Input } from '@twilio-paste/core';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
+import { Ref } from 'react';
+
+import { useLegactSearchIcon } from '../config';
 
 export interface SearchBoxProps {
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputRef?: Ref<HTMLInputElement>;
 }
 
 export const LegacySearchIcon = () => {
@@ -16,25 +20,28 @@ export const LegacySearchIcon = () => {
   );
 };
 
-export const SearchInput = ({ onInputChange }: SearchBoxProps) => {
+export const SearchInput = ({ onInputChange, inputRef }: SearchBoxProps) => {
   const { WorkerDirectorySearchPlaceholder } = Manager.getInstance().strings;
 
   return (
     <Input
       element="TRANSFER_DIR_COMMON_SEARCH_BOX"
-      insertBefore={false ? <SearchIcon decorative={false} title="Search Queue Names" /> : <LegacySearchIcon />}
+      insertBefore={
+        useLegactSearchIcon() ? <LegacySearchIcon /> : <SearchIcon decorative={false} title="Search Queue Names" />
+      }
       type="text"
       key="custom-directory-input-field"
       onChange={onInputChange}
       placeholder={WorkerDirectorySearchPlaceholder}
+      ref={inputRef}
     />
   );
 };
 
-export const SearchBox = ({ onInputChange }: SearchBoxProps) => {
+export const SearchBox = ({ onInputChange, inputRef }: SearchBoxProps) => {
   return (
-    <Box paddingLeft="space50" paddingRight="space50" paddingTop="space60" paddingBottom="space50">
-      <SearchInput onInputChange={onInputChange} />
+    <Box width="100%" paddingLeft="space50" paddingRight="space50" paddingTop="space60" paddingBottom="space50">
+      <SearchInput onInputChange={onInputChange} inputRef={inputRef} />
     </Box>
   );
 };

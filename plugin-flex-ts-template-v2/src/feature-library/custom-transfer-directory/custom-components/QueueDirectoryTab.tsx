@@ -8,7 +8,7 @@ import {
   Actions,
   ITask,
 } from '@twilio/flex-ui';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
 import { SearchBox } from './CommonDirectoryComponents';
@@ -46,13 +46,16 @@ export interface MapItem {
 const QueueDirectoryTab = (props: OwnProps) => {
   const [fetchedQueues, setFetchedQueues] = useState([] as Array<IQueue>);
   const [insightsQueues, setInsightsQueues] = useState([] as Array<MapItem>);
-  const [queues, setQueues] = useState([] as Array<TransferQueue>);
-  const [queueFilter, setQueueFilter] = useState('');
+  const [filteredQueues, setFilteredQueues] = useState([] as Array<TransferQueue>);
   const [queueFilterTimer, setQueueFiltertimer] = useState(null as number | null);
+
+  const transferQueues = useRef([] as Array<TransferQueue>);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   const { workspaceClient, insightsClient } = Manager.getInstance();
 
   // takes the input in the search box and applies it to the queue result
+  // this will trigger the useEffect for a queueFilter update
   const onQueueSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!fetchedQueues || queueFilterTimer) {
       return;
@@ -62,8 +65,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
       window.setTimeout(() => {
         // eslint-disable-next-line no-eq-null, eqeqeq
         if (event.target != null) {
-          setQueueFilter(event.target.value);
-          // clearTimeout(queueFilterTimer);
+          filterQueues();
           setQueueFiltertimer(null);
         }
       }, 300),
@@ -71,6 +73,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
   };
 
   // async function to retrieve the task queues from the tr sdk
+  // this will trrigger the useEffect for a fetchedQueues update
   const fetchSDKTaskQueues = async () => {
     if (workspaceClient)
       setFetchedQueues(
@@ -88,7 +91,9 @@ const QueueDirectoryTab = (props: OwnProps) => {
   // agent availability - it shoould be noted the insights client acts
   // like a cache and can go stale if account is not active
   // to restore the cache, tasks need to be pushed into the queue
+  // this will trigger the useEffect for the insightsQueue update
   const fetchInsightsQueueData = async () => {
+    // check the insights client is available
     if (
       !ClientManagerInstance.InsightsClient ||
       ClientManagerHelpers.isForcedDegraded(ClientManagerInstance.InsightsClient)
@@ -96,18 +101,48 @@ const QueueDirectoryTab = (props: OwnProps) => {
       return;
     }
 
-    const queues = await getAllSyncMapItems(
-      await insightsClient.map({
-        id: 'realtime_statistics_v1',
-        mode: 'open_existing',
-      }),
-    );
+    // get real time stats map
+    const queueMap = await insightsClient.map({
+      id: 'realtime_statistics_v1',
+      mode: 'open_existing',
+    });
 
-    setInsightsQueues(queues);
+    // make sure all queues are loaded
+    const insightQueues = await getAllSyncMapItems(queueMap);
+
+    // update the queue item
+    queueMap.on('itemUpdated', (updatedItem) => {
+      const {
+        item: { key, data },
+      } = updatedItem;
+
+      const queue = transferQueues.current.find((transferQueue) => transferQueue.sid === key);
+      if (queue) {
+        queue.total_eligible_workers = data ? data.total_eligible_workers : null;
+        queue.total_available_workers = data ? data.total_available_workers : null;
+        queue.total_tasks = data ? data.total_tasks : null;
+        queue.longest_task_waiting_age = data ? data.longest_task_waiting_age : null;
+        queue.tasks_by_status = data ? data.tasks_by_status : null;
+      }
+
+      filterQueues();
+    });
+
+    // if a queue is added trrigger a reload
+    queueMap.on('itemAdded', () => {
+      fetchSDKTaskQueues();
+    });
+
+    // if a queue is removed trigger a reload
+    queueMap.on('itemRemoved', () => {
+      fetchSDKTaskQueues();
+    });
+
+    setInsightsQueues(insightQueues);
   };
 
   // function to resolve fetchedQueues and insights queue data
-  const updateQueueList = () => {
+  const generateQueueList = () => {
     const tempQueues = [] as Array<TransferQueue>;
     fetchedQueues.forEach((value) => {
       const tempInsightsQueue = insightsQueues.find((item) => item.key === value.sid);
@@ -125,22 +160,31 @@ const QueueDirectoryTab = (props: OwnProps) => {
       tempQueues.push(transferQueue);
     });
 
+    // cache the merged list of fetched queues with real time data
+    transferQueues.current = tempQueues;
+
     // Apply filter and sort alphabetically
-    const filteredQueues = tempQueues
+    filterQueues();
+  };
+
+  // function to filter the generatedQueueList and trigger a rerender
+  const filterQueues = () => {
+    const updatedQueues = transferQueues.current
       .filter((queue) => {
+        const searchString = searchInputRef.current?.value || '';
         if (showOnlyQueuesWithAvailableWorkers()) {
           // returning only queues with available workers
           // or queues where meta data is not available
           return (
-            queue.name.includes(queueFilter) &&
+            queue.name.includes(searchString) &&
             (queue.total_available_workers === null || queue.total_available_workers > 0)
           );
         }
-        return queue.name.includes(queueFilter);
+        return queue.name.includes(searchString);
       })
       .sort((a: TransferQueue, b: TransferQueue) => (a.name > b.name ? 1 : -1));
 
-    setQueues(filteredQueues);
+    setFilteredQueues(updatedQueues);
   };
 
   const onTransferQueueClick = (queue: IQueue) => (transferOptions: TransferClickPayload) => {
@@ -161,17 +205,24 @@ const QueueDirectoryTab = (props: OwnProps) => {
     fetchInsightsQueueData().catch(console.error);
   }, []);
 
-  // hook when fetchedQueues, insightsQueues or queueFilter are updated
+  // hook when fetchedQueues, insightsQueues are updated
   useEffect(() => {
-    updateQueueList();
-  }, [fetchedQueues, insightsQueues, queueFilter]);
+    generateQueueList();
+  }, [fetchedQueues, insightsQueues]);
 
   return (
-    <Flex vertical wrap={false} grow={1} shrink={1}>
-      <SearchBox onInputChange={onQueueSearchInputChange} />
-      <Flex vertical grow={1} shrink={1} wrap={true} element="TRANSFER_DIR_COMMON_ROWS_CONTAINER">
-        <Stack orientation="vertical" spacing="space20">
-          {Array.from(queues).map((queue: IQueue<any>) => {
+    <Flex key="queue-tab-list" vertical wrap={false} grow={1} shrink={1}>
+      <SearchBox key="key-tab-search-box" onInputChange={onQueueSearchInputChange} inputRef={searchInputRef} />
+      <Flex
+        key="queue-tab-results"
+        vertical
+        grow={1}
+        shrink={1}
+        wrap={true}
+        element="TRANSFER_DIR_COMMON_ROWS_CONTAINER"
+      >
+        <Stack key="queue-tab-results-list" orientation="vertical" spacing="space20">
+          {Array.from(filteredQueues).map((queue: IQueue<any>) => {
             return (
               <QueueItem
                 task={props.task}

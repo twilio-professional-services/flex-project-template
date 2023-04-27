@@ -16,7 +16,7 @@ export const componentHook = function replaceQueueDirectory(flex: typeof Flex, _
   // Add new Queues tab
   flex.WorkerDirectory.Tabs.Content.add(
     <flex.Tab key="override-queue-transfer-directory" label="Queues">
-      <QueueDirectoryTab key="worker-directory-queue-tab" />
+      <QueueDirectoryTab key="worker-directory-custom-queue-tab" />
     </flex.Tab>,
     {
       // if: (props) => Flex.TaskHelper.isChatBasedTask(props.task)

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IQueue, TaskHelper, withTaskContext, ITask } from '@twilio/flex-ui';
+import { IQueue, TaskHelper, ITask } from '@twilio/flex-ui';
 import { ButtonGroup, Button, Stack, Tooltip, Text } from '@twilio-paste/core';
 import { ProductContactCenterTeamsIcon } from '@twilio-paste/icons/esm/ProductContactCenterTeamsIcon';
 import { CallTransferIcon } from '@twilio-paste/icons/esm/CallTransferIcon';
