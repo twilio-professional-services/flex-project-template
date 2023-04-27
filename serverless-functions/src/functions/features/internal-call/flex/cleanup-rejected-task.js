@@ -12,7 +12,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       taskSid,
       status: 'in-progress',
       limit: 20,
-      attempts: 0,
     });
 
     if (!conferencesResponse.success) {
@@ -25,7 +24,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
           context,
           conference: conference.sid,
           updateParams: { status: 'completed' },
-          attempts: 0,
         });
       }),
     );

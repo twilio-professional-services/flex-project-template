@@ -18,7 +18,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       taskSid,
       to,
       from,
-      attempts: 0,
     });
 
     response.setStatusCode(result.status);

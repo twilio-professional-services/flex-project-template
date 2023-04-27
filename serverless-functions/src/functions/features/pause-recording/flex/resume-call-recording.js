@@ -19,7 +19,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       params: {
         status: 'in-progress',
       },
-      attempts: 0,
     });
 
     const { recording, status } = result;

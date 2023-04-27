@@ -9,7 +9,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   try {
     const result = await TaskRouterOperations.getQueues({
       context,
-      attempts: 0,
     });
     const { queues: fullQueueData, status } = result;
     const queues = fullQueueData

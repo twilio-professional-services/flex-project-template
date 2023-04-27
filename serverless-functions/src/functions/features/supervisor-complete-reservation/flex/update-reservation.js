@@ -29,7 +29,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const { taskSid, reservationSid, status: taskStatus } = event;
 
     const result = await TaskOperations.updateReservation({
-      attempts: 0,
       context,
       taskSid,
       reservationSid,
