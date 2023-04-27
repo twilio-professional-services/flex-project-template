@@ -27,22 +27,9 @@ export const QueueItem = (props: QueueItemProps) => {
     onTransferClick({ mode: 'COLD' });
   };
 
-  const {
-    total_eligible_workers: eligible,
-    total_available_workers: available,
-    total_tasks: tasks,
-    longest_task_waiting_age: wait_time,
-    tasks_by_status,
-  } = queue;
+  const { total_eligible_workers: eligible, total_available_workers: available, total_tasks: tasks } = queue;
 
-  const status = `Agents: ${available}/${eligible} 
-  Tasks in queue: ${tasks}
-  Wait Time: ${wait_time}
-  Tasks by status:
-    Assigned: ${tasks_by_status?.assigned}
-    Pending: ${tasks_by_status?.pending}
-    Reserved: ${tasks_by_status?.reserved}
-    Wrapping: ${tasks_by_status?.wrapping}`;
+  const status = `Agents: ${available}/${eligible}, Tasks in queue: ${tasks}`;
 
   return (
     <Stack
