@@ -117,12 +117,12 @@ const QueueDirectoryTab = (props: OwnProps) => {
       } = updatedItem;
 
       const queue = transferQueues.current.find((transferQueue) => transferQueue.sid === key);
-      if (queue) {
-        queue.total_eligible_workers = data ? data.total_eligible_workers : null;
-        queue.total_available_workers = data ? data.total_available_workers : null;
-        queue.total_tasks = data ? data.total_tasks : null;
-        queue.longest_task_waiting_age = data ? data.longest_task_waiting_age : null;
-        queue.tasks_by_status = data ? data.tasks_by_status : null;
+      if (queue && data) {
+        queue.total_eligible_workers = data.total_eligible_workers;
+        queue.total_available_workers = data.total_available_workers;
+        queue.total_tasks = data.total_tasks;
+        queue.longest_task_waiting_age = data.longest_task_waiting_age;
+        queue.tasks_by_status = data.tasks_by_status;
       }
 
       filterQueues();
@@ -222,7 +222,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
         element="TRANSFER_DIR_COMMON_ROWS_CONTAINER"
       >
         <Stack key="queue-tab-results-list" orientation="vertical" spacing="space20">
-          {Array.from(filteredQueues).map((queue: IQueue<any>) => {
+          {Array.from(filteredQueues).map((queue: TransferQueue) => {
             return (
               <QueueItem
                 task={props.task}
