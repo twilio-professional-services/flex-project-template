@@ -14,8 +14,9 @@ import { useEffect, useState, useRef } from 'react';
 import { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
 import { SearchBox } from './CommonDirectoryComponents';
 import { QueueItem } from './QueueItem';
-import { showOnlyQueuesWithAvailableWorkers, shouldFetchInsightsData } from '../config';
+import { showOnlyQueuesWithAvailableWorkers, shouldFetchInsightsData, enforceQueueFilterFromWorker } from '../config';
 import { CustomTransferDirectoryNotification } from '../flex-hooks/notifications/CustomTransferDirectory';
+import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
 
 export interface IRealTimeQueueData {
   total_tasks: number | null;
@@ -67,7 +68,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
   const transferQueues = useRef([] as Array<TransferQueue>);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  const { workspaceClient, insightsClient } = Manager.getInstance();
+  const { workspaceClient, insightsClient, workerClient } = Manager.getInstance();
 
   // takes the input in the search box and applies it to the queue result
   // this will trigger the useEffect for a queueFilter update
@@ -185,15 +186,23 @@ const QueueDirectoryTab = (props: OwnProps) => {
     const updatedQueues = transferQueues.current
       .filter((queue) => {
         const searchString = searchInputRef.current?.value.toLocaleLowerCase() || '';
+        return queue.name.toLocaleLowerCase().includes(searchString);
+      })
+      .filter((queue) => {
         if (showOnlyQueuesWithAvailableWorkers()) {
           // returning only queues with available workers
           // or queues where meta data is not available
-          return (
-            queue.name.toLocaleLowerCase().includes(searchString) &&
-            (queue.total_available_workers === null || queue.total_available_workers > 0)
-          );
+          return queue.total_available_workers === null || queue.total_available_workers > 0;
         }
-        return queue.name.toLocaleLowerCase().includes(searchString);
+        return queue;
+      })
+      .filter((queue) => {
+        const attributes = workerClient?.attributes as CustomWorkerAttributes;
+        const enforcedQueueFilter = attributes?.enforcedQueueFilter?.toLocaleLowerCase();
+        if (enforceQueueFilterFromWorker() && enforcedQueueFilter) {
+          return queue.name.toLocaleLowerCase().includes(enforcedQueueFilter);
+        }
+        return queue;
       })
       .sort((a: TransferQueue, b: TransferQueue) => (a.name > b.name ? 1 : -1));
 

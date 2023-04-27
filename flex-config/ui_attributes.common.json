@@ -166,7 +166,8 @@
         "queue" : {
           "enabled": true,
           "show_only_queues_with_available_workers": true,
-          "show_real_time_data" : true
+          "show_real_time_data" : true,
+          "enforce_queue_filter_from_worker_object": true
         }
       }
     }
