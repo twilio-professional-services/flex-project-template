@@ -62,7 +62,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
   const [fetchedQueues, setFetchedQueues] = useState([] as Array<IQueue>);
   const [insightsQueues, setInsightsQueues] = useState([] as Array<MapItem>);
   const [filteredQueues, setFilteredQueues] = useState([] as Array<TransferQueue>);
-  const [queueFilterTimer, setQueueFiltertimer] = useState(null as number | null);
+  const [queueFilterTimer, setQueueFiltertimer] = useState(null as any);
 
   const transferQueues = useRef([] as Array<TransferQueue>);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -77,7 +77,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
     }
 
     setQueueFiltertimer(
-      window.setTimeout(() => {
+      setTimeout(() => {
         // eslint-disable-next-line no-eq-null, eqeqeq
         if (event.target != null) {
           filterQueues();
@@ -184,16 +184,16 @@ const QueueDirectoryTab = (props: OwnProps) => {
   const filterQueues = () => {
     const updatedQueues = transferQueues.current
       .filter((queue) => {
-        const searchString = searchInputRef.current?.value || '';
+        const searchString = searchInputRef.current?.value.toLocaleLowerCase() || '';
         if (showOnlyQueuesWithAvailableWorkers()) {
           // returning only queues with available workers
           // or queues where meta data is not available
           return (
-            queue.name.includes(searchString) &&
+            queue.name.toLocaleLowerCase().includes(searchString) &&
             (queue.total_available_workers === null || queue.total_available_workers > 0)
           );
         }
-        return queue.name.includes(searchString);
+        return queue.name.toLocaleLowerCase().includes(searchString);
       })
       .sort((a: TransferQueue, b: TransferQueue) => (a.name > b.name ? 1 : -1));
 
