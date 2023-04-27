@@ -3,7 +3,11 @@ import { getFeatureFlags } from '../../utils/configuration';
 const {
   enabled = false,
   use_legacy_search_icon = false,
-  queue: { enabled: queueEnabled = false, show_only_queues_with_available_workers },
+  queue: {
+    enabled: queueEnabled = false,
+    show_only_queues_with_available_workers = false,
+    show_real_time_data = false,
+  },
   worker: { enabled: workerEnabled = false },
 } = getFeatureFlags()?.features?.custom_transfer_directory || {};
 
@@ -21,6 +25,14 @@ export const isCustomWorkerrTransferEnabled = () => {
 
 export const showOnlyQueuesWithAvailableWorkers = () => {
   return show_only_queues_with_available_workers;
+};
+
+export const showRealTimeQueueData = () => {
+  return show_real_time_data;
+};
+
+export const shouldFetchInsightsData = () => {
+  return showOnlyQueuesWithAvailableWorkers() || showRealTimeQueueData();
 };
 
 export const useLegactSearchIcon = () => {

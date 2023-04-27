@@ -7,5 +7,6 @@ export default interface CustomTransferDirectoryConfig {
   queue: {
     enabled: boolean;
     show_only_queues_with_available_workers: boolean;
+    show_real_time_data: boolean;
   };
 }

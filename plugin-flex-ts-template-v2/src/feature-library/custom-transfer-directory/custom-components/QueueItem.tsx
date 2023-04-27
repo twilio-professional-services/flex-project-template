@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IQueue, TaskHelper, ITask } from '@twilio/flex-ui';
+import { TaskHelper, ITask } from '@twilio/flex-ui';
 import { ButtonGroup, Button, Stack, Tooltip, Text } from '@twilio-paste/core';
 import { ProductContactCenterTeamsIcon } from '@twilio-paste/icons/esm/ProductContactCenterTeamsIcon';
 import { CallTransferIcon } from '@twilio-paste/icons/esm/CallTransferIcon';
@@ -8,6 +8,7 @@ import { SendIcon } from '@twilio-paste/icons/esm/SendIcon';
 import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 
 import { TransferQueue } from './QueueDirectoryTab';
+import { showRealTimeQueueData } from '../config';
 
 export interface QueueItemProps {
   queue: TransferQueue;
@@ -29,7 +30,13 @@ export const QueueItem = (props: QueueItemProps) => {
 
   const { total_eligible_workers: eligible, total_available_workers: available, total_tasks: tasks } = queue;
 
-  const status = `Agents: ${available}/${eligible}, Tasks in queue: ${tasks}`;
+  const agents_available = !available || !eligible ? 'Unknown' : `${available}/${eligible}`;
+  // eslint-disable-next-line no-eq-null, eqeqeq
+  const tasks_in_queue = tasks != null && tasks >= 0 ? `${tasks}` : 'Unknown';
+
+  const queue_tooltip = showRealTimeQueueData()
+    ? `Agents: ${agents_available}, Tasks in queue: ${tasks_in_queue}`
+    : `${queue.name}`;
 
   return (
     <Stack
@@ -40,7 +47,7 @@ export const QueueItem = (props: QueueItemProps) => {
     >
       <ProductContactCenterTeamsIcon element="TRANSFER_DIR_COMMON_ROW_ICON" decorative={false} title={queue.name} />
 
-      <Tooltip element="TRANSFER_DIR_COMMON_TOOLTIP" text={status}>
+      <Tooltip element="TRANSFER_DIR_COMMON_TOOLTIP" text={queue_tooltip}>
         <Text element="TRANSFER_DIR_COMMON_ROW_NAME" as="div" title={queue.name} className="Twilio">
           {queue.name}
         </Text>

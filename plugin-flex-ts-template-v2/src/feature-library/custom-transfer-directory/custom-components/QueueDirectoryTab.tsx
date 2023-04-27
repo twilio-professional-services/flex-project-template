@@ -7,13 +7,15 @@ import {
   ClientManagerHelpers,
   Actions,
   ITask,
+  Notifications,
 } from '@twilio/flex-ui';
 import { useEffect, useState, useRef } from 'react';
 
 import { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
 import { SearchBox } from './CommonDirectoryComponents';
 import { QueueItem } from './QueueItem';
-import { showOnlyQueuesWithAvailableWorkers } from '../config';
+import { showOnlyQueuesWithAvailableWorkers, shouldFetchInsightsData } from '../config';
+import { CustomTransferDirectoryNotification } from '../flex-hooks/notifications/CustomTransferDirectory';
 
 export interface IRealTimeQueueData {
   total_tasks: number | null;
@@ -42,6 +44,19 @@ export interface MapItem {
   data: object | IRealTimeQueueData;
   key: string;
 }
+
+const mapRealTimeDataToTransferQueueItem = (
+  transferQueue: TransferQueue,
+  queueData?: IRealTimeQueueData,
+): TransferQueue => {
+  transferQueue.total_eligible_workers = queueData ? queueData.total_eligible_workers : null;
+  transferQueue.total_available_workers = queueData ? queueData.total_available_workers : null;
+  transferQueue.total_tasks = queueData ? queueData.total_tasks : null;
+  transferQueue.longest_task_waiting_age = queueData ? queueData.longest_task_waiting_age : null;
+  transferQueue.tasks_by_status = queueData ? queueData.tasks_by_status : null;
+
+  return transferQueue;
+};
 
 const QueueDirectoryTab = (props: OwnProps) => {
   const [fetchedQueues, setFetchedQueues] = useState([] as Array<IQueue>);
@@ -93,11 +108,15 @@ const QueueDirectoryTab = (props: OwnProps) => {
   // to restore the cache, tasks need to be pushed into the queue
   // this will trigger the useEffect for the insightsQueue update
   const fetchInsightsQueueData = async () => {
-    // check the insights client is available
+    // check if insights data has been turned off
+    if (!shouldFetchInsightsData()) return;
+
+    // check that the insights client is available
     if (
       !ClientManagerInstance.InsightsClient ||
       ClientManagerHelpers.isForcedDegraded(ClientManagerInstance.InsightsClient)
     ) {
+      Notifications.showNotification(CustomTransferDirectoryNotification.FailedLoadingInsightsClient);
       return;
     }
 
@@ -106,6 +125,12 @@ const QueueDirectoryTab = (props: OwnProps) => {
       id: 'realtime_statistics_v1',
       mode: 'open_existing',
     });
+
+    if (!queueMap) {
+      Notifications.showNotification(CustomTransferDirectoryNotification.FailedLoadingInsightsData);
+
+      return;
+    }
 
     // make sure all queues are loaded
     const insightQueues = await getAllSyncMapItems(queueMap);
@@ -118,11 +143,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
 
       const queue = transferQueues.current.find((transferQueue) => transferQueue.sid === key);
       if (queue && data) {
-        queue.total_eligible_workers = data.total_eligible_workers;
-        queue.total_available_workers = data.total_available_workers;
-        queue.total_tasks = data.total_tasks;
-        queue.longest_task_waiting_age = data.longest_task_waiting_age;
-        queue.tasks_by_status = data.tasks_by_status;
+        mapRealTimeDataToTransferQueueItem(queue, data as IRealTimeQueueData);
       }
 
       filterQueues();
@@ -142,22 +163,14 @@ const QueueDirectoryTab = (props: OwnProps) => {
   };
 
   // function to resolve fetchedQueues and insights queue data
-  const generateQueueList = () => {
+  const generateTransferQueueList = () => {
     const tempQueues = [] as Array<TransferQueue>;
     fetchedQueues.forEach((value) => {
       const tempInsightsQueue = insightsQueues.find((item) => item.key === value.sid);
       const data = tempInsightsQueue?.data as IRealTimeQueueData;
 
-      const transferQueue = {
-        name: value.name,
-        sid: value.sid,
-        total_eligible_workers: data ? data.total_eligible_workers : null,
-        total_available_workers: data ? data.total_available_workers : null,
-        total_tasks: data ? data.total_tasks : null,
-        longest_task_waiting_age: data ? data.longest_task_waiting_age : null,
-        tasks_by_status: data ? data.tasks_by_status : null,
-      } as TransferQueue;
-      tempQueues.push(transferQueue);
+      // merge the fetched queues data with the transfer queue data
+      tempQueues.push(mapRealTimeDataToTransferQueueItem(value as TransferQueue, data));
     });
 
     // cache the merged list of fetched queues with real time data
@@ -207,7 +220,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
 
   // hook when fetchedQueues, insightsQueues are updated
   useEffect(() => {
-    generateQueueList();
+    generateTransferQueueList();
   }, [fetchedQueues, insightsQueues]);
 
   return (
