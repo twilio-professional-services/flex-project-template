@@ -1,4 +1,4 @@
-import { Flex, Stack } from '@twilio-paste/core';
+import { Flex, Stack, Alert } from '@twilio-paste/core';
 import {
   withTaskContext,
   Manager,
@@ -257,17 +257,26 @@ const QueueDirectoryTab = (props: OwnProps) => {
         element="TRANSFER_DIR_COMMON_ROWS_CONTAINER"
       >
         <Stack key="queue-tab-results-list" orientation="vertical" spacing="space20">
-          {Array.from(filteredQueues).map((queue: TransferQueue) => {
-            return (
-              <QueueItem
-                task={props.task}
-                queue={queue}
-                key={`queue-item-${queue.sid}`}
-                isWarmTransferEnabled={true}
-                onTransferClick={onTransferQueueClick(queue)}
-              />
-            );
-          })}
+          {filteredQueues.length === 0 ? (
+            <Alert variant="neutral">
+              No queues qualified.
+              {showOnlyQueuesWithAvailableWorkers()
+                ? ` Queues may be filtered out due to lack of available workers in queues`
+                : ''}
+            </Alert>
+          ) : (
+            Array.from(filteredQueues).map((queue: TransferQueue) => {
+              return (
+                <QueueItem
+                  task={props.task}
+                  queue={queue}
+                  key={`queue-item-${queue.sid}`}
+                  isWarmTransferEnabled={true}
+                  onTransferClick={onTransferQueueClick(queue)}
+                />
+              );
+            })
+          )}
         </Stack>
       </Flex>
     </Flex>
