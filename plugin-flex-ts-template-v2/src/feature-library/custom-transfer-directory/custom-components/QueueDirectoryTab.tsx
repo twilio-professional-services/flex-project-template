@@ -14,7 +14,13 @@ import { useEffect, useState, useRef } from 'react';
 import { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
 import { SearchBox } from './CommonDirectoryComponents';
 import { QueueItem } from './QueueItem';
-import { showOnlyQueuesWithAvailableWorkers, shouldFetchInsightsData, enforceQueueFilterFromWorker } from '../config';
+import {
+  showOnlyQueuesWithAvailableWorkers,
+  shouldFetchInsightsData,
+  enforceQueueFilterFromWorker,
+  getGlobalFilter,
+  shouldEnforceGlobalFilter,
+} from '../config';
 import { CustomTransferDirectoryNotification } from '../flex-hooks/notifications/CustomTransferDirectory';
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
 
@@ -200,6 +206,13 @@ const QueueDirectoryTab = (props: OwnProps) => {
         const attributes = workerClient?.attributes as CustomWorkerAttributes;
         const enforcedQueueFilter = attributes?.enforcedQueueFilter?.toLocaleLowerCase();
         if (enforceQueueFilterFromWorker() && enforcedQueueFilter) {
+          return queue.name.toLocaleLowerCase().includes(enforcedQueueFilter);
+        }
+        return queue;
+      })
+      .filter((queue) => {
+        const enforcedQueueFilter = getGlobalFilter().toLocaleLowerCase();
+        if (shouldEnforceGlobalFilter() && enforcedQueueFilter) {
           return queue.name.toLocaleLowerCase().includes(enforcedQueueFilter);
         }
         return queue;
