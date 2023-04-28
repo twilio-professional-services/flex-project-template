@@ -3,5 +3,10 @@ export default interface DispositionsConfig {
   enable_notes: boolean;
   require_disposition: boolean;
   global_dispositions: string[];
-  per_queue_dispositions: { [key: string]: string[] };
+  per_queue: { [key: string]: DispositionsPerQueueConfig };
+}
+
+export interface DispositionsPerQueueConfig {
+  require_disposition: boolean;
+  dispositions: string[];
 }

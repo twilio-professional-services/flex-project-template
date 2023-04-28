@@ -46,12 +46,15 @@ interface UpdateWorkerChannelResponse {
   workerChannelCapacity: WorkerChannelCapacityResponse;
 }
 
-const STORAGE_KEY = 'pending_task_updates';
 let queues = null as null | Array<Queue>;
 
 class TaskRouterService extends ApiService {
+  private instanceSid = this.manager.serviceConfiguration.flex_service_instance_sid;
+
+  private STORAGE_KEY = `pending_task_updates_${this.instanceSid}`;
+
   addToLocalStorage(taskSid: string, attributesUpdate: object): void {
-    const storageValue = localStorage.getItem(STORAGE_KEY);
+    const storageValue = localStorage.getItem(this.STORAGE_KEY);
     let storageObject = {} as { [taskSid: string]: any };
 
     if (storageValue) {
@@ -64,11 +67,11 @@ class TaskRouterService extends ApiService {
 
     storageObject[taskSid] = merge({}, storageObject[taskSid], attributesUpdate);
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(storageObject));
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(storageObject));
   }
 
   fetchFromLocalStorage(taskSid: string): any {
-    const storageValue = localStorage.getItem(STORAGE_KEY);
+    const storageValue = localStorage.getItem(this.STORAGE_KEY);
     let storageObject = {} as { [taskSid: string]: any };
 
     if (storageValue) {
@@ -83,8 +86,9 @@ class TaskRouterService extends ApiService {
   }
 
   removeFromLocalStorage(taskSid: string): void {
-    const storageValue = localStorage.getItem(STORAGE_KEY);
+    const storageValue = localStorage.getItem(this.STORAGE_KEY);
     let storageObject = {} as { [taskSid: string]: any };
+    let changed = false;
 
     if (storageValue) {
       storageObject = JSON.parse(storageValue);
@@ -92,16 +96,20 @@ class TaskRouterService extends ApiService {
 
     if (storageObject[taskSid]) {
       delete storageObject[taskSid];
+      changed = true;
     }
 
     // Janitor - clean up any tasks that we don't have
     for (const [key] of Object.entries(storageObject)) {
       if (!TaskHelper.getTaskByTaskSid(key)) {
         delete storageObject[key];
+        changed = true;
       }
     }
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(storageObject));
+    if (changed) {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(storageObject));
+    }
   }
 
   async updateTaskAttributes(

@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
-import { getDispositionsForQueue, isNotesEnabled, isRequireDispositionEnabled } from '../../config';
+import { getDispositionsForQueue, isNotesEnabled, isRequireDispositionEnabledForQueue } from '../../config';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { DispositionsState } from '../states';
@@ -38,7 +38,7 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     const { tasks } = (manager.store.getState() as AppState)[reduxNamespace].dispositions as DispositionsState;
 
     if (!tasks || !tasks[payload.task.taskSid]) {
-      if (isRequireDispositionEnabled() && numDispositions > 0) {
+      if (isRequireDispositionEnabledForQueue(payload.task.queueSid) && numDispositions > 0) {
         handleAbort(flex, abortFunction);
       }
       return;
@@ -47,7 +47,11 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     const taskDisposition = tasks[payload.task.taskSid];
     let newConvAttributes = {};
 
-    if (isRequireDispositionEnabled() && !taskDisposition.disposition && numDispositions > 0) {
+    if (
+      isRequireDispositionEnabledForQueue(payload.task.queueSid) &&
+      !taskDisposition.disposition &&
+      numDispositions > 0
+    ) {
       handleAbort(flex, abortFunction);
       return;
     }

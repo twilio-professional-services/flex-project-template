@@ -171,11 +171,14 @@
           "Escalation",
           "Wrong Department"
         ],
-        "per_queue_dispositions": {
-          "exampleQueueSid": [
-            "Promotional Sale",
-            "Renewal"
-          ]
+        "per_queue": {
+          "exampleQueueSid": {
+            "require_disposition": true,
+            "dispositions": [
+              "Promotional Sale",
+              "Renewal"
+            ]
+          }
         }
       }
     }

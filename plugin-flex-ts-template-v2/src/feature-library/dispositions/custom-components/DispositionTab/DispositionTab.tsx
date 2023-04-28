@@ -9,7 +9,7 @@ import { HelpText } from '@twilio-paste/core/help-text';
 import { Box } from '@twilio-paste/core/box';
 import { debounce } from 'lodash';
 
-import { getDispositionsForQueue, isNotesEnabled, isRequireDispositionEnabled } from '../../config';
+import { getDispositionsForQueue, isNotesEnabled, isRequireDispositionEnabledForQueue } from '../../config';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { updateDisposition, DispositionsState } from '../../flex-hooks/states';
@@ -21,8 +21,8 @@ export interface OwnProps {
 
 const DispositionTab = (props: OwnProps) => {
   const NOTES_MAX_LENGTH = 100;
-  const [disposition, setDisposition] = useState(props.task?.attributes?.conversations?.outcome ?? '');
-  const [notes, setNotes] = useState(props.task?.attributes?.conversations?.content ?? '');
+  const [disposition, setDisposition] = useState('');
+  const [notes, setNotes] = useState('');
 
   const dispatch = useDispatch();
   const { tasks } = useSelector((state: AppState) => state[reduxNamespace].dispositions as DispositionsState);
@@ -102,7 +102,7 @@ const DispositionTab = (props: OwnProps) => {
             legend={strings[StringTemplates.SelectDispositionTitle]}
             helpText={strings[StringTemplates.SelectDispositionHelpText]}
             onChange={(value) => setDisposition(value)}
-            required={isRequireDispositionEnabled()}
+            required={isRequireDispositionEnabledForQueue(props.task?.queueSid ?? '')}
           >
             {getDispositionsForQueue(props.task?.queueSid ?? '').map((disp) => (
               <Radio

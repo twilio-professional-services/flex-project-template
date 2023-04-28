@@ -3,7 +3,8 @@ import * as Flex from '@twilio/flex-ui';
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 import HangUpByService from '../utils/HangUpByService';
 
-const STORAGE_KEY = 'hang_up_by';
+const instanceSid = Flex.Manager.getInstance().serviceConfiguration.flex_service_instance_sid;
+const STORAGE_KEY = `hang_up_by_${instanceSid}`;
 
 export const getHangUpBy = () => {
   const storageValue = localStorage.getItem(STORAGE_KEY);
