@@ -79,7 +79,7 @@ const setVars = () => {
   featureName = process.argv[2];
   
   // transform name
-  featureClassName = capitalizeFirstLetter(featureName.replace(/-([a-z])/gi, function(s, group1) {
+  featureClassName = capitalizeFirstLetter(featureName.replace(/-([a-z0-9])/gi, function(s, group1) {
       return group1.toUpperCase();
   }));
   featureConfigName = featureName.replace(/-/g, '_');
