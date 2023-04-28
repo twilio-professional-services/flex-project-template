@@ -36,11 +36,10 @@ class ScheduleManagerService extends ApiService {
   async update(config: ScheduleManagerConfig): Promise<UpdateConfigResponse> {
     try {
       return await this.#update(config);
-    } catch (error) {
+    } catch (error: any) {
       console.log('Unable to update config', error);
 
-      // TODO: Modify request util to return status too.
-      if (error === 'Provided version SID is not the latest deployed asset version SID') {
+      if (error.status === 409) {
         return {
           success: false,
           buildSid: 'versionError',
