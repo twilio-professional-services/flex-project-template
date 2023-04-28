@@ -15,7 +15,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
       const fetchTaskResult = await TaskOperations.fetchTask({
         context,
         taskSid,
-        attempts: 0,
       });
 
       const { task } = fetchTaskResult;
@@ -51,7 +50,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
             },
             workflowSid: process.env.TWILIO_FLEX_INTERNAL_CALL_WORKFLOW_SID,
             taskChannel: 'voice',
-            attempts: 0,
           });
 
           newAttributes.conference.participants.taskSid = createTaskResult.task.sid;
@@ -61,7 +59,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
           context,
           taskSid,
           attributesUpdate: JSON.stringify(newAttributes),
-          attempts: 0,
         });
       }
     }
@@ -72,7 +69,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
       const fetchTaskResult = await TaskOperations.fetchTask({
         context,
         taskSid,
-        attempts: 0,
       });
 
       const { task } = fetchTaskResult;
@@ -85,7 +81,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
             assignmentStatus: task.assignmentStatus === 'assigned' ? 'wrapping' : 'canceled',
             reason: 'conference is complete',
           },
-          attempts: 0,
         });
       }
 
@@ -95,7 +90,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
         const fetchTargetTaskResult = await TaskOperations.fetchTask({
           context,
           taskSid: targetTaskSid,
-          attempts: 0,
         });
 
         const { task: targetTask } = fetchTargetTaskResult;
@@ -108,7 +102,6 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
               assignmentStatus: targetTask.assignmentStatus === 'assigned' ? 'wrapping' : 'canceled',
               reason: 'conference is complete',
             },
-            attempts: 0,
           });
         }
       }

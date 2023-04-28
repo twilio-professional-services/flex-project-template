@@ -24,7 +24,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       const removeChannelSidResult = await ChatOperations.removeChannelSidFromTask({
         context,
         taskSid,
-        attempts: 0,
       });
 
       // if it fails, abandon process and return error messages
@@ -41,7 +40,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
           context,
           taskSid,
           channelSid,
-          attempts: 0,
         });
       } catch (error) {
         console.error('Error updating chat channel with task sid as completed');
@@ -54,7 +52,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       context,
       taskSid,
       reason,
-      attempts: 0,
     });
 
     response.setStatusCode(completeTaskResult.status);

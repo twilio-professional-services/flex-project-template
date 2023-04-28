@@ -18,7 +18,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       conference,
       participant,
       hold: hold === 'true',
-      attempts: 0,
     });
 
     const { participantsResponse, status } = result;

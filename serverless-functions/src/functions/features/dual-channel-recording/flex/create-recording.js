@@ -15,7 +15,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       params: {
         recordingChannels: 'dual',
       },
-      attempts: 0,
     });
 
     const { recording, status } = result;

@@ -32,7 +32,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         agentSid,
         muted,
         coaching,
-        attempts: 0,
       });
       response.setStatusCode(result.status);
       response.setBody({
@@ -47,7 +46,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         conferenceSid,
         participantSid,
         muted,
-        attempts: 0,
       });
 
       const { status, conferenceSid: conference } = result;

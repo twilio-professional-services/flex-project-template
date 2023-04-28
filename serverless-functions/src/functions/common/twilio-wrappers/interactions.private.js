@@ -13,10 +13,8 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  * @description the following method is used to create an Interaction Channel Invite
  */
 exports.participantCreateInvite = async function participantCreateInvite(parameters) {
-  const { attempts, context, interactionSid, channelSid, routing } = parameters;
+  const { context, interactionSid, channelSid, routing } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(interactionSid))
     throw new Error('Invalid parameters object passed. Parameters must contain interactionSid string value');
@@ -49,10 +47,8 @@ exports.participantCreateInvite = async function participantCreateInvite(paramet
  * @description the following method is used to update/modify a channel participant
  */
 exports.participantUpdate = async function participantUpdate(parameters) {
-  const { attempts, context, interactionSid, channelSid, participantSid, status } = parameters;
+  const { context, interactionSid, channelSid, participantSid, status } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(interactionSid))
     throw new Error('Invalid parameters object passed. Parameters must contain interactionSid string value');

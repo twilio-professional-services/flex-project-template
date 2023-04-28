@@ -12,7 +12,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const result = await VoiceOperations.fetchProperties({
       context,
       callSid,
-      attempts: 0,
     });
 
     const { callProperties, status } = result;
