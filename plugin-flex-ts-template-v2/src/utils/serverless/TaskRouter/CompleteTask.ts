@@ -12,7 +12,7 @@ export const actionHook = function updatePendingTaskAttributesAtCompleteTask(
   flex.Actions.replaceAction(`${actionName}`, async (payload, original) => {
     // Execute any pending task attribute updates
     if (payload.task?.taskSid) {
-      TaskRouterService.updateTaskAttributes(payload.task.taskSid, {});
+      await TaskRouterService.updateTaskAttributes(payload.task.taskSid, {});
     }
 
     // Carry on
