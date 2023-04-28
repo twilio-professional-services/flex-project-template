@@ -17,7 +17,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         status: 'paused',
         pauseBehavior: pauseBehavior ?? 'silence',
       },
-      attempts: 0,
     });
 
     const { recording, status } = result;

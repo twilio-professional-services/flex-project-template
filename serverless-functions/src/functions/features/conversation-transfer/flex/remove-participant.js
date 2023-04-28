@@ -51,7 +51,6 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
       channelSid: flexInteractionChannelSid,
       participantSid: flexInteractionParticipantSid,
       context,
-      attempts: 0,
     });
 
     response.setStatusCode(201);

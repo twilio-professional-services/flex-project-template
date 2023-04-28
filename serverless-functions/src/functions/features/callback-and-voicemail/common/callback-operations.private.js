@@ -59,6 +59,5 @@ exports.createCallbackTask = async (parameters) => {
     attributes,
     priority,
     timeout,
-    attempts: 0,
   });
 };

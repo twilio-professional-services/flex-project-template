@@ -15,32 +15,30 @@ interface ResponseProps {
 }
 
 const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
-  const inputState = useFlexSelector(
-    (state) =>
-      state.flex.chat.conversationInput[task.attributes.conversationSid ?? task.attributes.channelSid].inputText,
-  );
+  const conversationSid = task.attributes.conversationSid ?? task.attributes.channelSid;
+  const inputState = useFlexSelector((state) => state.flex.chat.conversationInput[conversationSid]?.inputText);
 
   const onClickSend = async () => {
-    if (!task.attributes.conversationSid && !task.attributes.channelSid) return;
+    if (!conversationSid) return;
     await Actions.invokeAction('SendMessage', {
       body: text,
-      conversationSid: task.attributes.conversationSid ?? task.attributes.channelSid,
+      conversationSid,
     });
     Actions.invokeAction('SetInputText', {
       body: inputState,
-      conversationSid: task.attributes.conversationSid ?? task.attributes.channelSid,
+      conversationSid,
     });
   };
 
   const onClickInsert = () => {
-    if (!task.attributes.conversationSid && !task.attributes.channelSid) return;
+    if (!conversationSid) return;
     let currentInput = inputState;
     if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
       currentInput += ' ';
     }
     Actions.invokeAction('SetInputText', {
       body: currentInput + text,
-      conversationSid: task.attributes.conversationSid ?? task.attributes.channelSid,
+      conversationSid,
     });
   };
 

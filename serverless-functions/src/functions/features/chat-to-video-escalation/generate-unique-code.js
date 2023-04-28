@@ -28,7 +28,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       });
 
       document = await SyncOperations.createDocument({
-        attempts: 0,
         context,
         uniqueName: unique_code,
         ttl: context.VIDEO_CODE_TTL,
@@ -47,7 +46,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       context,
       taskSid,
       attributesUpdate: JSON.stringify(attributesUpdate),
-      attempts: 0,
     });
 
     response.setStatusCode(result.status);

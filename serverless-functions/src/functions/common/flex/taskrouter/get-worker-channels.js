@@ -10,7 +10,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const { workerSid } = event;
     const result = await TaskRouterOperations.getWorkerChannels({
       context,
-      attempts: 0,
       workerSid,
     });
     const { status, workerChannels } = result;

@@ -125,7 +125,6 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
       interactionSid: flexInteractionSid,
       channelSid: flexInteractionChannelSid,
       context,
-      attempts: 0,
     };
 
     const {
@@ -147,7 +146,6 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
         channelSid: flexInteractionChannelSid,
         participantSid: removeFlexInteractionParticipantSid,
         context,
-        attempts: 0,
       });
 
     console.log(

@@ -84,9 +84,7 @@ If you also want to offer up a post-IVR "wait experience" to your customers - to
 
 Simply set this function's URL as **_Hold Music URL_** in the Studio Send to Flex widget, or as the `waitUrl` if using the <Enqueue> TwiML verb. e.g.
 
-`https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callback-and-voicemail/studio/wait-experience?mode=initialize&enqueuedWorkflowSid=WWxxx`
-
-The `enqueuedWorkflowSid` parameter should be the SID of the workflow supplied to the Send to Flex widget or to the <Enqueue> TwiML verb. It is needed in order to lookup the associated task - which is needed in order to eventually cancel that task if the customer opts to request a callback or leave a voicemail.
+`https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callback-and-voicemail/studio/wait-experience?mode=initialize`
 
 There is broad scope to customize the logic in here - potentially to pull more task attributes from the existing call task and apply them to the callback or voicemail task. Our default implementation keeps things simple and just retains the To and From numbers. For example, you may consider also retaining the workflow SID of the original call task, and some pertinent attributes from your IVR - to facilitate Taskrouter in routing those callback and voicemail tasks in an identical fashion to voice calls.
 

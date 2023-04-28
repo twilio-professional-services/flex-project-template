@@ -24,12 +24,9 @@ snooze = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  *   retry handler in the browser are still encouraged.
  */
 exports.retryHandler = async (error, parameters, callback) => {
-  if (!isNumber(parameters.attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
-
   const { TWILIO_SERVICE_MAX_BACKOFF, TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_RETRY_LIMIT, ENABLE_LOCAL_LOGGING } =
     process.env;
-  const { attempts, context } = parameters;
+  const { context } = parameters;
   const {
     response,
     message: errorMessage,
@@ -37,9 +34,9 @@ exports.retryHandler = async (error, parameters, callback) => {
     moreInfo: twilioDocPage,
     code: twilioErrorCode,
   } = error;
+  const attempts = parameters.attempts ?? 0;
   const status = errorStatus ? errorStatus : response ? response.status : 500;
-  const retryAttemptsMessage =
-    attempts === 1 ? `${parameters.attempts} retry attempt` : `${parameters.attempts} retry attempts`;
+  const retryAttemptsMessage = attempts === 1 ? `${attempts} retry attempt` : `${attempts} retry attempts`;
   const message = errorMessage ? errorMessage : error;
 
   if (
