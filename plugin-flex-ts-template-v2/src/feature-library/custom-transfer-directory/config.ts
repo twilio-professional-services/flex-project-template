@@ -8,8 +8,8 @@ const {
     show_only_queues_with_available_workers = false,
     show_real_time_data = false,
     enforce_queue_filter_from_worker_object = false,
-    enforce_global_filter = false,
-    global_filter = '',
+    enforce_global_exclude_filter = false,
+    global_exclude_filter = '',
   },
   worker: { enabled: workerEnabled = false },
 } = getFeatureFlags()?.features?.custom_transfer_directory || {};
@@ -39,11 +39,11 @@ export const enforceQueueFilterFromWorker = (): boolean => {
 };
 
 export const shouldEnforceGlobalFilter = (): boolean => {
-  return enforce_global_filter;
+  return enforce_global_exclude_filter;
 };
 
 export const getGlobalFilter = (): string => {
-  return global_filter;
+  return global_exclude_filter;
 };
 
 export const shouldFetchInsightsData = (): boolean => {

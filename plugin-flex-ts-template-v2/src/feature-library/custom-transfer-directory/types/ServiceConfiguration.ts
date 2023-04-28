@@ -9,7 +9,7 @@ export default interface CustomTransferDirectoryConfig {
     show_only_queues_with_available_workers: boolean;
     show_real_time_data: boolean;
     enforce_queue_filter_from_worker_object: boolean;
-    enforce_global_filter: boolean;
-    global_filter: string;
+    enforce_global_exclude_filter: boolean;
+    global_exclude_filter: string;
   };
 }

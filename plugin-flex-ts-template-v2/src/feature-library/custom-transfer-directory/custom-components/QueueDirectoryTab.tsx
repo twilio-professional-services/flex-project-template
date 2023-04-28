@@ -213,7 +213,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
       .filter((queue) => {
         const enforcedQueueFilter = getGlobalFilter().toLocaleLowerCase();
         if (shouldEnforceGlobalFilter() && enforcedQueueFilter) {
-          return queue.name.toLocaleLowerCase().includes(enforcedQueueFilter);
+          return !queue.name.toLocaleLowerCase().includes(enforcedQueueFilter);
         }
         return queue;
       })
