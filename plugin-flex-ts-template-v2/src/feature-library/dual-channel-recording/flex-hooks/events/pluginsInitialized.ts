@@ -4,7 +4,7 @@ import { NotificationIds } from '../notifications/DualChannelRecording';
 import { getChannelToRecord } from '../../config';
 import { FlexEvent } from '../../../../types/feature-loader';
 
-export const eventName = FlexEvent.pluginsLoaded;
+export const eventName = FlexEvent.pluginsInitialized;
 export const eventHook = () => {
   // Test to make sure the channel config property has been
   // configured correctly. If it has not, throw errors and notifications.
