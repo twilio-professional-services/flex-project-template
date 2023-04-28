@@ -5,7 +5,7 @@ import { registerRemoveChatParticipant } from '../../custom-action/removeChatPar
 import { registerCancelChatParticipantInvite } from '../../custom-action/cancelChatParticipantInvite';
 import { FlexEvent } from '../../../../types/feature-loader';
 
-export const eventName = FlexEvent.pluginsLoaded;
+export const eventName = FlexEvent.pluginsInitialized;
 export const eventHook = () => {
   const coldTransferEnabled = isColdTransferEnabled();
   const multiParticipantEnabled = isMultiParticipantEnabled();
