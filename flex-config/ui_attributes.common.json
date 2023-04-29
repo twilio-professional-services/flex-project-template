@@ -159,6 +159,27 @@
       "custom_hold_music": {
         "enabled": false,
         "url": ""
+      },
+      "dispositions": {
+        "enabled": false,
+        "enable_notes": true,
+        "require_disposition": true,
+        "global_dispositions": [
+          "Resolved",
+          "Not Resolved",
+          "Follow-up Required",
+          "Escalation",
+          "Wrong Department"
+        ],
+        "per_queue": {
+          "exampleQueueSid": {
+            "require_disposition": true,
+            "dispositions": [
+              "Promotional Sale",
+              "Renewal"
+            ]
+          }
+        }
       }
     }
   }
