@@ -335,7 +335,7 @@ enum FlexEvent {
   taskRescinded = 'taskRescinded',
   taskTimeout = 'taskTimeout',
   taskWrapup = 'taskWrapup',
-  pluginsLoaded = 'pluginsLoaded',
+  pluginsInitialized = 'pluginsInitialized',
   tokenUpdated = 'tokenUpdated',
 }
 ```
@@ -565,8 +565,8 @@ The common class that implements retry handling; all utilities that act as inter
 
 ### TaskRouter
 
-- updateTaskAttributes(taskSid: string, attributesUpdate: object)
-  - this will merge the attributesUpdate object with existing attributes. It will use the backend to ensure the operation is transactionally safe be checking the ETAG header. This is something not currently done when using the front end SDK.
+- updateTaskAttributes(taskSid: string, attributesUpdate: object, deferUpdates: bool = false)
+  - this will merge the attributesUpdate object with existing attributes. It will use the backend to ensure the operation is transactionally safe be checking the ETAG header. This is something not currently done when using the front end SDK. If deferUpdates=true, the attributes will not be saved until either another update with deferUpdates=false occurs, or CompleteTask is invoked.
 - getQueues(force: boolean)
 - getWorkerChannels(workerSid: string)
 - updateWorkerChannel(workerSid: string, workerChannelSid: string, capacity: number, available: boolean)

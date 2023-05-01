@@ -32,7 +32,7 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
     'font-weight:bold',
   );
 
-  if (event === FlexEvent.pluginsLoaded) {
+  if (event === FlexEvent.pluginsInitialized) {
     manager.events.addListener(event, () => {
       hook.eventHook(flex, manager);
     });
