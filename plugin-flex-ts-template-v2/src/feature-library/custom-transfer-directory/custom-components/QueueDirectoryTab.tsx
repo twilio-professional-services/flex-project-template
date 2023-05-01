@@ -248,36 +248,27 @@ const QueueDirectoryTab = (props: OwnProps) => {
   return (
     <Flex key="queue-tab-list" vertical wrap={false} grow={1} shrink={1}>
       <SearchBox key="key-tab-search-box" onInputChange={onQueueSearchInputChange} inputRef={searchInputRef} />
-      <Flex
-        key="queue-tab-results"
-        vertical
-        grow={1}
-        shrink={1}
-        wrap={true}
-        element="TRANSFER_DIR_COMMON_ROWS_CONTAINER"
-      >
-        <Stack key="queue-tab-results-list" orientation="vertical" spacing="space20">
-          {filteredQueues.length === 0 ? (
-            <Alert variant="neutral">
-              No queues qualified.
-              {showOnlyQueuesWithAvailableWorkers()
-                ? ` Queues may be filtered out due to lack of available workers in queues`
-                : ''}
-            </Alert>
-          ) : (
-            Array.from(filteredQueues).map((queue: TransferQueue) => {
-              return (
-                <QueueItem
-                  task={props.task}
-                  queue={queue}
-                  key={`queue-item-${queue.sid}`}
-                  isWarmTransferEnabled={true}
-                  onTransferClick={onTransferQueueClick(queue)}
-                />
-              );
-            })
-          )}
-        </Stack>
+      <Flex key="queue-tab-results" vertical element="TRANSFER_DIR_COMMON_ROWS_CONTAINER">
+        {filteredQueues.length === 0 ? (
+          <Alert variant="neutral">
+            No queues qualified.
+            {showOnlyQueuesWithAvailableWorkers()
+              ? ` Queues may be filtered out due to lack of available workers in queues`
+              : ''}
+          </Alert>
+        ) : (
+          Array.from(filteredQueues).map((queue: TransferQueue) => {
+            return (
+              <QueueItem
+                task={props.task}
+                queue={queue}
+                key={`queue-item-${queue.sid}`}
+                isWarmTransferEnabled={true}
+                onTransferClick={onTransferQueueClick(queue)}
+              />
+            );
+          })
+        )}
       </Flex>
     </Flex>
   );

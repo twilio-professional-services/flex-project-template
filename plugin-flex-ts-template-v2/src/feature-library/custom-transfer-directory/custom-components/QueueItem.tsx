@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { TaskHelper, ITask } from '@twilio/flex-ui';
-import { ButtonGroup, Button, Stack, Tooltip, Text } from '@twilio-paste/core';
+import { ButtonGroup, Button, Flex, Tooltip, Text } from '@twilio-paste/core';
 import { ProductContactCenterTeamsIcon } from '@twilio-paste/icons/esm/ProductContactCenterTeamsIcon';
 import { CallTransferIcon } from '@twilio-paste/icons/esm/CallTransferIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
@@ -39,10 +39,10 @@ export const QueueItem = (props: QueueItemProps) => {
     : `${queue.name}`;
 
   return (
-    <Stack
+    <Flex
       element="TRANSFER_DIR_QUEUE_HORIZONTAL_ROW_CONTAINER"
-      orientation="horizontal"
-      spacing="space40"
+      vertical={false}
+      vAlignContent="center"
       key={`queue-item-container-${queue.sid}`}
     >
       <ProductContactCenterTeamsIcon
@@ -110,6 +110,6 @@ export const QueueItem = (props: QueueItemProps) => {
           </Button>
         </Tooltip>
       </ButtonGroup>
-    </Stack>
+    </Flex>
   );
 };

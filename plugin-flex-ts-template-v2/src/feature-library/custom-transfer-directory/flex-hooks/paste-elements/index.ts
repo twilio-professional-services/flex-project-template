@@ -23,30 +23,27 @@ export const pasteElementHook = {
   TRANSFER_DIR_COMMON_ROWS_CONTAINER: {
     fontWeight: '700',
     overflowY: 'auto',
+    alignItems: 'initial',
+    width: '100%',
   },
   TRANSFER_DIR_COMMON_TOOLTIP: {
     zIndex: 101,
   },
   TRANSFER_DIR_COMMON_ROW_ICON: {
-    marginLeft: '0.75rem',
+    marginLeft: 'space30',
+    marginRight: 'space40',
+    minWidth: 'sizeIcon20',
   },
   TRANSFER_DIR_COMMON_ROW_NAME: {
     textOverflow: 'ellipsis',
     overflowX: 'hidden',
     whiteSpace: 'nowrap',
-    width: '162px',
     fontSize: '14px',
+    width: '100%',
   },
   TRANSFER_DIR_COMMON_ROW_BUTTONGROUP: {},
   TRANSFER_DIR_QUEUE_HORIZONTAL_ROW_CONTAINER: {
-    paddingLeft: '0.5rem',
-    paddingRight: '0.5rem',
-    color: 'inherit',
-    background: 'none',
-    border: 'none',
-    outline: 'none',
-    borderStyle: 'none',
-    borderWidth: '0px 0px 0px 0px',
-    // '-webkit-box-align': 'center',
+    paddingLeft: 'space30',
+    paddingRight: 'space30',
   },
 } as { [key: string]: any };
