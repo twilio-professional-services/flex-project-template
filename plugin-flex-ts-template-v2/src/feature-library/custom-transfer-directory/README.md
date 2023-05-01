@@ -1,7 +1,6 @@
 # custom-transfer-directory
-This feature enables the replacement of the worker transfer directory and the queue transfer directory enabling the following behavior
+This feature enables the replacement of the queue transfer directory enabling the following behavior
 
-- worker - TODO
 - queue
   - render different transfer icons for chat channel
   - enable the use of real time data to 
