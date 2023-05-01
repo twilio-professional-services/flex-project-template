@@ -9,9 +9,7 @@ export const componentHook = function replaceQueueDirectory(flex: typeof Flex, _
   if (!isCustomQueueTransferEnabled) return;
 
   // remove existing queues tab
-  flex.WorkerDirectory.Tabs.Content.remove('queues', {
-    // if: (props) => Flex.TaskHelper.isChatBasedTask(props.task)
-  });
+  flex.WorkerDirectory.Tabs.Content.remove('queues');
 
   // Add new Queues tab
   flex.WorkerDirectory.Tabs.Content.add(
@@ -19,7 +17,7 @@ export const componentHook = function replaceQueueDirectory(flex: typeof Flex, _
       <QueueDirectoryTab key="worker-directory-custom-queue-tab" />
     </flex.Tab>,
     {
-      // if: (props) => Flex.TaskHelper.isChatBasedTask(props.task)
+      sortOrder: 1,
     },
   );
 };
