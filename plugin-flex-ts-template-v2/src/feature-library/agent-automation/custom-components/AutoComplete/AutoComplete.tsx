@@ -1,9 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
 import { ITask } from '@twilio/flex-ui';
 import React from 'react';
-import { TaskQualificationConfig } from 'feature-library/agent-automation/types/ServiceConfiguration';
 
+import { TaskQualificationConfig } from '../../types/ServiceConfiguration';
 import { getMatchingTaskConfiguration } from '../../config';
+import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 
 export type Props = {
   task: ITask;
@@ -30,8 +31,15 @@ const autoCompleteTask = async (task: ITask, taskConfig: TaskQualificationConfig
     const currentTime = new Date().getTime();
     const timeout = scheduledTime - currentTime > 0 ? scheduledTime - currentTime : 0;
 
-    setTimeout(() => {
+    setTimeout(async () => {
       if (task && Flex.TaskHelper.isInWrapupMode(task)) {
+        if (taskConfig.default_outcome) {
+          await TaskRouterService.updateTaskAttributes(task.taskSid, {
+            conversations: {
+              outcome: taskConfig.default_outcome,
+            },
+          });
+        }
         Flex.Actions.invokeAction('CompleteTask', { sid });
       }
     }, timeout);

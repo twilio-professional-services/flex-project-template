@@ -18,7 +18,7 @@ export const getMatchingTaskConfiguration = (task: ITask): TaskQualificationConf
   configuration.forEach((config) => {
     let matched_config = true;
     if (config.channel === channel) {
-      config.required_attributes.forEach((required_attribute) => {
+      config.required_attributes?.forEach((required_attribute) => {
         if (attributes[required_attribute.key] !== required_attribute.value) {
           matched_config = false;
         }

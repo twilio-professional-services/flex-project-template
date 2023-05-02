@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions } from '../../flex-hooks/states/SupervisorCompleteReservation';
+import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 
 export interface OwnProps {
   task: ITask;
@@ -25,6 +26,15 @@ const SupervisorCompleteReservation = ({ task }: OwnProps) => {
 
   const completeReservation = async () => {
     setIsOpen(false);
+    await TaskRouterService.updateTaskAttributes(
+      taskSid,
+      {
+        conversations: {
+          outcome: 'Completed by supervisor',
+        },
+      },
+      false,
+    );
     dispatch(Actions.updateReservation(taskSid, reservationSid, 'completed'));
   };
 
