@@ -10,6 +10,7 @@ import {
   Notifications,
 } from '@twilio/flex-ui';
 import { useEffect, useState, useRef } from 'react';
+import { debounce } from 'lodash';
 
 import { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
 import { SearchBox } from './CommonDirectoryComponents';
@@ -69,7 +70,6 @@ const QueueDirectoryTab = (props: OwnProps) => {
   const [fetchedQueues, setFetchedQueues] = useState([] as Array<IQueue>);
   const [insightsQueues, setInsightsQueues] = useState([] as Array<MapItem>);
   const [filteredQueues, setFilteredQueues] = useState([] as Array<TransferQueue>);
-  const [queueFilterTimer, setQueueFiltertimer] = useState(null as any);
 
   const transferQueues = useRef([] as Array<TransferQueue>);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -79,19 +79,10 @@ const QueueDirectoryTab = (props: OwnProps) => {
   // takes the input in the search box and applies it to the queue result
   // this will trigger the useEffect for a queueFilter update
   const onQueueSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!fetchedQueues || queueFilterTimer) {
-      return;
+    // eslint-disable-next-line no-eq-null, eqeqeq
+    if (event.target != null) {
+      filterQueuesDebounce();
     }
-
-    setQueueFiltertimer(
-      setTimeout(() => {
-        // eslint-disable-next-line no-eq-null, eqeqeq
-        if (event.target != null) {
-          filterQueues();
-          setQueueFiltertimer(null);
-        }
-      }, 300),
-    );
   };
 
   // async function to retrieve the task queues from the tr sdk
@@ -221,6 +212,8 @@ const QueueDirectoryTab = (props: OwnProps) => {
 
     setFilteredQueues(updatedQueues);
   };
+
+  const filterQueuesDebounce = debounce(filterQueues, 500, { maxWait: 1000 });
 
   const onTransferQueueClick = (queue: IQueue) => (transferOptions: TransferClickPayload) => {
     Actions.invokeAction('TransferTask', {
