@@ -5,12 +5,13 @@
   "scripts": {
     "test": "echo 'Tests to come'; exit 1",
     "start": "twilio serverless:start",
-    "deploy": "twilio serverless:deploy --override-existing-project --env \".env.$TWILIO_PROFILE\" --runtime node16",
+    "deploy": "npm run fetch-config && twilio serverless:deploy --override-existing-project --env \".env.$TWILIO_PROFILE\" --runtime node16",
     "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v2",
     "deploy:dev": "TWILIO_PROFILE=dev npm run deploy",
     "deploy:test": "TWILIO_PROFILE=test npm run deploy",
     "deploy:qa": "TWILIO_PROFILE=qa npm run deploy",
     "deploy:prod": "TWILIO_PROFILE=prod npm run deploy",
+    "fetch-config": "node scripts/fetch-config.js assets/config.private.json",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "lint:report": "npm run lint -- --output-file eslint_report.json --format json"
