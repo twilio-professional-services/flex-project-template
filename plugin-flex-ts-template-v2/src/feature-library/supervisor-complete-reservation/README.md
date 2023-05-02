@@ -22,4 +22,6 @@ To enable the `Supervisor Complete Reservation` feature, under the `flex-config`
 
 # how does it work?
 
-When enabled, this feature adds a button to the TaskOverviewCanvas that when clicked opens a dialog to confirm the completion of the task. Upon confirmation a request is made to a twilio function that takes the task sid and reservation id and updates the reservation to the completed state.
+When enabled, this feature adds a button to the TaskOverviewCanvas that when clicked opens a dialog to confirm the completion of the task. Upon confirmation two requests are made:
+- First, task attributes are updated to set the conversation outcome displayed Flex Insights to indicate the task was completed by a supervisor
+- Then, a request is made to a twilio function that takes the task sid and reservation id and updates the reservation to the completed state.
