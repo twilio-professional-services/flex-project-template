@@ -3,7 +3,7 @@ const homedir = require('os').homedir();
 
 const axios = require('axios').default;
 
-const { getEnvironmentVariables } = require('../../scripts/common');
+const { getServerlessServices } = require('../../scripts/common');
 
 if (!process.argv[2]) {
   throw new Error('Please provide an output path');
@@ -24,7 +24,7 @@ if (!apiKey || !apiSecret) {
       }
     }
   } catch (error) {
-    throw new Error('Please set the TWILIO_API_KEY and TWILIO_API_SECRET environment variables');
+    console.log(error);
   }
 
   if (!apiKey || !apiSecret) {
@@ -32,23 +32,25 @@ if (!apiKey || !apiSecret) {
   }
 }
 
+console.log('Fetching serverless domain...');
 const outputPath = `${process.argv[2]}`;
-const domain = getEnvironmentVariables().scheduledFunctionsDomain;
+const domain = getServerlessServices()?.scheduledFunctionsDomain;
+console.log('Fetching latest deployed config...');
 
-if (!domain) {
-  throw new Error('Serverless domain not found, aborting');
+if (domain) {
+  axios
+    .get(`https://${domain}/admin/fetch-config?apiKey=${apiKey}&apiSecret=${apiSecret}`)
+    .then((response) => {
+      if (response.status === 200) {
+        fs.writeFileSync(outputPath, JSON.stringify(response.data, null, 2), 'utf8');
+        console.log(`Saved latest deployed config to ${outputPath}`);
+      } else {
+        console.log('Unable to fetch data', response);
+      }
+    })
+    .catch((error) => {
+      console.log('Unable to fetch data', error);
+    });
+} else {
+  console.log('Existing serverless domain not found; assuming new deployment');
 }
-
-axios
-  .get(`https://${domain}/admin/fetch-config?apiKey=${apiKey}&apiSecret=${apiSecret}`)
-  .then((response) => {
-    if (response.status === 200) {
-      fs.writeFileSync(outputPath, JSON.stringify(response.data, null, 2), 'utf8');
-      console.log(`Saved lastest deployed config to ${outputPath}`);
-    } else {
-      console.log('Unable to fetch data', response);
-    }
-  })
-  .catch((error) => {
-    console.log('Unable to fetch data', error);
-  });

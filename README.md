@@ -206,7 +206,7 @@ If you plan to use the schedule manager feature, deploy its serverless functions
 
 ```bash
 cd ../serverless-schedule-manager
-twilio serverless:deploy
+npm run deploy
 ```
 
 Next, populate the serverless domains deployed above into the config:

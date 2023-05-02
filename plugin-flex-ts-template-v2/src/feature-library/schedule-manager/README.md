@@ -20,6 +20,8 @@ To allow for greater scalability than provided by Twilio Sync and some other sol
 
 ## Installation
 
+It is recommended to [deploy via a release pipeline](https://github.com/twilio-professional-services/flex-project-template/tree/main#setup-a-project-with-release-pipeline-recommended), however manual instructions are available below.
+
 First, switch to the `serverless-schedule-manager` directory and install:
 
 ```bash
@@ -41,12 +43,12 @@ TWILIO_SERVICE_MAX_BACKOFF=300
 Finally, deploy the serverless functions:
 
 ```bash
-twilio serverless:deploy
+npm run deploy
 ```
 
 Note the domain name that is output when the deploy completes--this will be referenced throughout the rest of the readme.
 
-**Note: If you need to re-deploy via CLI in the future, be sure to first update your local `serverless-schedule-manager/assets/config.private.json` file with any configuration changes.**
+**Note: If you need to re-deploy via CLI in the future, be sure to first update your local `serverless-schedule-manager/assets/config.private.json` file with any configuration changes. This is done automatically by `npm run deploy` if the service already exists, but it is recommended to first run `npm run fetch-config` before attempting a re-deploy to ensure the latest file is present.**
 
 Then, update your flex-config ui_attributes file(s) with the serverless function domain from above:
 
@@ -94,6 +96,7 @@ The schedule's rules will then be evaluated against the current date and time. T
 - If no rules match, the schedule is closed, and the closed reason provided is `closed`.
 
 Here is an example response from a closed schedule:
+
 ```
 {
   "isOpen": false,
@@ -102,6 +105,7 @@ Here is an example response from a closed schedule:
 ```
 
 Here is an example response from an open schedule:
+
 ```
 {
   "isOpen": true,
@@ -178,4 +182,3 @@ The Flex plugin loads the configuration interface for workers with the `admin` r
 ## Development
 
 Run `twilio flex:plugins --help` to see all the commands we currently support. For further details on Flex Plugins refer to our documentation on the [Twilio Docs](https://www.twilio.com/docs/flex/developer/plugins/cli) page.
-

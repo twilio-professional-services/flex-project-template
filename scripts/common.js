@@ -35,9 +35,6 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     const CALLBACK_WORKFLOW_NAME = "Callback"
     const INTERNAL_CALL_WORKFLOW_NAME = "Internal Call";
 
-    const SERVERLESS_FUNCTIONS_SERVICE_NAME = "custom-flex-extensions-serverless"
-    const SCHEDULE_MANAGER_SERVICE_NAME = "schedule-manager"
-
 
     console.log("Loading environment variables..");
 
@@ -66,17 +63,10 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
       console.log("Workflows not found");
     }
 
-    const serverless_services_raw = shell.exec("twilio api:serverless:v1:services:list", {silent: true})
-    if(serverless_services_raw.length > 0){
-      result.serviceFunctionsSid = serverless_services_raw.grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[0];
-      result.serviceFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.serviceFunctionsSid}`, {silent: true}).grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[4]
-      result.scheduleFunctionsSid = serverless_services_raw.grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[0]
-
-      const scheduledFunctionsDomain_raw = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.scheduleFunctionsSid}`, {silent: true})
-      result.scheduledFunctionsDomain = scheduledFunctionsDomain_raw.length > 0 ? scheduledFunctionsDomain_raw.grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[4] : console.log("Scheduled Functions Domain not found");
-    } else {
-      console.log("No Serverless services found");
-    }
+    result = {
+      ...result,
+      ...exports.getServerlessServices()
+    };
 
     console.log("");
     console.log("\tDone fetching environment variables");
@@ -89,6 +79,28 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     console.error(error);
     return result;
   }
+}
+
+exports.getServerlessServices = function getServerlessServices() {
+  
+  const SERVERLESS_FUNCTIONS_SERVICE_NAME = "custom-flex-extensions-serverless"
+  const SCHEDULE_MANAGER_SERVICE_NAME = "schedule-manager"
+  
+  var result = {};
+  
+  const serverless_services_raw = shell.exec("twilio api:serverless:v1:services:list", {silent: true})
+  if(serverless_services_raw.length > 0){
+    result.serviceFunctionsSid = serverless_services_raw.grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[0];
+    result.serviceFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.serviceFunctionsSid}`, {silent: true}).grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[4];
+    
+    result.scheduleFunctionsSid = serverless_services_raw.grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[0];
+    const scheduledFunctionsDomain_raw = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.scheduleFunctionsSid}`, {silent: true});
+    result.scheduledFunctionsDomain = scheduledFunctionsDomain_raw.length > 0 ? scheduledFunctionsDomain_raw.grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[4] : console.log("Scheduled Functions Domain not found");
+  } else {
+    console.log("No Serverless services found");
+  }
+  
+  return result;
 }
 
 exports.getActiveTwilioProfile = async function getActiveTwilioProfile() {
