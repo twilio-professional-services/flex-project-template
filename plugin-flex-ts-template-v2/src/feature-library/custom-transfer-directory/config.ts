@@ -2,7 +2,7 @@ import { getFeatureFlags } from '../../utils/configuration';
 
 const {
   enabled = false,
-  use_legacy_search_icon = false,
+  use_paste_search_icon = false,
   queue: {
     enabled: queueEnabled = false,
     show_only_queues_with_available_workers = false,
@@ -11,7 +11,6 @@ const {
     enforce_global_exclude_filter = false,
     global_exclude_filter = '',
   },
-  worker: { enabled: workerEnabled = false },
 } = getFeatureFlags()?.features?.custom_transfer_directory || {};
 
 export const isFeatureEnabled = (): boolean => {
@@ -20,10 +19,6 @@ export const isFeatureEnabled = (): boolean => {
 
 export const isCustomQueueTransferEnabled = (): boolean => {
   return isFeatureEnabled() && queueEnabled;
-};
-
-export const isCustomWorkerrTransferEnabled = (): boolean => {
-  return isFeatureEnabled() && workerEnabled;
 };
 
 export const showOnlyQueuesWithAvailableWorkers = (): boolean => {
@@ -50,6 +45,6 @@ export const shouldFetchInsightsData = (): boolean => {
   return showOnlyQueuesWithAvailableWorkers() || showRealTimeQueueData();
 };
 
-export const useLegactSearchIcon = (): boolean => {
-  return use_legacy_search_icon;
+export const usePasteSearchIcon = (): boolean => {
+  return use_paste_search_icon;
 };

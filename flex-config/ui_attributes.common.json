@@ -159,7 +159,7 @@
       },
       "custom_transfer_directory": {
         "enabled": true,
-        "use_legacy_search_icon": true,
+        "use_paste_search_icon": false,
         "queue" : {
           "enabled": true,
           "show_only_queues_with_available_workers": true,

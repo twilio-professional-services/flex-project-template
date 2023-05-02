@@ -3,7 +3,7 @@ import { Box, Input } from '@twilio-paste/core';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
 import { Ref } from 'react';
 
-import { useLegactSearchIcon } from '../config';
+import { usePasteSearchIcon } from '../config';
 
 export interface SearchBoxProps {
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -27,7 +27,7 @@ export const SearchInput = ({ onInputChange, inputRef }: SearchBoxProps) => {
     <Input
       element="TRANSFER_DIR_COMMON_SEARCH_BOX"
       insertBefore={
-        useLegactSearchIcon() ? <LegacySearchIcon /> : <SearchIcon decorative={false} title="Search Queue Names" />
+        usePasteSearchIcon() ? <SearchIcon decorative={false} title="Search Queue Names" /> : <LegacySearchIcon />
       }
       type="text"
       key="custom-directory-input-field"

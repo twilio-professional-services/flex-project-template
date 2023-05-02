@@ -26,7 +26,7 @@ Enable the feature in the flex-config asset for your environment.
 ``` javascript
 "custom_transfer_directory": {
   "enabled": true, // globally enable or disable the feature
-  "use_legacy_search_icon": true, // use legacy icon (recommended if mixing queue overrided with OOTB overrride)
+  "use_paste_search_icon": false, // use new paste icon or old legacy icon (recommended to use old icon if mixing with OOTB tabs for consistant look)
   "worker" : {
     "enabled": false // enable the custom worker tab - not currently developed, still to come
   },
