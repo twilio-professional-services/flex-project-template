@@ -32,9 +32,31 @@ if (!apiKey || !apiSecret) {
   }
 }
 
+let domain = '';
+const outputPath = process.argv[2];
+const environment = process.argv[3];
+
 console.log('Fetching serverless domain...');
-const outputPath = `${process.argv[2]}`;
-const domain = getServerlessServices()?.scheduledFunctionsDomain;
+
+if (environment) {
+  // First, attempt to get domain via flex-config
+  try {
+    const flexConfig = JSON.parse(fs.readFileSync(`../flex-config/ui_attributes.${environment}.json`, 'utf8'));
+    const configDomain = flexConfig?.custom_data?.features?.schedule_manager?.serverless_domain;
+
+    if (configDomain && configDomain.includes('twil.io')) {
+      domain = configDomain;
+    }
+  } catch (error) {
+    console.log('Unable to read from flex-config, fetching domain via API...', error);
+  }
+}
+
+if (!domain) {
+  // Fall back to fetching domain via API
+  domain = getServerlessServices()?.scheduledFunctionsDomain;
+}
+
 console.log('Fetching latest deployed config...');
 
 if (domain) {
@@ -46,10 +68,12 @@ if (domain) {
         console.log(`Saved latest deployed config to ${outputPath}`);
       } else {
         console.log('Unable to fetch data', response);
+        throw new Error(`Received a ${response.status} status code when attempting to fetch the latest config`);
       }
     })
     .catch((error) => {
       console.log('Unable to fetch data', error);
+      throw new Error(`Received an error when attempting to fetch the latest config`);
     });
 } else {
   console.log('Existing serverless domain not found; assuming new deployment');
