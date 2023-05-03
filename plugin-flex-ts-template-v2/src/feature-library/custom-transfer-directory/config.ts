@@ -13,6 +13,11 @@ const {
   },
 } = getFeatureFlags()?.features?.custom_transfer_directory || {};
 
+const {
+  enabled: conversation_transfer_enabled = false,
+  multi_participant: conversation_transfer_warm_transfer = false,
+} = getFeatureFlags()?.features?.conversation_transfer || {};
+
 export const isFeatureEnabled = (): boolean => {
   return enabled;
 };
@@ -43,6 +48,10 @@ export const getGlobalFilter = (): string => {
 
 export const shouldFetchInsightsData = (): boolean => {
   return showOnlyQueuesWithAvailableWorkers() || showRealTimeQueueData();
+};
+
+export const isCbmWarmTransferEnabled = (): boolean => {
+  return conversation_transfer_enabled && conversation_transfer_warm_transfer;
 };
 
 export const usePasteSearchIcon = (): boolean => {

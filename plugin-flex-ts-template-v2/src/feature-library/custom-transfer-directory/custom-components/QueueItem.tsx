@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TaskHelper, ITask } from '@twilio/flex-ui';
+import { TaskHelper, ITask, Manager } from '@twilio/flex-ui';
 import { ButtonGroup, Button, Flex, Tooltip, Text } from '@twilio-paste/core';
 import { ProductContactCenterTeamsIcon } from '@twilio-paste/icons/esm/ProductContactCenterTeamsIcon';
 import { CallTransferIcon } from '@twilio-paste/icons/esm/CallTransferIcon';
@@ -8,13 +8,12 @@ import { SendIcon } from '@twilio-paste/icons/esm/SendIcon';
 import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 
 import { TransferQueue } from './QueueDirectoryTab';
-import { showRealTimeQueueData } from '../config';
+import { isCbmWarmTransferEnabled, showRealTimeQueueData } from '../config';
 
 export interface QueueItemProps {
   queue: TransferQueue;
   task: ITask;
   onTransferClick: (options: any) => void;
-  isWarmTransferEnabled?: boolean;
 }
 
 export const QueueItem = (props: QueueItemProps) => {
@@ -37,6 +36,11 @@ export const QueueItem = (props: QueueItemProps) => {
   const queue_tooltip = showRealTimeQueueData()
     ? `Agents: ${agents_available}, Tasks in queue: ${tasks_in_queue}`
     : `${queue.name}`;
+
+  const callWarmTransferEnabled =
+    Manager.getInstance().store.getState().flex.featureFlags.features['flex-warm-transfers']?.enabled;
+
+  const isWarmTransferEnabled = TaskHelper.isCBMTask(task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;
 
   return (
     <Flex
@@ -65,25 +69,29 @@ export const QueueItem = (props: QueueItemProps) => {
       </Tooltip>
 
       <ButtonGroup key={`queue-item-buttongroup-${queue.sid}`} attached>
-        <Tooltip
-          key={`queue-item-buttons-warm-transfer-tooltip-${queue.sid}`}
-          element="TRANSFER_DIR_COMMON_TOOLTIP"
-          text="Warm Transfer"
-        >
-          <Button
-            element="TRANSFER_DIR_COMMON_ROW_BUTTON"
-            key={`queue-item-warm-transfer-button-${queue.sid}`}
-            variant="secondary_icon"
-            size="circle"
-            onClick={onWarmTransferClick}
+        {isWarmTransferEnabled ? (
+          <Tooltip
+            key={`queue-item-buttons-warm-transfer-tooltip-${queue.sid}`}
+            element="TRANSFER_DIR_COMMON_TOOLTIP"
+            text="Warm Transfer"
           >
-            {TaskHelper.isChatBasedTask(task) ? (
-              <ChatIcon key={`queue-item-warm-transfer-icon-${queue.sid}`} decorative={false} title="" />
-            ) : (
-              <CallTransferIcon key={`queue-item-warm-transfer-icon-${queue.sid}`} decorative={false} title="" />
-            )}
-          </Button>
-        </Tooltip>
+            <Button
+              element="TRANSFER_DIR_COMMON_ROW_BUTTON"
+              key={`queue-item-warm-transfer-button-${queue.sid}`}
+              variant="secondary_icon"
+              size="circle"
+              onClick={onWarmTransferClick}
+            >
+              {TaskHelper.isChatBasedTask(task) ? (
+                <ChatIcon key={`queue-item-warm-transfer-icon-${queue.sid}`} decorative={false} title="" />
+              ) : (
+                <CallTransferIcon key={`queue-item-warm-transfer-icon-${queue.sid}`} decorative={false} title="" />
+              )}
+            </Button>
+          </Tooltip>
+        ) : (
+          <div></div>
+        )}
         <Tooltip
           key={`queue-item-buttons-cold-transfer-tooltip-${queue.sid}`}
           element="TRANSFER_DIR_COMMON_TOOLTIP"

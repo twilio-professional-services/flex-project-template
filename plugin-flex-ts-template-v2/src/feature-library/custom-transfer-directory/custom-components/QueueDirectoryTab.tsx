@@ -256,7 +256,6 @@ const QueueDirectoryTab = (props: OwnProps) => {
                 task={props.task}
                 queue={queue}
                 key={`queue-item-${queue.sid}`}
-                isWarmTransferEnabled={true}
                 onTransferClick={onTransferQueueClick(queue)}
               />
             );
