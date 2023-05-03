@@ -3,6 +3,7 @@ import { AlertDialog, Button, Box } from '@twilio-paste/core';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { getOutcome } from '../../config';
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions } from '../../flex-hooks/states/SupervisorCompleteReservation';
@@ -30,7 +31,7 @@ const SupervisorCompleteReservation = ({ task }: OwnProps) => {
       taskSid,
       {
         conversations: {
-          outcome: 'Completed by supervisor',
+          outcome: getOutcome(),
         },
       },
       false,
