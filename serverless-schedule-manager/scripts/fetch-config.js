@@ -66,7 +66,14 @@ if (domain) {
       if (response.status === 200) {
         fs.writeFileSync(outputPath, JSON.stringify(response.data, null, 2), 'utf8');
         console.log(`Saved latest deployed config to ${outputPath}`);
+      } else if (response.status === 404) {
+        // A 404 indicates this serverless domain exists, but is an older version without the fetch-config function
+        // Continue, otherwise we will never deploy the updated service!
+        console.log(
+          'Unable to fetch data, as the service exists but the fetch-config function is not present. Ensure your local config is up-to-date before deploying.',
+        );
       } else {
+        // For all other errors, fail in case of a transient issue
         console.log('Unable to fetch data', response);
         throw new Error(`Received a ${response.status} status code when attempting to fetch the latest config`);
       }
