@@ -10,11 +10,13 @@ export enum CustomTransferDirectoryNotification {
 export const notificationHook = (flex: typeof Flex, _manager: Flex.Manager) => [
   {
     id: CustomTransferDirectoryNotification.FailedLoadingInsightsClient,
+    timeout: 5000,
     content: StringTemplates.FailedToLoadInsightsClient,
     type: flex.NotificationType.warning,
   },
   {
     id: CustomTransferDirectoryNotification.FailedLoadingInsightsData,
+    timeout: 5000,
     content: StringTemplates.FailedToLoadInsightsData,
     type: flex.NotificationType.warning,
   },
