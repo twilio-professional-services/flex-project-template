@@ -30,7 +30,6 @@
   "devDependencies": {
     "eslint": "^8.37.0",
     "eslint-config-twilio": "^2.0.0",
-    "shelljs": "^0.8.5",
     "twilio-cli": "^5.2.0",
     "twilio-run": "^3.4.2"
   },

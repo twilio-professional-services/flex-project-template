@@ -45,7 +45,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-          
+      - name: install top-level packages
+        run: |
+          npm install
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
