@@ -27,17 +27,20 @@ Enable the feature in the flex-config asset for your environment.
 "custom_transfer_directory": {
   "enabled": true, // globally enable or disable the feature
   "use_paste_search_icon": false, // use new paste icon or old legacy icon (recommended to use old icon if mixing with OOTB tabs for consistant look)
-  "worker" : {
-    "enabled": false // enable the custom worker tab - not currently developed, still to come
-  },
   "queue" : {
     "enabled": true, // enable the custom queue tab
     "show_only_queues_with_available_workers": true, 
     "show_real_time_data" : true, // tool tup for queues will show real time data instead of queue name
     "enforce_queue_filter_from_worker_object": true, // when true, if `worker.attributes.enforcedQueueFilter` is present, it will be enforced, otherwise ignored
     "enforce_global_exclude_filter": false, // when true global_exclude_filter will be applied to exclude any queues matching the filter
-    "global_exclude_filter": ""
+    "global_exclude_filter": "SYSTEM" // EXAMPLE to exclude queues containing the word SYSTEM
   }
+}
+```
+
+``` javascript
+worker.attributes : {
+  enforcedQueueFilter : "TEAM A" // example filter that will include only queues with TEAM A in the name
 }
 ```
 
