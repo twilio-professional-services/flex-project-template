@@ -21,6 +21,7 @@ export const Participants = ({ participantDetails, handleKickParticipant }: Part
         name={participantName}
         participantType={participantType}
         allowKick={allowKick}
+        key={`participant-${interactionParticipantSid}`}
         handleKickParticiant={() => handleKickParticipant(interactionParticipantSid)}
       />
     );

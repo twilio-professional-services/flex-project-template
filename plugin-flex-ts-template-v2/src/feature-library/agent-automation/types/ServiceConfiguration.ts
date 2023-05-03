@@ -10,6 +10,7 @@ export interface TaskQualificationConfig {
   auto_wrapup: boolean;
   required_attributes: Array<TaskAttributesQualificationConfig>;
   wrapup_time: number;
+  default_outcome: string;
 }
 
 export default interface AgentAutomationConfig {
