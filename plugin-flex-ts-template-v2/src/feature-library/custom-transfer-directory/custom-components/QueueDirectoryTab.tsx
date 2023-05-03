@@ -86,7 +86,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
   };
 
   // async function to retrieve the task queues from the tr sdk
-  // this will trrigger the useEffect for a fetchedQueues update
+  // this will trigger the useEffect for a fetchedQueues update
   const fetchSDKTaskQueues = async () => {
     if (workspaceClient)
       setFetchedQueues(
@@ -101,7 +101,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
   };
 
   // async function to retrieve queues from the insights client with
-  // agent availability - it shoould be noted the insights client acts
+  // agent availability - it should be noted the insights client acts
   // like a cache and can go stale if account is not active
   // to restore the cache, tasks need to be pushed into the queue
   // this will trigger the useEffect for the insightsQueue update
@@ -147,7 +147,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
       filterQueues();
     });
 
-    // if a queue is added trrigger a reload
+    // if a queue is added trigger a reload
     queueMap.on('itemAdded', () => {
       fetchSDKTaskQueues();
     });
