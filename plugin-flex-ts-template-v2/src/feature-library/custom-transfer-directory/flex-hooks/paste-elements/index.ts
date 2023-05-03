@@ -41,7 +41,11 @@ export const pasteElementHook = {
     fontSize: '14px',
     width: '100%',
   },
-  TRANSFER_DIR_COMMON_ROW_BUTTONGROUP: {},
+  TRANSFER_DIR_COMMON_ROW_BUTTON: {
+    '&:focus': {
+      'box-shadow': 'none',
+    },
+  },
   TRANSFER_DIR_QUEUE_HORIZONTAL_ROW_CONTAINER: {
     paddingLeft: 'space30',
     paddingRight: 'space30',

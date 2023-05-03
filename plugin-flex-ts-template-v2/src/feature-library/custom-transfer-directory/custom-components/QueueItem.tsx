@@ -30,9 +30,9 @@ export const QueueItem = (props: QueueItemProps) => {
 
   const { total_eligible_workers: eligible, total_available_workers: available, total_tasks: tasks } = queue;
 
-  const agents_available = !available || !eligible ? 'Unknown' : `${available}/${eligible}`;
+  const agents_available = !available || !eligible ? 'N/A' : `${available}/${eligible}`;
   // eslint-disable-next-line no-eq-null, eqeqeq
-  const tasks_in_queue = tasks != null && tasks >= 0 ? `${tasks}` : 'Unknown';
+  const tasks_in_queue = tasks != null && tasks >= 0 ? `${tasks}` : 'N/A';
 
   const queue_tooltip = showRealTimeQueueData()
     ? `Agents: ${agents_available}, Tasks in queue: ${tasks_in_queue}`
@@ -64,26 +64,23 @@ export const QueueItem = (props: QueueItemProps) => {
         </Text>
       </Tooltip>
 
-      <ButtonGroup key={`queue-item-buttongroup-${queue.sid}`} element="TRANSFER_DIR_COMMON_ROW_BUTTONGROUP" attached>
+      <ButtonGroup key={`queue-item-buttongroup-${queue.sid}`} attached>
         <Tooltip
           key={`queue-item-buttons-warm-transfer-tooltip-${queue.sid}`}
           element="TRANSFER_DIR_COMMON_TOOLTIP"
           text="Warm Transfer"
         >
           <Button
+            element="TRANSFER_DIR_COMMON_ROW_BUTTON"
             key={`queue-item-warm-transfer-button-${queue.sid}`}
             variant="secondary_icon"
             size="circle"
             onClick={onWarmTransferClick}
           >
             {TaskHelper.isChatBasedTask(task) ? (
-              <ChatIcon key={`queue-item-warm-transfer-icon-${queue.sid}`} decorative={false} title="Warm Transfer" />
+              <ChatIcon key={`queue-item-warm-transfer-icon-${queue.sid}`} decorative={false} title="" />
             ) : (
-              <CallTransferIcon
-                key={`queue-item-warm-transfer-icon-${queue.sid}`}
-                decorative={false}
-                title="Warm Transfer"
-              />
+              <CallTransferIcon key={`queue-item-warm-transfer-icon-${queue.sid}`} decorative={false} title="" />
             )}
           </Button>
         </Tooltip>
@@ -93,19 +90,16 @@ export const QueueItem = (props: QueueItemProps) => {
           text="Cold Transfer"
         >
           <Button
+            element="TRANSFER_DIR_COMMON_ROW_BUTTON"
             key={`queue-item-warm-transfer-button-${queue.sid}`}
             variant="secondary_icon"
             size="circle"
             onClick={onColdTransferClick}
           >
             {TaskHelper.isChatBasedTask(task) ? (
-              <SendIcon key={`queue-item-cold-transfer-icon-${queue.sid}`} decorative={false} title="Warm Transfer" />
+              <SendIcon key={`queue-item-cold-transfer-icon-${queue.sid}`} decorative={false} title="" />
             ) : (
-              <CallOutgoingIcon
-                key={`queue-item-cold-transfer-icon-${queue.sid}`}
-                decorative={false}
-                title="Warm Transfer"
-              />
+              <CallOutgoingIcon key={`queue-item-cold-transfer-icon-${queue.sid}`} decorative={false} title="" />
             )}
           </Button>
         </Tooltip>
