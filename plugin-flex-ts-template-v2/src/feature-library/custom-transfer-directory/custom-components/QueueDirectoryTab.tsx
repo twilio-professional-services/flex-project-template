@@ -1,4 +1,4 @@
-import { Flex, Stack, Alert } from '@twilio-paste/core';
+import { Flex, Alert } from '@twilio-paste/core';
 import {
   withTaskContext,
   Manager,
