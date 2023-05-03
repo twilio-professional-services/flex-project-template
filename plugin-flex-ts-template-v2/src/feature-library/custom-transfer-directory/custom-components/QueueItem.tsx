@@ -68,7 +68,7 @@ export const QueueItem = (props: QueueItemProps) => {
         </Text>
       </Tooltip>
 
-      <ButtonGroup key={`queue-item-buttongroup-${queue.sid}`} attached>
+      <ButtonGroup element="TRANSFER_DIR_COMMON_ROW_BUTTONGROUP" key={`queue-item-buttongroup-${queue.sid}`} attached>
         {isWarmTransferEnabled ? (
           <Tooltip
             key={`queue-item-buttons-warm-transfer-tooltip-${queue.sid}`}
