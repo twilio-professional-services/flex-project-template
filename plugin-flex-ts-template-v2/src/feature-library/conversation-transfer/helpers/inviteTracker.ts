@@ -16,7 +16,7 @@ const instantQuery = async (targetSid: string, targetType: ParticipantInviteType
       q.search(search);
 
       q.on('searchResult', (items) => {
-        if (items) {
+        if (items && Object.keys(items).length > 0) {
           Object.entries(items).forEach(([key, value]) => {
             console.log('instantQuery', key, value);
             const name = targetType === 'Worker' ? (value as any).attributes.full_name : (value as any).queue_name;
@@ -24,6 +24,7 @@ const instantQuery = async (targetSid: string, targetType: ParticipantInviteType
           });
         } else {
           console.log('Invite participant name instantQuery failed for ', targetSid);
+          resolve(targetSid);
         }
       });
     });
@@ -94,7 +95,7 @@ export const removeInvitedParticipant = async (conversation: ConversationState.C
     }
 };
 
-// This is to handle removing an invite afer WE join the channel
+// This is to handle removing an invite after WE join the channel
 export const checkAndRemoveOldInvitedParticipants = async (
   task: ITask,
   conversation: ConversationState.ConversationState,

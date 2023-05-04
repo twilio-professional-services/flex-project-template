@@ -13,12 +13,12 @@ interface Props {
 
 export const componentName = FlexComponent.TaskCanvasHeader;
 export const componentHook = function addChatTransferButtons(flex: typeof Flex) {
-  if (isColdTransferEnabled()) {
-    flex.TaskCanvasHeader.Content.add(<TransferButton key="conversation-transfer-button" />, {
-      sortOrder: 1,
-      if: ({ task }) => TaskHelper.isCBMTask(task) && task.taskStatus === 'assigned',
-    });
-  }
+  if (!isColdTransferEnabled() && !isMultiParticipantEnabled()) return;
+
+  flex.TaskCanvasHeader.Content.add(<TransferButton key="conversation-transfer-button" />, {
+    sortOrder: 1,
+    if: ({ task }) => TaskHelper.isCBMTask(task) && task.taskStatus === 'assigned',
+  });
 
   if (!isMultiParticipantEnabled()) return;
 
