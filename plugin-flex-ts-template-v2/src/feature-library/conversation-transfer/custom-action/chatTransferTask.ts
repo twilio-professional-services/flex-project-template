@@ -3,7 +3,7 @@ import { Actions, Notifications, StateHelper } from '@twilio/flex-ui';
 import { TransferActionPayload } from '../types/ActionPayloads';
 import { NotificationIds } from '../flex-hooks/notifications/TransferResult';
 import ChatTransferService, { buildInviteParticipantAPIPayload } from '../helpers/APIHelper';
-import { isMultiParticipantEnabled } from '../config';
+import { isColdTransferEnabled, isMultiParticipantEnabled } from '../config';
 import { addInviteToConversation, countOfOutstandingInvitesForConversation } from '../helpers/inviteTracker';
 
 const handleChatTransferAction = async (payload: TransferActionPayload) => {
@@ -19,6 +19,11 @@ const handleChatTransferAction = async (payload: TransferActionPayload) => {
 
   if (payload?.options?.mode === 'WARM' && !isMultiParticipantEnabled()) {
     Notifications.showNotification(NotificationIds.ChatTransferFailedConsultNotSupported);
+    return;
+  }
+
+  if (payload?.options?.mode === 'COLD' && !isColdTransferEnabled()) {
+    Notifications.showNotification(NotificationIds.ChatTransferFailedColdNotSupported);
     return;
   }
 

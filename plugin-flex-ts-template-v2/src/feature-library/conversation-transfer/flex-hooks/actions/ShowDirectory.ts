@@ -41,10 +41,10 @@ export const actionHook = function handleChatTransferShowDirectory(flex: typeof 
             Container: {
               '.Twilio-WorkerDirectory-ButtonContainer': {
                 '&>:nth-child(1)': {
-                  display1,
+                  display: display1,
                 },
                 '&>:nth-child(2)': {
-                  display2,
+                  display: display2,
                 },
               },
             },
