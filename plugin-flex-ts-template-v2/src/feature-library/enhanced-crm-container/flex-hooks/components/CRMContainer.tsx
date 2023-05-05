@@ -8,5 +8,8 @@ export const componentHook = function replaceAndSetCustomCRMContainer(flex: type
   const baseUrl = 'https://www.bing.com';
   flex.CRMContainer.Content.replace(<IFrameCRMContainer key="custom-crm-container" baseUrl={baseUrl} />, {
     sortOrder: 1,
+    if: (props) => {
+      return props.task !== undefined;
+    },
   });
 };
