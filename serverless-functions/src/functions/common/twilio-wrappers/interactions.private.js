@@ -100,6 +100,6 @@ exports.channelUpdate = async function channelUpdate(parameters) {
 
     return { success: true, status: 200, updatedChannel };
   } catch (error) {
-    return retryHandler(error, parameters, exports.participantUpdate);
+    return retryHandler(error, parameters, exports.channelUpdate);
   }
 };
