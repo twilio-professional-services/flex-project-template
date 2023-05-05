@@ -71,12 +71,3 @@ Note that unlike the default behavior when the agent is removed the Conversation
 This plugin also copies all of the existing task attributes from the original task to the transferring task. The tasks conversations.conversations_id is updated to link the tasks for reporting purposes.
 
 The conversations attributes are used to track outstanding invites. When the invite is created the conversations attributes are updated and when an agent joins the conversation it will remove these attributes.
-
-## Disclaimer and important notes for production use
-
-This is a POC feature that demonstrates how transfers and multiple participants can be implemented with the Interactions API and Conversations Based Messaging in Flex. It is important with conversations that the conversation is closed if all agents are removed and ensuring the same agent doesn't try and join the conversation multiple times.
-In these scenarios you could be left with a customer chatting and the messages not being seen by an agent or for agents to end up with a task that they are unable to accept.
-
-The plugin attempts to avoid these edge cases but there are timing conditions that can't easily be taken into account from the plugin. For example the plugin will change the _end chat_ action to _leave chat_ when there are multiple participants. But there could be a timing window where both agents leave the chat at the same time. This results in the participants being removed but the channel is still active.
-
-To handle these edge cases we would recommend using TaskRouter or Conversations webhooks to a backend platform that could detect any invalid Task or Conversations states and update the chat accordingly. For example in this case marking the channel as inactive so that subsequent messages from the customer create a new conversation.
