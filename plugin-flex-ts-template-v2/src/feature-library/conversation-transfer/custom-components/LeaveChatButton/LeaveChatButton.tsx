@@ -8,11 +8,12 @@ interface LeaveChatButtonProps {
 
 const LeaveChatButton = ({ conversation }: LeaveChatButtonProps) => {
   const [buttonDisabled, setButtonDisable] = useState(false);
-  const handleLeaveChatClick = () => {
+  const handleLeaveChatClick = async () => {
     if (conversation) {
       setButtonDisable(true);
       const payload: LeaveChatActionPayload = { conversation };
-      Actions.invokeAction('LeaveChat', payload);
+      await Actions.invokeAction('LeaveChat', payload);
+      setButtonDisable(false);
     }
   };
   return (
