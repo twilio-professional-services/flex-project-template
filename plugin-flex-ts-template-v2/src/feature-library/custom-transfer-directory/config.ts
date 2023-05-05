@@ -15,6 +15,7 @@ const {
 
 const {
   enabled: conversation_transfer_enabled = false,
+  cold_transfer: conversation_transfer_cold_transfer = false,
   multi_participant: conversation_transfer_warm_transfer = false,
 } = getFeatureFlags()?.features?.conversation_transfer || {};
 
@@ -48,6 +49,10 @@ export const getGlobalFilter = (): string => {
 
 export const shouldFetchInsightsData = (): boolean => {
   return showOnlyQueuesWithAvailableWorkers() || showRealTimeQueueData();
+};
+
+export const isCbmColdTransferEnabled = (): boolean => {
+  return conversation_transfer_enabled && conversation_transfer_cold_transfer;
 };
 
 export const isCbmWarmTransferEnabled = (): boolean => {

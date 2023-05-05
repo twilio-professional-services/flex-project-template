@@ -4,15 +4,11 @@ import { Stack } from '@twilio-paste/core';
 import { ConversationState, styled, Actions } from '@twilio/flex-ui';
 
 import { Participants } from './Participants.tsx/Participants';
-import { InviteParticipant } from './InviteParticipant/InviteParticipant';
 import { InvitedParticipants } from './InvitedParticipants/InvitedParticipants';
 import { ParticipantDetails } from '../../types/ParticipantDetails';
 import { InvitedParticipantDetails } from '../../types/InvitedParticipantDetails';
 import { getUpdatedParticipantDetails, getUpdatedInvitedParticipantDetails } from './hooks';
-import {
-  checkAndRemoveOldInvitedParticipants,
-  countOfOutstandingInvitesForConversation,
-} from '../../helpers/inviteTracker';
+import { checkAndRemoveOldInvitedParticipants } from '../../helpers/inviteTracker';
 import {
   CancelChatParticipantInviteActionPayload,
   RemoveChatParticipantActionPayload,
@@ -33,7 +29,6 @@ interface ParticipantsTabProps {
 export const ParticipantsTab = ({ task, conversation }: ParticipantsTabProps) => {
   const [participantDetails, setParticipantDetails] = useState<ParticipantDetails[]>([]);
   const [invitedParticipantDetails, setInvitedParticipantDetails] = useState<InvitedParticipantDetails[]>([]);
-  const [disableNewInvites, setDisableNewInvites] = useState<boolean>(false);
 
   useEffect(() => {
     const updateParticipants = () => {
@@ -49,10 +44,6 @@ export const ParticipantsTab = ({ task, conversation }: ParticipantsTabProps) =>
     updateParticipants();
     updateInvitedParticipants();
     setInvitedParticipantDetails(getUpdatedInvitedParticipantDetails(conversation));
-
-    // for now just allow one outstanding invite to simplify routing. conversation.attribute.invites supports muliple though
-    if (countOfOutstandingInvitesForConversation(conversation)) setDisableNewInvites(true);
-    else setDisableNewInvites(false);
   }, [conversation]);
 
   const handleKickParticipant = (interactionParticipantSid: string) => {
@@ -77,8 +68,6 @@ export const ParticipantsTab = ({ task, conversation }: ParticipantsTabProps) =>
           invitedParticipantDetails={invitedParticipantDetails}
           handleCancelInvite={handleCancelInvite}
         />
-
-        <InviteParticipant task={task} disableNewInvites={disableNewInvites} />
       </Stack>
     </ParticipantsTabContainer>
   );

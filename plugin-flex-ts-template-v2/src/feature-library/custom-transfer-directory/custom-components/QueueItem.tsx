@@ -8,7 +8,7 @@ import { SendIcon } from '@twilio-paste/icons/esm/SendIcon';
 import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 
 import { TransferQueue } from './QueueDirectoryTab';
-import { isCbmWarmTransferEnabled, showRealTimeQueueData } from '../config';
+import { isCbmColdTransferEnabled, isCbmWarmTransferEnabled, showRealTimeQueueData } from '../config';
 
 export interface QueueItemProps {
   queue: TransferQueue;
@@ -41,6 +41,7 @@ export const QueueItem = (props: QueueItemProps) => {
     Manager.getInstance().store.getState().flex.featureFlags.features['flex-warm-transfers']?.enabled;
 
   const isWarmTransferEnabled = TaskHelper.isCBMTask(task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;
+  const isColdTransferEnabled = TaskHelper.isCBMTask(task) ? isCbmColdTransferEnabled() : true;
 
   return (
     <Flex
@@ -92,25 +93,29 @@ export const QueueItem = (props: QueueItemProps) => {
         ) : (
           <div></div>
         )}
-        <Tooltip
-          key={`queue-item-buttons-cold-transfer-tooltip-${queue.sid}`}
-          element="TRANSFER_DIR_COMMON_TOOLTIP"
-          text="Cold Transfer"
-        >
-          <Button
-            element="TRANSFER_DIR_COMMON_ROW_BUTTON"
-            key={`queue-item-warm-transfer-button-${queue.sid}`}
-            variant="secondary_icon"
-            size="circle"
-            onClick={onColdTransferClick}
+        {isColdTransferEnabled ? (
+          <Tooltip
+            key={`queue-item-buttons-cold-transfer-tooltip-${queue.sid}`}
+            element="TRANSFER_DIR_COMMON_TOOLTIP"
+            text="Cold Transfer"
           >
-            {TaskHelper.isChatBasedTask(task) ? (
-              <SendIcon key={`queue-item-cold-transfer-icon-${queue.sid}`} decorative={false} title="" />
-            ) : (
-              <CallOutgoingIcon key={`queue-item-cold-transfer-icon-${queue.sid}`} decorative={false} title="" />
-            )}
-          </Button>
-        </Tooltip>
+            <Button
+              element="TRANSFER_DIR_COMMON_ROW_BUTTON"
+              key={`queue-item-warm-transfer-button-${queue.sid}`}
+              variant="secondary_icon"
+              size="circle"
+              onClick={onColdTransferClick}
+            >
+              {TaskHelper.isChatBasedTask(task) ? (
+                <SendIcon key={`queue-item-cold-transfer-icon-${queue.sid}`} decorative={false} title="" />
+              ) : (
+                <CallOutgoingIcon key={`queue-item-cold-transfer-icon-${queue.sid}`} decorative={false} title="" />
+              )}
+            </Button>
+          </Tooltip>
+        ) : (
+          <div></div>
+        )}
       </ButtonGroup>
     </Flex>
   );

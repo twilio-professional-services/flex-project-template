@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { IconButton, ITask, Actions, styled } from '@twilio/flex-ui';
 
 import { TransferActionPayload } from '../../types/ActionPayloads';
+import { isColdTransferEnabled } from '../../config';
 
 const IconContainer = styled.div`
   margin: auto;
@@ -19,7 +20,7 @@ const TransferButton = ({ task }: TransferButtonProps) => {
 
   // if there is a transfer task event for this chat disable the transfer button if it was a cold transfer
   const handleTransferInitiated = (payload: TransferActionPayload) => {
-    if (payload.options?.mode === 'COLD') {
+    if (payload.options?.mode === 'COLD' && isColdTransferEnabled()) {
       setTaskSidsTransfered([...taskSidsTransfered, task.sid]);
     }
   };
