@@ -32,7 +32,9 @@
         "hold_workaround": false
       },
       "enhanced_crm_container": {
-        "enabled": false
+        "enabled": false,
+        "should_display_url_when_no_tasks": false,
+        "display_url_when_no_tasks": "https://www.bing.com"
       },
       "internal_call": {
         "enabled": false
