@@ -1,6 +1,7 @@
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 
 const FunctionHelper = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
 const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
 
 const getRequiredParameters = () => {
@@ -102,9 +103,11 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
   try {
     const {
       conversationId,
+      conversationSid,
       jsonAttributes,
       transferTargetSid,
       transferQueueName,
+      transferWorkerName,
       workersToIgnore,
       flexInteractionSid,
       flexInteractionChannelSid,
@@ -139,7 +142,7 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
       return sendErrorReply(callback, response, scriptName, status, message);
     }
 
-    if (removeFlexInteractionParticipantSid)
+    if (removeFlexInteractionParticipantSid) {
       await InteractionsOperations.participantUpdate({
         status: 'closed',
         interactionSid: flexInteractionSid,
@@ -147,14 +150,32 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
         participantSid: removeFlexInteractionParticipantSid,
         context,
       });
-
-    console.log(
-      'participantInvite',
-      participantInvite,
-      JSON.stringify(participantInvite.routing),
-      JSON.stringify(participantInvite.routing.reservation),
-      JSON.stringify(participantInvite.routing.properties),
-    );
+    } else {
+      // Add invite to conversation attributes
+      const inviteTargetType = transferTargetSid.startsWith('WK') ? 'Worker' : 'Queue';
+      const conversation = await ConversationsOperations.getConversation({
+        conversationSid,
+        context,
+      });
+      const currentAttributes = JSON.parse(conversation.conversation.attributes);
+      await ConversationsOperations.updateAttributes({
+        conversationSid,
+        attributes: JSON.stringify({
+          ...currentAttributes,
+          invites: {
+            ...currentAttributes.invites,
+            [participantInvite.routing.properties.sid]: {
+              invitesTaskSid: participantInvite.routing.properties.sid,
+              targetSid: transferTargetSid,
+              timestampCreated: new Date(),
+              targetName: inviteTargetType === 'Queue' ? transferQueueName : transferWorkerName,
+              inviteTargetType,
+            },
+          },
+        }),
+        context,
+      });
+    }
 
     response.setStatusCode(201);
     response.setBody({

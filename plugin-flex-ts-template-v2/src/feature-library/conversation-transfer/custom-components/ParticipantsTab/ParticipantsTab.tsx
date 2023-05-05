@@ -8,7 +8,6 @@ import { InvitedParticipants } from './InvitedParticipants/InvitedParticipants';
 import { ParticipantDetails } from '../../types/ParticipantDetails';
 import { InvitedParticipantDetails } from '../../types/InvitedParticipantDetails';
 import { getUpdatedParticipantDetails, getUpdatedInvitedParticipantDetails } from './hooks';
-import { checkAndRemoveOldInvitedParticipants } from '../../helpers/inviteTracker';
 import {
   CancelChatParticipantInviteActionPayload,
   RemoveChatParticipantActionPayload,
@@ -37,12 +36,7 @@ export const ParticipantsTab = ({ task, conversation }: ParticipantsTabProps) =>
       });
     };
 
-    const updateInvitedParticipants = () => {
-      checkAndRemoveOldInvitedParticipants(task, conversation);
-    };
-
     updateParticipants();
-    updateInvitedParticipants();
     setInvitedParticipantDetails(getUpdatedInvitedParticipantDetails(conversation));
   }, [conversation]);
 
