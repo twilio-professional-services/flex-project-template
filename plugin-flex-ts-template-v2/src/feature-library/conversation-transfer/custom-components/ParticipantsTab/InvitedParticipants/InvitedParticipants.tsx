@@ -15,6 +15,7 @@ export const InvitedParticipants = ({ invitedParticipantDetails, handleCancelInv
     return (
       <InvitedParticipant
         participantName={participantName}
+        key={invitedParticipantDetail.invitesTaskSid}
         inviteTargetType={inviteTargetType}
         handleCancelInvite={() => handleCancelInvite(invitedParticipantDetail)}
       />
