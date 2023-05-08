@@ -162,10 +162,10 @@
       "custom_transfer_directory": {
         "enabled": true,
         "use_paste_search_icon": false,
-        "queue" : {
+        "queue": {
           "enabled": true,
           "show_only_queues_with_available_workers": true,
-          "show_real_time_data" : true,
+          "show_real_time_data": true,
           "enforce_queue_filter_from_worker_object": true,
           "enforce_global_exclude_filter": false,
           "global_exclude_filter": ""
@@ -191,6 +191,9 @@
             ]
           }
         }
+      },
+      "emoji_picker": {
+        "enabled": true
       }
     }
   }
