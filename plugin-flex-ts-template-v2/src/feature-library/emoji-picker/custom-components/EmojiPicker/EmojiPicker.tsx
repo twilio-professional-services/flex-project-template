@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as Flex from '@twilio/flex-ui';
 import { EmojiIcon } from '@twilio-paste/icons/esm/EmojiIcon';
 import { Button } from '@twilio-paste/core/button';
@@ -17,7 +17,6 @@ interface MesageInputProps {
 }
 
 const EmojiPicker = ({ conversationSid, disabledReason }: MesageInputProps) => {
-  const buttonRef = useRef(null);
   const [selectedEmoji, setSelectedEmoji] = useState(null);
   const [isDisabled, setIsDisabled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -76,13 +75,7 @@ const EmojiPicker = ({ conversationSid, disabledReason }: MesageInputProps) => {
 
   return (
     <EmojiWrapper>
-      <Button
-        variant="reset"
-        onClick={togglePicker}
-        ref={buttonRef}
-        disabled={isDisabled}
-        element="EMOJI_PICKER_BUTTON"
-      >
+      <Button variant="reset" onClick={togglePicker} disabled={isDisabled} element="EMOJI_PICKER_BUTTON">
         <EmojiIcon decorative={false} title="Insert emoji" />
       </Button>
       {isOpen && data && (

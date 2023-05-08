@@ -10,7 +10,7 @@ export const pasteElementHook = {
     backgroundColor: 'transparent',
     borderRadius: 'borderRadiusCircle',
     padding: 'space30',
-    ':hover': {
+    ':hover:enabled': {
       backgroundColor: 'colorBackgroundStrong',
     },
   },
