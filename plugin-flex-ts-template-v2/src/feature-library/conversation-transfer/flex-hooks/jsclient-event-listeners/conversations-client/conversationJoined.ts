@@ -6,7 +6,7 @@ import { removeInvitedParticipant } from '../../../helpers/inviteTracker';
 
 export const clientName = FlexJsClient.conversationsClient;
 export const eventName = ConversationEvent.conversationJoined;
-export const jsClientHook = async function announceOnChannelWhenJoined(
+export const jsClientHook = async function removeInviteOnJoin(
   _flex: typeof Flex,
   _manager: Flex.Manager,
   conversation: Conversation,

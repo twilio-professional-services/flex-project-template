@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const componentName = FlexComponent.TaskCanvasHeader;
-export const componentHook = function addChatTransferButtons(flex: typeof Flex) {
+export const componentHook = function addConvTransferButtons(flex: typeof Flex) {
   if (!isColdTransferEnabled() && !isMultiParticipantEnabled()) return;
 
   flex.TaskCanvasHeader.Content.add(<TransferButton key="conversation-transfer-button" />, {
