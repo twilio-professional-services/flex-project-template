@@ -14,9 +14,12 @@ To enable the attribute viewer feature, under your `flex-config` attributes set 
 
 ```json
 "attribute_viewer": {
-    "enabled": true
+    "enabled": true,
+    "enabled_for_agents": false
 }
 ```
+
+If you would like to also allow agents to view task attributes, set `enabled_for_agents` to `true` as well.
 
 # how does it work?
 

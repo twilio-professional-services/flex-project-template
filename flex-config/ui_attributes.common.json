@@ -193,7 +193,8 @@
         }
       },
       "attribute_viewer": {
-        "enabled": false
+        "enabled": false,
+        "enabled_for_agents": false
       }
     }
   }
