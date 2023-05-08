@@ -12,8 +12,7 @@ import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHe
 import ConferenceService from '../../utils/ConferenceService';
 import AppState from '../../../../types/manager/AppState';
 import { addConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
-import { isFeatureEnabled } from '../../../hang-up-by/config';
-import * as HangUpByHelper from '../../../hang-up-by/helpers/hangUpBy';
+import { isHungUpByFeatureEnabled } from '../../config';
 import { HangUpBy } from '../../../hang-up-by/enums/hangUpBy';
 
 export interface OwnProps {
@@ -94,14 +93,12 @@ const ConferenceDialog = (props: OwnProps) => {
       );
 
       // Set Hang Up By if that feature is enabled
-      if (isFeatureEnabled()) {
-        HangUpByHelper.setHangUpBy(task.sid, HangUpBy.ExternalWarmTransfer);
-        await HangUpByHelper.setHangUpByAttribute(
-          task.taskSid,
-          task.attributes,
-          HangUpBy.ExternalWarmTransfer,
-          conferenceTo,
-        );
+      if (isHungUpByFeatureEnabled()) {
+        await Actions.invokeAction('SetHangUpBy', {
+          reservationSid: task.sid,
+          hangupby: HangUpBy.ExternalWarmTransfer,
+          setAttributes: { taskSid: task.taskSid, taskAttributes: task.attributes, destination: conferenceTo },
+        });
       }
     } catch (error) {
       console.error('Error adding conference participant:', error);
