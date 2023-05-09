@@ -33,9 +33,12 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
     if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
       currentInput += ' ';
     }
+    currentInput += text;
     Actions.invokeAction('SetInputText', {
-      body: currentInput + text,
+      body: currentInput,
       conversationSid,
+      selectionStart: currentInput.length,
+      selectionEnd: currentInput.length,
     });
   };
 
