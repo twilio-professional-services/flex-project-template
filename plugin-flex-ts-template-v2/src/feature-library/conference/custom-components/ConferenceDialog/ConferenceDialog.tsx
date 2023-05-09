@@ -62,47 +62,7 @@ const ConferenceDialog = (props: OwnProps) => {
   };
 
   const addConferenceParticipant = async () => {
-    const { task } = props;
-
-    if (!task) return;
-
-    let mainConferenceSid = task.attributes.conference ? task.attributes.conference.sid : null;
-
-    if (!mainConferenceSid && task.conference) {
-      mainConferenceSid = task.conference.conferenceSid;
-    }
-
-    let from;
-    if (phoneNumber) {
-      from = phoneNumber;
-    } else {
-      from = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
-    }
-
-    // Adding entered number to the conference
-    console.log(`Adding ${conferenceTo} to conference`);
-    let participantCallSid;
-    try {
-      participantCallSid = await ConferenceService.addParticipant(mainConferenceSid, from, conferenceTo);
-      dispatch(
-        addConnectingParticipant({
-          callSid: participantCallSid,
-          conferenceSid: mainConferenceSid,
-          phoneNumber: conferenceTo,
-        }),
-      );
-
-      // Set Hang Up By if that feature is enabled
-      if (isHungUpByFeatureEnabled()) {
-        await Actions.invokeAction('SetHangUpBy', {
-          reservationSid: task.sid,
-          hangupby: HangUpBy.ExternalWarmTransfer,
-          setAttributes: { taskSid: task.taskSid, taskAttributes: task.attributes, destination: conferenceTo },
-        });
-      }
-    } catch (error) {
-      console.error('Error adding conference participant:', error);
-    }
+    await Actions.invokeAction('StartExternalWarmTransfer', { task: props.task, phoneNumber: conferenceTo });
 
     setConferenceTo('');
   };

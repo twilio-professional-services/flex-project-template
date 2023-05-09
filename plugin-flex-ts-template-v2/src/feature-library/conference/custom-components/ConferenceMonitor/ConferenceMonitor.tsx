@@ -2,7 +2,7 @@ import { Actions, ConferenceParticipant, ITask } from '@twilio/flex-ui';
 import * as React from 'react';
 
 import ConferenceService from '../../utils/ConferenceService';
-import { isAddButtonEnabled, isHoldWorkaroundEnabled } from '../../config';
+import { isConferenceEnabledWithoutNativeXWT, isHoldWorkaroundEnabled } from '../../config';
 
 export interface OwnProps {
   task?: ITask;
@@ -105,7 +105,7 @@ class ConferenceMonitor extends React.Component {
           p,
           endConferenceOnExit,
           isHoldWorkaroundEnabled(),
-          isAddButtonEnabled(),
+          isConferenceEnabledWithoutNativeXWT(),
         ),
       );
     });

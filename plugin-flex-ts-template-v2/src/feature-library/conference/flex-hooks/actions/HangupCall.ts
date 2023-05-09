@@ -1,13 +1,13 @@
 import * as Flex from '@twilio/flex-ui';
 
 import { ConferenceNotification } from '../notifications/Conference';
-import { isAddButtonEnabled } from '../../config';
+import { isConferenceEnabledWithoutNativeXWT } from '../../config';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.HangupCall;
 export const actionHook = function handleConferenceHangup(flex: typeof Flex, _manager: Flex.Manager) {
-  if (!isAddButtonEnabled()) return;
+  if (!isConferenceEnabledWithoutNativeXWT()) return;
 
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     const { conference, taskSid } = payload.task;
