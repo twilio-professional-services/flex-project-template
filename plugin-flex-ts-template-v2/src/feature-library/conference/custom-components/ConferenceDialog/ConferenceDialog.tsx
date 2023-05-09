@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Actions, Manager, ITask, withTaskContext, useFlexSelector } from '@twilio/flex-ui';
-import { useDispatch } from 'react-redux';
+import { Actions, ITask, withTaskContext, useFlexSelector } from '@twilio/flex-ui';
 import { useUID } from '@twilio-paste/core/uid-library';
 import { Box } from '@twilio-paste/core/box';
 import { Button } from '@twilio-paste/core/button';
@@ -9,11 +8,7 @@ import { HelpText } from '@twilio-paste/core/help-text';
 import { Label } from '@twilio-paste/core/label';
 import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading } from '@twilio-paste/core/modal';
 
-import ConferenceService from '../../utils/ConferenceService';
 import AppState from '../../../../types/manager/AppState';
-import { addConnectingParticipant } from '../../flex-hooks/states/ConferenceSlice';
-import { isHungUpByFeatureEnabled } from '../../config';
-import { HangUpBy } from '../../../hang-up-by/enums/hangUpBy';
 
 export interface OwnProps {
   task?: ITask;
@@ -24,12 +19,10 @@ const ConferenceDialog = (props: OwnProps) => {
   const [hasError, setHasError] = useState(false);
 
   const componentViewStates = useFlexSelector((state: AppState) => state.flex.view.componentViewStates);
-  const phoneNumber = useFlexSelector((state: AppState) => state.flex.worker.attributes.phone);
 
   const conferenceDialogState = componentViewStates && componentViewStates.ConferenceDialog;
   const isOpen = (conferenceDialogState && conferenceDialogState.isOpen) || false;
 
-  const dispatch = useDispatch();
   const modalHeadingID = useUID();
   const inputRef = React.createRef<HTMLInputElement>();
   const inputID = useUID();
