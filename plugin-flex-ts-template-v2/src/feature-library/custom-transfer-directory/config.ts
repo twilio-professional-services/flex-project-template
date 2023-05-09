@@ -79,7 +79,7 @@ export const usePasteSearchIcon = (): boolean => {
 };
 
 export const isExternalDirectoryEnabled = (): boolean => {
-  return externalDirectoryEnabled;
+  return isFeatureEnabled() && externalDirectoryEnabled;
 };
 
 export const getExternalDirectory = (): Array<ExternalDirectoryEntry> => {
