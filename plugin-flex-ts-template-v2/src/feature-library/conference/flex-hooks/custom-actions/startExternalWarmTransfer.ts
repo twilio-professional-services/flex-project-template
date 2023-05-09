@@ -1,7 +1,8 @@
-import { Actions, ITask, Manager, TaskHelper } from '@twilio/flex-ui';
+import { Actions, ITask, Manager, Notifications, TaskHelper } from '@twilio/flex-ui';
 
 import ConferenceService from '../../utils/ConferenceService';
 import { addConnectingParticipant } from '../states/ConferenceSlice';
+import { ConferenceNotification } from '../notifications/Conference';
 
 export const registerStartExternalWarmTransfer = async () => {
   Actions.registerAction(
@@ -46,7 +47,11 @@ export const registerStartExternalWarmTransfer = async () => {
             phoneNumber,
           }),
         );
-      } catch (error) {
+      } catch (error: any) {
+        if (error.twilioErrorCode === 13223)
+          Notifications.showNotification(ConferenceNotification.ExternalWarmTransferInvalidPhoneNumber, {
+            message: error.message,
+          });
         console.error('Error adding conference participant:', error);
       }
     },

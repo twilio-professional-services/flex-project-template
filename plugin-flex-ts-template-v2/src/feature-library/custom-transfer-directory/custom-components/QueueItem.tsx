@@ -45,7 +45,7 @@ export const QueueItem = (props: QueueItemProps) => {
 
   return (
     <Flex
-      element="TRANSFER_DIR_QUEUE_HORIZONTAL_ROW_CONTAINER"
+      element="TRANSFER_DIR_COMMON_HORIZONTAL_ROW_CONTAINER"
       vertical={false}
       vAlignContent="center"
       key={`queue-item-container-${queue.sid}`}
