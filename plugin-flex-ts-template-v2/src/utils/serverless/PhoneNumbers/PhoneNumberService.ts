@@ -41,7 +41,7 @@ class PhoneNumberService extends ApiService {
 
   private STORAGE_KEY_FLEX_PHONE_NUMBERS = `FLEX_PHONE_NUMBERS_${this.flex_service_instance_sid}`;
 
-  private STORAGE_KEY_FLEX_TRANSFER_NUMBERS = `FLEX_TRANSFER_NUMBER`;
+  private STORAGE_KEY_VALIDATED_NUMBERS = `FLEX_VALIDATED_NUMBERS`;
 
   private EXPIRY = 86400000; // 1 day
 
@@ -91,7 +91,7 @@ class PhoneNumberService extends ApiService {
   };
 
   #getTransferNumberKey = (phoneNumber: string): string => {
-    return `${this.STORAGE_KEY_FLEX_TRANSFER_NUMBERS}_${phoneNumber}`;
+    return `${this.STORAGE_KEY_VALIDATED_NUMBERS}_${phoneNumber}`;
   };
 
   #validatePhoneNumber = async (phoneNumber: string): Promise<ValidatePhoneNumberResponse> => {
