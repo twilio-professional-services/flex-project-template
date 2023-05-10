@@ -1,12 +1,7 @@
 import { PasteCustomCSS } from '@twilio-paste/customization';
 
 export const pasteElementHook = {
-  CANNED_RESPONSES_MENU: {
-    maxHeight: '70vh',
-    height: '100%',
-    overflowY: 'scroll',
-  },
-  CANNED_RESPONSES_MENU_BUTTON: {
+  EMOJI_PICKER_BUTTON: {
     backgroundColor: 'transparent',
     borderRadius: 'borderRadiusCircle',
     padding: 'space30',

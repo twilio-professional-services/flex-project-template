@@ -192,6 +192,9 @@
           }
         }
       },
+      "emoji_picker": {
+        "enabled": true
+      },
       "attribute_viewer": {
         "enabled": true,
         "enabled_for_agents": false

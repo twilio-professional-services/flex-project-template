@@ -33,9 +33,12 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
     if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
       currentInput += ' ';
     }
+    currentInput += text;
     Actions.invokeAction('SetInputText', {
-      body: currentInput + text,
+      body: currentInput,
       conversationSid,
+      selectionStart: currentInput.length,
+      selectionEnd: currentInput.length,
     });
   };
 
@@ -59,8 +62,13 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
       {isLoading && <SkeletonLoader />}
       {Boolean(responseCategories) && !isLoading && (
         <>
-          <MenuButton {...menu} variant={'primary_icon'} disabled={TaskHelper.isInWrapupMode(task)}>
-            <ChatIcon decorative />
+          <MenuButton
+            {...menu}
+            variant="reset"
+            disabled={TaskHelper.isInWrapupMode(task)}
+            element="CANNED_RESPONSES_MENU_BUTTON"
+          >
+            <ChatIcon decorative title="Canned responses" />
           </MenuButton>
           <Menu {...menu} aria-label="canned-responses" element="CANNED_RESPONSES_MENU">
             {responseCategories?.categories.map((category: ResponseCategory) => (
