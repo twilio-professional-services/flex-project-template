@@ -34,7 +34,6 @@ jobs:
         working-directory: serverless-functions
         run: |
           npm install
-          npm run install-serverless-plugin
           TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy:$ENVIRONMENT
 
   deploy-schedule-manager:
