@@ -27,8 +27,6 @@ const {
   multi_participant: conversation_transfer_warm_transfer = false,
 } = getFeatureFlags()?.features?.conversation_transfer || {};
 
-const { enabled: hung_up_by_enabled = false } = getFeatureFlags()?.features?.hang_up_by || {};
-
 const { enabled: conference_enabled = false } = getFeatureFlags()?.features?.conference || {};
 
 const nativeXwtEnabled =
@@ -84,10 +82,6 @@ export const isExternalDirectoryEnabled = (): boolean => {
 
 export const getExternalDirectory = (): Array<ExternalDirectoryEntry> => {
   return directory;
-};
-
-export const isHungUpByFeatureEnabled = () => {
-  return hung_up_by_enabled;
 };
 
 export const isVoiceXWTEnabled = () => {
