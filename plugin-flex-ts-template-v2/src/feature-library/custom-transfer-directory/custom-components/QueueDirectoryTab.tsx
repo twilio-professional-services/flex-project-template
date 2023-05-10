@@ -217,8 +217,8 @@ const QueueDirectoryTab = (props: OwnProps) => {
 
   const filterQueuesDebounce = debounce(filterQueues, 500, { maxWait: 1000 });
 
-  const onTransferQueueClick = (queue: IQueue) => async (transferOptions: TransferClickPayload) => {
-    await Actions.invokeAction('TransferTask', {
+  const onTransferQueueClick = (queue: IQueue) => (transferOptions: TransferClickPayload) => {
+    Actions.invokeAction('TransferTask', {
       task: props.task,
       targetSid: queue.sid,
       options: transferOptions,
