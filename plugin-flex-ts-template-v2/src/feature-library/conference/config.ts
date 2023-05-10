@@ -13,7 +13,7 @@ export const isFeatureEnabled = () => {
   return enabled;
 };
 
-export const isAddButtonEnabled = () => {
+export const isConferenceEnabledWithoutNativeXWT = () => {
   return enabled && !nativeXwtEnabled;
 };
 

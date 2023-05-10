@@ -46,9 +46,15 @@ exports.coldTransfer = async function coldTransfer(parameters) {
   try {
     const client = context.getTwilioClient();
 
-    await client.calls(callSid).update({
-      twiml: `<Response><Dial>${to}</Dial></Response>`,
-    });
+    if (to.startsWith('sip')) {
+      await client.calls(callSid).update({
+        twiml: `<Response><Dial><Sip>${to}</Sip></Dial></Response>`,
+      });
+    } else {
+      await client.calls(callSid).update({
+        twiml: `<Response><Dial>${to}</Dial></Response>`,
+      });
+    }
 
     return { success: true, status: 200 };
   } catch (error) {

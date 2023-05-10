@@ -5,7 +5,7 @@ import ParticipantActionsButtons from '../../custom-components/ParticipantAction
 import ParticipantName from '../../custom-components/ParticipantName';
 import ParticipantStatus from '../../custom-components/ParticipantStatus';
 import ParticipantStatusContainer from '../../custom-components/ParticipantStatusContainer';
-import { isAddButtonEnabled } from '../../config';
+import { isConferenceEnabledWithoutNativeXWT } from '../../config';
 import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.ParticipantCanvas;
@@ -13,7 +13,7 @@ export const componentHook = function addConferenceToParticipantCanvas(flex: typ
   const isUnknownParticipant = (props: any) => props.participant.participantType === 'unknown';
   const replaceButtons = (props: any) => {
     // if the add button is disabled, only the customer participant needs replacement buttons
-    if (!isAddButtonEnabled() && props.participant.participantType !== 'customer') return false;
+    if (!isConferenceEnabledWithoutNativeXWT() && props.participant.participantType !== 'customer') return false;
 
     return props.participant.participantType !== 'transfer';
   };
@@ -30,7 +30,7 @@ export const componentHook = function addConferenceToParticipantCanvas(flex: typ
     if: replaceButtons,
   });
 
-  if (!isAddButtonEnabled()) return;
+  if (!isConferenceEnabledWithoutNativeXWT()) return;
   // Everything below here is not relevant without the add button enabled
 
   flex.ParticipantCanvas.Content.remove('name', { if: isUnknownParticipant });

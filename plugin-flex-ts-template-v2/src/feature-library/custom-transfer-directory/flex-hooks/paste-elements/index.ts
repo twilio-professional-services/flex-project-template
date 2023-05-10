@@ -27,7 +27,7 @@ export const pasteElementHook = {
     width: '100%',
   },
   TRANSFER_DIR_COMMON_TOOLTIP: {
-    zIndex: 101,
+    zIndex: 100,
   },
   TRANSFER_DIR_COMMON_ROW_ICON: {
     marginLeft: 'space30',
@@ -49,7 +49,7 @@ export const pasteElementHook = {
   TRANSFER_DIR_COMMON_ROW_BUTTONGROUP: {
     display: 'none',
   },
-  TRANSFER_DIR_QUEUE_HORIZONTAL_ROW_CONTAINER: {
+  TRANSFER_DIR_COMMON_HORIZONTAL_ROW_CONTAINER: {
     paddingLeft: 'space30',
     paddingRight: 'space30',
     minHeight: '40px',

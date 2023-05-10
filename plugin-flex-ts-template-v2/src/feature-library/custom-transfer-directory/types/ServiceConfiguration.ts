@@ -9,4 +9,16 @@ export default interface CustomTransferDirectoryConfig {
     enforce_global_exclude_filter: boolean;
     global_exclude_filter: string;
   };
+  external_directory: {
+    enabled: boolean;
+    skipPhoneNumberValidation: boolean;
+    directory: Array<ExternalDirectoryEntry>;
+  };
+}
+
+export interface ExternalDirectoryEntry {
+  cold_transfer_enabled: boolean;
+  warm_transfer_enabled: boolean;
+  label: string;
+  number: string;
 }
