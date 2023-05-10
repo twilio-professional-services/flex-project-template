@@ -28,7 +28,6 @@
   "devDependencies": {
     "@types/lodash": "4.14.182",
     "axios": "0.27.2",
-    "copyfiles": "2.4.1",
     "eslint": "^8.37.0",
     "eslint-config-twilio": "^2.0.0",
     "twilio-run": "3.4.2",
