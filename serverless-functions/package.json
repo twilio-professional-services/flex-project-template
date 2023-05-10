@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@twilio-labs/serverless-runtime-types": "^1.1",
+    "@twilio/runtime-handler": "1.3.0",
     "lodash": "^4.17.21",
     "randomstring": "^1.2.2",
     "twilio": "^3.82.0",
