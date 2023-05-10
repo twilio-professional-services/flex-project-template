@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Actions, ITask, withTaskContext, useFlexSelector } from '@twilio/flex-ui';
+import { Actions, ITask, withTaskContext, useFlexSelector, Manager } from '@twilio/flex-ui';
 import { useUID } from '@twilio-paste/core/uid-library';
 import { Box } from '@twilio-paste/core/box';
 import { Button } from '@twilio-paste/core/button';
@@ -19,6 +19,7 @@ const ConferenceDialog = (props: OwnProps) => {
   const [hasError, setHasError] = useState(false);
 
   const componentViewStates = useFlexSelector((state: AppState) => state.flex.view.componentViewStates);
+  const workerAttrs = useFlexSelector((state: AppState) => state.flex.worker.attributes);
 
   const conferenceDialogState = componentViewStates && componentViewStates.ConferenceDialog;
   const isOpen = (conferenceDialogState && conferenceDialogState.isOpen) || false;
@@ -55,7 +56,10 @@ const ConferenceDialog = (props: OwnProps) => {
   };
 
   const addConferenceParticipant = async () => {
-    await Actions.invokeAction('StartExternalWarmTransfer', { task: props.task, phoneNumber: conferenceTo });
+    const defaultFromNumber = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
+    const callerId = workerAttrs.phone ? workerAttrs.phone : defaultFromNumber;
+
+    await Actions.invokeAction('StartExternalWarmTransfer', { task: props.task, phoneNumber: conferenceTo, callerId });
 
     setConferenceTo('');
   };

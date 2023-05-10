@@ -1,5 +1,5 @@
 import { Flex, Alert } from '@twilio-paste/core';
-import { withTaskContext, ITask, Actions } from '@twilio/flex-ui';
+import { withTaskContext, ITask, Actions, Manager, useFlexSelector } from '@twilio/flex-ui';
 import { useState, useRef, useEffect } from 'react';
 import { debounce } from 'lodash';
 
@@ -7,6 +7,7 @@ import { SearchBox } from './CommonDirectoryComponents';
 import { getExternalDirectory } from '../config';
 import { ExternalDirectoryEntry } from '../types/ServiceConfiguration';
 import { ExternalItem } from './ExternalItem';
+import AppState from '../../../types/manager/AppState';
 
 export interface TransferClickPayload {
   mode: 'WARM' | 'COLD';
@@ -19,6 +20,8 @@ export interface OwnProps {
 const ExternalDirectoryTab = (props: OwnProps) => {
   const [directory] = useState(getExternalDirectory() as Array<ExternalDirectoryEntry>);
   const [filteredDirectory, setFilteredDirectory] = useState([] as Array<ExternalDirectoryEntry>);
+
+  const workerAttrs = useFlexSelector((state: AppState) => state.flex.worker.attributes);
 
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -46,8 +49,15 @@ const ExternalDirectoryTab = (props: OwnProps) => {
   const filterDirectoryDebounce = debounce(filterExternalDirectory, 500, { maxWait: 1000 });
 
   const onTransferEntryClick = (entry: ExternalDirectoryEntry) => async (transferOptions: TransferClickPayload) => {
+    const defaultFromNumber = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
+    const callerId = workerAttrs.phone ? workerAttrs.phone : defaultFromNumber;
+
     if (transferOptions.mode === 'WARM')
-      await Actions.invokeAction('StartExternalWarmTransfer', { task: props.task, phoneNumber: entry.number });
+      await Actions.invokeAction('StartExternalWarmTransfer', {
+        task: props.task,
+        phoneNumber: entry.number,
+        callerId,
+      });
     else if (transferOptions.mode === 'COLD')
       await Actions.invokeAction('StartExternalColdTransfer', { task: props.task, phoneNumber: entry.number });
 

@@ -7,9 +7,9 @@ import { ConferenceNotification } from '../notifications/Conference';
 export const registerStartExternalWarmTransfer = async () => {
   Actions.registerAction(
     'StartExternalWarmTransfer',
-    async (payload: { task?: ITask; sid?: string; phoneNumber: string }) => {
+    async (payload: { task?: ITask; sid?: string; phoneNumber: string; callerId: string }) => {
       // eslint-disable-next-line prefer-const
-      let { task, sid, phoneNumber } = payload;
+      let { task, sid, phoneNumber, callerId } = payload;
       if (!task) {
         task = TaskHelper.getTaskByTaskSid(sid || '');
       }
@@ -25,20 +25,11 @@ export const registerStartExternalWarmTransfer = async () => {
         mainConferenceSid = task.conference.conferenceSid;
       }
 
-      const workerFromNumber = Manager.getInstance().store.getState().flex.worker.attributes.phone;
-
-      let from;
-      if (workerFromNumber) {
-        from = workerFromNumber;
-      } else {
-        from = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
-      }
-
       // Adding entered number to the conference
       console.log(`Adding ${phoneNumber} to conference`);
       let participantCallSid;
       try {
-        participantCallSid = await ConferenceService.addParticipant(mainConferenceSid, from, phoneNumber);
+        participantCallSid = await ConferenceService.addParticipant(mainConferenceSid, callerId, phoneNumber);
 
         Manager.getInstance().store.dispatch(
           addConnectingParticipant({
