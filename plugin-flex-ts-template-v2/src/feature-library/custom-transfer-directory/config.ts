@@ -88,6 +88,6 @@ export const isVoiceXWTEnabled = () => {
   return conference_enabled || nativeXwtEnabled;
 };
 
-export const shouldSkipPhoneNumberValidatin = () => {
+export const shouldSkipPhoneNumberValidation = () => {
   return skipPhoneNumberValidation;
 };

@@ -1,6 +1,6 @@
 import { Actions, ITask, Notifications, TaskHelper } from '@twilio/flex-ui';
 
-import { shouldSkipPhoneNumberValidatin } from '../../config';
+import { shouldSkipPhoneNumberValidation } from '../../config';
 import PhoneNumberService from '../../../../utils/serverless/PhoneNumbers/PhoneNumberService';
 import CustomTransferDirectoryService from '../../utils/CustomTransferDirectoryService';
 import { CustomTransferDirectoryNotification } from '../notifications/CustomTransferDirectory';
@@ -20,7 +20,7 @@ export const registerStartExternalColdTransfer = async () => {
         return;
       }
 
-      if (!shouldSkipPhoneNumberValidatin()) {
+      if (!shouldSkipPhoneNumberValidation()) {
         const validationCheck = await PhoneNumberService.validatePhoneNumber(phoneNumber);
 
         if (!validationCheck.success) {
