@@ -39,7 +39,14 @@ export const registerStartExternalColdTransfer = async () => {
         }
       }
 
-      CustomTransferDirectoryService.startColdTransfer(task.attributes.call_sid, phoneNumber);
+      try {
+        await CustomTransferDirectoryService.startColdTransfer(task.attributes.call_sid, phoneNumber);
+      } catch (error: any) {
+        console.error('Error executing startColdTransfer', error);
+        Notifications.showNotification(CustomTransferDirectoryNotification.ErrorExecutingColdTransfer, {
+          message: error.message,
+        });
+      }
     },
   );
 };

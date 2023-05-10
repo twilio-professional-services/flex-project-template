@@ -4,6 +4,7 @@ export enum StringTemplates {
   XWTFeatureDependencyMissing = 'PSXWTFeatureDependencyMissing',
   PhoneNumberFailedValidationCheckRequest = 'PSPhoneNumberFailedValidationCheckRequest',
   PhoneNumberFailedValidationCheckWithErrors = 'PSPhoneNumberFailedValidationCheckWithErrors',
+  ErrorExecutingColdTransfer = 'PSErrorExecutingColdTransfer',
 }
 
 export const stringHook = () => ({
@@ -15,4 +16,5 @@ export const stringHook = () => ({
     "Failed to successfully make validation check request for phone number '{{phoneNumber}}'",
   [StringTemplates.PhoneNumberFailedValidationCheckWithErrors]:
     "The phone number '{{phoneNumber}}' failed validation check with the following errors: {{errors}}",
+  [StringTemplates.ErrorExecutingColdTransfer]: 'Error attempting to perform cold transfer, {{message}}',
 });

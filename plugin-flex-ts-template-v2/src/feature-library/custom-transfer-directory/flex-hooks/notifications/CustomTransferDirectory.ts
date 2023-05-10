@@ -8,6 +8,7 @@ export enum CustomTransferDirectoryNotification {
   XWTFeatureDependencyMissing = 'XWTFeatureDependencyMissing',
   PhoneNumberFailedValidationCheckRequest = 'PhoneNumberFailedValidationCheckRequest',
   PhoneNumberFailedValidationCheckWithErrors = 'PhoneNumberFailedValidationCheckWithErrors',
+  ErrorExecutingColdTransfer = 'ErrorExecutingColdTransfer',
 }
 
 export const notificationHook = (flex: typeof Flex, _manager: Flex.Manager) => [
@@ -39,6 +40,12 @@ export const notificationHook = (flex: typeof Flex, _manager: Flex.Manager) => [
     id: CustomTransferDirectoryNotification.PhoneNumberFailedValidationCheckWithErrors,
     timeout: 5000,
     content: StringTemplates.PhoneNumberFailedValidationCheckWithErrors,
+    type: flex.NotificationType.error,
+  },
+  {
+    id: CustomTransferDirectoryNotification.ErrorExecutingColdTransfer,
+    timeout: 5000,
+    content: StringTemplates.ErrorExecutingColdTransfer,
     type: flex.NotificationType.error,
   },
 ];
