@@ -53,13 +53,13 @@ const ExternalDirectoryTab = (props: OwnProps) => {
     const callerId = workerAttrs.phone ? workerAttrs.phone : defaultFromNumber;
 
     if (transferOptions.mode === 'WARM')
-      await Actions.invokeAction('StartExternalWarmTransfer', {
+      Actions.invokeAction('StartExternalWarmTransfer', {
         task: props.task,
         phoneNumber: entry.number,
         callerId,
       });
     else if (transferOptions.mode === 'COLD')
-      await Actions.invokeAction('StartExternalColdTransfer', { task: props.task, phoneNumber: entry.number });
+      Actions.invokeAction('StartExternalColdTransfer', { task: props.task, phoneNumber: entry.number });
 
     Actions.invokeAction('HideDirectory');
   };
