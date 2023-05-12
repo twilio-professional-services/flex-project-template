@@ -50,7 +50,11 @@ const ExternalDirectoryTab = (props: OwnProps) => {
 
   const onTransferEntryClick = (entry: ExternalDirectoryEntry) => async (transferOptions: TransferClickPayload) => {
     const defaultFromNumber = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
-    const callerId = workerAttrs.phone ? workerAttrs.phone : defaultFromNumber;
+    const callerId = workerAttrs.phone
+      ? workerAttrs.phone
+      : workerAttrs.selectedCallerId
+      ? workerAttrs.selectedCallerId
+      : defaultFromNumber;
 
     if (transferOptions.mode === 'WARM')
       Actions.invokeAction('StartExternalWarmTransfer', {
@@ -58,8 +62,24 @@ const ExternalDirectoryTab = (props: OwnProps) => {
         phoneNumber: entry.number,
         callerId,
       });
-    else if (transferOptions.mode === 'COLD')
-      Actions.invokeAction('StartExternalColdTransfer', { task: props.task, phoneNumber: entry.number });
+    else if (transferOptions.mode === 'COLD') {
+      let from;
+      if (
+        (props.task?.attributes?.caller && props.task?.attributes?.caller.startsWith('sip')) ||
+        (props.task?.attributes?.called && props.task?.attributes?.called.startsWith('sip'))
+      ) {
+        // If the call we're transferring is a SIP call, override the caller ID
+        from = callerId;
+      } else {
+        // Otherwise, do not specify caller ID (uses caller ANI)
+      }
+
+      Actions.invokeAction('StartExternalColdTransfer', {
+        task: props.task,
+        phoneNumber: entry.number,
+        callerId: from,
+      });
+    }
 
     Actions.invokeAction('HideDirectory');
   };

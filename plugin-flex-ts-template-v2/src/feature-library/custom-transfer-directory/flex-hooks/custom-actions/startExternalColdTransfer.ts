@@ -8,9 +8,9 @@ import { CustomTransferDirectoryNotification } from '../notifications/CustomTran
 export const registerStartExternalColdTransfer = async () => {
   Actions.registerAction(
     'StartExternalColdTransfer',
-    async (payload: { task?: ITask; sid?: string; phoneNumber: string }) => {
+    async (payload: { task?: ITask; sid?: string; phoneNumber: string; callerId: string }) => {
       // eslint-disable-next-line prefer-const
-      let { task, sid, phoneNumber } = payload;
+      let { task, sid, phoneNumber, callerId } = payload;
       if (!task) {
         task = TaskHelper.getTaskByTaskSid(sid || '');
       }
@@ -40,7 +40,7 @@ export const registerStartExternalColdTransfer = async () => {
       }
 
       try {
-        await CustomTransferDirectoryService.startColdTransfer(task.attributes.call_sid, phoneNumber);
+        await CustomTransferDirectoryService.startColdTransfer(task.attributes.call_sid, phoneNumber, callerId);
       } catch (error: any) {
         console.error('Error executing startColdTransfer', error);
         Notifications.showNotification(CustomTransferDirectoryNotification.ErrorExecutingColdTransfer, {
