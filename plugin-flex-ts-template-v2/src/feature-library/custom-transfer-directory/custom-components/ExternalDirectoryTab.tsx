@@ -69,9 +69,8 @@ const ExternalDirectoryTab = (props: OwnProps) => {
         (props.task?.attributes?.called && props.task?.attributes?.called.startsWith('sip'))
       ) {
         // If the call we're transferring is a SIP call, override the caller ID
-        from = callerId;
-      } else {
         // Otherwise, do not specify caller ID (uses caller ANI)
+        from = callerId;
       }
 
       Actions.invokeAction('StartExternalColdTransfer', {
