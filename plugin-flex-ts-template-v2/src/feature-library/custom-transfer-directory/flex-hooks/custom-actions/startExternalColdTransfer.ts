@@ -8,7 +8,7 @@ import { CustomTransferDirectoryNotification } from '../notifications/CustomTran
 export const registerStartExternalColdTransfer = async () => {
   Actions.registerAction(
     'StartExternalColdTransfer',
-    async (payload: { task?: ITask; sid?: string; phoneNumber: string; callerId: string }) => {
+    async (payload: { task?: ITask; sid?: string; phoneNumber: string; callerId?: string }) => {
       // eslint-disable-next-line prefer-const
       let { task, sid, phoneNumber, callerId } = payload;
       if (!task) {

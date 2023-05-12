@@ -6,12 +6,12 @@ export interface StartColdTransferResponse {
 }
 
 class CustomTransferDirectoryService extends ApiService {
-  async startColdTransfer(callSid: string, to: string, from: string): Promise<boolean> {
+  async startColdTransfer(callSid: string, to: string, from?: string): Promise<boolean> {
     const { success } = await this.#startColdTransfer(callSid, to, from);
     return success;
   }
 
-  #startColdTransfer = async (callSid: string, to: string, from: string): Promise<any> => {
+  #startColdTransfer = async (callSid: string, to: string, from?: string): Promise<any> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(this.manager.store.getState().flex.session.ssoTokenPayload.token),
       callSid: encodeURIComponent(callSid),
