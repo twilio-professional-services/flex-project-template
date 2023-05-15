@@ -8,6 +8,8 @@ const {
   include_silence = false,
 } = (getFeatureFlags()?.features?.pause_recording as PauseRecordingConfig) || {};
 
+const { enabled: dualChannelEnabled = false, channel } = getFeatureFlags()?.features?.dual_channel_recording || {};
+
 export const isFeatureEnabled = () => {
   return enabled;
 };
@@ -22,4 +24,12 @@ export const isPermanentIndicatorEnabled = () => {
 
 export const isIncludeSilenceEnabled = () => {
   return enabled && include_silence;
+};
+
+export const isDualChannelEnabled = () => {
+  return dualChannelEnabled;
+};
+
+export const getChannelToRecord = () => {
+  return channel;
 };

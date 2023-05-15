@@ -2,6 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 import HangUpByService from '../utils/HangUpByService';
+import { HangUpBy } from '../enums/hangUpBy';
 
 const instanceSid = Flex.Manager.getInstance().serviceConfiguration.flex_service_instance_sid;
 const STORAGE_KEY = `hang_up_by_${instanceSid}`;
@@ -139,7 +140,7 @@ export const hasCustomerJoined = async (task: Flex.ITask) => {
   return false;
 };
 
-export const setHangUpBy = (reservationSid: string, value: string) => {
+export const setHangUpBy = (reservationSid: string, value: HangUpBy) => {
   const existingValue = getHangUpBy();
 
   const newValue = {

@@ -11,7 +11,14 @@ import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterSe
 */
 
 export const queueWorkerDataFilter = async () => {
-  const queueOptions = await TaskRouterService.getQueues();
+  let queueOptions;
+
+  try {
+    queueOptions = await TaskRouterService.getQueues();
+  } catch (error) {
+    console.error('teams-view-filters: Unable to get queues', error);
+  }
+
   const options = queueOptions
     ? queueOptions.map((queue: any) => ({
         value: queue.sid,

@@ -46,7 +46,14 @@ const _getAgentsWorkerSidArray = (participants: any) => {
 };
 
 const _queueNameFromSid = async (transferTargetSid: string) => {
-  const queues = await TaskService.getQueues();
+  let queues;
+
+  try {
+    queues = await TaskService.getQueues();
+  } catch (error) {
+    console.error('conversation-transfer: Unable to get queues', error);
+  }
+
   const queueResult = queues
     ? queues.find((queue) => {
         return queue.sid === transferTargetSid;

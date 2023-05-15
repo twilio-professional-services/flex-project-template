@@ -1,4 +1,7 @@
+import { Manager } from '@twilio/flex-ui';
+
 import { getFeatureFlags } from '../../utils/configuration';
+import { ExternalDirectoryEntry } from './types/ServiceConfiguration';
 
 const {
   enabled = false,
@@ -11,6 +14,11 @@ const {
     enforce_global_exclude_filter = false,
     global_exclude_filter = '',
   },
+  external_directory: {
+    enabled: externalDirectoryEnabled = false,
+    skipPhoneNumberValidation = false,
+    directory = [] as Array<ExternalDirectoryEntry>,
+  },
 } = getFeatureFlags()?.features?.custom_transfer_directory || {};
 
 const {
@@ -18,6 +26,11 @@ const {
   cold_transfer: conversation_transfer_cold_transfer = false,
   multi_participant: conversation_transfer_warm_transfer = false,
 } = getFeatureFlags()?.features?.conversation_transfer || {};
+
+const { enabled: conference_enabled = false } = getFeatureFlags()?.features?.conference || {};
+
+const nativeXwtEnabled =
+  Manager.getInstance().store.getState().flex.featureFlags.features['external-warm-transfers']?.enabled === true;
 
 export const isFeatureEnabled = (): boolean => {
   return enabled;
@@ -61,4 +74,20 @@ export const isCbmWarmTransferEnabled = (): boolean => {
 
 export const usePasteSearchIcon = (): boolean => {
   return use_paste_search_icon;
+};
+
+export const isExternalDirectoryEnabled = (): boolean => {
+  return isFeatureEnabled() && externalDirectoryEnabled;
+};
+
+export const getExternalDirectory = (): Array<ExternalDirectoryEntry> => {
+  return directory;
+};
+
+export const isVoiceXWTEnabled = () => {
+  return conference_enabled || nativeXwtEnabled;
+};
+
+export const shouldSkipPhoneNumberValidation = () => {
+  return skipPhoneNumberValidation;
 };

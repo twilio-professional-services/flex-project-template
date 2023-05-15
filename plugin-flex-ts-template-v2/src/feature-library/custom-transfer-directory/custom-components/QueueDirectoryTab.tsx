@@ -11,6 +11,7 @@ import {
 } from '@twilio/flex-ui';
 import { useEffect, useState, useRef } from 'react';
 import { debounce } from 'lodash';
+import { SyncMap } from 'twilio-sync';
 
 import { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
 import { SearchBox } from './CommonDirectoryComponents';
@@ -73,6 +74,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
 
   const transferQueues = useRef([] as Array<TransferQueue>);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const queueMap = useRef(null as SyncMap | null);
 
   const { workspaceClient, insightsClient, workerClient } = Manager.getInstance();
 
@@ -119,22 +121,22 @@ const QueueDirectoryTab = (props: OwnProps) => {
     }
 
     // get real time stats map
-    const queueMap = await insightsClient.map({
+    queueMap.current = await insightsClient.map({
       id: 'realtime_statistics_v1',
       mode: 'open_existing',
     });
 
-    if (!queueMap) {
+    if (!queueMap.current) {
       Notifications.showNotification(CustomTransferDirectoryNotification.FailedLoadingInsightsData);
 
       return;
     }
 
     // make sure all queues are loaded
-    const insightQueues = await getAllSyncMapItems(queueMap);
+    const insightQueues = await getAllSyncMapItems(queueMap.current);
 
     // update the queue item
-    queueMap.on('itemUpdated', (updatedItem) => {
+    queueMap.current.on('itemUpdated', (updatedItem) => {
       const {
         item: { key, data },
       } = updatedItem;
@@ -148,12 +150,12 @@ const QueueDirectoryTab = (props: OwnProps) => {
     });
 
     // if a queue is added trigger a reload
-    queueMap.on('itemAdded', () => {
+    queueMap.current.on('itemAdded', () => {
       fetchSDKTaskQueues();
     });
 
     // if a queue is removed trigger a reload
-    queueMap.on('itemRemoved', () => {
+    queueMap.current.on('itemRemoved', () => {
       fetchSDKTaskQueues();
     });
 
@@ -231,6 +233,12 @@ const QueueDirectoryTab = (props: OwnProps) => {
 
     // fetch the queues from the insights client on initial render
     fetchInsightsQueueData().catch(console.error);
+
+    return () => {
+      if (queueMap.current) {
+        queueMap.current.close();
+      }
+    };
   }, []);
 
   // hook when fetchedQueues, insightsQueues are updated

@@ -1,7 +1,6 @@
 # custom-transfer-directory
 This feature enables the replacement of the queue transfer directory enabling the following behavior
 
-- queue
   - render different transfer icons for chat channel
   - enable the use of real time data to 
       - present queue insights such as # of tasks or # agents available
@@ -10,13 +9,24 @@ This feature enables the replacement of the queue transfer directory enabling th
   - provide an improved starting point for augmenting queue transfer list with custom data (imagine the need to filter queues based on skills required to transfer to those queues)
   - provide the ability to enforce queue filters by worker
   - provide ability to enforce global queue filter to filter out system queues.
+- external
+
+It also enables the addition of an external directory, enabling the following behavior
+
+  - present a list of external transfer numbers 
+    - each transfer number can independently be configured for warm or cold transfers
+    - validtion checks performed on transfer numbers with notifications of any validation failures
 
 
 # flex-user-experience
 
-Example call transfer
+Example queue transfer
 
 ![alt text](screenshots/flex-user-experience-queue-transfer.gif)
+
+Example external transfer
+
+![alt text](screenshots/flex-user-experience-external-transfer.gif)
 
 
 # setup and dependencies
@@ -34,9 +44,21 @@ Enable the feature in the flex-config asset for your environment.
     "enforce_queue_filter_from_worker_object": true, // when true, if `worker.attributes.enforcedQueueFilter` is present, it will be enforced, otherwise ignored
     "enforce_global_exclude_filter": false, // when true global_exclude_filter will be applied to exclude any queues matching the filter
     "global_exclude_filter": "SYSTEM" // EXAMPLE to exclude queues containing the word SYSTEM
+  },
+  "external_directory": {
+    "enabled": true, // enable the external directory tab for voice calls
+    "skipPhoneNumberValidation": false, // skip phone number validation 
+    "directory": [{  // Array of directory entry
+      "cold_transfer_enabled": true,  // whether cold transfer button shows for entry
+      "warm_transfer_enabled": true,  // whether warm transfer button shows for entry (see further dependencies)
+      "label": "Sample Entry", // label displayed on screen
+      "number": "+10000000000" // number used for entry
+    }] 
   }
 }
 ```
+
+NOTE: warm transfer for external directory entries only takes effect if either this plugins 'conference' feature is also enabled OR Flex's native warm transfer feature is enabled (currently in beta).  If neither of these are enabled then a notification will be posted at login informing the user that warm transfers will not be available.
 
 ``` javascript
 worker.attributes : {

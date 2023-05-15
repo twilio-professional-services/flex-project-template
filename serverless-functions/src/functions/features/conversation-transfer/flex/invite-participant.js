@@ -1,42 +1,38 @@
-const TokenValidator = require('twilio-flex-token-validator').functionValidator;
-
-const FunctionHelper = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
 const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
 
-const getRequiredParameters = () => {
-  return [
-    {
-      key: 'taskSid',
-      purpose: 'task sid of transferring task',
-    },
-    {
-      key: 'conversationId',
-      purpose: 'for linking transfer task in insights (CHxxx or WTxxx sid)',
-    },
-    {
-      key: 'jsonAttributes',
-      purpose: 'string representation of transferring task',
-    },
-    {
-      key: 'transferTargetSid',
-      purpose: 'worker or queue sid',
-    },
-    {
-      key: 'workersToIgnore',
-      purpose:
-        "json object with key indicating task attribute to set as an array of workers to ignore. eg {'workersToIgnore':['Alice','Bob']}. This gets copied to task attributes.",
-    },
-    {
-      key: 'flexInteractionSid',
-      purpose: 'KDxxx sid for inteactions API',
-    },
-    {
-      key: 'flexInteractionChannelSid',
-      purpose: 'UOxxx sid for interactions API',
-    },
-  ];
-};
+const requiredParameters = [
+  {
+    key: 'taskSid',
+    purpose: 'task sid of transferring task',
+  },
+  {
+    key: 'conversationId',
+    purpose: 'for linking transfer task in insights (CHxxx or WTxxx sid)',
+  },
+  {
+    key: 'jsonAttributes',
+    purpose: 'string representation of transferring task',
+  },
+  {
+    key: 'transferTargetSid',
+    purpose: 'worker or queue sid',
+  },
+  {
+    key: 'workersToIgnore',
+    purpose:
+      "json object with key indicating task attribute to set as an array of workers to ignore. eg {'workersToIgnore':['Alice','Bob']}. This gets copied to task attributes.",
+  },
+  {
+    key: 'flexInteractionSid',
+    purpose: 'KDxxx sid for inteactions API',
+  },
+  {
+    key: 'flexInteractionChannelSid',
+    purpose: 'UOxxx sid for interactions API',
+  },
+];
 
 const getRoutingParams = (
   context,
@@ -69,34 +65,13 @@ const getRoutingParams = (
   };
 };
 
-exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, event, callback) {
-  const response = new Twilio.Response();
-
-  const requiredParameters = getRequiredParameters();
-  const parameterError = FunctionHelper.validateParameters(context.PATH, event, requiredParameters);
-
-  response.appendHeader('Access-Control-Allow-Origin', '*');
-  response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST');
-  response.appendHeader('Content-Type', 'application/json');
-  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (Object.keys(event).length === 0) {
-    console.log('Empty event object, likely an OPTIONS request');
-    return callback(null, response);
-  }
-
+exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   if (!context.TWILIO_FLEX_WORKSPACE_SID || !context.TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID) {
     response.setStatusCode(400);
     response.setBody({
       data: null,
       message: 'TWILIO_FLEX_WORKSPACE_SID and TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID required enviroment variables',
     });
-    return callback(null, response);
-  }
-
-  if (parameterError) {
-    response.setStatusCode(400);
-    response.setBody({ data: null, message: parameterError });
     return callback(null, response);
   }
 
@@ -132,14 +107,13 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
 
     const {
       success,
-      status,
       message = '',
       participantInvite = null,
     } = await InteractionsOperations.participantCreateInvite(participantCreateInviteParams);
 
     // if this failed bail out so we don't remove the agent from the conversation and no one else joins
     if (!success) {
-      return sendErrorReply(callback, response, scriptName, status, message);
+      return handleError(message);
     }
 
     if (removeFlexInteractionParticipantSid) {
@@ -186,16 +160,6 @@ exports.handler = TokenValidator(async function chat_transfer_v2_cbm(context, ev
     });
     return callback(null, response);
   } catch (error) {
-    console.error(`Unexpected error occurred in ${scriptName}: ${error}`);
-    response.setStatusCode(500);
-    response.setBody({ success: false, message: error });
-    return callback(null, response);
+    return handleError(error);
   }
 });
-
-const sendErrorReply = (callback, response, scriptName, status, message) => {
-  console.error(`Unexpected error occurred in ${scriptName}: ${message}`);
-  response.setStatusCode(status);
-  response.setBody({ success: false, message });
-  return callback(null, response);
-};

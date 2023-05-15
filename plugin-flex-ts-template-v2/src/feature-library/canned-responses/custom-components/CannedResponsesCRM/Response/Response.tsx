@@ -27,6 +27,8 @@ const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
     Actions.invokeAction('SetInputText', {
       body: inputState,
       conversationSid,
+      selectionStart: inputState.length,
+      selectionEnd: inputState.length,
     });
   };
 
@@ -36,9 +38,12 @@ const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
     if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
       currentInput += ' ';
     }
+    currentInput += text;
     Actions.invokeAction('SetInputText', {
-      body: currentInput + text,
+      body: currentInput,
       conversationSid,
+      selectionStart: currentInput.length,
+      selectionEnd: currentInput.length,
     });
   };
 

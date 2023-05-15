@@ -77,12 +77,18 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
 
       // now find the queue for the replaced filter
       // and get the queue eligibility expression
+      let queue;
       const queueFiltersArray: Array<AppliedFilter> = [];
-      const fetchedQueues = await TaskRouterService.getQueues();
-      const queues = fetchedQueues ? fetchedQueues : [];
-      const queue = queues.find((queue) => {
-        return queue.friendlyName === queueEligibilityFilter?.values[0];
-      });
+
+      try {
+        const fetchedQueues = await TaskRouterService.getQueues();
+        const queues = fetchedQueues ? fetchedQueues : [];
+        queue = queues.find((queue) => {
+          return queue.friendlyName === queueEligibilityFilter?.values[0];
+        });
+      } catch (error) {
+        console.error('teams-view-filters: Unable to get queues', error);
+      }
 
       // if there is no queue found notify user
       if (!queue) {
