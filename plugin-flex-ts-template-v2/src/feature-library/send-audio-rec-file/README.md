@@ -5,6 +5,9 @@ This is a feature that enables agents on Flex to record, listen and send audio m
 # flex-user-experience
 The audio message feature provides a seamless user experience for agents on Flex. Agents can easily access the record panel feature by clicking on a button that enables them to record and listen the audio message. The feature is designed to work across chat channels, including WhatsApp and Web Chat, and admin can choose to enable or disable audio message sending feature based on their preferences.
 
+![sendAudioFeature](https://github.com/rickmachadotwilio/flex-project-template/assets/104230389/1631bfbe-930a-435f-9a78-769971818598)
+
+
 
 # setup and dependencies
 To use the audio message feature, you need to have access to the Twilio Flex platform. You also need to ensure that your Flex account is set up correctly, and you have the necessary permissions as agent or supervisor.
