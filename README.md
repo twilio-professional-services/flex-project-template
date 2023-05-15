@@ -124,13 +124,7 @@ npm install
 6. Run the serverless functions and plugin locally by running
 
 ```bash
-npm run start:local:v2
-```
-
-or if you have renamed your plugin (this does not currently work for windows)
-
-```bash
-npm run start:local
+npm start
 ```
 
 ### development notes
@@ -169,7 +163,7 @@ _~5 minutes_
    - If you intend to have multiple environments, you will need an API Key/Secret for each account. You'll use this in the next step
 4. In github, navigate to the repository you created in step 1, click the settings tab -> secrets -> actions -> Click the "New repository secret" button:
    - Add the following to select which plugin is released
-     - `PLUGIN_FOLDER` - this is typically `plugin-flex-ts-template-v2`
+     - `PLUGIN_FOLDER` - this is `plugin-flex-ts-template-v2` unless you are using the `rename-template` script
    - For each environment add the 3 env variables for that environment, for example, if its dev you would add
      - `TWILIO_ACCOUNT_SID_DEV` - the account sid you want to deploy to
      - `TWILIO_API_KEY_DEV` - the account key or key "sid" as its otherwise known
@@ -255,13 +249,13 @@ npm run rename-template <template-name>
 5. ensure the dependencies are updated - this will also generate appConfig.js
 
 ```bash
-npm run install
+npm install
 ```
 
 6. test everything works
 
 ```bash
-npm run start:local
+npm start
 ```
 
 7. Push your changes to your repository - this is your new baseline
