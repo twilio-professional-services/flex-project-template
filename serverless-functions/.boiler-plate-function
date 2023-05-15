@@ -1,20 +1,19 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()["common/helpers/function-helper"].path);
-const PhoneNumbers = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/phone-numbers"
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
 ].path);
+const PhoneNumbers = require(Runtime.getFunctions()['common/twilio-wrappers/phone-numbers'].path);
 
 const requiredParameters = [
-  { key: "requiredParamOneName", purpose: "parameter description" },
-  { key: "requiredParamTwoName", purpose: "parameter description" },
+  { key: 'requiredParamOneName', purpose: 'parameter description' },
+  { key: 'requiredParamTwoName', purpose: 'parameter description' },
 ];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-   
     // perform action: the following is an example of using a twilio-wrapper function
     // and extracting the standard response along with the desired phone numbers
     // object
-    
+
     /* 
     const result = await PhoneNumbers.listPhoneNumbers({
       context,
@@ -25,8 +24,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     response.setBody({ phoneNumbers, ...extractStandardResponse(result) });
     */
 
-    callback(null, response);
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });
