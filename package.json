@@ -11,12 +11,10 @@
     "remove-features": "node scripts/remove-features.js",
     "rename-template": "node scripts/rename-template.js",
     "start:serverless": "cd serverless-functions && twilio serverless:start --inspect=localhost --port=3001 --env .env",
-    "start:plugin:v1": "cd plugin-flex-ts-template-v1 && twilio flex:plugins:start --port=3000",
     "start:plugin:v2": "cd plugin-flex-ts-template-v2 && twilio flex:plugins:start --port=3000",
     "start:plugin": "node scripts/start-local.js",
-    "start:local:v1": "npm-run-all --parallel start:serverless start:plugin:v1",
     "start:local:v2": "npm-run-all --parallel start:serverless start:plugin:v2",
-    "start:local": "concurrently --kill-others --timings true \"npm:start:serverless\" \"npm:start:plugin\"",
+    "start:local": "npm-run-all --parallel start:serverless start:plugin",
     "lint": "eslint ./plugin-flex-ts-template-v2 ./serverless-functions ./serverless-schedule-manager",
     "lint:fix": "npm run lint -- --fix",
     "lint:report": "npm run lint -- --output-file eslint_report.json --format json"
@@ -32,7 +30,6 @@
   },
   "homepage": "https://github.com/twilio-professional-services/twilio-proserv-flex-project-template#readme",
   "devDependencies": {
-    "concurrently": "^7.5.0",
     "eslint": "^8.37.0",
     "json5": "^2.2.3",
     "npm-run-all": "4.1.5",

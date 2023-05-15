@@ -1,13 +1,8 @@
 var shell = require("shelljs");
 var fs = require("fs").promises;
 
-/* note this script is written exclusively for the v2 plugin 
-   as most work going forward is expected to be built on flex v2.x
-*/
-
-// defaulting to plugin v2 for just now
 var { getPaths } = require("./select-plugin");
-const { templateDirectory, featureDirectory, pluginSrc, pluginDir } = getPaths("v2");
+const { templateDirectory, featureDirectory, pluginSrc, pluginDir } = getPaths();
 
 var featureName;
 var featureClassName;
