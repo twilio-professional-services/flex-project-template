@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - '${{ secrets.PLUGIN_FOLDER }}/**'
+      - 'plugin-flex-ts-template-v2/**'
       - 'serverless-functions/**'
       - 'serverless-schedule-manager/**'
   # Enable running this workflow manually from the Actions tab
