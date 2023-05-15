@@ -64,13 +64,6 @@ const getRoutingParams = (
   };
 };
 
-const sendErrorReply = (callback, response, scriptName, status, message) => {
-  console.error(`Unexpected error occurred in ${scriptName}: ${message}`);
-  response.setStatusCode(status);
-  response.setBody({ success: false, message });
-  return callback(null, response);
-};
-
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   if (!context.TWILIO_FLEX_WORKSPACE_SID || !context.TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID) {
     response.setStatusCode(400);
@@ -111,14 +104,13 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     const {
       success,
-      status,
       message = '',
       participantInvite = null,
     } = await InteractionsOperations.participantCreateInvite(participantCreateInviteParams);
 
     // if this failed bail out so we don't remove the agent from the conversation and no one else joins
     if (!success) {
-      return sendErrorReply(callback, response, scriptName, status, message);
+      return handleError(message);
     }
 
     if (removeFlexInteractionParticipantSid)
