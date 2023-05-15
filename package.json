@@ -1,6 +1,6 @@
 {
   "name": "flex-project-template",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "This repository provides development teams with a starting point for flex projects or developing flex features.",
   "scripts": {
     "postinstall": "node scripts/setup-local-environment.js",
@@ -19,14 +19,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/twilio-professional-services/twilio-proserv-flex-project-template.git"
+    "url": "git+https://github.com/twilio-professional-services/flex-project-template.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/twilio-professional-services/twilio-proserv-flex-project-template/issues"
+    "url": "https://github.com/twilio-professional-services/flex-project-template/issues"
   },
-  "homepage": "https://github.com/twilio-professional-services/twilio-proserv-flex-project-template#readme",
+  "homepage": "https://github.com/twilio-professional-services/flex-project-template#readme",
   "devDependencies": {
     "eslint": "^8.37.0",
     "json5": "^2.2.3",

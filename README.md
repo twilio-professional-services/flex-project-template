@@ -440,6 +440,8 @@ convenience script that does the same as setup-local-environment except it won't
 
 # CHANGELOG
 
+- 1.0.6
+  - Removed plugin-flex-ts-template-v1 and all v1 references.
 - 1.0.5
   - Removed plugin versioning from repo, instead relying on automatic versioning by the Flex Plugins CLI.
 - 1.0.4
