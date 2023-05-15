@@ -130,10 +130,12 @@ exports.installNPMServerlessFunctions = function installNPMServerlessFunctions()
 }
 
 exports.installNPMServerlessSchmgrFunctions = function installNPMServerlessSchmgrFunctions() {
-  console.log("Installing npm dependencies for serverless schedule manager..");
-  shell.cd("./serverless-schedule-manager")
-  shell.exec("npm install", {silent:true});
-  shell.cd("..");
+  if (shell.test('-d', scheduleManagerServerlessDir)) {
+    console.log("Installing npm dependencies for serverless schedule manager..");
+    shell.cd(`./${scheduleManagerServerlessDir}`)
+    shell.exec("npm install", {silent:true});
+    shell.cd("..");
+  }
 }
 
 exports.installNPMFlexConfig = function installNPMFlexConfig() {
