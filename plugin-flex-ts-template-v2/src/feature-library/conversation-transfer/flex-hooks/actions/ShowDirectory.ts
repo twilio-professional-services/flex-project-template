@@ -5,7 +5,7 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.ShowDirectory;
-export const actionHook = function handleChatTransferShowDirectory(flex: typeof Flex, manager: Flex.Manager) {
+export const actionHook = function handleConvTransferShowDirectory(flex: typeof Flex, manager: Flex.Manager) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, (_payload: any, _abortFunction: any) => {
     let display1 = 'flex';
     let display2 = 'flex';

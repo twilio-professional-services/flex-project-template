@@ -23,12 +23,12 @@ const EmojiPicker = ({ conversationSid, disabledReason }: MesageInputProps) => {
   const [data, setData] = useState({});
 
   const inputState = Flex.useFlexSelector(
-    (state) => state.flex.chat.conversationInput[conversationSid ?? ''].inputText,
+    (state) => state.flex.chat.conversationInput[conversationSid ?? '']?.inputText,
   );
 
   const addEmoji = (selectedEmoji: string) => {
     // get the current input from state and append this emoji to it
-    let currentInput = inputState;
+    let currentInput = inputState ?? '';
 
     if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
       currentInput += ' ';

@@ -4,7 +4,7 @@ import { TransferActionPayload } from '../types/ActionPayloads';
 import { NotificationIds } from '../flex-hooks/notifications/TransferResult';
 import ChatTransferService, { buildInviteParticipantAPIPayload } from '../helpers/APIHelper';
 import { isColdTransferEnabled, isMultiParticipantEnabled } from '../config';
-import { addInviteToConversation, countOfOutstandingInvitesForConversation } from '../helpers/inviteTracker';
+import { countOfOutstandingInvitesForConversation } from '../helpers/inviteTracker';
 
 const handleChatTransferAction = async (payload: TransferActionPayload) => {
   const { task, targetSid } = payload;
@@ -35,13 +35,19 @@ const handleChatTransferAction = async (payload: TransferActionPayload) => {
     return;
   }
 
+  if ((transferChatAPIPayload.workersToIgnore as any).workerSidsInConversation.indexOf(targetSid) >= 0) {
+    Notifications.showNotification(NotificationIds.ChatTransferFailedAlreadyParticipating);
+    return;
+  }
+
   try {
-    const result = await ChatTransferService.sendTransferChatAPIRequest(transferChatAPIPayload);
+    await ChatTransferService.sendTransferChatAPIRequest(transferChatAPIPayload);
 
-    addInviteToConversation(task, result.invitesTaskSid, targetSid);
-
-    if (removeInvitingAgent) Notifications.showNotification(NotificationIds.ChatTransferTaskSuccess);
-    else Notifications.showNotification(NotificationIds.ChatParticipantInvited);
+    if (removeInvitingAgent) {
+      Notifications.showNotification(NotificationIds.ChatTransferTaskSuccess);
+    } else {
+      Notifications.showNotification(NotificationIds.ChatParticipantInvited);
+    }
   } catch (error) {
     console.error('transfer API request failed', error);
     Notifications.showNotification(NotificationIds.ChatTransferFailedGeneric);
