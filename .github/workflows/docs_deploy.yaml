@@ -35,6 +35,7 @@ jobs:
         run: |
           npm install
           npm run build
+          npm run transfer-assets
       - name: deploy docs site to assets
         working-directory: serverless-docs
         run: |
