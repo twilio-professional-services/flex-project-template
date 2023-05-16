@@ -57,11 +57,11 @@ class AudioRecorderPanel extends React.Component<Props> {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
       navigator.mediaDevices
         .getUserMedia({ audio: true })
-        .then((stream) => {
+        .then(() => {
           console.log('Permission granted');
           this.setState({ isBlocked: false });
         })
-        .catch((error) => {
+        .catch(() => {
           console.log('Permission denied');
           this.setState({ isBlocked: true });
         });
