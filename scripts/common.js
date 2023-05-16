@@ -1,7 +1,7 @@
 const shell = require("shelljs");
 const fs = require("fs");
 const JSON5 = require('json5');
-var { setPluginName, getPaths } = require("./select-plugin");
+var { getPaths } = require("./select-plugin");
 
 const serverlessDir = 'serverless-functions';
 const scheduleManagerServerlessDir = 'serverless-schedule-manager';
@@ -130,10 +130,12 @@ exports.installNPMServerlessFunctions = function installNPMServerlessFunctions()
 }
 
 exports.installNPMServerlessSchmgrFunctions = function installNPMServerlessSchmgrFunctions() {
-  console.log("Installing npm dependencies for serverless schedule manager..");
-  shell.cd("./serverless-schedule-manager")
-  shell.exec("npm install", {silent:true});
-  shell.cd("..");
+  if (shell.test('-d', scheduleManagerServerlessDir)) {
+    console.log("Installing npm dependencies for serverless schedule manager..");
+    shell.cd(`./${scheduleManagerServerlessDir}`)
+    shell.exec("npm install", {silent:true});
+    shell.cd("..");
+  }
 }
 
 exports.installNPMFlexConfig = function installNPMFlexConfig() {
@@ -144,17 +146,8 @@ exports.installNPMFlexConfig = function installNPMFlexConfig() {
 }
 
 exports.installNPMPlugin = function installNPMPlugin() {
-  var { pluginDir } = getPaths("v1");
-  var temp = pluginDir;
-  if( pluginDir && pluginDir != "" ) {
-    console.log(`Installing npm dependencies for ${pluginDir}...`);
-    shell.cd(`./${pluginDir}`)
-    shell.exec(`npm install`, {silent:true});
-    shell.cd("..")
-  }
-
-  var { pluginDir } = getPaths("v2");
-  if ( pluginDir && temp != pluginDir && pluginDir != "" ) {
+  var { pluginDir } = getPaths();
+  if ( pluginDir && pluginDir != "" ) {
     console.log(`Installing npm dependencies for ${pluginDir}...`);
     shell.cd(`./${pluginDir}`)
     shell.exec(`npm install`, {silent:true});
@@ -287,43 +280,15 @@ exports.populateFlexConfigPlaceholders = function populateFlexConfigPlaceholders
 }
 
 exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
-  var { pluginDir } = getPaths("v1");
-  var temp = pluginDir;
+  var { pluginDir } = getPaths();
 
-  var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
-  var pluginAppConfig = `./${pluginDir}/public/appConfig.js`
-  var commonFlexConfig = `./flex-config/ui_attributes.common.json`
+  var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`;
+  var pluginAppConfig = `./${pluginDir}/public/appConfig.js`;
+  var commonFlexConfig = `./flex-config/ui_attributes.common.json`;
 
-  if(pluginDir && pluginDir != ""){
-    try{
-
-      if(!shell.test('-e', pluginAppConfig)){
-        shell.cp(pluginAppConfigExample, pluginAppConfig);
-        
-        // now that we have a copy of the file, populate it with defaults
-        let appConfigFileData = fs.readFileSync(pluginAppConfig, "utf8");
-        let flexConfigFileData = fs.readFileSync(commonFlexConfig, "utf8");
-        let flexConfigJsonData = JSON.parse(flexConfigFileData);
-        
-        appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
-        
-        fs.writeFileSync(pluginAppConfig, appConfigFileData, 'utf8');
-      }
-      console.log(`Setting up ${pluginAppConfig}: complete`);
-    } catch (error) {
-      console.error(error);
-      console.log(`Error attempting to generate appConfig file ${pluginAppConfig}`);
-    }
-  }
-
-  var { pluginDir } = getPaths("v2");
-  if ( pluginDir && temp != pluginDir && pluginDir != "") {
-    var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
-    var pluginAppConfig = `./${pluginDir}/public/appConfig.js`
-  
-    try{
-  
-      if(!shell.test('-e', pluginAppConfig)){
+  if (pluginDir && pluginDir != "") {
+    try {
+      if (!shell.test('-e', pluginAppConfig)) {
         shell.cp(pluginAppConfigExample, pluginAppConfig);
         
         // now that we have a copy of the file, populate it with defaults

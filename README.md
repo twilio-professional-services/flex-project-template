@@ -30,6 +30,8 @@ All of the following information within this _README_ (and other _READMEs_ in th
       1. [Prerequisites](#prerequisites)
       2. [setup](#setup)
       3. [development notes](#development-notes)
+      4. [Adding history to your repository](#adding-history-to-your-repository)
+      5. [Taking future updates](#taking-future-updates-from-the-template)
    2. [Setup a project release pipeline (Recommended ~5 mins)](#setup-a-project-with-release-pipeline-recommended)
    3. [Deploying to hosted Flex without a release pipeline (Not Recommended ~20-30 minutes)](#deploying-to-hosted-flex-without-a-release-pipeline-not-recommended)
    4. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
@@ -42,12 +44,11 @@ All of the following information within this _README_ (and other _READMEs_ in th
 5. [Okay tell me more, what does it do exactly?](#okay-tell-me-more-what-does-it-do-exactly)
    1. [flex-config](#flex-config)
    2. [infra-as-code](#infra-as-code)
-   3. [plugin-flex-ts-template-v1](#plugin-flex-ts-template-v1)
-   4. [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
-   5. [serverless-functions](#serverless-functions)
-   6. [web-app-examples](#web-app-examples)
-   7. [scripts](#scripts)
-   8. [.github](#github)
+   3. [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
+   4. [serverless-functions](#serverless-functions)
+   5. [web-app-examples](#web-app-examples)
+   6. [scripts](#scripts)
+   7. [.github](#github)
 6. [More Scripts Details](#more-scripts-details)
    1. [Lint](#lint)
    2. [Add Feature](#add-feature)
@@ -60,52 +61,51 @@ All of the following information within this _README_ (and other _READMEs_ in th
 
 ## Feature library Information
 
-| Feature                           | Description                                                                                         | Flex V1 Plugin                                                                                    | Flex V2 Plugin                                                                                   | Enabled By Default |
-| --------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------ |
-| Activity Reservation Handler      | _synchronize agent activities to reservation states_                                                | [Yes](plugin-flex-ts-template-v1/src/feature-library/activity-reservation-handler/README.md)      | [Yes](plugin-flex-ts-template-v2/src/feature-library/activity-reservation-handler/README.md)     |                    |
-| Activity Skill Filter             | _manage visibility for activities based on agent skills_                                            | [Yes](plugin-flex-ts-template-v1/src/feature-library/activity-skill-filter/README.md)             | [Yes](plugin-flex-ts-template-v2/src/feature-library/activity-skill-filter/README.md)            |                    |
-| Agent Automation                  | _adds auto accept and auto wrapup behaviors to agent desktop_                                       | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/agent-automation/README.md)                 | ✅                 |
-| Attribute Viewer                  | _easily view task and worker attributes within Flex_                                                | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/attribute-viewer/README.md)                 | ✅                 |
-| Callbacks and Voicemail           | _introduce support for callback and voicemail tasks_                                                | [Yes](plugin-flex-ts-template-v1/src/feature-library/callback-and-voicemail/README.md)            | [Yes](plugin-flex-ts-template-v2/src/feature-library/callback-and-voicemail/README.md)           | ✅                 |
-| Caller ID                         | _provide agents with means to select their caller id when dialing out_                              | [Yes](plugin-flex-ts-template-v1/src/feature-library/caller-id/README.md)                         | [Yes](plugin-flex-ts-template-v2/src/feature-library/caller-id/README.md)                        | ✅                 |
-| Canned Responses                  | _provide agents with pre-canned chat responses_                                                     | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/canned-responses/README.md)                 |                    |
-| Chat to Video Escalation          | _provide agents ability to elevate a chat conversation to a video conversation with screen sharing_ | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/chat-to-video-escalation/README.md)         |                    |
-| Chat Transfer                     | _introduce programmable chat transfer functionality for agents_                                     | [Yes](plugin-flex-ts-template-v1/src/feature-library/chat-transfer/README.md)                     | [Yes](plugin-flex-ts-template-v2/src/feature-library/chat-transfer/README.md)                    |                    |
-| Conversation Transfer             | _introduce conversation-based messaging transfer functionality for agents_                          | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/conversation-transfer/README.md)            |                    |
-| Conference (external)             | _provide agents the ability to conference in external numbers_                                      | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/conference/README.md)                       | ✅                 |
-| Custom Hold Music                 | _customize the experience when an agent places a call on hold_                                      | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/custom-hold-music/README.md)                |                    |
-| Custom Transfer Directory         | _customize queue transfer directory and enable an external transfer directory_                      | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/custom-transfer-directory/README.md)        | ✅                 |
-| Device Manager                    | _provide agents the ability to select the audio output device_                                      | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/device-manager/README.md)                   | ✅                 |
-| Dispositions                      | _provide agents the ability to select a disposition/wrap-up code and enter notes_                   | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/dispositions/README.md)                     |                    |
-| Dual Channel Recording            | _automatically record both inbound and outbound calls in dual channel_                              | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/dual-channel-recording/README.md)           |                    |
-| Emoji Picker                      | _adds an emoji picker for messaging tasks_                                                          | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/emoji-picker/README.md)                     | ✅                 |
-| Enhanced CRM Container            | _optimize the CRM container experience_                                                             | [Yes](plugin-flex-ts-template-v1/src/feature-library/enhanced-crm-container/README.md)            | [Yes](plugin-flex-ts-template-v2/src/feature-library/enhanced-crm-container/README.md)           |                    |
-| Hang Up By Reporting              | _populates the Hang Up By and Destination attributes in Flex Insights_                              | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/hang-up-by/README.md)                       |                    |
-| Internal Call (Agent to Agent)    | _provide agents the ability to dial each other_                                                     | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/internal-call/README.md)                    |                    |
-| Multi-call                        | _allow agents to receive a transferred call while already on a call_                                | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/multi-call/README.md)                       |                    |
-| Override Queue Transfer Directory | _a template for modifying the transfer directories_                                                 | [Yes](plugin-flex-ts-template-v1/src/feature-library/override-queue-transfer-directory/README.md) | No                                                                                               |                    |
-| Omni Channel Management           | _method for mixing chat and voice channels_                                                         | [Yes](plugin-flex-ts-template-v1/src/feature-library/omni-channel-capacity-management/README.md)  | [Yes](plugin-flex-ts-template-v2/src/feature-library/omni-channel-capacity-management/README.md) |                    |
-| Pause Recording                   | _provide agents the ability to temporarily pause and resume call recording_                         | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/pause-recording/README.md)                  | ✅                 |
-| Schedule Manager                  | _a flexible, robust, and scalable way to manage open and closed hours for Twilio Flex applications_ | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/schedule-manager/README.md)                 |                    |
-| Scrollable Activities             | _allow the scrolling of the activities list_                                                        | [Yes](plugin-flex-ts-template-v1/src/feature-library/scrollable-activities/README.md)             | [Yes](plugin-flex-ts-template-v2/src/feature-library/scrollable-activities/README.md)            | ✅                 |
-| Supervisor Barge Coach            | _introduce advanced supervisor barge and coach features_                                            | [Yes](plugin-flex-ts-template-v1/src/feature-library/supervisor-barge-coach/README.md)            | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-barge-coach/README.md)           | ✅                 |
-| Supervisor Capacity               | _allow supervisors to update worker capacity configuration within Flex_                             | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-capacity/README.md)              | ✅                 |
-| Supervisor Complete Reservation   | _allows supervisor to remotely complete agent tasks_                                                | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/supervisor-complete-reservation/README.md)  | ✅                 |
-| Teams View Filters                | _adds additional filtering options to the supervisor teams view_                                    | No                                                                                                | [Yes](plugin-flex-ts-template-v2/src/feature-library/teams-view-filters/README.md)               | ✅                 |
+| Feature                         | Description                                                                                         | Readme                                                                                              | Enabled By Default |
+| ------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------ |
+| Activity Reservation Handler    | _synchronize agent activities to reservation states_                                                | [Readme](plugin-flex-ts-template-v2/src/feature-library/activity-reservation-handler/README.md)     |                    |
+| Activity Skill Filter           | _manage visibility for activities based on agent skills_                                            | [Readme](plugin-flex-ts-template-v2/src/feature-library/activity-skill-filter/README.md)            |                    |
+| Agent Automation                | _adds auto accept and auto wrapup behaviors to agent desktop_                                       | [Readme](plugin-flex-ts-template-v2/src/feature-library/agent-automation/README.md)                 | ✅                 |
+| Attribute Viewer                | _easily view task and worker attributes within Flex_                                                | [Readme](plugin-flex-ts-template-v2/src/feature-library/attribute-viewer/README.md)                 | ✅                 |
+| Callbacks and Voicemail         | _introduce support for callback and voicemail tasks_                                                | [Readme](plugin-flex-ts-template-v2/src/feature-library/callback-and-voicemail/README.md)           | ✅                 |
+| Caller ID                       | _provide agents with means to select their caller id when dialing out_                              | [Readme](plugin-flex-ts-template-v2/src/feature-library/caller-id/README.md)                        | ✅                 |
+| Canned Responses                | _provide agents with pre-canned chat responses_                                                     | [Readme](plugin-flex-ts-template-v2/src/feature-library/canned-responses/README.md)                 |                    |
+| Chat to Video Escalation        | _provide agents ability to elevate a chat conversation to a video conversation with screen sharing_ | [Readme](plugin-flex-ts-template-v2/src/feature-library/chat-to-video-escalation/README.md)         |                    |
+| Chat Transfer                   | _introduce programmable chat transfer functionality for agents_                                     | [Readme](plugin-flex-ts-template-v2/src/feature-library/chat-transfer/README.md)                    |                    |
+| Conversation Transfer           | _introduce conversation-based messaging transfer functionality for agents_                          | [Readme](plugin-flex-ts-template-v2/src/feature-library/conversation-transfer/README.md)            |                    |
+| Conference (external)           | _provide agents the ability to conference in external numbers_                                      | [Readme](plugin-flex-ts-template-v2/src/feature-library/conference/README.md)                       | ✅                 |
+| Custom Hold Music               | _customize the experience when an agent places a call on hold_                                      | [Readme](plugin-flex-ts-template-v2/src/feature-library/custom-hold-music/README.md)                |                    |
+| Custom Transfer Directory       | _customize queue transfer directory and enable an external transfer directory_                      | [Readme](plugin-flex-ts-template-v2/src/feature-library/custom-transfer-directory/README.md)        | ✅                 |
+| Device Manager                  | _provide agents the ability to select the audio output device_                                      | [Readme](plugin-flex-ts-template-v2/src/feature-library/device-manager/README.md)                   | ✅                 |
+| Dispositions                    | _provide agents the ability to select a disposition/wrap-up code and enter notes_                   | [Readme](plugin-flex-ts-template-v2/src/feature-library/dispositions/README.md)                     |                    |
+| Dual Channel Recording          | _automatically record both inbound and outbound calls in dual channel_                              | [Readme](plugin-flex-ts-template-v2/src/feature-library/dual-channel-recording/README.md)           |                    |
+| Emoji Picker                    | _adds an emoji picker for messaging tasks_                                                          | [Readme](plugin-flex-ts-template-v2/src/feature-library/emoji-picker/README.md)                     | ✅                 |
+| Enhanced CRM Container          | _optimize the CRM container experience_                                                             | [Readme](plugin-flex-ts-template-v2/src/feature-library/enhanced-crm-container/README.md)           |                    |
+| Hang Up By Reporting            | _populates the Hang Up By and Destination attributes in Flex Insights_                              | [Readme](plugin-flex-ts-template-v2/src/feature-library/hang-up-by/README.md)                       |                    |
+| Internal Call (Agent to Agent)  | _provide agents the ability to dial each other_                                                     | [Readme](plugin-flex-ts-template-v2/src/feature-library/internal-call/README.md)                    |                    |
+| Multi-call                      | _allow agents to receive a transferred call while already on a call_                                | [Readme](plugin-flex-ts-template-v2/src/feature-library/multi-call/README.md)                       |                    |
+| Omni Channel Management         | _method for mixing chat and voice channels_                                                         | [Readme](plugin-flex-ts-template-v2/src/feature-library/omni-channel-capacity-management/README.md) |                    |
+| Pause Recording                 | _provide agents the ability to temporarily pause and resume call recording_                         | [Readme](plugin-flex-ts-template-v2/src/feature-library/pause-recording/README.md)                  | ✅                 |
+| Schedule Manager                | _a flexible, robust, and scalable way to manage open and closed hours for Twilio Flex applications_ | [Readme](plugin-flex-ts-template-v2/src/feature-library/schedule-manager/README.md)                 |                    |
+| Scrollable Activities           | _allow the scrolling of the activities list_                                                        | [Readme](plugin-flex-ts-template-v2/src/feature-library/scrollable-activities/README.md)            | ✅                 |
+| Supervisor Barge Coach          | _introduce advanced supervisor barge and coach features_                                            | [Readme](plugin-flex-ts-template-v2/src/feature-library/supervisor-barge-coach/README.md)           | ✅                 |
+| Supervisor Capacity             | _allow supervisors to update worker capacity configuration within Flex_                             | [Readme](plugin-flex-ts-template-v2/src/feature-library/supervisor-capacity/README.md)              | ✅                 |
+| Supervisor Complete Reservation | _allows supervisor to remotely complete agent tasks_                                                | [Readme](plugin-flex-ts-template-v2/src/feature-library/supervisor-complete-reservation/README.md)  | ✅                 |
+| Teams View Filters              | _adds additional filtering options to the supervisor teams view_                                    | [Readme](plugin-flex-ts-template-v2/src/feature-library/teams-view-filters/README.md)               | ✅                 |
 
 ---
 
 # Setup Guides
 
-The following are guides to instruct the user how to leverage this template for each of the following use cases, they are focused around use of the flex V2 plugin.
+The following are guides to instruct the user how to leverage this template for each of the following use cases.
 
 ## Local Setup and use
 
 ### Prerequisites
 
-- you are running nodes v16 or above
-- twilio cli 5.2.0 or above is [installed](https://www.twilio.com/docs/twilio-cli/getting-started/install) (`twilio --version`)
-- twilio flex plugins 6.0.2 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli) (`twilio plugins`, `twilio plugins:install @twilio-labs/plugin-flex@latest`)
+- you are running node v16 or above
+- twilio cli 5.5.0 or above is [installed](https://www.twilio.com/docs/twilio-cli/getting-started/install) (`twilio --version`)
+- twilio flex plugins 6.1.1 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli) (`twilio plugins`, `twilio plugins:install @twilio-labs/plugin-flex@latest`)
 - twilio serverless plugin 3.0.4 or above is [installed](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit) (`twilio plugins` `twilio plugins:install @twilio-labs/plugin-serverless@latest`)
 - `twilio profiles:list` has an active account set.
 - have the twilio auth token for your account ready (you can find this in the [Twilio Console](https://console.twilio.com/))
@@ -114,6 +114,9 @@ The following are guides to instruct the user how to leverage this template for 
 
 1. [Generate a new repository based on the template](https://github.com/twilio-professional-services/flex-project-template/generate)
 2. Clone the new repository that you just created
+
+- (Optionally) after creating your repo you may also want to attach the history to your new repository for future updates - details [here](#adding-history-to-your-repository)
+
 3. make sure the twilio cli has the correct account set to active
 
 ```bash
@@ -127,22 +130,10 @@ npm install
 ```
 
 5. follow the prompt and provide your auth token
-6. Run the serverless functions and plugin locally by running (for Flex UI v1.x)
+6. Run the serverless functions and plugin locally by running
 
 ```bash
-npm run start:local:v1
-```
-
-or (for Flex UI v2.x)
-
-```bash
-npm run start:local:v2
-```
-
-or if you have renamed your plugin (v2 only, this does not currently work for windows)
-
-```bash
-npm run start:local
+npm start
 ```
 
 ### development notes
@@ -171,6 +162,52 @@ When running the plugin locally, this template has been set up to pair the plugi
 
 ---
 
+### Adding history to your repository
+
+As outlined on [github docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template), when creating a new repository from a template, you will be creating a repositroy with no history. One of the benefits of using the template this way instead of forking is that you can make it private.
+
+This means however, if you later want to take updates it can be difficult, but there is a solution. Attaching the history back into your repository allows you to take future updates with ease. You can do this with the following commands on your clone repository. Note, this is simplest to do when first creating your repo but can be done at any time, if doing at a later date BE CAREFUL as this will have downstream challanges with any branches you've created which will also have to be resolved.
+
+```bash
+git remote add upstream https://github.com/twilio-professional-services/flex-project-template.git
+git fetch upstream
+git rebase --onto <commit-id-from-template-when-cloning> <initial-commit-id-of-cloned-template> <branch-name>
+```
+
+where commit id from the template can be found by clicking on the commmit history
+
+![alt text](scripts/screenshots/get-repository-commit-id-01.png)
+
+then clicking copy on the copy-id button of the commit
+
+![alt text](scripts/screenshots/get-repository-commit-id-02.png)
+
+Similarly, the initial commit of the cloned template can be found in the same way.
+
+Finally `branch-name` can be main or an alternative branch name if you are performing the operation there instead.
+
+You then need to push this rebased history onto your branch
+
+```bash
+git push --force
+```
+
+And thats it, your repo now has the history!
+
+### Taking future updates from the template
+
+At a future date, you may want to grab the updates on the original template if you have added the history as mentioned above you can do this with the following commands
+
+```bash
+git checkout -b template-updates
+git remote add flex-template https://github.com/twilio-professional-services/flex-project-template.git
+git pull flex-template main
+```
+
+this will grab all the updates from the original template and apply them to your branch. You will of course have to manage any conflicts but if you have added the history correctly, this shouldnt be too complex. From here you can merge the changes into your parent branch as you see fit.
+
+---
+
 ## Setup a project with release pipeline (Recommended)
 
 _~5 minutes_
@@ -181,7 +218,7 @@ _~5 minutes_
    - If you intend to have multiple environments, you will need an API Key/Secret for each account. You'll use this in the next step
 4. In github, navigate to the repository you created in step 1, click the settings tab -> secrets -> actions -> Click the "New repository secret" button:
    - Add the following to select which plugin is released
-     - `PLUGIN_FOLDER` - this is typically `plugin-flex-ts-template-v1` or `plugin-flex-ts-template-v2`
+     - `PLUGIN_FOLDER` - this is `plugin-flex-ts-template-v2` unless you are using the `rename-template` script
    - For each environment add the 3 env variables for that environment, for example, if its dev you would add
      - `TWILIO_ACCOUNT_SID_DEV` - the account sid you want to deploy to
      - `TWILIO_API_KEY_DEV` - the account key or key "sid" as its otherwise known
@@ -206,7 +243,7 @@ First, deploy the serverless functions:
 
 ```bash
 cd serverless-functions
-twilio serverless:deploy
+npm run deploy
 ```
 
 If you plan to use the schedule manager feature, deploy its serverless functions as well:
@@ -232,7 +269,7 @@ cd flex-config
 npm run deploy:<environment>
 ```
 
-Start the plugin deployment (example is v2, substitute for v1 if you're using v1):
+Start the plugin deployment:
 
 ```bash
 cd ../plugin-flex-ts-template-v2
@@ -244,8 +281,6 @@ After your deployment runs you will receive instructions for releasing your plug
 For more details on deploying your plugin, refer to the [deploying your plugin guide](https://www.twilio.com/docs/flex/plugins#deploying-your-plugin).
 
 # Using template for a standalone plugin
-
-(Only applicable to v2 plugin)
 
 1. Fork the template and give it a name
 2. Install dependencies - you can skip when prompted to enter auth token
@@ -269,13 +304,13 @@ npm run rename-template <template-name>
 5. ensure the dependencies are updated - this will also generate appConfig.js
 
 ```bash
-npm run install
+npm install
 ```
 
 6. test everything works
 
 ```bash
-npm run start:local
+npm start
 ```
 
 7. Push your changes to your repository - this is your new baseline
@@ -321,7 +356,6 @@ At the root of the repository you will find the following packages
 
 - [flex-config](#flex-config)
 - [infra-as-code](#infra-as-code)
-- [plugin-flex-ts-template-v1](#plugin-flex-ts-template-v1)
 - [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
 - [serverless-functions](#serverless-functions)
 - [serverless-schedule-manager](#serverless-schedule-manager)
@@ -341,13 +375,9 @@ More details on the flex-config package can be found [here](/flex-config/README.
 
 This package is a legacy initiative to leverage pulumi in managing twilio configuration artifacts such as taskrouter entities. This package is a functional methodology and was setup to represent a typically vanilla flex account thats just been initialized. This package has not been maintained as the intention is to move towards a similar solution using the terraform provider, however what has been setup and used before is available for anyone looking to use it in the interim. More details on how to use this can be found [here](https://www.twilio.com/blog/intro-to-infrastructure-as-code-with-twilio-part-1). Currently there are no dependencies in this package that need to be used and is here only for reference. Feel free to remove this if not utilized.
 
-### **plugin-flex-ts-template-v1**
-
-This package is the actual flex plugin and a structure is already laid out that makes it a lot easier to work in a distributed development model. More details of the package structure are discussed [over here](plugin-flex-ts-template-v1/README.md) the plugin has a library of examples that can be turned on or off, or if desired can be removed completely with little overhead. The utilities in this package are designed around the associated serverless-functions and leverage the associated flex-config.
-
 ### **plugin-flex-ts-template-v2**
 
-This package is identical in purpose to the `plugin-flex-ts-template-v1` except its intended for flex v2 projects which are discussed more [over here](plugin-flex-ts-template-v2/README.md). The intention is when kicking off a project or feature the owner would fork the repository or start a clean repository using the clone template function, then delete the plugin version they are not using.
+This package is the actual flex plugin and a structure is already laid out that makes it a lot easier to work in a distributed development model. More details of the package structure are discussed [over here](plugin-flex-ts-template-v2/README.md) the plugin has a library of examples that can be turned on or off, or if desired can be removed completely with little overhead. The utilities in this package are designed around the associated serverless-functions and leverage the associated flex-config.
 
 ### **serverless-functions**
 
@@ -379,7 +409,7 @@ Lastly, this package manages the github action workflows - with one example bein
 
 ## Lint
 
-ESLint is configured for the v2 plugin, the serverless-functions package, and the serverless-schedule-manager package, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
+ESLint is configured for the plugin, the serverless-functions package, and the serverless-schedule-manager package, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
 
 Before pushing changes, run the following command from the repository root dir to see the linter results across all packages.
 
@@ -394,8 +424,6 @@ npm run lint:fix
 ```
 
 ## Add feature
-
-(the following is only applicable when using the flex v2 plugin)
 
 When adding new features to the template, some boilerplate is required. This script does all of that for you, specifically:
 
@@ -414,8 +442,6 @@ npm run add-feature my-new-feature-name-goes-here
 
 ## Removing Features
 
-(the following is only applicable when using the flex v2 plugin)
-
 You may want to remove all the features in the template and just want to use the template skeleton and serverless utilities
 
 - You are starting a project and you don't want the features
@@ -431,8 +457,6 @@ npm run remove-features
 ---
 
 ## Renaming template
-
-(the following is only applicable when using the flex v2 plugin)
 
 **NOTE** _renaming the template will make it a little more challenging to merge further template updates later_
 
@@ -452,7 +476,6 @@ It will
 - rename the plugin to `ps-template-my-feature-name`
   - update the plugin filenames and code references to `MyFeatureName`
   - _the prefix ps-template is used to easily identify plugins using the template format_
-- remove the flex v1 plugin (assuming its not to be used)
 - rename the serverless-functions deployment name to `serverless-my-feature-name`
 - reset the versions of these packages to `0.0.1`
 - rename the variable used in flex-config to identify the serverless domain to `serverless_functions_domain_my_feature_name`
@@ -472,6 +495,8 @@ convenience script that does the same as setup-local-environment except it won't
 
 # CHANGELOG
 
+- 1.0.6
+  - Removed plugin-flex-ts-template-v1 and all v1 references.
 - 1.0.5
   - Removed plugin versioning from repo, instead relying on automatic versioning by the Flex Plugins CLI.
 - 1.0.4

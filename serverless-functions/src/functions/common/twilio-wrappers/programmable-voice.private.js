@@ -33,11 +33,12 @@ exports.fetchProperties = async function fetchProperties(parameters) {
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.callSid the unique call SID to fetch
  * @param {string} parameters.to the phone number to transfer to
+ * @param {string} parameters.from optional, the phone number to use as caller id
  * @returns {object} generic response object
  * @description cold transfers the given call SID to the given phone number
  */
 exports.coldTransfer = async function coldTransfer(parameters) {
-  const { context, callSid, to } = parameters;
+  const { context, callSid, to, from } = parameters;
 
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(callSid)) throw new Error('Invalid parameters object passed. Parameters must contain callSid string');
@@ -45,14 +46,19 @@ exports.coldTransfer = async function coldTransfer(parameters) {
 
   try {
     const client = context.getTwilioClient();
+    let callerIdStr = '';
+
+    if (from) {
+      callerIdStr = ` callerId="${from}"`;
+    }
 
     if (to.startsWith('sip')) {
       await client.calls(callSid).update({
-        twiml: `<Response><Dial><Sip>${to}</Sip></Dial></Response>`,
+        twiml: `<Response><Dial${callerIdStr}><Sip>${to}</Sip></Dial></Response>`,
       });
     } else {
       await client.calls(callSid).update({
-        twiml: `<Response><Dial>${to}</Dial></Response>`,
+        twiml: `<Response><Dial${callerIdStr}>${to}</Dial></Response>`,
       });
     }
 
