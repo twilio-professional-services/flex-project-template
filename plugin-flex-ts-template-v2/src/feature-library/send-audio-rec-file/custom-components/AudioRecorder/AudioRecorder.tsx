@@ -1,5 +1,5 @@
 import React from 'react';
-import { Actions, Notifications, StateHelper, Manager, IconButton, TaskHelper, withTheme} from "@twilio/flex-ui";
+import { IconButton } from "@twilio/flex-ui";
 import AudioRecorderPanel from '../AudioRecorderPanel'; 
 
 interface AudioRecorderState {

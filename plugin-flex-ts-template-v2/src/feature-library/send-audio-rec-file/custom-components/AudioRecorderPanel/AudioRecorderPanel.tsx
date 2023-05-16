@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Flex, Box, Stack, Grid, Card, Text, Heading, Paragraph, Button } from '@twilio-paste/core';
+import React from 'react';
+import { Grid, Card, Text, Paragraph } from '@twilio-paste/core';
 import FlexState from "../../../send-audio-rec-file/helpers/flexHelper";
 import { uploadAudio } from '../../../send-audio-rec-file/flex-hooks/actions/uploadAudio';
 import MicRecorder from 'mic-recorder-to-mp3';
@@ -8,9 +8,6 @@ const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
 import {
   IconButton,
-  styled,
-  TaskHelper,
-  ITask
 } from '@twilio/flex-ui';
 
 
