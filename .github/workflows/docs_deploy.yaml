@@ -17,7 +17,7 @@ env:
   PLUGIN_FOLDER: ${{ secrets.PLUGIN_FOLDER }}
 
 jobs:
-  deploy-serverless:
+  deploy-docs-to-serverless:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
