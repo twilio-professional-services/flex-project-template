@@ -10,12 +10,13 @@ const requiredParameters = [
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    const { callSid, to } = event;
+    const { callSid, to, from } = event;
 
     const result = await VoiceOperations.coldTransfer({
       context,
       callSid,
       to,
+      from,
     });
 
     response.setStatusCode(result.status);
