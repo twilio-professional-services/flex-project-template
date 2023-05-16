@@ -52,7 +52,11 @@ exports.fetchMapItem = async function fetchMapItem(parameters) {
   try {
     const client = context.getTwilioClient();
 
-    const mapItem = await client.sync.services(context.TWILIO_FLEX_SYNC_SID).syncMaps(mapSid).syncMapItems(key).fetch();
+    const mapItem = await client.sync.v1
+      .services(context.TWILIO_FLEX_SYNC_SID)
+      .syncMaps(mapSid)
+      .syncMapItems(key)
+      .fetch();
 
     return { success: true, status: 200, mapItem };
   } catch (error) {
@@ -92,7 +96,7 @@ exports.createMapItem = async function createMapItem(parameters) {
       data,
     };
 
-    const mapItem = await client.sync
+    const mapItem = await client.sync.v1
       .services(context.TWILIO_FLEX_SYNC_SID)
       .syncMaps(mapSid)
       .syncMapItems.create(mapItemParameters);
@@ -132,7 +136,7 @@ exports.createDocument = async function createDocument(parameters) {
       data,
     };
 
-    const document = await client.sync.services(context.TWILIO_FLEX_SYNC_SID).documents.create(documentParameters);
+    const document = await client.sync.v1.services(context.TWILIO_FLEX_SYNC_SID).documents.create(documentParameters);
 
     return { success: true, status: 200, document };
   } catch (error) {
@@ -158,7 +162,7 @@ exports.fetchDocument = async function fetchDocument(parameters) {
   try {
     const client = context.getTwilioClient();
 
-    const document = await client.sync.services(context.TWILIO_FLEX_SYNC_SID).documents(documentSid).fetch();
+    const document = await client.sync.v1.services(context.TWILIO_FLEX_SYNC_SID).documents(documentSid).fetch();
 
     return { success: true, status: 200, document };
   } catch (error) {
@@ -187,7 +191,7 @@ exports.updateDocumentData = async function updateDocumentData(parameters) {
   try {
     const client = context.getTwilioClient();
 
-    const documentUpdate = await client.sync
+    const documentUpdate = await client.sync.v1
       .services(context.TWILIO_FLEX_SYNC_SID)
       .documents(documentSid)
       .update({ data: updateData });

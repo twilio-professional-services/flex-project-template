@@ -252,7 +252,7 @@ First, deploy the serverless functions:
 
 ```bash
 cd serverless-functions
-twilio serverless:deploy
+npm run deploy
 ```
 
 If you plan to use the schedule manager feature, deploy its serverless functions as well:
