@@ -1,8 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
-import AudioRecorder from '../../custom-components/AudioRecorder/AudioRecorder'
+
+import AudioRecorder from '../../custom-components/AudioRecorder/AudioRecorder';
 
 export interface OwnProps {
-  showRecorder: boolean
+  showRecorder: boolean;
 }
 
 export const componentHook = function addSendAudioFile(flex: typeof Flex, _manager: Flex.Manager) {

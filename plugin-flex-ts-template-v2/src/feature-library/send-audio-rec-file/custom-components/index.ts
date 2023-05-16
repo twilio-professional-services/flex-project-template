@@ -1,5 +1,3 @@
-import AudioRecorder from './AudioRecorder/AudioRecorder'
+import AudioRecorder from './AudioRecorder/AudioRecorder';
 
 export default AudioRecorder;
-
-
