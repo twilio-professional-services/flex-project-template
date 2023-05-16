@@ -1,4 +1,5 @@
 const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
 const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
 
 const requiredParameters = [
@@ -77,9 +78,11 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   try {
     const {
       conversationId,
+      conversationSid,
       jsonAttributes,
       transferTargetSid,
       transferQueueName,
+      transferWorkerName,
       workersToIgnore,
       flexInteractionSid,
       flexInteractionChannelSid,
@@ -113,7 +116,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       return handleError(message);
     }
 
-    if (removeFlexInteractionParticipantSid)
+    if (removeFlexInteractionParticipantSid) {
       await InteractionsOperations.participantUpdate({
         status: 'closed',
         interactionSid: flexInteractionSid,
@@ -121,14 +124,32 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         participantSid: removeFlexInteractionParticipantSid,
         context,
       });
-
-    console.log(
-      'participantInvite',
-      participantInvite,
-      JSON.stringify(participantInvite.routing),
-      JSON.stringify(participantInvite.routing.reservation),
-      JSON.stringify(participantInvite.routing.properties),
-    );
+    } else {
+      // Add invite to conversation attributes
+      const inviteTargetType = transferTargetSid.startsWith('WK') ? 'Worker' : 'Queue';
+      const conversation = await ConversationsOperations.getConversation({
+        conversationSid,
+        context,
+      });
+      const currentAttributes = JSON.parse(conversation.conversation.attributes);
+      await ConversationsOperations.updateAttributes({
+        conversationSid,
+        attributes: JSON.stringify({
+          ...currentAttributes,
+          invites: {
+            ...currentAttributes.invites,
+            [participantInvite.routing.properties.sid]: {
+              invitesTaskSid: participantInvite.routing.properties.sid,
+              targetSid: transferTargetSid,
+              timestampCreated: new Date(),
+              targetName: inviteTargetType === 'Queue' ? transferQueueName : transferWorkerName,
+              inviteTargetType,
+            },
+          },
+        }),
+        context,
+      });
+    }
 
     response.setStatusCode(201);
     response.setBody({

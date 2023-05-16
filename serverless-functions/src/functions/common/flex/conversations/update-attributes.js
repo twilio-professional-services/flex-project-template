@@ -1,22 +1,21 @@
 const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
+const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
 
 const requiredParameters = [
-  { key: 'callSid', purpose: 'unique ID of call to update' },
-  { key: 'to', purpose: 'phone number to transfer to' },
+  { key: 'conversationSid', purpose: 'conversation to be updated' },
+  { key: 'attributes', purpose: 'new attributes' },
 ];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    const { callSid, to, from } = event;
+    const { conversationSid, attributes } = event;
 
-    const result = await VoiceOperations.coldTransfer({
+    const result = await ConversationsOperations.updateAttributes({
       context,
-      callSid,
-      to,
-      from,
+      conversationSid,
+      attributes,
     });
 
     response.setStatusCode(result.status);

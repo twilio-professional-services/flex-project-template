@@ -57,7 +57,11 @@ const ConferenceDialog = (props: OwnProps) => {
 
   const addConferenceParticipant = async () => {
     const defaultFromNumber = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
-    const callerId = workerAttrs.phone ? workerAttrs.phone : defaultFromNumber;
+    const callerId = workerAttrs.phone
+      ? workerAttrs.phone
+      : workerAttrs.selectedCallerId
+      ? workerAttrs.selectedCallerId
+      : defaultFromNumber;
 
     await Actions.invokeAction('StartExternalWarmTransfer', { task: props.task, phoneNumber: conferenceTo, callerId });
 

@@ -13,8 +13,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "0.26.0",
-    "dotenv": "16.0.0",
+    "axios": "^1.4.0",
+    "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "lodash": "^4.17.21"
   }

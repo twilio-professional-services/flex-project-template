@@ -8,10 +8,6 @@ on:
       - synchronize
     branches:
       - main
-    paths:
-      - 'plugin-flex-ts-template-v2/**'
-      - 'serverless-functions/**'
-      - 'serverless-schedule-manager/**'
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -34,8 +30,6 @@ jobs:
           cd ${{ secrets.PLUGIN_FOLDER }}
           npm install
           cd ../serverless-functions
-          npm install
-          cd ../serverless-schedule-manager
           npm install
       - name: Run eslint
         run: npm run lint:report

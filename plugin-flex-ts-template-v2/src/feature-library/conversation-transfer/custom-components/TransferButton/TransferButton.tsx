@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { IconButton, ITask, Actions, styled } from '@twilio/flex-ui';
 
 import { TransferActionPayload } from '../../types/ActionPayloads';
-import { isColdTransferEnabled } from '../../config';
 
 const IconContainer = styled.div`
   margin: auto;
@@ -18,18 +17,27 @@ const TransferButton = ({ task }: TransferButtonProps) => {
   const [disableTransferButtonForTask, setDisableTransferButtonForTask] = useState(false);
   const [taskSidsTransfered, setTaskSidsTransfered] = useState<string[]>([]);
 
-  // if there is a transfer task event for this chat disable the transfer button if it was a cold transfer
+  // if there is a transfer task event for this chat disable the transfer button while the request is made
   const handleTransferInitiated = (payload: TransferActionPayload) => {
-    if (payload.options?.mode === 'COLD' && isColdTransferEnabled()) {
-      setTaskSidsTransfered([...taskSidsTransfered, task.sid]);
+    if (payload.task.sid === task.sid) {
+      setTaskSidsTransfered((taskSidsTransfered) => [...taskSidsTransfered, task.sid]);
+    }
+  };
+
+  // if there is a transfer task event for this chat re-enable the transfer button afterwards
+  const handleTransferCompleted = (payload: TransferActionPayload) => {
+    if (payload.task.sid === task.sid) {
+      setTaskSidsTransfered((taskSidsTransfered) => taskSidsTransfered.filter((item) => item !== task.sid));
     }
   };
 
   // only listen for transfer task events when mounted and make sure we clean up the listener
   useEffect(() => {
-    Actions.addListener('beforeTransferTask', handleTransferInitiated);
+    Actions.addListener('beforeChatTransferTask', handleTransferInitiated);
+    Actions.addListener('afterChatTransferTask', handleTransferCompleted);
     return () => {
-      Actions.removeListener('beforeTransferTask', handleTransferInitiated);
+      Actions.removeListener('beforeChatTransferTask', handleTransferInitiated);
+      Actions.removeListener('afterChatTransferTask', handleTransferCompleted);
     };
   }, []);
 

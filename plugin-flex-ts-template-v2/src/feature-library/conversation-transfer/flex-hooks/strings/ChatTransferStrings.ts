@@ -4,6 +4,7 @@ export enum StringTemplates {
   ChatTransferFailedGeneric = 'ChatTransferFailedGeneric',
   ChatTransferFailedConsultNotSupported = 'ChatTransferFailedConsultNotSupported',
   ChatTransferFailedColdNotSupported = 'ChatTransferFailedColdNotSupported',
+  ChatTransferFailedAlreadyParticipating = 'ChatTransferFailedAlreadyParticipating',
   ChatParticipantInvited = 'ChatParticipantInvited',
   ChatRemoveParticipantFailed = 'ChatRemoveParticipantFailed',
   ChatRemoveParticipantSuccess = 'ChatRemoveParticipantSuccess',
@@ -18,6 +19,8 @@ export const stringHook = () => ({
   [StringTemplates.ChatTransferFailedGeneric]: 'Error occured adding new participant',
   [StringTemplates.ChatTransferFailedConsultNotSupported]: 'Consult/warm transfer is not enabled',
   [StringTemplates.ChatTransferFailedColdNotSupported]: 'Cold transfer is not enabled',
+  [StringTemplates.ChatTransferFailedAlreadyParticipating]:
+    'The selected target is already a participant in the conversation',
   [StringTemplates.ChatRemoveParticipantFailed]: 'Participant remove failed',
   [StringTemplates.ChatRemoveParticipantSuccess]: 'Participant removed',
   [StringTemplates.ChatCancelParticipantInviteFailed]: 'Participant invite cancel failed',
