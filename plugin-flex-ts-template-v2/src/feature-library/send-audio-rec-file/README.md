@@ -7,7 +7,13 @@ The audio message feature provides a seamless user experience for agents on Flex
 
 ![sendAudioFeature](https://github.com/rickmachadotwilio/flex-project-template/assets/104230389/1631bfbe-930a-435f-9a78-769971818598)
 
-
+To use the audio message feature, follow these steps:
+1. Click on the audio recorder panel expand button in the Flex UI.
+2. Click on the record button to start recording your message.
+3. When you’re done recording, click on the stop button.
+4. Preview your recorded message by clicking play and click on the send button to send the message to the customer, or click on the cancel button to discard the message.
+5. When you receive an audio message from a customer, click on the play button to listen to the message.
+* The audio message feature is designed to convert audio messages to an MP3 file format to reduce the file size and minimize bandwidth and storage issues. The feature also has a reasonable size limit of 16MB for audio messages to ensure that the messages can be transmitted and stored without any issues.
 
 # setup and dependencies
 To use the audio message feature, you need to have access to the Twilio Flex platform. You also need to ensure that your Flex account is set up correctly, and you have the necessary permissions as agent or supervisor.
@@ -19,13 +25,11 @@ The audio message feature has the following dependencies:
 
 
 # how does it work?
-To use the audio message feature, follow these steps:
+The provided feature code includes a React component that enables users to record audio. 
+Once the recording is completed, the audio is converted to an MP3 file and attached to a conversation using the invoke action 'AttachFiles'.
+The audio file is then distributed to participants through the respective conversation channels, such as WhatsApp or web chat. 
+The client application for each channel recognizes the uploaded binary file as an audio file, allowing users to play it within their interface.
 
-To use the audio message feature, follow these steps:
-1. Click on the audio recorder panel expand button in the Flex UI.
-2. Click on the record button to start recording your message.
-3. When you’re done recording, click on the stop button.
-4. Preview your recorded message by clicking play and click on the send button to send the message to the customer, or click on the cancel button to discard the message.
-5. When you receive an audio message from a customer, click on the play button to listen to the message.
-* The audio message feature is designed to convert audio messages to an MP3 file format to reduce the file size and minimize bandwidth and storage issues. The feature also has a reasonable size limit of 16MB for audio messages to ensure that the messages can be transmitted and stored without any issues.
+
+
 
