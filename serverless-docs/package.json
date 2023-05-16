@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "twilio-run",
-    "deploy": "twilio-run deploy",
+    "deploy": "twilio serverless:deploy --override-existing-project",
     "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v2"
   },
   "dependencies": {
