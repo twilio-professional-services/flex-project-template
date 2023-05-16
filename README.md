@@ -26,6 +26,8 @@ The primary aims of this template are
       1. [Prerequisites](#prerequisites)
       2. [setup](#setup)
       3. [development notes](#development-notes)
+      4. [Adding history to your repository](#adding-history-to-your-repository)
+      5. [Taking future updates](#taking-future-updates-from-the-template)
    2. [Setup a project release pipeline (Recommended ~5 mins)](#setup-a-project-with-release-pipeline-recommended)
    3. [Deploying to hosted Flex without a release pipeline (Not Recommended ~20-30 minutes)](#deploying-to-hosted-flex-without-a-release-pipeline-not-recommended)
    4. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
@@ -110,6 +112,7 @@ The following are guides to instruct the user how to leverage this template for 
 
 1. [Generate a new repository based on the template](https://github.com/twilio-professional-services/flex-project-template/generate)
 2. Clone the new repository that you just created
+  - (Optionally) after creating your repo you may also want to attach the history to your new repository for future updates - details [here](#adding-history-to-your-repository)
 3. make sure the twilio cli has the correct account set to active
 
 ```bash
@@ -164,6 +167,53 @@ When running the plugin locally, this template has been set up to pair the plugi
   ]
 }
 ```
+
+---
+
+### Adding history to your repository
+
+As outlined on [github docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template), when creating a new repository from a template, you will be creating a repositroy with no history.  One of the benefits of using the template this way instead of forking is that you can make it private.
+
+This means however, if you later want to take updates it can be difficult, but there is a solution.  Attaching the history back into your repository allows you to take future updates with ease.  You can do this with the following commands on your clone repository.  Note, this is simplest to do when first creating your repo but can be done at any time, if doing at a later date BE CAREFUL as this will have downstream challanges with any branches you've created which will also have to be resolved.
+
+```bash
+git remote add upstream https://github.com/twilio-professional-services/flex-project-template.git
+git fetch upstream
+git rebase --onto <commit-id-from-template-when-cloning> <initial-commit-id-of-cloned-template> <branch-name>
+```
+
+where commit id from the template can be found by clicking on the commmit history 
+
+![alt text](scripts/screenshots/get-repository-commit-id-01.png)
+
+then clicking copy on the copy-id button of the commit 
+
+![alt text](scripts/screenshots/get-repository-commit-id-02.png)
+
+Similarly, the initial commit of the cloned template can be found in the same way.
+
+Finally `branch-name` can be main or an alternative branch name if you are performing the operation there instead.
+
+You then need to push this rebased history onto your branch
+
+```bash
+git push --force
+```
+
+And thats it, your repo now has the history!
+
+
+### Taking future updates from the template
+
+At a future date, you may want to grab the updates on the original template if you have added the history as mentioned above you can do this with the following commands
+
+```bash
+git checkout -b template-updates
+git remote add flex-template https://github.com/twilio-professional-services/flex-project-template.git
+git pull flex-template main
+```
+
+this will grab all the updates from the original template and apply them to your branch.  You will of course have to manage any conflicts but if you have added the history correctly, this shouldnt be too complex.  From here you can merge the changes into your parent branch as you see fit.
 
 ---
 
