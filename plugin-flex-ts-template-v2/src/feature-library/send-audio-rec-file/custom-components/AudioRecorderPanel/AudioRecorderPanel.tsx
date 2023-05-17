@@ -1,10 +1,8 @@
 import React from 'react';
 import { Grid, Card, Text, Paragraph } from '@twilio-paste/core';
 import MicRecorder from 'mic-recorder-to-mp3';
-import { IconButton } from '@twilio/flex-ui';
-
+import { IconButton , Actions} from '@twilio/flex-ui';
 import FlexState from '../../helpers/flexHelper';
-import { uploadAudio } from '../../flex-hooks/actions/uploadAudio';
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
@@ -50,7 +48,15 @@ class AudioRecorderPanel extends React.Component<Props> {
   };
 
   sendRec = async (buffer: any, conversationSid: any) => {
-    return uploadAudio(buffer, conversationSid);
+    const audioFile = new File(buffer, 'voice-recording.mp3', {
+      type: 'audio/mpeg',
+      lastModified: Date.now(),
+    });
+
+    Actions.invokeAction('AttachFiles', {
+      files: [audioFile],
+      conversationSid,
+    });
   };
 
   componentDidMount() {
@@ -70,6 +76,7 @@ class AudioRecorderPanel extends React.Component<Props> {
 
   render() {
     const { showRecorder } = this.props;
+    const { blobURL } = this.state;
     if (showRecorder) {
       return (
         <div>
