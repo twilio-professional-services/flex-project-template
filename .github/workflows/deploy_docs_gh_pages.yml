@@ -3,7 +3,7 @@ name: Deploy docs site to GH pages
 
 on:
   # Runs on pushes targeting the default branch
-  pull_request:
+  push:
     branches:
       - main
     paths:
