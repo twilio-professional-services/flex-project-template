@@ -11,9 +11,9 @@ For adding on to the documentation site, please see the [Adding Content](#adding
 The documentation that encompasses this site is found within the [docs folder](/docs/docs/). Within this folder there are five distinct sections:
 
 - `intro.mdx` - the landing page (`/`) or home page of the documentation site
-- `How it works/` - a folder containing nested `markdown` files outlining the organization structure of the template
-- `Feature Library/` - a folder containing nested `markdown` files outlining the features in the template
-- `Setup Guides/` - a folder containing nested `markdown` files outlining various instructions
+- `how-it-works/` - a folder containing nested `markdown` files outlining the organization structure of the template
+- `feature-library/` - a folder containing nested `markdown` files outlining the features in the template
+- `setup-guides/` - a folder containing nested `markdown` files outlining various instructions
 - `changelog.md` - the changelog
 
 ### Example: adding a new feature to the site
