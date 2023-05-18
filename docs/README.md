@@ -47,4 +47,4 @@ This command starts a local development server at `http://localhost:3010` and op
 
 ### Build & Release
 
-Build & deployment of the site is automatically handled via Github Actions when a pull request is merged into the `main` branch of the template. The live documentation site can be found [here](https://flex-project-template-docs-2618-dev.twil.io/index.html).
+Build & deployment of the site is automatically handled via Github Actions when a pull request is merged into the `main` branch of the template. The live documentation site can be found [here](https://twilio-professional-services.github.io/flex-project-template/).

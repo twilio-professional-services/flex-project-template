@@ -1,9 +1,0 @@
-{
-  "commands": {},
-  "environments": {},
-  "projects": {},
-  "assets": true,
-  "functions": false,
-  "runtime": "node16",
-  "serviceName": "flex-project-template-docs"
-}
