@@ -47,7 +47,7 @@ cp ui_attributes.example.json ui_attributes.local.json
 
 ## To use with release pipeline
 
-follow the instructions for setting up the release pipeline [here](/Setup%20Guides/setup-release-pipeline);
+follow the instructions for setting up the release pipeline [here](/setup-guides/setup-release-pipeline);
 
 # Configuring skills
 

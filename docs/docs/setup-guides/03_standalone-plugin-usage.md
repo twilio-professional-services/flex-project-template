@@ -48,4 +48,4 @@ It also makes reuse of the serverless work that often gets re-written over and o
    ```
 
 7. Push your changes to your repository - this is your new baseline.
-8. You can follow the instructions for [local development setup](/Setup%20Guides/local-setup-and-use) and then [adding a feature](/Setup%20Guides/building-with-template#adding-a-feature)
+8. You can follow the instructions for [local development setup](/setup-guides/local-setup-and-use) and then [adding a feature](/setup-guides/building-with-template#adding-a-feature)
