@@ -11,15 +11,15 @@ const config = {
   favicon: "img/twilio.png",
 
   // Set the production url of your site here
-  url: "https://flex-project-template-docs-2618-dev.twil.io",
+  url: "https://twilio-professional-services.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/",
+  baseUrl: "/flex-project-template/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: "twilio-professional-services", // Usually your GitHub org/user name.
-  projectName: "project-template-docs", // Usually your repo name.
+  projectName: "flex-project-template-docs", // Usually your repo name.
   trailingSlash: false,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
