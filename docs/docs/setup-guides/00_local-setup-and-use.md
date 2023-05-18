@@ -1,51 +1,8 @@
-<a  href="https://twilio-professional-services.github.io/flex-project-template/">
-<img  src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg"  alt="Twilio"  width="250"  />
-</a>
-<br>
-
 ---
-
-# Flex Project Template
-
-The _Flex Project Template_ is a starting point for Flex solutions of any size. It proposes recommendations around package structure and solution management. It can be used for large projects or simple standalone features.
-
-You can have the solution running locally with little overhead or have a development pipeline setup without even doing a checkout.
-
-The primary aims of this template are
-
-1. To make iteratively building on Flex _easier_
-2. Improve interoperability of plugin features by proposing some standardization
-3. Massively accelerate project setup with options for asset and configuration versioning across multiple Twilio accounts
-
-For more overview information around the methodology of the template, please visit the [How it works](https://twilio-professional-services.github.io/flex-project-template/how-it-works/overview) section of the documentation site.
-
-## Documentation Site
-
-The [Flex Project Template Documentation Site](https://twilio-professional-services.github.io/flex-project-template/) contains comprehensive documentation regarding usage, features, utility scripts, and more. Check it out!
-
+sidebar_label: Local Setup & Use
+sidebar_position: 1
+title: Local Setup & Use
 ---
-
-1. [Feature library Information](#feature-library-information)
-2. [Setup Guides](#setup-guides)
-   1. [Local Setup And Use](#local-setup-and-use)
-      1. [Prerequisites](#prerequisites)
-      2. [setup](#setup)
-      3. [development notes](#development-notes)
-      4. [Adding history to your repository](#adding-history-to-your-repository)
-      5. [Taking future updates](#taking-future-updates-from-the-template)
-   2. [Setup a project release pipeline (Recommended ~5 mins)](#setup-a-project-with-release-pipeline-recommended)
-   3. [Deploying to hosted Flex without a release pipeline (Not Recommended ~20-30 minutes)](#deploying-to-hosted-flex-without-a-release-pipeline-not-recommended)
-   4. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
-
-## Feature library Information
-
-For a full list of features that come with the template, please visit the [Feature Overview](https://twilio-professional-services.github.io/flex-project-template/feature-library/overview) section of the documentation site.
-
-# Setup Guides
-
-The following are guides to instruct the user how to leverage this template for each of the following use cases.
-
-## Local Setup and use
 
 ### Prerequisites
 
@@ -82,9 +39,9 @@ npm install
 npm start
 ```
 
-### development notes
+### Development Notes
 
-When developing locally, Flex config is overridden by anything in your [appConfig.js](/plugin-flex-ts-template-v2/public/appConfig.example.js). Note: appConfig is only applicable when running the plugin locally, so you can edit this file to toggle features on and off for your locally running web server. You can also tweak the api endpoint for your serverless functions if you need to.
+When developing locally, Flex config is overridden by anything in your [appConfig.js](https://github.com/twilio-professional-services/flex-project-template/blob/main/plugin-flex-ts-template-v2/public/appConfig.example.js). Note: appConfig is only applicable when running the plugin locally, so you can edit this file to toggle features on and off for your locally running web server. You can also tweak the api endpoint for your serverless functions if you need to.
 
 When running the plugin locally, this template has been set up to pair the plugin with the serverless functions also running locally on localhost:3001. The serverless functions can be debugged by attaching your debugger to the node instance. The following is a sample entry for ".vscode/launch.json" to connect vscode for debugging
 
@@ -122,11 +79,11 @@ git rebase --onto <commit-id-from-template-when-cloning> <initial-commit-id-of-c
 
 where commit id from the template can be found by clicking on the commmit history
 
-![alt text](scripts/screenshots/get-repository-commit-id-01.png)
+![alt text](/img/guides/get-repository-commit-id-01.png)
 
 then clicking copy on the copy-id button of the commit
 
-![alt text](scripts/screenshots/get-repository-commit-id-02.png)
+![alt text](/img/guides/get-repository-commit-id-02.png)
 
 Similarly, the initial commit of the cloned template can be found in the same way.
 
@@ -151,17 +108,3 @@ git pull flex-template main
 ```
 
 this will grab all the updates from the original template and apply them to your branch. You will of course have to manage any conflicts but if you have added the history correctly, this shouldnt be too complex. From here you can merge the changes into your parent branch as you see fit.
-
----
-
-## Setup a project with release pipeline (Recommended)
-
-For instructions on setting up a project with a release pipeline, please visit the [Setup a release pipeline](https://twilio-professional-services.github.io/flex-project-template/setup-guides/setup-release-pipeline) section of the documentation site.
-
-## Deploying to hosted Flex without a release pipeline (Not Recommended)
-
-For instructions on deploying to hosted Flex manually, please visit the [Manual Flex Deployment](https://twilio-professional-services.github.io/flex-project-template/setup-guides/deploy-to-flex-manual) section of the documentation site.
-
-# Using template for a standalone plugin
-
-For instructions on using the template as a standalone plugin, please visit the [Standalone Plugin Usage](https://twilio-professional-services.github.io/flex-project-template/setup-guides/standalone-plugin-usage) section of the documentation site.
