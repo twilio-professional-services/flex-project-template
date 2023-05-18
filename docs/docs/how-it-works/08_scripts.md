@@ -16,7 +16,7 @@ This package maintains some convenience scripts namely:
 
 ## Lint
 
-ESLint is configured for the v2 plugin, the serverless-functions package, and the serverless-schedule-manager package, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
+ESLint is configured for the plugin, the serverless-functions package, and the serverless-schedule-manager package, using [Twilio Style](https://github.com/twilio-labs/twilio-style) as a base with some relaxations. When opening a pull request, the included GitHub workflows will run the linter, preventing merge if errors are present. Therefore, it is convenient to run the linter locally to identify any errors that you may need to fix ahead of time.
 
 Before pushing changes, run the following command from the repository root dir to see the linter results across all packages.
 
@@ -31,8 +31,6 @@ npm run lint:fix
 ```
 
 ## Add feature
-
-(the following is only applicable when using the flex v2 plugin)
 
 When adding new features to the template, some boilerplate is required. This script does all of that for you, specifically:
 
@@ -51,8 +49,6 @@ npm run add-feature my-new-feature-name-goes-here
 
 ## Removing Features
 
-(the following is only applicable when using the flex v2 plugin)
-
 You may want to remove all the features in the template and just want to use the template skeleton and serverless utilities
 
 - You are starting a project and you don't want the features
@@ -66,8 +62,6 @@ npm run remove-features
 ```
 
 ## Renaming template
-
-(the following is only applicable when using the flex v2 plugin)
 
 **NOTE** _renaming the template will make it a little more challenging to merge further template updates later_
 
@@ -87,7 +81,6 @@ It will
 - rename the plugin to `ps-template-my-feature-name`
   - update the plugin filenames and code references to `MyFeatureName`
   - _the prefix ps-template is used to easily identify plugins using the template format_
-- remove the flex v1 plugin (assuming its not to be used)
 - rename the serverless-functions deployment name to `serverless-my-feature-name`
 - reset the versions of these packages to `0.0.1`
 - rename the variable used in flex-config to identify the serverless domain to `serverless_functions_domain_my_feature_name`

@@ -4,4 +4,6 @@ sidebar_position: 5
 title: plugin-flex-ts-template-v2
 ---
 
-This package is identical in purpose to the `plugin-flex-ts-template-v1` except its intended for flex v2 projects which are discussed more [over here](/setup-guides/building-with-template). The intention is when kicking off a project or feature the owner would fork the repository or start a clean repository using the clone template function, then delete the plugin version they are not using.
+This is the Twilio Professional Services Flex Plugin that accompanies the Flex Project Template.
+
+This plugin defines a package structure to make distributed development easier when augmenting Flex with custom features and behaviors. For walkthroughs on building with this template, check out the documentation [over here](/setup-guides/building-with-template).

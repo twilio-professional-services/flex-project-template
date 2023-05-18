@@ -14,38 +14,36 @@ It also makes reuse of the serverless work that often gets re-written over and o
 
 ## Usage Instructions
 
-(Only applicable to v2 plugin)
-
 1. Fork the template and give it a name
 2. Install dependencies - you can skip when prompted to enter auth token
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 3. Remove the features; from the root folder of a checkout of your new repository run
 
-   ```bash
-   npm run remove-features
-   ```
+```bash
+npm run remove-features
+```
 
 4. Rename the template; from the root folder of a checkout of your new repository run
 
-   ```bash
-   npm run rename-template <template-name>
-   ```
+```bash
+npm run rename-template <template-name>
+```
 
 5. ensure the dependencies are updated - this will also generate appConfig.js
 
-   ```bash
-   npm run install
-   ```
+```bash
+npm install
+```
 
 6. test everything works
 
-   ```bash
-   npm run start:local
-   ```
+```bash
+npm start
+```
 
-7. Push your changes to your repository - this is your new baseline.
+7. Push your changes to your repository - this is your new baseline
 8. You can follow the instructions for [local development setup](/setup-guides/local-setup-and-use) and then [adding a feature](/setup-guides/building-with-template#adding-a-feature)

@@ -38,7 +38,7 @@ cd flex-config
 npm run deploy:<environment>
 ```
 
-Start the plugin deployment (example is v2, substitute for v1 if you're using v1):
+Start the plugin deployment:
 
 ```bash
 cd ../plugin-flex-ts-template-v2

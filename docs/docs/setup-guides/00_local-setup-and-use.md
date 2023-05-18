@@ -6,9 +6,9 @@ title: Local Setup & Use
 
 ### Prerequisites
 
-- you are running nodes v16 or above
-- twilio cli 5.2.0 or above is [installed](https://www.twilio.com/docs/twilio-cli/getting-started/install) (`twilio --version`)
-- twilio flex plugins 6.0.2 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli) (`twilio plugins`, `twilio plugins:install @twilio-labs/plugin-flex@latest`)
+- you are running node v16 or above
+- twilio cli 5.5.0 or above is [installed](https://www.twilio.com/docs/twilio-cli/getting-started/install) (`twilio --version`)
+- twilio flex plugins 6.1.1 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli) (`twilio plugins`, `twilio plugins:install @twilio-labs/plugin-flex@latest`)
 - twilio serverless plugin 3.0.4 or above is [installed](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit) (`twilio plugins` `twilio plugins:install @twilio-labs/plugin-serverless@latest`)
 - `twilio profiles:list` has an active account set.
 - have the twilio auth token for your account ready (you can find this in the [Twilio Console](https://console.twilio.com/))
@@ -17,6 +17,9 @@ title: Local Setup & Use
 
 1. [Generate a new repository based on the template](https://github.com/twilio-professional-services/flex-project-template/generate)
 2. Clone the new repository that you just created
+
+- (Optionally) after creating your repo you may also want to attach the history to your new repository for future updates - details [here](#adding-history-to-your-repository)
+
 3. make sure the twilio cli has the correct account set to active
 
 ```bash
@@ -30,27 +33,15 @@ npm install
 ```
 
 5. follow the prompt and provide your auth token
-6. Run the serverless functions and plugin locally by running (for Flex UI v1.x)
+6. Run the serverless functions and plugin locally by running
 
 ```bash
-npm run start:local:v1
-```
-
-or (for Flex UI v2.x)
-
-```bash
-npm run start:local:v2
-```
-
-or if you have renamed your plugin (v2 only, this does not currently work for windows)
-
-```bash
-npm run start:local
+npm start
 ```
 
 ### Development Notes
 
-When developing locally, Flex config is overridden by anything in your [appConfig.js](https://github.com/twilio-professional-services/flex-project-template/blob/main/plugin-flex-ts-template-v2/public/appConfig.example.js). Note: appConfig is only applicable when running the plugin locally, so you can edit this file to toggle features on and off for your locally running web server. You can also tweak the api endpoint for your serverless functions if you need to.
+When developing locally, Flex config is overridden by anything in your [appConfig.js](/plugin-flex-ts-template-v2/public/appConfig.example.js). Note: appConfig is only applicable when running the plugin locally, so you can edit this file to toggle features on and off for your locally running web server. You can also tweak the api endpoint for your serverless functions if you need to.
 
 When running the plugin locally, this template has been set up to pair the plugin with the serverless functions also running locally on localhost:3001. The serverless functions can be debugged by attaching your debugger to the node instance. The following is a sample entry for ".vscode/launch.json" to connect vscode for debugging
 
