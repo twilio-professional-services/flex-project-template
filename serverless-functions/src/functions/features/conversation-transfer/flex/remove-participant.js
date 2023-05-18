@@ -41,13 +41,31 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     });
 
     if (participants.participants && participants.participants.length <= 1) {
-      // If the customer is alone, close it out.
-      await InteractionsOperations.channelUpdate({
-        status: 'closed',
-        interactionSid: flexInteractionSid,
-        channelSid: flexInteractionChannelSid,
+      // No other participants. Check for outstanding invites.
+      const conversationResult = await ConversationsOperations.getConversation({
+        conversationSid,
         context,
       });
+
+      let invites = {};
+
+      if (conversationResult?.conversation?.attributes) {
+        const parsedAttrs = JSON.parse(conversationResult.conversation.attributes);
+
+        if (parsedAttrs.invites) {
+          invites = parsedAttrs.invites;
+        }
+      }
+
+      if (Object.keys(invites).length < 1) {
+        // If the customer is alone, and no invites are pending, close it out.
+        await InteractionsOperations.channelUpdate({
+          status: 'closed',
+          interactionSid: flexInteractionSid,
+          channelSid: flexInteractionChannelSid,
+          context,
+        });
+      }
     }
 
     response.setStatusCode(201);
