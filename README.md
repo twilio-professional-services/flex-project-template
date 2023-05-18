@@ -2,7 +2,6 @@
 <img  src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg"  alt="Twilio"  width="250"  />
 </a>
 <br>
-<br>
 
 ---
 
@@ -37,29 +36,8 @@ All of the following information within this _README_ (and other _READMEs_ in th
    2. [Setup a project release pipeline (Recommended ~5 mins)](#setup-a-project-with-release-pipeline-recommended)
    3. [Deploying to hosted Flex without a release pipeline (Not Recommended ~20-30 minutes)](#deploying-to-hosted-flex-without-a-release-pipeline-not-recommended)
    4. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
-3. [Why a template?](#why-a-template)
-   1. [One Plugin](#one-plugin-instead-of-a-collection-of-plugins)
-   2. [Package Structure](#when-working-with-one-plugin-we-need-a-package-structure-to-organize-our-code)
-   3. [Versioning](#manage-serverless-functions-with-plugins-and-flex-configuration-in-once-place)
-   4. [Typescript](#use-typescript)
-4. [Okay, but why a template for a standalone plugin?](#okay-but-why-a-template-for-a-standalone-feature)
-5. [Okay tell me more, what does it do exactly?](#okay-tell-me-more-what-does-it-do-exactly)
-   1. [flex-config](#flex-config)
-   2. [infra-as-code](#infra-as-code)
-   3. [plugin-flex-ts-template-v2](#plugin-flex-ts-template-v2)
-   4. [serverless-functions](#serverless-functions)
-   5. [web-app-examples](#web-app-examples)
-   6. [scripts](#scripts)
-   7. [.github](#github)
-6. [More Scripts Details](#more-scripts-details)
-   1. [Lint](#lint)
-   2. [Add Feature](#add-feature)
-   3. [Removing Features](#removing-features)
-   4. [Renaming Template](#renaming-template)
-   5. [show-env-vars](#show-env-vars)
-   6. [setup-local-environment](#setup-local-environment)
-   7. [generate-env](#generate-env)
-7. [Change log](#changelog)
+3. [More Scripts Details](#more-scripts-details)
+4. [Change log](#changelog)
 
 ## Feature library Information
 
