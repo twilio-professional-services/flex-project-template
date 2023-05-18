@@ -21,7 +21,7 @@ For more overview information around the methodology of the template, please vis
 
 ## Documentation Site
 
-The includes [Flex Project Documentation Site](https://twilio-professional-services.github.io/flex-project-template/). contains comprehensive documentation regarding usage, features, utility scripts, and more.
+The [Flex Project Template Documentation Site](https://twilio-professional-services.github.io/flex-project-template/) contains comprehensive documentation regarding usage, features, utility scripts, and more. Check it out!
 
 ---
 
@@ -36,8 +36,6 @@ The includes [Flex Project Documentation Site](https://twilio-professional-servi
    2. [Setup a project release pipeline (Recommended ~5 mins)](#setup-a-project-with-release-pipeline-recommended)
    3. [Deploying to hosted Flex without a release pipeline (Not Recommended ~20-30 minutes)](#deploying-to-hosted-flex-without-a-release-pipeline-not-recommended)
    4. [Using template for a standalone plugin](#using-template-for-a-standalone-plugin)
-3. [More Scripts Details](#more-scripts-details)
-4. [Change log](#changelog)
 
 ## Feature library Information
 
