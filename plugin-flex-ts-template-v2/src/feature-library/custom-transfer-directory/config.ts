@@ -3,23 +3,22 @@ import { Manager } from '@twilio/flex-ui';
 import { getFeatureFlags } from '../../utils/configuration';
 import { ExternalDirectoryEntry } from './types/ServiceConfiguration';
 
+const { enabled = false, use_paste_search_icon = false } = getFeatureFlags()?.features?.custom_transfer_directory || {};
+
 const {
-  enabled = false,
-  use_paste_search_icon = false,
-  queue: {
-    enabled: queueEnabled = false,
-    show_only_queues_with_available_workers = false,
-    show_real_time_data = false,
-    enforce_queue_filter_from_worker_object = false,
-    enforce_global_exclude_filter = false,
-    global_exclude_filter = '',
-  },
-  external_directory: {
-    enabled: externalDirectoryEnabled = false,
-    skipPhoneNumberValidation = false,
-    directory = [] as Array<ExternalDirectoryEntry>,
-  },
-} = getFeatureFlags()?.features?.custom_transfer_directory || {};
+  enabled: queueEnabled = false,
+  show_only_queues_with_available_workers = false,
+  show_real_time_data = false,
+  enforce_queue_filter_from_worker_object = false,
+  enforce_global_exclude_filter = false,
+  global_exclude_filter = '',
+} = getFeatureFlags()?.features?.custom_transfer_directory?.queue || {};
+
+const {
+  enabled: externalDirectoryEnabled = false,
+  skipPhoneNumberValidation = false,
+  directory = [] as Array<ExternalDirectoryEntry>,
+} = getFeatureFlags()?.features?.custom_transfer_directory?.external_directory || {};
 
 const {
   enabled: conversation_transfer_enabled = false,
