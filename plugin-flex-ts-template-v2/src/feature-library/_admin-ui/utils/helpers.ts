@@ -83,12 +83,14 @@ export const saveUserConfig = async (feature: string, config: any): Promise<bool
       await resetWorkerSetting(feature);
     }
   } catch (error) {
+    Notifications.dismissNotificationById(AdminUiNotification.SAVE_SUCCESS);
     Notifications.showNotification(AdminUiNotification.SAVE_ERROR);
     console.error('admin-ui: Unable to update user config', error);
     return false;
   }
 
   Notifications.dismissNotificationById(AdminUiNotification.SAVE_ERROR);
+  Notifications.dismissNotificationById(AdminUiNotification.SAVE_SUCCESS);
   Notifications.showNotification(AdminUiNotification.SAVE_SUCCESS);
 
   return true;
@@ -116,11 +118,13 @@ export const saveGlobalConfig = async (feature: string, config: any): Promise<an
   }
 
   if (!returnVal) {
+    Notifications.dismissNotificationById(AdminUiNotification.SAVE_SUCCESS);
     Notifications.showNotification(AdminUiNotification.SAVE_ERROR);
     return false;
   }
 
   Notifications.dismissNotificationById(AdminUiNotification.SAVE_ERROR);
+  Notifications.dismissNotificationById(AdminUiNotification.SAVE_SUCCESS);
   Notifications.showNotification(AdminUiNotification.SAVE_SUCCESS);
   return returnVal;
 };

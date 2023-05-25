@@ -80,7 +80,7 @@ const AdminView = () => {
   return (
     <AdminViewWrapper>
       <Flex vAlignContent="center" margin="space50" marginBottom="space0">
-        <Flex minWidth="195px">
+        <Flex minWidth="195px" width="310px">
           <Heading as="h2" variant="heading20" marginBottom="space0">
             <Template source={templates[StringTemplates.ADMIN_TITLE]} />
           </Heading>

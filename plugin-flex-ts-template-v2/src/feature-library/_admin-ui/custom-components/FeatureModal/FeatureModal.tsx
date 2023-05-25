@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Template, templates } from '@twilio/flex-ui';
-import { Alert, Box, TextArea, Anchor, Label, Switch, Button, Input } from '@twilio-paste/core';
+import { Alert, Box, TextArea, Anchor, Label, Switch, Button, Input, HelpText } from '@twilio-paste/core';
 import { Form, FormControl } from '@twilio-paste/core/form';
 import { useUID, useUIDSeed } from '@twilio-paste/core/uid-library';
 import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading } from '@twilio-paste/core/modal';
@@ -24,6 +24,7 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
   const [isSaving, setIsSaving] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [hasFailure, setHasFailure] = useState(false);
+  const [invalidInputs, setInvalidInputs] = useState([] as string[]);
   const modalHeadingID = useUID();
   const seed = useUIDSeed();
 
@@ -31,12 +32,29 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
     if (isOpen) {
       setHasFailure(false);
       setModifiedConfig(config);
+      setInvalidInputs([]);
     }
   }, [isOpen]);
 
   const save = async () => {
     setHasFailure(false);
     setIsSaving(true);
+
+    Object.entries(config).forEach(([key, value]) => {
+      switch (typeof value) {
+        case 'boolean':
+        case 'number':
+        case 'string':
+          break;
+        default:
+          // Parse JSON values that were edited and became strings
+          if (typeof modifiedConfig[key] === 'string') {
+            modifiedConfig[key] = JSON.parse(modifiedConfig[key]);
+          }
+          break;
+      }
+    });
+
     if (await handleSave(feature, modifiedConfig)) {
       handleClose();
     } else {
@@ -131,17 +149,44 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
                       <TextArea
                         id={seed(`${feature}-${key}`)}
                         name={seed(`${feature}-${key}`)}
-                        value={JSON.stringify(modifiedConfig[key], null, 2)}
+                        value={
+                          typeof modifiedConfig[key] === 'string'
+                            ? modifiedConfig[key]
+                            : JSON.stringify(modifiedConfig[key], null, 2)
+                        }
                         resize="vertical"
+                        element="ADMIN_CODE_TEXTAREA"
+                        hasError={invalidInputs.includes(key)}
                         onChange={(e) => {
                           try {
                             const parsed = JSON.parse(e.target.value);
                             if (parsed && typeof parsed === 'object') {
-                              setModifiedConfig((modifiedConfig: any) => ({ ...modifiedConfig, [key]: parsed }));
+                              // valid JSON
+                              if (invalidInputs.includes(key)) {
+                                setInvalidInputs((invalidInputs: string[]) =>
+                                  invalidInputs.filter((feature) => feature !== key),
+                                );
+                              }
+                            } else if (!invalidInputs.includes(key)) {
+                              setInvalidInputs((invalidInputs: string[]) => [...invalidInputs, key]);
                             }
-                          } catch (e) {}
+                          } catch (error) {
+                            if (!invalidInputs.includes(key)) {
+                              setInvalidInputs((invalidInputs: string[]) => [...invalidInputs, key]);
+                            }
+                          }
+                          // save as string to allow frustration-free edits, later parsed in save()
+                          setModifiedConfig((modifiedConfig: any) => ({
+                            ...modifiedConfig,
+                            [key]: e.target.value,
+                          }));
                         }}
                       />
+                      {invalidInputs.includes(key) && (
+                        <HelpText variant="error">
+                          <Template source={templates[StringTemplates.INVALID_JSON]} />
+                        </HelpText>
+                      )}
                     </>
                   );
                   break;
@@ -167,7 +212,7 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
           <Button variant="secondary" onClick={handleClose}>
             <Template source={templates[StringTemplates.CANCEL]} />
           </Button>
-          <Button variant="primary" onClick={save} loading={isSaving}>
+          <Button variant="primary" onClick={save} loading={isSaving} disabled={invalidInputs.length > 0}>
             <Template source={templates[StringTemplates.SAVE]} />
           </Button>
         </ModalFooterActions>

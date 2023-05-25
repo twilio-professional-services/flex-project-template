@@ -15,6 +15,7 @@ export enum StringTemplates {
   MODAL_SETTINGS_TITLE = 'PSAdminModalSettingsTitle',
   SAVE_ERROR = 'PSAdminSaveError',
   SAVE_SUCCESS = 'PSAdminSaveSuccess',
+  INVALID_JSON = 'PSAdminInvalidJson',
 }
 
 export const stringHook = () => ({
@@ -34,4 +35,5 @@ export const stringHook = () => ({
   [StringTemplates.MODAL_SETTINGS_TITLE]: '{{feature}} settings',
   [StringTemplates.SAVE_ERROR]: 'There was an error saving the changes. Please try again.',
   [StringTemplates.SAVE_SUCCESS]: 'Changes saved successfully. Reload Flex for changes to take effect.',
+  [StringTemplates.INVALID_JSON]: 'Enter valid JSON in order to save.',
 });
