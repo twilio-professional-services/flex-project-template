@@ -3,7 +3,6 @@ import { Manager, Template, templates } from '@twilio/flex-ui';
 import { Heading, Flex, Box, Stack, Card, Switch, Button, Anchor } from '@twilio-paste/core';
 import { SkipBackIcon } from '@twilio-paste/icons/esm/SkipBackIcon';
 import { ProductSettingsIcon } from '@twilio-paste/icons/esm/ProductSettingsIcon';
-import Grid from '@material-ui/core/Grid';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import FeatureModal from '../FeatureModal';
@@ -36,70 +35,66 @@ const FeatureCard = ({ feature, configureFor, isUserModified, config, handleSave
   };
 
   return (
-    <Grid item xs={12} md={6} lg={4} xl={3}>
-      <Box margin="space30">
-        <Card padding="space50">
-          <Flex vAlignContent="center" marginBottom="space30">
-            <Flex>
-              <Heading as="h4" variant="heading40" marginBottom="space0">
-                {formatName(feature)}
-              </Heading>
-            </Flex>
-            <Flex grow marginLeft="space90" hAlignContent="right">
-              <Anchor href={formatDocsUrl(feature)} showExternal>
-                <Template source={templates[StringTemplates.DOCS]} />
-              </Anchor>
-            </Flex>
+    <Box margin="space30">
+      <Card padding="space50">
+        <Flex vAlignContent="center" marginBottom="space30">
+          <Flex>
+            <Heading as="h4" variant="heading40" marginBottom="space0">
+              {formatName(feature)}
+            </Heading>
           </Flex>
-          <Flex vAlignContent="center">
-            <Flex>
-              {Object.keys(config).includes('enabled') && (
-                <Switch checked={config.enabled} onChange={handleEnabledChanged} disabled={isSaving}>
-                  {config.enabled ? (
-                    <Template source={templates[StringTemplates.ENABLED]} />
-                  ) : (
-                    <Template source={templates[StringTemplates.DISABLED]} />
-                  )}
-                </Switch>
-              )}
-            </Flex>
-            <Flex grow marginLeft="space90" hAlignContent="right">
-              <Stack orientation="horizontal" spacing="space30">
-                {configureFor === 'user' && isUserModified === true && (
-                  <Button variant="destructive_secondary" size="circle" onClick={handleReset} disabled={isSaving}>
-                    <SkipBackIcon decorative={false} title={strings[StringTemplates.REVERT_WORKER_TO_GLOBAL]} />
-                  </Button>
+          <Flex grow marginLeft="space90" hAlignContent="right">
+            <Anchor href={formatDocsUrl(feature)} showExternal>
+              <Template source={templates[StringTemplates.DOCS]} />
+            </Anchor>
+          </Flex>
+        </Flex>
+        <Flex vAlignContent="center">
+          <Flex>
+            {Object.keys(config).includes('enabled') && (
+              <Switch checked={config.enabled} onChange={handleEnabledChanged} disabled={isSaving}>
+                {config.enabled ? (
+                  <Template source={templates[StringTemplates.ENABLED]} />
+                ) : (
+                  <Template source={templates[StringTemplates.DISABLED]} />
                 )}
-                <Button
-                  variant="secondary"
-                  size="circle"
-                  disabled={!hasMoreSettings}
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  <ProductSettingsIcon
-                    decorative={false}
-                    title={
-                      hasMoreSettings
-                        ? strings[StringTemplates.MORE_SETTINGS]
-                        : strings[StringTemplates.NO_MORE_SETTINGS]
-                    }
-                  />
-                </Button>
-              </Stack>
-            </Flex>
+              </Switch>
+            )}
           </Flex>
-        </Card>
-        <FeatureModal
-          feature={feature}
-          configureFor={configureFor}
-          isUserModified={isUserModified}
-          config={config}
-          isOpen={isModalOpen}
-          handleClose={() => setIsModalOpen(false)}
-          handleSave={handleSave}
-        />
-      </Box>
-    </Grid>
+          <Flex grow marginLeft="space90" hAlignContent="right">
+            <Stack orientation="horizontal" spacing="space30">
+              {configureFor === 'user' && isUserModified === true && (
+                <Button variant="destructive_secondary" size="circle" onClick={handleReset} disabled={isSaving}>
+                  <SkipBackIcon decorative={false} title={strings[StringTemplates.REVERT_WORKER_TO_GLOBAL]} />
+                </Button>
+              )}
+              <Button
+                variant="secondary"
+                size="circle"
+                disabled={!hasMoreSettings}
+                onClick={() => setIsModalOpen(true)}
+              >
+                <ProductSettingsIcon
+                  decorative={false}
+                  title={
+                    hasMoreSettings ? strings[StringTemplates.MORE_SETTINGS] : strings[StringTemplates.NO_MORE_SETTINGS]
+                  }
+                />
+              </Button>
+            </Stack>
+          </Flex>
+        </Flex>
+      </Card>
+      <FeatureModal
+        feature={feature}
+        configureFor={configureFor}
+        isUserModified={isUserModified}
+        config={config}
+        isOpen={isModalOpen}
+        handleClose={() => setIsModalOpen(false)}
+        handleSave={handleSave}
+      />
+    </Box>
   );
 };
 

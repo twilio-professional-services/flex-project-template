@@ -8,3 +8,8 @@ export const AdminViewWrapper = styled('div')`
   flex-grow: 1;
   flex-shrink: 1;
 `;
+
+export const FeatureCardWrapper = styled('div')`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(430px, 1fr));
+`;

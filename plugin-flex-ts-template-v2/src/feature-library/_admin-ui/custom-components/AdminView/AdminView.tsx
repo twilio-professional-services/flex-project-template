@@ -1,19 +1,17 @@
 import { useEffect, useState } from 'react';
-import { Manager, Notifications, Template, templates } from '@twilio/flex-ui';
-import { Heading, Flex, Box, RadioButtonGroup, RadioButton, Input, Spinner } from '@twilio-paste/core';
+import { Manager, Template, templates } from '@twilio/flex-ui';
+import { Heading, Flex, Label, Box, RadioButtonGroup, RadioButton, Input, Spinner } from '@twilio-paste/core';
 import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { ProductFlexIcon } from '@twilio-paste/icons/esm/ProductFlexIcon';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
-import Grid from '@material-ui/core/Grid';
 import { merge } from 'lodash';
 
 import { StringTemplates } from '../../flex-hooks/strings';
-import { AdminViewWrapper } from './AdminView.Styles';
+import { AdminViewWrapper, FeatureCardWrapper } from './AdminView.Styles';
 import { getFeatureFlagsUser } from '../../../../utils/configuration';
 import FeatureCard from '../FeatureCard';
 import AdminUiService from '../../utils/AdminUiService';
-import { updateWorkerSetting, resetWorkerSetting } from '../../utils/helpers';
-import { AdminUiNotification } from '../../flex-hooks/notifications';
+import { saveUserConfig, saveGlobalConfig, shouldShowFeature } from '../../utils/helpers';
 
 const AdminView = () => {
   const [configureFor, setConfigureFor] = useState('user');
@@ -61,58 +59,34 @@ const AdminView = () => {
 
   const handleSave = async (feature: string, config: any): Promise<boolean> => {
     if (configureFor === 'user') {
-      try {
-        if (config) {
-          await updateWorkerSetting(feature, config);
-        } else {
-          await resetWorkerSetting(feature);
-        }
+      const saveResult = await saveUserConfig(feature, config);
+
+      if (saveResult) {
         reloadUserConfig();
-      } catch (error) {
-        Notifications.showNotification(AdminUiNotification.SAVE_ERROR);
-        console.log('admin-ui: Unable to update user config', error);
-        return false;
+        return true;
       }
     } else {
-      try {
-        const updateResponse = await AdminUiService.updateUiAttributes(
-          JSON.stringify({
-            custom_data: {
-              features: {
-                [feature]: config,
-              },
-            },
-          }),
-        );
-        if (updateResponse?.configuration?.custom_data?.features) {
-          setGlobalConfig(updateResponse.configuration.custom_data.features);
-        } else {
-          Notifications.showNotification(AdminUiNotification.SAVE_ERROR);
-          console.log('admin-ui: Unexpected response upon updating global config', updateResponse);
-          return false;
-        }
-      } catch (error) {
-        Notifications.showNotification(AdminUiNotification.SAVE_ERROR);
-        console.log('admin-ui: Unable to update global config', error);
-        return false;
+      const saveResult = await saveGlobalConfig(feature, config);
+
+      if (saveResult) {
+        setGlobalConfig(saveResult);
+        return true;
       }
     }
 
-    Notifications.showNotification(AdminUiNotification.SAVE_SUCCESS);
-
-    return true;
+    return false;
   };
 
   return (
     <AdminViewWrapper>
       <Flex vAlignContent="center" margin="space50" marginBottom="space0">
-        <Flex>
+        <Flex minWidth="195px">
           <Heading as="h2" variant="heading20" marginBottom="space0">
             <Template source={templates[StringTemplates.ADMIN_TITLE]} />
           </Heading>
         </Flex>
         <Flex grow hAlignContent="center">
-          <Box width="size30">
+          <Box width="size30" marginLeft="space30" marginRight="space30">
             <Input
               id="feature-filter"
               name="feature-filter"
@@ -124,11 +98,17 @@ const AdminView = () => {
             />
           </Box>
         </Flex>
-        <Flex>
+        <Flex vAlignContent="center" minWidth="310px">
+          <Box marginRight="space30">
+            <Label htmlFor="configure-for" marginBottom="space0">
+              <Template source={templates[StringTemplates.CONFIG_FOR_TITLE]} />
+            </Label>
+          </Box>
           <RadioButtonGroup
             attached
+            id="configure-for"
             name="configure-for"
-            legend={<Template source={templates[StringTemplates.CONFIG_FOR_TITLE]} />}
+            legend={<></>}
             value={configureFor}
             onChange={(value) => setConfigureFor(value)}
           >
@@ -150,18 +130,20 @@ const AdminView = () => {
       ) : (
         <>
           <Box margin="space30">
-            <Grid container>
-              {(filter ? featureList.filter((feature) => feature.includes(filter)) : featureList).map((feature) => (
-                <FeatureCard
-                  feature={feature}
-                  configureFor={configureFor}
-                  isUserModified={configureFor === 'user' && userConfig[feature] !== undefined}
-                  config={config[feature]}
-                  handleSave={handleSave}
-                  key={feature}
-                />
-              ))}
-            </Grid>
+            <FeatureCardWrapper>
+              {featureList
+                .filter((feature) => shouldShowFeature(feature) && (!filter || feature.includes(filter)))
+                .map((feature) => (
+                  <FeatureCard
+                    feature={feature}
+                    configureFor={configureFor}
+                    isUserModified={configureFor === 'user' && userConfig[feature] !== undefined}
+                    config={config[feature]}
+                    handleSave={handleSave}
+                    key={feature}
+                  />
+                ))}
+            </FeatureCardWrapper>
           </Box>
         </>
       )}
