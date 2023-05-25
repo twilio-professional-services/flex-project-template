@@ -10,7 +10,7 @@
         "enabled": false,
         "filter_teams_view": false
       },
-      "callbacks": {
+      "callback_and_voicemail": {
         "enabled": true,
         "allow_requeue": true,
         "max_attempts": 3,
