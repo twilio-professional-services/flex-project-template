@@ -6,6 +6,7 @@ import { StringTemplates } from '../strings';
 export enum AdminUiNotification {
   SAVE_ERROR = 'PSAdminSaveError',
   SAVE_SUCCESS = 'PSAdminSaveSuccess',
+  SAVE_DISABLED = 'PSAdminSaveDisabled',
 }
 
 // Return an array of Flex.Notification
@@ -23,5 +24,12 @@ export const notificationHook = (flex: typeof Flex, _manager: Flex.Manager) => [
     content: StringTemplates.SAVE_SUCCESS,
     timeout: 3000,
     closeButton: true,
+  },
+  {
+    id: AdminUiNotification.SAVE_DISABLED,
+    type: flex.NotificationType.warning,
+    content: StringTemplates.SAVE_DISABLED,
+    timeout: 0,
+    closeButton: false,
   },
 ];

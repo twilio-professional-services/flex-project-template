@@ -16,6 +16,10 @@ export enum StringTemplates {
   SAVE_ERROR = 'PSAdminSaveError',
   SAVE_SUCCESS = 'PSAdminSaveSuccess',
   INVALID_JSON = 'PSAdminInvalidJson',
+  UPDATED_MODAL_TITLE = 'PSAdminUpdatedModalTitle',
+  UPDATED_MODAL_DESC = 'PSAdminUpdatedModalDesc',
+  UPDATED_MODAL_RELOAD = 'PSAdminUpdatedModalReload',
+  SAVE_DISABLED = 'PSAdminSaveDisabled',
 }
 
 export const stringHook = () => ({
@@ -36,4 +40,9 @@ export const stringHook = () => ({
   [StringTemplates.SAVE_ERROR]: 'There was an error saving the changes. Please try again.',
   [StringTemplates.SAVE_SUCCESS]: 'Changes saved successfully. Reload Flex for changes to take effect.',
   [StringTemplates.INVALID_JSON]: 'Enter valid JSON in order to save.',
+  [StringTemplates.UPDATED_MODAL_TITLE]: 'Settings updated',
+  [StringTemplates.UPDATED_MODAL_DESC]:
+    'Another user has updated global settings. Click "Reload" to refresh the view with the updated settings. Saving global settings will be unavailable until the view is reloaded.',
+  [StringTemplates.UPDATED_MODAL_RELOAD]: 'Reload',
+  [StringTemplates.SAVE_DISABLED]: 'Saving global settings is unavailable until the view is reloaded.',
 });

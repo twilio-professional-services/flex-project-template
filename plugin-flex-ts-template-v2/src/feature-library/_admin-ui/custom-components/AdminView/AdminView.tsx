@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react';
-import { Manager, Template, templates } from '@twilio/flex-ui';
-import { Heading, Flex, Label, Box, RadioButtonGroup, RadioButton, Input, Spinner } from '@twilio-paste/core';
+import { Manager, Notifications, Template, templates } from '@twilio/flex-ui';
+import {
+  Heading,
+  Flex,
+  Label,
+  Box,
+  RadioButtonGroup,
+  RadioButton,
+  Input,
+  Spinner,
+  AlertDialog,
+} from '@twilio-paste/core';
 import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { ProductFlexIcon } from '@twilio-paste/icons/esm/ProductFlexIcon';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
@@ -12,20 +22,29 @@ import { getFeatureFlagsUser } from '../../../../utils/configuration';
 import FeatureCard from '../FeatureCard';
 import AdminUiService from '../../utils/AdminUiService';
 import { saveUserConfig, saveGlobalConfig, shouldShowFeature } from '../../utils/helpers';
+import { subscribe, unsubscribe, publishMessage, SyncStreamEvent } from '../../utils/sync-stream';
+import { AdminUiNotification } from '../../flex-hooks/notifications';
 
 const AdminView = () => {
   const [configureFor, setConfigureFor] = useState('user');
   const [filter, setFilter] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isUpdatedByOtherUser, setIsUpdatedByOtherUser] = useState(false);
+  const [isUpdatedModalOpen, setIsUpdatedModalOpen] = useState(false);
   const [featureList, setFeatureList] = useState([] as string[]);
   const [config, setConfig] = useState({} as any);
   const [globalConfig, setGlobalConfig] = useState({} as any);
   const [userConfig, setUserConfig] = useState({} as any);
 
   const strings = Manager.getInstance().strings as any;
+  const streamEvent = 'template-admin-update';
 
   useEffect(() => {
-    reloadConfig();
+    initialize();
+    return () => {
+      Notifications.dismissNotificationById(AdminUiNotification.SAVE_DISABLED);
+      unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
@@ -36,8 +55,20 @@ const AdminView = () => {
     setConfig(configureFor === 'user' ? merge({}, globalConfig, userConfig) : globalConfig);
   }, [configureFor, globalConfig, userConfig]);
 
-  const reloadConfig = async () => {
+  const handleSyncMessage = (event: SyncStreamEvent) => {
+    if (event.isLocal) return;
+
+    if (event.message?.data?.event === streamEvent) {
+      setIsUpdatedByOtherUser(true);
+      setIsUpdatedModalOpen(true);
+    }
+  };
+
+  const initialize = async () => {
+    setIsUpdatedByOtherUser(false);
+    setIsUpdatedModalOpen(false);
     setIsLoading(true);
+    await subscribe(handleSyncMessage);
     await reloadGlobalConfig();
     reloadUserConfig();
     setIsLoading(false);
@@ -66,15 +97,26 @@ const AdminView = () => {
         return true;
       }
     } else {
+      if (isUpdatedByOtherUser) {
+        // Pending reload from another update; prevent save
+        return false;
+      }
+
       const saveResult = await saveGlobalConfig(feature, config);
 
       if (saveResult) {
+        publishMessage({ event: streamEvent });
         setGlobalConfig(saveResult);
         return true;
       }
     }
 
     return false;
+  };
+
+  const handleDismissUpdatedModal = () => {
+    setIsUpdatedModalOpen(false);
+    Notifications.showNotification(AdminUiNotification.SAVE_DISABLED);
   };
 
   return (
@@ -145,6 +187,16 @@ const AdminView = () => {
                 ))}
             </FeatureCardWrapper>
           </Box>
+          <AlertDialog
+            heading={strings[StringTemplates.UPDATED_MODAL_TITLE]}
+            isOpen={isUpdatedModalOpen}
+            onConfirm={initialize}
+            onConfirmLabel={strings[StringTemplates.UPDATED_MODAL_RELOAD]}
+            onDismiss={handleDismissUpdatedModal}
+            onDismissLabel={strings[StringTemplates.CANCEL]}
+          >
+            <Template source={templates[StringTemplates.UPDATED_MODAL_DESC]} />
+          </AlertDialog>
         </>
       )}
     </AdminViewWrapper>
