@@ -11,5 +11,5 @@ export const componentHook = function addAdminToSideNav(flex: typeof Flex, manag
   }
 
   // Add side nav button for the view
-  flex.SideNav.Content.add(<AdminSideLink viewName="template-admin" key="template-admin-side-nav" />);
+  flex.SideNav.Content.add(<AdminSideLink viewName="template-admin" key="template-admin-side-nav" />, { align: 'end' });
 };
