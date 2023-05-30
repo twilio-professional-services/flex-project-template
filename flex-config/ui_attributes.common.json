@@ -212,7 +212,7 @@
         "enabled_for_agents": false
       },
       "admin_ui": {
-        "enabled": false
+        "enabled": true
       }
     }
   }

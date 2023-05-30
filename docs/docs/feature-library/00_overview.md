@@ -10,6 +10,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 
 | Feature                         | Description                                                                 | Feature Docs Page                                                                           | Enabled By Default |
 | ------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------ |
+| Admin UI                        | _adds a feature settings view to Flex for customizing the template_         | [admin-ui](/feature-library/flex-v2/admin-ui)                                               | ✅                 |
 | Agent Automation                | _adds auto accept and auto wrapup behaviors to agent desktop_               | [agent-automation](/feature-library/flex-v2/agent-automation)                               | ✅                 |
 | Attribute Viewer                | _easily view task and worker attributes within Flex_                        | [attribute-viewer](/feature-library/flex-v2/attribute-viewer)                               | ✅                 |
 | Callbacks and Voicemail         | _introduce support for callback and voicemail tasks_                        | [callback-and-voicemail](/feature-library/flex-v2/callback-and-voicemail)                   | ✅                 |
