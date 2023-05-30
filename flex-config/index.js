@@ -90,7 +90,7 @@ async function deployConfigurationData({ map, auth, environment, overwrite }) {
 
     console.log("Merging current configuraton with new configuration...");
     let uiAttributesMerged;
-    if (overwrite && overwrite.toLowerCase === "true") {
+    if (overwrite && overwrite.toLowerCase() === "true") {
       uiAttributesMerged = _.merge(uiAttributesCurrent, uiAttributesCommon, uiAttributes);
     } else {
       uiAttributesMerged = _.merge({}, uiAttributesCommon, uiAttributes, uiAttributesCurrent);
