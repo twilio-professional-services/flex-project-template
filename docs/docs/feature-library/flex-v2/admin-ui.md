@@ -26,13 +26,13 @@ This feature uses the Flex Configuration API to retrieve and store global featur
 
 To prevent accidentally overwriting changes made by other users at the same time, when a global change is made, a Sync stream is used to fan out a message to all clients with the admin-ui open. This message shows affected clients an alert, disables the save functionality, and offers an option to reload the config.
 
-The configuration interface shows the appropriate controls for top-level feature settings that are boolean, string, or number values. For other property types, as well as nested objects, a JSON editor is displayed. This editor requires the input JSON to be valid before saving is allowed.
+The configuration interface shows the appropriate controls for top-level feature settings that are boolean, string, or number values. For other property types, as well as nested objects, a JSON editor is displayed. This editor requires the input JSON to be valid before saving is allowed. However, features can instead provide their own component as the configuration interface if desired.
 
 ### Extending the configuration interface
 
 If a feature has complex configuration options, that feature can register its own component(s) for display in the feature configuration interface. The feature receives the initial configuration, and is provided callback functions to send the updated configuration to the admin-ui, or to disable/enable the save button.
 
-To do so, the feature should register a flex-hook for the `beforeOpenFeatureSettings` action. This action will be invoked with the following payload interface:
+To do so, the feature should register an admin-hook by creating an `admin-hook.tsx` file in the feature directory root. This file's `adminHook` export will be invoked with the following payload interface:
 
 ```ts
 interface CustomComponentPayload {
@@ -45,22 +45,15 @@ interface CustomComponentPayload {
 }
 ```
 
-The feature should update the payload to provide the `component` and `hideDefaultComponents` parameters. Here is an example flex-hook showing the expected usage:
+The feature should update the payload to provide the `component` and `hideDefaultComponents` parameters. Here is an example admin-hook showing the expected usage:
 
 ```ts
-import * as Flex from '@twilio/flex-ui';
+import ActivityHandlerAdmin from './custom-components/ActivityHandlerAdmin/ActivityHandlerAdmin';
 
-import ActivityHandlerAdmin from '../../custom-components/ActivityHandlerAdmin/ActivityHandlerAdmin';
-import { FlexActionEvent } from '../../../../types/feature-loader';
-
-export const actionEvent = FlexActionEvent.before;
-export const actionName = 'OpenFeatureSettings';
-export const actionHook = function addAdminComponent(flex: typeof Flex, _manager: Flex.Manager) {
-  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, _abortFunction) => {
-    if (payload.feature !== 'activity_reservation_handler') return; // Important! We only want to add a component for our feature's settings.
-    payload.component = <ActivityHandlerAdmin {...payload} />; // Pass the payload as props so the component can update admin-ui
-    payload.hideDefaultComponents = true; // Set this to true if you wish to hide the default components provided by admin-ui
-  });
+export const adminHook = function addActivityReservationHandlerAdmin(payload: any) {
+  if (payload.feature !== 'activity_reservation_handler') return; // Important! We only want to add a component for our feature's settings.
+  payload.component = <ActivityHandlerAdmin {...payload} />; // Pass the payload as props so the component can update admin-ui
+  payload.hideDefaultComponents = true; // Set this to true if you wish to hide the default components provided by admin-ui
 };
 ```
 

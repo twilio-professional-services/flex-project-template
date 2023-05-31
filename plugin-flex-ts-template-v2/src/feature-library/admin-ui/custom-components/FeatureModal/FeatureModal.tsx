@@ -24,7 +24,7 @@ interface CustomComponentPayload {
   initialConfig: any;
   setModifiedConfig: (featureName: string, newConfig: any) => void;
   setAllowSave: (featureName: string, allowSave: boolean) => void;
-  component?: JSX.Element;
+  component?: React.ComponentType;
   hideDefaultComponents?: boolean;
 }
 
@@ -34,7 +34,7 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
   const [isResetting, setIsResetting] = useState(false);
   const [hasFailure, setHasFailure] = useState(false);
   const [invalidInputs, setInvalidInputs] = useState([] as string[]);
-  const [customComponent, setCustomComponent] = useState<JSX.Element | null>(null);
+  const [customComponent, setCustomComponent] = useState<React.ComponentType | null>(null);
   const [customAllowSave, setCustomAllowSave] = useState(true);
   const [hideComponents, setHideComponents] = useState(false);
   const modalHeadingID = useUID();
