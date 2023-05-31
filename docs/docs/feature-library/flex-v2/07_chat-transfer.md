@@ -4,6 +4,10 @@ sidebar_position: 8
 title: chat-transfer
 ---
 
+> **Important**
+> 
+> This feature is specifically for *Programmable Chat*, which is deprecated and no longer recommended for new deployments. Chat is now handled by *Flex Conversations*, and the replacement for the chat-transfer feature is [conversation-transfer](conversation-transfer).
+
 This feature enables chat users to perform warm and cold transfers to individual agents or queues. It also introduces notifications into the chat channel for users joining or leaving chat, or starting a warm or cold transfer.
 
 If using the notification feature it is advised that you copy the custom components over to the customer facing chat react app to be re-used, so the custom messages with message-attributes indicating a notification can be rendered the same as they will be in flex.
