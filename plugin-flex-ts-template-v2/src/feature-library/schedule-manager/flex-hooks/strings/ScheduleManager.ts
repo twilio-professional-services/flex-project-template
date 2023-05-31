@@ -102,7 +102,6 @@ export enum StringTemplates {
   RESTRICT_DATE_RANGE = 'SchMgrRestrictDateRange',
   START_DATE = 'SchMgrStartDate',
   END_DATE = 'SchMgrEndDate',
-  OPEN_SCHEDULE_MANAGER = 'SchMgrOpen',
 }
 
 export const stringHook = () => ({
@@ -212,5 +211,4 @@ export const stringHook = () => ({
   [StringTemplates.RESTRICT_DATE_RANGE]: 'Restrict date range',
   [StringTemplates.START_DATE]: 'Start date',
   [StringTemplates.END_DATE]: 'End date',
-  [StringTemplates.OPEN_SCHEDULE_MANAGER]: 'Open Schedule Manager',
 });
