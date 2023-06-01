@@ -10,6 +10,7 @@ import { Button } from '@twilio-paste/button';
 
 import { CannedResponse, CannedResponseCategories, ResponseCategory } from '../../types/CannedResponses';
 import CannedResponsesService from '../../utils/CannedResponsesService';
+import { replaceStringAttributes } from '../../utils/helpers';
 
 interface CannedResponsesDropdownProps {
   task: ITask;
@@ -33,7 +34,7 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
     if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
       currentInput += ' ';
     }
-    currentInput += text;
+    currentInput += replaceStringAttributes(text, task);
     Actions.invokeAction('SetInputText', {
       body: currentInput,
       conversationSid,
@@ -83,7 +84,7 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
                         menu.hide();
                       }}
                     >
-                      {response.text}
+                      {replaceStringAttributes(response.text, task)}
                     </MenuItem>
                   ))}
                 </MenuGroup>
