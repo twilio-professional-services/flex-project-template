@@ -5,28 +5,34 @@
   "scripts": {
     "test": "echo 'Tests to come'; exit 1",
     "start": "twilio serverless:start",
-    "deploy": "twilio serverless:deploy --override-existing-project --env \".env.$TWILIO_PROFILE\" --runtime node14",
+    "deploy": "npm run fetch-config && twilio serverless:deploy --override-existing-project --runtime node16",
+    "deploy-env": "npm run deploy -- --env \".env.$TWILIO_PROFILE\"",
     "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v2",
-    "deploy:dev": "TWILIO_PROFILE=dev npm run deploy",
-    "deploy:test": "TWILIO_PROFILE=test npm run deploy",
-    "deploy:qa": "TWILIO_PROFILE=qa npm run deploy",
-    "deploy:prod": "TWILIO_PROFILE=prod npm run deploy"
+    "deploy:dev": "TWILIO_PROFILE=dev npm run deploy-env",
+    "deploy:test": "TWILIO_PROFILE=test npm run deploy-env",
+    "deploy:qa": "TWILIO_PROFILE=qa npm run deploy-env",
+    "deploy:prod": "TWILIO_PROFILE=prod npm run deploy-env",
+    "fetch-config": "node scripts/fetch-config.js assets/config.private.json $TWILIO_PROFILE",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:report": "npm run lint -- --output-file eslint_report.json --format json"
   },
   "dependencies": {
-    "@twilio/runtime-handler": "1.2.5",
-    "axios": "^0.27.2",
+    "@twilio/runtime-handler": "1.3.0",
+    "axios": "^1.4.0",
     "form-data": "^4.0.0",
     "lodash": "^4.17.21",
     "luxon": "^3.0.1",
     "rrule": "^2.7.1",
-    "twilio": "^3.82.0",
+    "twilio": "^4.11.0",
     "twilio-flex-token-validator": "^1.5.6"
   },
   "devDependencies": {
-    "twilio-cli": "^5.2.0",
-    "twilio-run": "^3.4.2"
+    "eslint": "^8.37.0",
+    "eslint-config-twilio": "^2.0.0",
+    "twilio-run": "^3.5.3"
   },
   "engines": {
-    "node": "14"
+    "node": "16"
   }
 }

@@ -146,6 +146,9 @@ test-results/
 # vscode
 .vscode
 
+# eslint results
+eslint_report.json
+
 appConfig.js
 
 package-lock.json

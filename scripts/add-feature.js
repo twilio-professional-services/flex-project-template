@@ -1,13 +1,8 @@
 var shell = require("shelljs");
 var fs = require("fs").promises;
 
-/* note this script is written exclusively for the v2 plugin 
-   as most work going forward is expected to be built on flex v2.x
-*/
-
-// defaulting to plugin v2 for just now
 var { getPaths } = require("./select-plugin");
-const { templateDirectory, featureDirectory, pluginSrc, pluginDir } = getPaths("v2");
+const { templateDirectory, featureDirectory, pluginSrc, pluginDir } = getPaths();
 
 var featureName;
 var featureClassName;
@@ -79,7 +74,7 @@ const setVars = () => {
   featureName = process.argv[2];
   
   // transform name
-  featureClassName = capitalizeFirstLetter(featureName.replace(/-([a-z])/gi, function(s, group1) {
+  featureClassName = capitalizeFirstLetter(featureName.replace(/-([a-z0-9])/gi, function(s, group1) {
       return group1.toUpperCase();
   }));
   featureConfigName = featureName.replace(/-/g, '_');

@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const componentName = FlexComponent.TaskCanvasTabs;
-export const componentHook = function addTaskCanvasTabCustomization(flex: typeof Flex) {
+export const componentHook = function addParticipantsTab(flex: typeof Flex) {
   if (!isMultiParticipantEnabled()) return;
 
   flex.TaskCanvasTabs.Content.add(

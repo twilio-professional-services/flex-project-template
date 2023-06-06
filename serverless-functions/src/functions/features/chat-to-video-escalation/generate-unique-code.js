@@ -1,4 +1,4 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sync'].path);
 const randomstring = require('randomstring');
@@ -28,7 +28,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       });
 
       document = await SyncOperations.createDocument({
-        attempts: 0,
         context,
         uniqueName: unique_code,
         ttl: context.VIDEO_CODE_TTL,
@@ -47,7 +46,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       context,
       taskSid,
       attributesUpdate: JSON.stringify(attributesUpdate),
-      attempts: 0,
     });
 
     response.setStatusCode(result.status);

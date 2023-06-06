@@ -29,16 +29,14 @@
       },
       "conference": {
         "enabled": true,
-        "add_button": true,
         "hold_workaround": false
       },
       "enhanced_crm_container": {
-        "enabled": false
+        "enabled": false,
+        "should_display_url_when_no_tasks": false,
+        "display_url_when_no_tasks": "https://www.bing.com"
       },
       "internal_call": {
-        "enabled": false
-      },
-      "override_queue_transfer_directory": {
         "enabled": false
       },
       "scrollable_activities": {
@@ -52,7 +50,9 @@
         "supervisor_alert_toggle": true
       },
       "omni_channel_capacity_management": {
-        "enabled": false
+        "enabled": false,
+        "channel": "chat",
+        "default_max_capacity": 2
       },
       "device_manager": {
         "enabled": true
@@ -86,7 +86,7 @@
           "queue_no_worker_data": true,
           "queue_worker_data": false,
           "team": true,
-          "agent_skills": true
+          "agent_skills": false
         },
         "department_options": [
           "General Management",
@@ -148,16 +148,68 @@
         ]
       },
       "supervisor_complete_reservation": {
-        "enabled": true
+        "enabled": true,
+        "outcome": "Completed by supervisor"
       },
-<<<<<<< HEAD
+      "canned_responses": {
+        "enabled": true,
+        "location": "CRM"
+      },
       "keyboard_shortcuts": {
         "enabled": false
-=======
+      },
       "custom_hold_music": {
         "enabled": false,
         "url": ""
->>>>>>> main
+      },
+      "custom_transfer_directory": {
+        "enabled": true,
+        "use_paste_search_icon": false,
+        "queue": {
+          "enabled": true,
+          "show_only_queues_with_available_workers": true,
+          "show_real_time_data": true,
+          "enforce_queue_filter_from_worker_object": true,
+          "enforce_global_exclude_filter": false,
+          "global_exclude_filter": ""
+        },
+        "external_directory": {
+          "enabled": false,
+          "skipPhoneNumberValidation": false,
+          "directory": [
+            {
+              "cold_transfer_enabled": true,
+              "warm_transfer_enabled": true,
+              "label": "Sample Entry",
+              "number": "+10000000000"
+            }
+          ]
+        }
+      },
+      "dispositions": {
+        "enabled": false,
+        "enable_notes": true,
+        "require_disposition": true,
+        "global_dispositions": [
+          "Resolved",
+          "Not Resolved",
+          "Follow-up Required",
+          "Escalation",
+          "Wrong Department"
+        ],
+        "per_queue": {
+          "exampleQueueSid": {
+            "require_disposition": true,
+            "dispositions": ["Promotional Sale", "Renewal"]
+          }
+        }
+      },
+      "emoji_picker": {
+        "enabled": true
+      },
+      "attribute_viewer": {
+        "enabled": true,
+        "enabled_for_agents": false
       }
     }
   }

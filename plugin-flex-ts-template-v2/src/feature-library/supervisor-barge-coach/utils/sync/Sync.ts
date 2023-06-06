@@ -6,10 +6,10 @@ class SyncDocClass {
     return new Promise((resolve) => {
       client
         .document(syncDocName)
-        .then((doc) => {
+        .then((doc: any) => {
           resolve(doc);
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.error('Sync Util: getSyncDoc: Error calling this function', error);
         });
     });
@@ -25,13 +25,10 @@ class SyncDocClass {
     updateStatus: string,
   ) => {
     const docToUpdate = `Agent-Assistance`;
-    // Getting the latest Sync Doc agent list and storing in an array
-    // We will use this to add/remove the appropriate agentAssistance status and agentFN and then update the Sync Doc
     let agentAssistanceArray: Array<any> = [];
     this.getSyncDoc(docToUpdate)
-      .then((doc: { data: { agentAssistance: null } }) => {
-        // Confirm the Sync Doc supervisors array isn't null
-        if (doc.data.agentAssistance !== null) {
+      .then((doc: any) => {
+        if (doc?.data?.agentAssistance) {
           agentAssistanceArray = [...doc.data.agentAssistance];
         }
         if (updateStatus === 'add') {
@@ -42,19 +39,15 @@ class SyncDocClass {
             selectedTaskSID,
             needsAssistance: true,
           });
-          // Update the Sync Doc with the new supervisorsArray
-          this.updateSyncDoc(docToUpdate, 'agentAssistance', agentAssistanceArray);
-
-          // Checking Updated Status we pass during the button click
-          // to update the Supervisor's Status within the Supervisor Array to the Sync Doc
+          this.updateSyncDoc(docToUpdate, agentAssistanceArray);
         } else if (updateStatus === 'remove') {
-          // Get the index of the Supervisor we need to remove in the array
-          const removeAgentAssistanceIndex = agentAssistanceArray.findIndex((a) => a.agentWorkerSID === agentWorkerSID);
-          // Ensure we get something back, and update the status the supervisor is in
+          const removeAgentAssistanceIndex = agentAssistanceArray?.findIndex(
+            (a: any) => a.agentWorkerSID === agentWorkerSID,
+          );
           if (removeAgentAssistanceIndex > -1) {
             agentAssistanceArray.splice(removeAgentAssistanceIndex, 1);
           }
-          this.updateSyncDoc(docToUpdate, 'agentAssistance', agentAssistanceArray);
+          this.updateSyncDoc(docToUpdate, agentAssistanceArray);
         }
       })
       .catch((error: any) => {
@@ -75,14 +68,10 @@ class SyncDocClass {
     const docToUpdate = `syncDoc.${agentWorkerSID}`;
     let supervisorsArray: Array<any> = [];
     this.getSyncDoc(docToUpdate)
-      .then((doc: { data: { supervisors: null } }) => {
-        // Confirm the Sync Doc supervisors array isn't null
+      .then((doc: any) => {
         if (doc.data.supervisors !== null) {
           supervisorsArray = [...doc.data.supervisors];
         }
-        // Checking Updated Status we pass during the button click
-        // to push/add the supervisor from the Supervisor Array within the Sync Doc
-        // adding their Full Name and Conference - the Agent will leverage these values
         if (updateStatus === 'add') {
           supervisorsArray.push({
             conference: conferenceSID,
@@ -90,31 +79,19 @@ class SyncDocClass {
             supervisor: supervisorFN,
             status: supervisorStatus,
           });
-          // Update the Sync Doc with the new supervisorsArray
-          this.updateSyncDoc(docToUpdate, 'supervisors', supervisorsArray);
-
-          // Checking Updated Status we pass during the button click
-          // to update the Supervisor's Status within the Supervisor Array to the Sync Doc
+          this.updateSyncDoc(docToUpdate, supervisorsArray);
         } else if (updateStatus === 'update') {
-          // Get the index of the Supervisor we need to remove in the array
           const updateSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
-          // Ensure we get something back, and update the status the supervisor is in
           if (updateSupervisorIndex > -1) {
             supervisorsArray[updateSupervisorIndex].status = supervisorStatus;
           }
-          // Update the Sync Doc with the new supervisorsArray
-          this.updateSyncDoc(docToUpdate, 'supervisors', supervisorsArray);
-          // Checking Updated Status we pass during button click
-          // to splice/remove the Supervisor from the Supervisor Array within the Sync Doc
+          this.updateSyncDoc(docToUpdate, supervisorsArray);
         } else if (updateStatus === 'remove') {
-          // Get the index of the Supervisor we need to remove in the array
           const removeSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
-          // Ensure we get something back, let's splice this index where the Supervisor is within the array
           if (removeSupervisorIndex > -1) {
             supervisorsArray.splice(removeSupervisorIndex, 1);
           }
-          // Update the Sync Doc with the new supervisorsArray
-          this.updateSyncDoc(docToUpdate, 'supervisors', supervisorsArray);
+          this.updateSyncDoc(docToUpdate, supervisorsArray);
         }
       })
       .catch((error: any) => {
@@ -123,29 +100,27 @@ class SyncDocClass {
   };
 
   // This is where we update the Sync Document we pass in the syncDocName we are updating
-  // We will pass the syncDocName, the type (which would be supervisors or agentAssistance)
-  // along with the object
-  updateSyncDoc = (syncDocName: string, type: string, object: Array<any>) => {
+  // We will pass the syncDocName along with the object
+  updateSyncDoc = (syncDocName: string, object: Array<any>) => {
     client
       .document(syncDocName)
-      .then(async (doc) => {
-        if (type === 'supervisors') {
+      .then(async (doc: any) => {
+        if (syncDocName === 'Agent-Assistance') {
+          doc.update({
+            agentAssistance: object,
+          });
+        } else {
           doc.update({
             supervisors: object,
           });
         }
-        if (type === 'agentAssistance') {
-          doc.update({
-            agentAssistance: object,
-          });
-        }
         return new Promise((resolve) => {
-          client.document(syncDocName).then((doc) => {
+          client.document(syncDocName).then((doc: unknown) => {
             resolve(doc);
           });
         });
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.error('Sync Util: updateSyncDoc: Error calling this function', error);
       });
   };
@@ -154,12 +129,12 @@ class SyncDocClass {
   clearSyncDoc = (syncDocName: string) => {
     client
       .document(syncDocName)
-      .then((doc) => {
+      .then((doc: any) => {
         doc.update({
           supervisors: [],
         });
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.error('Sync Util: clearSyncDoc: Error calling this function', error);
       });
   };

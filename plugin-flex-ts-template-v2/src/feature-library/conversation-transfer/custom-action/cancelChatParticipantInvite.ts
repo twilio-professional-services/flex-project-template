@@ -11,7 +11,10 @@ const handleCancelChatParticipantInvite = async (payload: CancelChatParticipantI
 
   try {
     await TaskService.updateTaskAssignmentStatus(invitesTaskSid, 'canceled');
-    await removeInvitedParticipant(conversation, invitesTaskSid);
+
+    if (conversation?.source?.sid && conversation?.source?.attributes) {
+      await removeInvitedParticipant(conversation.source.sid, conversation.source.attributes as object, invitesTaskSid);
+    }
 
     Notifications.showNotification(NotificationIds.ChatCancelParticipantInviteSuccess);
   } catch (error) {

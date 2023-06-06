@@ -1,7 +1,7 @@
 const AccessToken = require('twilio').jwt.AccessToken;
 
 const { SyncGrant, VideoGrant } = AccessToken;
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sync'].path);
 
 const requiredParameters = [{ key: 'DocumentSid', purpose: 'used for sync document' }];
@@ -12,7 +12,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const client = context.getTwilioClient();
 
     const documentData = await SyncOperations.fetchDocument({
-      attempts: 0,
       context,
       documentSid: document_sid,
     });
@@ -42,7 +41,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         })
         .then((new_document_data) =>
           SyncOperations.updateDocumentData({
-            attempts: 0,
             context,
             documentSid: document_sid,
             updateData: new_document_data,

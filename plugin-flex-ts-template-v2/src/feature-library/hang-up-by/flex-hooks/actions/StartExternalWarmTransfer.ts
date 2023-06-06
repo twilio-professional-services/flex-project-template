@@ -1,6 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
 
-import * as HangUpByHelper from '../../helpers/hangUpBy';
 import { HangUpBy } from '../../enums/hangUpBy';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
@@ -17,7 +16,10 @@ export const actionHook = function reportHangUpByStartExternalWarmTransfer(flex:
       task = Flex.TaskHelper.getTaskByTaskSid(sid);
     }
 
-    HangUpByHelper.setHangUpBy(task.sid, newHangUpBy);
-    await HangUpByHelper.setHangUpByAttribute(task.taskSid, task.attributes, newHangUpBy, phoneNumber);
+    await flex.Actions.invokeAction('SetHangUpBy', {
+      reservationSid: task.sid,
+      hangupby: newHangUpBy,
+      setAttributes: { taskSid: task.taskSid, taskAttributes: task.attributes, destination: phoneNumber },
+    });
   });
 };

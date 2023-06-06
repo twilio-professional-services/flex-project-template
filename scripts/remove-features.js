@@ -1,15 +1,10 @@
 var shell = require("shelljs");
 // https://github.com/shelljs/shelljs#shellstringstr
 
-/* note this script is written exclusively for the v2 plugin 
-   as most work going forward is expected to be built on flex v2.x
-*/
-  
 const { serverlessSrc, flexConfigDir, flexConfigTemplateDir, scheduleManagerServerlessDir } = require ('./common');
 
-// defaulting to plugin v2 for just now
 var { getPaths } = require("./select-plugin");
-const { featureDirectory} = getPaths("v2");
+const { featureDirectory} = getPaths();
 
 
 const filesToCopy = [

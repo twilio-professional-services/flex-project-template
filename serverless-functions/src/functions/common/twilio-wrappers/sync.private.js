@@ -1,6 +1,6 @@
 const { isString, isObject, isNumber } = require('lodash');
 
-const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
+const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handler'].path).retryHandler;
 
 /**
  * @param {object} parameters the parameters for the function
@@ -11,11 +11,9 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
  * @returns {object} success
  * @description the following method is used to remove a Sync Map Item
  */
-exports.deleteMapItem = async (parameters) => {
-  const { attempts, context, mapSid, key } = parameters;
+exports.deleteMapItem = async function deleteMapItem(parameters) {
+  const { context, mapSid, key } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(mapSid) && !isString(mapSid))
     throw new Error('Invalid parameters object passed. Parameters must contain mapSid string value');
@@ -42,11 +40,9 @@ exports.deleteMapItem = async (parameters) => {
  * @returns {object} An existing Sync Map Item
  * @description the following method is used to fetch a Sync Map Item
  */
-exports.fetchMapItem = async (parameters) => {
-  const { attempts, context, mapSid, key } = parameters;
+exports.fetchMapItem = async function fetchMapItem(parameters) {
+  const { context, mapSid, key } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(mapSid) && !isString(mapSid))
     throw new Error('Invalid parameters object passed. Parameters must contain context object');
@@ -56,7 +52,11 @@ exports.fetchMapItem = async (parameters) => {
   try {
     const client = context.getTwilioClient();
 
-    const mapItem = await client.sync.services(context.TWILIO_FLEX_SYNC_SID).syncMaps(mapSid).syncMapItems(key).fetch();
+    const mapItem = await client.sync.v1
+      .services(context.TWILIO_FLEX_SYNC_SID)
+      .syncMaps(mapSid)
+      .syncMapItems(key)
+      .fetch();
 
     return { success: true, status: 200, mapItem };
   } catch (error) {
@@ -75,11 +75,9 @@ exports.fetchMapItem = async (parameters) => {
  * @returns {object} A new Sync Map Item
  * @description the following method is used to create a Sync Map Item
  */
-exports.createMapItem = async (parameters) => {
-  const { attempts, context, mapSid, key, ttl, data } = parameters;
+exports.createMapItem = async function createMapItem(parameters) {
+  const { context, mapSid, key, ttl, data } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(mapSid) && !isString(mapSid))
     throw new Error('Invalid parameters object passed. Parameters must contain context object');
@@ -98,7 +96,7 @@ exports.createMapItem = async (parameters) => {
       data,
     };
 
-    const mapItem = await client.sync
+    const mapItem = await client.sync.v1
       .services(context.TWILIO_FLEX_SYNC_SID)
       .syncMaps(mapSid)
       .syncMapItems.create(mapItemParameters);
@@ -119,11 +117,9 @@ exports.createMapItem = async (parameters) => {
  * @returns {object} A new Sync document
  * @description the following method is used to create a sync document
  */
-exports.createDocument = async (parameters) => {
-  const { attempts, context, uniqueName, ttl, data } = parameters;
+exports.createDocument = async function createDocument(parameters) {
+  const { context, uniqueName, ttl, data } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (Boolean(uniqueName) && !isString(uniqueName))
     throw new Error('Invalid parameters object passed. Parameters must contain uniqueName string value');
@@ -140,7 +136,7 @@ exports.createDocument = async (parameters) => {
       data,
     };
 
-    const document = await client.sync.services(context.TWILIO_FLEX_SYNC_SID).documents.create(documentParameters);
+    const document = await client.sync.v1.services(context.TWILIO_FLEX_SYNC_SID).documents.create(documentParameters);
 
     return { success: true, status: 200, document };
   } catch (error) {
@@ -156,11 +152,9 @@ exports.createDocument = async (parameters) => {
  * @returns {object} A Sync document
  * @description the following method is used to fetch a sync document
  */
-exports.fetchDocument = async (parameters) => {
-  const { attempts, context, documentSid } = parameters;
+exports.fetchDocument = async function fetchDocument(parameters) {
+  const { context, documentSid } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(documentSid))
     throw new Error('Invalid parameters object passed. Parameters must contain documentSid string value');
@@ -168,7 +162,7 @@ exports.fetchDocument = async (parameters) => {
   try {
     const client = context.getTwilioClient();
 
-    const document = await client.sync.services(context.TWILIO_FLEX_SYNC_SID).documents(documentSid).fetch();
+    const document = await client.sync.v1.services(context.TWILIO_FLEX_SYNC_SID).documents(documentSid).fetch();
 
     return { success: true, status: 200, document };
   } catch (error) {
@@ -185,11 +179,9 @@ exports.fetchDocument = async (parameters) => {
  * @returns {object} A Sync document
  * @description the following method is used to fetch a sync document
  */
-exports.updateDocumentData = async (parameters) => {
-  const { attempts, context, documentSid, updateData } = parameters;
+exports.updateDocumentData = async function updateDocumentData(parameters) {
+  const { context, documentSid, updateData } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(documentSid))
     throw new Error('Invalid parameters object passed. Parameters must contain documentSid string value');
@@ -199,7 +191,7 @@ exports.updateDocumentData = async (parameters) => {
   try {
     const client = context.getTwilioClient();
 
-    const documentUpdate = await client.sync
+    const documentUpdate = await client.sync.v1
       .services(context.TWILIO_FLEX_SYNC_SID)
       .documents(documentSid)
       .update({ data: updateData });

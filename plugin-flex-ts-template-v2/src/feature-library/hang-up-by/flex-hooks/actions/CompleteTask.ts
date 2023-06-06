@@ -36,7 +36,7 @@ export const actionHook = function reportHangUpByCompleteTask(flex: typeof Flex,
         return;
       }
 
-      await TaskRouterService.updateTaskAttributes(task.taskSid, attributes);
+      await TaskRouterService.updateTaskAttributes(task.taskSid, attributes, true);
       console.log(`Set conversation attributes for ${task.taskSid}`, attributes);
     } catch (error) {
       console.log(`Failed to set conversation attributes for ${payload.sid}`, error);

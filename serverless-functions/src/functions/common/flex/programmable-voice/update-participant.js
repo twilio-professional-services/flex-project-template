@@ -1,4 +1,6 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const ConferenceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conference-participant'].path);
 
 const requiredParameters = [
@@ -19,13 +21,12 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       conference,
       participant,
       endConferenceOnExit: endConferenceOnExit === 'true',
-      attempts: 0,
     });
 
-    const { success, participantsResponse, status } = result;
+    const { participantsResponse, status } = result;
 
     response.setStatusCode(status);
-    response.setBody({ success, participantsResponse });
+    response.setBody({ participantsResponse, ...extractStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

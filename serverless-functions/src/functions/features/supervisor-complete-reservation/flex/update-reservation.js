@@ -1,4 +1,6 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 const requiredParameters = [
@@ -27,17 +29,16 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const { taskSid, reservationSid, status: taskStatus } = event;
 
     const result = await TaskOperations.updateReservation({
-      attempts: 0,
       context,
       taskSid,
       reservationSid,
       status: taskStatus,
     });
 
-    const { success, status, reservation, message } = result;
+    const { status, reservation } = result;
 
     response.setStatusCode(status);
-    response.setBody({ success, reservation, message });
+    response.setBody({ reservation, ...extractStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

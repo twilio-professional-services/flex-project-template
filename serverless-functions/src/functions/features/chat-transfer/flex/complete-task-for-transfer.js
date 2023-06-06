@@ -1,4 +1,6 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const ChatOperations = require(Runtime.getFunctions()['features/chat-transfer/common/chat-operations'].path);
 
@@ -19,20 +21,25 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (channelSid) {
       // remove channel sid from task to prevent janitor from closing chat channel
-      const { success: removeSidSuccess, message } = await ChatOperations.removeChannelSidFromTask({
+      const removeChannelSidResult = await ChatOperations.removeChannelSidFromTask({
         context,
         taskSid,
-        attempts: 0,
       });
-      if (!removeSidSuccess) return { success: removeSidSuccess, message };
+
+      // if it fails, abandon process and return error messages
+      if (!removeChannelSidResult.success) {
+        response.setStatusCode(removeChannelSidResult.status);
+        response.setBody({ ...extractStandardResponse(removeChannelSidResult) });
+        return callback(null, response);
+      }
 
       // update task data in channel to show this task is no longer in flight
+      // this is not critical so if it fails log error and carry on
       try {
         await ChatOperations.setTaskToCompleteOnChannel({
           context,
           taskSid,
           channelSid,
-          attempts: 0,
         });
       } catch (error) {
         console.error('Error updating chat channel with task sid as completed');
@@ -41,13 +48,14 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     // move the task to completed
     const reason = `Task ${transferType} Transfered to new task`;
-    const { success: completeTaskSuccess, message: completeTaskMessage } = await TaskOperations.completeTask({
+    const completeTaskResult = await TaskOperations.completeTask({
       context,
       taskSid,
       reason,
-      attempts: 0,
     });
-    response.setBody({ success: completeTaskSuccess, completeTaskMessage });
+
+    response.setStatusCode(completeTaskResult.status);
+    response.setBody({ ...extractStandardResponse(completeTaskResult) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

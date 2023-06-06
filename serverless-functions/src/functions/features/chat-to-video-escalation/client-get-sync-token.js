@@ -1,4 +1,4 @@
-const { prepareStudioFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareStudioFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const randomstring = require('randomstring');
 const AccessToken = require('twilio').jwt.AccessToken;
 
@@ -14,7 +14,6 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
 
     // Validate that the unique code is valid, i.e.: that the SYNC document exists
     const documentData = await SyncOperations.fetchDocument({
-      attempts: 0,
       context,
       documentSid: code,
     });

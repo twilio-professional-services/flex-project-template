@@ -1,0 +1,67 @@
+{
+  "categories": [
+    {
+      "section": "Sales",
+      "responses": [
+        {
+          "label": "Features",
+          "text": "Our product comes with a variety of features that cater to your specific needs."
+        },
+        {
+          "label": "Refund",
+          "text": "We offer a 30-day money-back guarantee if you’re not satisfied with our product."
+        },
+        {
+          "label": "Upgrade",
+          "text": "You can upgrade your plan at any time by logging into your account."
+        },
+        {
+          "label": "Demo",
+          "text": "We offer a free demo of our product to help you make an informed decision."
+        },
+        {
+          "label": "Compatibility",
+          "text": "Our product is compatible with most modern browsers and devices."
+        },
+        {
+          "label": "Cost",
+          "text": "We have multiple billing options. You can pay yearly and save 10%"
+        },
+        {
+          "label": "Promotion",
+          "text": "We do offer discounts for our best customers."
+        }
+      ]
+    },
+    {
+      "section": "Support",
+      "responses": [
+        {
+          "label": "Technical Issue",
+          "text": "Please provide us with more details regarding the issue you’re facing so that we can assist you better."
+        },
+        {
+          "label": "Billing Issue",
+          "text": "Please provide us with your account details so that we can look into the billing issue you’re facing."
+        },
+        {
+          "label": "Customer Feedback",
+          "text": "We appreciate your feedback and will do our best to improve our product and services."
+        },
+        {
+          "label": "Cancel Subscription",
+          "text": "You can cancel your subscription at any time by logging into your account and navigating to the subscription section."
+        },
+        {
+          "label": "Account Verification",
+          "text": "For security purposes, we may require you to verify your account before we can proceed with your request."
+        },
+        { "label": "Login", "text": "You can login at https://example.com" },
+        {
+          "label": "Forgot Password",
+          "text": "You can reset your password here at https://example.com/passwordreset"
+        }
+      ]
+    }
+  ]
+}

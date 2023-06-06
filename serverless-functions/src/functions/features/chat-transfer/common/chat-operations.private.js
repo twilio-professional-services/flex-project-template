@@ -1,7 +1,7 @@
 const { isString, isObject, isNumber } = require('lodash');
 const axios = require('axios');
 
-const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
+const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handler'].path).retryHandler;
 
 const INFLIGHT = 'inflight';
 const COMPLETED = 'completed';
@@ -19,10 +19,8 @@ const COMPLETED = 'completed';
  *  is called which marks the task as "completed"
  */
 exports.addTaskToChannel = async (parameters) => {
-  const { attempts, context, channelSid, taskSid } = parameters;
+  const { context, channelSid, taskSid } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(channelSid))
     throw new Error('Invalid parameters object passed. Parameters must contain channelSid string');
@@ -69,10 +67,8 @@ exports.addTaskToChannel = async (parameters) => {
  *  channel data and marked as being "complete".
  */
 exports.setTaskToCompleteOnChannel = async (parameters) => {
-  const { attempts, context, channelSid, taskSid } = parameters;
+  const { context, channelSid, taskSid } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(channelSid))
     throw new Error('Invalid parameters object passed. Parameters must contain channelSid string');
@@ -119,10 +115,8 @@ exports.setTaskToCompleteOnChannel = async (parameters) => {
  *  a channel sid.
  */
 exports.removeChannelSidFromTask = async function removeChannelSidFromTask(parameters) {
-  const { attempts, context, taskSid } = parameters;
+  const { context, taskSid } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(taskSid)) throw new Error('Invalid parameters object passed. Parameters must contain taskSid string');
 

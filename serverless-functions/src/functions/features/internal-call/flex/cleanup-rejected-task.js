@@ -1,4 +1,4 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const ConferenceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conference-participant'].path);
 
 const requiredParameters = [{ key: 'taskSid', purpose: 'unique ID of task to clean up' }];
@@ -12,7 +12,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       taskSid,
       status: 'in-progress',
       limit: 20,
-      attempts: 0,
     });
 
     if (!conferencesResponse.success) {
@@ -25,7 +24,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
           context,
           conference: conference.sid,
           updateParams: { status: 'completed' },
-          attempts: 0,
         });
       }),
     );

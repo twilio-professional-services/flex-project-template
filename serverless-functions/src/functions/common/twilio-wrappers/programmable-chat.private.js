@@ -1,6 +1,6 @@
 const { isString, isObject, isNumber } = require('lodash');
 
-const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
+const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handler'].path).retryHandler;
 
 /**
  * @param {object} parameters the parameters for the function
@@ -12,11 +12,9 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
  * @description the following method is used to apply attributes
  *    to the channel object
  */
-exports.updateChannelAttributes = async (parameters) => {
-  const { attempts, context, channelSid, attributes } = parameters;
+exports.updateChannelAttributes = async function updateChannelAttributes(parameters) {
+  const { context, channelSid, attributes } = parameters;
 
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(channelSid))
     throw new Error('Invalid parameters object passed. Parameters must contain channelSid string');

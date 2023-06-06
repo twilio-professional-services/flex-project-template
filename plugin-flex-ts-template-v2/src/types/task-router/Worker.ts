@@ -36,6 +36,9 @@ export interface CustomWorkerAttributes extends WorkerAttributes {
   // caller-id feature
   selectedCallerId: string;
 
+  // custom-transfer-directory feature
+  enforcedQueueFilter?: string;
+
   // Flex insights references the following elements
   email: string;
   full_name: string;

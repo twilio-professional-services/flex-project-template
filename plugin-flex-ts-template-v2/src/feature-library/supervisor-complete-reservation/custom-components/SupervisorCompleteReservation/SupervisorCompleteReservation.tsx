@@ -3,9 +3,11 @@ import { AlertDialog, Button, Box } from '@twilio-paste/core';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { getOutcome } from '../../config';
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions } from '../../flex-hooks/states/SupervisorCompleteReservation';
+import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 
 export interface OwnProps {
   task: ITask;
@@ -25,6 +27,15 @@ const SupervisorCompleteReservation = ({ task }: OwnProps) => {
 
   const completeReservation = async () => {
     setIsOpen(false);
+    await TaskRouterService.updateTaskAttributes(
+      taskSid,
+      {
+        conversations: {
+          outcome: getOutcome(),
+        },
+      },
+      false,
+    );
     dispatch(Actions.updateReservation(taskSid, reservationSid, 'completed'));
   };
 

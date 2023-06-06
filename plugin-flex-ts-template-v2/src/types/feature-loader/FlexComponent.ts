@@ -5,6 +5,7 @@ export enum FlexComponent {
   CRMContainer = 'CRMContainer',
   MainHeader = 'MainHeader',
   MessageListItem = 'MessageListItem',
+  MessageInputActions = 'MessageInputActions',
   NoTasksCanvas = 'NoTasksCanvas',
   ParticipantCanvas = 'ParticipantCanvas',
   QueueStats = 'QueueStats',

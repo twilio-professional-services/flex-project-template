@@ -5,62 +5,31 @@
   "scripts": {
     "test": "echo 'Tests to come'; exit 1",
     "start": "twilio serverless:start",
-    "deploy": "twilio serverless:deploy --override-existing-project --env \".env.$TWILIO_PROFILE\" --runtime node14",
+    "deploy": "twilio serverless:deploy --override-existing-project --runtime node16",
+    "deploy-env": "npm run deploy -- --env \".env.$TWILIO_PROFILE\"",
     "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v2",
-    "deploy:dev": "TWILIO_PROFILE=dev npm run deploy",
-    "deploy:test": "TWILIO_PROFILE=test npm run deploy",
-    "deploy:qa": "TWILIO_PROFILE=qa npm run deploy",
-    "deploy:prod": "TWILIO_PROFILE=prod npm run deploy",
-    "x-old-predeploy": "[[ -z \"${TWILIO_PROFILE}\" ]] && (echo \"TWILIO_PROFILE must be set\"; exit 1) || exit 0",
-    "x-old-deploy": "twilio serverless:deploy --override-existing-project -p \"$TWILIO_PROFILE\" --env \".env.$TWILIO_PROFILE\" --no-assets",
-    "lint": "eslint --ext js ./src/functions",
+    "deploy:dev": "TWILIO_PROFILE=dev npm run deploy-env",
+    "deploy:test": "TWILIO_PROFILE=test npm run deploy-env",
+    "deploy:qa": "TWILIO_PROFILE=qa npm run deploy-env",
+    "deploy:prod": "TWILIO_PROFILE=prod npm run deploy-env",
+    "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "lint:report": "npm run lint -- --output-file eslint_report.json --format json"
   },
   "dependencies": {
-    "@twilio-labs/serverless-runtime-types": "^1.1",
+    "@twilio/runtime-handler": "1.3.0",
+    "axios": "^1.4.0",
     "lodash": "^4.17.21",
     "randomstring": "^1.2.2",
-    "twilio": "^3.82.0",
-    "twilio-flex-token-validator": "^1.5.4"
+    "twilio": "^4.11.0",
+    "twilio-flex-token-validator": "^1.5.6"
   },
   "devDependencies": {
-    "@types/lodash": "4.14.182",
-    "axios": "0.27.2",
-    "copyfiles": "2.4.1",
     "eslint": "^8.37.0",
     "eslint-config-twilio": "^2.0.0",
-    "twilio-cli": "5.2.1",
-    "twilio-run": "3.4.2",
-    "typescript": "^3.9.4"
+    "twilio-run": "^3.5.3"
   },
   "engines": {
-    "node": "14"
-  },
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "twilio"
-    ],
-    "rules": {
-      "camelcase": "off",
-      "complexity": "off",
-      "import/extensions": "off",
-      "import/no-extraneous-dependencies": "off",
-      "import/no-mutable-exports": "off",
-      "import/no-unresolved": "off",
-      "import/no-unused-modules": "off",
-      "multiline-comment-style": "off",
-      "no-alert": "off",
-      "no-console": "off",
-      "no-multi-str": "off",
-      "no-use-before-define": "off",
-      "prefer-destructuring": "off",
-      "prefer-named-capture-group": "off",
-      "prefer-promise-reject-errors": "off",
-      "sonarjs/cognitive-complexity": "off",
-      "sonarjs/no-identical-functions": "off",
-      "sonarjs/no-duplicate-string": "off"
-    }
+    "node": "16"
   }
 }

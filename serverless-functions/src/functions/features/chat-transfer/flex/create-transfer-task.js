@@ -1,4 +1,6 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/prepare-function'].path);
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const ChatOperations = require(Runtime.getFunctions()['features/chat-transfer/common/chat-operations'].path);
 
@@ -58,37 +60,40 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     };
 
     // create task for transfer
-    const {
-      success: createTaskSuccess,
-      task: newTask,
-      status: createTaskStatus,
-    } = await TaskOperations.createTask({
+    const result = await TaskOperations.createTask({
       context,
       workflowSid,
       taskChannel: 'chat',
       attributes: newAttributes,
       priority,
       timeout,
-      attempts: 0,
     });
 
-    // push task data into chat meta data so that should we end the chat while in queue
-    // the customer front end can trigger cancelling tasks associated to the chat channel
-    // this is not critical to transfer but is ideal
+    const {
+      task: {
+        sid: taskSid,
+        attributes: { channelSid },
+      },
+      success,
+      status,
+    } = result;
+
+    // push task data into chat meta data so that should we end the chat
+    // while in queue the customer front end can trigger cancelling tasks associated
+    // to the chat channel this is not critical to transfer but is ideal
     try {
-      if (createTaskSuccess)
+      if (success)
         await ChatOperations.addTaskToChannel({
           context,
-          taskSid: newTask.sid,
-          channelSid: newTask.attributes.channelSid,
-          attempts: 0,
+          taskSid,
+          channelSid,
         });
     } catch (error) {
       console.error('Error updating chat channel with task sid created for it');
     }
 
-    response.setStatusCode(createTaskStatus);
-    response.setBody({ success: createTaskSuccess, taskSid: newTask.sid });
+    response.setStatusCode(status);
+    response.setBody({ taskSid, ...extractStandardResponse(result) });
 
     return callback(null, response);
   } catch (error) {

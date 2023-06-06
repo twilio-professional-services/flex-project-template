@@ -68,33 +68,33 @@ There are several types of hooks, which should be organized in a directory per t
 
 ```
 ├── flex-hooks
-│   ├── actions
-│   │   └── CompleteTask.ts
-│   ├── channels
-│   │   └── Callback.tsx
-│   ├── chat-orchestrator
-│   │   └── completed.ts
-│   ├── components
-│   │   └── MainHeader.tsx
-│   ├── css-overrides
-│   │   └── index.ts
-│   ├── events
-│   │   └── taskAccepted.ts
-│   ├── jsclient-event-listeners
-│   │   └── conversations-client
-│   │       └── conversationJoined.ts
-│   ├── notification-events
-│   │   └── beforeAddNotification.ts
-│   ├── notifications
-│   │   └── index.ts
-│   ├── paste-elements
-│   │   └── index.ts
-│   ├── reducers
-│   │   └── slice.ts
-│   ├── strings
-│   │   └── index.ts
-│   └── teams-filters
-│       └── index.ts
+│   ├── actions
+│   │   └── CompleteTask.ts
+│   ├── channels
+│   │   └── Callback.tsx
+│   ├── chat-orchestrator
+│   │   └── completed.ts
+│   ├── components
+│   │   └── MainHeader.tsx
+│   ├── css-overrides
+│   │   └── index.ts
+│   ├── events
+│   │   └── taskAccepted.ts
+│   ├── jsclient-event-listeners
+│   │   └── conversations-client
+│   │       └── conversationJoined.ts
+│   ├── notification-events
+│   │   └── beforeAddNotification.ts
+│   ├── notifications
+│   │   └── index.ts
+│   ├── paste-elements
+│   │   └── index.ts
+│   ├── reducers
+│   │   └── slice.ts
+│   ├── strings
+│   │   └── index.ts
+│   └── teams-filters
+│       └── index.ts
 ```
 
 The feature loader determines hook type by the named export(s) in each respective module. The following sections are templates that you can use as a starting point for each type of hook.
@@ -260,6 +260,7 @@ enum FlexComponent {
   CRMContainer = 'CRMContainer',
   MainHeader = 'MainHeader',
   MessageListItem = 'MessageListItem',
+  MessageInputActions = 'MessageInputActions',
   NoTasksCanvas = 'NoTasksCanvas',
   ParticipantCanvas = 'ParticipantCanvas',
   QueueStats = 'QueueStats',
@@ -334,7 +335,7 @@ enum FlexEvent {
   taskRescinded = 'taskRescinded',
   taskTimeout = 'taskTimeout',
   taskWrapup = 'taskWrapup',
-  pluginsLoaded = 'pluginsLoaded',
+  pluginsInitialized = 'pluginsInitialized',
   tokenUpdated = 'tokenUpdated',
 }
 ```
@@ -564,8 +565,8 @@ The common class that implements retry handling; all utilities that act as inter
 
 ### TaskRouter
 
-- updateTaskAttributes(taskSid: string, attributesUpdate: object)
-  - this will merge the attributesUpdate object with existing attributes. It will use the backend to ensure the operation is transactionally safe be checking the ETAG header. This is something not currently done when using the front end SDK.
+- updateTaskAttributes(taskSid: string, attributesUpdate: object, deferUpdates: bool = false)
+  - this will merge the attributesUpdate object with existing attributes. It will use the backend to ensure the operation is transactionally safe be checking the ETAG header. This is something not currently done when using the front end SDK. If deferUpdates=true, the attributes will not be saved until either another update with deferUpdates=false occurs, or CompleteTask is invoked.
 - getQueues(force: boolean)
 - getWorkerChannels(workerSid: string)
 - updateWorkerChannel(workerSid: string, workerChannelSid: string, capacity: number, available: boolean)

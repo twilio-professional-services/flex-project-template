@@ -1,0 +1,82 @@
+name: checks
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    branches:
+      - main
+  # Enable running this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install packages
+        run: |
+          npm install --no-save eslint
+          cd ${{ secrets.PLUGIN_FOLDER }}
+          npm install
+          cd ../serverless-functions
+          npm install
+      - name: Run eslint
+        run: npm run lint:report
+        continue-on-error: true
+      - name: Annotate Code Linting Results
+        id: annotate
+        uses: ataylorme/eslint-annotate-action@v2
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          report-json: "eslint_report.json"
+      - name: Comment on error
+        uses: mshick/add-pr-comment@v2
+        if: always() && steps.annotate.outputs.errorCount > 0
+        with:
+          message: |
+            ${{steps.annotate.outputs.summary}}
+            :rotating_light: Errors must be resolved before merging, and have been annotated in the "Files changed" tab. Run `npm run lint` if you would like to see results locally.
+      - name: Comment on warning
+        uses: mshick/add-pr-comment@v2
+        if: always() && steps.annotate.outputs.errorCount < 1 && steps.annotate.outputs.warningCount > 0
+        with:
+          message: |
+            ${{steps.annotate.outputs.summary}}
+            :warning: Merging is still possible with these warnings, but please fix them if possible! Annotations are available in the "Files changed" tab. Run `npm run lint` if you would like to see results locally.
+      - name: Comment on no issues
+        uses: mshick/add-pr-comment@v2
+        if: always() && steps.annotate.outputs.errorCount < 1 && steps.annotate.outputs.warningCount < 1
+        with:
+          message: |
+            ${{steps.annotate.outputs.summary}}
+            :white_check_mark: No issues found!
+  test-plugin-v2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install packages
+        working-directory: ./${{ secrets.PLUGIN_FOLDER }}
+        run: npm install
+      - name: Run tests
+        working-directory: ./${{ secrets.PLUGIN_FOLDER }}
+        run: npm run test:ci
+      - name: Publish test results
+        uses: mikepenz/action-junit-report@v3
+        if: always()
+        with:
+          report_paths: './${{ secrets.PLUGIN_FOLDER }}/test-results/junit.xml'

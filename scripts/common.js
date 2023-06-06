@@ -1,7 +1,7 @@
 const shell = require("shelljs");
 const fs = require("fs");
 const JSON5 = require('json5');
-var { setPluginName, getPaths } = require("./select-plugin");
+var { getPaths } = require("./select-plugin");
 
 const serverlessDir = 'serverless-functions';
 const scheduleManagerServerlessDir = 'serverless-schedule-manager';
@@ -35,9 +35,6 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     const CALLBACK_WORKFLOW_NAME = "Callback"
     const INTERNAL_CALL_WORKFLOW_NAME = "Internal Call";
 
-    const SERVERLESS_FUNCTIONS_SERVICE_NAME = "custom-flex-extensions-serverless"
-    const SCHEDULE_MANAGER_SERVICE_NAME = "schedule-manager"
-
 
     console.log("Loading environment variables..");
 
@@ -66,17 +63,10 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
       console.log("Workflows not found");
     }
 
-    const serverless_services_raw = shell.exec("twilio api:serverless:v1:services:list", {silent: true})
-    if(serverless_services_raw.length > 0){
-      result.serviceFunctionsSid = serverless_services_raw.grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[0];
-      result.serviceFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.serviceFunctionsSid}`, {silent: true}).grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[4]
-      result.scheduleFunctionsSid = serverless_services_raw.grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[0]
-
-      const scheduledFunctionsDomain_raw = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.scheduleFunctionsSid}`, {silent: true})
-      result.scheduledFunctionsDomain = scheduledFunctionsDomain_raw.length > 0 ? scheduledFunctionsDomain_raw.grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[4] : console.log("Scheduled Functions Domain not found");
-    } else {
-      console.log("No Serverless services found");
-    }
+    result = {
+      ...result,
+      ...exports.getServerlessServices()
+    };
 
     console.log("");
     console.log("\tDone fetching environment variables");
@@ -89,6 +79,28 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     console.error(error);
     return result;
   }
+}
+
+exports.getServerlessServices = function getServerlessServices() {
+  
+  const SERVERLESS_FUNCTIONS_SERVICE_NAME = "custom-flex-extensions-serverless"
+  const SCHEDULE_MANAGER_SERVICE_NAME = "schedule-manager"
+  
+  var result = {};
+  
+  const serverless_services_raw = shell.exec("twilio api:serverless:v1:services:list", {silent: true})
+  if(serverless_services_raw.length > 0){
+    result.serviceFunctionsSid = serverless_services_raw.grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[0];
+    result.serviceFunctionsDomain = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.serviceFunctionsSid}`, {silent: true}).grep(SERVERLESS_FUNCTIONS_SERVICE_NAME).stdout.split(" ")[4];
+    
+    result.scheduleFunctionsSid = serverless_services_raw.grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[0];
+    const scheduledFunctionsDomain_raw = shell.exec(`twilio api:serverless:v1:services:environments:list --service-sid=${result.scheduleFunctionsSid}`, {silent: true});
+    result.scheduledFunctionsDomain = scheduledFunctionsDomain_raw.length > 0 ? scheduledFunctionsDomain_raw.grep(SCHEDULE_MANAGER_SERVICE_NAME).stdout.split(" ")[4] : console.log("Scheduled Functions Domain not found");
+  } else {
+    console.log("No Serverless services found");
+  }
+  
+  return result;
 }
 
 exports.getActiveTwilioProfile = async function getActiveTwilioProfile() {
@@ -117,6 +129,15 @@ exports.installNPMServerlessFunctions = function installNPMServerlessFunctions()
   shell.cd("..");
 }
 
+exports.installNPMServerlessSchmgrFunctions = function installNPMServerlessSchmgrFunctions() {
+  if (shell.test('-d', scheduleManagerServerlessDir)) {
+    console.log("Installing npm dependencies for serverless schedule manager..");
+    shell.cd(`./${scheduleManagerServerlessDir}`)
+    shell.exec("npm install", {silent:true});
+    shell.cd("..");
+  }
+}
+
 exports.installNPMFlexConfig = function installNPMFlexConfig() {
   console.log("Installing npm dependencies for flex-config...");
   shell.cd("./flex-config");
@@ -125,17 +146,8 @@ exports.installNPMFlexConfig = function installNPMFlexConfig() {
 }
 
 exports.installNPMPlugin = function installNPMPlugin() {
-  var { pluginDir } = getPaths("v1");
-  var temp = pluginDir;
-  if( pluginDir && pluginDir != "" ) {
-    console.log(`Installing npm dependencies for ${pluginDir}...`);
-    shell.cd(`./${pluginDir}`)
-    shell.exec(`npm install`, {silent:true});
-    shell.cd("..")
-  }
-
-  var { pluginDir } = getPaths("v2");
-  if ( pluginDir && temp != pluginDir && pluginDir != "" ) {
+  var { pluginDir } = getPaths();
+  if ( pluginDir && pluginDir != "" ) {
     console.log(`Installing npm dependencies for ${pluginDir}...`);
     shell.cd(`./${pluginDir}`)
     shell.exec(`npm install`, {silent:true});
@@ -268,43 +280,15 @@ exports.populateFlexConfigPlaceholders = function populateFlexConfigPlaceholders
 }
 
 exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
-  var { pluginDir } = getPaths("v1");
-  var temp = pluginDir;
+  var { pluginDir } = getPaths();
 
-  var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
-  var pluginAppConfig = `./${pluginDir}/public/appConfig.js`
-  var commonFlexConfig = `./flex-config/ui_attributes.common.json`
+  var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`;
+  var pluginAppConfig = `./${pluginDir}/public/appConfig.js`;
+  var commonFlexConfig = `./flex-config/ui_attributes.common.json`;
 
-  if(pluginDir && pluginDir != ""){
-    try{
-
-      if(!shell.test('-e', pluginAppConfig)){
-        shell.cp(pluginAppConfigExample, pluginAppConfig);
-        
-        // now that we have a copy of the file, populate it with defaults
-        let appConfigFileData = fs.readFileSync(pluginAppConfig, "utf8");
-        let flexConfigFileData = fs.readFileSync(commonFlexConfig, "utf8");
-        let flexConfigJsonData = JSON.parse(flexConfigFileData);
-        
-        appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
-        
-        fs.writeFileSync(pluginAppConfig, appConfigFileData, 'utf8');
-      }
-      console.log(`Setting up ${pluginAppConfig}: complete`);
-    } catch (error) {
-      console.error(error);
-      console.log(`Error attempting to generate appConfig file ${pluginAppConfig}`);
-    }
-  }
-
-  var { pluginDir } = getPaths("v2");
-  if ( pluginDir && temp != pluginDir && pluginDir != "") {
-    var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`
-    var pluginAppConfig = `./${pluginDir}/public/appConfig.js`
-  
-    try{
-  
-      if(!shell.test('-e', pluginAppConfig)){
+  if (pluginDir && pluginDir != "") {
+    try {
+      if (!shell.test('-e', pluginAppConfig)) {
         shell.cp(pluginAppConfigExample, pluginAppConfig);
         
         // now that we have a copy of the file, populate it with defaults

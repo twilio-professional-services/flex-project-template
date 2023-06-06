@@ -10,50 +10,28 @@ module.exports = (config, { isProd, isDev, isTest }) => {
     ...config,
     performance: {
       ...config.performance,
-      hints: false
+      hints: false,
     },
     module: {
       ...config.module,
       rules: [
         ...config.module.rules,
         {
-            test: /index\.ts$/,
-            include: [
-              path.join(__dirname, 'src/feature-library/')
-            ],
-            use: 'import-glob'
+          test: /index\.ts$/,
+          include: [path.join(__dirname, 'src/feature-library/')],
+          use: 'import-glob',
         },
         {
-            test: /\.js$/,
-            include: [
-              path.join(__dirname, 'src/flex-hooks/')
-            ],
-            use: 'import-glob'
+          test: /\.ts$/,
+          include: [path.join(__dirname, 'src/utils/feature-loader/')],
+          use: 'import-glob',
         },
         {
-            test: /\.jsx$/,
-            include: [
-              path.join(__dirname, 'src/flex-hooks/')
-            ],
-            use: 'import-glob'
+          test: /\.tsx$/,
+          include: [path.join(__dirname, 'src/utils/feature-loader/')],
+          use: 'import-glob',
         },
-        {
-            test: /\.ts$/,
-            include: [
-              path.join(__dirname, 'src/flex-hooks/'),
-              path.join(__dirname, 'src/utils/feature-loader/')
-            ],
-            use: 'import-glob'
-        },
-        {
-            test: /\.tsx$/,
-            include: [
-              path.join(__dirname, 'src/flex-hooks/'),
-              path.join(__dirname, 'src/utils/feature-loader/')
-            ],
-            use: 'import-glob'
-        },
-      ]
-    }
+      ],
+    },
   };
-}
+};

@@ -1,6 +1,6 @@
 const { isString, isObject, isNumber, isBoolean } = require('lodash');
 
-const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retry-handler'].path).retryHandler;
+const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handler'].path).retryHandler;
 
 /**
  * @param {object} parameters the parameters for the function
@@ -16,7 +16,7 @@ const retryHandler = require(Runtime.getFunctions()['common/twilio-wrappers/retr
  *      within the defined conference
  */
 exports.coachToggle = async function coachToggle(parameters) {
-  const { context, conferenceSid, participantSid, agentSid, muted, coaching, attempts } = parameters;
+  const { context, conferenceSid, participantSid, agentSid, muted, coaching } = parameters;
 
   if (!isObject(context))
     throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
@@ -28,8 +28,6 @@ exports.coachToggle = async function coachToggle(parameters) {
   if (!isString(muted)) throw new Error('Invalid parameters object passed. Parameters must contain muted boolean');
   if (!isString(coaching))
     throw new Error('Invalid parameters object passed. Parameters must contain coaching boolean');
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   try {
     const client = context.getTwilioClient();
 
@@ -56,7 +54,7 @@ exports.coachToggle = async function coachToggle(parameters) {
  *      within the defined conference
  */
 exports.bargeToggle = async function bargeToggle(parameters) {
-  const { context, conferenceSid, participantSid, muted, attempts } = parameters;
+  const { context, conferenceSid, participantSid, muted } = parameters;
 
   if (!isObject(context))
     throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
@@ -65,8 +63,6 @@ exports.bargeToggle = async function bargeToggle(parameters) {
   if (!isString(participantSid))
     throw new Error('Invalid parameters object passed. Parameters must contain participantSid string');
   if (!isString(muted)) throw new Error('Invalid parameters object passed. Parameters must contain muted boolean');
-  if (!isNumber(attempts))
-    throw new Error('Invalid parameters object passed. Parameters must contain the number of attempts');
   try {
     const client = context.getTwilioClient();
 
@@ -89,7 +85,7 @@ exports.bargeToggle = async function bargeToggle(parameters) {
  * @returns {Participant} The newly created conference participant
  * @description adds the specified phone number as a conference participant
  */
-exports.addParticipant = async (parameters) => {
+exports.addParticipant = async function addParticipant(parameters) {
   const { context, taskSid, to, from } = parameters;
 
   if (!isObject(context))
@@ -124,7 +120,7 @@ exports.addParticipant = async (parameters) => {
  * @returns {Participant} The newly updated conference participant
  * @description holds or unholds the given conference participant
  */
-exports.holdParticipant = async (parameters) => {
+exports.holdParticipant = async function holdParticipant(parameters) {
   const { context, conference, participant, hold } = parameters;
 
   if (!isObject(context))
@@ -157,7 +153,7 @@ exports.holdParticipant = async (parameters) => {
  * @returns empty response object
  * @description removes the given conference participant
  */
-exports.removeParticipant = async (parameters) => {
+exports.removeParticipant = async function removeParticipant(parameters) {
   const { context, conference, participant } = parameters;
 
   if (!isObject(context))
@@ -187,7 +183,7 @@ exports.removeParticipant = async (parameters) => {
  * @returns empty response object
  * @description fetch the given conference participant
  */
-exports.fetchParticipant = async (parameters) => {
+exports.fetchParticipant = async function fetchParticipant(parameters) {
   const { context, conference, participant } = parameters;
 
   if (!isObject(context))
@@ -218,7 +214,7 @@ exports.fetchParticipant = async (parameters) => {
  * @returns {Participant} The newly updated conference participant
  * @description sets endConferenceOnExit on the given conference participant
  */
-exports.updateParticipant = async (parameters) => {
+exports.updateParticipant = async function updateParticipant(parameters) {
   const { context, conference, participant, endConferenceOnExit } = parameters;
 
   if (!isObject(context))
@@ -253,7 +249,7 @@ exports.updateParticipant = async (parameters) => {
  * @returns {Conference[]} The fetched conference(s)
  * @description fetches conferences matching the given task SID and status
  */
-exports.fetchByTask = async (parameters) => {
+exports.fetchByTask = async function fetchByTask(parameters) {
   const { context, taskSid, status, limit } = parameters;
 
   if (!isObject(context))
@@ -286,7 +282,7 @@ exports.fetchByTask = async (parameters) => {
  * @returns {Conference} The newly updated conference
  * @description updates the given conference
  */
-exports.updateConference = async (parameters) => {
+exports.updateConference = async function updateConference(parameters) {
   const { context, conference, updateParams } = parameters;
 
   if (!isObject(context))

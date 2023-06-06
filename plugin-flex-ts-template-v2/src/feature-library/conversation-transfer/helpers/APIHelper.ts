@@ -3,10 +3,12 @@ import { ITask, Manager, ConversationState, TaskHelper } from '@twilio/flex-ui';
 import TaskService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 import { EncodedParams } from '../../../types/serverless';
 import ApiService from '../../../utils/serverless/ApiService';
+import { getWorkerName } from './inviteTracker';
 
 const manager: any | undefined = Manager.getInstance();
 
 export interface RemoveParticipantRESTPayload {
+  conversationSid: string;
   flexInteractionSid: string; // KDxxx sid for inteactions API
   flexInteractionChannelSid: string; // UOxxx sid for interactions API
   flexInteractionParticipantSid: string; // UTxxx sid for interactions API for the transferrring agent to remove
@@ -15,9 +17,11 @@ export interface RemoveParticipantRESTPayload {
 export interface TransferRESTPayload {
   taskSid: string; // sid of task to be transferred
   conversationId: string; // for linking transfer task in insights (CHxxx or WTxxx sid)
+  conversationSid: string; // for storing invite to attributes (CHxxx sid)
   jsonAttributes: string; // string representation of attributes for new task
   transferTargetSid: string; // worker or queue sid
   transferQueueName: string; // only valid if transfer to queue
+  transferWorkerName: string; // only valid if transfer to worker
   workersToIgnore: object; // {key: value} - where key is the taskrouter attribute to set and value is a string array of names of agents in conversation to make sure they don't get reservations to join again
   flexInteractionSid: string; // KDxxx sid for inteactions API
   flexInteractionChannelSid: string; // UOxxx sid for interactions API
@@ -42,7 +46,14 @@ const _getAgentsWorkerSidArray = (participants: any) => {
 };
 
 const _queueNameFromSid = async (transferTargetSid: string) => {
-  const queues = await TaskService.getQueues();
+  let queues;
+
+  try {
+    queues = await TaskService.getQueues();
+  } catch (error) {
+    console.error('conversation-transfer: Unable to get queues', error);
+  }
+
   const queueResult = queues
     ? queues.find((queue) => {
         return queue.sid === transferTargetSid;
@@ -59,7 +70,7 @@ export const buildRemoveMyPartiticipantAPIPayload = async (
   const task = TaskHelper.getTaskFromConversationSid(conversation.source?.sid);
   if (!task || !TaskHelper.isCBMTask(task)) return null;
 
-  const { flexInteractionSid = '', flexInteractionChannelSid = '' } = task.attributes;
+  const { flexInteractionSid = '', flexInteractionChannelSid = '', conversationSid = '' } = task.attributes;
 
   const participants = await task.getParticipants(flexInteractionChannelSid);
 
@@ -71,13 +82,14 @@ export const buildRemoveMyPartiticipantAPIPayload = async (
     flexInteractionSid,
     flexInteractionChannelSid,
     flexInteractionParticipantSid,
+    conversationSid,
   };
 };
 
 export const buildRemovePartiticipantAPIPayload = (task: ITask, flexInteractionParticipantSid: string) => {
   if (!task || !TaskHelper.isCBMTask(task)) return null;
 
-  const { flexInteractionSid = '', flexInteractionChannelSid = '' } = task.attributes;
+  const { flexInteractionSid = '', flexInteractionChannelSid = '', conversationSid = '' } = task.attributes;
 
   if (!flexInteractionParticipantSid) return null;
 
@@ -85,6 +97,7 @@ export const buildRemovePartiticipantAPIPayload = (task: ITask, flexInteractionP
     flexInteractionSid,
     flexInteractionChannelSid,
     flexInteractionParticipantSid,
+    conversationSid,
   };
 };
 
@@ -99,15 +112,18 @@ export const buildInviteParticipantAPIPayload = async (
   const transferTargetSid = targetSid;
 
   let transferQueueName = '';
+  let transferWorkerName = '';
   if (transferTargetSid.startsWith('WQ')) {
     transferQueueName = await _queueNameFromSid(transferTargetSid);
     if (!transferQueueName) {
       console.error('Transfer failed. queueNameFromSid failed for', transferTargetSid);
       return null;
     }
+  } else {
+    transferWorkerName = await getWorkerName(transferTargetSid);
   }
 
-  const { flexInteractionSid = null, flexInteractionChannelSid = null } = task.attributes;
+  const { flexInteractionSid = null, flexInteractionChannelSid = null, conversationSid = null } = task.attributes;
 
   if (!flexInteractionSid || !flexInteractionChannelSid) {
     console.error('Transfer failed. Missing flexInteractionSid or flexInteractionChannelSid', task.sid);
@@ -134,9 +150,11 @@ export const buildInviteParticipantAPIPayload = async (
   return {
     taskSid,
     conversationId,
+    conversationSid,
     jsonAttributes,
     transferTargetSid,
     transferQueueName,
+    transferWorkerName,
     workersToIgnore,
     flexInteractionSid,
     flexInteractionChannelSid,
@@ -159,9 +177,11 @@ class ChatTransferService extends ApiService {
       Token: encodeURIComponent(manager.user.token),
       taskSid: encodeURIComponent(requestPayload.taskSid),
       conversationId: encodeURIComponent(requestPayload.conversationId),
+      conversationSid: encodeURIComponent(requestPayload.conversationSid),
       jsonAttributes: encodeURIComponent(requestPayload.jsonAttributes),
       transferTargetSid: encodeURIComponent(requestPayload.transferTargetSid),
       transferQueueName: encodeURIComponent(requestPayload.transferQueueName),
+      transferWorkerName: encodeURIComponent(requestPayload.transferWorkerName),
       workersToIgnore: encodeURIComponent(JSON.stringify(requestPayload.workersToIgnore)),
       flexInteractionSid: encodeURIComponent(requestPayload.flexInteractionSid),
       flexInteractionChannelSid: encodeURIComponent(requestPayload.flexInteractionChannelSid),
@@ -187,6 +207,7 @@ class ChatTransferService extends ApiService {
   ): Promise<RemoveParticipantRESTResponse> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(manager.user.token),
+      conversationSid: encodeURIComponent(requestPayload.conversationSid),
       flexInteractionSid: encodeURIComponent(requestPayload.flexInteractionSid),
       flexInteractionChannelSid: encodeURIComponent(requestPayload.flexInteractionChannelSid),
       flexInteractionParticipantSid: encodeURIComponent(requestPayload.flexInteractionParticipantSid),

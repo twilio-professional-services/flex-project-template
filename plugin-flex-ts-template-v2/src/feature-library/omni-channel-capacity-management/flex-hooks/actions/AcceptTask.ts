@@ -3,6 +3,9 @@ import * as Flex from '@twilio/flex-ui';
 import { Channel } from '../../../../types/task-router';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import { getConfigChannel, getDefaultMaxCapacity } from '../../config';
+
+const STORAGE_KEY = 'omni_channel_previous_capacity';
 
 export const actionEvent = FlexActionEvent.after;
 export const actionName = FlexAction.AcceptTask;
@@ -32,48 +35,56 @@ export const actionName = FlexAction.AcceptTask;
   this function works such that when reaching the chat capacity, it can be assumed
   there is a backlog of chat work, therefore the capacity is reduced to 1 allowing 
   the agent to complete all the work for the chat channel and for task router to 
-  assign the next peice of work of highest importance across any channel.
+  assign the next piece of work of highest importance across any channel.
 
-  Once the next piece of work is recieved, the capacity is reset. 
+  Once the next piece of work is received, the capacity is reset. 
 */
 export const actionHook = function omniChannelChatCapacityManager(flex: typeof Flex, manager: Flex.Manager) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, async () => {
     const workerChanneslMap = manager?.workerClient?.channels;
     const tasksMap = manager.store.getState().flex.worker.tasks;
+    const channelFromConfig = getConfigChannel();
 
     const workerChannelsArray = workerChanneslMap ? Array.from(workerChanneslMap.values()) : null;
-    const chatChannel: Channel | undefined = workerChannelsArray
+    const configuredChannel: Channel | undefined = workerChannelsArray
       ? workerChannelsArray.find((channel) => {
-          return channel?.taskChannelUniqueName === 'chat';
+          return channel?.taskChannelUniqueName === channelFromConfig;
         })
       : undefined;
 
-    if (!chatChannel) {
+    if (!configuredChannel) {
       return;
     }
 
-    const currentChatCapacity = chatChannel.capacity; // current assumed to be 2
-    const workerChannelSid = chatChannel.sid;
+    const currentChannelCapacity = configuredChannel.capacity;
+    const workerChannelSid = configuredChannel.sid;
 
     const tasksArray = Array.from(tasksMap.values());
-    const chatTasks: Array<any>[] | any = tasksArray.filter((task: any) => {
-      return task.taskChannelUniqueName === 'chat';
+    const channelTasks: Array<any>[] | any = tasksArray.filter((task: any) => {
+      return task.taskChannelUniqueName === channelFromConfig;
     });
 
     const workerSid = manager?.workerClient?.sid || '';
 
-    if (workerSid && currentChatCapacity === 1 && chatTasks.length < 2) {
-      // we're assuming chat capacity has been artificially reduced
+    if (workerSid && currentChannelCapacity === 1) {
+      // we're assuming channel capacity has been artificially reduced
       // reset it to the desired max value
-      /* 
-          TODO: - add logic to derive max capacity instead of hard coded 2
-        */
-      TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 2, true);
+      const storageValue = Number(localStorage.getItem(STORAGE_KEY));
+      let maxCapacity = getDefaultMaxCapacity();
+
+      if (!isNaN(storageValue) && storageValue > 0) {
+        maxCapacity = storageValue;
+      }
+
+      if (channelTasks.length < maxCapacity) {
+        TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, maxCapacity, true);
+      }
     }
 
-    if (workerSid && chatTasks.length > 1 && chatTasks.length === currentChatCapacity) {
+    if (workerSid && channelTasks.length > 1 && channelTasks.length === currentChannelCapacity) {
       // we're saturated
-      // reduce capacity on chat channel to 1
+      // reduce capacity on channel to 1
+      localStorage.setItem(STORAGE_KEY, currentChannelCapacity.toString());
       TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 1, true);
     }
   });

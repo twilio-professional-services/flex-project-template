@@ -39,7 +39,7 @@ import {
 } from "../../utils/helper";
 import PostVideoRoom from "../PostVideoRoom/PostVideoRoom";
 
-const BACKEND_URL = process.env.SERVERLESS_FUNCTIONS_DOMAIN;
+const BACKEND_URL = process.env.NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN;
 
 export default function VideoRoom() {
   const router = useRouter();
