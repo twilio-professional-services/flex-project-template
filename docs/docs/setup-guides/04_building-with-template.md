@@ -537,14 +537,14 @@ Use a string hook to register your own string definitions for use in your featur
 ```ts
 // Export the template names as an enum for better maintainability when accessing them elsewhere
 export enum StringTemplates {
-  MyString = "MyString",
-  MyString2 = "MyString2",
+  MyString = 'MyString',
+  MyString2 = 'MyString2',
 }
 
 export const stringHook = () => ({
   'en-US': {
-    [StringTemplates.MyString]: "Your string here",
-    [StringTemplates.MyString2]: "Your {{customString}} here",
+    [StringTemplates.MyString]: 'Your string here',
+    [StringTemplates.MyString2]: 'Your {{customString}} here',
   },
 });
 ```
@@ -554,12 +554,12 @@ Note that this string hook specifies `en-US` for the string locale. All string h
 ```ts
 export const stringHook = () => ({
   'en-US': {
-    [StringTemplates.MyString]: "Your string here",
-    [StringTemplates.MyString2]: "Your {{customString}} here",
+    [StringTemplates.MyString]: 'Your string here',
+    [StringTemplates.MyString2]: 'Your {{customString}} here',
   },
   'es-MX': {
-    [StringTemplates.MyString]: "Tu cadena aquí",
-    [StringTemplates.MyString2]: "Tu {{customString}} aquí",
+    [StringTemplates.MyString]: 'Tu cadena aquí',
+    [StringTemplates.MyString2]: 'Tu {{customString}} aquí',
   },
 });
 ```

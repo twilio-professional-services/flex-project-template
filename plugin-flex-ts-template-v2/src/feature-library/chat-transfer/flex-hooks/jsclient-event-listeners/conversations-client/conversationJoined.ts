@@ -4,6 +4,7 @@ import { Conversation } from '@twilio/conversations';
 
 import { getWorkerFriendlyName } from '../../../utils/serverless/ChatTransferService';
 import { FlexJsClient, ConversationEvent } from '../../../../../types/feature-loader';
+import { StringTemplates } from '../../strings/ChatTransfer';
 
 export const clientName = FlexJsClient.conversationsClient;
 export const eventName = ConversationEvent.conversationJoined;
@@ -23,7 +24,9 @@ export const jsClientHook = function announceOnChannelWhenJoined(
 
   Flex.Actions.invokeAction('SendMessage', {
     conversationSid: conversation.sid,
-    body: `${getWorkerFriendlyName(manager.workerClient as unknown as Worker)} joined the channel`,
+    body: flex.templates[StringTemplates.JoinMessage]({
+      workerName: getWorkerFriendlyName(manager.workerClient as unknown as Worker),
+    }),
     messageAttributes: { notification: true },
   });
 };

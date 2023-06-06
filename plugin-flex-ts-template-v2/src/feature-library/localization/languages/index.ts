@@ -16,6 +16,7 @@ export default [
   {
     name: 'English',
     key: 'en-US',
+    strings: {},
   },
   {
     name: 'Spanish',

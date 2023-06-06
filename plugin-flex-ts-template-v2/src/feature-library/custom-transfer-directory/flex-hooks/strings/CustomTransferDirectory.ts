@@ -5,6 +5,15 @@ export enum StringTemplates {
   PhoneNumberFailedValidationCheckRequest = 'PSPhoneNumberFailedValidationCheckRequest',
   PhoneNumberFailedValidationCheckWithErrors = 'PSPhoneNumberFailedValidationCheckWithErrors',
   ErrorExecutingColdTransfer = 'PSErrorExecutingColdTransfer',
+  Queues = 'PSDirectoryQueues',
+  External = 'PSDirectoryExternal',
+  SearchDirectory = 'PSDirectorySearchDirectory',
+  NoItemsFound = 'PSDirectoryNoItemsFound',
+  ColdTransfer = 'PSDirectoryColdTransfer',
+  WarmTransfer = 'PSDirectoryWarmTransfer',
+  QueuesFiltered = 'PSDirectoryQueuesFiltered',
+  QueueTooltip = 'PSDirectoryQueueTooltip',
+  NA = 'PSDirectoryNA',
 }
 
 export const stringHook = () => ({
@@ -18,5 +27,14 @@ export const stringHook = () => ({
     [StringTemplates.PhoneNumberFailedValidationCheckWithErrors]:
       "The phone number '{{phoneNumber}}' failed validation check with the following errors: {{errors}}",
     [StringTemplates.ErrorExecutingColdTransfer]: 'Error attempting to perform cold transfer, {{message}}',
+    [StringTemplates.Queues]: 'Queues',
+    [StringTemplates.External]: 'External',
+    [StringTemplates.SearchDirectory]: 'Search Directory',
+    [StringTemplates.NoItemsFound]: 'No items found.',
+    [StringTemplates.ColdTransfer]: 'Cold Transfer',
+    [StringTemplates.WarmTransfer]: 'Warm Transfer',
+    [StringTemplates.QueuesFiltered]: 'Queues may be filtered out due to lack of available workers in queues.',
+    [StringTemplates.QueueTooltip]: 'Agents: {{agentsAvailable}}, Tasks in queue: {{tasksInQueue}}',
+    [StringTemplates.NA]: 'N/A',
   },
 });
