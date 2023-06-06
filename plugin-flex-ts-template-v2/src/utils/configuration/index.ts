@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
+import { CustomWorkerAttributes } from 'types/task-router/Worker';
 
 export const defaultLanguage = 'en-US';
 
@@ -9,7 +10,16 @@ export const getFeatureFlags = () => {
 };
 
 export const getUserLanguage = () => {
-  const { language } = getFeatureFlags();
+  const workerClient = Flex.Manager.getInstance().workerClient;
+  let { language } = getFeatureFlags();
+
+  if (workerClient) {
+    // get user-specified language if present, instead of global language
+    const workerAttrs = workerClient.attributes as CustomWorkerAttributes;
+    if (workerAttrs.language) {
+      language = workerAttrs.language;
+    }
+  }
 
   if (!language) {
     return defaultLanguage;

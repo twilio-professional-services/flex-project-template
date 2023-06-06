@@ -22,7 +22,7 @@ const LanguageSelector = () => {
     }
 
     await Actions.invokeAction('SetWorkerAttributes', {
-      attributes: { custom_data: { language: selectedLanguage?.key } },
+      attributes: { language: selectedLanguage?.key },
       mergeExisting: true,
     });
     location.reload();

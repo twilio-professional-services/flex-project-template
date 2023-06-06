@@ -212,7 +212,8 @@
         "enabled_for_agents": false
       },
       "localization": {
-        "enabled": false
+        "enabled": false,
+        "show_menu": true
       }
     }
   }
