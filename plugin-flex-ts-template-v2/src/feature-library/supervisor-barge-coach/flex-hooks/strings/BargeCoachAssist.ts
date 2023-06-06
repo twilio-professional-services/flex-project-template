@@ -4,5 +4,7 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.AGENT_ASSISTANCE]: `{{agentFN}} is seeking assistance.`,
+  'en-US': {
+    [StringTemplates.AGENT_ASSISTANCE]: `{{agentFN}} is seeking assistance.`,
+  },
 });

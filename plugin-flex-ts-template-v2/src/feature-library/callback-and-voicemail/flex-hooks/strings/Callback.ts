@@ -5,6 +5,9 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.ErrorCallingCustomer]: 'Failed to call {{customer}}, please try again',
-  [StringTemplates.OutboundDialingNotEnabled]: 'Outbound dialing is not enabled, please notify a systems administrator',
+  'en-US': {
+    [StringTemplates.ErrorCallingCustomer]: 'Failed to call {{customer}}, please try again',
+    [StringTemplates.OutboundDialingNotEnabled]:
+      'Outbound dialing is not enabled, please notify a systems administrator',
+  },
 });

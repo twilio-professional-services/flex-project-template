@@ -4,6 +4,8 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.MultiCallBroken]:
-    'The multi-call feature will not work because it has not been configured correctly.',
+  'en-US': {
+    [StringTemplates.MultiCallBroken]:
+      'The multi-call feature will not work because it has not been configured correctly.',
+  },
 });

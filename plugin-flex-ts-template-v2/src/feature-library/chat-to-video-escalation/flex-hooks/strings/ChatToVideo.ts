@@ -4,5 +4,7 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.FailedVideoLinkNotification]: 'Unable to create the video room. Please try again.',
+  'en-US': {
+    [StringTemplates.FailedVideoLinkNotification]: 'Unable to create the video room. Please try again.',
+  },
 });

@@ -6,8 +6,10 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.ErrorParsingQueueExpression]: 'Failed to parse queue expression, ignoring queue filter.',
-  [StringTemplates.ErrorParsingQueueExpressionWithOR]:
-    "Unable to apply queue filters to queues containing OR'd expressions. Ignoring queue filter.",
-  [StringTemplates.ErrorQueueNotFound]: 'Queue reference not found, ignoring queue filter',
+  'en-US': {
+    [StringTemplates.ErrorParsingQueueExpression]: 'Failed to parse queue expression, ignoring queue filter.',
+    [StringTemplates.ErrorParsingQueueExpressionWithOR]:
+      "Unable to apply queue filters to queues containing OR'd expressions. Ignoring queue filter.",
+    [StringTemplates.ErrorQueueNotFound]: 'Queue reference not found, ignoring queue filter',
+  },
 });

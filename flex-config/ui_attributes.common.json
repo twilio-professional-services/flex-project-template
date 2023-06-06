@@ -173,12 +173,14 @@
         "external_directory": {
           "enabled": false,
           "skipPhoneNumberValidation": false,
-          "directory": [{
-            "cold_transfer_enabled": true,
-            "warm_transfer_enabled": true,
-            "label": "Sample Entry",
-            "number": "+10000000000"
-          }]
+          "directory": [
+            {
+              "cold_transfer_enabled": true,
+              "warm_transfer_enabled": true,
+              "label": "Sample Entry",
+              "number": "+10000000000"
+            }
+          ]
         }
       },
       "dispositions": {
@@ -208,6 +210,9 @@
       "attribute_viewer": {
         "enabled": true,
         "enabled_for_agents": false
+      },
+      "localization": {
+        "enabled": false
       }
     }
   }

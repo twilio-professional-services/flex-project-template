@@ -4,6 +4,8 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.ActivitySkillRulesNotConfigured]:
-    'Activity skill filter rules are not configured. The activity menu has not been modified.',
+  'en-US': {
+    [StringTemplates.ActivitySkillRulesNotConfigured]:
+      'Activity skill filter rules are not configured. The activity menu has not been modified.',
+  },
 });

@@ -5,7 +5,9 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.ExternalTransferFailedHangupNotification]:
-    'Hangup call abandoned: Failed to take all participants off hold while hanging up the call. If this issue persists, please try unholding participants manually before leaving the call',
-  [StringTemplates.ExternalWarmTransferInvalidPhoneNumber]: 'Unable to add participant. {{message}}',
+  'en-US': {
+    [StringTemplates.ExternalTransferFailedHangupNotification]:
+      'Hangup call abandoned: Failed to take all participants off hold while hanging up the call. If this issue persists, please try unholding participants manually before leaving the call',
+    [StringTemplates.ExternalWarmTransferInvalidPhoneNumber]: 'Unable to add participant. {{message}}',
+  },
 });
