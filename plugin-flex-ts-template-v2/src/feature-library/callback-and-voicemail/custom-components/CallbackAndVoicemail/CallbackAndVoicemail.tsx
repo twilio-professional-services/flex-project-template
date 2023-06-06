@@ -1,4 +1,4 @@
-import { ITask, useFlexSelector, Manager } from '@twilio/flex-ui';
+import { ITask, useFlexSelector, Manager, Template, templates } from '@twilio/flex-ui';
 import React from 'react';
 import { DateTime } from 'luxon';
 import { TaskAttributes } from 'types/task-router/Task';
@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions, CallbackAndVoicemailState } from '../../flex-hooks/states/CallbackAndVoicemail';
+import { StringTemplates } from '../../flex-hooks/strings/Callback';
 
 type CallbackAndVoicemailProps = {
   task: ITask;
@@ -50,10 +51,10 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
   } as Intl.DateTimeFormatOptions;
 
   const localTimeShort = timeReceived.toLocaleString({ ...formatOptions, timeZone: localTz });
-  const serverTimeShort = `System time: ${timeReceived.toLocaleString({
+  const serverTimeShort = timeReceived.toLocaleString({
     ...formatOptions,
     timeZone: callBackData?.mainTimeZone || localTz,
-  })}`;
+  });
   const disableRetryButton =
     taskStatus !== 'assigned' || isCompletingCallbackAction[task.taskSid] || isRequeueingCallbackAction[task.taskSid];
   const disableCallCustomerButton = disableRetryButton || workerOffline(workerActivitySid);
@@ -65,25 +66,29 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
         {taskType === 'callback' && (
           <Box element="C_AND_V_CONTENT_BOX">
             <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
-              Callback Request
+              <Template source={templates[StringTemplates.CallbackRequestHeading]} />
             </Heading>
-            <Text as="span">A contact has requested an immediate callback.</Text>
+            <Text as="span">
+              <Template source={templates[StringTemplates.CallbackRequestDescription]} />
+            </Text>
           </Box>
         )}
 
         {taskType === 'voicemail' && (
           <Box element="C_AND_V_CONTENT_BOX">
             <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
-              Contact Voicemail
+              <Template source={templates[StringTemplates.VoicemailRequestHeading]} />
             </Heading>
-            <Text as="span">A contact has left a voicemail that requires attention.</Text>
+            <Text as="span">
+              <Template source={templates[StringTemplates.VoicemailRequestDescription]} />
+            </Text>
           </Box>
         )}
 
         {callBackData.recordingUrl && !callBackData.isDeleted && (
           <Box element="C_AND_V_CONTENT_BOX">
             <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
-              Voicemail recording
+              <Template source={templates[StringTemplates.VoicemailRecording]} />
             </Heading>
             <Text as="span">
               <audio src={callBackData.recordingUrl} controls />
@@ -94,7 +99,7 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
         {callBackData.transcriptText && !callBackData.isDeleted && (
           <Box element="C_AND_V_CONTENT_BOX">
             <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
-              Voicemail transcript
+              <Template source={templates[StringTemplates.VoicemailTranscript]} />
             </Heading>
             <Text as="span">{callBackData.transcriptText}</Text>
           </Box>
@@ -102,14 +107,14 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
 
         <Box element="C_AND_V_CONTENT_BOX">
           <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
-            Contact phone
+            <Template source={templates[StringTemplates.ContactPhone]} />
           </Heading>
           <Text as="span">{callBackData?.numberToCall}</Text>
         </Box>
 
         <Box element="C_AND_V_CONTENT_BOX">
           <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
-            Call reception time
+            <Template source={templates[StringTemplates.CallReceptionTime]} />
           </Heading>
           <Flex vAlignContent="center">
             <Flex>
@@ -117,7 +122,12 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
             </Flex>
             <Flex grow>
               <Box paddingLeft="space10">
-                <InformationIcon decorative={false} title={serverTimeShort} />
+                <InformationIcon
+                  decorative={false}
+                  title={templates[StringTemplates.SystemTime]({
+                    systemTime: serverTimeShort,
+                  })}
+                />
               </Box>
             </Flex>
           </Flex>
@@ -126,10 +136,14 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
         {allowRequeue && (
           <Box element="C_AND_V_CONTENT_BOX">
             <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
-              Callback attempt
+              <Template source={templates[StringTemplates.CallbackAttemptHeading]} />
             </Heading>
             <Text as="span">
-              {thisAttempt} of {maxAttempts}
+              <Template
+                source={templates[StringTemplates.CallbackAttempts]}
+                thisAttempt={thisAttempt}
+                maxAttempts={maxAttempts}
+              />
             </Text>
           </Box>
         )}
@@ -142,7 +156,7 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
           variant="primary"
           onClick={() => dispatch(Actions.callCustomer(task))}
         >
-          Place Call Now To {callBackData?.numberToCall}
+          <Template source={templates[StringTemplates.PlaceCallNow]} phoneNumber={callBackData?.numberToCall} />
         </Button>
       </Box>
 
@@ -154,7 +168,7 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
             variant="secondary"
             onClick={async () => dispatch(Actions.requeueCallback(task))}
           >
-            Retry Later
+            <Template source={templates[StringTemplates.RetryLater]} />
           </Button>
         </Box>
       )}
