@@ -9,7 +9,7 @@ This feature provides a language selection dropdown in the Flex UI header, as we
 
 ## Flex User Experience
 
-TODO _animations with descriptions if necessary of the user experience in Flex_
+![Localization demo](/img/f2/localization/localization.gif)
 
 ## Setup and dependencies
 
