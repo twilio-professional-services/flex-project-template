@@ -1,11 +1,12 @@
-import { FilterDefinition } from '@twilio/flex-ui';
+import { FilterDefinition, Manager } from '@twilio/flex-ui';
 
 import SelectFilter from '../custom-components/SelectFilter';
 import SelectFilterLabel from '../custom-components/SelectFilterLabel';
 import { getDepartmentOptions } from '../config';
+import { StringTemplates } from '../flex-hooks/strings/TeamViewQueueFilter';
 
 /* 
-  This filter is based on the model of the worker attibutes adopted from
+  This filter is based on the model of the worker attributes adopted from
   flex insights.  For a definition of that model see:
 
   https://www.twilio.com/docs/flex/developer/insights/enhance-integration#enhance-agent-data
@@ -21,7 +22,7 @@ import { getDepartmentOptions } from '../config';
   but there is no consistent way to do this without a backend solution.
 
   If building tooling in the solution to allow supervisors the ability
-  to edit and apply department name, synconrizing these options should be 
+  to edit and apply department name, synchronizing these options should be 
   a consideration.
 
   */
@@ -29,7 +30,7 @@ import { getDepartmentOptions } from '../config';
 export const departmentFilter = () =>
   ({
     id: 'data.attributes.department_name',
-    title: 'Departments',
+    title: (Manager.getInstance().strings as any)[StringTemplates.Department],
     fieldName: 'department_name',
     options: getDepartmentOptions()
       .sort()
