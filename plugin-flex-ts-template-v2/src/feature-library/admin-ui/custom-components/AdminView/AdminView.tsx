@@ -193,7 +193,7 @@ const AdminView = () => {
             onConfirm={initialize}
             onConfirmLabel={strings[StringTemplates.UPDATED_MODAL_RELOAD]}
             onDismiss={handleDismissUpdatedModal}
-            onDismissLabel={strings[StringTemplates.CANCEL]}
+            onDismissLabel={templates.Cancel()}
           >
             <Template source={templates[StringTemplates.UPDATED_MODAL_DESC]} />
           </AlertDialog>

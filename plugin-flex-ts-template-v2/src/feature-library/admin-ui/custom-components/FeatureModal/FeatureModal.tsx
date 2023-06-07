@@ -260,7 +260,7 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
         </ModalFooterActions>
         <ModalFooterActions>
           <Button variant="secondary" onClick={handleClose}>
-            <Template source={templates[StringTemplates.CANCEL]} />
+            <Template source={templates.Cancel} />
           </Button>
           <Button
             variant="primary"
@@ -268,7 +268,7 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
             loading={isSaving}
             disabled={invalidInputs.length > 0 || !customAllowSave}
           >
-            <Template source={templates[StringTemplates.SAVE]} />
+            <Template source={templates.Save} />
           </Button>
         </ModalFooterActions>
       </ModalFooter>
