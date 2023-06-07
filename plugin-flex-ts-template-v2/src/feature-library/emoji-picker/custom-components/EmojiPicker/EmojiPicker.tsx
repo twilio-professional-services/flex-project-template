@@ -67,7 +67,7 @@ const EmojiPicker = ({ conversationSid, disabledReason }: MesageInputProps) => {
   }, [selectedEmoji]);
 
   useEffect(() => {
-    if (!disabledReason || disabledReason === 'Send Message') {
+    if (!disabledReason || disabledReason === Flex.templates.SendMessageTooltip()) {
       setIsDisabled(false);
     } else {
       setIsDisabled(true);

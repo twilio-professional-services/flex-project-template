@@ -5,8 +5,6 @@ export enum StringTemplates {
   ChangeLanguage = 'PSLocChangeLanguage',
   Languages = 'PSLocLanguages',
   CurrentLanguage = 'PSLocCurrentLanguage',
-  Change = 'PSLocChange',
-  Cancel = 'PSLocCancel',
   ChangeLanguageDialog = 'PSLocChangeLanguageDialog',
 }
 
@@ -15,8 +13,6 @@ export const stringHook = () => ({
     [StringTemplates.ChangeLanguage]: 'Change language',
     [StringTemplates.Languages]: 'Languages',
     [StringTemplates.CurrentLanguage]: 'This is the current language',
-    [StringTemplates.Change]: 'Change',
-    [StringTemplates.Cancel]: 'Cancel',
     [StringTemplates.ChangeLanguageDialog]:
       'Are you sure you wish to change the language to {{newLanguage}}? Flex will automatically reload, dropping any active calls.',
   },

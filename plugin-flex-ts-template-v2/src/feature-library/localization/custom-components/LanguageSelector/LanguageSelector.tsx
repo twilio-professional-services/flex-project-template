@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Actions, Manager, Template, templates } from '@twilio/flex-ui';
+import { Actions, Template, templates } from '@twilio/flex-ui';
 import { Flex, MenuButton, MenuGroup, useMenuState, Menu, MenuItem, AlertDialog } from '@twilio-paste/core';
 import { TranslationIcon } from '@twilio-paste/icons/esm/TranslationIcon';
 
@@ -12,7 +12,6 @@ const LanguageSelector = () => {
   const [selectedLanguage, setSelectedLanguage] = useState(null as Language | null);
   const menu = useMenuState();
   const currentLanguage = getUserLanguage();
-  const strings = Manager.getInstance().strings as any;
 
   const handleClose = () => setSelectedLanguage(null);
 
@@ -31,17 +30,17 @@ const LanguageSelector = () => {
   return (
     <Flex hAlignContent="center" vAlignContent="center">
       <MenuButton {...menu} variant="reset" element={menu.visible ? 'LANG_SELECT_BUTTON_OPEN' : 'LANG_SELECT_BUTTON'}>
-        <TranslationIcon decorative={false} title={strings[StringTemplates.ChangeLanguage]} />
+        <TranslationIcon decorative={false} title={templates[StringTemplates.ChangeLanguage]()} />
       </MenuButton>
-      <Menu {...menu} aria-label={strings[StringTemplates.Languages]}>
-        <MenuGroup label={strings[StringTemplates.ChangeLanguage]}>
+      <Menu {...menu} aria-label={templates[StringTemplates.Languages]()}>
+        <MenuGroup label={templates[StringTemplates.ChangeLanguage]()}>
           {languages.map((language) => (
             <MenuItem
               {...menu}
               onClick={async () => setSelectedLanguage(language)}
               key={language.key}
               disabled={language.key === currentLanguage}
-              title={language.key === currentLanguage ? strings[StringTemplates.CurrentLanguage] : ''}
+              title={language.key === currentLanguage ? templates[StringTemplates.CurrentLanguage]() : ''}
             >
               {language.name}
             </MenuItem>
@@ -49,12 +48,12 @@ const LanguageSelector = () => {
         </MenuGroup>
       </Menu>
       <AlertDialog
-        heading={strings[StringTemplates.ChangeLanguage]}
+        heading={templates[StringTemplates.ChangeLanguage]()}
         isOpen={selectedLanguage !== null}
         onConfirm={async () => setLanguage()}
-        onConfirmLabel={strings[StringTemplates.Change]}
+        onConfirmLabel={templates.ConfirmableDialogConfirmButton()}
         onDismiss={handleClose}
-        onDismissLabel={strings[StringTemplates.Cancel]}
+        onDismissLabel={templates.ConfirmableDialogCancelButton()}
       >
         <Template source={templates[StringTemplates.ChangeLanguageDialog]} newLanguage={selectedLanguage?.name} />
       </AlertDialog>
