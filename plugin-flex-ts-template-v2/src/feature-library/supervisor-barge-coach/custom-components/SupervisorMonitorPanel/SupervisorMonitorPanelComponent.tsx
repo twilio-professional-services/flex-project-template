@@ -96,19 +96,4 @@ export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
       </Stack>
     </Flex>
   );
-
-  if (supervisorArray.length > 0) {
-  }
-  return (
-    <Flex hAlignContent="center" vertical padding="space40">
-      <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-        <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-          <Template source={templates[StringTemplates.ActiveSupervisors]} />
-          <Box>
-            <Template source={templates[StringTemplates.None]} />
-          </Box>
-        </Box>
-      </Stack>
-    </Flex>
-  );
 };
