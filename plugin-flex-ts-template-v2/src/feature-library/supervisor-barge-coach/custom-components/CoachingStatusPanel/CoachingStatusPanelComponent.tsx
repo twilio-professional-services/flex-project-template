@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { useFlexSelector } from '@twilio/flex-ui';
+import { useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex, Stack, Box, Text } from '@twilio-paste/core';
 
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoach';
+import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 // Import to get Sync Doc updates
 import { SyncDoc } from '../../utils/sync/Sync';
 
@@ -75,7 +76,7 @@ export const CoachingStatusPanel = () => {
       <Flex hAlignContent="center" vertical padding="space40">
         <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
           <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-            You are being Coached by:
+            <Template source={templates[StringTemplates.AgentCoachedBy]} />
             <Box>
               <ol>
                 <Text

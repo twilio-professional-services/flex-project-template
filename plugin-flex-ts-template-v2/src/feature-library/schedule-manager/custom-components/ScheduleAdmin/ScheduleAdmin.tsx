@@ -1,8 +1,6 @@
 import React from 'react';
-import { Actions, Template, templates } from '@twilio/flex-ui';
+import { Actions } from '@twilio/flex-ui';
 import { Button } from '@twilio-paste/core';
-
-import { StringTemplates } from '../../flex-hooks/strings/ScheduleManager';
 
 interface OwnProps {
   feature: string;
@@ -23,7 +21,7 @@ const ScheduleAdmin = (props: OwnProps) => {
 
   return (
     <Button variant="secondary" onClick={navigate}>
-      <Template source={templates[StringTemplates.OPEN_SCHEDULE_MANAGER]} />
+      Open Schedule Manager
     </Button>
   );
 };

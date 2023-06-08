@@ -4,6 +4,8 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.DualChannelBroken]:
-    'The dual channel recording feature will not work because it has not been configured correctly.',
+  'en-US': {
+    [StringTemplates.DualChannelBroken]:
+      'The dual channel recording feature will not work because it has not been configured correctly.',
+  },
 });

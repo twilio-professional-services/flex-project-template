@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Actions, ITask, Manager, Template, templates, withTaskContext } from '@twilio/flex-ui';
+import { Actions, ITask, Template, templates, withTaskContext } from '@twilio/flex-ui';
 import { Radio, RadioGroup } from '@twilio-paste/core/radio-group';
 import { Stack } from '@twilio-paste/core/stack';
 import { TextArea } from '@twilio-paste/core/textarea';
@@ -26,8 +26,6 @@ const DispositionTab = (props: OwnProps) => {
 
   const dispatch = useDispatch();
   const { tasks } = useSelector((state: AppState) => state[reduxNamespace].dispositions as DispositionsState);
-
-  const strings = Manager.getInstance().strings as any;
 
   const updateStore = () => {
     if (!props.task) return;
@@ -99,8 +97,8 @@ const DispositionTab = (props: OwnProps) => {
           <RadioGroup
             name={`${props.task?.sid}-disposition`}
             value={disposition}
-            legend={strings[StringTemplates.SelectDispositionTitle]}
-            helpText={strings[StringTemplates.SelectDispositionHelpText]}
+            legend={templates[StringTemplates.SelectDispositionTitle]()}
+            helpText={templates[StringTemplates.SelectDispositionHelpText]()}
             onChange={(value) => setDisposition(value)}
             required={isRequireDispositionEnabledForQueue(props.task?.queueSid ?? '')}
           >
@@ -118,7 +116,9 @@ const DispositionTab = (props: OwnProps) => {
         )}
         {isNotesEnabled() && (
           <>
-            <Label htmlFor="notes">{strings[StringTemplates.NotesTitle]}</Label>
+            <Label htmlFor="notes">
+              <Template source={templates[StringTemplates.NotesTitle]} />
+            </Label>
             <TextArea
               onChange={(e) => setNotes(e.target.value)}
               aria-describedby="notes_help_text"

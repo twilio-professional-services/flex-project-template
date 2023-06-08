@@ -1,4 +1,4 @@
-import { Manager, IconButton, TaskHelper, ITask } from '@twilio/flex-ui';
+import { IconButton, TaskHelper, ITask, templates } from '@twilio/flex-ui';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -68,11 +68,7 @@ const PauseRecordingButton = (props: OwnProps) => {
       disabled={!isLiveCall || waiting}
       onClick={handleClick}
       variant={paused ? 'primary' : 'secondary'}
-      title={
-        paused
-          ? (Manager.getInstance().strings as any)[StringTemplates.RESUME_TOOLTIP]
-          : (Manager.getInstance().strings as any)[StringTemplates.PAUSE_TOOLTIP]
-      }
+      title={paused ? templates[StringTemplates.RESUME_TOOLTIP]() : templates[StringTemplates.PAUSE_TOOLTIP]()}
     />
   );
 };

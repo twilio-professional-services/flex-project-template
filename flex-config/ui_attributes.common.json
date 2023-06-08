@@ -213,6 +213,10 @@
       },
       "admin_ui": {
         "enabled": true
+      },
+      "localization": {
+        "enabled": false,
+        "show_menu": true
       }
     }
   }
