@@ -114,6 +114,10 @@ export const loadFeature = (flex: typeof Flex, manager: Flex.Manager, feature: F
       Strings.addHook(flex, manager, name, hook);
     }
 
+    if (hook.systemStringHook) {
+      Strings.addSystemHook(flex, manager, name, hook);
+    }
+
     if (hook.teamsFilterHook) {
       TeamsFilters.addHook(flex, manager, name, hook);
     }

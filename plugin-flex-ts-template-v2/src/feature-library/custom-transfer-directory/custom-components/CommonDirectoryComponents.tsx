@@ -1,9 +1,10 @@
-import { Manager, styled } from '@twilio/flex-ui';
+import { Manager, styled, templates } from '@twilio/flex-ui';
 import { Box, Input } from '@twilio-paste/core';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
 import { Ref } from 'react';
 
 import { usePasteSearchIcon } from '../config';
+import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 
 export interface SearchBoxProps {
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -27,7 +28,11 @@ export const SearchInput = ({ onInputChange, inputRef }: SearchBoxProps) => {
     <Input
       element="TRANSFER_DIR_COMMON_SEARCH_BOX"
       insertBefore={
-        usePasteSearchIcon() ? <SearchIcon decorative={false} title="Search Queue Names" /> : <LegacySearchIcon />
+        usePasteSearchIcon() ? (
+          <SearchIcon decorative={false} title={templates[StringTemplates.SearchDirectory]()} />
+        ) : (
+          <LegacySearchIcon />
+        )
       }
       type="text"
       key="custom-directory-input-field"

@@ -6,6 +6,7 @@ import Picker from '@emoji-mart/react';
 
 import { EmojiPopover, EmojiWrapper } from './EmojiPicker.Styles';
 import { getEmojiData } from '../../helpers/emojiHelper';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 /** This component uses EmojiMart
  *  See license text at https://github.com/missive/emoji-mart/blob/main/LICENSE
@@ -66,7 +67,7 @@ const EmojiPicker = ({ conversationSid, disabledReason }: MesageInputProps) => {
   }, [selectedEmoji]);
 
   useEffect(() => {
-    if (!disabledReason || disabledReason === 'Send Message') {
+    if (!disabledReason || disabledReason === Flex.templates.SendMessageTooltip()) {
       setIsDisabled(false);
     } else {
       setIsDisabled(true);
@@ -76,7 +77,7 @@ const EmojiPicker = ({ conversationSid, disabledReason }: MesageInputProps) => {
   return (
     <EmojiWrapper>
       <Button variant="reset" onClick={togglePicker} disabled={isDisabled} element="EMOJI_PICKER_BUTTON">
-        <EmojiIcon decorative={false} title="Insert emoji" />
+        <EmojiIcon decorative={false} title={Flex.templates[StringTemplates.InsertEmoji]()} />
       </Button>
       {isOpen && data && (
         <EmojiPopover>

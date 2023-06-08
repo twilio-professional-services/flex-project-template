@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ColumnDefinition, DataTable, Manager } from '@twilio/flex-ui';
+import { ColumnDefinition, DataTable, Manager, templates } from '@twilio/flex-ui';
 import { Button } from '@twilio-paste/core/button';
 import { Box } from '@twilio-paste/core/box';
 import { PlusIcon } from '@twilio-paste/icons/esm/PlusIcon';
@@ -127,9 +127,7 @@ const ScheduleDataTable = (props: OwnProps) => {
           <ColumnDefinition
             key="status-column"
             header={ScheduleManagerStrings[StringTemplates.COLUMN_STATUS]}
-            subHeader={
-              props.isLoading ? '' : `${ScheduleManagerStrings[StringTemplates.COLUMN_STATUS_ASOF]} ${statusTimestamp}`
-            }
+            subHeader={props.isLoading ? '' : templates[StringTemplates.COLUMN_STATUS_ASOF]({ statusTimestamp })}
             sortingFn={(a: Schedule, b: Schedule) => (getScheduleStatus(a) > getScheduleStatus(b) ? 1 : -1)}
             content={(item: Schedule) => <span>{getScheduleStatus(item)}</span>}
           />

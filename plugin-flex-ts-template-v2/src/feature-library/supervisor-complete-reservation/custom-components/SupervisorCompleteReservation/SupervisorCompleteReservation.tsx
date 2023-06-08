@@ -1,4 +1,4 @@
-import { ITask } from '@twilio/flex-ui';
+import { ITask, Template, templates } from '@twilio/flex-ui';
 import { AlertDialog, Button, Box } from '@twilio-paste/core';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions } from '../../flex-hooks/states/SupervisorCompleteReservation';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 export interface OwnProps {
   task: ITask;
@@ -44,21 +45,21 @@ const SupervisorCompleteReservation = ({ task }: OwnProps) => {
       <Button
         disabled={isTaskProcessingRequest || task.status !== 'wrapping'}
         onClick={handleOpen}
-        title={'Remotely complete the task reservation on behalf of the agent'}
+        title={templates[StringTemplates.CompleteTooltip]()}
         variant="destructive"
         size="small"
       >
-        Complete
+        <Template source={templates.TaskHeaderComplete} />
       </Button>
       <AlertDialog
-        heading="Complete Task Reservation"
+        heading={templates[StringTemplates.ConfirmationHeader]()}
         isOpen={isOpen}
         onConfirm={completeReservation}
-        onConfirmLabel="Submit"
+        onConfirmLabel={templates.ConfirmableDialogConfirmButton()}
         onDismiss={handleClose}
-        onDismissLabel="Cancel"
+        onDismissLabel={templates.ConfirmableDialogCancelButton()}
       >
-        Are you sure you want to force complete this reservation?
+        <Template source={templates[StringTemplates.ConfirmationDescription]} />
       </AlertDialog>
     </Box>
   );

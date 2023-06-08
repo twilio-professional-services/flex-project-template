@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { IconButton, ITask, Actions, styled } from '@twilio/flex-ui';
+import { IconButton, ITask, Actions, styled, templates } from '@twilio/flex-ui';
+
+import { StringTemplates } from '../../flex-hooks/strings/ChatTransfer';
 
 const IconContainer = styled.div`
   margin: auto;
@@ -45,7 +47,7 @@ const TransferButton = ({ task }: TransferButtonProps) => {
         disabled={disableTransferButtonForTask}
         onClick={onShowDirectory}
         variant="secondary"
-        title="Transfer Chat"
+        title={templates[StringTemplates.TransferChat]()}
       />
     </IconContainer>
   );

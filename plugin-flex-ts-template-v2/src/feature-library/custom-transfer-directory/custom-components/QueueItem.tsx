@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TaskHelper, ITask, Manager } from '@twilio/flex-ui';
+import { TaskHelper, ITask, Manager, templates } from '@twilio/flex-ui';
 import { ButtonGroup, Button, Flex, Tooltip, Text } from '@twilio-paste/core';
 import { ProductContactCenterTeamsIcon } from '@twilio-paste/icons/esm/ProductContactCenterTeamsIcon';
 import { CallTransferIcon } from '@twilio-paste/icons/esm/CallTransferIcon';
@@ -9,6 +9,7 @@ import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 
 import { TransferQueue } from './QueueDirectoryTab';
 import { isCbmColdTransferEnabled, isCbmWarmTransferEnabled, showRealTimeQueueData } from '../config';
+import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 
 export interface QueueItemProps {
   queue: TransferQueue;
@@ -27,14 +28,16 @@ export const QueueItem = (props: QueueItemProps) => {
     onTransferClick({ mode: 'COLD' });
   };
 
+  const na = templates[StringTemplates.NA]();
+
   const { total_eligible_workers: eligible, total_available_workers: available, total_tasks: tasks } = queue;
 
-  const agents_available = !available || !eligible ? 'N/A' : `${available}/${eligible}`;
+  const agentsAvailable = !available || !eligible ? na : `${available}/${eligible}`;
   // eslint-disable-next-line no-eq-null, eqeqeq
-  const tasks_in_queue = tasks != null && tasks >= 0 ? `${tasks}` : 'N/A';
+  const tasksInQueue = tasks != null && tasks >= 0 ? `${tasks}` : na;
 
   const queue_tooltip = showRealTimeQueueData()
-    ? `Agents: ${agents_available}, Tasks in queue: ${tasks_in_queue}`
+    ? templates[StringTemplates.QueueTooltip]({ agentsAvailable, tasksInQueue })
     : `${queue.name}`;
 
   const callWarmTransferEnabled =
@@ -74,7 +77,7 @@ export const QueueItem = (props: QueueItemProps) => {
           <Tooltip
             key={`queue-item-buttons-warm-transfer-tooltip-${queue.sid}`}
             element="TRANSFER_DIR_COMMON_TOOLTIP"
-            text="Warm Transfer"
+            text={templates[StringTemplates.WarmTransfer]()}
           >
             <Button
               element="TRANSFER_DIR_COMMON_ROW_BUTTON"
@@ -97,7 +100,7 @@ export const QueueItem = (props: QueueItemProps) => {
           <Tooltip
             key={`queue-item-buttons-cold-transfer-tooltip-${queue.sid}`}
             element="TRANSFER_DIR_COMMON_TOOLTIP"
-            text="Cold Transfer"
+            text={templates[StringTemplates.ColdTransfer]()}
           >
             <Button
               element="TRANSFER_DIR_COMMON_ROW_BUTTON"

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ITask, Manager } from '@twilio/flex-ui';
+import { ITask, Manager, Template, templates } from '@twilio/flex-ui';
 import Video from 'twilio-video';
 import { Flex, Button, Box, Heading, Tooltip } from '@twilio-paste/core';
 import { VideoOnIcon } from '@twilio-paste/icons/esm/VideoOnIcon';
@@ -12,6 +12,7 @@ import { updateTaskAttributesForVideo } from '../../helpers/taskAttributes';
 import { getFeatureFlags } from '../../../../utils/configuration';
 import { btn, btnContainer, btnRow, mediaTrackContainer, taskContainerStyle } from './styles';
 import { attachLocalTracks, attachRemoteTracks, detachTracks } from '../../helpers/videoRoom';
+import { StringTemplates } from '../../flex-hooks/strings/ChatToVideo';
 
 interface VideoRoomProps {
   task: ITask;
@@ -189,7 +190,7 @@ const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
               <div id="remote-media" style={mediaTrackContainer}>
                 <Flex padding={'space20'} width={'100%'} hAlignContent="center" marginTop="space10">
                   <Heading as="h3" variant="heading30" marginBottom="space0">
-                    Remote Participant
+                    <Template source={templates[StringTemplates.RemoteParticipant]} />
                   </Heading>
                 </Flex>
               </div>
@@ -197,42 +198,42 @@ const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
               <div style={btnRow}>
                 {audioEnabled ? (
                   <div style={btnContainer}>
-                    <Tooltip text="Mute" placement="top">
+                    <Tooltip text={templates.MuteCallTooltip()} placement="top">
                       <Button variant="primary" size="icon" style={btn} onClick={mute}>
-                        <MicrophoneOnIcon decorative={false} title="Mute" />
+                        <MicrophoneOnIcon decorative={false} title={templates.MuteCallTooltip()} />
                       </Button>
                     </Tooltip>
                   </div>
                 ) : (
                   <div style={btnContainer}>
-                    <Tooltip text="Unmute" placement="top">
+                    <Tooltip text={templates.UnmuteAriaLabel()} placement="top">
                       <Button variant="primary" size="icon" style={btn} onClick={unMute}>
-                        <MicrophoneOffIcon decorative={false} title="Unmute" />
+                        <MicrophoneOffIcon decorative={false} title={templates.UnmuteAriaLabel()} />
                       </Button>
                     </Tooltip>
                   </div>
                 )}
                 {videoEnabled ? (
                   <div style={btnContainer}>
-                    <Tooltip text="Stop Camera" placement="top">
+                    <Tooltip text={templates[StringTemplates.StopCamera]()} placement="top">
                       <Button variant="primary" size="icon" style={btn} onClick={videoOff}>
-                        <VideoOnIcon decorative={false} title="Stop Camera" />
+                        <VideoOnIcon decorative={false} title={templates[StringTemplates.StopCamera]()} />
                       </Button>
                     </Tooltip>
                   </div>
                 ) : (
                   <div style={btnContainer}>
-                    <Tooltip text="Start Camera" placement="top">
+                    <Tooltip text={templates[StringTemplates.StartCamera]()} placement="top">
                       <Button variant="primary" size="icon" style={btn} onClick={videoOn}>
-                        <VideoOffIcon decorative={false} title="Start Camera" />
+                        <VideoOffIcon decorative={false} title={templates[StringTemplates.StartCamera]()} />
                       </Button>
                     </Tooltip>
                   </div>
                 )}
                 <div style={btnContainer}>
-                  <Tooltip text="Disconnect" placement="top">
+                  <Tooltip text={templates[StringTemplates.Disconnect]()} placement="top">
                     <Button variant="destructive" size="icon" style={btn} onClick={disconnect}>
-                      <CloseIcon decorative={false} title="Disconnect" />
+                      <CloseIcon decorative={false} title={templates[StringTemplates.Disconnect]()} />
                     </Button>
                   </Tooltip>
                 </div>
@@ -242,7 +243,7 @@ const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
                 <div id="local-media">
                   <Flex padding={'space20'} width={'100%'} hAlignContent="center">
                     <Heading as="h6" variant="heading40" marginBottom="space0">
-                      Local Participant
+                      <Template source={templates[StringTemplates.LocalParticipant]} />
                     </Heading>
                   </Flex>
                 </div>
@@ -253,11 +254,14 @@ const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
       ) : (
         <div style={taskContainerStyle}>
           {connecting ? (
-            <Flex padding="space50">Connecting...</Flex>
+            <Flex padding="space50">
+              <Template source={templates[StringTemplates.Connecting]} />
+            </Flex>
           ) : (
             <Flex padding="space50">
               <Button variant="primary" onClick={connectVideo}>
-                🎥&nbsp; Join Video Room
+                <VideoOnIcon decorative />
+                <Template source={templates[StringTemplates.JoinVideoRoom]} />
               </Button>
             </Flex>
           )}
