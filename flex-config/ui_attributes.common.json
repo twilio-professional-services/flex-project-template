@@ -212,7 +212,7 @@
         "enabled_for_agents": false
       },
       "localization": {
-        "enabled": true,
+        "enabled": false,
         "show_menu": true
       }
     }
