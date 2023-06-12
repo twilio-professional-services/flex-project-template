@@ -32,7 +32,7 @@ const DeleteButton = ({
   };
 
   return (
-    <Button variant="primary_icon" size="reset" onClick={deleteShortcutHandler}>
+    <Button variant="destructive_icon" size="reset" onClick={deleteShortcutHandler}>
       <DeleteIcon decorative={false} title="Delete" />
     </Button>
   );

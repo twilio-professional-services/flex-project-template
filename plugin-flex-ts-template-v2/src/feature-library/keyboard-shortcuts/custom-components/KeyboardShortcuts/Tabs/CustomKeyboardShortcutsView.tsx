@@ -77,7 +77,7 @@ const CustomKeyboardShortcutsView = ({
         <Card>
           <Heading as="h5" variant="heading50">
             <Stack orientation="horizontal" spacing="space20">
-              <WarningIcon decorative={false} title="Description of icon" />
+              <WarningIcon decorative />
               Re-enable Keyboard Shortcuts
             </Stack>
           </Heading>
@@ -96,9 +96,10 @@ const CustomKeyboardShortcutsView = ({
                   <Th>
                     <Stack orientation="horizontal" spacing="space30">
                       <Tooltip text="Ctrl and Shift are the default modifiers that cannot be changed.">
-                        <Text as="span">
-                          Modifiers <InformationIcon decorative />
-                        </Text>
+                        <Stack orientation="horizontal" spacing="space20">
+                          <Text as="span">Modifiers</Text>
+                          <InformationIcon decorative />
+                        </Stack>
                       </Tooltip>
                     </Stack>
                   </Th>
