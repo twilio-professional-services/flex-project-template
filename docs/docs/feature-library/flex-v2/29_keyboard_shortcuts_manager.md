@@ -1,4 +1,8 @@
-# Keyboard Shortcuts Manager
+---
+sidebar_label: keyboard-shortcuts-manager
+sidebar_position: 30
+title: keyboard-shortcuts-manager
+---
 
 The _Keyboard Shortcuts Manager_ Twilio Flex plugin empowers contact center users to configure default and custom keyboards shortcuts in their day-to-day activities to increase efficiency and enjoyment when using Twilio Flex.
 
@@ -8,39 +12,39 @@ The plugin is available to both agents and supervisors alike and it allows the f
 
 **View default Flex keyboard shortcuts:**
 
-<img width="100%" src="./screenshots/default-keyboard-shortcuts.png"/>
+![Default keyboard shortcuts](/img/f2/keyboard-shortcuts/default-keyboard-shortcuts.png)
 
 This view allows users to see the default Flex keyboard shortcuts and their current mappings.
 
 **View custom Flex keyboard shortcuts**
 
-<img width="100%" src="./screenshots/custom-keyboard-shortcuts.png"/>
+![Custom keyboard shortcuts](/img/f2/keyboard-shortcuts/custom-keyboard-shortcuts.png)
 
 This view allows users to see custom added keyboard shortcuts and their current mappings.
 
 **A settings screen for easy management**
 
-![](./screenshots/settings.gif)
+![Setting screen](/img/f2/keyboard-shortcuts/settings.gif)
 
 **Delete shortcuts**
 
-![](./screenshots/delete-shortcuts.gif)
+![Delete shortcuts](/img/f2/keyboard-shortcuts/delete-shortcuts.gif)
 
 **Remap a shortcut**
 
-![](./screenshots/remap-shortcut.gif)
+![Remap shortcuts](/img/f2/keyboard-shortcuts/remap-shortcut.gif)
 
 **Adjust key throttling**
 
-![](./screenshots/key-throttling.gif)
+![Key Thorottling](/img/f2/keyboard-shortcuts/key-throttling.gif)
 
 **Disable keyboard shortcuts**
 
-![](screenshots/disable-shortcuts.gif)
+![Disable shortcuts](/img/f2/keyboard-shortcuts/disable-shortcuts.gif)
 
 **Reset keyboard shortcuts to default values**
 
-![](./screenshots/reset-shortcuts.gif)
+![Reset shortcuts](/img/f2/keyboard-shortcuts/reset-shortcuts.gif)
 
 # Setup and dependencies
 
