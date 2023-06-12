@@ -1,0 +1,55 @@
+{
+    "description": "IVR for creating a Flex voice task",
+    "states": [
+      {
+        "name": "Trigger",
+        "type": "trigger",
+        "transitions": [
+          {
+            "event": "incomingMessage"
+          },
+          {
+            "next": "SendCallToAgent",
+            "event": "incomingCall"
+          },
+          {
+            "event": "incomingRequest"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 0,
+            "y": -10
+          }
+        }
+      },
+      {
+        "name": "SendCallToAgent",
+        "type": "send-to-flex",
+        "transitions": [
+          {
+            "event": "callComplete"
+          },
+          {
+            "event": "failedToEnqueue"
+          },
+          {
+            "event": "callFailure"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 30,
+            "y": 180
+          },
+          "workflow": "${WORKFLOW_SID}",
+          "channel": "${VOICE_CHANNEL_SID}",
+          "attributes": "{ \"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\" }"
+        }
+      }
+    ],
+    "initial_state": "Trigger",
+    "flags": {
+      "allow_concurrent_calls": true
+    }
+  }
