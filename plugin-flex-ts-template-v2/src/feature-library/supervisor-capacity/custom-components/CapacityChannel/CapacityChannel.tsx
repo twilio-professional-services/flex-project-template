@@ -4,9 +4,11 @@ import { Switch } from '@twilio-paste/core/switch';
 import { Flex } from '@twilio-paste/core/flex';
 import { Input } from '@twilio-paste/core/input';
 import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon';
+import { templates } from '@twilio/flex-ui';
 
 import { WorkerChannelCapacityResponse } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import { getRules } from '../../config';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 export interface OwnProps {
   isSaving: boolean;
@@ -100,7 +102,7 @@ export default function CapacityChannel(props: OwnProps) {
       {changed && (
         <Flex margin="space30">
           <Button variant="destructive_icon" disabled={props.isSaving} size="reset" onClick={reset}>
-            <DeleteIcon decorative={false} title="Restore previous value" />
+            <DeleteIcon decorative={false} title={templates[StringTemplates.RestorePreviousValue]()} />
           </Button>
         </Flex>
       )}

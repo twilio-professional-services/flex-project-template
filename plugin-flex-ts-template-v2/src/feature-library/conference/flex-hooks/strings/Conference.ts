@@ -2,10 +2,28 @@
 export enum StringTemplates {
   ExternalTransferFailedHangupNotification = 'PSConferenceFailedHangupNotification',
   ExternalWarmTransferInvalidPhoneNumber = 'PSExternalWarmTransferInvalidPhoneNumber',
+  AddConferenceParticipant = 'PSConferenceAddConferenceParticipant',
+  PhoneNumber = 'PSConferencePhoneNumber',
+  PhoneNumberError = 'PSConferencePhoneNumberError',
+  Dial = 'PSConferenceDial',
+  HoldParticipant = 'PSConferenceHoldParticipant',
+  UnholdParticipant = 'PSConferenceUnholdParticipant',
+  RemoveParticipant = 'PSConferenceRemoveParticipant',
+  Unknown = 'PSConferenceUnknown',
 }
 
 export const stringHook = () => ({
-  [StringTemplates.ExternalTransferFailedHangupNotification]:
-    'Hangup call abandoned: Failed to take all participants off hold while hanging up the call. If this issue persists, please try unholding participants manually before leaving the call',
-  [StringTemplates.ExternalWarmTransferInvalidPhoneNumber]: 'Unable to add participant. {{message}}',
+  'en-US': {
+    [StringTemplates.ExternalTransferFailedHangupNotification]:
+      'Hangup call abandoned: Failed to take all participants off hold while hanging up the call. If this issue persists, please try unholding participants manually before leaving the call',
+    [StringTemplates.ExternalWarmTransferInvalidPhoneNumber]: 'Unable to add participant. {{message}}',
+    [StringTemplates.AddConferenceParticipant]: 'Add Conference Participant',
+    [StringTemplates.PhoneNumber]: 'Phone Number',
+    [StringTemplates.PhoneNumberError]: 'Enter a phone number to add to the conference.',
+    [StringTemplates.Dial]: 'Dial',
+    [StringTemplates.HoldParticipant]: 'Hold Participant',
+    [StringTemplates.UnholdParticipant]: 'Unhold Participant',
+    [StringTemplates.RemoveParticipant]: 'Remove Participant',
+    [StringTemplates.Unknown]: 'Unknown',
+  },
 });

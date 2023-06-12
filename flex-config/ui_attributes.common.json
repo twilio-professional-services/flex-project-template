@@ -210,6 +210,10 @@
       "attribute_viewer": {
         "enabled": true,
         "enabled_for_agents": false
+      },
+      "localization": {
+        "enabled": false,
+        "show_menu": true
       }
     }
   }

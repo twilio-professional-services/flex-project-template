@@ -8,6 +8,8 @@ import {
   Actions,
   ITask,
   Notifications,
+  Template,
+  templates,
 } from '@twilio/flex-ui';
 import { useEffect, useState, useRef } from 'react';
 import { debounce } from 'lodash';
@@ -25,6 +27,7 @@ import {
 } from '../config';
 import { CustomTransferDirectoryNotification } from '../flex-hooks/notifications/CustomTransferDirectory';
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
+import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 
 export interface IRealTimeQueueData {
   total_tasks: number | null;
@@ -252,10 +255,8 @@ const QueueDirectoryTab = (props: OwnProps) => {
       <Flex key="queue-tab-results" vertical element="TRANSFER_DIR_COMMON_ROWS_CONTAINER">
         {filteredQueues.length === 0 ? (
           <Alert variant="neutral">
-            No queues qualified.
-            {showOnlyQueuesWithAvailableWorkers()
-              ? ` Queues may be filtered out due to lack of available workers in queues`
-              : ''}
+            <Template source={templates[StringTemplates.NoItemsFound]} />
+            {showOnlyQueuesWithAvailableWorkers() ? ` ${templates[StringTemplates.QueuesFiltered]()}` : ''}
           </Alert>
         ) : (
           Array.from(filteredQueues).map((queue: TransferQueue) => {
