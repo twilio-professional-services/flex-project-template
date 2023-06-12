@@ -40,7 +40,7 @@ const debuggingHelper = () => {
     workspaceSid: ${Flex.Manager.getInstance().workerClient?.workspaceSid}
     friendlyName: ${Flex.Manager.getInstance().workerClient?.friendlyName}
     attributes:`,
-    Flex.Manager.getInstance().workerClient?.attributes
+    Flex.Manager.getInstance().workerClient?.attributes,
   );
 };
 

@@ -2,7 +2,7 @@ export interface ShortcutsObject {
   key: string;
   actionName: string;
   throttle?: number;
-  action: Function;
+  action: any;
 }
 
 export interface CustomShortcut {
@@ -12,11 +12,11 @@ export interface CustomShortcut {
 }
 
 export interface ShortcutActions {
-  [x: string]: Function;
+  [x: string]: () => void;
 }
 
 export interface RemapShortcutObject {
-  action: Function;
+  action: () => void;
   name: string;
   throttle: number;
 }

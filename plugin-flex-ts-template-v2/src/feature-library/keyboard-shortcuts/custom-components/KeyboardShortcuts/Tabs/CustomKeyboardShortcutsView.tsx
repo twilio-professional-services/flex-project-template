@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from 'react';
-
-import { Heading, Paragraph, Card } from '@twilio-paste/core';
-import { Tooltip, Text, Stack, Box } from '@twilio-paste/core';
-import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
+import {
+  Heading,
+  Paragraph,
+  Card,
+  Tooltip,
+  Text,
+  Stack,
+  Box,
+  Table,
+  THead,
+  Tr,
+  Th,
+  Td,
+  TBody,
+} from '@twilio-paste/core';
 import { WarningIcon } from '@twilio-paste/icons/esm/WarningIcon';
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
 
@@ -19,11 +30,7 @@ interface CustomKeyboardShortcutsViewProps {
   isThrottleEnabled: boolean;
   isDeleteShortcutsEnabled: boolean;
   toasterDeleteNotification: (actionName: string) => void;
-  toasterSuccessNotification: (
-    actionName: string,
-    oldShortcut: string,
-    newShortcut: string
-  ) => void;
+  toasterSuccessNotification: (actionName: string, oldShortcut: string, newShortcut: string) => void;
 }
 
 const CustomKeyboardShortcutsView = ({
@@ -39,15 +46,9 @@ const CustomKeyboardShortcutsView = ({
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [selectedShortcutKey, setSelectedShortcutKey] = useState<string>('');
   const [selectedActionName, setSelectedActionName] = useState<string>('');
-  const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(
-    0
-  );
+  const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(0);
 
-  const openModalHandler = (
-    shortcut: string,
-    actionName: string,
-    throttle: number | undefined
-  ): void => {
+  const openModalHandler = (shortcut: string, actionName: string, throttle: number | undefined): void => {
     setIsEditModalOpen(true);
     setSelectedThrottle(throttle);
     setSelectedShortcutKey(shortcut);
@@ -81,8 +82,8 @@ const CustomKeyboardShortcutsView = ({
             </Stack>
           </Heading>
           <Paragraph>
-            There are no configured custom keyboard shortcuts. Please reset your
-            keyboard settings to enable custom keyboard shortcuts.
+            There are no configured custom keyboard shortcuts. Please reset your keyboard settings to enable custom
+            keyboard shortcuts.
           </Paragraph>
         </Card>
       ) : (
@@ -95,9 +96,10 @@ const CustomKeyboardShortcutsView = ({
                   <Th>
                     <Stack orientation="horizontal" spacing="space30">
                       <Tooltip text="Ctrl and Shift are the default modifiers that cannot be changed.">
-                        <Text as="span">Modifiers</Text>
+                        <Text as="span">
+                          Modifiers <InformationIcon decorative />
+                        </Text>
                       </Tooltip>
-                      <InformationIcon decorative={false} title="modifiers" />
                     </Stack>
                   </Th>
                   <Th>
@@ -117,21 +119,16 @@ const CustomKeyboardShortcutsView = ({
                 </Tr>
               </THead>
               <TBody>
-                {customShortcuts.map(item => (
+                {customShortcuts.map((item) => (
                   <Tr key={item.key}>
                     <Td>
-                      <KeyCommand keyCommand="Ctrl" /> +{' '}
-                      <KeyCommand keyCommand="Shift" />
+                      <KeyCommand keyCommand="Ctrl" /> + <KeyCommand keyCommand="Shift" />
                     </Td>
                     <Td>
                       <KeyCommand keyCommand={item.key} />{' '}
                     </Td>
                     <Td>{item.actionName}</Td>
-                    {isThrottleEnabled && (
-                      <Td>
-                        {item.throttle ? item.throttle : 'Not configured'}
-                      </Td>
-                    )}
+                    {isThrottleEnabled && <Td>{item.throttle ? item.throttle : 'Not configured'}</Td>}
                     <Td>
                       <Stack orientation="horizontal" spacing="space30">
                         <EditButton
@@ -146,9 +143,7 @@ const CustomKeyboardShortcutsView = ({
                             actionName={item.actionName}
                             shortcuts={customShortcuts}
                             setShortcuts={setCustomShortcuts}
-                            toasterDeleteNotification={
-                              toasterDeleteNotification
-                            }
+                            toasterDeleteNotification={toasterDeleteNotification}
                           />
                         )}
                       </Stack>

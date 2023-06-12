@@ -1,22 +1,40 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useUID } from '@twilio-paste/core/uid-library';
-
-import { Grid, Column, HelpText } from '@twilio-paste/core';
-import { ModalHeading, ModalFooterActions } from '@twilio-paste/core';
-import { Box, Button, Label, Input, Separator } from '@twilio-paste/core';
-import { Table, THead, Tr, Th, Td, TBody, Stack } from '@twilio-paste/core';
-import { Modal, ModalBody, ModalFooter, ModalHeader } from '@twilio-paste/core';
+import {
+  Grid,
+  Column,
+  HelpText,
+  ModalHeading,
+  ModalFooterActions,
+  Box,
+  Button,
+  Label,
+  Input,
+  Separator,
+  Table,
+  THead,
+  Tr,
+  Th,
+  Td,
+  TBody,
+  Stack,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalHeader,
+} from '@twilio-paste/core';
 
 import KeyCommand from './KeyCommand';
-
 import { ShortcutsObject } from '../../types/types';
 import { shortcutsConfig } from '../../utils/constants';
-import { getCamelCase } from '../../utils/KeyboardShortcutsUtil';
-import { getAllActions } from '../../utils/KeyboardShortcutsUtil';
+import {
+  getCamelCase,
+  getAllActions,
+  getAllShortcuts,
+  getCurrentShortcuts,
+  remapKeyboardShortcutUtil,
+} from '../../utils/KeyboardShortcutsUtil';
 import { writeToLocalStorage } from '../../utils/LocalStorageUtil';
-import { getAllShortcuts } from '../../utils/KeyboardShortcutsUtil';
-import { getCurrentShortcuts } from '../../utils/KeyboardShortcutsUtil';
-import { remapKeyboardShortcutUtil } from '../../utils/KeyboardShortcutsUtil';
 
 interface ModalProps {
   shortcuts: ShortcutsObject[];
@@ -27,11 +45,7 @@ interface ModalProps {
   isThrottleEnabled: boolean;
   closeModalHandler: () => void;
   setShortcuts: Dispatch<SetStateAction<ShortcutsObject[]>>;
-  toasterSuccessNotification: (
-    actionName: string,
-    oldShortcut: string,
-    newShortcut: string
-  ) => void;
+  toasterSuccessNotification: (actionName: string, oldShortcut: string, newShortcut: string) => void;
 }
 
 const ModalWindow = ({
@@ -55,14 +69,13 @@ const ModalWindow = ({
 
   const saveHandler = (): void => {
     const actionFunction = getCamelCase(selectedActionName);
-    const shortcutKeys = getAllShortcuts().map(item => item.key);
-    let parsedShortcut =
-      typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut;
+    const shortcutKeys = getAllShortcuts().map((item) => item.key);
+    let parsedShortcut = typeof newShortcut === 'string' ? newShortcut.toUpperCase() : newShortcut;
     const indexPosition = shortcutKeys.indexOf(parsedShortcut);
     const shortcutObject = {
       action: getAllActions()[actionFunction],
       name: selectedActionName,
-      throttle: +throttleValue,
+      throttle: Number(throttleValue),
     };
 
     setShortcutErrorMessage('');
@@ -70,7 +83,7 @@ const ModalWindow = ({
       setShortcutErrorMessage(
         `A shortcut with key mapping ${parsedShortcut} already exists and it is assigned to the ${
           getAllShortcuts()[indexPosition].actionName
-        } action.`
+        } action.`,
       );
       return;
     }
@@ -79,28 +92,19 @@ const ModalWindow = ({
       parsedShortcut = selectedShortcutKey;
     }
 
-    remapKeyboardShortcutUtil(
-      selectedShortcutKey,
-      parsedShortcut,
-      shortcutObject
-    );
+    remapKeyboardShortcutUtil(selectedShortcutKey, parsedShortcut, shortcutObject);
 
-    const updatedShortcuts = shortcuts.map(item => item.key);
+    const updatedShortcuts = shortcuts.map((item) => item.key);
     shortcuts[updatedShortcuts.indexOf(selectedShortcutKey)].key =
       parsedShortcut === '' ? selectedShortcutKey : parsedShortcut;
-    shortcuts[updatedShortcuts.indexOf(selectedShortcutKey)].throttle =
-      +throttleValue;
+    shortcuts[updatedShortcuts.indexOf(selectedShortcutKey)].throttle = Number(throttleValue);
     setShortcuts(shortcuts);
 
     closeModalHandler();
     setNewShortcut('');
     setThrottleValue('');
     writeToLocalStorage(shortcutsConfig, getCurrentShortcuts());
-    toasterSuccessNotification(
-      selectedActionName,
-      selectedShortcutKey,
-      newShortcut
-    );
+    toasterSuccessNotification(selectedActionName, selectedShortcutKey, newShortcut);
   };
 
   useEffect(() => {
@@ -114,18 +118,13 @@ const ModalWindow = ({
       setIsSaveButtonVisible(true);
     }
 
-    if (isNaN(+throttleValue)) {
+    if (isNaN(Number(throttleValue))) {
       setIsSaveButtonVisible(false);
     }
   }, [newShortcut, throttleValue]);
 
   return (
-    <Modal
-      ariaLabelledby={modalHeadingID}
-      size="default"
-      isOpen={isEditModalOpen}
-      onDismiss={closeModalHandler}
-    >
+    <Modal ariaLabelledby={modalHeadingID} size="default" isOpen={isEditModalOpen} onDismiss={closeModalHandler}>
       <ModalHeader>
         <ModalHeading as="h3" id={modalHeadingID}>
           Modify a keyboard shortcut
@@ -153,13 +152,7 @@ const ModalWindow = ({
                       <Td>
                         <KeyCommand keyCommand={selectedShortcutKey} />
                       </Td>
-                      {isThrottleEnabled && (
-                        <Td>
-                          {selectedThrottle
-                            ? selectedThrottle
-                            : 'Not configured'}
-                        </Td>
-                      )}
+                      {isThrottleEnabled && <Td>{selectedThrottle ? selectedThrottle : 'Not configured'}</Td>}
                     </Tr>
                   </TBody>
                 </Table>
@@ -182,7 +175,7 @@ const ModalWindow = ({
                     </Label>
                     <Input
                       required
-                      onChange={e => setNewShortcut(e.currentTarget.value)}
+                      onChange={(e) => setNewShortcut(e.currentTarget.value)}
                       id={titleInputID}
                       type="text"
                       value={newShortcut}
@@ -197,19 +190,15 @@ const ModalWindow = ({
                       <Input
                         id={titleInputID}
                         type="number"
-                        onChange={e => setThrottleValue(e.currentTarget.value)}
-                        hasError={isNaN(+throttleValue)}
+                        onChange={(e) => setThrottleValue(e.currentTarget.value)}
+                        hasError={isNaN(Number(throttleValue))}
                         placeholder="Number in milliseconds"
                         maxLength={5}
                       />
                       <HelpText>Enter the shortcut throttle</HelpText>
                     </Stack>
                   )}
-                  {shortcutErrorMessage !== '' ? (
-                    <HelpText variant="error">{shortcutErrorMessage}</HelpText>
-                  ) : (
-                    ''
-                  )}
+                  {shortcutErrorMessage !== '' && <HelpText variant="error">{shortcutErrorMessage}</HelpText>}
                 </Stack>
               </Stack>
             </Box>
@@ -229,11 +218,7 @@ const ModalWindow = ({
           >
             Cancel
           </Button>
-          <Button
-            variant="primary"
-            onClick={saveHandler}
-            disabled={!isSaveButtonVisible}
-          >
+          <Button variant="primary" onClick={saveHandler} disabled={!isSaveButtonVisible}>
             Save changes
           </Button>
         </ModalFooterActions>

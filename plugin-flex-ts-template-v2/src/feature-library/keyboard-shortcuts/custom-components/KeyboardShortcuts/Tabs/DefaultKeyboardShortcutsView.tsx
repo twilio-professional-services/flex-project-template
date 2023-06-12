@@ -1,7 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Paragraph } from '@twilio-paste/core';
-import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core';
-import { Box, Tooltip, Text, Heading, Stack, Card } from '@twilio-paste/core';
+import {
+  Paragraph,
+  Table,
+  THead,
+  Tr,
+  Th,
+  Td,
+  TBody,
+  Box,
+  Tooltip,
+  Text,
+  Heading,
+  Stack,
+  Card,
+} from '@twilio-paste/core';
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
 import { WarningIcon } from '@twilio-paste/icons/esm/WarningIcon';
 
@@ -18,11 +30,7 @@ interface DefaultKeyboardShortcutsViewProps {
   isThrottleEnabled: boolean;
   isDeleteShortcutsEnabled: boolean;
   toasterDeleteNotification: (actionName: string) => void;
-  toasterSuccessNotification: (
-    actionName: string,
-    oldShortcut: string,
-    newShortcut: string
-  ) => void;
+  toasterSuccessNotification: (actionName: string, oldShortcut: string, newShortcut: string) => void;
 }
 
 const DefaultKeyboardShortcutsView = ({
@@ -33,22 +41,14 @@ const DefaultKeyboardShortcutsView = ({
   toasterDeleteNotification,
   toasterSuccessNotification,
 }: DefaultKeyboardShortcutsViewProps) => {
-  const [defaultShortcuts, setDefaultShortcuts] = useState<ShortcutsObject[]>(
-    []
-  );
+  const [defaultShortcuts, setDefaultShortcuts] = useState<ShortcutsObject[]>([]);
   const [shortcutsDeleted, setShortcutsDeleted] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [selectedShortcutKey, setSelectedShortcutKey] = useState<string>('');
   const [selectedActionName, setSelectedActionName] = useState<string>('');
-  const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(
-    0
-  );
+  const [selectedThrottle, setSelectedThrottle] = useState<number | undefined>(0);
 
-  const openModalHandler = (
-    shortcut: string,
-    actionName: string,
-    throttle?: number
-  ): void => {
+  const openModalHandler = (shortcut: string, actionName: string, throttle?: number): void => {
     setIsEditModalOpen(true);
     setSelectedThrottle(throttle);
     setSelectedShortcutKey(shortcut);
@@ -82,8 +82,8 @@ const DefaultKeyboardShortcutsView = ({
             </Stack>
           </Heading>
           <Paragraph>
-            There are no configured keyboard shortcuts. Please reset your
-            keyboard settings to enable keyboard shortcut customization.
+            There are no configured keyboard shortcuts. Please reset your keyboard settings to enable keyboard shortcut
+            customization.
           </Paragraph>
         </Card>
       ) : (
@@ -118,21 +118,16 @@ const DefaultKeyboardShortcutsView = ({
                 </Tr>
               </THead>
               <TBody>
-                {defaultShortcuts.map(item => (
+                {defaultShortcuts.map((item) => (
                   <Tr key={item.key}>
                     <Td>
-                      <KeyCommand keyCommand="Ctrl" /> +{' '}
-                      <KeyCommand keyCommand="Shift" />
+                      <KeyCommand keyCommand="Ctrl" /> + <KeyCommand keyCommand="Shift" />
                     </Td>
                     <Td>
                       <KeyCommand keyCommand={item.key} />{' '}
                     </Td>
                     <Td>{item.actionName}</Td>
-                    {isThrottleEnabled && (
-                      <Td>
-                        {item.throttle ? item.throttle : 'Not configured'}
-                      </Td>
-                    )}
+                    {isThrottleEnabled && <Td>{item.throttle ? item.throttle : 'Not configured'}</Td>}
                     <Td>
                       <Stack orientation="horizontal" spacing="space30">
                         <EditButton
@@ -147,9 +142,7 @@ const DefaultKeyboardShortcutsView = ({
                             actionName={item.actionName}
                             shortcuts={defaultShortcuts}
                             setShortcuts={setDefaultShortcuts}
-                            toasterDeleteNotification={
-                              toasterDeleteNotification
-                            }
+                            toasterDeleteNotification={toasterDeleteNotification}
                           />
                         )}
                       </Stack>

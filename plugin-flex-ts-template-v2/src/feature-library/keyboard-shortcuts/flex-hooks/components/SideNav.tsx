@@ -4,7 +4,7 @@ import SideNavigationIcon from '../../custom-components/SideNavigation/SideNavig
 import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.SideNav;
-export const componentHook = function KeyboardSideNav(flex: typeof Flex, _manager: Flex.Manager) {
+export const componentHook = function KeyboardSideNav(_manager: Flex.Manager) {
   Flex.SideNav.Content.add(<SideNavigationIcon key="keyboard-shortcuts-side-nav" viewName="keyboard-shortcuts" />, {
     sortOrder: 100,
   });

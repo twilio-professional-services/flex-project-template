@@ -1,17 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
-
-import { ShortcutsObject, CustomShortcut } from '../types/types';
-import { RemapShortcutObject, ShortcutActions } from '../types/types';
 import { KeyboardShortcuts } from '@twilio/flex-ui/src/KeyboardShortcuts';
 
-import { readFromLocalStorage } from './LocalStorageUtil';
+import { ShortcutsObject, CustomShortcut, RemapShortcutObject, ShortcutActions } from '../types/types';
+import { readFromLocalStorage, deleteMultipleFromLocalStorage } from './LocalStorageUtil';
 import { presetCustomShortcuts } from './CustomKeyboardShortcuts';
-import { deleteMultipleFromLocalStorage } from './LocalStorageUtil';
-
-import { shortcutsConfig } from './constants';
-import { deleteShortcuts } from './constants';
-import { enableThrottling } from './constants';
-import { removeAllShortcuts } from './constants';
+import { shortcutsConfig, deleteShortcuts, enableThrottling, removeAllShortcuts } from './constants';
 
 export const getCurrentShortcuts = (): KeyboardShortcuts => {
   return Flex.KeyboardShortcutManager.keyboardShortcuts;
@@ -31,60 +24,45 @@ export const disableKeyboardShortcutsUtil = (): void => {
 
 export const resetKeyboardShortcutsUtil = (): void => {
   disableKeyboardShortcutsUtil();
-  deleteMultipleFromLocalStorage([
-    deleteShortcuts,
-    enableThrottling,
-    removeAllShortcuts,
-    shortcutsConfig,
-  ]);
+  deleteMultipleFromLocalStorage([deleteShortcuts, enableThrottling, removeAllShortcuts, shortcutsConfig]);
   shortcutInitUtil(Flex.defaultKeyboardShortcuts);
 };
 
-export const addKeyboardShortcutUtil = (
-  shortcutObject: KeyboardShortcuts
-): void => {
+export const addKeyboardShortcutUtil = (shortcutObject: KeyboardShortcuts): void => {
   Flex.KeyboardShortcutManager.addShortcuts(shortcutObject);
 };
 
 export const remapKeyboardShortcutUtil = (
   oldKey: string,
   newKey: string,
-  shortcutObject: RemapShortcutObject
+  shortcutObject: RemapShortcutObject,
 ): void => {
   Flex.KeyboardShortcutManager.remapShortcut(
     oldKey,
     typeof newKey === 'string' ? newKey.toUpperCase() : newKey,
-    shortcutObject
+    shortcutObject,
   );
 };
 
 export const initCustomShortcuts = (): CustomShortcut[] => {
-  const customShortcutsValues = Object.entries(presetCustomShortcuts).map(
-    (item): CustomShortcut => {
-      return {
-        key: item[0],
-        actionName: item[1].name,
-        throttle: item[1]?.throttle,
-      };
-    }
-  );
-
-  return customShortcutsValues;
+  return Object.entries(presetCustomShortcuts).map((item): CustomShortcut => {
+    return {
+      key: item[0],
+      actionName: item[1].name,
+      throttle: item[1]?.throttle,
+    };
+  });
 };
 
 export const getAllShortcuts = (): ShortcutsObject[] => {
-  const shortcutValues = Object.entries(getCurrentShortcuts()).map(
-    (item): ShortcutsObject => {
-      return {
-        key: item[0],
-        actionName: item[1].name,
-        throttle: item[1]?.throttle,
-        action: item[1].action,
-      };
-    }
-  );
-
-  return shortcutValues;
+  return Object.entries(getCurrentShortcuts()).map((item): ShortcutsObject => {
+    return {
+      key: item[0],
+      actionName: item[1].name,
+      throttle: item[1]?.throttle,
+      action: item[1].action,
+    };
+  });
 };
 
 export const getDefaultShortcuts = (): ShortcutsObject[] => {
@@ -92,15 +70,9 @@ export const getDefaultShortcuts = (): ShortcutsObject[] => {
   const customShortcuts = initCustomShortcuts();
   const allShortcuts = getAllShortcuts();
 
-  const customShortcutsKeys = Object.values(customShortcuts).map(
-    item => item.actionName
-  );
+  const customShortcutsKeys = Object.values(customShortcuts).map((item) => item.actionName);
 
-  const defaultShortcutValues = allShortcuts.filter(
-    item => customShortcutsKeys.indexOf(item.actionName) === -1
-  );
-
-  return defaultShortcutValues;
+  return allShortcuts.filter((item) => customShortcutsKeys.indexOf(item.actionName) === -1);
 };
 
 export const getCustomShortcuts = (): ShortcutsObject[] => {
@@ -112,15 +84,9 @@ export const getCustomShortcuts = (): ShortcutsObject[] => {
   const customShortcuts = initCustomShortcuts();
   const allShortcuts = getAllShortcuts();
 
-  const customShortcutsKeys = Object.values(customShortcuts).map(
-    item => item.actionName
-  );
+  const customShortcutsKeys = Object.values(customShortcuts).map((item) => item.actionName);
 
-  const customShortcutValues = allShortcuts.filter(
-    item => customShortcutsKeys.indexOf(item.actionName) !== -1
-  );
-
-  return customShortcutValues;
+  return allShortcuts.filter((item) => customShortcutsKeys.indexOf(item.actionName) !== -1);
 };
 
 export const getUserConfig = (): void => {
@@ -131,7 +97,7 @@ export const getUserConfig = (): void => {
     const userLocalConfig: ShortcutsObject = JSON.parse(localConfig);
     const systemConfig = getCurrentShortcuts();
 
-    const userLocalConfigArray = Object.entries(userLocalConfig).map(item => {
+    const userLocalConfigArray = Object.entries(userLocalConfig).map((item) => {
       return {
         key: item[0],
         actionName: item[1].name,
@@ -139,21 +105,17 @@ export const getUserConfig = (): void => {
       };
     });
 
-    const systemConfigArray = Object.entries(systemConfig).map(
-      (item): ShortcutsObject => {
-        return {
-          key: item[0],
-          actionName: item[1].name,
-          throttle: item[1]?.throttle,
-          action: item[1].action,
-        };
-      }
-    );
+    const systemConfigArray = Object.entries(systemConfig).map((item): ShortcutsObject => {
+      return {
+        key: item[0],
+        actionName: item[1].name,
+        throttle: item[1]?.throttle,
+        action: item[1].action,
+      };
+    });
 
-    const userConfig = systemConfigArray.map(systemItem => {
-      const foundItem = userLocalConfigArray.find(
-        userItem => userItem.actionName === systemItem.actionName
-      );
+    const userConfig = systemConfigArray.map((systemItem) => {
+      const foundItem = userLocalConfigArray.find((userItem) => userItem.actionName === systemItem.actionName);
       if (foundItem) {
         return {
           ...foundItem,
@@ -161,23 +123,18 @@ export const getUserConfig = (): void => {
           oldKey: systemItem.key,
           delete: false,
         };
-      } else {
-        return { ...systemItem, oldKey: systemItem.key, delete: true };
       }
+      return { ...systemItem, oldKey: systemItem.key, delete: true };
     });
 
     disableKeyboardShortcutsUtil();
 
-    userConfig.forEach(shortcut => {
-      Flex.KeyboardShortcutManager.remapShortcut(
-        shortcut.oldKey,
-        shortcut.key,
-        {
-          action: shortcut.action,
-          name: shortcut.actionName,
-          throttle: shortcut.throttle,
-        }
-      );
+    userConfig.forEach((shortcut) => {
+      Flex.KeyboardShortcutManager.remapShortcut(shortcut.oldKey, shortcut.key, {
+        action: shortcut.action,
+        name: shortcut.actionName,
+        throttle: shortcut.throttle,
+      });
 
       if (shortcut.delete === true) {
         deleteShortcutsUtil(shortcut.key);
@@ -203,7 +160,7 @@ export const getCamelCase = (input: string): string =>
 export const getAllActions = (): ShortcutActions => {
   const allShortcuts = getAllShortcuts();
 
-  const allActions = allShortcuts.map(item => {
+  const allActions = allShortcuts.map((item) => {
     return {
       [getCamelCase(item.actionName)]: item.action,
     };

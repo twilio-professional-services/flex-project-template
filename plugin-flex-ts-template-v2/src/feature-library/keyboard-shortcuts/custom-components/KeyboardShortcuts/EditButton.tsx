@@ -5,24 +5,11 @@ interface EditButtonProps {
   actionName: string;
   shortcutKey: string;
   throttle: number | undefined;
-  openModalHandler: (
-    shortcutKey: string,
-    actionName: string,
-    throttle: number | undefined
-  ) => void;
+  openModalHandler: (shortcutKey: string, actionName: string, throttle: number | undefined) => void;
 }
 
-const EditButton = ({
-  shortcutKey,
-  actionName,
-  throttle,
-  openModalHandler,
-}: EditButtonProps): JSX.Element => {
-  const clickHandler = (
-    shortcutKey: string,
-    actionName: string,
-    throttle?: number
-  ): void => {
+const EditButton = ({ shortcutKey, actionName, throttle, openModalHandler }: EditButtonProps): JSX.Element => {
+  const clickHandler = (shortcutKey: string, actionName: string, throttle?: number): void => {
     openModalHandler(shortcutKey, actionName, throttle);
   };
 

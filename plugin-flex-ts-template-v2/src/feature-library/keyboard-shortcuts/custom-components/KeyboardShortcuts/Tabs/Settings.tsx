@@ -1,22 +1,18 @@
-import { Dispatch, SetStateAction } from 'react';
-import { useState, useEffect, useCallback } from 'react';
-
-import { Button, Heading, Stack } from '@twilio-paste/core';
-import { Card, Paragraph, Switch } from '@twilio-paste/core';
-import { TabPrimitiveInitialState } from '@twilio-paste/core';
+import { Dispatch, SetStateAction, useState, useEffect, useCallback } from 'react';
+import { Button, Heading, Stack, Card, Paragraph, Switch, TabPrimitiveInitialState } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
-import { writeToLocalStorage } from '../../../utils/LocalStorageUtil';
-import { readFromLocalStorage } from '../../../utils/LocalStorageUtil';
-import { resetKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
-import { disableKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
 
-import { deleteShortcuts } from '../../../utils/constants';
-import { enableThrottling } from '../../../utils/constants';
-import { removeAllShortcuts } from '../../../utils/constants';
-import { deleteSettingExplanation } from '../../../utils/constants';
-import { throttleSettingExplanation } from '../../../utils/constants';
-import { removeAllSettingExplanation } from '../../../utils/constants';
-import { resetShortcutsSettingExplanation } from '../../../utils/constants';
+import { writeToLocalStorage, readFromLocalStorage } from '../../../utils/LocalStorageUtil';
+import { resetKeyboardShortcutsUtil, disableKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
+import {
+  deleteShortcuts,
+  enableThrottling,
+  removeAllShortcuts,
+  deleteSettingExplanation,
+  throttleSettingExplanation,
+  removeAllSettingExplanation,
+  resetShortcutsSettingExplanation,
+} from '../../../utils/constants';
 
 interface SettingsProps {
   tabState: TabPrimitiveInitialState;
@@ -63,19 +59,13 @@ const Settings = ({
   const throttlingHandler = (): void => {
     setThrottlingToggle(!throttlingToggle);
     setIsThrottleEnabled(!throttlingToggle);
-    writeToLocalStorage(
-      enableThrottling,
-      readFromLocalStorage(enableThrottling) === 'true' ? 'false' : 'true'
-    );
+    writeToLocalStorage(enableThrottling, readFromLocalStorage(enableThrottling) === 'true' ? 'false' : 'true');
   };
 
   const deleteShortcutsHandler = (): void => {
     setIsDeleteShortcutsEnabled(!deleteToggle);
     setDeleteToggle(!deleteToggle);
-    writeToLocalStorage(
-      deleteShortcuts,
-      readFromLocalStorage(deleteShortcuts) === 'true' ? 'false' : 'true'
-    );
+    writeToLocalStorage(deleteShortcuts, readFromLocalStorage(deleteShortcuts) === 'true' ? 'false' : 'true');
   };
 
   const removeAllShortcutsHandler = (): void => {
@@ -83,10 +73,7 @@ const Settings = ({
     setDisableShortcuts(true);
     setDisableAllSetting(false);
     toasterNotification('remove');
-    writeToLocalStorage(
-      removeAllShortcuts,
-      readFromLocalStorage(removeAllShortcuts) === 'true' ? 'false' : 'true'
-    );
+    writeToLocalStorage(removeAllShortcuts, readFromLocalStorage(removeAllShortcuts) === 'true' ? 'false' : 'true');
   };
 
   const resetShortcutsHandler = (): void => {
@@ -147,11 +134,7 @@ const Settings = ({
             Enable key throttling
           </Heading>
           <Paragraph>{throttleSettingExplanation}</Paragraph>
-          <Switch
-            value="throttling"
-            checked={throttlingToggle}
-            onChange={throttlingHandler}
-          >
+          <Switch value="throttling" checked={throttlingToggle} onChange={throttlingHandler}>
             Enable key throttling
           </Switch>
         </Card>
@@ -160,11 +143,7 @@ const Settings = ({
             Delete individual shortcuts
           </Heading>
           <Paragraph>{deleteSettingExplanation}</Paragraph>
-          <Switch
-            value="delete"
-            checked={deleteToggle}
-            onChange={deleteShortcutsHandler}
-          >
+          <Switch value="delete" checked={deleteToggle} onChange={deleteShortcutsHandler}>
             Delete individual shortcuts
           </Switch>
         </Card>
@@ -176,10 +155,7 @@ const Settings = ({
           {/* Once the setting is clicked, display the Save and Cancel buttons */}
           {disableAllSetting ? (
             <Stack orientation="horizontal" spacing="space30">
-              <Button
-                variant="secondary"
-                onClick={() => setDisableAllSetting(false)}
-              >
+              <Button variant="secondary" onClick={() => setDisableAllSetting(false)}>
                 Cancel
               </Button>
               <Button variant="destructive" onClick={removeAllShortcutsHandler}>
@@ -192,11 +168,7 @@ const Settings = ({
               <Button
                 variant="destructive"
                 onClick={() => setDisableAllSetting(true)}
-                disabled={
-                  readFromLocalStorage(removeAllShortcuts) === 'true'
-                    ? true
-                    : false
-                }
+                disabled={readFromLocalStorage(removeAllShortcuts) === 'true'}
               >
                 Remove all shortcuts
               </Button>
@@ -211,10 +183,7 @@ const Settings = ({
           {/* Once the setting is clicked, display the Save and Cancel buttons */}
           {resetSetting ? (
             <Stack orientation="horizontal" spacing="space30">
-              <Button
-                variant="secondary"
-                onClick={() => setResetSetting(false)}
-              >
+              <Button variant="secondary" onClick={() => setResetSetting(false)}>
                 Cancel
               </Button>
               <Button variant="destructive" onClick={resetShortcutsHandler}>

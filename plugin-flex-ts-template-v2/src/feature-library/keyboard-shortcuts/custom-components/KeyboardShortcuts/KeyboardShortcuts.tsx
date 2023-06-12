@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { useUID } from '@twilio-paste/core/uid-library';
-
-import { useTabState } from '@twilio-paste/core';
-import { Box, Heading } from '@twilio-paste/core';
+import { useTabState, Box, Heading, Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
-import { Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
 
 import Settings from './Tabs/Settings';
 import DefaultKeyboardShortcutsView from './Tabs/DefaultKeyboardShortcutsView';
@@ -12,19 +9,14 @@ import CustomKeyboardShortcutsView from './Tabs/CustomKeyboardShortcutsView';
 
 const KeyboardShortcuts = () => {
   const [disableShortcuts, setDisableShortcuts] = useState(false);
-  const [isDeleteShortcutsEnabled, setIsDeleteShortcutsEnabled] =
-    useState(false);
+  const [isDeleteShortcutsEnabled, setIsDeleteShortcutsEnabled] = useState(false);
   const [isThrottleEnabled, setIsThrottleEnabled] = useState(false);
   const [reset, setReset] = useState(false);
   const randomComponentId = useUID();
   const { ...tabState } = useTabState();
   const toaster = useToaster();
 
-  const toasterSuccessNotification = (
-    actionName: string,
-    oldShortcut: string,
-    newShortcut: string
-  ) => {
+  const toasterSuccessNotification = (actionName: string, oldShortcut: string, newShortcut: string) => {
     toaster.push({
       message: `Keyboard action ${actionName} modified successfully from ${oldShortcut} to ${newShortcut.toUpperCase()}!
       Your new keyboard shortcut is: Ctrl + Shift + ${newShortcut.toUpperCase()}`,
@@ -46,12 +38,7 @@ const KeyboardShortcuts = () => {
       <Heading as="h1" variant="heading10">
         My Shortcut Settings
       </Heading>
-      <Tabs
-        selectedId={randomComponentId}
-        baseId="options"
-        orientation="vertical"
-        state={tabState}
-      >
+      <Tabs selectedId={randomComponentId} baseId="options" orientation="vertical" state={tabState}>
         <TabList aria-label="Vertical product tabs">
           <Tab id={randomComponentId}>Default keyboard shortcuts</Tab>
           <Tab>Custom keyboard shortcuts</Tab>
