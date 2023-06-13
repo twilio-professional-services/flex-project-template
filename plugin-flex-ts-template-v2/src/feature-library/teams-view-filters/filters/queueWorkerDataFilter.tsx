@@ -1,8 +1,9 @@
-import { FilterDefinition } from '@twilio/flex-ui';
+import { FilterDefinition, Manager } from '@twilio/flex-ui';
 
 import SelectFilter from '../custom-components/SelectFilter';
 import SelectFilterLabel from '../custom-components/SelectFilterLabel';
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
+import { StringTemplates } from '../flex-hooks/strings/TeamViewQueueFilter';
 
 /* 
     this filter only works when a supporting backend solution is keeping
@@ -29,7 +30,7 @@ export const queueWorkerDataFilter = async () => {
 
   return {
     id: 'data.attributes.queues',
-    title: 'Queue Eligibility',
+    title: (Manager.getInstance().strings as any)[StringTemplates.QueueEligibility],
     fieldName: 'queues',
     customStructure: {
       label: <SelectFilterLabel />,

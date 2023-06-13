@@ -4,11 +4,13 @@ import { Box } from '@twilio-paste/core/box';
 import { HelpText } from '@twilio-paste/core/help-text';
 import { Label } from '@twilio-paste/core/label';
 import { Select, Option } from '@twilio-paste/core/select';
+import { Template, templates } from '@twilio/flex-ui';
 
 import { PhoneNumberItem } from '../../../../utils/serverless/PhoneNumbers/PhoneNumberService';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions, OutboundCallerIDSelectorState } from '../../flex-hooks/states/OutboundCallerIDSelector';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 const OutboundCallerIDSelectorComponent = () => {
   const dispatch = useDispatch();
@@ -17,7 +19,7 @@ const OutboundCallerIDSelectorComponent = () => {
     (state: AppState) => state[reduxNamespace].outboundCallerIdSelector as OutboundCallerIDSelectorState,
   );
 
-  const [helpText, setHelpText] = useState('Loading phone numbers...');
+  const [helpText, setHelpText] = useState(templates[StringTemplates.Loading]());
   const [selectOptions, setSelectOptions] = useState([] as PhoneNumberItem[]);
 
   useEffect(() => {
@@ -27,14 +29,14 @@ const OutboundCallerIDSelectorComponent = () => {
   useEffect(() => {
     if (isFetchingPhoneNumbers) {
       setSelectOptions([]);
-      setHelpText('Loading phone numbers...');
+      setHelpText(templates[StringTemplates.Loading]());
     } else if (fetchingPhoneNumbersFailed) {
       setSelectOptions([]);
-      setHelpText('Unable to load phone numbers');
+      setHelpText(templates[StringTemplates.LoadingFailed]());
     } else {
       setSelectOptions([
         {
-          friendlyName: 'Choose a Caller ID',
+          friendlyName: templates[StringTemplates.ChooseCallerId](),
           phoneNumber: 'placeholder',
         },
         ...phoneNumbers,
@@ -50,7 +52,9 @@ const OutboundCallerIDSelectorComponent = () => {
 
   return (
     <Box width="100%">
-      <Label htmlFor="outboundCallerIdSelect">Caller ID</Label>
+      <Label htmlFor="outboundCallerIdSelect">
+        <Template source={templates[StringTemplates.CallerId]} />
+      </Label>
       <Select
         id="outboundCallerIdSelect"
         disabled={helpText !== ''}

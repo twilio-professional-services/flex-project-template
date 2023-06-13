@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import { Actions, ITask, Manager, ConversationState, Notifications, styled, IconButton } from '@twilio/flex-ui';
+import {
+  Actions,
+  ITask,
+  Manager,
+  ConversationState,
+  Notifications,
+  styled,
+  IconButton,
+  templates,
+} from '@twilio/flex-ui';
 
 import { updateTaskAttributesForVideo } from '../../helpers/taskAttributes';
 import { getFeatureFlags } from '../../../../utils/configuration';
 import { ChatToVideoNotification } from '../../flex-hooks/notifications/ChatToVideo';
+import { StringTemplates } from '../../flex-hooks/strings/ChatToVideo';
 
 interface SwitchToVideoProps {
   task: ITask;
@@ -67,7 +77,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, conv
         }
 
         Actions.invokeAction('SendMessage', {
-          body: `Please join me using this unique video link: ${response.full_url}`,
+          body: templates[StringTemplates.InviteMessage]({ videoLink: response.full_url }),
           conversation,
           messageAttributes: {
             hasVideo: true,
@@ -91,7 +101,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, conv
         disabled={isLoading}
         onClick={onClick}
         variant="secondary"
-        title="Switch to Video"
+        title={templates[StringTemplates.SwitchToVideo]()}
       />
     </IconContainer>
   );

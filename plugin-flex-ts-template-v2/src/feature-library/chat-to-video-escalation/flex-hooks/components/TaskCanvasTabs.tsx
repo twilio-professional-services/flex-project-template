@@ -1,12 +1,13 @@
 import * as Flex from '@twilio/flex-ui';
 
 import VideoRoom from '../../custom-components/VideoRoom';
+import { StringTemplates } from '../strings/ChatToVideo';
 import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.TaskCanvasTabs;
-export const componentHook = function addVideoRoomTabToTaskCanvasTabs(flex: typeof Flex) {
+export const componentHook = function addVideoRoomTabToTaskCanvasTabs(flex: typeof Flex, manager: Flex.Manager) {
   flex.TaskCanvasTabs.Content.add(
-    <Flex.Tab label="Video Room" key="VideoRoom" uniqueName="VideoRoom">
+    <Flex.Tab label={(manager.strings as any)[StringTemplates.VideoRoom]} key="VideoRoom" uniqueName="VideoRoom">
       <VideoRoom />
     </Flex.Tab>,
     {
