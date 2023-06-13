@@ -12,7 +12,7 @@ export const getFeatureFlagsGlobal = () => {
 };
 
 export const getFeatureFlagsUser = () => {
-  const { custom_data: workerSettings } = manager.workerClient?.attributes as CustomWorkerAttributes;
+  const { config_overrides: workerSettings } = manager.workerClient?.attributes as CustomWorkerAttributes;
   return workerSettings;
 };
 
@@ -23,12 +23,11 @@ export const getFeatureFlags = () => {
 };
 
 export const getUserLanguage = () => {
-  const workerClient = Flex.Manager.getInstance().workerClient;
   let { language } = getFeatureFlags();
 
-  if (workerClient) {
+  if (manager.workerClient) {
     // get user-specified language if present, instead of global language
-    const workerAttrs = workerClient.attributes as CustomWorkerAttributes;
+    const workerAttrs = manager.workerClient.attributes as CustomWorkerAttributes;
     if (workerAttrs.language) {
       language = workerAttrs.language;
     }

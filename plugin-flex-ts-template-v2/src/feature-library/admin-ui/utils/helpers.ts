@@ -50,7 +50,7 @@ const updateWorkerSetting = async (feature: string, config: any) => {
   await Actions.invokeAction('SetWorkerAttributes', {
     mergeExisting: true,
     attributes: {
-      custom_data: {
+      config_overrides: {
         features: {
           [feature]: config,
         },
@@ -68,8 +68,8 @@ const resetWorkerSetting = async (feature: string) => {
 
   const attributes = workerClient.attributes as CustomWorkerAttributes;
 
-  if (attributes?.custom_data?.features && attributes.custom_data.features[feature]) {
-    delete attributes.custom_data.features[feature];
+  if (attributes?.config_overrides?.features && attributes.config_overrides.features[feature]) {
+    delete attributes.config_overrides.features[feature];
   }
 
   await workerClient.setAttributes(attributes);

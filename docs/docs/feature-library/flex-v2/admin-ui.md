@@ -6,7 +6,7 @@ title: admin-ui
 
 ## Feature summary
 
-This feature adds a user interface to Flex for easily managing flex-config. Every feature can be enabled or disabled, and each feature's deployed configuration is editable. Configuration changes can be made globally or to only the current user, allowing for easy testing and development. The interface is fully dynamic, meaning feature developers do not need to do anything for the feature to be shown and manage-able via admin-ui.
+This feature adds a user interface to Flex for easily managing the configuration of features within the template. Every feature can be enabled or disabled, and each feature's deployed configuration is editable. Configuration changes can be made globally or to only the current user, allowing for easy testing and development. The admin panel is fully dynamic, automatically showing features added to the template. In most cases, feature developers do not need to do anything for the feature to be shown and manage-able via admin-ui. However, features with complex configuration requirements may use the provided hook pattern to register their own configuration component (see "Extending the configuration interface" below).
 
 ## Flex User Experience
 
