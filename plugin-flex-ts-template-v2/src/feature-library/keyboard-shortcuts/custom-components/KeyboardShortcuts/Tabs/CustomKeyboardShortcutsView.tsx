@@ -14,9 +14,11 @@ import {
   Td,
   TBody,
 } from '@twilio-paste/core';
+import { Template, templates } from '@twilio/flex-ui';
 import { WarningIcon } from '@twilio-paste/icons/esm/WarningIcon';
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
 
+import { StringTemplates } from '../../../flex-hooks/strings';
 import EditButton from '../EditButton';
 import KeyCommand from '../KeyCommand';
 import ModalWindow from '../ModalWindow';
@@ -78,12 +80,11 @@ const CustomKeyboardShortcutsView = ({
           <Heading as="h5" variant="heading50">
             <Stack orientation="horizontal" spacing="space20">
               <WarningIcon decorative />
-              Re-enable Keyboard Shortcuts
+              <Template source={templates[StringTemplates.WarningMsg]} />
             </Stack>
           </Heading>
           <Paragraph>
-            There are no configured custom keyboard shortcuts. Please reset your keyboard settings to enable custom
-            keyboard shortcuts.
+            <Template source={templates[StringTemplates.ErrorMsgNoCustomShortcuts]} />
           </Paragraph>
         </Card>
       ) : (
@@ -95,27 +96,37 @@ const CustomKeyboardShortcutsView = ({
                 <Tr>
                   <Th>
                     <Stack orientation="horizontal" spacing="space30">
-                      <Tooltip text="Ctrl and Shift are the default modifiers that cannot be changed.">
+                      <Tooltip text={templates[StringTemplates.TooltipMsg]()}>
                         <Stack orientation="horizontal" spacing="space20">
-                          <Text as="span">Modifiers</Text>
+                          <Text as="span">
+                            <Template source={templates[StringTemplates.HeaderModifiers]} />
+                          </Text>
                           <InformationIcon decorative />
                         </Stack>
                       </Tooltip>
                     </Stack>
                   </Th>
                   <Th>
-                    <Text as="span">Shortcuts</Text>
+                    <Text as="span">
+                      <Template source={templates[StringTemplates.HeaderShortcuts]} />
+                    </Text>
                   </Th>
                   <Th>
-                    <Text as="span">Actions</Text>
+                    <Text as="span">
+                      <Template source={templates[StringTemplates.HeaderActions]} />
+                    </Text>
                   </Th>
                   {isThrottleEnabled && (
                     <Th>
-                      <Text as="span">Throttle (ms)</Text>
+                      <Text as="span">
+                        <Template source={templates[StringTemplates.HeaderThrottle]} />
+                      </Text>
                     </Th>
                   )}
                   <Th>
-                    <Text as="span">Edit</Text>
+                    <Text as="span">
+                      <Template source={templates[StringTemplates.HeaderEdit]} />
+                    </Text>
                   </Th>
                 </Tr>
               </THead>
@@ -126,10 +137,18 @@ const CustomKeyboardShortcutsView = ({
                       <KeyCommand keyCommand="Ctrl" /> + <KeyCommand keyCommand="Shift" />
                     </Td>
                     <Td>
-                      <KeyCommand keyCommand={item.key} />{' '}
+                      <KeyCommand keyCommand={item.key} />
                     </Td>
                     <Td>{item.actionName}</Td>
-                    {isThrottleEnabled && <Td>{item.throttle ? item.throttle : 'Not configured'}</Td>}
+                    {isThrottleEnabled && (
+                      <Td>
+                        {item.throttle ? (
+                          item.throttle
+                        ) : (
+                          <Template source={templates[StringTemplates.NotConfiguredMsg]} />
+                        )}
+                      </Td>
+                    )}
                     <Td>
                       <Stack orientation="horizontal" spacing="space30">
                         <EditButton

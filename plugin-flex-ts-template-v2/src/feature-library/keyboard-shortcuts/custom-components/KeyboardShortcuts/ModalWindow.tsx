@@ -23,7 +23,9 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@twilio-paste/core';
+import { Template, templates } from '@twilio/flex-ui';
 
+import { StringTemplates } from '../../flex-hooks/strings';
 import KeyCommand from './KeyCommand';
 import { ShortcutsObject } from '../../types/types';
 import { shortcutsConfig } from '../../utils/constants';
@@ -80,11 +82,8 @@ const ModalWindow = ({
 
     setShortcutErrorMessage('');
     if (shortcutKeys.indexOf(parsedShortcut) !== -1) {
-      setShortcutErrorMessage(
-        `A shortcut with key mapping ${parsedShortcut} already exists and it is assigned to the ${
-          getAllShortcuts()[indexPosition].actionName
-        } action.`,
-      );
+      const actionName = getAllShortcuts()[indexPosition].actionName;
+      setShortcutErrorMessage(templates[StringTemplates.ModalSetShortcutErrorMsg]({ parsedShortcut, actionName }));
       return;
     }
 
@@ -127,7 +126,7 @@ const ModalWindow = ({
     <Modal ariaLabelledby={modalHeadingID} size="default" isOpen={isEditModalOpen} onDismiss={closeModalHandler}>
       <ModalHeader>
         <ModalHeading as="h3" id={modalHeadingID}>
-          Modify a keyboard shortcut
+          <Template source={templates[StringTemplates.ModalTitle]} />
         </ModalHeading>
       </ModalHeader>
       <ModalBody>
@@ -136,14 +135,22 @@ const ModalWindow = ({
             <Box marginBottom="space50">
               <Stack orientation="vertical" spacing="space30">
                 <ModalHeading as="h6" id={modalHeadingID}>
-                  Current configuration
+                  <Template source={templates[StringTemplates.ModalCurrentConfig]} />
                 </ModalHeading>
                 <Table>
                   <THead>
                     <Tr>
-                      <Th>Action name</Th>
-                      <Th>Current shortcut</Th>
-                      {isThrottleEnabled && <Th>Throttle (ms)</Th>}
+                      <Th>
+                        <Template source={templates[StringTemplates.ModalHeaderAction]} />
+                      </Th>
+                      <Th>
+                        <Template source={templates[StringTemplates.ModalHeaderCurrent]} />
+                      </Th>
+                      {isThrottleEnabled && (
+                        <Th>
+                          <Template source={templates[StringTemplates.HeaderThrottle]} />
+                        </Th>
+                      )}
                     </Tr>
                   </THead>
                   <TBody>
@@ -152,7 +159,15 @@ const ModalWindow = ({
                       <Td>
                         <KeyCommand keyCommand={selectedShortcutKey} />
                       </Td>
-                      {isThrottleEnabled && <Td>{selectedThrottle ? selectedThrottle : 'Not configured'}</Td>}
+                      {isThrottleEnabled && (
+                        <Td>
+                          {selectedThrottle ? (
+                            selectedThrottle
+                          ) : (
+                            <Template source={templates[StringTemplates.NotConfiguredMsg]} />
+                          )}
+                        </Td>
+                      )}
                     </Tr>
                   </TBody>
                 </Table>
@@ -166,12 +181,12 @@ const ModalWindow = ({
             <Box marginBottom="space50">
               <Stack orientation="vertical" spacing="space30">
                 <ModalHeading as="h6" id={modalHeadingID}>
-                  New configuration
+                  <Template source={templates[StringTemplates.ModalNewConfig]} />
                 </ModalHeading>
                 <Stack orientation="horizontal" spacing="space200">
                   <Stack orientation="vertical" spacing="space30">
                     <Label htmlFor="new-shortcut" required>
-                      New keyboard shortcut
+                      <Template source={templates[StringTemplates.ModalInputLabel]} />
                     </Label>
                     <Input
                       required
@@ -180,22 +195,28 @@ const ModalWindow = ({
                       type="text"
                       value={newShortcut}
                       maxLength={1}
-                      placeholder="Single character"
+                      placeholder={templates[StringTemplates.ModalInputPlaceholder]()}
                     />
-                    <HelpText>Enter your new keyboard shortcut</HelpText>
+                    <HelpText>
+                      <Template source={templates[StringTemplates.ModalHelpText]} />
+                    </HelpText>
                   </Stack>
                   {isThrottleEnabled && (
                     <Stack orientation="vertical" spacing="space30">
-                      <Label htmlFor="throttle">Throttle</Label>
+                      <Label htmlFor="throttle">
+                        <Template source={templates[StringTemplates.ModalThrottleInputLabel]} />
+                      </Label>
                       <Input
                         id={titleInputID}
                         type="number"
                         onChange={(e) => setThrottleValue(e.currentTarget.value)}
                         hasError={isNaN(Number(throttleValue))}
-                        placeholder="Number in milliseconds"
+                        placeholder={templates[StringTemplates.ModalThrottlePlaceholder]()}
                         maxLength={5}
                       />
-                      <HelpText>Enter the shortcut throttle</HelpText>
+                      <HelpText>
+                        <Template source={templates[StringTemplates.ModalThrottleHelpText]} />
+                      </HelpText>
                     </Stack>
                   )}
                   {shortcutErrorMessage !== '' && <HelpText variant="error">{shortcutErrorMessage}</HelpText>}
@@ -216,10 +237,10 @@ const ModalWindow = ({
               setShortcutErrorMessage('');
             }}
           >
-            Cancel
+            <Template source={templates[StringTemplates.CancelButton]} />
           </Button>
           <Button variant="primary" onClick={saveHandler} disabled={!isSaveButtonVisible}>
-            Save changes
+            <Template source={templates[StringTemplates.SaveChangesButton]} />
           </Button>
         </ModalFooterActions>
       </ModalFooter>

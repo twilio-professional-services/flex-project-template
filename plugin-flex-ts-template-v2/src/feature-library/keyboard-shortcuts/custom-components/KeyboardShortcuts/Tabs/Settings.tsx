@@ -1,18 +1,12 @@
 import { Dispatch, SetStateAction, useState, useEffect, useCallback } from 'react';
+import { Template, templates } from '@twilio/flex-ui';
 import { Button, Heading, Stack, Card, Paragraph, Switch, TabPrimitiveInitialState } from '@twilio-paste/core';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 
+import { StringTemplates } from '../../../flex-hooks/strings';
 import { writeToLocalStorage, readFromLocalStorage } from '../../../utils/LocalStorageUtil';
 import { resetKeyboardShortcutsUtil, disableKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
-import {
-  deleteShortcuts,
-  enableThrottling,
-  removeAllShortcuts,
-  deleteSettingExplanation,
-  throttleSettingExplanation,
-  removeAllSettingExplanation,
-  resetShortcutsSettingExplanation,
-} from '../../../utils/constants';
+import { deleteShortcuts, enableThrottling, removeAllShortcuts } from '../../../utils/constants';
 
 interface SettingsProps {
   tabState: TabPrimitiveInitialState;
@@ -42,14 +36,14 @@ const Settings = ({
   const toasterNotification = (setting: string): void => {
     if (setting === 'reset') {
       toaster.push({
-        message: `All keyboard shortcuts have been reset to the default values!`,
+        message: templates[StringTemplates.SettingsToastResetNotification](),
         variant: 'success',
         dismissAfter: 4000,
       });
     }
     if (setting === 'remove') {
       toaster.push({
-        message: `All keyboard shortcuts have been disabled.`,
+        message: templates[StringTemplates.SettingsToastDisableNotification](),
         variant: 'success',
         dismissAfter: 4000,
       });
@@ -131,35 +125,41 @@ const Settings = ({
       <Stack orientation="vertical" spacing="space60">
         <Card>
           <Heading as="h5" variant="heading50">
-            Enable key throttling
+            <Template source={templates[StringTemplates.SettingsEnableKeyThrottling]} />
           </Heading>
-          <Paragraph>{throttleSettingExplanation}</Paragraph>
+          <Paragraph>
+            <Template source={templates[StringTemplates.SettingsEnableKeyThrottlingText]} />
+          </Paragraph>
           <Switch value="throttling" checked={throttlingToggle} onChange={throttlingHandler}>
-            Enable key throttling
+            <Template source={templates[StringTemplates.SettingsEnableKeyThrottling]} />
           </Switch>
         </Card>
         <Card>
           <Heading as="h5" variant="heading50">
-            Delete individual shortcuts
+            <Template source={templates[StringTemplates.SettingsDeleteIndividualShortcuts]} />
           </Heading>
-          <Paragraph>{deleteSettingExplanation}</Paragraph>
+          <Paragraph>
+            <Template source={templates[StringTemplates.SettingsDeleteIndividualShortcutsText]} />
+          </Paragraph>
           <Switch value="delete" checked={deleteToggle} onChange={deleteShortcutsHandler}>
-            Delete individual shortcuts
+            <Template source={templates[StringTemplates.SettingsDeleteIndividualShortcuts]} />
           </Switch>
         </Card>
         <Card>
           <Heading as="h5" variant="heading50">
-            Remove all shortcuts
+            <Template source={templates[StringTemplates.SettingsRemoveShortcuts]} />
           </Heading>
-          <Paragraph>{removeAllSettingExplanation}</Paragraph>
+          <Paragraph>
+            <Template source={templates[StringTemplates.SettingsRemoveShortcutsText]} />
+          </Paragraph>
           {/* Once the setting is clicked, display the Save and Cancel buttons */}
           {disableAllSetting ? (
             <Stack orientation="horizontal" spacing="space30">
               <Button variant="secondary" onClick={() => setDisableAllSetting(false)}>
-                Cancel
+                <Template source={templates[StringTemplates.CancelButton]} />
               </Button>
               <Button variant="destructive" onClick={removeAllShortcutsHandler}>
-                Save
+                <Template source={templates[StringTemplates.SaveButton]} />
               </Button>
             </Stack>
           ) : (
@@ -170,24 +170,26 @@ const Settings = ({
                 onClick={() => setDisableAllSetting(true)}
                 disabled={readFromLocalStorage(removeAllShortcuts) === 'true'}
               >
-                Remove all shortcuts
+                <Template source={templates[StringTemplates.SettingsRemoveShortcuts]} />
               </Button>
             </>
           )}
         </Card>
         <Card>
           <Heading as="h5" variant="heading50">
-            Reset keyboard shortcut settings
+            <Template source={templates[StringTemplates.SettingsResetShortcutsTitle]} />
           </Heading>
-          <Paragraph>{resetShortcutsSettingExplanation}</Paragraph>
+          <Paragraph>
+            <Template source={templates[StringTemplates.SettingsResetShortcutsText]} />
+          </Paragraph>
           {/* Once the setting is clicked, display the Save and Cancel buttons */}
           {resetSetting ? (
             <Stack orientation="horizontal" spacing="space30">
               <Button variant="secondary" onClick={() => setResetSetting(false)}>
-                Cancel
+                <Template source={templates[StringTemplates.CancelButton]} />
               </Button>
               <Button variant="destructive" onClick={resetShortcutsHandler}>
-                Save
+                <Template source={templates[StringTemplates.SaveButton]} />
               </Button>
             </Stack>
           ) : (
@@ -199,7 +201,7 @@ const Settings = ({
                   setResetSetting(true);
                 }}
               >
-                Reset keyboard shortcuts
+                <Template source={templates[StringTemplates.SettingsResetShortcuts]} />
               </Button>
             </>
           )}
