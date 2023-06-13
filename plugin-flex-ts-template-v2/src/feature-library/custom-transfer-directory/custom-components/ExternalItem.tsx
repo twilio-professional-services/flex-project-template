@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ITask } from '@twilio/flex-ui';
+import { ITask, templates } from '@twilio/flex-ui';
 import { ButtonGroup, Button, Flex, Tooltip, Text } from '@twilio-paste/core';
 import { ProductPhoneNumbersIcon } from '@twilio-paste/icons/esm/ProductPhoneNumbersIcon';
 import { CallTransferIcon } from '@twilio-paste/icons/esm/CallTransferIcon';
@@ -7,6 +7,7 @@ import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 
 import { ExternalDirectoryEntry } from '../types/ServiceConfiguration';
 import { isVoiceXWTEnabled } from '../config';
+import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 
 export interface ExternalItemProps {
   entry: ExternalDirectoryEntry;
@@ -60,7 +61,7 @@ export const ExternalItem = (props: ExternalItemProps) => {
           <Tooltip
             key={`ext-dir-item-buttons-warm-transfer-tooltip-${index}`}
             element="TRANSFER_DIR_COMMON_TOOLTIP"
-            text="Warm Transfer"
+            text={templates[StringTemplates.WarmTransfer]()}
           >
             <Button
               element="TRANSFER_DIR_COMMON_ROW_BUTTON"
@@ -79,7 +80,7 @@ export const ExternalItem = (props: ExternalItemProps) => {
           <Tooltip
             key={`ext-dir-item-buttons-cold-transfer-tooltip-${index}`}
             element="TRANSFER_DIR_COMMON_TOOLTIP"
-            text="Cold Transfer"
+            text={templates[StringTemplates.ColdTransfer]()}
           >
             <Button
               element="TRANSFER_DIR_COMMON_ROW_BUTTON"

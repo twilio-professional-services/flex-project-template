@@ -5,6 +5,8 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.TaskAttributesHeader]: 'Task attributes',
-  [StringTemplates.WorkerAttributesHeader]: 'Attributes',
+  'en-US': {
+    [StringTemplates.TaskAttributesHeader]: 'Task attributes',
+    [StringTemplates.WorkerAttributesHeader]: 'Attributes',
+  },
 });

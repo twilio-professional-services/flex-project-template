@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { styled } from '@twilio/flex-ui';
+import { styled, templates } from '@twilio/flex-ui';
 import { Select, Option } from '@twilio-paste/core/select';
 import { Stack } from '@twilio-paste/core/stack';
 import { useFormPillState, FormPillGroup, FormPill } from '@twilio-paste/core/form-pill-group';
@@ -13,6 +13,7 @@ import {
   selectQueue,
   ResetQueuePlaceholder,
 } from '../../flex-hooks/states/QueueNoWorkerDataFilterSlice';
+import { StringTemplates } from '../../flex-hooks/strings/TeamViewQueueFilter';
 
 const FilterContainer = styled('div')`
   margin-left: 16px;
@@ -94,7 +95,7 @@ export const MultiSelectFilter = (props: OwnProps) => {
           value={props.IsMulti ? 'placeholder' : selectedItems.length === 1 ? selectedItems[0] : 'placeholder'}
         >
           <Option disabled={true} key="placeholder" value="placeholder">
-            {props.IsMulti ? 'Select one or more items...' : 'Select an item...'}
+            {props.IsMulti ? templates[StringTemplates.MultiSelectItems]() : templates[StringTemplates.SelectItem]()}
           </Option>
           {props.options
             ? props.options.map((item: FilterDefinitionOption) => {
@@ -109,7 +110,7 @@ export const MultiSelectFilter = (props: OwnProps) => {
             : {}}
         </Select>
         {props.IsMulti && (
-          <FormPillGroup {...pillState} aria-label="Selected items:">
+          <FormPillGroup {...pillState} aria-label={templates[StringTemplates.MultiSelectedItems]()}>
             {selectedItems.map((item) => {
               const filterItem = props.options?.find((i) => i.value === item);
               if (!filterItem) return null;

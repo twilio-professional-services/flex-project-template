@@ -3,8 +3,10 @@ import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { AgentIcon } from '@twilio-paste/icons/esm/AgentIcon';
 import { CloseIcon } from '@twilio-paste/icons/esm/CloseIcon';
 import { useState } from 'react';
+import { templates } from '@twilio/flex-ui';
 
 import { ParticipantType } from '../../../../types/ParticipantDetails';
+import { StringTemplates } from '../../../../flex-hooks/strings/ChatTransferStrings';
 
 interface ParticipantProps {
   name: string;
@@ -23,9 +25,9 @@ export const Participant = ({ participantType, name, allowKick, handleKickPartic
 
   const icon =
     participantType === 'agent' ? (
-      <AgentIcon decorative={false} title={`Agent - ${name}`} />
+      <AgentIcon decorative={false} title={templates[StringTemplates.Agent]()} />
     ) : (
-      <UserIcon decorative title={`Customer - ${name}`} />
+      <UserIcon decorative={false} title={templates[StringTemplates.Customer]()} />
     );
 
   const disableKickParticipant = !allowKick;
@@ -43,7 +45,7 @@ export const Participant = ({ participantType, name, allowKick, handleKickPartic
       <FlexBox>
         <Box padding="space20">
           <Button variant="secondary" size="icon" disabled={kickHandled || disableKickParticipant} onClick={handleKick}>
-            <CloseIcon decorative title={`Remove ${name}`} />
+            <CloseIcon decorative title={templates[StringTemplates.Remove]({ name })} />
           </Button>
         </Box>
       </FlexBox>

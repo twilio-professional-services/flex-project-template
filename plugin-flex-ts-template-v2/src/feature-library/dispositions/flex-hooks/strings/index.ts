@@ -9,10 +9,12 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.DispositionRequired]: 'A disposition is required before you may complete this task.',
-  [StringTemplates.DispositionTab]: 'Disposition',
-  [StringTemplates.SelectDispositionTitle]: 'Select a disposition',
-  [StringTemplates.SelectDispositionHelpText]: 'The selected disposition will be saved when you complete this task.',
-  [StringTemplates.NotesTitle]: 'Notes',
-  [StringTemplates.NotesCharactersRemaining]: '{{characters}} characters remaining',
+  'en-US': {
+    [StringTemplates.DispositionRequired]: 'A disposition is required before you may complete this task.',
+    [StringTemplates.DispositionTab]: 'Disposition',
+    [StringTemplates.SelectDispositionTitle]: 'Select a disposition',
+    [StringTemplates.SelectDispositionHelpText]: 'The selected disposition will be saved when you complete this task.',
+    [StringTemplates.NotesTitle]: 'Notes',
+    [StringTemplates.NotesCharactersRemaining]: '{{characters}} characters remaining',
+  },
 });

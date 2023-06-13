@@ -7,6 +7,7 @@ export interface UIAttributes extends FlexUIAttributes {
     serverless_functions_protocol: string;
     serverless_functions_domain: string;
     serverless_functions_port: string;
+    language: string;
     features: any;
   };
 }

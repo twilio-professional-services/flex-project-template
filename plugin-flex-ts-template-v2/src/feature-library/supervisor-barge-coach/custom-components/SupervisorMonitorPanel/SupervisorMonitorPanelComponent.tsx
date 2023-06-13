@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { useFlexSelector } from '@twilio/flex-ui';
+import { useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex, Stack, Box, Text } from '@twilio-paste/core';
 
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoach';
+import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
 
@@ -71,36 +72,26 @@ export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
     }
   });
 
-  if (supervisorArray.length > 0) {
-    return (
-      <Flex hAlignContent="center" vertical padding="space40">
-        <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-          <Box backgroundColor="colorBackgroundPrimaryWeakest">
-            Active Supervisors:
-            <Box>
-              <ol>
-                <Text
-                  as="p"
-                  fontWeight="fontWeightMedium"
-                  fontSize="fontSize30"
-                  marginBottom="space40"
-                  color="colorTextSuccess"
-                >
-                  {supervisorsArray()}
-                </Text>
-              </ol>
-            </Box>
-          </Box>
-        </Stack>
-      </Flex>
-    );
-  }
   return (
     <Flex hAlignContent="center" vertical padding="space40">
-      <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-        <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-          Active Supervisors:
-          <Box>None</Box>
+      <Stack orientation="vertical" spacing="space30" element="COACH_STATUS_PANEL_BOX">
+        <Template source={templates[StringTemplates.ActiveSupervisors]} />
+        <Box>
+          {supervisorArray.length > 0 ? (
+            <ol>
+              <Text
+                as="p"
+                fontWeight="fontWeightMedium"
+                fontSize="fontSize30"
+                marginBottom="space40"
+                color="colorTextSuccess"
+              >
+                {supervisorsArray()}
+              </Text>
+            </ol>
+          ) : (
+            <Template source={templates[StringTemplates.None]} />
+          )}
         </Box>
       </Stack>
     </Flex>
