@@ -211,6 +211,9 @@
         "enabled": true,
         "enabled_for_agents": false
       },
+      "admin_ui": {
+        "enabled": true
+      },
       "localization": {
         "enabled": false,
         "show_menu": true

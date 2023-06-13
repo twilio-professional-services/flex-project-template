@@ -15,6 +15,7 @@ env:
   TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_PROD }}
   TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_PROD }}
   PLUGIN_FOLDER: ${{ secrets.PLUGIN_FOLDER }}
+  OVERWRITE_CONFIG: ${{ secrets.OVERWRITE_CONFIG }}
 
 jobs:
   deploy-serverless:

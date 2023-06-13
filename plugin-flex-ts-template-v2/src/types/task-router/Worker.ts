@@ -51,4 +51,7 @@ export interface CustomWorkerAttributes extends WorkerAttributes {
   team_name?: string;
   department_id?: string;
   department_name?: string;
+
+  // configuration
+  config_overrides?: any;
 }
