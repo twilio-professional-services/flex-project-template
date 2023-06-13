@@ -12,7 +12,6 @@ var newFeatureDirectory;
 const featureSubstitutionFiles = [
   "config.ts",
   "index.ts",
-  "README.md",
   "types/ServiceConfiguration.ts"
 ];
 

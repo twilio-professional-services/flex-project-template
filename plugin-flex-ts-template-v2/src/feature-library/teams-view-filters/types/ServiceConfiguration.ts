@@ -1,6 +1,6 @@
 export default interface TeamViewFiltersConfig {
   enabled: boolean;
-  logFilters: boolean;
+  log_filters: boolean;
   applied_filters: {
     email: boolean;
     department: boolean;
