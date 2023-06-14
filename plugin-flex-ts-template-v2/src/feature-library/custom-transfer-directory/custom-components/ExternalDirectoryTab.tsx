@@ -1,5 +1,5 @@
 import { Flex, Alert } from '@twilio-paste/core';
-import { withTaskContext, ITask, Actions, Manager, useFlexSelector } from '@twilio/flex-ui';
+import { withTaskContext, ITask, Actions, Manager, useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import { useState, useRef, useEffect } from 'react';
 import { debounce } from 'lodash';
 
@@ -8,6 +8,7 @@ import { getExternalDirectory } from '../config';
 import { ExternalDirectoryEntry } from '../types/ServiceConfiguration';
 import { ExternalItem } from './ExternalItem';
 import AppState from '../../../types/manager/AppState';
+import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 
 export interface TransferClickPayload {
   mode: 'WARM' | 'COLD';
@@ -92,7 +93,9 @@ const ExternalDirectoryTab = (props: OwnProps) => {
       <SearchBox key="key-tab-search-box" onInputChange={onQueueSearchInputChange} inputRef={searchInputRef} />
       <Flex key="external-tab-results" vertical element="TRANSFER_DIR_COMMON_ROWS_CONTAINER">
         {filteredDirectory.length === 0 ? (
-          <Alert variant="neutral">No External Directory Items Found</Alert>
+          <Alert variant="neutral">
+            <Template source={templates[StringTemplates.NoItemsFound]} />
+          </Alert>
         ) : (
           Array.from(filteredDirectory).map((entry: ExternalDirectoryEntry, index: number) => {
             return (

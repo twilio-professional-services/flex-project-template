@@ -11,20 +11,40 @@ export enum StringTemplates {
   ChatCancelParticipantInviteFailed = 'ChatCancelParticipantInviteFailed',
   ChatCancelParticipantInviteSuccess = 'ChatCancelParticipantInviteSuccess',
   ChatParticipantInviteOutstanding = 'ChatParticipantInviteOutstanding',
+  TransferChat = 'PSConvTransferTransferChat',
+  Participants = 'PSConvTransferParticipants',
+  Agent = 'PSConvTransferAgent',
+  Customer = 'PSConvTransferCustomer',
+  Queue = 'PSConvTransferQueue',
+  Remove = 'PSConvTransferRemove',
+  InvitedParticipants = 'PSConvTransferInvitedParticipants',
+  CancelInvite = 'PSConvTransferCancelInvite',
+  LeaveChat = 'PSConvTransferLeaveChat',
 }
 
 export const stringHook = () => ({
-  [StringTemplates.ChatTransferTaskSuccess]: 'Conversation transferred',
-  [StringTemplates.ChatParticipantInvited]: 'Participant invited',
-  [StringTemplates.ChatTransferFailedGeneric]: 'Error occured adding new participant',
-  [StringTemplates.ChatTransferFailedConsultNotSupported]: 'Consult/warm transfer is not enabled',
-  [StringTemplates.ChatTransferFailedColdNotSupported]: 'Cold transfer is not enabled',
-  [StringTemplates.ChatTransferFailedAlreadyParticipating]:
-    'The selected target is already a participant in the conversation',
-  [StringTemplates.ChatRemoveParticipantFailed]: 'Participant remove failed',
-  [StringTemplates.ChatRemoveParticipantSuccess]: 'Participant removed',
-  [StringTemplates.ChatCancelParticipantInviteFailed]: 'Participant invite cancel failed',
-  [StringTemplates.ChatCancelParticipantInviteSuccess]: 'Participant invite canceled',
-  [StringTemplates.ChatParticipantInviteOutstanding]:
-    'Inviting participant failed. There is already an outstanding invite for the chat.',
+  'en-US': {
+    [StringTemplates.ChatTransferTaskSuccess]: 'Conversation transferred',
+    [StringTemplates.ChatParticipantInvited]: 'Participant invited',
+    [StringTemplates.ChatTransferFailedGeneric]: 'Error occured adding new participant',
+    [StringTemplates.ChatTransferFailedConsultNotSupported]: 'Consult/warm transfer is not enabled',
+    [StringTemplates.ChatTransferFailedColdNotSupported]: 'Cold transfer is not enabled',
+    [StringTemplates.ChatTransferFailedAlreadyParticipating]:
+      'The selected target is already a participant in the conversation',
+    [StringTemplates.ChatRemoveParticipantFailed]: 'Participant remove failed',
+    [StringTemplates.ChatRemoveParticipantSuccess]: 'Participant removed',
+    [StringTemplates.ChatCancelParticipantInviteFailed]: 'Participant invite cancel failed',
+    [StringTemplates.ChatCancelParticipantInviteSuccess]: 'Participant invite canceled',
+    [StringTemplates.ChatParticipantInviteOutstanding]:
+      'Inviting participant failed. There is already an outstanding invite for the chat.',
+    [StringTemplates.TransferChat]: 'Transfer Chat',
+    [StringTemplates.Participants]: 'Participants',
+    [StringTemplates.Agent]: 'Agent',
+    [StringTemplates.Customer]: 'Customer',
+    [StringTemplates.Queue]: 'Queue',
+    [StringTemplates.Remove]: 'Remove {{name}}',
+    [StringTemplates.InvitedParticipants]: 'Invited Participants',
+    [StringTemplates.CancelInvite]: 'Cancel invite to {{name}}',
+    [StringTemplates.LeaveChat]: 'Leave Chat',
+  },
 });

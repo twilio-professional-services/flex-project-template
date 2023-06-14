@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { TaskHelper, useFlexSelector, ITask, IconButton } from '@twilio/flex-ui';
+import { TaskHelper, useFlexSelector, ITask, IconButton, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex, Stack } from '@twilio-paste/core';
 
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
 import { Actions, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoach';
+import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
 
@@ -78,10 +79,10 @@ export const SupervisorPrivateToggle = ({ task }: SupervisorPrivateToggleProps) 
           icon={privateMode ? 'EyeBold' : 'Eye'}
           disabled={!isLiveCall}
           onClick={togglePrivateMode}
-          title={privateMode ? 'Disable Private Mode' : 'Enable Private Mode'}
+          title={privateMode ? templates[StringTemplates.DisablePrivacy]() : templates[StringTemplates.EnablePrivacy]()}
           variant="secondary"
         />
-        {privateMode ? 'Privacy On' : 'Privacy Off'}
+        {privateMode ? templates[StringTemplates.PrivacyOn]() : templates[StringTemplates.PrivacyOff]()}
       </Stack>
     </Flex>
   );

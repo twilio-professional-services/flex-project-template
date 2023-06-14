@@ -7,9 +7,11 @@ import {
   ConferenceParticipant,
   ITask,
   useFlexSelector,
+  templates,
 } from '@twilio/flex-ui';
 
 import AppState from '../../../../types/manager/AppState';
+import { StringTemplates } from '../../flex-hooks/strings/Conference';
 
 const ActionsContainer = styled('div')`
   min-width: 88px;
@@ -150,8 +152,10 @@ const ParticipantActionsButtons = (props: OwnProps) => {
 
     if (!participant || !task) return <></>;
 
-    const holdParticipantTooltip = participant.onHold ? 'Unhold Participant' : 'Hold Participant';
-    const kickParticipantTooltip = 'Remove Participant';
+    const holdParticipantTooltip = participant.onHold
+      ? templates[StringTemplates.UnholdParticipant]()
+      : templates[StringTemplates.HoldParticipant]();
+    const kickParticipantTooltip = templates[StringTemplates.RemoveParticipant]();
 
     const holdIcon = 'Hold';
     const unholdIcon = 'HoldOff';

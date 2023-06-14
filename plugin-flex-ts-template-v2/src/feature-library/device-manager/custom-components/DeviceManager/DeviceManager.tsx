@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Manager } from '@twilio/flex-ui';
+import { Manager, templates } from '@twilio/flex-ui';
 import { Flex, MenuButton, MenuGroup, useMenuState, Menu, MenuItem, useToaster, Toaster } from '@twilio-paste/core';
 import { VolumeOnIcon } from '@twilio-paste/icons/esm/VolumeOnIcon';
 import { AgentIcon } from '@twilio-paste/icons/esm/AgentIcon';
 
 import { SecondDevice } from '../../../multi-call/helpers/MultiCallHelper';
 import { isFeatureEnabled as isMultiCallEnabled } from '../../../multi-call/config';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 const DeviceManager: React.FunctionComponent = () => {
   const menu = useMenuState();
@@ -44,13 +45,13 @@ const DeviceManager: React.FunctionComponent = () => {
       menu.hide();
 
       toaster.push({
-        message: `Set ${selectedDevice.label} as your audio device.`,
+        message: templates[StringTemplates.SetDeviceSuccess]({ selectedDevice: selectedDevice.label }),
         variant: 'success',
         dismissAfter: 3000,
       });
     } catch (e) {
       toaster.push({
-        message: `There was an error attempting to set ${selectedDevice.label} as your audio device.`,
+        message: templates[StringTemplates.SetDeviceError]({ selectedDevice: selectedDevice.label }),
         variant: 'error',
       });
     }
@@ -69,10 +70,10 @@ const DeviceManager: React.FunctionComponent = () => {
     return (
       <Flex hAlignContent="center" vAlignContent={'center'}>
         <MenuButton {...menu} variant="reset" element={menu.visible ? 'DEVICE_MGR_BUTTON_OPEN' : 'DEVICE_MGR_BUTTON'}>
-          <AgentIcon decorative />
+          <AgentIcon decorative={false} title={templates[StringTemplates.SelectAudioDevice]()} />
         </MenuButton>
         <Menu {...menu} aria-label="Actions">
-          <MenuGroup label="Select an Audio Device" icon={<VolumeOnIcon decorative />}>
+          <MenuGroup label={templates[StringTemplates.SelectAudioDevice]()} icon={<VolumeOnIcon decorative />}>
             {devices
               .filter((device) => device.kind === 'audiooutput')
               .map((device) => (

@@ -10,7 +10,7 @@ export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => 
   {
     id: NotificationIds.AGENT_ASSISTANCE,
     closeButton: true,
-    content: StringTemplates.AGENT_ASSISTANCE,
+    content: StringTemplates.AgentAssistanceNotification,
     type: Flex.NotificationType.warning,
     timeout: 8000,
     onClick: () => navigateToTeamsView(),

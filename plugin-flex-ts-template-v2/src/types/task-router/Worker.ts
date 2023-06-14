@@ -30,6 +30,9 @@ export interface CustomWorkerAttributes extends WorkerAttributes {
   image_url: string;
   roles: ['admin' | 'supervisor' | 'agent'];
 
+  // used for selecting language
+  language?: string;
+
   // used to override name seen on webchat
   public_identity: string;
 
@@ -48,4 +51,7 @@ export interface CustomWorkerAttributes extends WorkerAttributes {
   team_name?: string;
   department_id?: string;
   department_name?: string;
+
+  // configuration
+  config_overrides?: any;
 }

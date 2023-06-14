@@ -1,7 +1,9 @@
 import { Stack, Card, Heading } from '@twilio-paste/core';
+import { Template, templates } from '@twilio/flex-ui';
 
 import { InvitedParticipant } from './InvitedParticipant/InvitedParticipant';
 import { InvitedParticipantDetails } from '../../../types/InvitedParticipantDetails';
+import { StringTemplates } from '../../../flex-hooks/strings/ChatTransferStrings';
 
 interface InvitedParticipantsProps {
   invitedParticipantDetails: InvitedParticipantDetails[];
@@ -25,7 +27,7 @@ export const InvitedParticipants = ({ invitedParticipantDetails, handleCancelInv
   return (
     <Card padding="space60">
       <Heading as="h2" variant="heading20">
-        Invited Participants
+        <Template source={templates[StringTemplates.InvitedParticipants]} />
       </Heading>
       <Stack orientation="vertical" spacing="space20">
         {invitedParticipants}

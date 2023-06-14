@@ -19,7 +19,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       context,
     });
 
-    const { phoneNumbers, status } = result;
+    const { phoneNumbers } = result;
     response.setStatusCode(result.status);
     response.setBody({ phoneNumbers, ...extractStandardResponse(result) });
     */
