@@ -17,6 +17,7 @@ class ParkInteractionService extends ApiService {
     workflowSid: string,
     taskChannelUniqueName: string,
     queueName: string,
+    queueSid: string,
     taskAttributes: string,
   ): Promise<FetchedRecording> => {
     return new Promise((resolve, reject) => {
@@ -29,6 +30,7 @@ class ParkInteractionService extends ApiService {
         workflowSid: encodeURIComponent(workflowSid),
         taskChannelUniqueName: encodeURIComponent(taskChannelUniqueName),
         queueName: encodeURIComponent(queueName),
+        queueSid: encodeURIComponent(queueSid),
         taskAttributes: encodeURIComponent(taskAttributes),
         workerSid: encodeURIComponent(this.manager.store.getState().flex.worker.worker?.sid ?? ''),
         Token: encodeURIComponent(this.manager.user.token),

@@ -38,6 +38,7 @@ export const parkInteraction = async (payload: ParkInteractionPayload) => {
       payload.task.workflowSid,
       payload.task.taskChannelUniqueName,
       payload.task.queueName,
+      payload.task.queueSid,
       JSON.stringify(payload.task.attributes),
     );
 
