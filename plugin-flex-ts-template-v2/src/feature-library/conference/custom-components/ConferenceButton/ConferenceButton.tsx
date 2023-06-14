@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Actions, IconButton, TaskHelper, ITask } from '@twilio/flex-ui';
+import { Actions, IconButton, TaskHelper, ITask, templates } from '@twilio/flex-ui';
+
+import { StringTemplates } from '../../flex-hooks/strings/Conference';
 
 export interface OwnProps {
   task?: ITask;
@@ -21,7 +23,7 @@ const ConferenceButton = (props: OwnProps) => {
       disabled={!isLiveCall}
       onClick={handleClick}
       variant="secondary"
-      title="Add Conference Participant"
+      title={templates[StringTemplates.AddConferenceParticipant]()}
     />
   );
 };

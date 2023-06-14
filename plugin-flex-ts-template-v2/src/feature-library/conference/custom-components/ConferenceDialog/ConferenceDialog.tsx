@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Actions, ITask, withTaskContext, useFlexSelector, Manager } from '@twilio/flex-ui';
+import { Actions, ITask, withTaskContext, useFlexSelector, Manager, Template, templates } from '@twilio/flex-ui';
 import { useUID } from '@twilio-paste/core/uid-library';
 import { Box } from '@twilio-paste/core/box';
 import { Button } from '@twilio-paste/core/button';
@@ -9,6 +9,7 @@ import { Label } from '@twilio-paste/core/label';
 import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading } from '@twilio-paste/core/modal';
 
 import AppState from '../../../../types/manager/AppState';
+import { StringTemplates } from '../../flex-hooks/strings/Conference';
 
 export interface OwnProps {
   task?: ITask;
@@ -104,12 +105,14 @@ const ConferenceDialog = (props: OwnProps) => {
     >
       <ModalHeader>
         <ModalHeading as="h3" id={modalHeadingID}>
-          Add Conference Participant
+          <Template source={templates[StringTemplates.AddConferenceParticipant]} />
         </ModalHeading>
       </ModalHeader>
       <ModalBody>
         <Box as="form">
-          <Label htmlFor={inputID}>Phone Number</Label>
+          <Label htmlFor={inputID}>
+            <Template source={templates[StringTemplates.PhoneNumber]} />
+          </Label>
           <Input
             id={inputID}
             value={conferenceTo}
@@ -120,16 +123,20 @@ const ConferenceDialog = (props: OwnProps) => {
             type="text"
             hasError={hasError}
           />
-          {hasError && <HelpText variant="error">Enter a phone number to add to the conference.</HelpText>}
+          {hasError && (
+            <HelpText variant="error">
+              <Template source={templates[StringTemplates.PhoneNumberError]} />
+            </HelpText>
+          )}
         </Box>
       </ModalBody>
       <ModalFooter>
         <ModalFooterActions>
           <Button variant="secondary" onClick={handleButtonClose}>
-            Cancel
+            <Template source={templates.Cancel} />
           </Button>
           <Button variant="primary" onClick={handleDialButton}>
-            Dial
+            <Template source={templates[StringTemplates.Dial]} />
           </Button>
         </ModalFooterActions>
       </ModalFooter>

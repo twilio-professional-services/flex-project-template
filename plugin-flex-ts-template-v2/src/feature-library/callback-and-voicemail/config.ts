@@ -6,7 +6,7 @@ const {
   allow_requeue = false,
   max_attempts = 1,
   auto_select_task = false,
-} = (getFeatureFlags()?.features?.callbacks as CallbackAndVoicemailConfig) || {};
+} = (getFeatureFlags()?.features?.callback_and_voicemail as CallbackAndVoicemailConfig) || {};
 
 export const isFeatureEnabled = () => {
   return enabled;

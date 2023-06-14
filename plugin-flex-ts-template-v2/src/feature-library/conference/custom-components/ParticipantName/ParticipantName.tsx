@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { styled, ConferenceParticipant, ITask } from '@twilio/flex-ui';
+import { styled, ConferenceParticipant, ITask, templates } from '@twilio/flex-ui';
 
 import ConferenceService from '../../utils/ConferenceService';
 import { FetchedCall } from '../../../../types/serverless/twilio-api';
+import { StringTemplates } from '../../flex-hooks/strings/Conference';
 
 const Name = styled('div')`
   font-size: 0.875rem;
@@ -31,7 +32,8 @@ export interface OwnProps {
 }
 
 const ParticipantName = (props: OwnProps) => {
-  const [name, setName] = useState('Unknown');
+  const unknown = templates[StringTemplates.Unknown]();
+  const [name, setName] = useState(unknown);
 
   useEffect(() => {
     const { participant, task } = props;
@@ -47,14 +49,14 @@ const ParticipantName = (props: OwnProps) => {
       ConferenceService.getCallProperties(participant.callSid)
         .then((response: FetchedCall) => {
           if (response) {
-            setName(response.to || 'Unknown');
+            setName(response.to || unknown);
           }
         })
         .catch((_error) => {
-          setName('Unknown');
+          setName(unknown);
         });
     } else {
-      setName(participant.worker ? participant.worker.fullName : 'Unknown');
+      setName(participant.worker ? participant.worker.fullName : unknown);
     }
   }, []);
 

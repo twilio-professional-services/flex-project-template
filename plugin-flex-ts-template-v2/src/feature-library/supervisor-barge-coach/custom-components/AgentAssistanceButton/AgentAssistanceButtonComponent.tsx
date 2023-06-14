@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { TaskHelper, useFlexSelector, ITask, IconButton } from '@twilio/flex-ui';
+import { TaskHelper, useFlexSelector, ITask, IconButton, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex, Tooltip } from '@twilio-paste/core';
 
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
 import { Actions } from '../../flex-hooks/states/SupervisorBargeCoach';
+import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
 
@@ -23,7 +24,7 @@ export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
   const selectedTaskSID = useFlexSelector((state) => state?.flex?.view?.selectedTaskSid) || '';
 
   // On click we will be pulling the conference SID, toggling the agent assistance button respectively,
-  // and updating the sync doc with the agent's asssistance status (either adding or removing them)
+  // and updating the sync doc with the agent's assistance status (either adding or removing them)
   const agentAssistanceClick = () => {
     const conference = task && task.conference;
     const conferenceSID = conference?.conferenceSid || '';
@@ -59,7 +60,14 @@ export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
   const isLiveCall = TaskHelper.isLiveCall(task);
   return (
     <Flex hAlignContent="center" vertical padding="space100">
-      <Tooltip text={agentAssistanceButton ? 'Turn off Assistance' : 'Ask for Assistance'} placement="right">
+      <Tooltip
+        text={
+          agentAssistanceButton
+            ? templates[StringTemplates.TurnOffAssistance]()
+            : templates[StringTemplates.AskForAssistance]()
+        }
+        placement="right"
+      >
         <IconButton
           icon={agentAssistanceButton ? 'HelpBold' : 'Help'}
           disabled={!isLiveCall}
@@ -67,7 +75,7 @@ export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
           variant="secondary"
           style={{ width: '44px', height: '44px' }}
         >
-          {agentAssistanceButton ? 'Assistance Required' : ''}
+          {agentAssistanceButton ? templates[StringTemplates.AssistanceRequired]() : ''}
         </IconButton>
       </Tooltip>
     </Flex>

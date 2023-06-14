@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ColumnDefinition, DataTable, Manager } from '@twilio/flex-ui';
+import { ColumnDefinition, DataTable, Manager, templates } from '@twilio/flex-ui';
 import { Button } from '@twilio-paste/core/button';
 import { Box } from '@twilio-paste/core/box';
 import { PlusIcon } from '@twilio-paste/icons/esm/PlusIcon';
@@ -110,14 +110,14 @@ const RuleDataTable = (props: OwnProps) => {
       }
 
       if (rule.startDate) {
-        dateStr += `${ScheduleManagerStrings[StringTemplates.DATE_FROM]} ${rule.startDate}`;
+        dateStr += templates[StringTemplates.DATE_FROM]({ startDate: rule.startDate });
       }
 
       if (rule.endDate) {
         if (dateStr) {
           dateStr += ' ';
         }
-        dateStr += `${ScheduleManagerStrings[StringTemplates.DATE_UNTIL]} ${rule.endDate}`;
+        dateStr += templates[StringTemplates.DATE_UNTIL]({ endDate: rule.endDate });
       }
     }
 

@@ -1,8 +1,9 @@
-import { FilterDefinition } from '@twilio/flex-ui';
+import { FilterDefinition, Manager } from '@twilio/flex-ui';
 
 import SelectFilter from '../custom-components/SelectFilter';
 import SelectFilterLabel from '../custom-components/SelectFilterLabel';
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
+import { StringTemplates } from '../flex-hooks/strings/TeamViewQueueFilter';
 
 /* 
     this filter works by injecting a temporary placeholder into the filters
@@ -17,7 +18,7 @@ import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterSe
     expressions will result in a notification to the user and the filter
     will be ignored.
 
-    furthermore the expression can onlyuse the following qualifiers
+    furthermore the expression can only use the following qualifiers
       HAS|==|EQ|!=|CONTAINS|IN|NOT IN
 */
 
@@ -40,7 +41,7 @@ export const queueNoWorkerDataFilter = async () => {
 
   return {
     id: 'queue-replacement',
-    title: 'Queue Eligibility',
+    title: (Manager.getInstance().strings as any)[StringTemplates.QueueEligibility],
     fieldName: 'queue',
     customStructure: {
       label: <SelectFilterLabel />,

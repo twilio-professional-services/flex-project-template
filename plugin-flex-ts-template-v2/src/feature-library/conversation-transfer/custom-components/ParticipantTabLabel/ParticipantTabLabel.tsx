@@ -1,5 +1,7 @@
-import { TaskContext } from '@twilio/flex-ui';
+import { TaskContext, Template, templates } from '@twilio/flex-ui';
 import { Stack, Badge } from '@twilio-paste/core';
+
+import { StringTemplates } from '../../flex-hooks/strings/ChatTransferStrings';
 
 export const ParticipantTabLabelContainer = () => {
   return (
@@ -9,7 +11,7 @@ export const ParticipantTabLabelContainer = () => {
 
         return (
           <Stack orientation="horizontal" spacing="space20">
-            Participants
+            <Template source={templates[StringTemplates.Participants]} />
             <Badge as="span" variant="info">
               {participantCount}
             </Badge>

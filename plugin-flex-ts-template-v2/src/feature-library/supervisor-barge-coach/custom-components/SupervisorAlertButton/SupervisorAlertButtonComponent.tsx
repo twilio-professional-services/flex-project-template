@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { IconButton } from '@twilio/flex-ui';
+import { IconButton, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex, Tooltip } from '@twilio-paste/core';
 
@@ -7,6 +7,7 @@ import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
 import { Actions } from '../../flex-hooks/states/SupervisorBargeCoach';
 import { alertSupervisorsCheck, syncUpdates } from '../../helpers/supervisorAlertHelper';
+import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 
 export const SupervisorAlertButton = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,11 @@ export const SupervisorAlertButton = () => {
   // the option to enable or disable Agent Assistance Alerts
   return (
     <Tooltip
-      text={enableAgentAssistanceAlerts ? 'Agent Assistance Alerts Enabled' : 'Agent Assistance Alerts Disabled'}
+      text={
+        enableAgentAssistanceAlerts
+          ? templates[StringTemplates.AssistanceAlertsEnabled]()
+          : templates[StringTemplates.AssistanceAlertsDisabled]()
+      }
       placement="left"
     >
       <Flex vAlignContent="center">

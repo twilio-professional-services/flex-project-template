@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IconButton, Manager, WorkerAttributes } from '@twilio/flex-ui';
+import { IconButton, Manager, WorkerAttributes, Template, templates } from '@twilio/flex-ui';
 import { Box } from '@twilio-paste/core/box';
 import { Combobox } from '@twilio-paste/core/combobox';
 import { Flex } from '@twilio-paste/core/flex';
@@ -9,6 +9,7 @@ import { debounce } from 'lodash';
 import { Worker as InstantQueryWorker } from 'types/sync/InstantQuery';
 
 import { makeInternalCall } from '../../helpers/internalCall';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 export interface OwnProps {
   manager: Manager;
@@ -93,14 +94,14 @@ const InternalDialpad = (props: OwnProps) => {
     >
       <Stack orientation="vertical" spacing="space60">
         <Text as="span" fontSize="fontSize60" fontWeight="fontWeightBold">
-          Call Agent
+          <Template source={templates[StringTemplates.CallAgent]} />
         </Text>
         <Combobox
           autocomplete
           items={workerList}
           inputValue={inputText}
           itemToString={(item) => item.attributes.full_name}
-          labelText="Select an agent"
+          labelText={templates[StringTemplates.SelectAgent]()}
           onInputValueChange={({ inputValue }) => handleInput(inputValue as string)}
           onIsOpenChange={({ isOpen }) => handleOpenChange(isOpen)}
           onSelectedItemChange={({ selectedItem }) => selectWorker(selectedItem)}

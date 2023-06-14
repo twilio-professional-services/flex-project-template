@@ -1,6 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
 
+import { getUserLanguage, defaultLanguage } from '../configuration';
+
+const userLanguage = getUserLanguage();
+
 let customStrings = {};
+let systemStrings = {};
 
 export const init = (manager: Flex.Manager) => {
   manager.strings = {
@@ -11,18 +16,53 @@ export const init = (manager: Flex.Manager) => {
     ...manager.strings,
 
     // -v- Modify strings provided by flex here -v-
-    // WorkerDirectoryAgentsTabLabel: '<span style="font-size: 10px;">Agents</span>',
-    // WorkerDirectoryQueuesTabLabel: '<span style="font-size: 10px;">Queues</span>',
+    ...systemStrings,
     // -^----------------------------------------^-
   };
 };
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
   console.info(`Feature ${feature} registered string hook: %c${hook.stringHook.name}`, 'font-weight:bold');
-  // Returns dictionary of string definitions to register
-  const hookStrings = hook.stringHook(flex, manager);
+  // Returns dictionary of language and string definitions to register
+  const hookLanguages = hook.stringHook(flex, manager);
+  let hookStrings = {};
+
+  if (hookLanguages[userLanguage]) {
+    hookStrings = hookLanguages[userLanguage];
+  } else if (hookLanguages[defaultLanguage]) {
+    hookStrings = hookLanguages[defaultLanguage];
+  } else {
+    console.error(
+      `Feature ${feature} string hook is missing the user language (${userLanguage}) and the default language (${defaultLanguage}). Skipping.`,
+    );
+    return;
+  }
+
   customStrings = {
     ...customStrings,
+    ...hookStrings,
+  };
+};
+
+export const addSystemHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
+  console.info(`Feature ${feature} registered system string hook: %c${hook.systemStringHook.name}`, 'font-weight:bold');
+  // Returns dictionary of language and string definitions to register
+  const hookLanguages = hook.systemStringHook(flex, manager);
+  let hookStrings = {};
+
+  if (hookLanguages[userLanguage]) {
+    hookStrings = hookLanguages[userLanguage];
+  } else if (hookLanguages[defaultLanguage]) {
+    hookStrings = hookLanguages[defaultLanguage];
+  } else {
+    console.error(
+      `Feature ${feature} system string hook is missing the user language (${userLanguage}) and the default language (${defaultLanguage}). Skipping.`,
+    );
+    return;
+  }
+
+  systemStrings = {
+    ...systemStrings,
     ...hookStrings,
   };
 };

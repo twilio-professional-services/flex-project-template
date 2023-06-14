@@ -6,6 +6,7 @@ import { getWorkerFriendlyName } from '../../utils/serverless/ChatTransferServic
 import TaskService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import ProgrammableChatService from '../../../../utils/serverless/ProgrammableChat/ProgrammableChatService';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import { StringTemplates } from '../strings/ChatTransfer';
 
 export interface MessageAttributes {
   senderInfo: { type: string; name: string };
@@ -44,7 +45,9 @@ export const actionHook = async function announceOnChannelWhenLeavingAndRemoveCh
     if (channelSid) {
       await Flex.Actions.invokeAction('SendMessage', {
         conversationSid: channelSid,
-        body: `${getWorkerFriendlyName(manager.workerClient as unknown as Worker)} left the channel`,
+        body: flex.templates[StringTemplates.LeaveMessage]({
+          workerName: getWorkerFriendlyName(manager.workerClient as unknown as Worker),
+        }),
         messageAttributes: { notification: true },
       });
 

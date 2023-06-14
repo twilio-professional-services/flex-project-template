@@ -10,12 +10,14 @@ export enum StringTemplates {
 }
 
 export const stringHook = () => ({
-  [StringTemplates.RECORDING_PAUSED]:
-    'Call recording has been paused. Please remember to resume call recording when appropriate.',
-  [StringTemplates.RECORDING_PAUSED_LABEL]: 'Call Recording Paused',
-  [StringTemplates.RESUME_RECORDING]: 'Resumed recording this call.',
-  [StringTemplates.PAUSE_FAILED]: 'Failed to pause call recording. Please try again.',
-  [StringTemplates.RESUME_FAILED]: 'Failed to resume call recording. Please try again.',
-  [StringTemplates.PAUSE_TOOLTIP]: 'Pause Recording',
-  [StringTemplates.RESUME_TOOLTIP]: 'Resume Recording',
+  'en-US': {
+    [StringTemplates.RECORDING_PAUSED]:
+      'Call recording has been paused. Please remember to resume call recording when appropriate.',
+    [StringTemplates.RECORDING_PAUSED_LABEL]: 'Call Recording Paused',
+    [StringTemplates.RESUME_RECORDING]: 'Resumed recording this call.',
+    [StringTemplates.PAUSE_FAILED]: 'Failed to pause call recording. Please try again.',
+    [StringTemplates.RESUME_FAILED]: 'Failed to resume call recording. Please try again.',
+    [StringTemplates.PAUSE_TOOLTIP]: 'Pause Recording',
+    [StringTemplates.RESUME_TOOLTIP]: 'Resume Recording',
+  },
 });

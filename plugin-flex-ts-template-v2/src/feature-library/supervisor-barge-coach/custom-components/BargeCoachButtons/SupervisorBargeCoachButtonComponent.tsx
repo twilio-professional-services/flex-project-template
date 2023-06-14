@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { TaskHelper, useFlexSelector, ITask, IconButton } from '@twilio/flex-ui';
+import { TaskHelper, useFlexSelector, ITask, IconButton, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex, Stack } from '@twilio-paste/core';
 import { ParticipantTypes } from '@twilio/flex-ui/src/state/Participants/participants.types';
@@ -9,6 +9,7 @@ import { reduxNamespace } from '../../../../utils/state';
 import { Actions, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoach';
 import BargeCoachService from '../../utils/serverless/BargeCoachService';
 import { isAgentCoachingPanelEnabled } from '../../config';
+import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
 
@@ -235,7 +236,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
           icon={muted ? 'MuteLargeBold' : 'MuteLarge'}
           disabled={!isLiveCall || !enableBargeinButton || !enableCoachButton || (!barge && !coaching)}
           onClick={bargeHandleClick}
-          title={muted ? 'Unmute' : 'Mute'}
+          title={muted ? templates.UnmuteAriaLabel() : templates.MuteCallTooltip()}
           variant="secondary"
           style={{ width: '44px', height: '44px' }}
         ></IconButton>
@@ -243,7 +244,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
           icon={barge ? `IncomingCallBold` : 'IncomingCall'}
           disabled={!isLiveCall || !enableBargeinButton || coaching}
           onClick={bargeHandleClick}
-          title={barge ? 'Barge-Out' : 'Barge-In'}
+          title={barge ? templates[StringTemplates.BargeOut]() : templates[StringTemplates.BargeIn]()}
           variant={barge ? 'primary' : 'secondary'}
           style={{ width: '44px', height: '44px' }}
         />
@@ -251,7 +252,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
           icon={coaching ? `DefaultAvatarBold` : `DefaultAvatar`}
           disabled={!isLiveCall || !enableCoachButton}
           onClick={coachHandleClick}
-          title={coaching ? 'Disable Coach Mode' : 'Enable Coach Mode'}
+          title={coaching ? templates[StringTemplates.DisableCoach]() : templates[StringTemplates.EnableCoach]()}
           variant={coaching ? 'primary' : 'secondary'}
           style={{ width: '44px', height: '44px' }}
         />
