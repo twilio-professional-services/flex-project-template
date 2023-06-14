@@ -7,7 +7,7 @@ import ParkInteractionService from '../utils/ParkInteractionService';
 
 const getAgent = async (payload: ParkInteractionPayload) => {
   const participants = await payload.task.getParticipants(payload.task.attributes.flexInteractionChannelSid);
-
+  console.log('aaaaa', participants);
   let agent;
   for (const p of participants) {
     if (p.type === 'agent') {
@@ -37,6 +37,7 @@ export const parkInteraction = async (payload: ParkInteractionPayload) => {
       payload.task.taskSid,
       payload.task.workflowSid,
       payload.task.taskChannelUniqueName,
+      payload.task.queueName,
       JSON.stringify(payload.task.attributes),
     );
 

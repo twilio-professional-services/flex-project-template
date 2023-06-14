@@ -5,6 +5,7 @@ export enum StringTemplates {
   ParkInteraction = 'PSParkInteraction',
   WebhookError = 'PSParkWebhookError',
   NonCbmError = 'PSParkNonCbmError',
+  MultipleParticipantsError = 'PSParkMultipleParticipantsError',
 }
 
 export const stringHook = () => ({
@@ -14,5 +15,7 @@ export const stringHook = () => ({
     [StringTemplates.ParkInteraction]: 'Park interaction',
     [StringTemplates.WebhookError]: 'Invalid webhook URL. Parking is not supported when running locally.',
     [StringTemplates.NonCbmError]: 'Parking is only available for conversation-based messaging tasks.',
+    [StringTemplates.MultipleParticipantsError]:
+      'This conversation cannot be parked because there are multiple internal participants.',
   },
 });
