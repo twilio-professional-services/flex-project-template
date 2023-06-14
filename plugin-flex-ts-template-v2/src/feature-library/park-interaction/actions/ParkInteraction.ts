@@ -7,7 +7,7 @@ import ParkInteractionService from '../utils/ParkInteractionService';
 
 const getAgent = async (payload: ParkInteractionPayload) => {
   const participants = await payload.task.getParticipants(payload.task.attributes.flexInteractionChannelSid);
-  console.log('aaaaa', participants);
+
   let agent;
   for (const p of participants) {
     if (p.type === 'agent') {
