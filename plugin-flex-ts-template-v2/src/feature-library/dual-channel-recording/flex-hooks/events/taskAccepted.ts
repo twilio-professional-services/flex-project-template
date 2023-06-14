@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 
 import { addCallDataToTask, waitForConferenceParticipants, waitForActiveCall } from '../../helpers/dualChannelHelper';
-import RecordingService from '../../../pause-recording/helpers/RecordingService';
+import DualChannelService from '../../helpers/DualChannelService';
 import { getChannelToRecord } from '../../config';
 import { FlexEvent } from '../../../../types/feature-loader';
 
@@ -66,7 +66,7 @@ export const eventHook = async (flex: typeof Flex, _manager: Flex.Manager, task:
   }
 
   try {
-    const recording = await RecordingService.startDualChannelRecording(callSid);
+    const recording = await DualChannelService.startDualChannelRecording(callSid);
     await addCallDataToTask(task, callSid, recording);
   } catch (error) {
     console.error('Unable to start dual channel recording.', error);
