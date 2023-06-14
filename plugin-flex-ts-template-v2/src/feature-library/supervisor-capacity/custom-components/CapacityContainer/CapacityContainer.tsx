@@ -3,7 +3,7 @@ import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
 import { Stack } from '@twilio-paste/core/stack';
 import { Text } from '@twilio-paste/core/text';
-import { IWorker } from '@twilio/flex-ui';
+import { IWorker, Template, templates } from '@twilio/flex-ui';
 
 import { SectionHeader } from './CapacityContainerStyles';
 import TaskRouterService, {
@@ -11,6 +11,7 @@ import TaskRouterService, {
 } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import { getRules } from '../../config';
 import CapacityChannel from '../CapacityChannel';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 export interface OwnProps {
   worker?: IWorker;
@@ -130,7 +131,9 @@ export default function CapacityContainer(props: OwnProps) {
 
   return (
     <Stack orientation="vertical" spacing="space0">
-      <SectionHeader>Channel Capacity</SectionHeader>
+      <SectionHeader>
+        <Template source={templates[StringTemplates.ChannelCapacity]} />
+      </SectionHeader>
       {workerChannels.length > 0 &&
         workerChannels.map((workerChannel) => (
           <CapacityChannel
@@ -145,27 +148,27 @@ export default function CapacityContainer(props: OwnProps) {
         <Flex hAlignContent="right" margin="space50">
           <Stack orientation="horizontal" spacing="space30">
             <Button variant="secondary" disabled={!changed || isLoading || isSaving} onClick={reset}>
-              Reset
+              <Template source={templates.Reset} />
             </Button>
             <Button variant="primary" disabled={!changed || isLoading || isSaving} loading={isSaving} onClick={save}>
-              Save
+              <Template source={templates.Save} />
             </Button>
           </Stack>
         </Flex>
       )}
       {rules && Object.keys(rules).length < 1 && !isLoading && (
         <Text as="p" margin="space50">
-          Missing configuration. Please notify your system administrator.
+          <Template source={templates[StringTemplates.MissingConfiguration]} />
         </Text>
       )}
       {workerChannels.length < 1 && (!rules || Object.keys(rules).length > 0) && !isLoading && (
         <Text as="p" margin="space50">
-          No worker channels available.
+          <Template source={templates[StringTemplates.NoChannels]} />
         </Text>
       )}
       {isLoading && !isSaving && (
         <Text as="p" margin="space50">
-          Loading...
+          <Template source={templates[StringTemplates.Loading]} />
         </Text>
       )}
     </Stack>

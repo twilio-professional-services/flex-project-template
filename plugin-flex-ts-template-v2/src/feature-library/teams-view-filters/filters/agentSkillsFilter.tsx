@@ -2,6 +2,7 @@ import { FilterDefinition, Manager } from '@twilio/flex-ui';
 
 import SelectFilter from '../custom-components/SelectFilter';
 import SelectFilterLabel from '../custom-components/SelectFilterLabel';
+import { StringTemplates } from '../flex-hooks/strings/TeamViewQueueFilter';
 
 const skillsArray = Manager.getInstance().serviceConfiguration.taskrouter_skills?.map((skill) => ({
   value: skill.name,
@@ -23,7 +24,7 @@ const skillsArray = Manager.getInstance().serviceConfiguration.taskrouter_skills
 export const agentSkillsFilter = () =>
   ({
     id: 'data.attributes.routing.skills',
-    title: 'Agent Skills',
+    title: (Manager.getInstance().strings as any)[StringTemplates.AgentSkills],
     fieldName: 'skills',
     options: skillsArray ? skillsArray : [],
     customStructure: {

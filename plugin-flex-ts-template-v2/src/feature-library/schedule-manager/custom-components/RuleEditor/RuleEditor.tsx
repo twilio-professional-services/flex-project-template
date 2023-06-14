@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Manager, SidePanel } from '@twilio/flex-ui';
+import { Manager, SidePanel, templates } from '@twilio/flex-ui';
 import { Alert } from '@twilio-paste/core/alert';
 import { Button } from '@twilio-paste/core/button';
 import { Box } from '@twilio-paste/core/box';
@@ -742,7 +742,7 @@ const RuleEditor = (props: OwnProps) => {
           {error.length > 0 && <Alert variant="error">{error}</Alert>}
           <Stack orientation="horizontal" spacing="space30">
             <Button variant="primary" onClick={handleSave}>
-              {ScheduleManagerStrings[StringTemplates.SAVE_BUTTON]}
+              {templates.Save()}
             </Button>
             <Button variant="secondary" onClick={handleCopy}>
               {ScheduleManagerStrings[StringTemplates.SAVE_COPY_BUTTON]}

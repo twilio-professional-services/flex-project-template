@@ -3,8 +3,10 @@ import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 import { AgentIcon } from '@twilio-paste/icons/esm/AgentIcon';
 import { CloseIcon } from '@twilio-paste/icons/esm/CloseIcon';
 import { useState } from 'react';
+import { templates } from '@twilio/flex-ui';
 
 import { ParticipantInviteType } from '../../../../types/ParticipantInvite';
+import { StringTemplates } from '../../../../flex-hooks/strings/ChatTransferStrings';
 
 interface InvitedParticipantProps {
   participantName: string;
@@ -26,9 +28,9 @@ export const InvitedParticipant = ({
 
   const icon =
     inviteTargetType === 'Worker' ? (
-      <AgentIcon decorative={false} title={`Agent - ${participantName}`} />
+      <AgentIcon decorative={false} title={templates[StringTemplates.Agent]()} />
     ) : (
-      <ChatIcon decorative title={`Queue - ${participantName}`} />
+      <ChatIcon decorative={false} title={templates[StringTemplates.Queue]()} />
     );
 
   return (
@@ -44,7 +46,7 @@ export const InvitedParticipant = ({
       <FlexBox>
         <Box padding="space20">
           <Button variant="secondary" size="icon" disabled={cancelHandled} onClick={handleCancel}>
-            <CloseIcon decorative title={`Cancel invite to ${participantName}`} />
+            <CloseIcon decorative title={templates[StringTemplates.CancelInvite]({ name: participantName })} />
           </Button>
         </Box>
       </FlexBox>

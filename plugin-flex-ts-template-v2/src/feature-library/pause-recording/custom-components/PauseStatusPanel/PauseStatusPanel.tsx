@@ -1,4 +1,4 @@
-import { Manager, TaskHelper, ITask } from '@twilio/flex-ui';
+import { TaskHelper, ITask, Template, templates } from '@twilio/flex-ui';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Text } from '@twilio-paste/core/text';
@@ -49,7 +49,7 @@ const PauseStatusPanel = (props: OwnProps) => {
     <>
       {paused && (
         <Text as="p" textAlign="center" fontWeight="fontWeightBold" padding="space50">
-          {(Manager.getInstance().strings as any)[StringTemplates.RECORDING_PAUSED_LABEL]}
+          <Template source={templates[StringTemplates.RECORDING_PAUSED_LABEL]} />
         </Text>
       )}
     </>
