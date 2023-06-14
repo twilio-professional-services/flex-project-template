@@ -46,7 +46,7 @@ To use the sample features, most of the filters can simply be toggled on in the 
 ```json
 "teams_view_filters": {
         "enabled": true,
-        "logFilters": true,
+        "log_filters": false,
         "applied_filters": {
           "email": true,
           "department" : true,

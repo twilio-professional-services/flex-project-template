@@ -10,7 +10,7 @@
         "enabled": false,
         "filter_teams_view": false
       },
-      "callbacks": {
+      "callback_and_voicemail": {
         "enabled": true,
         "allow_requeue": true,
         "max_attempts": 3,
@@ -79,7 +79,7 @@
       },
       "teams_view_filters": {
         "enabled": true,
-        "logFilters": true,
+        "log_filters": false,
         "applied_filters": {
           "email": true,
           "department": true,
@@ -210,6 +210,9 @@
       "attribute_viewer": {
         "enabled": true,
         "enabled_for_agents": false
+      },
+      "admin_ui": {
+        "enabled": true
       },
       "localization": {
         "enabled": false,
