@@ -59,6 +59,10 @@ There are default examples of a canned responses payload located in [this file](
         {
           "label": "Promotion",
           "text": "We do offer discounts for our best customers."
+        },
+        {
+          "label": "Greeting",
+          "text": "Hello, {{task.from}}! My name is {{worker.full_name}}. How may I help you today?"
         }
       ]
     },
@@ -76,7 +80,9 @@ There are default examples of a canned responses payload located in [this file](
 }
 ```
 
-While this provides an example data structure of how to organize your canned responses, the UI components are implemented with this structure in mind, meaning alterations to the data structure will requrie minor tweaking within the [CannedResponsesCRM](https://github.com/twilio-professional-services/flex-project-template/tree/main/plugin-flex-ts-template-v2/src/feature-library/canned-responses/custom-components/CannedResponsesCRM) and [CannedResponsesDropdown](https://github.com/twilio-professional-services/flex-project-template/tree/main/plugin-flex-ts-template-v2/src/feature-library/canned-responses/custom-components/CannedResponsesDropdown) components.
+When specifying the text of a response, you may include task and/or worker attributes via template variable substitution. To do so, use the format `{{task.attribute_name_goes_here}}` or `{{worker.attribute_name_goes_here}}` within the response text. If the attribute exists, the template variable is replaced with the contents of the attribute. See the "Greeting" item above as an example.
+
+While this provides an example data structure of how to organize your canned responses, the UI components are implemented with this structure in mind, meaning alterations to the data structure will require minor tweaking within the [CannedResponsesCRM](https://github.com/twilio-professional-services/flex-project-template/tree/main/plugin-flex-ts-template-v2/src/feature-library/canned-responses/custom-components/CannedResponsesCRM) and [CannedResponsesDropdown](https://github.com/twilio-professional-services/flex-project-template/tree/main/plugin-flex-ts-template-v2/src/feature-library/canned-responses/custom-components/CannedResponsesDropdown) components.
 
 # how does it work?
 
