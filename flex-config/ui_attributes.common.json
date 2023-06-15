@@ -218,6 +218,9 @@
       "localization": {
         "enabled": false,
         "show_menu": true
+      },
+      "park_interaction": {
+        "enabled": false
       }
     }
   }
