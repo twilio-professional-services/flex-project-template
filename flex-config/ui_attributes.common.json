@@ -156,6 +156,9 @@
         "enabled": true,
         "location": "CRM"
       },
+      "keyboard_shortcuts": {
+        "enabled": false
+      },
       "custom_hold_music": {
         "enabled": false,
         "url": ""
@@ -198,10 +201,7 @@
         "per_queue": {
           "exampleQueueSid": {
             "require_disposition": true,
-            "dispositions": [
-              "Promotional Sale",
-              "Renewal"
-            ]
+            "dispositions": ["Promotional Sale", "Renewal"]
           }
         }
       },
