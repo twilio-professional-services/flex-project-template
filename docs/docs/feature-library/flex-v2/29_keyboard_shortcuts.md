@@ -80,7 +80,7 @@ Twilio Flex comes with a list of default shortcuts which can be found [here](htt
 
 ### Custom keyboard shortcuts
 
-With the help of new Flex APIs, it is possible to add custom shortcuts like described [here](https://www.twilio.com/docs/flex/developer/ui/modify-keyboard-shortcuts#add-custom-shortcuts). The following list of custom shortcuts are all custom values preconfigured as a part of this [plugin](flex-keyboard-shortcuts/src/utils/CustomKeyboardShortcuts.ts).
+With the help of new Flex APIs, it is possible to add custom shortcuts like described [here](https://www.twilio.com/docs/flex/developer/ui/modify-keyboard-shortcuts#add-custom-shortcuts). The following list of custom shortcuts are all custom values preconfigured as a part of this [plugin](https://github.com/twilio-professional-services/flex-project-template/blob/main/plugin-flex-ts-template-v2/src/feature-library/keyboard-shortcuts/utils/CustomKeyboardShortcuts.ts).
 
 | Action                            | Description                                                                                                                                                                                                                | Shortcut               |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
