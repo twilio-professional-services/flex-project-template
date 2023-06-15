@@ -45,7 +45,7 @@ export const remapKeyboardShortcutUtil = (
 };
 
 export const initCustomShortcuts = (): CustomShortcut[] => {
-  return Object.entries(presetCustomShortcuts).map((item): CustomShortcut => {
+  return Object.entries(presetCustomShortcuts()).map((item): CustomShortcut => {
     return {
       key: item[0],
       actionName: item[1].name,
@@ -78,7 +78,7 @@ export const getDefaultShortcuts = (): ShortcutsObject[] => {
 export const getCustomShortcuts = (): ShortcutsObject[] => {
   getUserConfig();
   if (readFromLocalStorage(shortcutsConfig) === (undefined || null)) {
-    addKeyboardShortcutUtil(presetCustomShortcuts);
+    addKeyboardShortcutUtil(presetCustomShortcuts());
   }
 
   const customShortcuts = initCustomShortcuts();
@@ -93,7 +93,7 @@ export const getUserConfig = (): void => {
   const localConfig = readFromLocalStorage(shortcutsConfig);
 
   if (localConfig) {
-    addKeyboardShortcutUtil(presetCustomShortcuts);
+    addKeyboardShortcutUtil(presetCustomShortcuts());
     const userLocalConfig: ShortcutsObject = JSON.parse(localConfig);
     const systemConfig = getCurrentShortcuts();
 

@@ -1,7 +1,7 @@
 ---
-sidebar_label: keyboard-shortcuts-manager
+sidebar_label: keyboard-shortcuts
 sidebar_position: 30
-title: keyboard-shortcuts-manager
+title: keyboard-shortcuts
 ---
 
 The _Keyboard Shortcuts Manager_ Twilio Flex plugin empowers contact center users to configure default and custom keyboards shortcuts in their day-to-day activities to increase efficiency and enjoyment when using Twilio Flex.

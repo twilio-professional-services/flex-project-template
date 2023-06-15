@@ -156,10 +156,10 @@ const Settings = ({
           {disableAllSetting ? (
             <Stack orientation="horizontal" spacing="space30">
               <Button variant="secondary" onClick={() => setDisableAllSetting(false)}>
-                <Template source={templates[StringTemplates.CancelButton]} />
+                <Template source={templates.Cancel} />
               </Button>
               <Button variant="destructive" onClick={removeAllShortcutsHandler}>
-                <Template source={templates[StringTemplates.SaveButton]} />
+                <Template source={templates.Save} />
               </Button>
             </Stack>
           ) : (
@@ -186,10 +186,10 @@ const Settings = ({
           {resetSetting ? (
             <Stack orientation="horizontal" spacing="space30">
               <Button variant="secondary" onClick={() => setResetSetting(false)}>
-                <Template source={templates[StringTemplates.CancelButton]} />
+                <Template source={templates.Cancel} />
               </Button>
               <Button variant="destructive" onClick={resetShortcutsHandler}>
-                <Template source={templates[StringTemplates.SaveButton]} />
+                <Template source={templates.Save} />
               </Button>
             </Stack>
           ) : (

@@ -237,7 +237,7 @@ const ModalWindow = ({
               setShortcutErrorMessage('');
             }}
           >
-            <Template source={templates[StringTemplates.CancelButton]} />
+            <Template source={templates.Cancel} />
           </Button>
           <Button variant="primary" onClick={saveHandler} disabled={!isSaveButtonVisible}>
             <Template source={templates[StringTemplates.SaveChangesButton]} />
