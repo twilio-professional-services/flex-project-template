@@ -7,8 +7,7 @@ import { frameStyle } from '../../custom-components/IFrameCRMContainer/IFrameWra
 
 export const componentName = FlexComponent.CRMContainer;
 export const componentHook = function replaceAndSetCustomCRMContainer(flex: typeof Flex, _manager: Flex.Manager) {
-  const baseUrl = 'https://www.bing.com';
-  flex.CRMContainer.Content.replace(<IFrameCRMContainer key="custom-crm-container" baseUrl={baseUrl} />, {
+  flex.CRMContainer.Content.replace(<IFrameCRMContainer key="custom-crm-container" />, {
     sortOrder: 1,
     if: (props) => {
       return props.task !== undefined;
@@ -24,4 +23,11 @@ export const componentHook = function replaceAndSetCustomCRMContainer(flex: type
       },
     },
   );
+
+  flex.CRMContainer.Content.replace(<div key="custom-crm-container" />, {
+    sortOrder: 1,
+    if: (props) => {
+      return !shouldDisplayUrlWhenNoTasks() && props.task === undefined;
+    },
+  });
 };
