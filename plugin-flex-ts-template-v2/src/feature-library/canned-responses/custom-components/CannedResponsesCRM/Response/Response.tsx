@@ -8,6 +8,8 @@ import { Tr, Td } from '@twilio-paste/table';
 import { Flex } from '@twilio-paste/flex';
 import { Tooltip } from '@twilio-paste/tooltip';
 
+import { replaceStringAttributes } from '../../../utils/helpers';
+
 interface ResponseProps {
   label: string;
   text: string;
@@ -17,11 +19,12 @@ interface ResponseProps {
 const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
   const conversationSid = task.attributes.conversationSid ?? task.attributes.channelSid;
   const inputState = useFlexSelector((state) => state.flex.chat.conversationInput[conversationSid]?.inputText);
+  const parsedText = replaceStringAttributes(text, task);
 
   const onClickSend = async () => {
     if (!conversationSid) return;
     await Actions.invokeAction('SendMessage', {
-      body: text,
+      body: parsedText,
       conversationSid,
     });
     Actions.invokeAction('SetInputText', {
@@ -38,7 +41,7 @@ const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
     if (currentInput.length > 0 && currentInput.charAt(currentInput.length - 1) !== ' ') {
       currentInput += ' ';
     }
-    currentInput += text;
+    currentInput += parsedText;
     Actions.invokeAction('SetInputText', {
       body: currentInput,
       conversationSid,
@@ -51,7 +54,7 @@ const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
     <Tr>
       <Td>
         <Text as="p" color="colorText" marginBottom="space10" marginTop="space10">
-          {text}
+          {parsedText}
         </Text>
       </Td>
       <Td>

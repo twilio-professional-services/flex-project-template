@@ -1,6 +1,6 @@
 import { ITask, Manager, Notifications } from '@twilio/flex-ui';
 
-import RecordingService from './RecordingService';
+import PauseRecordingService from './PauseRecordingService';
 import { NotificationIds } from '../flex-hooks/notifications/PauseRecording';
 import AppState from '../../../types/manager/AppState';
 import { reduxNamespace } from '../../../utils/state';
@@ -56,7 +56,7 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
       const callSid = getDualChannelCallSid(task);
 
       if (callSid) {
-        const recording = await RecordingService.pauseCallRecording(
+        const recording = await PauseRecordingService.pauseCallRecording(
           callSid,
           isIncludeSilenceEnabled() ? 'silence' : 'skip',
         );
@@ -65,7 +65,7 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
         console.error('Unable to get call SID to pause recording');
       }
     } else if (task.conference) {
-      const recording = await RecordingService.pauseConferenceRecording(
+      const recording = await PauseRecordingService.pauseConferenceRecording(
         task.conference?.conferenceSid,
         isIncludeSilenceEnabled() ? 'silence' : 'skip',
       );
@@ -110,13 +110,13 @@ export const resumeRecording = async (task: ITask): Promise<boolean> => {
       const callSid = getDualChannelCallSid(task);
 
       if (callSid) {
-        await RecordingService.resumeCallRecording(callSid, recording.recordingSid);
+        await PauseRecordingService.resumeCallRecording(callSid, recording.recordingSid);
         success = true;
       } else {
         console.error('Unable to get call SID to resume recording');
       }
     } else if (task.conference) {
-      await RecordingService.resumeConferenceRecording(task.conference?.conferenceSid, recording.recordingSid);
+      await PauseRecordingService.resumeConferenceRecording(task.conference?.conferenceSid, recording.recordingSid);
       success = true;
     }
 

@@ -23,6 +23,6 @@ export const componentHook = function addCannedResponsesCRMContainer(flex: typeo
     sortOrder: -1,
   };
   if (getUILocation() === 'CRM') {
-    flex.CRMContainer.Content.add(<CannedResponsesCRM key="canned-responses-crm-container" />, options);
+    flex.CRMContainer.Content.replace(<CannedResponsesCRM key="canned-responses-crm-container" />, options);
   }
 };

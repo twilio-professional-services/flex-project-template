@@ -33,6 +33,7 @@
       },
       "enhanced_crm_container": {
         "enabled": false,
+        "url": "https://www.bing.com/search?q={{task.from}}",
         "should_display_url_when_no_tasks": false,
         "display_url_when_no_tasks": "https://www.bing.com"
       },
