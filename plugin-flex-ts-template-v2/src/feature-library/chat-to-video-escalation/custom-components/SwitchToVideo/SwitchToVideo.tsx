@@ -77,7 +77,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, conv
         }
 
         Actions.invokeAction('SendMessage', {
-          body: `${templates[StringTemplates.InviteMessage]}: ${response.full_url}`,
+          body: `${templates[StringTemplates.InviteMessage]()}: ${response.full_url}`,
           conversation,
           messageAttributes: {
             hasVideo: true,
