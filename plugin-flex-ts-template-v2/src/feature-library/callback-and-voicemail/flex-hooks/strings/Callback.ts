@@ -15,6 +15,7 @@ export enum StringTemplates {
   PlaceCallNow = 'PSCallbackPlaceCallNow',
   RetryLater = 'PSCallbackRetryLater',
   SystemTime = 'PSCallbackSystemTime',
+  VoicemailLoading = 'PSCallbackVoicemailLoading',
 }
 
 export const stringHook = () => ({
@@ -35,5 +36,6 @@ export const stringHook = () => ({
     [StringTemplates.PlaceCallNow]: 'Place Call Now To {{phoneNumber}}',
     [StringTemplates.RetryLater]: 'Retry Later',
     [StringTemplates.SystemTime]: 'System time: {{systemTime}}',
+    [StringTemplates.VoicemailLoading]: 'Loading voicemail...',
   },
 });
