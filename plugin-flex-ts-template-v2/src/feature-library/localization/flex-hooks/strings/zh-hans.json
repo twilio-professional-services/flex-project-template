@@ -1,0 +1,6 @@
+{
+  "PSLocChangeLanguage": "更改语言",
+  "PSLocLanguages": "语言",
+  "PSLocCurrentLanguage": "这是当前语言",
+  "PSLocChangeLanguageDialog": "您确定要将语言更改为 {{newLanguage}} 吗？ Flex 将自动重新加载，丢弃任何活动通话。"
+}

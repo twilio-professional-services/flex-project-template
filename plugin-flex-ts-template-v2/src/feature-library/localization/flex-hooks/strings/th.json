@@ -1,0 +1,6 @@
+{
+  "PSLocChangeLanguage": "เปลี่ยนภาษา",
+  "PSLocLanguages": "ภาษา",
+  "PSLocCurrentLanguage": "นี่คือภาษาปัจจุบัน",
+  "PSLocChangeLanguageDialog": "คุณแน่ใจหรือว่าต้องการเปลี่ยนภาษาเป็น {{newLanguage}}? Flex จะโหลดใหม่โดยอัตโนมัติและทำการยกเลิกการโทรที่กำลังดำเนินอยู่"
+}

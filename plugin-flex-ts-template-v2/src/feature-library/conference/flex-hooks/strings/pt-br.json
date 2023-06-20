@@ -1,0 +1,12 @@
+{
+  "PSConferenceFailedHangupNotification": "Encerramento de chamada interrompido: Falha ao remover todos os participantes do modo de espera antes de encerrar a chamada. Se este problema persistir, tente remover manualmente os participantes do modo de espera antes de sair da chamada.",
+  "PSExternalWarmTransferInvalidPhoneNumber": "Não foi possível adicionar um novo participante. {{message}}",
+  "PSConferenceAddConferenceParticipant": "Adicionar Participante à Conferência",
+  "PSConferencePhoneNumber": "Número de Telefone",
+  "PSConferencePhoneNumberError": "Digite um número de telefone para adicionar à conferência.",
+  "PSConferenceDial": "Discar",
+  "PSConferenceHoldParticipant": "Colocar participante em modo de espera",
+  "PSConferenceUnholdParticipant": "Retornar participante do modo de espera",
+  "PSConferenceRemoveParticipant": "Remover Participante",
+  "PSConferenceUnknown": "Desconhecido"
+}

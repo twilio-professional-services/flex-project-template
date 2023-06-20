@@ -1,0 +1,20 @@
+{
+  "PSBargeCoachAgentAssistanceTriggered": "{{agentFN}}正在寻求帮助。",
+  "PSBargeCoachAssistanceRequired": "需要协助",
+  "PSBargeCoachTurnOffAssistance": "关闭协助",
+  "PSBargeCoachAskForAssistance": "请求协助",
+  "PSBargeCoachAgentSeekingAssistance": "代理尋求協助",
+  "PSBargeCoachBargeIn": "闯入",
+  "PSBargeCoachBargeOut": "闯出",
+  "PSBargeCoachDisableCoach": "禁用指导模式",
+  "PSBargeCoachEnableCoach": "启用指导模式",
+  "PSBargeCoachAgentCoachedBy": "你正在接受教练指导：",
+  "PSBargeCoachAssistanceAlertsEnabled": "客服协助警报已启用",
+  "PSBargeCoachAssistanceAlertsDisabled": "客服协助警报已禁用",
+  "PSBargeCoachActiveSupervisors": "活跃监督员：",
+  "PSBargeCoachNone": "无",
+  "PSBargeCoachEnablePrivacy": "启用私人模式",
+  "PSBargeCoachDisablePrivacy": "禁用私人模式",
+  "PSBargeCoachPrivacyOn": "隐私开启",
+  "PSBargeCoachPrivacyOff": "关闭隐私"
+}

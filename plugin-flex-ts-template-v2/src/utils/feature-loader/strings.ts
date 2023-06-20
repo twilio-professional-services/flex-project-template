@@ -27,8 +27,9 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
   const hookLanguages = hook.stringHook(flex, manager);
   let hookStrings = {};
 
-  if (hookLanguages[userLanguage]) {
-    hookStrings = hookLanguages[userLanguage];
+  if (hookLanguages[userLanguage] && hookLanguages[defaultLanguage] && userLanguage !== defaultLanguage) {
+    // Include both default and user language to allow for incomplete translations
+    hookStrings = { ...hookLanguages[defaultLanguage], ...hookLanguages[userLanguage] };
   } else if (hookLanguages[defaultLanguage]) {
     hookStrings = hookLanguages[defaultLanguage];
   } else {

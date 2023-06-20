@@ -1,0 +1,20 @@
+{
+  "PSBargeCoachAgentAssistanceTriggered": "{{agentFN}} กำลังขอความช่วยเหลือ",
+  "PSBargeCoachAssistanceRequired": "ต้องการความช่วยเหลือ",
+  "PSBargeCoachTurnOffAssistance": "ปิดการช่วยเหลือ",
+  "PSBargeCoachAskForAssistance": "ขอความช่วยเหลือ",
+  "PSBargeCoachAgentSeekingAssistance": "เจ้าหน้าที่ต้องการความช่วยเหลือ",
+  "PSBargeCoachBargeIn": "เข้ามาแทรก",
+  "PSBargeCoachBargeOut": "\"Barge Out\" ไม่มีคำแปลในภาษาไทย แต่หากในทางเทคนิคของ contact center แปลว่าการเข้าไปยังการสนทนาของผู้ใช้โดยไม่ได้รับอนุญาต การเข้าไปนี้เป็นการเรียกใช้เมื่อต้องการช่วยเหลือผู้ใช้ที่อยู่ในสถานการณ์ที่ด่วนและต้องการช่วยเหลือโดยเร็ว ๆ นี้",
+  "PSBargeCoachDisableCoach": "ปิดโหมดโค้ช",
+  "PSBargeCoachEnableCoach": "เปิดโหมดโค้ช",
+  "PSBargeCoachAgentCoachedBy": "คุณกำลังได้รับการฝึกฝนโดย:",
+  "PSBargeCoachAssistanceAlertsEnabled": "เปิดใช้งานการแจ้งเตือนการช่วยเหลือของเอเจ้นต์",
+  "PSBargeCoachAssistanceAlertsDisabled": "ปิดการแจ้งเตือนความช่วยเหลือของเอเจ้นต์",
+  "PSBargeCoachActiveSupervisors": "ผู้รับใช้งานหัวหน้างานที่ใช้งานอยู่:",
+  "PSBargeCoachNone": "ไม่มี",
+  "PSBargeCoachEnablePrivacy": "เปิดโหมดส่วนตัว",
+  "PSBargeCoachDisablePrivacy": "ปิดโหมดส่วนบุคคล",
+  "PSBargeCoachPrivacyOn": "ความเป็นส่วนตัวเปิด",
+  "PSBargeCoachPrivacyOff": "ความเป็นส่วนตัวปิด"
+}

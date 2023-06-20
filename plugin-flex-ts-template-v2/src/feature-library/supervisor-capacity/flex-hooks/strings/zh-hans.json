@@ -1,0 +1,7 @@
+{
+  "PSSupervisorCapacityChannelCapacity": "通道容量",
+  "PSSupervisorCapacityMissingConfiguration": "缺少配置。请通知您的系统管理员。",
+  "PSSupervisorCapacityNoChannels": "没有可用的工作人员渠道。",
+  "PSSupervisorCapacityLoading": "加载中...",
+  "PSSupervisorCapacityRestorePreviousValue": "恢复上一个值"
+}

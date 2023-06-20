@@ -1,0 +1,17 @@
+{
+  "PSFailedToLoaddInsightsClient": "",
+  "PSFailedToLoadInsightsData": "",
+  "PSXWTFeatureDependencyMissing": "",
+  "PSPhoneNumberFailedValidationCheckRequest": "Falha ao fazer a verificação de validação para o número de telefone '{{phoneNumber}}'",
+  "PSPhoneNumberFailedValidationCheckWithErrors": "O número de telefone '{{phoneNumber}}' falhou na validação com os seguintes erros: {{errors}}",
+  "PSErrorExecutingColdTransfer": "Erro ao tentar realizar transferência direta, {{message}}",
+  "PSDirectoryQueues": "Filas",
+  "PSDirectoryExternal": "Externo",
+  "PSDirectorySearchDirectory": "Buscar no Diretório",
+  "PSDirectoryNoItemsFound": "Nenhum item encontrado.",
+  "PSDirectoryColdTransfer": "Transferência Direta",
+  "PSDirectoryWarmTransfer": "Transferência Assistida",
+  "PSDirectoryQueuesFiltered": "Algumas filas podem ser ocultadas por falta de agentes disponíveis nas filas.",
+  "PSDirectoryQueueTooltip": "Agentes: {{agentsAvailable}}, Tarefas na fila: {{tasksInQueue}}",
+  "PSDirectoryNA": "N/A"
+}
