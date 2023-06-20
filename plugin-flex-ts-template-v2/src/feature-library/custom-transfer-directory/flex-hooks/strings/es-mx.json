@@ -1,5 +1,5 @@
 {
-  "PSFailedToLoaddInsightsClient": "No se pudo cargar la información del cliente en tiempo real. Todas las colas están listadas.",
+  "PSFailedToLoadInsightsClient": "No se pudo cargar la información del cliente en tiempo real. Todas las colas están listadas.",
   "PSFailedToLoadInsightsData": "No se puede cargar los datos de insights en tiempo real. Se muestran todas las colas.",
   "PSXWTFeatureDependencyMissing": "\"El directorio de transferencia personalizada con transferencia externa está habilitado, pero ni la función nativa de \"transferencia externa consultada\" ni la función de \"conferencia\" propia del complemento están habilitadas. Como resultado, las transferencias externas consultadas para llamadas de voz estarán deshabilitadas.\"",
   "PSPhoneNumberFailedValidationCheckRequest": "No se pudo realizar con éxito la solicitud de verificación de validación para el número de teléfono '{{phoneNumber}}'.",

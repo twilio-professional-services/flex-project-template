@@ -1,5 +1,5 @@
 {
-  "PSFailedToLoaddInsightsClient": "",
+  "PSFailedToLoadInsightsClient": "",
   "PSFailedToLoadInsightsData": "",
   "PSXWTFeatureDependencyMissing": "",
   "PSPhoneNumberFailedValidationCheckRequest": "Falha ao fazer a verificação de validação para o número de telefone '{{phoneNumber}}'",

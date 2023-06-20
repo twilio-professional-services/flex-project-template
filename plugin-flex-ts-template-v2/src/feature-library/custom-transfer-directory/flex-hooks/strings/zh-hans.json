@@ -1,5 +1,5 @@
 {
-  "PSFailedToLoaddInsightsClient": "未能加载实时insights客户端。所有队列都已列出。",
+  "PSFailedToLoadInsightsClient": "未能加载实时insights客户端。所有队列都已列出。",
   "PSFailedToLoadInsightsData": "无法加载实时insights数据。列出了所有队列。",
   "PSXWTFeatureDependencyMissing": "自定义转移目录与外部转移已启用，但它所依赖的本地“外部温暖转移”功能或插件自己的“会议”功能都未启用。因此，语音呼叫的温暖外部转移将被禁用。",
   "PSPhoneNumberFailedValidationCheckRequest": "无法成功地对电话号码 '{{phoneNumber}}' 进行验证检查请求",

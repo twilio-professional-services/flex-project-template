@@ -4,7 +4,7 @@ import th from './th.json';
 import zhHans from './zh-hans.json';
 
 export enum StringTemplates {
-  FailedToLoadInsightsClient = 'PSFailedToLoaddInsightsClient',
+  FailedToLoadInsightsClient = 'PSFailedToLoadInsightsClient',
   FailedToLoadInsightsData = 'PSFailedToLoadInsightsData',
   XWTFeatureDependencyMissing = 'PSXWTFeatureDependencyMissing',
   PhoneNumberFailedValidationCheckRequest = 'PSPhoneNumberFailedValidationCheckRequest',
