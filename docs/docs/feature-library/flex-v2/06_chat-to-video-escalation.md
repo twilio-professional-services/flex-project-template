@@ -87,20 +87,21 @@ The following diagram demonstrates how a chat session can be escalated to video.
 
 To test this feature locally:
 
-1. [Configure, build, and deploy the Customer Facing Video Application](https://github.com/twilio-professional-services/flex-project-template/tree/main/web-app-examples/video-app-quickstart).
+1. Create an [API Key and Secret](https://support.twilio.com/hc/en-us/articles/9318455807771-API-Keys-and-How-to-Change-Them)
 
-2. [Deploy your Twilio Function](/setup-guides/deploy-to-flex-manual) - please follow the instructions laid out at the root of this repository to deploy the serverless function, specifically adding the following entries to the `.env` file within `../../../../serverless-functions`:
+2. Ensure the API key and secret are populated in the `.env` file within `../../../../serverless-functions` along with the other following variables
 
    ```
    TWILIO_FLEX_SYNC_SID=ISxxxxxxxxxxxxxxxxxx
 
+   TWILIO_API_KEY=<YOUR_API_KEY>
+   TWILIO_API_SECRET=<YOUR_API_SECRET>
    VIDEO_CODE_LENGTH=7
    VIDEO_CODE_TTL=3600
    VIDEO_ROOM_TYPE=group
    VIDEO_RECORD_BY_DEFAULT=false
    ```
 
-3. [Setup Conversations Web Chat](https://github.com/twilio/twilio-webchat-react-app) - to mock an interaction with a customer over web chat using conversations, please stand up the [Twilio Flex Web Chat React Sample](https://github.com/twilio/twilio-webchat-react-app) web app.
 
 ---
 

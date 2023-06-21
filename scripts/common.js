@@ -155,6 +155,20 @@ exports.installNPMPlugin = function installNPMPlugin() {
   }
 }
 
+exports.installNPMVideoAppQuickstart = function installNPMVideoAppQuickstart() {
+  console.log("Installing npm dependencies for web-app-examples/video-app-quickstart...");
+  shell.cd("./web-app-examples/video-app-quickstart");
+  shell.exec("npm install", {silent:true});
+  shell.cd("../..");
+}
+
+exports.buildVideoAppQuickstart = function buildNPMVideoAppQuickstart() {
+  console.log("building assets for video app quickstart");
+  shell.cd("./web-app-examples/video-app-quickstart");
+  shell.exec("npm run build", {silent:true});
+  shell.cd("../..");
+}
+
 exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv(context, serverlessEnv) {
 
   try {
@@ -187,9 +201,13 @@ exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv
       }
       if(api_key){
         shell.sed('-i', /<YOUR_API_KEY>/g, `${api_key}`, serverlessEnv);
+      } else {
+        console.log("WARNING: YOUR_API_KEY not found, you may need to replace this in your serverless-functions/.env file manually to use chat-to-video feature.");
       }
       if(api_secret){
         shell.sed('-i', /<YOUR_API_SECRET>/g, `${api_secret}`, serverlessEnv);
+      } else {
+        console.log("WARNING: YOUR_API_SECRET not found, you may need to replace this in your serverless-functions/.env file manually to use chat-to-video feature.");
       }
       if(taskrouter_workspace_sid){
         shell.sed('-i', /<YOUR_FLEX_WORKSPACE_SID>/g, `${taskrouter_workspace_sid}`, serverlessEnv);
@@ -260,6 +278,33 @@ exports.generateFlexConfigEnv = function generateFlexConfigEnv(context, flexConf
   }
 }
 
+exports.generateVideoAppConfigEnv = function generateVideoAppConfigEnv(context, isLocal) {
+
+  const videoAppConfig = `./web-app-examples/video-app-quickstart/.env`;
+  const videoAppEnvExample = `./web-app-examples/video-app-quickstart/.env.example`;
+  const localEnvironment = 'http://localhost:3001'
+
+  // create file from example if it does not exist  
+  if(!shell.test('-e', videoAppConfig)){
+    shell.cp(videoAppEnvExample, videoAppConfig);
+  }
+
+  var {
+    serviceFunctionsDomain
+     } = context
+
+    if(shell.test('-e', videoAppConfig)){
+      if(serviceFunctionsDomain && isLocal){
+        shell.sed('-i', /<PLACEHOLDER_SERVERLESS_DOMAIN>/g, `${localEnvironment}`, videoAppConfig);
+      } else if (serviceFunctionsDomain) {
+        shell.sed('-i', /<PLACEHOLDER_SERVERLESS_DOMAIN>/g, `https://${serviceFunctionsDomain}`, videoAppConfig);
+      }
+    }
+
+    console.log(`Setting up environment ${videoAppConfig}: complete`);
+  
+}
+
 exports.populateFlexConfigPlaceholders = function populateFlexConfigPlaceholders(context, environment) {
 
   const configFile = `./${flexConfigDir}/ui_attributes.${environment}.json`;
@@ -269,14 +314,14 @@ exports.populateFlexConfigPlaceholders = function populateFlexConfigPlaceholders
     serviceFunctionsDomain
      } = context
 
-    if(shell.test('-e', configFile)){
-      if(serviceFunctionsDomain){
-        shell.sed('-i', /<PLACEHOLDER_SERVERLESS_DOMAIN>/g, `${serviceFunctionsDomain}`, configFile);
-      }
-      if(serviceFunctionsDomain){
-        shell.sed('-i', /<PLACEHOLDER_SCHEDULE_MANAGER_DOMAIN>/g, `${scheduledFunctionsDomain}`, configFile);
-      }
+  if(shell.test('-e', configFile)){
+    if(serviceFunctionsDomain){
+      shell.sed('-i', /<PLACEHOLDER_SERVERLESS_DOMAIN>/g, `${serviceFunctionsDomain}`, configFile);
     }
+    if(scheduledFunctionsDomain){
+      shell.sed('-i', /<PLACEHOLDER_SCHEDULE_MANAGER_DOMAIN>/g, `${scheduledFunctionsDomain}`, configFile);
+    }
+  }
 }
 
 exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {

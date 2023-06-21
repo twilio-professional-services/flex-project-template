@@ -17,7 +17,7 @@ export const stringHook = () => ({
   'en-US': {
     [StringTemplates.FailedVideoLinkNotification]: 'Unable to create the video room. Please try again.',
     [StringTemplates.VideoRoom]: 'Video Room',
-    [StringTemplates.InviteMessage]: 'Please join me using this unique video link: {{videoLink}}',
+    [StringTemplates.InviteMessage]: 'Please join me using this unique video link:',
     [StringTemplates.SwitchToVideo]: 'Switch to Video',
     [StringTemplates.RemoteParticipant]: 'Remote Participant',
     [StringTemplates.LocalParticipant]: 'Local Participant',

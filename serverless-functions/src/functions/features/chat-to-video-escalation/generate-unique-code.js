@@ -17,7 +17,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     - Create a SYNC document to store the data about this request
     - The unique code is also the unique name of the document so it's easy to find later on. 
     */
-    const { taskSid } = event;
+    const { taskSid, protocol = 'https' } = event;
     let unique_code = '';
     let document = null;
 
@@ -52,7 +52,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     response.setBody({
       unique_code,
       valid_until: document.dateExpires,
-      full_url: `https://${context.DOMAIN_NAME}/features/chat-to-video/index.html?code=${unique_code}`,
+      full_url: `${protocol}://${context.DOMAIN_NAME}/features/chat-to-video/index.html?code=${unique_code}`,
     });
 
     return callback(null, response);
