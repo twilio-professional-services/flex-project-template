@@ -16,5 +16,6 @@ var context = {
 
 generateServerlessFunctionsEnv(context, serverlessEnv);
 populateFlexConfigPlaceholders(context, environmentName);
+generateVideoAppConfigEnv(context, false);
 printEnvironmentSummary(context);
 

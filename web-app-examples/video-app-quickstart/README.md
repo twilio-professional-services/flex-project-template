@@ -38,7 +38,7 @@ Before we begin, we need to collect all the config values we need to run this qu
 
 ---
 
-## Local Development
+## Local Development using twilio serverless functions
 
 After the above requirements have been met:
 
@@ -55,34 +55,24 @@ After the above requirements have been met:
    ```
 
    ```
-   NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN=https://xxxxx
-   ACCOUNT_SID=ACxxxxxxxxxx
-   AUTH_TOKEN=xxxxxxxxxx
+   NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN=http://localhost:3001
    ```
 
-3. To run the app locally:
-
-   ```bash
-   npm run dev
-   ```
-
-## Build & Deploy Application for Twilio Asset Deployment
-
-1. Run the following command to build the application and transfer the build output to the `../../serverless-functions/src/assets/features/chat-to-video` folder:
+3. Run the following command to build the application and automatically transfer the build output to the `../../serverless-functions/src/assets/features/chat-to-video` folder:
 
    ```bash
    npm run build
    ```
 
-2. Within the `../../serverless-functions` directory, run the following command to deploy the updated build:
-
-   ```bash
-   twilio serverless:deploy --assets
-   ```
-
 ---
 
 ## Changelog
+
+### 1.0.1
+
+**June 21, 2023**
+
+- Updated README to target steps for local development as action scripts are updated to take care of hosted deployment automatically.
 
 ### 1.0.0
 
