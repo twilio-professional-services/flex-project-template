@@ -2,7 +2,7 @@ import { ITask, useFlexSelector, Manager, Template, templates } from '@twilio/fl
 import React, { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 import { TaskAttributes } from 'types/task-router/Task';
-import { Button, Box, Heading, Text, Flex } from '@twilio-paste/core';
+import { Button, Box, Heading, Text, Flex, Stack, HelpText } from '@twilio-paste/core';
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -61,17 +61,28 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
   const disableCallCustomerButton = disableRetryButton || workerOffline(workerActivitySid);
   const thisAttempt = callBackData?.attempts ? Number(callBackData.attempts) + 1 : 1;
 
+  const [recordingSid, setRecordingSid] = useState('');
   const [voicemail, setVoicemail] = useState(null as FetchVoicemailResponse | null);
+  const [voicemailError, setVoicemailError] = useState(false);
 
   const fetchVoicemail = async () => {
     setVoicemail(null);
+    setVoicemailError(false);
     if (callBackData?.recordingSid && !callBackData.isDeleted) {
-      setVoicemail(await CallbackService.fetchVoicemail(callBackData.recordingSid));
+      try {
+        const voicemailResponse = await CallbackService.fetchVoicemail(callBackData.recordingSid);
+        setVoicemail(voicemailResponse);
+      } catch {
+        setVoicemailError(true);
+      }
     }
   };
 
   useEffect(() => {
-    fetchVoicemail();
+    if (callBackData?.recordingSid && !callBackData.isDeleted && callBackData?.recordingSid !== recordingSid) {
+      setRecordingSid(callBackData.recordingSid);
+      fetchVoicemail();
+    }
   }, [callBackData]);
 
   return (
@@ -104,13 +115,22 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
             <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
               <Template source={templates[StringTemplates.VoicemailRecording]} />
             </Heading>
-            <Text as="span">
-              {voicemail ? (
-                <audio src={`data:${voicemail.type};base64,${voicemail.recording}`} controls />
-              ) : (
+            {voicemail ? (
+              <audio src={`data:${voicemail.type};base64,${voicemail.recording}`} controls />
+            ) : voicemailError ? (
+              <Stack orientation="horizontal" spacing="space30">
+                <HelpText variant="error" marginTop="space0">
+                  <Template source={templates[StringTemplates.VoicemailError]} />
+                </HelpText>
+                <Button variant="secondary" size="small" onClick={async () => fetchVoicemail()}>
+                  <Template source={templates[StringTemplates.VoicemailTryAgain]} />
+                </Button>
+              </Stack>
+            ) : (
+              <Text as="span">
                 <Template source={templates[StringTemplates.VoicemailLoading]} />
-              )}
-            </Text>
+              </Text>
+            )}
           </Box>
         )}
 

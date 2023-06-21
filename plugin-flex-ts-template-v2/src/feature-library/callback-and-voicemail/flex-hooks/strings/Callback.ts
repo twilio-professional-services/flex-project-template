@@ -16,6 +16,8 @@ export enum StringTemplates {
   RetryLater = 'PSCallbackRetryLater',
   SystemTime = 'PSCallbackSystemTime',
   VoicemailLoading = 'PSCallbackVoicemailLoading',
+  VoicemailError = 'PSCallbackVoicemailError',
+  VoicemailTryAgain = 'PSCallbackVoicemailTryAgain',
 }
 
 export const stringHook = () => ({
@@ -37,5 +39,7 @@ export const stringHook = () => ({
     [StringTemplates.RetryLater]: 'Retry Later',
     [StringTemplates.SystemTime]: 'System time: {{systemTime}}',
     [StringTemplates.VoicemailLoading]: 'Loading voicemail...',
+    [StringTemplates.VoicemailError]: 'Error loading voicemail.',
+    [StringTemplates.VoicemailTryAgain]: 'Try again',
   },
 });
