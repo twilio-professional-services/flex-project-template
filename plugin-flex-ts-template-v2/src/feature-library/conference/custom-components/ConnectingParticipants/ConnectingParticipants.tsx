@@ -72,7 +72,7 @@ const ConnectingParticipants = (props: OwnProps) => {
         .filter((p) => p.conferenceSid === props.task?.conference?.conferenceSid)
         .map((p) => {
           const fakeParticipant = {
-            participantType: 'external',
+            participantType: 'unknown',
             phoneNumber: p.phoneNumber,
             connecting: true,
             callSid: p.callSid,
