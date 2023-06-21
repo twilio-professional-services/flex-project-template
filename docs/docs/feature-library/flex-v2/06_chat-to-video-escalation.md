@@ -89,7 +89,7 @@ To test this feature locally:
 
 1. [Configure, build, and deploy the Customer Facing Video Application](https://github.com/twilio-professional-services/flex-project-template/tree/main/web-app-examples/video-app-quickstart).
 
-2. [Deploy your Twilio Function](/setup-guides/deploy-to-flex-manual) - please follow the instructions laid out at the root of this repository to deploy the serverless function, specifically adding the following entries to the `.env` file within `../../../../serverless-functions`:
+2. [Deploy your Twilio Function](/setup-guides/deploy-to-flex-manual) - please follow the instructions laid out at the root of this repository to deploy the serverless function, specifically ensuring the following entries are present in the `.env` file within `../../../../serverless-functions`:
 
    ```
    TWILIO_FLEX_SYNC_SID=ISxxxxxxxxxxxxxxxxxx
