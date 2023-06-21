@@ -318,7 +318,7 @@ exports.populateFlexConfigPlaceholders = function populateFlexConfigPlaceholders
     if(serviceFunctionsDomain){
       shell.sed('-i', /<PLACEHOLDER_SERVERLESS_DOMAIN>/g, `${serviceFunctionsDomain}`, configFile);
     }
-    if(serviceFunctionsDomain){
+    if(scheduledFunctionsDomain){
       shell.sed('-i', /<PLACEHOLDER_SCHEDULE_MANAGER_DOMAIN>/g, `${scheduledFunctionsDomain}`, configFile);
     }
   }
