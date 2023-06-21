@@ -64,7 +64,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, conv
     }
 
     await fetch(
-      `${serverlessProtocol}://${serverlessDomain}/features/chat-to-video-escalation/generate-unique-code?taskSid=${taskSid}&protocol=${serverless_functions_protocol}`,
+      `${serverlessProtocol}://${serverlessDomain}/features/chat-to-video-escalation/generate-unique-code?taskSid=${taskSid}&protocol=${serverlessProtocol}`,
       options,
     )
       .then(async (response) => response.json())
