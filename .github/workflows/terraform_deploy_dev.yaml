@@ -1,0 +1,34 @@
+name: terraform_deploy_dev
+
+on:
+  # Run on merge to main
+  #push:
+  #  branches:
+  #  - main
+
+  # Enable running this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  ENVIRONMENT: dev
+  TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID_DEV }}
+  TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_DEV }}
+  TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_DEV }}
+  TF_WORKSPACE_SID: ${{ vars.TF_WORKSPACE_SID }}
+  TF_DEFAULT_WORKFLOW_SID: ${{ vars.TF_DEFAULT_WORKFLOW_SID }}
+  TF_DEFAULT_TASK_QUEUE_SID: ${{ vars.TF_DEFAULT_TASK_QUEUE_SID }}
+  TF_CHAT_TASK_CHANNEL_SID: ${{ vars.TF_CHAT_TASK_CHANNEL_SID }}
+  TF_VOICE_TASK_CHANNEL_SID: ${{ vars.TF_VOICE_TASK_CHANNEL_SID }}
+  TF_MESSAGING_FLOW_SID: ${{ vars.TF_MESSAGING_FLOW_SID }}
+  TF_VOICE_FLOW_SID: ${{ vars.TF_VOICE_FLOW_SID }}
+  TF_CHAT_FLOW_SID: ${{ vars.TF_CHAT_FLOW_SID }}
+
+jobs:
+  deploy-terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1 
+      - uses: ./.github/actions/terraform_state_artifact
+        with:
+          encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
+          path: ./infra-as-code/terraform/environments/default
