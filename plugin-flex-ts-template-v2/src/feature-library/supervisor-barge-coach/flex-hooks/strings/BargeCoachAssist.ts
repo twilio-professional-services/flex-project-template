@@ -1,3 +1,8 @@
+import esMX from './es-mx.json';
+import ptBR from './pt-br.json';
+import th from './th.json';
+import zhHans from './zh-hans.json';
+
 // Export the template names as an enum for better maintainability when accessing them elsewhere
 export enum StringTemplates {
   AgentAssistanceNotification = 'PSBargeCoachAgentAssistanceTriggered',
@@ -41,4 +46,8 @@ export const stringHook = () => ({
     [StringTemplates.PrivacyOn]: 'Privacy On',
     [StringTemplates.PrivacyOff]: 'Privacy Off',
   },
+  'es-MX': esMX,
+  'pt-BR': ptBR,
+  th,
+  'zh-Hans': zhHans,
 });

@@ -1,0 +1,22 @@
+{
+  "ChatTransferTaskSuccess": "对话已转移",
+  "ChatParticipantInvited": "受邀参加者",
+  "ChatTransferFailedGeneric": "添加新参与者时出错",
+  "ChatTransferFailedConsultNotSupported": "会商/温和转移未启用",
+  "ChatTransferFailedColdNotSupported": "冷转移未启用",
+  "ChatTransferFailedAlreadyParticipating": "所选目标已经是会话中的参与者",
+  "ChatRemoveParticipantFailed": "参与者移除失败",
+  "ChatRemoveParticipantSuccess": "参与者已移除",
+  "ChatCancelParticipantInviteFailed": "参与者邀请取消失败",
+  "ChatCancelParticipantInviteSuccess": "参与者邀请已取消",
+  "ChatParticipantInviteOutstanding": "邀请参与者失败。聊天中已经有一个未处理的邀请。",
+  "PSConvTransferTransferChat": "转接聊天",
+  "PSConvTransferParticipants": "参与者",
+  "PSConvTransferAgent": "客服",
+  "PSConvTransferCustomer": "客户",
+  "PSConvTransferQueue": "队列",
+  "PSConvTransferRemove": "移除{{name}}",
+  "PSConvTransferInvitedParticipants": "受邀参与者",
+  "PSConvTransferCancelInvite": "取消邀请{{name}}",
+  "PSConvTransferLeaveChat": "结束聊天"
+}

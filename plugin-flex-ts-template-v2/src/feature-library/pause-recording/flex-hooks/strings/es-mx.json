@@ -1,0 +1,9 @@
+{
+  "PSRecordingPaused": "La grabación de la llamada ha sido pausada. Por favor recuerda reanudar la grabación cuando sea apropiado.",
+  "PSRecordingPausedLabel": "Pausa de grabación de llamada",
+  "PSResumeRecording": "Se reanudó la grabación de esta llamada.",
+  "PSPauseRecordingFailed": "No se pudo pausar la grabación de la llamada. Por favor, inténtelo de nuevo.",
+  "PSResumeRecordingFailed": "No se pudo reanudar la grabación de la llamada. Por favor, inténtalo de nuevo.",
+  "PSPauseRecordingTooltip": "Pausar grabación",
+  "PSResumeRecordingTooltip": "Reanudar grabación"
+}
