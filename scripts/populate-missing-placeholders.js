@@ -1,4 +1,4 @@
-const { serverlessDir, getEnvironmentVariables, generateServerlessFunctionsEnv, printEnvironmentSummary, populateFlexConfigPlaceholders } = require ('./common');
+const { serverlessDir, getEnvironmentVariables, generateServerlessFunctionsEnv, printEnvironmentSummary, populateFlexConfigPlaceholders, generateVideoAppConfigEnv } = require ('./common');
 
 
 if(!process.argv[2]) {
@@ -16,5 +16,6 @@ var context = {
 
 generateServerlessFunctionsEnv(context, serverlessEnv);
 populateFlexConfigPlaceholders(context, environmentName);
+generateVideoAppConfigEnv(context, false);
 printEnvironmentSummary(context);
 

@@ -31,7 +31,16 @@ export interface CreateCallbackRequest {
   isDeleted?: boolean;
 }
 
+export interface FetchVoicemailResponse {
+  type: string;
+  recording: string;
+}
+
 class CallbackService extends ApiService {
+  async fetchVoicemail(recordingSid: string): Promise<FetchVoicemailResponse> {
+    return this.#fetchVoicemail(recordingSid);
+  }
+
   async callCustomerBack(task: Flex.ITask, attempts: number): Promise<Flex.ITask> {
     // Check to see if outbound dialing is enabled on the account
     // as outbound calls won't work unless it is
@@ -145,6 +154,22 @@ class CallbackService extends ApiService {
 
     return this.fetchJsonWithReject<CreateCallbackResponse>(
       `${this.serverlessProtocol}://${this.serverlessDomain}/features/callback-and-voicemail/flex/create-callback`,
+      {
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      },
+    );
+  };
+
+  #fetchVoicemail = async (recordingSid: string): Promise<FetchVoicemailResponse> => {
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(this.manager.user.token),
+      recordingSid: encodeURIComponent(recordingSid),
+    };
+
+    return this.fetchJsonWithReject<FetchVoicemailResponse>(
+      `${this.serverlessProtocol}://${this.serverlessDomain}/features/callback-and-voicemail/flex/fetch-voicemail`,
       {
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

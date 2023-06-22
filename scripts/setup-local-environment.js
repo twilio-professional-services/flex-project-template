@@ -1,4 +1,4 @@
-const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, installNPMServerlessSchmgrFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPlugins } = require ('./common');
+const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, installNPMServerlessSchmgrFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPlugins, installNPMVideoAppQuickstart, generateVideoAppConfigEnv, buildVideoAppQuickstart } = require ('./common');
 const prompt = require('prompt');
 prompt.colors = false;
 
@@ -70,6 +70,7 @@ getActiveTwilioProfile().then((profile_result) => {
         installNPMServerlessSchmgrFunctions();
         installNPMFlexConfig();
         installNPMPlugin();
+        installNPMVideoAppQuickstart();
         console.log("");
       }
 
@@ -77,6 +78,9 @@ getActiveTwilioProfile().then((profile_result) => {
         generateServerlessFunctionsEnv(context, serverlessEnv);
         generateFlexConfigEnv(context, flexConfigEnv);
         generateAppConfigForPlugins();
+        generateVideoAppConfigEnv(context, true);
+        buildVideoAppQuickstart();
+
         console.log("");
 
         printEnvironmentSummary(context);
