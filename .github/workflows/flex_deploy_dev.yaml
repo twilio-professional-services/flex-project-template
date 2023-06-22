@@ -70,7 +70,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-
       - name: install npm and apply missing environment variables
         run: |
           npm install
