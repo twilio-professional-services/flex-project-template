@@ -27,11 +27,29 @@ export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
 
   const agentWorkerSID = useFlexSelector((state) => state?.flex?.supervisor?.stickyWorker?.worker?.sid);
 
+  const createSupervisorString = () => {
+    const supervisorString: any = [];
+    supervisorArray.forEach((s) => {
+      switch (s.status) {
+        case 'barge':
+          supervisorString.push(`${s.supervisor} ${templates[StringTemplates.PanelBarge]()}`);
+          break;
+        case 'coaching':
+          supervisorString.push(`${s.supervisor} ${templates[StringTemplates.PanelCoaching]()}`);
+          break;
+        case 'monitoring':
+          supervisorString.push(`${s.supervisor} ${templates[StringTemplates.PanelMonitoring]()}`);
+          break;
+        default:
+          break;
+      }
+    });
+    return supervisorString;
+  };
   const supervisorsArray = () => {
-    return supervisorArray.map((supervisorArray) => (
-      <tr key={supervisorArray.supervisorSID}>
-        <td>{supervisorArray.supervisor}</td>
-        <td style={{ color: 'green' }}>&nbsp;{supervisorArray.status}</td>
+    return createSupervisorString().map((s: string) => (
+      <tr key={s}>
+        <td>{s}</td>
       </tr>
     ));
   };
