@@ -15,6 +15,7 @@ env:
   TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_DEV }}
   TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_DEV }}
   PLUGIN_FOLDER: ${{ secrets.PLUGIN_FOLDER }}
+  OVERWRITE_CONFIG: ${{ secrets.OVERWRITE_CONFIG }}
 
 jobs:
   deploy-serverless:
@@ -30,6 +31,11 @@ jobs:
         run: |
           npm install
           TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run populate-missing-placeholders $ENVIRONMENT
+      - name: install npm and build video-app-assets
+        working-directory: web-app-examples/video-app-quickstart
+        run: |
+          npm install
+          npm run build
       - name: deploy serverless
         working-directory: serverless-functions
         run: |

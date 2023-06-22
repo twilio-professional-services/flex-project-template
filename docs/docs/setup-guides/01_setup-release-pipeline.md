@@ -13,6 +13,8 @@ _~5 minutes_
 4. In github, navigate to the repository you created in step 1, click the settings tab -> secrets -> actions -> Click the "New repository secret" button:
    - Add the following to select which plugin is released
      - `PLUGIN_FOLDER` - this is `plugin-flex-ts-template-v2` unless you are using the `rename-template` script
+   - Add the following to choose deployment behavior
+     - `OVERWRITE_CONFIG` - if using an infrastructure-as-code deployment approach, set this to `true` to use the config in the repository as the source of truth. Otherwise, set this to `false` to allow configuration via the admin UI.
    - For each environment add the 3 env variables for that environment, for example, if its dev you would add
      - `TWILIO_ACCOUNT_SID_DEV` - the account sid you want to deploy to
      - `TWILIO_API_KEY_DEV` - the account key or key "sid" as its otherwise known

@@ -47,7 +47,7 @@ async function exists (path) {
     }
   });
 
-  const { ENVIRONMENT, TWILIO_ACCOUNT_SID, TWILIO_API_KEY, TWILIO_API_SECRET } =
+  const { ENVIRONMENT, TWILIO_ACCOUNT_SID, TWILIO_API_KEY, TWILIO_API_SECRET, OVERWRITE_CONFIG } =
     process.env;
 
   deployConfigurationData({
@@ -58,6 +58,7 @@ async function exists (path) {
       TWILIO_API_SECRET,
     },
     environment: ENVIRONMENT,
+    overwrite: OVERWRITE_CONFIG,
   });
 })();
 
@@ -72,7 +73,7 @@ Array.prototype.unique = function () {
   return a;
 };
 
-async function deployConfigurationData({ map, auth, environment }) {
+async function deployConfigurationData({ map, auth, environment, overwrite }) {
   try {
     const uiAttributes = map[environment];
     const uiAttributesCommon = map["common"]
@@ -88,7 +89,12 @@ async function deployConfigurationData({ map, auth, environment }) {
     } = await getConfiguration({ auth });
 
     console.log("Merging current configuraton with new configuration...");
-    const uiAttributesMerged = _.merge( uiAttributesCurrent, uiAttributesCommon, uiAttributes)
+    let uiAttributesMerged;
+    if (overwrite && overwrite.toLowerCase() === "true") {
+      uiAttributesMerged = _.merge(uiAttributesCurrent, uiAttributesCommon, uiAttributes);
+    } else {
+      uiAttributesMerged = _.merge({}, uiAttributesCommon, uiAttributes, uiAttributesCurrent);
+    }
     const trskillsMerged = tr_current
       ? tr_current.concat(taskrouter_skills).unique()
       : taskrouter_skills;

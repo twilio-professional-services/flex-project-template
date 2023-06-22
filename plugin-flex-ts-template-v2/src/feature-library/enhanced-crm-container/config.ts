@@ -3,6 +3,7 @@ import EnhancedCRMContainerConfig from './types/ServiceConfiguration';
 
 const {
   enabled = false,
+  url = '',
   should_display_url_when_no_tasks = false,
   display_url_when_no_tasks = '',
 } = (getFeatureFlags()?.features?.enhanced_crm_container as EnhancedCRMContainerConfig) || {};
@@ -17,4 +18,8 @@ export const shouldDisplayUrlWhenNoTasks = () => {
 
 export const displayUrlWhenNoTasks = () => {
   return display_url_when_no_tasks;
+};
+
+export const getUrl = () => {
+  return url;
 };

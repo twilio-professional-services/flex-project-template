@@ -10,7 +10,7 @@
         "enabled": false,
         "filter_teams_view": false
       },
-      "callbacks": {
+      "callback_and_voicemail": {
         "enabled": true,
         "allow_requeue": true,
         "max_attempts": 3,
@@ -33,6 +33,7 @@
       },
       "enhanced_crm_container": {
         "enabled": false,
+        "url": "https://www.bing.com/search?q={{task.from}}",
         "should_display_url_when_no_tasks": false,
         "display_url_when_no_tasks": "https://www.bing.com"
       },
@@ -79,7 +80,7 @@
       },
       "teams_view_filters": {
         "enabled": true,
-        "logFilters": true,
+        "log_filters": false,
         "applied_filters": {
           "email": true,
           "department": true,
@@ -155,6 +156,9 @@
         "enabled": true,
         "location": "CRM"
       },
+      "keyboard_shortcuts": {
+        "enabled": false
+      },
       "custom_hold_music": {
         "enabled": false,
         "url": ""
@@ -197,10 +201,7 @@
         "per_queue": {
           "exampleQueueSid": {
             "require_disposition": true,
-            "dispositions": [
-              "Promotional Sale",
-              "Renewal"
-            ]
+            "dispositions": ["Promotional Sale", "Renewal"]
           }
         }
       },
@@ -211,9 +212,15 @@
         "enabled": true,
         "enabled_for_agents": false
       },
+      "admin_ui": {
+        "enabled": true
+      },
       "localization": {
         "enabled": false,
         "show_menu": true
+      },
+      "park_interaction": {
+        "enabled": false
       }
     }
   }

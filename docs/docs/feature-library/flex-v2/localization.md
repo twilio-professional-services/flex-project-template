@@ -1,5 +1,6 @@
 ---
 sidebar_label: localization
+sidebar_position: 18
 title: localization
 ---
 
@@ -13,7 +14,7 @@ This feature provides a language selection dropdown in the Flex UI header, as we
 
 ## Setup and dependencies
 
-To enable the attribute viewer feature, under your `flex-config` attributes set the `localization` `enabled` flag to `true`:
+To enable the localization feature, under your `flex-config` attributes set the `localization` `enabled` flag to `true`:
 
 ```json
 "localization": {

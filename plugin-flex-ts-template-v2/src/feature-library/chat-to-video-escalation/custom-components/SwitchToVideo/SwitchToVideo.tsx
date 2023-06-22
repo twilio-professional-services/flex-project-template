@@ -64,7 +64,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, conv
     }
 
     await fetch(
-      `${serverlessProtocol}://${serverlessDomain}/features/chat-to-video-escalation/generate-unique-code?taskSid=${taskSid}`,
+      `${serverlessProtocol}://${serverlessDomain}/features/chat-to-video-escalation/generate-unique-code?taskSid=${taskSid}&protocol=${serverlessProtocol}`,
       options,
     )
       .then(async (response) => response.json())
@@ -77,7 +77,7 @@ const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, conv
         }
 
         Actions.invokeAction('SendMessage', {
-          body: templates[StringTemplates.InviteMessage]({ videoLink: response.full_url }),
+          body: `${templates[StringTemplates.InviteMessage]()} ${response.full_url}`,
           conversation,
           messageAttributes: {
             hasVideo: true,
