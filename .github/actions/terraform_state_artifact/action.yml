@@ -33,10 +33,11 @@ runs:
         npm install -g twilio-cli
 
         ### capture the sids from the envirnoment
-        # workspace
+        # WORKSPACE
         twilio api:taskrouter:v1:workspaces:list | select-string "Flex Task Assignment" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workspace_sid 
 
-        #assign to anyone workflow 
+        #WORKFLOWS
+        twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid | Write-Host
 
         $Repo = "${{ github.repository }}"
         $BaseUri = "https://api.github.com"
@@ -72,7 +73,7 @@ runs:
         }
 
         if ($tf_default_workflow_sid) {
-          terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.default $tf_workspace_sid/$tf_default_workflow_sid
+          terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone $tf_workspace_sid/$tf_default_workflow_sid
         }
 
         if ($tf_default_task_queue_sid) {

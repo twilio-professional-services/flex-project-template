@@ -4,7 +4,7 @@ output "workspace_sid" {
 }
 
 output "workflow_sid" {
-  value = twilio_taskrouter_workspaces_workflows_v1.default.sid
+  value = twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone.sid
   description = "Default workflow SID"
 }
 
