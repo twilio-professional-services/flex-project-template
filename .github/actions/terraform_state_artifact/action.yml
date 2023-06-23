@@ -30,7 +30,7 @@ runs:
       working-directory: ${{ inputs.path }}
       shell: pwsh
       run: |
-        ../../script.ps1
+        ../../script.ps1 ${{ github.repository }} ${{ github.token }}
     - uses: actions/upload-artifact@v2
       with:
         name: terraformstatefile
