@@ -48,6 +48,8 @@ runs:
         $tf_workspace_sid = "${{ env.TF_WORKSPACE_SID }}"
         $tf_default_workflow_sid = "${{ env.TF_DEFAULT_WORKFLOW_SID }}"
         $tf_default_task_queue_sid = "${{ env.TF_DEFAULT_TASK_QUEUE_SID }}"
+        $tf_sales_task_queue_sid = "${{ env.TF_SALES_TASK_QUEUE_SID }}"
+        $tf_support_task_queue_sid = "${{ env.TF_SUPPORT_TASK_QUEUE_SID }}"
         $tf_chat_task_channel_sid = "${{ env.TF_CHAT_TASK_CHANNEL_SID }}"
         $tf_voice_task_channel_sid = "${{ env.TF_VOICE_TASK_CHANNEL_SID }}"
         $tf_voice_flow_sid = "${{ env.TF_VOICE_FLOW_SID }}"
@@ -66,7 +68,15 @@ runs:
 
         if ($tf_default_task_queue_sid) {
           terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.everyone $tf_workspace_sid/$tf_default_task_queue_sid
-        }  
+        }
+
+        if ($tf_sales_task_queue_sid) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.sales $tf_workspace_sid/$tf_sales_task_queue_sid
+        }
+
+        if ($tf_support_task_queue_sid) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.support $tf_workspace_sid/$tf_support_task_queue_sid
+        }      
 
         if ($tf_chat_task_channel_sid) {
           terraform import module.routing.twilio_taskrouter_workspaces_task_channels_v1.chat $tf_workspace_sid/$tf_chat_task_channel_sid
