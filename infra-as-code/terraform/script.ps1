@@ -1,5 +1,5 @@
-write-host "repo $(env.REPO)"
-write-host "token $(env.TOKEN)"
+write-host "repo ${env.REPO}"
+write-host "token ${env.TOKEN}"
 write-host "path ${ env.PATH }"
 write-host "account ${ env.TWILIO_ACCOUNT_SID}"
 
