@@ -43,8 +43,8 @@ export const stringHook = () => ({
     [StringTemplates.DisablePrivacy]: 'Disable Private Mode',
     [StringTemplates.PrivacyOn]: 'Privacy On',
     [StringTemplates.PrivacyOff]: 'Privacy Off',
-    [StringTemplates.PanelBarge]: 'has joined',
-    [StringTemplates.PanelCoaching]: 'is coaching',
-    [StringTemplates.PanelMonitoring]: 'is monitoring',
+    [StringTemplates.PanelBarge]: '{{supervisor}} has joined',
+    [StringTemplates.PanelCoaching]: '{{supervisor}} is coaching',
+    [StringTemplates.PanelMonitoring]: '{{supervisor}} is monitoring',
   },
 });

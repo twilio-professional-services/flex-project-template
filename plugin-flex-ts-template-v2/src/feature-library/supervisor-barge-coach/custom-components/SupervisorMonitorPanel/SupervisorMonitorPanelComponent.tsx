@@ -27,32 +27,24 @@ export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
 
   const agentWorkerSID = useFlexSelector((state) => state?.flex?.supervisor?.stickyWorker?.worker?.sid);
 
-  const createSupervisorString = () => {
-    const supervisorString: any = [];
-    supervisorArray.forEach((s) => {
-      switch (s.status) {
-        case 'barge':
-          supervisorString.push(`${s.supervisor} ${templates[StringTemplates.PanelBarge]()}`);
-          break;
-        case 'coaching':
-          supervisorString.push(`${s.supervisor} ${templates[StringTemplates.PanelCoaching]()}`);
-          break;
-        case 'monitoring':
-          supervisorString.push(`${s.supervisor} ${templates[StringTemplates.PanelMonitoring]()}`);
-          break;
-        default:
-          break;
-      }
-    });
-    return supervisorString;
+  const supervisorSwitch = (status: string, supervisor: string) => {
+    switch (status) {
+      case 'barge':
+        return templates[StringTemplates.PanelBarge]({ supervisor });
+      case 'coaching':
+        return templates[StringTemplates.PanelCoaching]({ supervisor });
+      case 'monitoring':
+        return templates[StringTemplates.PanelMonitoring]({ supervisor });
+      default:
+        return null;
+    }
   };
   const supervisorsArray = () => {
-    return createSupervisorString().map((s: string) => (
-      <tr key={s}>
-        <td>{s}</td>
-      </tr>
+    return supervisorArray.map((supervisorArray) => (
+      <li key={`${Math.random()}`}>{supervisorSwitch(supervisorArray.status, supervisorArray.supervisor)}</li>
     ));
   };
+
   const syncUpdates = () => {
     if (agentWorkerSID) {
       // Let's subscribe to the sync doc as an agent/worker and check
