@@ -29,6 +29,14 @@ runs:
     - id: terraform
       working-directory: ${{ inputs.path }}
       run: |
+
+        cd ../../../../
+        npm install
+
+        $tf_workspace_sid = TWILIO_ACCOUNT_SID=${{ env.TF_VAR_TWILIO_ACCOUNT_SID }} TWILIO_API_KEY=${{ env.TF_VAR_TWILIO_API_KEY }} TWILIO_API_SECRET=${{ env.TF_VAR_TWILIO_API_SECRET }} twilio api:taskrouter:v1:workspaces:list | select-string "Flex Task Assignment" | ForEach-Object { ([string]$_).Split(" ")[0] }
+
+        cd -
+
         $Repo = "${{ github.repository }}"
         $BaseUri = "https://api.github.com"
         $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
@@ -45,7 +53,7 @@ runs:
         }
 
         $tfdir = "${{ inputs.path }}"
-        $tf_workspace_sid = "${{ env.TF_WORKSPACE_SID }}"
+        #$tf_workspace_sid = "${{ env.TF_WORKSPACE_SID }}"
         $tf_default_workflow_sid = "${{ env.TF_DEFAULT_WORKFLOW_SID }}"
         $tf_default_task_queue_sid = "${{ env.TF_DEFAULT_TASK_QUEUE_SID }}"
         $tf_sales_task_queue_sid = "${{ env.TF_SALES_TASK_QUEUE_SID }}"
