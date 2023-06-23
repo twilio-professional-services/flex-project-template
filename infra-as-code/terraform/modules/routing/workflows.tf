@@ -4,6 +4,12 @@ resource "twilio_taskrouter_workspaces_workflows_v1" "assign_to_anyone" {
   configuration = templatefile("../../taskrouter/assign_to_anyone.json", local.params)
 }
 
+resource "twilio_taskrouter_workspaces_workflows_v1" "callback" {
+  workspace_sid = twilio_taskrouter_workspaces_v1.flex.sid
+  friendly_name = "Callback"
+  configuration = templatefile("../../taskrouter/callback.json", local.params)
+}
+
 resource "twilio_taskrouter_workspaces_workflows_v1" "chat_transfer" {
   workspace_sid = twilio_taskrouter_workspaces_v1.flex.sid
   friendly_name = "Chat Transfer"
