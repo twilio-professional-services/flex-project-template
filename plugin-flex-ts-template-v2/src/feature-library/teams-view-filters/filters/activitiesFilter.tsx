@@ -1,7 +1,5 @@
-import { FilterDefinition, Manager } from '@twilio/flex-ui';
+import { FilterDefinition, Manager, FiltersListItemType } from '@twilio/flex-ui';
 
-import SelectFilter from '../custom-components/SelectFilter';
-import SelectFilterLabel from '../custom-components/SelectFilterLabel';
 import { StringTemplates } from '../flex-hooks/strings/TeamViewQueueFilter';
 
 const activities = Array.from(Manager.getInstance().store.getState().flex.worker.activities);
@@ -23,9 +21,6 @@ export const activitiesFilter = () =>
           default: false,
         }))
       : [],
-    customStructure: {
-      field: <SelectFilter IsMulti={true} />,
-      label: <SelectFilterLabel />,
-    },
+    type: FiltersListItemType.multiValue,
     condition: 'IN',
   } as FilterDefinition);
