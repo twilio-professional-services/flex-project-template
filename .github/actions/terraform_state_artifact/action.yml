@@ -50,9 +50,10 @@ runs:
         npm install -g twilio-cli
         terraform init
         
-        ###########################################################################################
-        ### THE FOLLOWING CAPTURES THE SIDS FROM THE ENVIRONMENT AND IMPORTS THEM INTO TERRAFORM ##
-        ###########################################################################################
+        #############################################################################
+        ### THE FOLLOWING CAPTURES THE SIDS FROM THE ENVIRONMENT AND IMPORTS THEM
+        ### INTO TERRAFORM IF THEY EXIST 
+        #############################################################################
 
         ### TASK ROUTER ###
 
@@ -77,7 +78,7 @@ runs:
         }
 
         if ($tf_workflow_sid_callback) {
-          terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.chat_transfer $tf_workspace_sid/$tf_workflow_sid_callback
+          terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.callback $tf_workspace_sid/$tf_workflow_sid_callback
         }
 
         # queues
