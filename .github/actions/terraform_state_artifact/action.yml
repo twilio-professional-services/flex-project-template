@@ -39,6 +39,11 @@ runs:
         #WORKFLOWS
         twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid | select-string "Assign To Anyone" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workflow_sid_assign_to_anyone 
 
+        #QUEUES
+        twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid | select-string "Everyone" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_queue_sid_everyone
+        twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid | select-string "Sales" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_queue_sid_sales
+        twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid | select-string "Support" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_queue_sid_support
+
         $Repo = "${{ github.repository }}"
         $BaseUri = "https://api.github.com"
         $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
@@ -57,9 +62,9 @@ runs:
         $tfdir = "${{ inputs.path }}"
         #$tf_workspace_sid = "${{ env.TF_WORKSPACE_SID }}"
         #$tf_default_workflow_sid = "${{ env.TF_DEFAULT_WORKFLOW_SID }}"
-        $tf_default_task_queue_sid = "${{ env.TF_DEFAULT_TASK_QUEUE_SID }}"
-        $tf_sales_task_queue_sid = "${{ env.TF_SALES_TASK_QUEUE_SID }}"
-        $tf_support_task_queue_sid = "${{ env.TF_SUPPORT_TASK_QUEUE_SID }}"
+        #$tf_default_task_queue_sid = "${{ env.TF_DEFAULT_TASK_QUEUE_SID }}"
+        #$tf_sales_task_queue_sid = "${{ env.TF_SALES_TASK_QUEUE_SID }}"
+        #$tf_support_task_queue_sid = "${{ env.TF_SUPPORT_TASK_QUEUE_SID }}"
         $tf_chat_task_channel_sid = "${{ env.TF_CHAT_TASK_CHANNEL_SID }}"
         $tf_voice_task_channel_sid = "${{ env.TF_VOICE_TASK_CHANNEL_SID }}"
         $tf_voice_flow_sid = "${{ env.TF_VOICE_FLOW_SID }}"
@@ -76,16 +81,16 @@ runs:
           terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone $tf_workspace_sid/$tf_workflow_sid_assign_to_anyone
         }
 
-        if ($tf_default_task_queue_sid) {
-          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.everyone $tf_workspace_sid/$tf_default_task_queue_sid
+        if ($tf_queue_sid_everyone) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.everyone $tf_workspace_sid/$tf_queue_sid_everyone
         }
 
-        if ($tf_sales_task_queue_sid) {
-          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.sales $tf_workspace_sid/$tf_sales_task_queue_sid
+        if ($tf_queue_sid_sales) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.sales $tf_workspace_sid/$tf_queue_sid_sales
         }
 
-        if ($tf_support_task_queue_sid) {
-          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.support $tf_workspace_sid/$tf_support_task_queue_sid
+        if ($tf_queue_sid_support) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.support $tf_workspace_sid/$tf_queue_sid_support
         }      
 
         if ($tf_chat_task_channel_sid) {
