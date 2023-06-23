@@ -41,17 +41,37 @@ export const SupervisorPrivateToggle = ({ task }: SupervisorPrivateToggleProps) 
         }),
       );
       if (coaching) {
-        SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID, supervisorFN, 'is Coaching', 'add');
-      } else if (barge) {
-        SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID, supervisorFN, 'has Joined', 'add');
-      } else {
+        const supervisorStatus = 'coaching';
+        const updateStatus = 'add';
         SyncDoc.initSyncDocSupervisors(
           agentWorkerSID,
           conferenceSID,
           myWorkerSID,
           supervisorFN,
-          'is Monitoring',
-          'add',
+          supervisorStatus,
+          updateStatus,
+        );
+      } else if (barge) {
+        const supervisorStatus = 'barge';
+        const updateStatus = 'add';
+        SyncDoc.initSyncDocSupervisors(
+          agentWorkerSID,
+          conferenceSID,
+          myWorkerSID,
+          supervisorFN,
+          supervisorStatus,
+          updateStatus,
+        );
+      } else {
+        const supervisorStatus = 'monitoring';
+        const updateStatus = 'add';
+        SyncDoc.initSyncDocSupervisors(
+          agentWorkerSID,
+          conferenceSID,
+          myWorkerSID,
+          supervisorFN,
+          supervisorStatus,
+          updateStatus,
         );
       }
       // If privateMode is false, toggle to true and remove the Supervisor from the Sync Doc

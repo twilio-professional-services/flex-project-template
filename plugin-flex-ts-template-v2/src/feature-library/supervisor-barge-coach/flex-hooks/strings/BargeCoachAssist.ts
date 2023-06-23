@@ -23,6 +23,9 @@ export enum StringTemplates {
   DisablePrivacy = 'PSBargeCoachDisablePrivacy',
   PrivacyOn = 'PSBargeCoachPrivacyOn',
   PrivacyOff = 'PSBargeCoachPrivacyOff',
+  PanelBarge = 'PSBargeCoachMonitorPanelBarge',
+  PanelCoaching = 'PSBargeCoachMonitorPanelCoaching',
+  PanelMonitoring = 'PSBargeCoachMonitorPanelMonitoring',
 }
 
 export const stringHook = () => ({
@@ -45,6 +48,9 @@ export const stringHook = () => ({
     [StringTemplates.DisablePrivacy]: 'Disable Private Mode',
     [StringTemplates.PrivacyOn]: 'Privacy On',
     [StringTemplates.PrivacyOff]: 'Privacy Off',
+    [StringTemplates.PanelBarge]: '{{supervisor}} has joined',
+    [StringTemplates.PanelCoaching]: '{{supervisor}} is coaching',
+    [StringTemplates.PanelMonitoring]: '{{supervisor}} is monitoring',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,
