@@ -13,6 +13,11 @@ variable "workflow_sid_callback" {
   description = "SID of the Callback workflow"
 }
 
+variable "workflow_sid_internal_call" {
+  type        = string
+  description = "SID of the internal_call workflow"
+}
+
 variable "chat_channel_sid" {
   type        = string
   description = "SID of the chat task channel"

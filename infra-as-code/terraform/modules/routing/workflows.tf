@@ -16,10 +16,17 @@ resource "twilio_taskrouter_workspaces_workflows_v1" "chat_transfer" {
   configuration = templatefile("../../taskrouter/chat_transfer.json", local.params)
 }
 
+resource "twilio_taskrouter_workspaces_workflows_v1" "internal_call" {
+  workspace_sid = twilio_taskrouter_workspaces_v1.flex.sid
+  friendly_name = "Internal Call"
+  configuration = templatefile("../../taskrouter/internal_call.json", local.params)
+}
+
 locals{
   params = {
     "QUEUE_SID_EVERYONE" = twilio_taskrouter_workspaces_task_queues_v1.everyone.sid
     "QUEUE_SID_SALES" = twilio_taskrouter_workspaces_task_queues_v1.sales.sid
     "QUEUE_SID_SUPPORT" = twilio_taskrouter_workspaces_task_queues_v1.support.sid
+    "QUEUE_SID_INTERNAL_CALLS" = twilio_taskrouter_workspaces_task_queues_v1.internal_calls.sid
   }
 }
