@@ -1,7 +1,8 @@
-$Repo = "${ github.repository }"
+$Repo = ${ github.repository }
+echo $Repo
 $BaseUri = "https://api.github.com"
 $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
-$Token = "${ github.token }" | ConvertTo-SecureString -AsPlainText
+$Token = ${ github.token } | ConvertTo-SecureString -AsPlainText
 $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token | Select-Object -ExpandProperty artifacts
 if ($RestResponse){
   $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url

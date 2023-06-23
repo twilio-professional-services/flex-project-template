@@ -28,8 +28,9 @@ runs:
     - uses: hashicorp/setup-terraform@v1
     - id: terraform
       working-directory: ${{ inputs.path }}
-      run: ../../script.ps1
       shell: pwsh
+      run: |
+        ../../script.ps1
     - uses: actions/upload-artifact@v2
       with:
         name: terraformstatefile
