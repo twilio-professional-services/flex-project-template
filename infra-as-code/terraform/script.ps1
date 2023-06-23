@@ -1,8 +1,8 @@
-write-host "repo $( github.repository )"
-write-host "env workspace $( env.TF_WORKSPACE_SID)"
-write-host "inputs $( inputs.path )"
+#write-host "repo $( github.repository )"
 write-host "arg0 $(args[0])"
 write-host "arg1 $(args[1])"
+write-host "env workspace $( env.TF_WORKSPACE_SID)"
+write-host "inputs $( inputs.path )"
 
 $Repo = ${ github.repository }
 $BaseUri = "https://api.github.com"
