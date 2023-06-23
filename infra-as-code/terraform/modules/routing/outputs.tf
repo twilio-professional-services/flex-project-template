@@ -5,7 +5,12 @@ output "workspace_sid" {
 
 output "workflow_sid" {
   value = twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone.sid
-  description = "Default workflow SID"
+  description = "Assign To Anyone workflow SID"
+}
+
+output "workflow_chat_transfer_sid" {
+  value = twilio_taskrouter_workspaces_workflows_v1.chat_transfer.sid
+  description = "Chat Transfer for conversation-transfer feature workflow SID"
 }
 
 output "chat_channel_sid" {

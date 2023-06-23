@@ -1,6 +1,6 @@
 variable "workflow_sid" {
   type        = string
-  description = "SID of the default workflow"
+  description = "SID of the Assign To Anyone workflow"
 }
 
 variable "chat_channel_sid" {
