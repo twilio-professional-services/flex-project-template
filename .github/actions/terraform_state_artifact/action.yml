@@ -142,6 +142,17 @@ runs:
           terraform import module.ivr.twilio_studio_flows_v2.chat $tf_flow_sid_chat_flow
         }
 
+        ### SERVERLESS DOMAIN ###
+        twilio api:serverless:v1:services:list | select-string "custom-flex-extensions-serverless" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_severless_sid_custom_flex
+        twilio api:serverless:v1:services:list | select-string "schedule-manager" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_severless_sid_schedule_manager
+
+        twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex | select-sstring "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_var_severless_domain_custom_flex
+        twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager | select-sstring "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_var_severless_domain_schedule_manager
+
+        #############################################################################
+        ### END OF SID EVALUATION
+        #############################################################################
+
         $terraformapply = "${{ inputs.apply }}"
         $custom_plan_flags = "${{ inputs.custom_plan_flags }}"
         $custom_apply_flags = "${{ inputs.custom_apply_flags }}"

@@ -27,3 +27,13 @@ variable "voice_channel_sid" {
   type        = string
   description = "SID of voice task channel"
 }
+
+variable "serverless_domain_custom_flex" {
+  type        = string
+  description = "domain of the serverless backend for custom flex extensions"
+}
+
+variable "severless_domain_schedule_manager" {
+  type        = string
+  description = "domain of the serverless backend for schedule manager"
+}
