@@ -1,7 +1,7 @@
 write-host "repo ${ repository }"
-write-host "token $( token )"
-write-host "path $( path )"
-write-host "env workspace $( env.TF_WORKSPACE_SID)"
+write-host "token ${ token }"
+write-host "path ${ path }"
+write-host "env workspace ${ env.TF_WORKSPACE_SID}"
 
 
 $Repo = ${ github.repository }
