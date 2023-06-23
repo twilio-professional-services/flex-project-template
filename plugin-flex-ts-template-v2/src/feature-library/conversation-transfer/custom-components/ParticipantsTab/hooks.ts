@@ -88,7 +88,9 @@ export const getUpdatedParticipantDetails = async (
 
     if (intertactionParticipant) {
       const friendlyName =
-        conversationParticipant.friendlyName || intertactionParticipant.mediaProperties?.messagingBinding.address;
+        conversationParticipant.friendlyName ||
+        intertactionParticipant.mediaProperties?.messagingBinding?.address ||
+        intertactionParticipant.mediaProperties?.identity;
       const participantType = intertactionParticipant.type;
       const isMe = conversationParticipant.source.identity === myIdentity;
       const interactionParticipantSid = intertactionParticipant.participantSid;
