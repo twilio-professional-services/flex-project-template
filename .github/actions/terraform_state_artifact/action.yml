@@ -29,12 +29,26 @@ runs:
     - id: terraform
       working-directory: ${{ inputs.path }}
       env:
+        INPUTS_APPLY: ${{ inputs.apply }}
+        INPUTS_CUSTOM_PLAN_FLAGS: ${{ inputs.custom_plan_flags }}
+        INPUTS_CUSTOM_APPLY_FLAGS: ${{ inputs.custom_apply_flags }}
         REPO: ${{ github.repository }}
         TOKEN: ${{ github.token }}
+        ENCRYPTIONKEY: ${{ inputs.encryptionkey }}
         PATH: ${{ inputs.path }}
         TWILIO_ACCOUNT_SID: ${{ env.TF_VAR_TWILIO_ACCOUNT_SID }}
         TWILIO_API_KEY: ${{ env.TF_VAR_TWILIO_API_KEY }}
         TWILIO_API_SECRET: ${{ env.TF_VAR_TWILIO_API_SECRET }}
+        TF_WORKSPACE_SID: ${{ env.TF_WORKSPACE_SID }}
+        TF_DEFAULT_WORKFLOW_SID: ${{ env.TF_DEFAULT_WORKFLOW_SID }}
+        TF_DEFAULT_TASK_QUEUE_SID: ${{ env.TF_DEFAULT_TASK_QUEUE_SID }}
+        TF_SALES_TASK_QUEUE_SID: ${{ env.TF_SALES_TASK_QUEUE_SID }}
+        TF_SUPPORT_TASK_QUEUE_SID: ${{ env.TF_SUPPORT_TASK_QUEUE_SID }}
+        TF_CHAT_TASK_CHANNEL_SID: ${{ env.TF_CHAT_TASK_CHANNEL_SID }}
+        TF_VOICE_TASK_CHANNEL_SID: ${{ env.TF_VOICE_TASK_CHANNEL_SID }}
+        TF_VOICE_FLOW_SID: ${{ env.TF_VOICE_FLOW_SID }}
+        TF_MESSAGING_FLOW_SID: ${{ env.TF_MESSAGING_FLOW_SID }}
+        TF_CHAT_FLOW_SID: ${{ env.TF_CHAT_FLOW_SID }}
       run: ../../script.ps1 
       shell: pwsh
     - uses: actions/upload-artifact@v2

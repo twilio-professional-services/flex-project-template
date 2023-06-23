@@ -4,10 +4,10 @@ write-host "path $env:PATH"
 write-host "account $env:TWILIO_ACCOUNT_SID"
 
 
-$Repo = ${ env.REPO }
+$Repo = $env:REPO
 $BaseUri = "https://api.github.com"
 $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
-$Token = ${ env.TOKEN } | ConvertTo-SecureString -AsPlainText
+$Token = $env:TOKEN | ConvertTo-SecureString -AsPlainText
 $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token | Select-Object -ExpandProperty artifacts
 if ($RestResponse){
   $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
@@ -15,21 +15,21 @@ if ($RestResponse){
   if ($MostRecentArtifactURI){
     Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
     Expand-Archive ./state.zip
-    openssl enc -d -in ./state/terraform.tfstate.enc -aes-256-cbc -pbkdf2 -pass pass:"${ inputs.encryptionkey }" -out ./terraform.tfstate
+    openssl enc -d -in ./state/terraform.tfstate.enc -aes-256-cbc -pbkdf2 -pass pass:"$env:ENCRYPTIONKEY" -out ./terraform.tfstate
   }
 }
 
-$tfdir = "${ inputs.path }"
-$tf_workspace_sid = "${ env.TF_WORKSPACE_SID }"
-$tf_default_workflow_sid = "${ env.TF_DEFAULT_WORKFLOW_SID }"
-$tf_default_task_queue_sid = "${ env.TF_DEFAULT_TASK_QUEUE_SID }"
-$tf_sales_task_queue_sid = "${ env.TF_SALES_TASK_QUEUE_SID }"
-$tf_support_task_queue_sid = "${ env.TF_SUPPORT_TASK_QUEUE_SID }"
-$tf_chat_task_channel_sid = "${ env.TF_CHAT_TASK_CHANNEL_SID }"
-$tf_voice_task_channel_sid = "${ env.TF_VOICE_TASK_CHANNEL_SID }"
-$tf_voice_flow_sid = "${ env.TF_VOICE_FLOW_SID }"
-$tf_messaging_flow_sid = "${ env.TF_MESSAGING_FLOW_SID }"
-$tf_chat_flow_sid = "${ env.TF_CHAT_FLOW_SID }"
+$tfdir = "$env:path"
+$tf_workspace_sid = "$env:TF_WORKSPACE_SID"
+$tf_default_workflow_sid = "$env:TF_DEFAULT_WORKFLOW_SID"
+$tf_default_task_queue_sid = "$env:TF_DEFAULT_TASK_QUEUE_SID"
+$tf_sales_task_queue_sid = "$env:TF_SALES_TASK_QUEUE_SID"
+$tf_support_task_queue_sid = "$env:TF_SUPPORT_TASK_QUEUE_SID"
+$tf_chat_task_channel_sid = "$env:TF_CHAT_TASK_CHANNEL_SID"
+$tf_voice_task_channel_sid = "$env:TF_VOICE_TASK_CHANNEL_SID"
+$tf_voice_flow_sid = "$env:TF_VOICE_FLOW_SID"
+$tf_messaging_flow_sid = "$env:TF_MESSAGING_FLOW_SID"
+$tf_chat_flow_sid = "$env:TF_CHAT_FLOW_SID"
 
 terraform init
 
@@ -73,9 +73,10 @@ if ($tf_chat_flow_sid) {
   terraform import module.ivr.twilio_studio_flows_v2.chat $tf_chat_flow_sid
 }
 
-$terraformapply = "${ inputs.apply }"
-$custom_plan_flags = "${ inputs.custom_plan_flags }"
-$custom_apply_flags = "${ inputs.custom_apply_flags }"
+$terraformapply = "$env:INPUTS_APPLY"
+$custom_plan_flags = "$env:custom_plan_flags"
+$custom_apply_flags = "$env:custom_apply_flags"
+
 if ($terraformapply -eq "false"){
   $terraformapply = $false
 }
@@ -85,5 +86,5 @@ if ($terraformapply){
 }
 $StateExists = Test-Path -Path ./terraform.tfstate -PathType Leaf
 if ($StateExists){
-  openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"${ inputs.encryptionkey }" -out ./terraform.tfstate.enc
+  openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"$env:ENCRYPTIONKEY }" -out ./terraform.tfstate.enc
 }
