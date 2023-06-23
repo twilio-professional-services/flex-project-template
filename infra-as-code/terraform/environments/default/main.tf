@@ -19,7 +19,7 @@ terraform {
 
 module "ivr" {
   source           = "../../modules/ivr"
-  workflow_sid = module.routing.workflow_sid
+  workflow_sid_assign_to_anyone = module.routing.workflow_sid_assign_to_anyone
   chat_channel_sid = module.routing.chat_channel_sid
   voice_channel_sid = module.routing.voice_channel_sid
 }

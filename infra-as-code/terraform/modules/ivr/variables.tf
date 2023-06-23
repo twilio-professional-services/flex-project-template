@@ -1,4 +1,4 @@
-variable "workflow_sid" {
+variable "workflow_sid_assign_to_anyone" {
   type        = string
   description = "SID of the Assign To Anyone workflow"
 }

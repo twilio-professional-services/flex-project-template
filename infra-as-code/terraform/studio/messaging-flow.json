@@ -46,7 +46,7 @@
             "x": 30,
             "y": 180
           },
-          "workflow": "${WORKFLOW_SID}",
+          "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
           "channel": "${CHAT_CHANNEL_SID}",
           "attributes": "{\"name\": \"{{trigger.message.ChannelAttributes.from}}\", \"channelType\": \"{{trigger.message.ChannelAttributes.channel_type}}\", \"channelSid\": \"{{trigger.message.ChannelSid}}\"}"
         }
@@ -70,7 +70,7 @@
             "x": 380,
             "y": 180
           },
-          "workflow": "${WORKFLOW_SID}",
+          "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
           "channel": "${CHAT_CHANNEL_SID}",
           "attributes": "{}"
         }

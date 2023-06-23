@@ -42,7 +42,7 @@
             "x": 30,
             "y": 180
           },
-          "workflow": "${WORKFLOW_SID}",
+          "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
           "channel": "${VOICE_CHANNEL_SID}",
           "attributes": "{ \"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\" }"
         }
