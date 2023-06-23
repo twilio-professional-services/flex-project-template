@@ -18,6 +18,7 @@ export enum StringTemplates {
   EmailAddress = 'PSTeamsViewEmailAddress',
   QueueEligibility = 'PSTeamsViewQueueEligibility',
   Team = 'PSTeamsViewTeam',
+  Activities = 'PSTeamsViewActivities',
 }
 
 export const stringHook = () => ({
@@ -36,6 +37,7 @@ export const stringHook = () => ({
     [StringTemplates.EmailAddress]: 'Email Address',
     [StringTemplates.QueueEligibility]: 'Queue Eligibility',
     [StringTemplates.Team]: 'Team',
+    [StringTemplates.Activities]: 'Activities',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,

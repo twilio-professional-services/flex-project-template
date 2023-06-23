@@ -82,6 +82,7 @@
         "enabled": true,
         "log_filters": false,
         "applied_filters": {
+          "activities": true,
           "email": true,
           "department": true,
           "queue_no_worker_data": true,
