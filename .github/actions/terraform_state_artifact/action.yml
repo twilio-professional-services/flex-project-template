@@ -36,6 +36,11 @@ runs:
         $TWILIO_API_KEY="${{ env.TF_VAR_TWILIO_API_KEY }}"
         $TWILIO_API_SECRET="${{ env.TF_VAR_TWILIO_API_SECRET }}"
 
+        Write-Host "running 1"
+        twilio api:taskrouter:v1:workspaces:list
+        Write-Host "running 2"
+        twilio api:taskrouter:v1:workspaces:list | Write-Host
+        Write-Host "running 3"
         twilio api:taskrouter:v1:workspaces:list | select-string "Flex Task Assignment" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workspace_sid  
 
         $Repo = "${{ github.repository }}"
