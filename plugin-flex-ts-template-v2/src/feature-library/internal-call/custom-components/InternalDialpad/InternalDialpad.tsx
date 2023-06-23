@@ -25,11 +25,14 @@ const InternalDialpad = (props: OwnProps) => {
       return;
     }
     const { contact_uri: worker_contact_uri } = props.manager.workerClient.attributes as WorkerAttributes;
+    const { taskrouter_offline_activity_sid } = props.manager.serviceConfiguration;
 
     const workerQuery = await props.manager.insightsClient.instantQuery('tr-worker');
     workerQuery.on('searchResult', (items: { [key: string]: InstantQueryWorker }) => {
       const initialList = Object.keys(items).map((workerSid: string) => items[workerSid]);
-      const availableList = initialList.filter((worker) => worker.activity_name !== 'Offline');
+      const availableList = initialList.filter(
+        (worker) => worker.worker_activity_sid !== taskrouter_offline_activity_sid,
+      );
       setWorkerList(availableList);
     });
 
