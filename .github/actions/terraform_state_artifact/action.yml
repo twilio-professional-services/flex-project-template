@@ -32,16 +32,11 @@ runs:
 
         npm install -g twilio-cli
 
-        $TWILIO_ACCOUNT_SID="${{ env.TF_VAR_TWILIO_ACCOUNT_SID }}"
-        $TWILIO_API_KEY="${{ env.TF_VAR_TWILIO_API_KEY }}"
-        $TWILIO_API_SECRET="${{ env.TF_VAR_TWILIO_API_SECRET }}"
+        ### capture the sids from the envirnoment
+        # workspace
+        twilio api:taskrouter:v1:workspaces:list | select-string "Flex Task Assignment" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workspace_sid 
 
-        Write-Host "running 1"
-        twilio api:taskrouter:v1:workspaces:list
-        Write-Host "running 2"
-        twilio api:taskrouter:v1:workspaces:list | Write-Host
-        Write-Host "running 3"
-        twilio api:taskrouter:v1:workspaces:list | select-string "Flex Task Assignment" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workspace_sid  
+        #assign to anyone workflow 
 
         $Repo = "${{ github.repository }}"
         $BaseUri = "https://api.github.com"
