@@ -29,9 +29,12 @@ runs:
     - id: terraform
       working-directory: ${{ inputs.path }}
       env:
-        repository: ${{ github.repository }}
-        token: ${{ github.token }}
-        path: ${{ inputs.path }}
+        REPO: ${{ github.repository }}
+        TOKEN: ${{ github.token }}
+        PATH: ${{ inputs.path }}
+        TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID_DEV }}
+        TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_DEV }}
+        TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_DEV }}
       run: ../../script.ps1 
       shell: pwsh
     - uses: actions/upload-artifact@v2
