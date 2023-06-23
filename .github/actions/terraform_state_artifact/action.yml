@@ -65,9 +65,14 @@ runs:
 
         # workflows
         twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid | select-string "Assign To Anyone" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workflow_sid_assign_to_anyone 
+        twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid | select-string "Chat Transfer" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workflow_sid_chat_transfer 
 
         if ($tf_workflow_sid_assign_to_anyone) {
           terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone $tf_workspace_sid/$tf_workflow_sid_assign_to_anyone
+        }
+
+        if ($tf_workflow_sid_chat_transfer) {
+          terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.chat_transfer $tf_workspace_sid/$tf_workflow_sid_chat_transfer
         }
 
         # queues
