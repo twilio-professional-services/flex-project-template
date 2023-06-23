@@ -48,7 +48,7 @@ const InternalDialpad = (props: OwnProps) => {
   const handleWorkersListUpdate = debounce(
     (e) => {
       if (e) {
-        setWorkers(`data.attributes.full_name CONTAINS "${e}"`);
+        setWorkers(`(data.attributes.full_name CONTAINS "${e}" OR data.friendly_name CONTAINS "${e}")`);
       }
     },
     250,
@@ -103,12 +103,12 @@ const InternalDialpad = (props: OwnProps) => {
           autocomplete
           items={workerList}
           inputValue={inputText}
-          itemToString={(item) => item.attributes.full_name}
+          itemToString={(item) => item.attributes.full_name || item.friendly_name}
           labelText={templates[StringTemplates.SelectAgent]()}
           onInputValueChange={({ inputValue }) => handleInput(inputValue as string)}
           onIsOpenChange={({ isOpen }) => handleOpenChange(isOpen)}
           onSelectedItemChange={({ selectedItem }) => selectWorker(selectedItem)}
-          optionTemplate={(item) => <>{item.attributes.full_name}</>}
+          optionTemplate={(item) => <>{item.attributes.full_name || item.friendly_name}</>}
         />
         <Flex hAlignContent="center">
           <IconButton variant="primary" icon="Call" disabled={!selectedWorker} onClick={makeCall} />
