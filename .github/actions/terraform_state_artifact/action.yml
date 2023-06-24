@@ -62,11 +62,7 @@ runs:
         twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex | select-string "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[4] } | tee-object -variable TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
         twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager | select-string "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[4] } | tee-object -variable TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
 
-        write-host my variable $TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX $TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
-
-
-        $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = $TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
-        $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = $TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
+        write-host my variable $TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
 
         terraform init
 
@@ -167,7 +163,7 @@ runs:
         if ($terraformapply -eq "false"){
           $terraformapply = $false
         }
-        terraform plan $custom_plan_flags
+        terraform plan $custom_plan_flags -var 'SERVERLESS_DOMAIN_CUSTOM_FLEX=$SERVERLESS_DOMAIN_CUSTOM_FLEX'
         if ($terraformapply){
           terraform apply -auto-approve $custom_apply_flags
         }
