@@ -28,22 +28,22 @@ variable "voice_channel_sid" {
   description = "SID of voice task channel"
 }
 
-variable "SERVERLESS_DOMAIN_CUSTOM_FLEX" {
+variable "domain_custom_flex" {
   type        = string
   sensitive   = true
   description = "serverless domain for flex plugin"
   validation {
-    condition     = length(var.SERVERLESS_DOMAIN_CUSTOM_FLEX) > 34 && substr(var.SERVERLESS_DOMAIN_CUSTOM_FLEX, 0, 34) == "custom-flex-extensions-serverless-"
-    error_message = "SERVERLESS_DOMAIN_CUSTOM_FLEX expected to start with \"custom-flex-extensions-serverless-\"."
+    condition     = length(var.domain_custom_flex) > 34 && substr(var.domain_custom_flex, 0, 34) == "custom-flex-extensions-serverless-"
+    error_message = "domain_custom_flex expected to start with \"custom-flex-extensions-serverless-\"."
   }
 }
 
-variable "SERVERLESS_DOMAIN_SCHEDULE_MANAGER" {
+variable "domain_schedule_manager" {
   type        = string
   sensitive   = true
   description = "serverless domain schedule manager for flex plugin"
   validation {
-    condition     = length(var.SERVERLESS_DOMAIN_SCHEDULE_MANAGER) > 17 && substr(var.SERVERLESS_DOMAIN_SCHEDULE_MANAGER, 0, 17) == "schedule-manager-"
-    error_message = "SERVERLESS_DOMAIN_SCHEDULE_MANAGER expected to start with \"custom-flex-extensions-serverless-\"."
+    condition     = length(var.domain_schedule_manager) > 17 && substr(var.domain_schedule_manager, 0, 17) == "schedule-manager-"
+    error_message = "domain_schedule_manager expected to start with \"schedule-manager-\"."
   }
 }

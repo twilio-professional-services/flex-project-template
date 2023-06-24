@@ -25,6 +25,9 @@ module "ivr" {
   workflow_sid_internal_call = module.routing.workflow_sid_internal_call
   chat_channel_sid = module.routing.chat_channel_sid
   voice_channel_sid = module.routing.voice_channel_sid
+  domain_custom_flex = var.SERVERLESS_DOMAIN_CUSTOM_FLEX
+  domain_schedule_manager = var.SERVERLESS_DOMAIN_SCHEDULE_MANAGER
+
 }
 
 module "routing" {
