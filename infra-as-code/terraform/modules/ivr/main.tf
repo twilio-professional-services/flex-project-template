@@ -28,8 +28,8 @@ resource "twilio_studio_flows_v2" "voice" {
 locals{
   params = {
     "WORKFLOW_SID_ASSIGN_TO_ANYONE" = var.workflow_sid_assign_to_anyone
-    "SERVERLESS_DOMAIN_SCHEDULE_MANAGER" = var.severless_domain_schedule_manager
-    "SERVERLESS_DOMAIN_CUSTOM_FLEX" = var.severless_domain_custom_flex
+    "DOMAIN_FLEX_BACKEND" = var.SERVERLESS_DOMAIN_CUSTOM_FLEX
+    "DOMAIN_SCHEDULE_MANAGER" = var.SERVERLESS_DOMAIN_SCHEDULE_MANAGER
     "CHAT_CHANNEL_SID" = var.chat_channel_sid
     "VOICE_CHANNEL_SID" = var.voice_channel_sid
   }
