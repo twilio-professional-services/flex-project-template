@@ -48,7 +48,8 @@ runs:
         $tfdir = "${{ inputs.path }}"
 
         npm install -g twilio-cli
-        
+
+        terraform init
         
         #############################################################################
         ### THE FOLLOWING CAPTURES THE SIDS FROM THE ENVIRONMENT AND IMPORTS THEM
@@ -62,12 +63,8 @@ runs:
         twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex | select-string "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[4] } | tee-object -variable TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
         twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager | select-string "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[4] } | tee-object -variable TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
 
-        write-host my variable $TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
-
         $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = $TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
         $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = $TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
-
-        terraform init
 
         ### TASK ROUTER ###
 

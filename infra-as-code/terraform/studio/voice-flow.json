@@ -42,6 +42,7 @@
             "x": 30,
             "y": 180
           },
+          "waitUrlMethod": "POST",
           "waitUrl": "https://${DOMAIN_CUSTOM_FLEX}/features/callback-and-voicemail/studio/wait-experience?mode=initialize",
           "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
           "channel": "${VOICE_CHANNEL_SID}",
