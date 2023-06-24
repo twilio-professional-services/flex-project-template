@@ -16,13 +16,13 @@ variable "TWILIO_API_SECRET" {
   description = "Twilio API secret"
 }
 
-variable "serverless_domain_custom_flex" {
+variable "SERVERLESS_DOMAIN_CUSTOM_FLEX" {
   type        = string
   sensitive   = true
   description = "serverless domain for flex plugin"
 }
 
-variable "serverless_domain_schedule_manager" {
+variable "SERVERLESS_DOMAIN_SCHEDULE_MANAGER" {
   type        = string
   sensitive   = true
   description = "serverless domain schedule manager for flex plugin"
