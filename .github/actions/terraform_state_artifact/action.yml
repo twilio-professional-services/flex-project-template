@@ -59,8 +59,8 @@ runs:
         twilio api:serverless:v1:services:list | select-string "custom-flex-extensions-serverless" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_severless_sid_custom_flex
         twilio api:serverless:v1:services:list | select-string "schedule-manager" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_severless_sid_schedule_manager
 
-        twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex | select-string "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
-        twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager | select-string "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
+        twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex | select-string "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[2] } | tee-object -variable env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
+        twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager | select-string "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[2] } | tee-object -variable env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
 
         terraform init
 
