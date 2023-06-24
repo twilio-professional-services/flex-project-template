@@ -30,7 +30,6 @@ variable "voice_channel_sid" {
 
 variable "domain_custom_flex" {
   type        = string
-  sensitive   = true
   description = "serverless domain for flex plugin"
   validation {
     condition     = length(var.domain_custom_flex) > 34 && substr(var.domain_custom_flex, 0, 34) == "custom-flex-extensions-serverless-"
@@ -40,7 +39,6 @@ variable "domain_custom_flex" {
 
 variable "domain_schedule_manager" {
   type        = string
-  sensitive   = true
   description = "serverless domain schedule manager for flex plugin"
   validation {
     condition     = length(var.domain_schedule_manager) > 17 && substr(var.domain_schedule_manager, 0, 17) == "schedule-manager-"

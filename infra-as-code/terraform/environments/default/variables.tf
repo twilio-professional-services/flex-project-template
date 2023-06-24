@@ -18,7 +18,6 @@ variable "TWILIO_API_SECRET" {
 
 variable "SERVERLESS_DOMAIN_CUSTOM_FLEX" {
   type        = string
-  sensitive   = true
   description = "serverless domain for flex plugin"
   validation {
     condition     = length(var.SERVERLESS_DOMAIN_CUSTOM_FLEX) > 34 && substr(var.SERVERLESS_DOMAIN_CUSTOM_FLEX, 0, 34) == "custom-flex-extensions-serverless-"
@@ -28,7 +27,6 @@ variable "SERVERLESS_DOMAIN_CUSTOM_FLEX" {
 
 variable "SERVERLESS_DOMAIN_SCHEDULE_MANAGER" {
   type        = string
-  sensitive   = true
   description = "serverless domain schedule manager for flex plugin"
   validation {
     condition     = length(var.SERVERLESS_DOMAIN_SCHEDULE_MANAGER) > 17 && substr(var.SERVERLESS_DOMAIN_SCHEDULE_MANAGER, 0, 17) == "schedule-manager-"

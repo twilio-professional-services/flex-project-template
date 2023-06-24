@@ -64,6 +64,9 @@ runs:
 
         write-host my variable $TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
 
+        $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = $TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
+        $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = $TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
+
         terraform init
 
         ### TASK ROUTER ###
@@ -72,7 +75,7 @@ runs:
         twilio api:taskrouter:v1:workspaces:list | select-string "Flex Task Assignment" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workspace_sid 
 
         if ($tf_workspace_sid) {
-          terraform -var 'SERVERLESS_DOMAIN_CUSTOM_FLEX=$(TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX)' import module.routing.twilio_taskrouter_workspaces_v1.flex $tf_workspace_sid 
+          terraform import module.routing.twilio_taskrouter_workspaces_v1.flex $tf_workspace_sid 
         }
 
         # workflows
