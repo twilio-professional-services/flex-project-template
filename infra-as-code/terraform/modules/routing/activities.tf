@@ -22,10 +22,4 @@ resource "twilio_taskrouter_workspaces_activities_v1" "break" {
   available     = false
 }
 
-resource "twilio_taskrouter_workspaces_activities_v1" "on_a_task" {
-  workspace_sid = twilio_taskrouter_workspaces_v1.flex.sid
-  friendly_name = "On A Task"
-  available     = true
-}
-
 
