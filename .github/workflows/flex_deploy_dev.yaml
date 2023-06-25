@@ -9,25 +9,22 @@ on:
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
 
-environment: dev
-env:
-  ENVIRONMENT: dev
-  TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-  TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-  TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-  PLUGIN_FOLDER: plugin-flex-ts-template-v2
-  OVERWRITE_CONFIG: ${{ vars.OVERWRITE_CONFIG }}
 
 jobs:
   deploy-serverless:
     runs-on: ubuntu-latest
+    environment: dev
+    env:
+      ENVIRONMENT: dev
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-     
       - name: install npm and apply missing environment variables
         run: |
           npm install
@@ -46,6 +43,12 @@ jobs:
 
   deploy-schedule-manager:
     runs-on: ubuntu-latest
+    environment: dev
+    env:
+      ENVIRONMENT: dev
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
@@ -64,6 +67,13 @@ jobs:
 
   deploy-flex-config:
     runs-on: ubuntu-latest
+    environment: dev
+    env:
+      ENVIRONMENT: dev
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      OVERWRITE_CONFIG: ${{ vars.OVERWRITE_CONFIG }}
     needs: [deploy-serverless, deploy-schedule-manager]
     steps:
       - uses: actions/checkout@v3
@@ -84,6 +94,12 @@ jobs:
 
   deploy-release-plugin:
     runs-on: ubuntu-latest
+    environment: dev
+    env:
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      PLUGIN_FOLDER: plugin-flex-ts-template-v2
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
