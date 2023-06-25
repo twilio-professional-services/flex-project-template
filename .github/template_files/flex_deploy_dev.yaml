@@ -9,28 +9,26 @@ on:
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  ENVIRONMENT: dev
-  TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID_DEV }}
-  TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY_DEV }}
-  TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET_DEV }}
-  PLUGIN_FOLDER: ${{ secrets.PLUGIN_FOLDER }}
-  OVERWRITE_CONFIG: ${{ secrets.OVERWRITE_CONFIG }}
 
 jobs:
   deploy-serverless:
     runs-on: ubuntu-latest
+    environment: dev
+    env:
+      ENVIRONMENT: dev
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-     
       - name: install npm and apply missing environment variables
         run: |
           npm install
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run populate-missing-placeholders $ENVIRONMENT
+          npm run populate-missing-placeholders $ENVIRONMENT
       - name: install npm and build video-app-assets
         working-directory: web-app-examples/video-app-quickstart
         run: |
@@ -41,22 +39,108 @@ jobs:
         run: |
           npm install
           npm run install-serverless-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy:$ENVIRONMENT
+          npm run deploy:$ENVIRONMENT
 
-  deploy-flex-config:
+  deploy-schedule-manager:
     runs-on: ubuntu-latest
-    needs: deploy-serverless
+    environment: dev
+    env:
+      ENVIRONMENT: dev
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: install top-level packages
+        run: |
+          npm install
+      - name: deploy serverless-schedule-manager
+        working-directory: serverless-schedule-manager
+        run: |
+          npm install
+          npm run install-serverless-plugin
+          npm run deploy:$ENVIRONMENT
 
+  deploy-terraform:
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      ENVIRONMENT: dev
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+    needs: [deploy-serverless, deploy-schedule-manager]
+    steps:
+      - uses: actions/checkout@v1 
+      - uses: ./.github/actions/terraform_state_artifact
+        with:
+          encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
+          path: ./infra-as-code/terraform/environments/default
+
+  ####################################################
+  ### NOTE: This job can be removed after the first 
+  ### successful deploy it is required to align
+  ### serverless hostname with terraform and then 
+  ### sids from terraform deploy back with serverless
+  #####################################################
+  deploy-serverless-post-terraform:
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      ENVIRONMENT: dev
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+    needs: [deploy-terraform]
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
       - name: install npm and apply missing environment variables
         run: |
           npm install
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run populate-missing-placeholders $ENVIRONMENT
+          npm run populate-missing-placeholders $ENVIRONMENT
+      - name: install npm and build video-app-assets
+        working-directory: web-app-examples/video-app-quickstart
+        run: |
+          npm install
+          npm run build
+      - name: deploy serverless
+        working-directory: serverless-functions
+        run: |
+          npm install
+          npm run install-serverless-plugin
+          npm run deploy:$ENVIRONMENT
+
+  deploy-flex-config:
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      ENVIRONMENT: dev
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      OVERWRITE_CONFIG: ${{ vars.OVERWRITE_CONFIG }}
+    needs: [deploy-serverless, deploy-schedule-manager]
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: install npm and apply missing environment variables
+        run: |
+          npm install
+          npm run populate-missing-placeholders $ENVIRONMENT
     
       - name: deploy flex config
         working-directory: flex-config
@@ -66,6 +150,12 @@ jobs:
 
   deploy-release-plugin:
     runs-on: ubuntu-latest
+    environment: dev
+    env:
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      PLUGIN_FOLDER: plugin-flex-ts-template-v2
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
@@ -81,5 +171,5 @@ jobs:
           cd $PLUGIN_FOLDER
           npm install
           npm run install-flex-plugin
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }} npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
-          TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID_DEV }} TWILIO_API_KEY=${{ secrets.TWILIO_API_KEY_DEV }} TWILIO_API_SECRET=${{ secrets.TWILIO_API_SECRET_DEV }}  npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
+          npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
+          npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
