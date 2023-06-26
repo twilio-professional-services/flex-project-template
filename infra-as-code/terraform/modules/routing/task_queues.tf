@@ -9,7 +9,7 @@ resource "twilio_taskrouter_workspaces_task_queues_v1" "everyone" {
 resource "twilio_taskrouter_workspaces_task_queues_v1" "sales" {
   workspace_sid  = twilio_taskrouter_workspaces_v1.flex.sid
   friendly_name  = "Sales"
-  target_workers = "routing.skills HAS 'sales'"
+  target_workers = "routing.skills HAS 'Sales'"
   max_reserved_workers = 1
   task_order = "FIFO"
 }
@@ -17,7 +17,7 @@ resource "twilio_taskrouter_workspaces_task_queues_v1" "sales" {
 resource "twilio_taskrouter_workspaces_task_queues_v1" "support" {
   workspace_sid  = twilio_taskrouter_workspaces_v1.flex.sid
   friendly_name  = "Support"
-  target_workers = "routing.skills HAS 'support'"
+  target_workers = "routing.skills HAS 'Support'"
   max_reserved_workers = 1
   task_order = "FIFO"
 }
