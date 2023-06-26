@@ -67,7 +67,7 @@ jobs:
           npm run deploy:$ENVIRONMENT
 
   deploy-terraform:
-    if: ${{vars.DISABLE_TERRAFORM || 'false'}} == 'false'
+    if: ${{vars.DISABLE_TERRAFORM || 'false'}} != 'true'
     runs-on: ubuntu-latest
     environment: dev
     env:
