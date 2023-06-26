@@ -72,6 +72,9 @@ jobs:
   eval-terraform-deploy:
     env: 
       DISABLE_TERRAFORM: ${{vars.DISABLE_TERRAFORM || 'false' }}
+    steps:
+      run: |
+        echo DISABLE_TERRAFORM=$DISABLE_TERRAFORM
     outputs:
       DISABLE_TERRAFORM: ${{DISABLE_TERRAFORM}}
 
