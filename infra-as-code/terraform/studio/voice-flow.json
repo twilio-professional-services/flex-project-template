@@ -42,9 +42,11 @@
             "x": 30,
             "y": 180
           },
-          "workflow": "${WORKFLOW_SID}",
+          "waitUrlMethod": "POST",
+          "waitUrl": "https://${DOMAIN_CUSTOM_FLEX}/features/callback-and-voicemail/studio/wait-experience?mode=initialize",
+          "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
           "channel": "${VOICE_CHANNEL_SID}",
-          "attributes": "{ \"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\" }"
+          "attributes": "{ \"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\", \"conversations\": {\"hang_up_by\": \"Customer\"} }"
         }
       }
     ],

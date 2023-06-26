@@ -3,9 +3,24 @@ output "workspace_sid" {
   description = "Default workspace SID"
 }
 
-output "workflow_sid" {
-  value = twilio_taskrouter_workspaces_workflows_v1.default.sid
-  description = "Default workflow SID"
+output "workflow_sid_assign_to_anyone" {
+  value = twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone.sid
+  description = "Assign To Anyone workflow SID"
+}
+
+output "workflow_sid_chat_transfer" {
+  value = twilio_taskrouter_workspaces_workflows_v1.chat_transfer.sid
+  description = "conversation-transfer feature workflow SID"
+}
+
+output "workflow_sid_callback" {
+  value = twilio_taskrouter_workspaces_workflows_v1.callback.sid
+  description = "callback-and-voicemail feature workflow SID"
+}
+
+output "workflow_sid_internal_call" {
+  value = twilio_taskrouter_workspaces_workflows_v1.internal_call.sid
+  description = "internal call feature workflow SID"
 }
 
 output "chat_channel_sid" {

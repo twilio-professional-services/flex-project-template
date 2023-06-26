@@ -29,6 +29,7 @@ runs:
     - id: terraform
       working-directory: ${{ inputs.path }}
       run: |
+
         $Repo = "${{ github.repository }}"
         $BaseUri = "https://api.github.com"
         $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
@@ -45,48 +46,137 @@ runs:
         }
 
         $tfdir = "${{ inputs.path }}"
-        $tf_workspace_sid = "${{ env.TF_WORKSPACE_SID }}"
-        $tf_default_workflow_sid = "${{ env.TF_DEFAULT_WORKFLOW_SID }}"
-        $tf_default_task_queue_sid = "${{ env.TF_DEFAULT_TASK_QUEUE_SID }}"
-        $tf_chat_task_channel_sid = "${{ env.TF_CHAT_TASK_CHANNEL_SID }}"
-        $tf_voice_task_channel_sid = "${{ env.TF_VOICE_TASK_CHANNEL_SID }}"
-        $tf_voice_flow_sid = "${{ env.TF_VOICE_FLOW_SID }}"
-        $tf_messaging_flow_sid = "${{ env.TF_MESSAGING_FLOW_SID }}"
-        $tf_chat_flow_sid = "${{ env.TF_CHAT_FLOW_SID }}"
+
+        npm install -g twilio-cli
 
         terraform init
+        
+        #############################################################################
+        ### THE FOLLOWING CAPTURES THE SIDS FROM THE ENVIRONMENT AND IMPORTS THEM
+        ### INTO TERRAFORM IF THEY EXIST 
+        #############################################################################
+
+        ### SERVERLESS DOMAIN ###
+        twilio api:serverless:v1:services:list | select-string "custom-flex-extensions-serverless" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_severless_sid_custom_flex
+        twilio api:serverless:v1:services:list | select-string "schedule-manager" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_severless_sid_schedule_manager
+
+        twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex | select-string "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[4] } | tee-object -variable TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
+        twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager | select-string "dev-environment" | ForEach-Object { ([string]$_).Split(" ")[4] } | tee-object -variable TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
+
+        $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = $TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
+        $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = $TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
+
+        ### TASK ROUTER ###
+
+        # workspace
+        twilio api:taskrouter:v1:workspaces:list | select-string "Flex Task Assignment" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workspace_sid 
 
         if ($tf_workspace_sid) {
-          terraform import module.routing.twilio_taskrouter_workspaces_v1.flex $tf_workspace_sid
+          terraform import module.routing.twilio_taskrouter_workspaces_v1.flex $tf_workspace_sid 
         }
 
-        if ($tf_default_workflow_sid) {
-          terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.default $tf_workspace_sid/$tf_default_workflow_sid
+        # workflows
+        twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid | select-string "Assign To Anyone" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workflow_sid_assign_to_anyone 
+        twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid | select-string "Chat Transfer" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workflow_sid_chat_transfer
+        twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid | select-string "Callback" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workflow_sid_callback 
+        twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid | select-string "Internal Call" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_workflow_sid_internal_call 
+
+
+        if ($tf_workflow_sid_assign_to_anyone) {
+          terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone $tf_workspace_sid/$tf_workflow_sid_assign_to_anyone
         }
 
-        if ($tf_default_task_queue_sid) {
-          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.everyone $tf_workspace_sid/$tf_default_task_queue_sid
-        }  
-
-        if ($tf_chat_task_channel_sid) {
-          terraform import module.routing.twilio_taskrouter_workspaces_task_channels_v1.chat $tf_workspace_sid/$tf_chat_task_channel_sid
+        if ($tf_workflow_sid_chat_transfer) {
+          terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.chat_transfer $tf_workspace_sid/$tf_workflow_sid_chat_transfer
         }
 
-        if ($tf_voice_task_channel_sid) {
-          terraform import module.routing.twilio_taskrouter_workspaces_task_channels_v1.voice $tf_workspace_sid/$tf_voice_task_channel_sid
+        if ($tf_workflow_sid_callback) {
+          terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.callback $tf_workspace_sid/$tf_workflow_sid_callback
         }
 
-        if ($tf_voice_flow_sid) {
-          terraform import module.ivr.twilio_studio_flows_v2.voice $tf_voice_flow_sid
+        if ($tf_workflow_sid_internal_call) {
+          terraform import module.routing.twilio_taskrouter_workspaces_workflows_v1.internal_call $tf_workspace_sid/$tf_workflow_sid_internal_call
         }
 
-        if ($tf_messaging_flow_sid) {
-          terraform import module.ivr.twilio_studio_flows_v2.messaging $tf_messaging_flow_sid
+        # queues
+        twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid | select-string "Everyone" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_queue_sid_everyone
+        twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid | select-string "Sales" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_queue_sid_sales
+        twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid | select-string "Support" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_queue_sid_support
+        twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid | select-string "Internal Calls" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_queue_sid_internal_calls
+
+
+        if ($tf_queue_sid_everyone) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.everyone $tf_workspace_sid/$tf_queue_sid_everyone
         }
 
-        if ($tf_chat_flow_sid) {
-          terraform import module.ivr.twilio_studio_flows_v2.chat $tf_chat_flow_sid
+        if ($tf_queue_sid_sales) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.sales $tf_workspace_sid/$tf_queue_sid_sales
         }
+
+        if ($tf_queue_sid_support) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.support $tf_workspace_sid/$tf_queue_sid_support
+        }
+
+        if ($tf_queue_sid_internal_calls) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_queues_v1.internal_calls $tf_workspace_sid/$tf_queue_sid_internal_calls
+        }   
+
+        # channels
+        twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid $tf_workspace_sid | select-string "Voice" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_task_channel_sid_voice
+        twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid $tf_workspace_sid | select-string "Chat" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_task_channel_sid_chat
+
+
+        if ($tf_task_channel_sid_voice) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_channels_v1.voice $tf_workspace_sid/$tf_task_channel_sid_voice
+        }
+
+        if ($tf_task_channel_sid_chat) {
+          terraform import module.routing.twilio_taskrouter_workspaces_task_channels_v1.chat $tf_workspace_sid/$tf_task_channel_sid_chat
+        }
+
+        # activities
+        twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid | select-string "Offline" -CaseSensitive  | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_activity_offline
+        twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid | select-string "Available" -CaseSensitive | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_activity_available
+        twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid | select-string "Unavailable" -CaseSensitive | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_activity_unavailable
+        twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid | select-string "Break"  -CaseSensitive | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_activity_break
+
+        if ($tf_activity_offline) {
+          terraform import module.routing.twilio_taskrouter_workspaces_activities_v1.offline $tf_workspace_sid/$tf_activity_offline
+        }
+
+        if ($tf_activity_available) {
+          terraform import module.routing.twilio_taskrouter_workspaces_activities_v1.available $tf_workspace_sid/$tf_activity_available
+        }
+
+        if ($tf_activity_unavailable) {
+          terraform import module.routing.twilio_taskrouter_workspaces_activities_v1.unavailable $tf_workspace_sid/$tf_activity_unavailable
+        }
+
+        if ($tf_activity_break) {
+          terraform import module.routing.twilio_taskrouter_workspaces_activities_v1.break $tf_workspace_sid/$tf_activity_break
+        }
+
+        ### STUDIO ###
+        twilio api:studio:v2:flows:list | select-string "Voice IVR" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_flow_sid_voice_ivr
+        twilio api:studio:v2:flows:list | select-string "Messaging Flow" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_flow_sid_messaging_flow
+        twilio api:studio:v2:flows:list | select-string "Chat Flow" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_flow_sid_chat_flow
+
+
+        if ($tf_flow_sid_voice_ivr) {
+          terraform import module.ivr.twilio_studio_flows_v2.voice $tf_flow_sid_voice_ivr
+        }
+
+        if ($tf_flow_sid_messaging_flow) {
+          terraform import module.ivr.twilio_studio_flows_v2.messaging $tf_flow_sid_messaging_flow
+        }
+
+        if ($tf_flow_sid_chat_flow) {
+          terraform import module.ivr.twilio_studio_flows_v2.chat $tf_flow_sid_chat_flow
+        }
+
+        #############################################################################
+        ### END OF SID EVALUATION
+        #############################################################################
 
         $terraformapply = "${{ inputs.apply }}"
         $custom_plan_flags = "${{ inputs.custom_plan_flags }}"
