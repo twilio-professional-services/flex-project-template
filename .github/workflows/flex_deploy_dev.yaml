@@ -9,6 +9,9 @@ on:
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  DISABLE_TERRAFORM: ${{vars.DISABLE_TERRAFORM || 'false' }}
+
 jobs:
   deploy-serverless:
     if: false
@@ -67,11 +70,11 @@ jobs:
           npm run deploy:$ENVIRONMENT
 
   deploy-terraform:
+    if: env.DISABLE_TERRAFORM != 'true'
     runs-on: ubuntu-latest
     environment: dev
     env:
       ENVIRONMENT: dev
-      DISABLE_TERRAFORM: ${{vars.DISABLE_TERRAFORM || 'false' }}
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
@@ -80,11 +83,8 @@ jobs:
       TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     #needs: [deploy-serverless, deploy-schedule-manager]
     steps:
-
       - uses: actions/checkout@v1 
-        if: env.DISABLE_TERRAFORM != 'true'
       - uses: ./.github/actions/terraform_state_artifact
-        if: env.DISABLE_TERRAFORM != 'true'
         with:
           encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
           path: ./infra-as-code/terraform/environments/default
