@@ -27,14 +27,24 @@ export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
 
   const agentWorkerSID = useFlexSelector((state) => state?.flex?.supervisor?.stickyWorker?.worker?.sid);
 
+  const supervisorSwitch = (status: string, supervisor: string) => {
+    switch (status) {
+      case 'barge':
+        return templates[StringTemplates.PanelBarge]({ supervisor });
+      case 'coaching':
+        return templates[StringTemplates.PanelCoaching]({ supervisor });
+      case 'monitoring':
+        return templates[StringTemplates.PanelMonitoring]({ supervisor });
+      default:
+        return null;
+    }
+  };
   const supervisorsArray = () => {
     return supervisorArray.map((supervisorArray) => (
-      <tr key={supervisorArray.supervisorSID}>
-        <td>{supervisorArray.supervisor}</td>
-        <td style={{ color: 'green' }}>&nbsp;{supervisorArray.status}</td>
-      </tr>
+      <li key={`${Math.random()}`}>{supervisorSwitch(supervisorArray.status, supervisorArray.supervisor)}</li>
     ));
   };
+
   const syncUpdates = () => {
     if (agentWorkerSID) {
       // Let's subscribe to the sync doc as an agent/worker and check

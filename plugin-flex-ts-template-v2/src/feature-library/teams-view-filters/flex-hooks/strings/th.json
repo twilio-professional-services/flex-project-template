@@ -1,0 +1,15 @@
+{
+  "QueueFilterParseNotification": "การแยกวิเคราะห์สูตรคิวไม่สำเร็จ กำลังเพิกเฉยต่อตัวกรองคิว",
+  "QueueFilterParseORsNotification": "ไม่สามารถใช้ตัวกรองคิวกับคิวที่มีส่วนประกอบ OR ได้ กำลังละเว้นตัวกรองคิว",
+  "QueueFilterQueueNotFound": "ไม่พบอ้างอิงคิว ระบบจะไม่ใช้ตัวกรองคิว",
+  "PSTeamsViewFilterOnly": "เฉพาะ {{selected}}",
+  "PSTeamsViewFilterContaining": "มี \"{{selected}}\" อยู่",
+  "PSTeamsViewSelectItem": "เลือกไอเท็ม...",
+  "PSTeamsViewMultiSelectItems": "เลือกไอเท็มหนึ่งรายการหรือมากกว่า...",
+  "PSTeamsViewMultiSelectedItems": "รายการที่เลือก:",
+  "PSTeamsViewAgentSkills": "ทักษะของเอเย่นต์",
+  "PSTeamsViewDepartment": "แผนก",
+  "PSTeamsViewEmailAddress": "ที่อยู่อีเมล",
+  "PSTeamsViewQueueEligibility": "ความเหมาะสมของคิว",
+  "PSTeamsViewTeam": "ทีม"
+}

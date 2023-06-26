@@ -1,0 +1,9 @@
+{
+  "PSRecordingPaused": "通话录音已暂停。请在适当时候记得恢复通话录音。",
+  "PSRecordingPausedLabel": "通话录音已暂停",
+  "PSResumeRecording": "恢复录制此通话。",
+  "PSPauseRecordingFailed": "暂停通话录音失败。请重试。",
+  "PSResumeRecordingFailed": "恢复通话录音失败，请重试。",
+  "PSPauseRecordingTooltip": "暂停录音",
+  "PSResumeRecordingTooltip": "恢复录音"
+}

@@ -1,0 +1,6 @@
+{
+  "PSCallerIdLoading": "Carregando números de telefone...",
+  "PSCallerIdLoadingFailed": "Não foi possível carregar os números de telefone",
+  "PSCallerIdChoose": "Escolha um ID de contato",
+  "PSCallerId": "Identificação do Contato"
+}

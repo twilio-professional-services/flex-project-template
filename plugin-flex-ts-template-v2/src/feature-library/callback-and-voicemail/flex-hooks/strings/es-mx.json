@@ -1,0 +1,17 @@
+{
+  "PSCallbackErrorCallingCustomerNotification": "No se pudo llamar a {{customer}}, por favor intente de nuevo",
+  "PSCallbackOutboundDialingNotEnabledNotification": "La marcación saliente no está habilitada, por favor notifique a un administrador del sistema",
+  "PSCallbackRequestHeading": "Solicitud de devolución de llamada",
+  "PSCallbackRequestDescription": "Un contacto ha solicitado una devolución de llamada inmediata.",
+  "PSCallbackVoicemailRequestHeading": "Buzón de voz de contacto",
+  "PSCallbackVoicemailRequestDescription": "Un contacto ha dejado un mensaje de voz que requiere atención.",
+  "PSCallbackVoicemailRecording": "Grabación de buzón de voz",
+  "PSCallbackVoicemailTranscript": "Transcripción de buzón de voz",
+  "PSCallbackContactPhone": "Teléfono de contacto",
+  "PSCallbackCallReceptionTime": "Tiempo de recepción de llamadas",
+  "PSCallbackAttemptHeading": "Intento de devolución de llamada",
+  "PSCallbackAttempts": "{{thisAttempt}} de {{maxAttempts}}",
+  "PSCallbackPlaceCallNow": "Llamar ahora al {{phoneNumber}}",
+  "PSCallbackRetryLater": "Reintentar más tarde",
+  "PSCallbackSystemTime": "Hora del sistema: {{systemTime}}"
+}

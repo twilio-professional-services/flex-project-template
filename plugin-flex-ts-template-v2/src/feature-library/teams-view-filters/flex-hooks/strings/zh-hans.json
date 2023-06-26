@@ -1,0 +1,15 @@
+{
+  "QueueFilterParseNotification": "无法解析队列表达式，忽略队列过滤器。",
+  "QueueFilterParseORsNotification": "无法将队列过滤器应用于包含 OR 表达式的队列。忽略队列过滤器。",
+  "QueueFilterQueueNotFound": "队列参考未找到，忽略队列过滤器",
+  "PSTeamsViewFilterOnly": "仅{{selected}}",
+  "PSTeamsViewFilterContaining": "包含 \"{{selected}}\"",
+  "PSTeamsViewSelectItem": "选择一个项目...",
+  "PSTeamsViewMultiSelectItems": "请选择一个或多个项目...",
+  "PSTeamsViewMultiSelectedItems": "所选项目：",
+  "PSTeamsViewAgentSkills": "客服人技能",
+  "PSTeamsViewDepartment": "部门",
+  "PSTeamsViewEmailAddress": "电子邮件地址",
+  "PSTeamsViewQueueEligibility": "队列资格",
+  "PSTeamsViewTeam": "团队"
+}

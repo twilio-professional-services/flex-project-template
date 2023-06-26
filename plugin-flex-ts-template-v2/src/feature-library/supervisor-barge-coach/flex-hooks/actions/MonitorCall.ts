@@ -31,7 +31,16 @@ export const actionHook = async function enableBargeCoachButtonsUponMonitor(flex
     const agentWorkerSID = manager.store.getState().flex?.supervisor?.stickyWorker?.worker?.sid;
     const supervisorFN = manager.store.getState().flex?.worker?.attributes?.full_name;
     const conferenceSID = payload.task?.conference?.conferenceSid;
+    const supervisorStatus = 'monitoring';
+    const updateStatus = 'add';
 
-    SyncDoc.initSyncDocSupervisors(agentWorkerSID, conferenceSID, myWorkerSID, supervisorFN, 'is Monitoring', 'add');
+    SyncDoc.initSyncDocSupervisors(
+      agentWorkerSID,
+      conferenceSID,
+      myWorkerSID,
+      supervisorFN,
+      supervisorStatus,
+      updateStatus,
+    );
   });
 };

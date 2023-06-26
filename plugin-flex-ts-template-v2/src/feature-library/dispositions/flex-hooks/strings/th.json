@@ -1,0 +1,8 @@
+{
+  "PSDispositionRequired": "คุณจำเป็นต้องมีการจัดหาที่พักก่อนที่คุณจะสามารถทำภารกิจนี้เสร็จสิ้นได้",
+  "PSDispositionTab": "การจัดสิ้นสุด",
+  "PSSelectDispositionTitle": "เลือกสถานะการจัดการ",
+  "PSSelectDispositionHelpText": "การดำเนินการที่เลือกจะถูกบันทึกเมื่อคุณทำภารกิจนี้เสร็จสิ้น",
+  "PSNotesTitle": "หมายเหตุ",
+  "PSNotesCharactersRemaining": "เหลือ {{characters}} ตัวอักษร"
+}

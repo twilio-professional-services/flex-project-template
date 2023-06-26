@@ -1,0 +1,17 @@
+{
+  "PSCallbackErrorCallingCustomerNotification": "无法呼叫{{customer}}，请再试一次",
+  "PSCallbackOutboundDialingNotEnabledNotification": "外发拨号未启用，请通知系统管理员",
+  "PSCallbackRequestHeading": "回电请求",
+  "PSCallbackRequestDescription": "一个联系人请求立即回拨。",
+  "PSCallbackVoicemailRequestHeading": "联系语音信箱",
+  "PSCallbackVoicemailRequestDescription": "有一条需要关注的语音邮件已经留言。",
+  "PSCallbackVoicemailRecording": "语音信箱录音",
+  "PSCallbackVoicemailTranscript": "语音信箱转录",
+  "PSCallbackContactPhone": "联系电话",
+  "PSCallbackCallReceptionTime": "来电接待时间",
+  "PSCallbackAttemptHeading": "回拨尝试",
+  "PSCallbackAttempts": "第{{thisAttempt}}次尝试，共{{maxAttempts}}次",
+  "PSCallbackPlaceCallNow": "马上拨打电话{{phoneNumber}}",
+  "PSCallbackRetryLater": "稍后重试",
+  "PSCallbackSystemTime": "系统时间：{{systemTime}}"
+}

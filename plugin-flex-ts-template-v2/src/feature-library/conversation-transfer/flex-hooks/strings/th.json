@@ -1,0 +1,22 @@
+{
+  "ChatTransferTaskSuccess": "การโอนสนทนา",
+  "ChatParticipantInvited": "เชิญผู้เข้าร่วม",
+  "ChatTransferFailedGeneric": "เกิดข้อผิดพลาดในการเพิ่มผู้ร่วมงานใหม่",
+  "ChatTransferFailedConsultNotSupported": "การโอน/โอนแบบอ่อนไม่ได้เปิดใช้งาน",
+  "ChatTransferFailedColdNotSupported": "ไม่สามารถโอนสายได้ในโหมดเย็น",
+  "ChatTransferFailedAlreadyParticipating": "เป้าหมายที่เลือกไว้เป็นผู้เข้าร่วมบทสนทนาอยู่แล้ว",
+  "ChatRemoveParticipantFailed": "การลบผู้เข้าร่วมไม่สำเร็จ",
+  "ChatRemoveParticipantSuccess": "ผู้เข้าร่วมถูกลบออก",
+  "ChatCancelParticipantInviteFailed": "ล้มเหลวในการยกเลิกการเชิญผู้เข้าร่วม",
+  "ChatCancelParticipantInviteSuccess": "ยกเลิกการเชิญผู้เข้าร่วม",
+  "ChatParticipantInviteOutstanding": "เชิญผู้ร่วมการสนทนาล้มเหลว มีการเชิญอยู่แล้วสำหรับการสนทนานี้",
+  "PSConvTransferTransferChat": "โอนการสนทนา",
+  "PSConvTransferParticipants": "ผู้เข้าร่วม",
+  "PSConvTransferAgent": "ตัวแทน",
+  "PSConvTransferCustomer": "ลูกค้า",
+  "PSConvTransferQueue": "คิว",
+  "PSConvTransferRemove": "ลบ {{name}}",
+  "PSConvTransferInvitedParticipants": "ผู้เข้าร่วมที่ได้รับเชิญ",
+  "PSConvTransferCancelInvite": "ยกเลิกเชิญ{{name}}",
+  "PSConvTransferLeaveChat": "ออกจากการสนทนา"
+}

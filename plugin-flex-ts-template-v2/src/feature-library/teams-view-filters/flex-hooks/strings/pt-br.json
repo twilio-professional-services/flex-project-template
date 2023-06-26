@@ -1,0 +1,15 @@
+{
+  "QueueFilterParseNotification": "Falha ao analisar a expressão da fila, ignorando o filtro de fila.",
+  "QueueFilterParseORsNotification": "Incapaz de aplicar filtros de fila em filas que contêm expressões OR. Ignorando filtro de fila.",
+  "QueueFilterQueueNotFound": "Referência de fila não encontrada, ignorando filtro de fila",
+  "PSTeamsViewFilterOnly": "{{selected}} apenas",
+  "PSTeamsViewFilterContaining": "Contendo \"{{selected}}\"",
+  "PSTeamsViewSelectItem": "Selecione um item...",
+  "PSTeamsViewMultiSelectItems": "Selecione um ou mais itens...",
+  "PSTeamsViewMultiSelectedItems": "Itens selecionados:",
+  "PSTeamsViewAgentSkills": "Habilidades do Agente",
+  "PSTeamsViewDepartment": "Departamento",
+  "PSTeamsViewEmailAddress": "Endereço de e-mail",
+  "PSTeamsViewQueueEligibility": "Elegibilidade da Fila",
+  "PSTeamsViewTeam": "Time"
+}
