@@ -9,9 +9,6 @@ on:
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
 
-env:
-  DISABLE_TERRAFORM: ${{ vars.DISABLE_TERRAFORM || 'false' }}
-
 jobs:
   deploy-serverless:
     if: false
@@ -70,7 +67,7 @@ jobs:
           npm run deploy:$ENVIRONMENT
 
   deploy-terraform:
-    if: DISABLE_TERRAFORM == 'false'
+    if: ${{vars.DISABLE_TERRAFORM || 'false'}} == 'false'
     runs-on: ubuntu-latest
     environment: dev
     env:
