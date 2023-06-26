@@ -1,0 +1,5 @@
+{
+  "PSCompleteReservationTooltip": "Completar remotamente la reserva de tarea en nombre del agente",
+  "PSCompleteReservationConfirmationHeader": "Completar reserva de tarea",
+  "PSCompleteReservationConfirmationDescription": "¿Estás seguro de que deseas completar forzadamente esta reserva?"
+}
