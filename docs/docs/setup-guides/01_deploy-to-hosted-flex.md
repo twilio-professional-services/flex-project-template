@@ -1,8 +1,38 @@
 ---
-sidebar_label: Setup a release pipeline
+sidebar_label: Deploy to hosted Flex
 sidebar_position: 2
-title: Setup a release pipeline
+title: Deploy to hosted Flex
 ---
+
+*WARNING* : These deploy steps will inject taskrouter configuration overwriting resources that may already be there.  This includes
+
+Task Router - Task Queues:
+ - Everyone
+ - Sales
+ - Support
+ - Internal Calls
+
+Task Router - Workflows
+ - Assign To Anyone
+ - Chat Transfer
+ - Callback
+ - Internal Call
+
+Task Router - Activities
+ - Offline
+ - Available
+ - Unavailable
+ - Break
+
+Task Router - Task Channels
+ - Voice
+ - Chat
+
+Studio Flows
+ - Messaging Flow
+ - Chat Flow
+ - Voice IVR
+
 
 _~5 minutes_
 

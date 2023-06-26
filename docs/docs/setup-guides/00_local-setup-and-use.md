@@ -15,7 +15,7 @@ title: Local Setup & Use
 
 _NOTE_ the admin panel will *not* be functional when working locally as [appConfig supersedes](#development-notes) the hosted config and the admin panel works directly with the hosted config.
 
-_NOTE_ some features may not be functional without a deployment of the taskrouter conofiguration and studio flows. It is recommended to do at least one initial deploy to your environment using the [release pipeline](/setup-guides/setup-release-pipeline)
+_NOTE_ some features may not be functional without a deployment of the taskrouter conofiguration and studio flows. It is recommended to do at least one initial deploy to your environment using the [release pipeline](/setup-guides/deploy-to-hosted-flex)
 
 
 ### Setup

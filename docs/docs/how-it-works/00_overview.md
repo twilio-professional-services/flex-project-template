@@ -17,7 +17,7 @@ Following the links to see more infomation on each asset.
  - [release management via github actions](/how-it-works/github)
  - [web-app-examples](/how-it-works/web-app-examples)
 
-To see this template in action, you can [deploy it to your account with just an Account SID, API key and an API Secret](https://twilio-professional-services.github.io/flex-project-template/setup-guides/setup-release-pipeline)
+To see this template in action, you can [deploy it to your account with just an Account SID, API key and an API Secret](https://twilio-professional-services.github.io/flex-project-template/setup-guides/deploy-to-hosted-flex)
 
 
 Its worth noting, the template comes with a [library of example features](/feature-library/overview) that cover a lot of typical extensions to Flex.The template creates a system of encapsulation and self discovery for each feature.  As a result, features can be identified and removed just by deleting a folder. Alternatively, you use the scripts to [remove all the features](/how-it-works/scripts#removing-features), you will be left with just the structure of the template plus some handy utilities and serverless functions.

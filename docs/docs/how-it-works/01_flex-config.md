@@ -56,7 +56,7 @@ cp ui_attributes.example.json ui_attributes.local.json
 
 ## To use with release pipeline
 
-follow the instructions for setting up the release pipeline [here](/setup-guides/setup-release-pipeline)
+follow the instructions for setting up the release pipeline [here](/setup-guides/deploy-to-hosted-flex)
 
 # Configuring skills
 

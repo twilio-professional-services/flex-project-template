@@ -139,7 +139,6 @@ runs:
         twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid | select-string "Available" -CaseSensitive | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_activity_available
         twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid | select-string "Unavailable" -CaseSensitive | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_activity_unavailable
         twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid | select-string "Break"  -CaseSensitive | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_activity_break
-        twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid | select-string "On A Task" -CaseSensitive  | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_activity_on_a_task
 
         if ($tf_activity_offline) {
           terraform import module.routing.twilio_taskrouter_workspaces_activities_v1.offline $tf_workspace_sid/$tf_activity_offline
@@ -156,12 +155,6 @@ runs:
         if ($tf_activity_break) {
           terraform import module.routing.twilio_taskrouter_workspaces_activities_v1.break $tf_workspace_sid/$tf_activity_break
         }
-
-        if ($tf_activity_on_a_task) {
-          terraform import module.routing.twilio_taskrouter_workspaces_activities_v1.on_a_task $tf_workspace_sid/$tf_activity_on_a_task
-        }
-
-
 
         ### STUDIO ###
         twilio api:studio:v2:flows:list | select-string "Voice IVR" | ForEach-Object { ([string]$_).Split(" ")[0] } | tee-object -variable tf_flow_sid_voice_ivr
