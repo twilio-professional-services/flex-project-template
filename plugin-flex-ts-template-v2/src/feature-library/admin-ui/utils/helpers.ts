@@ -40,7 +40,7 @@ export const formatName = (name: string): string => {
 };
 
 export const formatDocsUrl = (name: string): string => {
-  return `https://twilio-professional-services.github.io/flex-project-template/feature-library/flex-v2/${name.replaceAll(
+  return `https://twilio-professional-services.github.io/flex-project-template/feature-library/${name.replaceAll(
     '_',
     '-',
   )}`;

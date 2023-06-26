@@ -18,12 +18,12 @@ The documentation that encompasses this site is found within the [docs folder](/
 
 ### Example: adding a new feature to the site
 
-1. Navigate to the `docs/Feature Library/Flex V2/` folder.
-2. Create a new file with the following naming structure: `##_name-of-feature.md` (there is an example template located at `/docs/src/pages/example-feature-page.md`).
+1. Navigate to the `docs/feature-library/` folder.
+2. Create a new file with the following naming structure: `name-of-feature.md` (there is an example template located at [`_example-feature-page.md`](_example-feature-page.md)).
 3. Populate the information for the various sections.
-4. If screenshots or images are embedded, you can add them to the `static/img/f2/*` folder (create a new folder for your new feature), then reference them in the `.md` file as such:
+4. If screenshots or images are embedded, you can add them to the `static/img/features/*` folder (create a new folder for your new feature), then reference them in the `.md` file as such:
    ```
-   ![alt text](/img/f2/name-of-feature/name-of-screenshot.png)
+   ![alt text](/img/features/name-of-feature/name-of-screenshot.png)
    ```
 5. You can run the documentation site locally to see how your new documentation will display within the site by following the [Local Development](#local-development) section.
 
@@ -40,7 +40,7 @@ $ npm i
 ### Running the site locally
 
 ```
-$ npm run start
+$ npm start
 ```
 
 This command starts a local development server at `http://localhost:3010` and opens up a browser window. Most changes are reflected live without having to restart the server.

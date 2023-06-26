@@ -58,7 +58,7 @@ The plugin logs each hook for each feature as it is loaded. This is particularly
 
 The feature library is intended to be a suite of typical features added to flex that can accelerate the launch of a Flex project by showing developers "how-to". Features can easily be turned on or off via the [flex-config](/how-it-works/flex-config) - or they can easily be removed completely by removing the feature directory or using the [remove-features](/how-it-works/scripts#removing-features) script.
 
-Each feature in the feature library is self contained. Let's look at [Caller ID](/feature-library/flex-v2/caller-id) as an example.
+Each feature in the feature library is self contained. Let's look at [Caller ID](/feature-library/caller-id) as an example.
 
 For this feature, we have a `custom-components` directory, containing components that are created for rendering within Flex (in this case, the Caller ID dropdown). Within the `flex-hooks` directory, we can see which hooks are used to hook in the behavioural changes to Flex. In this case, we can see hooks defined for the `StartOutboundCall` action, the `OutboundDialerPanel` component, the `pluginLoaded` event, and our own Redux `state` namespace.
 
