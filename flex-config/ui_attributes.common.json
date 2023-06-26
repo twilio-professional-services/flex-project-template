@@ -38,7 +38,7 @@
         "display_url_when_no_tasks": "https://www.bing.com"
       },
       "internal_call": {
-        "enabled": false
+        "enabled": true
       },
       "scrollable_activities": {
         "enabled": true
