@@ -12,7 +12,7 @@ The scripts work by merging the common attributes with the environment specifc a
 
 _NOTE_ there are two mechanisms for managing the flex-config.
 
-1. manging the files via the [administration panel](https://twilio-professional-services.github.io/flex-project-template/feature-library/flex-v2/admin-ui).  This is the default mechanism and as a result a deploy from the pipeline will only add new elements, it will not overwrite existing configuration.
+1. manging the files via the [administration panel](/feature-library/flex-v2/admin-ui).  This is the default mechanism and as a result a deploy from the pipeline will only add new elements, it will not overwrite existing configuration.
 2.  manging completely through what is in version control.  In which case, you need to create an environment *variable* in your github actions configuration `OVERWRITE_CONFIG` = `true`
 
 Currently it only supports managing `ui_attributes` properties and `taskrouter_skills` within the [Flex UI Configuration](https://www.twilio.com/docs/flex/developer/ui/configuration).
@@ -56,7 +56,7 @@ cp ui_attributes.example.json ui_attributes.local.json
 
 ## To use with release pipeline
 
-follow the instructions for setting up the release pipeline [here](/setup-guides/setup-release-pipeline);
+follow the instructions for setting up the release pipeline [here](/setup-guides/setup-release-pipeline)
 
 # Configuring skills
 

@@ -10,15 +10,15 @@ Well that's where the template comes in.  It provides a means to version control
 
 Following the links to see more infomation on each asset.
 
- - [flex Configuration - aka "environment variables"](/how-it-works/flex-config), 
- - [the plugin code aka "the presentation layer"](/how-it-works/plugin-flex-ts-template-v2) itself as well as the supporting 
- - [serverless functions aka "the backend"](/how-it-works/serverless-functions). There is also a solution to manage 
+ - [flex configuration - aka "environment variables"](/how-it-works/flex-config), 
+ - [the plugin code aka "the presentation layer"](/how-it-works/plugin-flex-ts-template-v2) 
+ - [serverless functions aka "the backend"](/how-it-works/serverless-functions).
  - [twilio account configuration aka "flex dependencies" like task router and studio flows](/how-it-works/infra-as-code).
  - [release management via github actions](/how-it-works/github)
  - [web-app-examples](/how-it-works/web-app-examples)
 
-To see this template in action, you can [deploy it to your account with just an Account SID, API key and an API Secret](https://twilio-professional-services.github.io/flex-project-template/setup-guides/setup-release-pipeline))
+To see this template in action, you can [deploy it to your account with just an Account SID, API key and an API Secret](https://twilio-professional-services.github.io/flex-project-template/setup-guides/setup-release-pipeline)
 
 
-Secondly the template comes with a [library of example features](/feature-library/overview) that cover a lot of typical extensions to Flex. These features can easily be turned on or off or simply just removed by removing the folder that contains each feature. If you use the scripts to [remove all the features](/how-it-works/scripts#removing-features), you will be left with just the structure of the template plus some handy utilities and serverless functions.
+Its worth noting, the template comes with a [library of example features](/feature-library/overview) that cover a lot of typical extensions to Flex.The template creates a system of encapsulation and self discovery for each feature.  As a result, features can be identified and removed just by deleting a folder. Alternatively, you use the scripts to [remove all the features](/how-it-works/scripts#removing-features), you will be left with just the structure of the template plus some handy utilities and serverless functions.
 

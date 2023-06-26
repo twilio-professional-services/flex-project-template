@@ -19,11 +19,11 @@ git rebase --onto <commit-id-from-template-when-cloning> <initial-commit-id-of-c
 
 where commit id from the template can be found by clicking on the commmit history
 
-![alt text](scripts/screenshots/get-repository-commit-id-01.png)
+![alt text](/img/guides/get-repository-commit-id-01.png)
 
 then clicking copy on the copy-id button of the commit
 
-![alt text](scripts/screenshots/get-repository-commit-id-02.png)
+![alt text](/img/guides/get-repository-commit-id-02.png)
 
 Similarly, the initial commit of the cloned template can be found in the same way.
 
