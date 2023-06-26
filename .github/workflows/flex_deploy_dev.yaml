@@ -67,7 +67,6 @@ jobs:
           npm run deploy:$ENVIRONMENT
 
   deploy-terraform:
-    if: env.DISABLE_TERRAFORM != 'true'
     runs-on: ubuntu-latest
     environment: dev
     env:
@@ -81,8 +80,11 @@ jobs:
       TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     #needs: [deploy-serverless, deploy-schedule-manager]
     steps:
+
       - uses: actions/checkout@v1 
+        if: env.DISABLE_TERRAFORM != 'true'
       - uses: ./.github/actions/terraform_state_artifact
+        if: env.DISABLE_TERRAFORM != 'true'
         with:
           encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
           path: ./infra-as-code/terraform/environments/default
