@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  DISABLE_TERRAFORM: ${{vars.DISABLE_TERRAFORM || 'false' }}
+  
 
 jobs:
   deploy-serverless:
@@ -69,8 +69,14 @@ jobs:
           npm run install-serverless-plugin
           npm run deploy:$ENVIRONMENT
 
+  eval-terraform-deploy:
+    env: 
+      DISABLE_TERRAFORM: ${{vars.DISABLE_TERRAFORM || 'false' }}
+    outputs:
+      DISABLE_TERRAFORM: ${{DISABLE_TERRAFORM}}
+
   deploy-terraform:
-    if: env.DISABLE_TERRAFORM != 'true'
+    if: needs.eval-terraform-deploy.outputs.DISABLE_TERRAFORM != 'true'
     runs-on: ubuntu-latest
     environment: dev
     env:
@@ -81,6 +87,7 @@ jobs:
       TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+    needs: [eval-terraform-deploy]
     #needs: [deploy-serverless, deploy-schedule-manager]
     steps:
       - uses: actions/checkout@v1 
