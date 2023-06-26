@@ -10,15 +10,19 @@ _~5 minutes_
 2. Nominate a Twilio account to act as one of dev, qa, test, prod (based on your use case)
 3. Create a twilio api key and secret for your account follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key.
    - If you intend to have multiple environments, you will need an API Key/Secret for each account. You'll use this in the next step
-4. In github, navigate to the repository you created in step 1, click the settings tab -> secrets -> actions -> Click the "New repository secret" button:
-   - Add the following to select which plugin is released
-     - `PLUGIN_FOLDER` - this is `plugin-flex-ts-template-v2` unless you are using the `rename-template` script
-   - Add the following to choose deployment behavior
+4. In github, navigate to the repository you created in step 1, click the settings tab -> envirnoments -> "New Environment"
+
+   - Give it the name to match one of [dev, qa, test, prod] 
+
+   - Add the following *variable* to choose deployment behavior
      - `OVERWRITE_CONFIG` - if using an infrastructure-as-code deployment approach, set this to `true` to use the config in the repository as the source of truth. Otherwise, set this to `false` to allow configuration via the admin UI.
-   - For each environment add the 3 env variables for that environment, for example, if its dev you would add
-     - `TWILIO_ACCOUNT_SID_DEV` - the account sid you want to deploy to
-     - `TWILIO_API_KEY_DEV` - the account key or key "sid" as its otherwise known
-     - `TWILIO_API_SECRET_DEV` - the account secret
+
+   - add the 3 *secrets* for that environment
+     - `TWILIO_ACCOUNT_SID_` - the account sid you want to deploy to
+     - `TWILIO_API_KEY` - the account key or key "sid" as its otherwise known
+     - `TWILIO_API_SECRET` - the account secret
+
+5. Create a project level secret for `TF_ENCRYPTION_KEY` this can be any string value you want
 
 ![alt text](../../static/img/github-secrets.png)
 
