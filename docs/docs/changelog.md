@@ -9,7 +9,7 @@ title: Changelog
   - removed Pulumi from infra-as-code
   - added Terraform to infra-as-code
   - included Terraform release in github release scripts
-  - _BREAKING CHANGE_ modified release scripts to use github environments and changed secret key names
+  - _BREAKING CHANGE_ modified release scripts to use github environments and changed secret key names.  To disable terraform as part of your deploy add a repository variable `DISABLE_TERRAFORM` and set it to `true`
 - 1.0.6
   - Removed plugin-flex-ts-template-v1 and all v1 references.
 - 1.0.5

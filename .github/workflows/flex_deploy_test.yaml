@@ -70,6 +70,7 @@ jobs:
     environment: test
     env:
       ENVIRONMENT: test
+      DISABLE_TERRAFORM: ${{vars.DISABLE_TERRAFORM || 'false' }}
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
@@ -79,7 +80,9 @@ jobs:
     needs: [deploy-serverless, deploy-schedule-manager]
     steps:
       - uses: actions/checkout@v1 
+        if: env.DISABLE_TERRAFORM != 'true'
       - uses: ./.github/actions/terraform_state_artifact
+        if: env.DISABLE_TERRAFORM != 'true'
         with:
           encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
           path: ./infra-as-code/terraform/environments/default
