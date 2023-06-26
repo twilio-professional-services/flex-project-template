@@ -72,6 +72,7 @@ jobs:
   eval-terraform-deploy:
     env: 
       DISABLE_TERRAFORM: ${{vars.DISABLE_TERRAFORM || 'false' }}
+    runs-on: ubuntu-latest
     steps:
       run: |
         echo DISABLE_TERRAFORM=$DISABLE_TERRAFORM
