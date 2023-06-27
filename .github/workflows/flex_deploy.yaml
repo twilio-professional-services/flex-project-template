@@ -18,7 +18,7 @@ on:
         type: boolean
         description: is this the first release to the environment?
         default: false
-      deplo_terraform:
+      deploy_terraform:
         required: true
         type: boolean
         default: true
