@@ -105,20 +105,20 @@ runs:
         $queues = twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
 
         $tf_queue_sid_everyone = $queues | where {$_.friendlyName -eq 'Everyone'} | Select -property sid -ExpandProperty sid
-        $tf_queue_sid_sales = $queues | where {$_.friendlyName -eq 'Sales'} | Select -property sid -ExpandProperty sid
-        $tf_queue_sid_support = $queues | where {$_.friendlyName -eq 'Support'} | Select -property sid -ExpandProperty sid
+        $tf_queue_sid_template_example_sales = $queues | where {$_.friendlyName -eq 'Template Example Sales'} | Select -property sid -ExpandProperty sid
+        $tf_queue_sid_template_example_support = $queues | where {$_.friendlyName -eq 'Template Example Support'} | Select -property sid -ExpandProperty sid
         $tf_queue_sid_internal_calls = $queues | where {$_.friendlyName -eq 'Internal Calls'} | Select -property sid -ExpandProperty sid
 
         if ($tf_queue_sid_everyone) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.everyone $tf_workspace_sid/$tf_queue_sid_everyone
         }
 
-        if ($tf_queue_sid_sales) {
-          terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.sales $tf_workspace_sid/$tf_queue_sid_sales
+        if ($tf_queue_sid_template_example_sales) {
+          terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.sales $tf_workspace_sid/$tf_queue_sid_template_example_sales
         }
 
-        if ($tf_queue_sid_support) {
-          terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.support $tf_workspace_sid/$tf_queue_sid_support
+        if ($tf_queue_sid_template_example_support) {
+          terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.support $tf_workspace_sid/$tf_queue_sid_template_example_support
         }
 
         if ($tf_queue_sid_internal_calls) {

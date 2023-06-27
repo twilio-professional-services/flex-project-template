@@ -23,20 +23,20 @@
       },
       {
         "filter_friendly_name": "Assign To Queue - Sales",
-        "expression": "transferQueueName == 'Sales'",
+        "expression": "transferQueueName == 'Template Example Sales'",
         "targets": [
           {
-            "queue": "${QUEUE_SID_SALES}",
+            "queue": "${QUEUE_SID_TEMPLATE_EXAMPLE_SALES}",
             "expression": "worker.sid NOT IN task.workerSidsInConversation"
           }
         ]
       },
       {
         "filter_friendly_name": "Assign To Queue - Support",
-        "expression": "transferQueueName == 'Support'",
+        "expression": "transferQueueName == 'Template Example Support'",
         "targets": [
           {
-            "queue": "${QUEUE_SID_SUPPORT}",
+            "queue": "${QUEUE_SID_TEMPLATE_EXAMPLE_SUPPORT}",
             "expression": "worker.sid NOT IN task.workerSidsInConversation"
           }
         ]
