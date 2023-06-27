@@ -44,7 +44,7 @@ At a future date, you may want to grab the updates on the original template if y
 ```bash
 git checkout -b template-updates
 git remote add flex-template https://github.com/twilio-professional-services/flex-project-template.git
-git pull flex-template main
+git pull flex-template main --no-ff
 ```
 
 this will grab all the updates from the original template and apply them to your branch. You will of course have to manage any conflicts but if you have added the history correctly, this shouldnt be too complex. From here you can merge the changes into your parent branch as you see fit.

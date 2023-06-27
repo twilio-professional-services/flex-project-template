@@ -23,7 +23,7 @@ Currently it only supports managing `ui_attributes` properties and `taskrouter_s
 
 ## To Use Locally (typically not neccessary)
 
-_NOTE_ although not typically neccessary, these instructions are intended for completeness and only for application of config on a personal development environment, not a shared development environment.  For shared environments please use the github release pipeline scripts.
+_NOTE_ although not typically neccessary, these instructions are intended for completeness.  Local development should use `plugin-flex-ts-template-v2\public\appConfig.js`. For shared environments please use the github release pipeline scripts.
 
 1. Make sure the dependent modules are installed
 
