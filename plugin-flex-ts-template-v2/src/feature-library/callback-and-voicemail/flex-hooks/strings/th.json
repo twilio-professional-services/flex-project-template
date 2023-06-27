@@ -1,0 +1,17 @@
+{
+  "PSCallbackErrorCallingCustomerNotification": "ไม่สามารถโทรหา {{customer}} ได้ โปรดลองอีกครั้ง",
+  "PSCallbackOutboundDialingNotEnabledNotification": "การโทรออกไม่ได้เปิดใช้งาน โปรดแจ้งผู้ดูแลระบบ",
+  "PSCallbackRequestHeading": "คำขอการโทรกลับ",
+  "PSCallbackRequestDescription": "ผู้ติดต่อขอให้โทรกลับทันที",
+  "PSCallbackVoicemailRequestHeading": "ฝากข้อความเสียงติดต่อ",
+  "PSCallbackVoicemailRequestDescription": "มีผู้ติดต่อที่ฝากข้อความเสียงไว้ที่ต้องการความสนใจ",
+  "PSCallbackVoicemailRecording": "การบันทึกข้อความเสียงโทรศัพท์ที่ไม่ได้รับ",
+  "PSCallbackVoicemailTranscript": "การถอดรหัสข้อความเสียงที่ไม่ได้รับ",
+  "PSCallbackContactPhone": "หมายเลขโทรศัพท์ติดต่อ",
+  "PSCallbackCallReceptionTime": "เวลาการรับสายโทร",
+  "PSCallbackAttemptHeading": "การโทรกลับลอง",
+  "PSCallbackAttempts": "{{thisAttempt}} จาก {{maxAttempts}}",
+  "PSCallbackPlaceCallNow": "โทรหา {{phoneNumber}} ตอนนี้",
+  "PSCallbackRetryLater": "ลองอีกครั้งในภายหลัง",
+  "PSCallbackSystemTime": "เวลาของระบบ: {{systemTime}}"
+}

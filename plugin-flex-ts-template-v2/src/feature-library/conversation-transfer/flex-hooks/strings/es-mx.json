@@ -1,0 +1,22 @@
+{
+  "ChatTransferTaskSuccess": "Conversación transferida",
+  "ChatParticipantInvited": "Participante invitado",
+  "ChatTransferFailedGeneric": "Ocurrió un error al agregar un nuevo participante",
+  "ChatTransferFailedConsultNotSupported": "La transferencia consultada no está habilitada",
+  "ChatTransferFailedColdNotSupported": "La transferencia no consultada no está habilitada",
+  "ChatTransferFailedAlreadyParticipating": "El objetivo seleccionado ya es un participante en la conversación",
+  "ChatRemoveParticipantFailed": "Error al eliminar participante",
+  "ChatRemoveParticipantSuccess": "Participante eliminado",
+  "ChatCancelParticipantInviteFailed": "Fallo al cancelar la invitación del participante",
+  "ChatCancelParticipantInviteSuccess": "Invitación de participante cancelada",
+  "ChatParticipantInviteOutstanding": "Falló la invitación del participante. Ya hay una invitación pendiente para el chat.",
+  "PSConvTransferTransferChat": "Transferir Chat",
+  "PSConvTransferParticipants": "Participantes",
+  "PSConvTransferAgent": "Agente",
+  "PSConvTransferCustomer": "Cliente",
+  "PSConvTransferQueue": "Cola",
+  "PSConvTransferRemove": "Eliminar {{name}}",
+  "PSConvTransferInvitedParticipants": "Participantes Invitados",
+  "PSConvTransferCancelInvite": "Cancelar invitación a {{name}}",
+  "PSConvTransferLeaveChat": "Salir del chat"
+}

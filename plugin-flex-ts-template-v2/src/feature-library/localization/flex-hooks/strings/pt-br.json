@@ -1,0 +1,6 @@
+{
+  "PSLocChangeLanguage": "Mudar idioma",
+  "PSLocLanguages": "Idiomas",
+  "PSLocCurrentLanguage": "Este é o idioma atual",
+  "PSLocChangeLanguageDialog": "Você tem certeza de que deseja mudar o idioma para {{newLanguage}}? O Flex irá recarregar automaticamente, interrompendo todas as chamadas ativas."
+}

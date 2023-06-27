@@ -1,0 +1,17 @@
+{
+  "PSCallbackErrorCallingCustomerNotification": "Não foi possível realizar a chamada para {{customer}}, por favor, tente novamente",
+  "PSCallbackOutboundDialingNotEnabledNotification": "A discagem de saída não está habilitada, por favor, procure o administrador do sistema",
+  "PSCallbackRequestHeading": "Solicitação de retorno de chamada",
+  "PSCallbackRequestDescription": "Um contato solicitou um retorno de chamada imediato.",
+  "PSCallbackVoicemailRequestHeading": "Caixa postal do contato",
+  "PSCallbackVoicemailRequestDescription": "Um contato deixou um correio de voz que requer atenção.",
+  "PSCallbackVoicemailRecording": "Gravação de correio de voz",
+  "PSCallbackVoicemailTranscript": "Transcrição de correio de voz",
+  "PSCallbackContactPhone": "Telefone do contato",
+  "PSCallbackCallReceptionTime": "Tempo de recepção da ligação",
+  "PSCallbackAttemptHeading": "Tentativa de retorno de chamada",
+  "PSCallbackAttempts": "{{thisAttempt}} de {{maxAttempts}}",
+  "PSCallbackPlaceCallNow": "Ligar agora para {{phoneNumber}}",
+  "PSCallbackRetryLater": "Tente novamente mais tarde",
+  "PSCallbackSystemTime": "Hora do sistema: {{systemTime}}"
+}

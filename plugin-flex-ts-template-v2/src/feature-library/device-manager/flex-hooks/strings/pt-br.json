@@ -1,0 +1,5 @@
+{
+  "PSDeviceMgrSelectAudioDevice": "Selecionar um dispositivo de áudio",
+  "PSDeviceMgrSetDeviceSuccess": "Defina {{selectedDevice}} como seu dispositivo de áudio.",
+  "PSDeviceMgrSetDeviceError": "Houve um erro ao tentar definir {{selectedDevice}} como o seu dispositivo de áudio."
+}

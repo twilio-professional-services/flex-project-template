@@ -33,9 +33,9 @@ export const CoachingStatusPanel = () => {
         if (doc.data.supervisors) {
           supervisorArray = [...doc.data.supervisors];
           // Current verion of this feature will only show the Agent they are being coached
-          // This could be updated by removing the below logic and including Monitoring and Joined (barged)
+          // This could be updated by removing the below logic and including Monitoring and Barge
           for (let i = 0; i < supervisorArray.length; i++) {
-            if (supervisorArray[i].status === 'is Monitoring' || supervisorArray[i].status === 'has Joined') {
+            if (supervisorArray[i].status === 'monitoring' || supervisorArray[i].status === 'barge') {
               supervisorArray.splice(i, 1);
               i -= 1;
             }

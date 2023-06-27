@@ -1,0 +1,17 @@
+{
+  "PSFailedToLoadInsightsClient": "未能加载实时insights客户端。所有队列都已列出。",
+  "PSFailedToLoadInsightsData": "无法加载实时insights数据。列出了所有队列。",
+  "PSXWTFeatureDependencyMissing": "自定义转移目录与外部转移已启用，但它所依赖的本地“外部温暖转移”功能或插件自己的“会议”功能都未启用。因此，语音呼叫的温暖外部转移将被禁用。",
+  "PSPhoneNumberFailedValidationCheckRequest": "无法成功地对电话号码 '{{phoneNumber}}' 进行验证检查请求",
+  "PSPhoneNumberFailedValidationCheckWithErrors": "电话号码 '{{phoneNumber}}' 未通过验证检查，出现以下错误：{{errors}}",
+  "PSErrorExecutingColdTransfer": "尝试执行冷转移时出错，{{message}}",
+  "PSDirectoryQueues": "队列",
+  "PSDirectoryExternal": "外部",
+  "PSDirectorySearchDirectory": "搜索目录",
+  "PSDirectoryNoItemsFound": "未找到任何物品。",
+  "PSDirectoryColdTransfer": "冷转接",
+  "PSDirectoryWarmTransfer": "暖转接",
+  "PSDirectoryQueuesFiltered": "由于队列中没有可用的工作者，队列可能会被过滤掉。",
+  "PSDirectoryQueueTooltip": "客服：{{agentsAvailable}}，队列中的任务数：{{tasksInQueue}}",
+  "PSDirectoryNA": "不适用"
+}
