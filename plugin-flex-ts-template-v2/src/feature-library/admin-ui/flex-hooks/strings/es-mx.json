@@ -1,0 +1,21 @@
+{
+  "PSAdminTitle": "Ajuste de características",
+  "PSAdminConfigForTitle": "Configurar para:",
+  "PSAdminConfigForMyself": "Yo mismo",
+  "PSAdminConfigForEveryone": "Todos",
+  "PSAdminEnabled": "Habilitado",
+  "PSAdminDisabled": "Desactivado",
+  "PSAdminDocs": "Documentos",
+  "PSAdminRevertWorkerToGlobal": "Regresar a la configuración global",
+  "PSAdminMoreSettings": "Más ajustes",
+  "PSAdminNoMoreSettings": "Esta característica no tiene configuraciones adicionales",
+  "PSAdminFilterFeatures": "Características de filtro...",
+  "PSAdminModalSettingsTitle": "Configuraciones de {{feature}}",
+  "PSAdminSaveError": "Hubo un error al guardar los cambios. Por favor, inténtalo de nuevo.",
+  "PSAdminSaveSuccess": "Cambios guardados correctamente. Vuelva a cargar Flex para que los cambios surtan efecto.",
+  "PSAdminInvalidJson": "Ingrese un JSON válido para poder guardar.",
+  "PSAdminUpdatedModalTitle": "Configuraciones actualizadas",
+  "PSAdminUpdatedModalDesc": "\"Otro usuario ha actualizado la configuración global. Haz clic en \"volver a cargar\" para actualizar la vista con la configuración actualizada. La opción de guardar la configuración global no estará disponible hasta que se haya vuelto a cargar la vista.\"",
+  "PSAdminUpdatedModalReload": "Volver a cargar",
+  "PSAdminSaveDisabled": "La opción de guardar la configuración global no está disponible hasta que se vuelva a cargar la vista."
+}

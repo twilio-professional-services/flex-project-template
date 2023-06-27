@@ -1,5 +1,10 @@
+import esMX from './es-mx.json';
+import ptBR from './pt-br.json';
+import th from './th.json';
+import zhHans from './zh-hans.json';
+
 export enum StringTemplates {
-  FailedToLoadInsightsClient = 'PSFailedToLoaddInsightsClient',
+  FailedToLoadInsightsClient = 'PSFailedToLoadInsightsClient',
   FailedToLoadInsightsData = 'PSFailedToLoadInsightsData',
   XWTFeatureDependencyMissing = 'PSXWTFeatureDependencyMissing',
   PhoneNumberFailedValidationCheckRequest = 'PSPhoneNumberFailedValidationCheckRequest',
@@ -37,4 +42,8 @@ export const stringHook = () => ({
     [StringTemplates.QueueTooltip]: 'Agents: {{agentsAvailable}}, Tasks in queue: {{tasksInQueue}}',
     [StringTemplates.NA]: 'N/A',
   },
+  'es-MX': esMX,
+  'pt-BR': ptBR,
+  th,
+  'zh-Hans': zhHans,
 });

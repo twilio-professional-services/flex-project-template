@@ -1,0 +1,21 @@
+{
+  "PSAdminTitle": "特性设置",
+  "PSAdminConfigForTitle": "配置为:",
+  "PSAdminConfigForMyself": "自己",
+  "PSAdminConfigForEveryone": "每个人",
+  "PSAdminEnabled": "启用",
+  "PSAdminDisabled": "禁用",
+  "PSAdminDocs": "文档",
+  "PSAdminRevertWorkerToGlobal": "恢复全局设置",
+  "PSAdminMoreSettings": "更多设置",
+  "PSAdminNoMoreSettings": "此功能没有其他设置",
+  "PSAdminFilterFeatures": "筛选功能",
+  "PSAdminModalSettingsTitle": "{{feature}}设置",
+  "PSAdminSaveError": "保存更改时出现错误。请重试。",
+  "PSAdminSaveSuccess": "更改已成功保存。重新加载Flex以使更改生效。",
+  "PSAdminInvalidJson": "请输入有效的JSON以便保存。",
+  "PSAdminUpdatedModalTitle": "设置已更新",
+  "PSAdminUpdatedModalDesc": "另一位用户已更新全局设置。单击“重新加载”以使用更新后的设置刷新视图。在重新加载视图之前，将无法保存全局设置。",
+  "PSAdminUpdatedModalReload": "刷新",
+  "PSAdminSaveDisabled": "在重新加载视图之前，无法保存全局设置。"
+}

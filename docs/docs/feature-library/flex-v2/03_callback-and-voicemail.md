@@ -14,6 +14,7 @@ The feature is inspired by the work in the [Queued Callback and Voicemail](https
 - Callbacks and voicemails use a shared set of components and functions, as voicemails are effectively callbacks with a voicemail recording (and possibly a transcription) attached.
 - The callback or voicemail task can be automatically selected after the outbound call back to the contact ends, allowing for a smoother call wrapup process.
 - A robust wait experience (aka `waitUrl` endpoint) is provided - which uses a more robust Task API query to find the task associated with the Call SID. This addresses the documented scalability issue of the solution library approach - which uses `EvaluateTaskAttributes` for getting the pending task SID (an API that's strictly rate limited to 3 requests per second).
+- Voicemail retrieval works with recording media HTTP authentication enabled or disabled
 
 # Flex User Experience
 
@@ -38,6 +39,8 @@ When the channel is registered, it renders custom components based on the task a
 There are two associated serverless functions called _create-callback_.
 
 The only difference between these functions is one is intended to be called from Flex, the other from anywhere else, but typically Studio (could also be from a TwiML app). The difference is the security model for each function but both do the same thing, taking in task attributes and generating a new callback (or voicemail) task (via a common utility). The Flex interface is used for the re-queueing feature.
+
+When retrieving voicemail, the `fetch-voicemail` function is invoked. This fetches the recording media using HTTP authentication and returns it base64-encoded to Flex UI.
 
 # Setup and Dependencies
 

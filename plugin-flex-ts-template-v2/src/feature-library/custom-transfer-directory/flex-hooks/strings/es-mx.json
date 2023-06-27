@@ -1,0 +1,17 @@
+{
+  "PSFailedToLoadInsightsClient": "No se pudo cargar la información del cliente en tiempo real. Todas las colas están listadas.",
+  "PSFailedToLoadInsightsData": "No se puede cargar los datos de insights en tiempo real. Se muestran todas las colas.",
+  "PSXWTFeatureDependencyMissing": "\"El directorio de transferencia personalizada con transferencia externa está habilitado, pero ni la función nativa de \"transferencia externa consultada\" ni la función de \"conferencia\" propia del complemento están habilitadas. Como resultado, las transferencias externas consultadas para llamadas de voz estarán deshabilitadas.\"",
+  "PSPhoneNumberFailedValidationCheckRequest": "No se pudo realizar con éxito la solicitud de verificación de validación para el número de teléfono '{{phoneNumber}}'.",
+  "PSPhoneNumberFailedValidationCheckWithErrors": "\"El número de teléfono '{{phoneNumber}}' no pasó la validación y presenta los siguientes errores: {{errors}}\".",
+  "PSErrorExecutingColdTransfer": "Error al intentar realizar transferencia no consultada, {{mensaje}}",
+  "PSDirectoryQueues": "Colas",
+  "PSDirectoryExternal": "Externo",
+  "PSDirectorySearchDirectory": "Búsqueda de Directorio",
+  "PSDirectoryNoItemsFound": "No se encontraron elementos.",
+  "PSDirectoryColdTransfer": "Transferencia no consultada",
+  "PSDirectoryWarmTransfer": "Transferencia Consultada",
+  "PSDirectoryQueuesFiltered": "Las colas pueden filtrarse debido a la falta de trabajadores disponibles en las colas.",
+  "PSDirectoryQueueTooltip": "Agentes: {{agentsAvailable}}, Tareas en cola: {{tasksInQueue}}",
+  "PSDirectoryNA": "N/A"
+}

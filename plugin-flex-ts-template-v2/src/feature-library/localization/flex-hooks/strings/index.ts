@@ -1,4 +1,8 @@
 import languages from '../../languages';
+import esMX from './es-mx.json';
+import ptBR from './pt-br.json';
+import th from './th.json';
+import zhHans from './zh-hans.json';
 
 // Export the template names as an enum for better maintainability when accessing them elsewhere
 export enum StringTemplates {
@@ -16,6 +20,10 @@ export const stringHook = () => ({
     [StringTemplates.ChangeLanguageDialog]:
       'Are you sure you wish to change the language to {{newLanguage}}? Flex will automatically reload, dropping any active calls.',
   },
+  'es-MX': esMX,
+  'pt-BR': ptBR,
+  th,
+  'zh-Hans': zhHans,
 });
 
 export const systemStringHook = () => {

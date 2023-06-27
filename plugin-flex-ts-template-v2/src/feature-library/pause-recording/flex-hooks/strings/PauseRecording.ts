@@ -1,3 +1,8 @@
+import esMX from './es-mx.json';
+import ptBR from './pt-br.json';
+import th from './th.json';
+import zhHans from './zh-hans.json';
+
 // Export the template names as an enum for better maintainability when accessing them elsewhere
 export enum StringTemplates {
   RECORDING_PAUSED = 'PSRecordingPaused',
@@ -20,4 +25,8 @@ export const stringHook = () => ({
     [StringTemplates.PAUSE_TOOLTIP]: 'Pause Recording',
     [StringTemplates.RESUME_TOOLTIP]: 'Resume Recording',
   },
+  'es-MX': esMX,
+  'pt-BR': ptBR,
+  th,
+  'zh-Hans': zhHans,
 });

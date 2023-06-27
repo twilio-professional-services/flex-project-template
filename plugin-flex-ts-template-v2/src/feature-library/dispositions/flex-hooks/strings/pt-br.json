@@ -1,0 +1,8 @@
+{
+  "PSDispositionRequired": "Um desfecho é necessário antes de você poder completar esta tarefa.",
+  "PSDispositionTab": "Desfecho",
+  "PSSelectDispositionTitle": "Selecione um desfecho",
+  "PSSelectDispositionHelpText": "O desfecho selecionado será salvo quando você concluir esta tarefa.",
+  "PSNotesTitle": "Notas",
+  "PSNotesCharactersRemaining": "{{characters}} caracteres restantes"
+}

@@ -86,14 +86,16 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
         // If agent_coaching_panel is true (enabled), proceed
         // otherwise we will not update to the Sync Doc
         if (agent_coaching_panel && !privateMode) {
+          const supervisorStatus = 'coaching';
+          const updateStatus = 'update';
           // Updating the Sync Doc to reflect that we are no longer barging and back into Monitoring
           SyncDoc.initSyncDocSupervisors(
             agentWorkerSID,
             conferenceSid,
             myWorkerSID,
             supervisorFN,
-            'is Coaching',
-            'update',
+            supervisorStatus,
+            updateStatus,
           );
         }
       } else {
@@ -106,14 +108,16 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
         // If agent_coaching_panel is true (enabled), proceed
         // otherwise we will not update to the Sync Doc
         if (agent_coaching_panel && !privateMode) {
+          const supervisorStatus = 'barge';
+          const updateStatus = 'update';
           // Updating the Sync Doc to reflect that we are no longer barging and back into Monitoring
           SyncDoc.initSyncDocSupervisors(
             agentWorkerSID,
             conferenceSid,
             myWorkerSID,
             supervisorFN,
-            'has Joined',
-            'update',
+            supervisorStatus,
+            updateStatus,
           );
         }
       }
@@ -190,13 +194,15 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
       // otherwise we will not update to the Sync Doc
       if (agent_coaching_panel && !privateMode) {
         // Updating the Sync Doc to reflect that we are no longer coaching and back into Monitoring
+        const supervisorStatus = 'monitoring';
+        const updateStatus = 'update';
         SyncDoc.initSyncDocSupervisors(
           agentWorkerSID,
           conferenceSid,
           myWorkerSID,
           supervisorFN,
-          'is Monitoring',
-          'update',
+          supervisorStatus,
+          updateStatus,
         );
       }
     } else {
@@ -212,14 +218,16 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
       // If agent_coaching_panel is true (enabled), proceed
       // otherwise we will not update to the Sync Doc
       if (agent_coaching_panel && !privateMode) {
+        const supervisorStatus = 'coaching';
+        const updateStatus = 'update';
         // Updating the Sync Doc to reflect that we are now coaching the agent
         SyncDoc.initSyncDocSupervisors(
           agentWorkerSID,
           conferenceSid,
           myWorkerSID,
           supervisorFN,
-          'is Coaching',
-          'update',
+          supervisorStatus,
+          updateStatus,
         );
       }
     }
