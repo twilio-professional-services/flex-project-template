@@ -195,6 +195,7 @@ runs:
         terraform plan $custom_plan_flags
         if ($terraformapply){
           terraform apply -auto-approve $custom_apply_flags
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
         }
         $StateExists = Test-Path -Path ./terraform.tfstate -PathType Leaf
         if ($StateExists){
