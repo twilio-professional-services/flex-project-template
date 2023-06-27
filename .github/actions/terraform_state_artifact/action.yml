@@ -62,8 +62,8 @@ runs:
         $tf_severless_sid_custom_flex = $services | where {$_.uniqueName -eq 'custom-flex-extensions-serverless'} | Select -property sid -ExpandProperty sid
         $tf_severless_sid_schedule_manager = $services | where {$_.uniqueName -eq 'schedule-manager'} | Select -property sid -ExpandProperty sid
 
-        $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property sid -ExpandProperty sid
-        $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property sid -ExpandProperty sid
+        $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
+        $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
 
         ### TASK ROUTER ###
 
