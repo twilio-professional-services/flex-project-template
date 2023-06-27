@@ -124,7 +124,7 @@ if(shell.test('-e', './serverless-functions/.twiliodeployinfo')){
 
 // update references to the plugin in the actions scripts
 var oldPluginNamdRegex = RegExp(`${pluginDir}`); 
-shell.sed('-i', oldPluginNamdRegex, fullPluginName, `./.github/*/flex_deploy_*.yaml`);
+shell.sed('-i', oldPluginNamdRegex, fullPluginName, `./.github/*/flex_deploy*.yaml`);
 
 
 console.log(`Re-evaluating npm package-lock for ${fullPluginName}...`);
