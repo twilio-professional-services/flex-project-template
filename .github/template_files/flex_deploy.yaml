@@ -14,7 +14,7 @@ on:
         type: environment
         description: 'Environment to run tests against'
       initial_release:
-        requred: true
+        required: true
         type: boolean
         description: is this the first release to the environment?
         default: false
