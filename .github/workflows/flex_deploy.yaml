@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: '16'
       - name: install npm and apply missing environment variables
-      - id: initial-env
+        id: initial-env
         run: |
           npm install
           npm run populate-missing-placeholders $ENVIRONMENT
