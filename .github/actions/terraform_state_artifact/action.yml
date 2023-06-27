@@ -105,7 +105,7 @@ runs:
         $queues = twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
 
         $tf_queue_sid_everyone = $queues | where {$_.friendlyName -eq 'Everyone'} | Select -property sid -ExpandProperty sid
-        $tf_queue_sid_template_example_sales = $queues | where {$_.friendlyName -eq 'Template Example Sales'} | Select -property sid -ExpandProperty sid
+        $tf_queue_sid_template_example_ = $queues | where {$_.friendlyName -eq 'Template Example Sales'} | Select -property sid -ExpandProperty sid
         $tf_queue_sid_template_example_support = $queues | where {$_.friendlyName -eq 'Template Example Support'} | Select -property sid -ExpandProperty sid
         $tf_queue_sid_internal_calls = $queues | where {$_.friendlyName -eq 'Internal Calls'} | Select -property sid -ExpandProperty sid
 
