@@ -1,4 +1,4 @@
-name: flex_deploy
+name: Deploy Flex
 
 on:
   # Run on merge to main
