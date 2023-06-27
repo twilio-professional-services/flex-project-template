@@ -4,7 +4,7 @@ sidebar_position: 3
 title: infra-as-code
 ---
 
-This package contains the available infastructure as code solutions, right now only one is in use terraform, which is the default.
+This package contains the available infastructure as code solutions, right now the only one in use is terraform, which is the default.
 
 
 -----
