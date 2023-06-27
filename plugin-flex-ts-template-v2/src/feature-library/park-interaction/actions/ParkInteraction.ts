@@ -45,7 +45,8 @@ export const parkInteraction = async (payload: ParkInteractionPayload) => {
     Notifications.dismissNotificationById(ParkInteractionNotification.ParkError);
 
     setTimeout(() => {
-      console.log('after 2 sec');
+      // Work around a Flex bug where a CONVERSATION_UPDATE happens after CONVERSATION_UNLOAD,
+      // which results in the conversation not loading until Flex UI is reloaded
       Manager.getInstance().store.dispatch({
         type: 'CONVERSATION_UNLOAD',
         payload: {},
