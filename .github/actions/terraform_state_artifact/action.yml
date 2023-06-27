@@ -195,12 +195,13 @@ runs:
         terraform plan $custom_plan_flags
         if ($terraformapply){
           terraform apply -auto-approve $custom_apply_flags
-          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          if ($LASTEXITCODE) { $report_exit_code=$LASTEXITCODE }
         }
         $StateExists = Test-Path -Path ./terraform.tfstate -PathType Leaf
         if ($StateExists){
           openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"${{ inputs.encryptionkey }}" -out ./terraform.tfstate.enc
         }
+        if ($report_exit_code) { exit $report_exit_code }
       shell: pwsh
     - uses: actions/upload-artifact@v2
       with:
