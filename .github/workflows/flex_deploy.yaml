@@ -82,6 +82,7 @@ jobs:
 
 
   deploy-serverless:
+    if: ${{ always() && !failed() && !cancelled() }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     env:
@@ -114,6 +115,7 @@ jobs:
           npm run deploy:$ENVIRONMENT
 
   deploy-schedule-manager:
+    if: ${{ always() && !failed() && !cancelled() }}
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     env:
@@ -139,6 +141,7 @@ jobs:
           npm run deploy:$ENVIRONMENT
 
   deploy-flex-config:
+    if: ${{ always() && !failed() && !cancelled() }}
     environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     env:
