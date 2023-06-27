@@ -1,7 +1,7 @@
 ---
 sidebar_label: Overview
 sidebar_position: 1
-title: Okay tell me more, how does it work exactly?
+title: Okay tell me more, how does it work?
 ---
 
 The Twilio platform is a suite of tools that can be threaded together to create incredible custom solutions.  The biggest challenge here is the gap in tools readily available to automatically configure and thread these different tools together from an single image. 
