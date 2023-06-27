@@ -30,7 +30,9 @@ jobs:
   # the serverless backend needs an initial deploy so 
   # the domain name can be pulled in for the terraform deploy
   perform-initial-serverless-release:
-    if: (github.event.inputs.initial_release && github.event.inputs.deploy_terraform)
+    if: |
+      (github.event.inputs.initial_release == true && 
+       github.event.inputs.deploy_terraform == true)
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     env:
