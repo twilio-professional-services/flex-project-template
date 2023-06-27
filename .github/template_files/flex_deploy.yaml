@@ -86,9 +86,6 @@ jobs:
     needs: [perform-initial-serverless-release]
     steps:
       - uses: actions/checkout@v1 
-        if: env.DISABLE_TERRAFORM != 'true'
-      - uses: ./.github/actions/terraform_state_artifact
-        if: env.DISABLE_TERRAFORM != 'true'
       - uses: ./.github/actions/terraform_state_artifact
         with:
           encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
