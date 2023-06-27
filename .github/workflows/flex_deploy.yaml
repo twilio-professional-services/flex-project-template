@@ -36,6 +36,7 @@ jobs:
         run: |
           npm install
           npm run populate-missing-placeholders $ENVIRONMENT
+          npm install -g twilio-cli
           echo "INITIAL_SERVICE=$(twilio api:serverless:v1:services:list | grep 'custom-flex-extensions' | cut -d ' ' -f 3)" >> "$GITHUB_OUTPUT"
       - name: install npm and build video-app-assets
         working-directory: web-app-examples/video-app-quickstart
