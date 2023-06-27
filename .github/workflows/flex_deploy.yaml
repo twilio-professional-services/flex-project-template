@@ -30,7 +30,7 @@ jobs:
   # the serverless backend domain names need
   # set so they can be pulled in for the terraform deploy
   perform-initial-serverless-release:
-    if: ${{ github.event.inputs.initial-release && github.event.inputs.deploy-terraform }}
+    if: github.event.inputs.initial-release && github.event.inputs.deploy-terraform
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     env:
@@ -58,7 +58,7 @@ jobs:
           npm run deploy:$ENVIRONMENT
 
   deploy-terraform:
-    if: ${{ github.event.inputs.initial-release }}
+    if: github.event.inputs.initial-release
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     env:
