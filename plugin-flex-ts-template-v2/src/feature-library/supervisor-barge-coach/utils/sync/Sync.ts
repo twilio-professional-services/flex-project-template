@@ -69,7 +69,7 @@ class SyncDocClass {
     let supervisorsArray: Array<any> = [];
     this.getSyncDoc(docToUpdate)
       .then((doc: any) => {
-        if (doc.data.supervisors !== null) {
+        if (doc.data.supervisors) {
           supervisorsArray = [...doc.data.supervisors];
         }
         if (updateStatus === 'add') {
