@@ -163,7 +163,7 @@
       "properties": {
         "variables": [
           {
-            "value": "sales",
+            "value": "template_example_sales",
             "key": "queue_name"
           }
         ],
@@ -185,7 +185,7 @@
       "properties": {
         "variables": [
           {
-            "value": "support",
+            "value": "template_example_support",
             "key": "queue_name"
           }
         ],

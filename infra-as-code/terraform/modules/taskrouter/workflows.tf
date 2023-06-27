@@ -25,8 +25,8 @@ resource "twilio_taskrouter_workspaces_workflows_v1" "internal_call" {
 locals{
   params = {
     "QUEUE_SID_EVERYONE" = twilio_taskrouter_workspaces_task_queues_v1.everyone.sid
-    "QUEUE_SID_SALES" = twilio_taskrouter_workspaces_task_queues_v1.sales.sid
-    "QUEUE_SID_SUPPORT" = twilio_taskrouter_workspaces_task_queues_v1.support.sid
+    "QUEUE_SID_TEMPLATE_EXAMPLE_SALES" = twilio_taskrouter_workspaces_task_queues_v1.template_example_sales.sid
+    "QUEUE_SID_TEMPLATE_EXAMPLE_SUPPORT" = twilio_taskrouter_workspaces_task_queues_v1.template_example_support.sid
     "QUEUE_SID_INTERNAL_CALLS" = twilio_taskrouter_workspaces_task_queues_v1.internal_calls.sid
   }
 }
