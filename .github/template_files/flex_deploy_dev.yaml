@@ -10,6 +10,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
+        required: true
         type: environment
 
 
