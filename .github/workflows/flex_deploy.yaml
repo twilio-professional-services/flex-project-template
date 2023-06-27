@@ -24,7 +24,7 @@ jobs:
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     outputs: 
-      should-redeploy-serverless: ${{ steps.initial-env.outputs.flex-domain }} == 'custom-flex-extensions-serverless'
+      should-redeploy-serverless: ${{ steps.initial-env.outputs.INITIAL_DOMAIN }} == 'custom-flex-extensions-serverless'
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
@@ -35,7 +35,8 @@ jobs:
         id: initial-env
         run: |
           npm install
-          npm run populate-missing-placeholders $ENVIRONMENT | grep "custom-flex-extensions-serverless" | cut -d ' ' -f 4 >> "$GITHUB_OUTPUT"
+          npm run populate-missing-placeholders $ENVIRONMENT
+          echo "INITIAL_DOMAIN=$(twilio api:serverless:v1:services:list | grep 'custom-flex-extensions' | cut -d ' ' -f 3)" >> "$GITHUB_OUTPUT"
       - name: install npm and build video-app-assets
         working-directory: web-app-examples/video-app-quickstart
         run: |
