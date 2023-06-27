@@ -63,7 +63,11 @@ jobs:
           npm run deploy:$ENVIRONMENT
 
   deploy-terraform:
-    if: github.event.inputs.deploy_terraform == 'true'
+    if: | 
+      always() &&
+        !contains(needs.*.result, 'failure') &&
+        !contains(needs.*.result, 'cancelled') &&
+      github.event.inputs.deploy_terraform == 'true'
     runs-on: ubuntu-latest
     environment: ${{ github.event.inputs.environment }}
     env:
