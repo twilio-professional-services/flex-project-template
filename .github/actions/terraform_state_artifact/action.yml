@@ -168,7 +168,7 @@ runs:
   
         $tf_flow_sid_voice_ivr = $flows | where {$_.friendlyName -eq 'Voice IVR'} | Select -property sid -ExpandProperty sid
         $tf_flow_sid_messaging_flow = $flows | where {$_.friendlyName -eq 'Messaging Flow'} | Select -property sid -ExpandProperty sid
-        $tf_flow_sid_chat_flow = $flows | where {$_.friendlyName -eq 'Chat Flow'} | Select -property sid -ExpandProperty si
+        $tf_flow_sid_chat_flow = $flows | where {$_.friendlyName -eq 'Chat Flow'} | Select -property sid -ExpandProperty sid
 
         if ($tf_flow_sid_voice_ivr) {
           terraform import module.ivr.twilio_studio_flows_v2.voice $tf_flow_sid_voice_ivr
