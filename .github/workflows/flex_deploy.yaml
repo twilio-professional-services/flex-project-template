@@ -16,7 +16,7 @@ on:
       deploy_terraform:
         required: true
         type: boolean
-        default: true
+        default: false
         description: Deploy Terraform?
       initial_release:
         required: true
