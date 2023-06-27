@@ -1,6 +1,6 @@
 output "workspace_sid" {
   value = twilio_taskrouter_workspaces_v1.flex.sid
-  description = "Default workspace SID"
+  description = "Flex Task Assignment workspace SID"
 }
 
 output "workflow_sid_assign_to_anyone" {

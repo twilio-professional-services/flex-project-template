@@ -2,12 +2,20 @@ variable "TWILIO_ACCOUNT_SID" {
   type        = string
   sensitive   = true
   description = "Twilio Account SID"
+  validation {
+    condition     = length(var.TWILIO_ACCOUNT_SID) > 2 && substr(var.TWILIO_ACCOUNT_SID, 0, 2) == "AC"
+    error_message = "TWILIO_ACCOUNT_SID expected to start with \"AC\"."
+  }
 }
 
 variable "TWILIO_API_KEY" {
   type        = string
   sensitive   = true
   description = "Twilio API key"
+  validation {
+    condition     = length(var.TWILIO_API_KEY) > 2 && substr(var.TWILIO_API_KEY, 0, 2) == "SK"
+    error_message = "TWILIO_API_KEY expected to start with \"SK\"."
+  }
 }
 
 variable "TWILIO_API_SECRET" {

@@ -1,4 +1,4 @@
-name: flex_deploy_dev
+name: Deploy Flex
 
 on:
   # Run on merge to main
@@ -8,14 +8,40 @@ on:
 
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
-
+    inputs:
+      environment:
+        required: true
+        type: environment
+        description: 'Environment to run tests against'
+      deploy_terraform:
+        required: true
+        type: boolean
+        default: true
+        description: Deploy Terraform?
+      initial_release:
+        required: true
+        type: boolean
+        description: Is this the first release to the environment?
+        default: false
+      overwrite_config:
+        required: true
+        type: boolean
+        default: false
+        description: Overwrite config set by Admin UI Panel?
 
 jobs:
-  deploy-serverless:
+
+  # When performing an initial release
+  # the serverless backend needs an initial deploy so 
+  # the domain name can be pulled in for the terraform deploy
+  perform-initial-serverless-release:
+    if: |
+      (github.event.inputs.initial_release == 'true' && 
+       github.event.inputs.deploy_terraform == 'true')
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ github.event.inputs.environment }}
     env:
-      ENVIRONMENT: dev
+      ENVIRONMENT: ${{ github.event.inputs.environment }}
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
@@ -25,7 +51,71 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: install top-level packages
+        run: |
+          npm install
+      - name: deploy serverless
+        working-directory: serverless-functions
+        run: |
+          npm install
+          npm run install-serverless-plugin
+          npm run deploy:$ENVIRONMENT
+      - name: deploy serverless-schedule-manager
+        working-directory: serverless-schedule-manager
+        run: |
+          npm install
+          npm run install-serverless-plugin
+          npm run deploy:$ENVIRONMENT
+
+  deploy-terraform:
+    if: | 
+      always() &&
+        !contains(needs.*.result, 'failure') &&
+        !contains(needs.*.result, 'cancelled') &&
+      github.event.inputs.deploy_terraform == 'true'
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ github.event.inputs.environment }}
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+    needs: [perform-initial-serverless-release]
+    steps:
+      - uses: actions/checkout@v1 
+        if: env.DISABLE_TERRAFORM != 'true'
+      - uses: ./.github/actions/terraform_state_artifact
+        if: env.DISABLE_TERRAFORM != 'true'
+      - uses: ./.github/actions/terraform_state_artifact
+        with:
+          encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
+          path: ./infra-as-code/terraform/environments/default
+
+
+  deploy-serverless:
+    if: |    
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ github.event.inputs.environment }}
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+    needs: [deploy-terraform]
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
       - name: install npm and apply missing environment variables
+        id: initial-env
         run: |
           npm install
           npm run populate-missing-placeholders $ENVIRONMENT
@@ -42,13 +132,18 @@ jobs:
           npm run deploy:$ENVIRONMENT
 
   deploy-schedule-manager:
+    if: |    
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ github.event.inputs.environment }}
     env:
-      ENVIRONMENT: dev
+      ENVIRONMENT: ${{ github.event.inputs.environment }}
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+    needs: [deploy-terraform]
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
@@ -65,75 +160,19 @@ jobs:
           npm run install-serverless-plugin
           npm run deploy:$ENVIRONMENT
 
-  deploy-terraform:
-    runs-on: ubuntu-latest
-    environment: dev
-    env:
-      ENVIRONMENT: dev
-      DISABLE_TERRAFORM: ${{vars.DISABLE_TERRAFORM || 'false' }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-      TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-    needs: [deploy-serverless, deploy-schedule-manager]
-    steps:
-      - uses: actions/checkout@v1 
-        if: env.DISABLE_TERRAFORM != 'true'
-      - uses: ./.github/actions/terraform_state_artifact
-        if: env.DISABLE_TERRAFORM != 'true'
-      - uses: ./.github/actions/terraform_state_artifact
-        with:
-          encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
-          path: ./infra-as-code/terraform/environments/default
-
-  ####################################################
-  ### NOTE: This job can be removed after the first 
-  ### successful deploy it is required to align
-  ### serverless hostname with terraform and then 
-  ### sids from terraform deploy back with serverless
-  #####################################################
-  deploy-serverless-post-terraform:
-    runs-on: ubuntu-latest
-    environment: dev
-    env:
-      ENVIRONMENT: dev
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-    needs: [deploy-terraform]
-    steps:
-      - uses: actions/checkout@v3
-      - name: setup node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: install npm and apply missing environment variables
-        run: |
-          npm install
-          npm run populate-missing-placeholders $ENVIRONMENT
-      - name: install npm and build video-app-assets
-        working-directory: web-app-examples/video-app-quickstart
-        run: |
-          npm install
-          npm run build
-      - name: deploy serverless
-        working-directory: serverless-functions
-        run: |
-          npm install
-          npm run install-serverless-plugin
-          npm run deploy:$ENVIRONMENT
-
   deploy-flex-config:
+    if: |    
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    environment: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
-    environment: dev
     env:
-      ENVIRONMENT: dev
+      ENVIRONMENT:  ${{ github.event.inputs.environment }}
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-      OVERWRITE_CONFIG: ${{ vars.OVERWRITE_CONFIG }}
+      OVERWRITE_CONFIG: ${{ github.event.inputs.overwrite_config }}
     needs: [deploy-serverless, deploy-schedule-manager]
     steps:
       - uses: actions/checkout@v3
@@ -145,7 +184,6 @@ jobs:
         run: |
           npm install
           npm run populate-missing-placeholders $ENVIRONMENT
-    
       - name: deploy flex config
         working-directory: flex-config
         run: |
@@ -154,7 +192,7 @@ jobs:
 
   deploy-release-plugin:
     runs-on: ubuntu-latest
-    environment: dev
+    environment: ${{ github.event.inputs.environment }}
     env:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
