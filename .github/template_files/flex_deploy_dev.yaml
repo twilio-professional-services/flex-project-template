@@ -12,6 +12,7 @@ on:
       environment:
         required: true
         type: environment
+        description: 'Environment to run tests against'
 
 
 jobs:
