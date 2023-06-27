@@ -83,6 +83,7 @@ jobs:
         if: env.DISABLE_TERRAFORM != 'true'
       - uses: ./.github/actions/terraform_state_artifact
         if: env.DISABLE_TERRAFORM != 'true'
+      - uses: ./.github/actions/terraform_state_artifact
         with:
           encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
           path: ./infra-as-code/terraform/environments/default
