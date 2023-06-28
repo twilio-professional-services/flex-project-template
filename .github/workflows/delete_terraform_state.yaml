@@ -17,7 +17,6 @@ jobs:
       ENVIRONMENT: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - id: download_state
         run: |
           $Repo = "${{ github.repository }}"
@@ -29,7 +28,7 @@ jobs:
             Write-Host "Rest response: $RestResponse"
             $StateHistory = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}"
             
-            echo $StateHistory 
+            $StateHistory.ForEach({ echo $_.url }]
             $StateHistory.ForEach( { $artifact_id = $_ | Select-Object -ExpandProperty archive_download_url, Invoke-RestMethod -uri $ArtifactUri/$artifact_id -Token $Token -Authentication bearer -Method DELETE })
           }
         shell: pwsh
