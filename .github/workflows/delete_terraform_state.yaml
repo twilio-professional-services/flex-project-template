@@ -21,7 +21,7 @@ jobs:
           echo "### Job summary" >> $env:GITHUB_STEP_SUMMARY
           echo " - Repo: ${{ github.repository }}"  >> $env:GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
-          echo " - Artifact Name: "terraformstatefile-${{ env.ENVIRONMENT }}"
+          echo " - Artifact Name: terraformstatefile-${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
           echo " --- "  >> $env:GITHUB_STEP_SUMMARY
           echo "### Job Results "  >> $env:GITHUB_STEP_SUMMARY
 
