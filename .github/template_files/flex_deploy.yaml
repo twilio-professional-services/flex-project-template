@@ -16,7 +16,7 @@ on:
       deploy_terraform:
         required: true
         type: boolean
-        default: true
+        default: false
         description: Deploy Terraform?
       initial_release:
         required: true
@@ -90,6 +90,7 @@ jobs:
         with:
           encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
           path: ./infra-as-code/terraform/environments/default
+          environment: ${{ github.event.inputs.environment }}
 
 
   deploy-serverless:

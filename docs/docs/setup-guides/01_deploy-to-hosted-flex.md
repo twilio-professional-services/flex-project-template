@@ -5,19 +5,20 @@ title: Deploy to hosted Flex
 ---
 
 
-:::caution
+:::danger IMPORTANT UNDERSTANDING
 These deploy steps will setup taskrouter configuration possibly overwriting resources that may already be there. 
 
-*If you do not want to overwrite any changes uncheck the `Deploy Terraform?` input box when running the github action to deploy flex* 
+If you do not want to overwrite any changes uncheck the `Deploy Terraform?` input box when running the github action to deploy flex
 
 ![image](/img/guides/github-trigger.png)
 
+doing this however will mean some features will need manual setup, the steps of which can be found in the relevant documentation.
 
 :::
 
-:::note
+:::info Resources effected
 
-Resources effected
+
 
 ## TaskRouter
 
@@ -34,7 +35,7 @@ Resources effected
 :::
 
 
-_~8 minutes_
+Time to complete: _~8 minutes_
 
 1. Use the template to [create your own repository](https://github.com/twilio-professional-services/flex-project-template/generate) 
    - (Optionally) after creating your repo you may also want to attach the history to your new repository for future updates - details [here](/setup-guides/managing-future-updates-from-the-template)
@@ -51,13 +52,17 @@ _~8 minutes_
      - `TWILIO_API_SECRET` - the api secret
 
 5. Create a project level secret for `TF_ENCRYPTION_KEY` this can be any string value you want
-
-![alt text](../../static/img/github-secrets.png)
+   - your environment secrets should look something like this 
+   ![image](/img/guides/github-secrets.png)
 
 6. Login into Flex and make sure in the admin panel, the version of flex you are using meets the minimal version allowed by the plugin (in this case Flex 2.x is minimum allowed)
 7. _Optionally_ navigate to the flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/manage/voice?frameUrl=%2Fconsole%2Fflex%2Fvoice%3Fx-target-region%3Dus1) (this is required for some features)
-8. Navigate over to github actions of your repository and select the environment you want to deploy, check the box for the initial deploy then run the workflow.
+8. Navigate over to github actions of your repository and select the environment you want to deploy, check the boxes for;
+   - `Is this the first release to the environment?`
+   - `Deploy Terraform?`  (as *cautioned* above), 
+   
+9. Run the workflow.
    - this will deploy the assets to your environment with the default features enabled, See [Feature library Information](/feature-library/overview) for further details of whats enabled by default.
    - serverless-functions will auto-identify any missing environment variables for the default features. It is recommended you populate the [environment variables](https://github.com/twilio-professional-services/flex-project-template/blob/main/serverless-functions/.env.example) for each account and manage config in version control at a later date to remove any ambiguity.
-   - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommended you populate the [ui_attributes](https://github.com/twilio-professional-services/flex-project-template/blob/main/flex-config/ui_attributes.common.json) config and manage the domain names through version control at a later date to remove any ambiguity.
+   - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. It is recommended you populate the [ui_attributes](https://github.com/twilio-professional-services/flex-project-template/blob/main/flex-config/ui_attributes.common.json) config and manage the domain names through version control at a later date, again, to remove any ambiguity.
 
