@@ -17,12 +17,11 @@ jobs:
       ENVIRONMENT: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - name: Adding markdown
       - id: download_state
         run: |
 
           echo "### Deleting Terraform State for ${{ env.ENVIRONMENT }}" >> $GITHUB_STEP_SUMMARY
-          
+
           $Repo = "${{ github.repository }}"
           $BaseUri = "https://api.github.com"
           $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
