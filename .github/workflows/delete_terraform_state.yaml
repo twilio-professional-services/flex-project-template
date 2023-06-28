@@ -21,6 +21,7 @@ jobs:
           echo "### Job summary" >> $env:GITHUB_STEP_SUMMARY
           echo " - Repo: ${{ github.repository }}"  >> $env:GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
+          echo " - Artifact Name: "terraformstatefile-${{ env.ENVIRONMENT }}"
           echo " --- "  >> $env:GITHUB_STEP_SUMMARY
           echo "### Job Results "  >> $env:GITHUB_STEP_SUMMARY
 
@@ -32,14 +33,19 @@ jobs:
           if ($RestResponse){
             $StateHistory = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}"
 
-            echo $StateHistory
 
-            echo " - Historic State Files Found: $StateHistory.Length"  >> $env:GITHUB_STEP_SUMMARY
+            if($StateHistory) {
+              echo $StateHistory
+
+              echo " - Historic State Files Found: $StateHistory.Length"  >> $env:GITHUB_STEP_SUMMARY
             
-            $StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method DELETE})
+              $StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method DELETE})
+            } else {
+              echo " - Historic State Files Found: 0"  >> $env:GITHUB_STEP_SUMMARY
+            }
 
           } else {
-            echo ":warning: No artifacts found for repository:"  >> $env:GITHUB_STEP_SUMMARY
+            echo ":warning: No artifacts found for repository"  >> $env:GITHUB_STEP_SUMMARY
           }
         shell: pwsh
 
