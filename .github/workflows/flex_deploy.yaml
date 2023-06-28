@@ -55,7 +55,6 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          echo " - AccountSid: ${{ env.TWILIO_ACCOUNT_SID }}"  >> $GITHUB_STEP_SUMMARY
           npm install
       - name: deploy serverless
         working-directory: serverless-functions
@@ -120,7 +119,6 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          echo " - AccountSid: ${{ env.TWILIO_ACCOUNT_SID }}"  >> $GITHUB_STEP_SUMMARY
           npm install
           npm run populate-missing-placeholders $ENVIRONMENT
       - name: install npm and build video-app-assets
@@ -158,7 +156,6 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          echo " - AccountSid: ${{ env.TWILIO_ACCOUNT_SID }}"  >> $GITHUB_STEP_SUMMARY
           npm install
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
@@ -191,7 +188,6 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          echo " - AccountSid: ${{ env.TWILIO_ACCOUNT_SID }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Overwrite Config: ${{ env.OVERWRITE_CONFIG }}"  >> $GITHUB_STEP_SUMMARY
           npm install
           npm run populate-missing-placeholders $ENVIRONMENT
@@ -223,7 +219,6 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ github.event.inputs.environment }}"  >> $GITHUB_STEP_SUMMARY
-          echo " - AccountSid: ${{ env.TWILIO_ACCOUNT_SID }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Plugin Folder: ${{ env.PLUGIN_FOLDER }}"  >> $GITHUB_STEP_SUMMARY
           cd $PLUGIN_FOLDER
           npm install
