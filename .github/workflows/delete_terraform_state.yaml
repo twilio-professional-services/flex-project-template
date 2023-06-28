@@ -36,7 +36,7 @@ jobs:
 
             if($StateHistory) {
               echo "Terraform State Files Found: "
-              echo $StateHistory | Measure-Object
+              echo $StateHistory | Measure-Object.Count
 
               echo " - Historic State Files Found: $($StateHistory | Measure-Object).Count"  >> $env:GITHUB_STEP_SUMMARY
             
