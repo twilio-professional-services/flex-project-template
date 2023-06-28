@@ -73,7 +73,8 @@ runs:
         $tf_workspace_sid = $workspaces | where {$_.friendlyName -eq 'Flex Task Assignment'} | Select -property sid -ExpandProperty sid
 
         if ($tf_workspace_sid) {
-          terraform import module.taskrouter.twilio_taskrouter_workspaces_v1.flex $tf_workspace_sid 
+          terraform import module.taskrouter.twilio_taskrouter_workspaces_v1.flex $tf_workspace_sid
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         # workflows
@@ -87,18 +88,22 @@ runs:
 
         if ($tf_workflow_sid_assign_to_anyone) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone $tf_workspace_sid/$tf_workflow_sid_assign_to_anyone
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_workflow_sid_chat_transfer) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.chat_transfer $tf_workspace_sid/$tf_workflow_sid_chat_transfer
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_workflow_sid_callback) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.callback $tf_workspace_sid/$tf_workflow_sid_callback
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_workflow_sid_internal_call) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.internal_call $tf_workspace_sid/$tf_workflow_sid_internal_call
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         # queues
@@ -111,18 +116,22 @@ runs:
 
         if ($tf_queue_sid_everyone) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.everyone $tf_workspace_sid/$tf_queue_sid_everyone
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_queue_sid_template_example_sales) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_sales $tf_workspace_sid/$tf_queue_sid_template_example_sales
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_queue_sid_template_example_support) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_support $tf_workspace_sid/$tf_queue_sid_template_example_support
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_queue_sid_internal_calls) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.internal_calls $tf_workspace_sid/$tf_queue_sid_internal_calls
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }   
 
         # channels
@@ -133,10 +142,12 @@ runs:
 
         if ($tf_task_channel_sid_voice) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.voice $tf_workspace_sid/$tf_task_channel_sid_voice
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_task_channel_sid_chat) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.chat $tf_workspace_sid/$tf_task_channel_sid_chat
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         # activities
@@ -149,18 +160,22 @@ runs:
 
         if ($tf_activity_offline) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.offline $tf_workspace_sid/$tf_activity_offline
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_activity_available) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.available $tf_workspace_sid/$tf_activity_available
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_activity_unavailable) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.unavailable $tf_workspace_sid/$tf_activity_unavailable
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_activity_break) {
           terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.break $tf_workspace_sid/$tf_activity_break
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         ### STUDIO ###
@@ -172,14 +187,17 @@ runs:
 
         if ($tf_flow_sid_voice_ivr) {
           terraform import module.studio.twilio_studio_flows_v2.voice $tf_flow_sid_voice_ivr
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_flow_sid_messaging_flow) {
           terraform import module.studio.twilio_studio_flows_v2.messaging $tf_flow_sid_messaging_flow
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         if ($tf_flow_sid_chat_flow) {
           terraform import module.studio.twilio_studio_flows_v2.chat $tf_flow_sid_chat_flow
+          if ($LASTEXITCODE) { exit $LASTEXITCODE } 
         }
 
         #############################################################################
@@ -195,18 +213,22 @@ runs:
         terraform plan $custom_plan_flags
         if ($terraformapply){
           terraform apply -auto-approve $custom_apply_flags
-          if ($LASTEXITCODE) { $report_exit_code=$LASTEXITCODE }
+          if ($LASTEXITCODE) { echo "APPLY_EXIT_CODE=$LASTEXITCODE" >> $env:GITHUB_ENV  } 
         }
         $StateExists = Test-Path -Path ./terraform.tfstate -PathType Leaf
         if ($StateExists){
           openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"${{ inputs.encryptionkey }}" -out ./terraform.tfstate.enc
         }
-        if ($report_exit_code) { exit $report_exit_code }
       shell: pwsh
     - uses: actions/upload-artifact@v2
       with:
         name: terraformstatefile
         path: ${{ inputs.path }}/terraform.tfstate.enc
+    - id: report-exit-code
+      if: ${{ env.APPLY_EXIT_CODE }} == null
+      working-directory: ${{ inputs.path }}
+      run: |
+        exit ${{ env.APPLY_EXIT_CODE }}
 branding:
   icon: 'cloud'
   color: 'gray-dark'
