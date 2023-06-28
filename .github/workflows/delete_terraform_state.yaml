@@ -38,7 +38,7 @@ jobs:
               echo "Terraform State Files Found: "
               echo $StateHistory
               echo $StateHistory | Measure-Object | Select-Object -ExpandProperty Count
-              echo $StateHistory | Measure-Object.Count
+              echo $($StateHistory | Measure-Object).Count
 
               $size = $StateHistory | Measure-Object | Select-Object -ExpandProperty Count;
               echo " - Historic State Files Found: $size"  >> $env:GITHUB_STEP_SUMMARY
