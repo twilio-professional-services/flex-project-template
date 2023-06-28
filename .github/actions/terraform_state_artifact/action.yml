@@ -261,9 +261,9 @@ runs:
         path: ${{ inputs.path }}/terraform.tfstate.enc
         if-no-files-found: error
     - id: report_complete
-        run: |
+      run: |
           echo " - :white_check_mark: upload of terraform state file complete"  >> $env:GITHUB_STEP_SUMMARY
-        shell: pwsh
+      shell: pwsh
     - id: report-exit-code
       if: ${{ env.APPLY_EXIT_CODE }} != null
       shell: pwsh
