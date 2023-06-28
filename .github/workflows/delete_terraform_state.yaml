@@ -35,9 +35,10 @@ jobs:
 
 
             if($StateHistory) {
+              echo "Terraform State Files Found: "
               echo $StateHistory
 
-              echo " - Historic State Files Found: $StateHistory.Length"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - Historic State Files Found: $($StateHistory | Measure-Object).Count"  >> $env:GITHUB_STEP_SUMMARY
             
               $StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method DELETE})
             } else {
