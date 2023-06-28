@@ -28,6 +28,7 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: actions/checkout@v2
     - uses: hashicorp/setup-terraform@v2
     - id: terraform
       working-directory: ${{ inputs.path }}
