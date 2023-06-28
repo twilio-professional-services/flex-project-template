@@ -40,8 +40,8 @@ jobs:
               echo $StateHistory | Measure-Object | Select-Object -ExpandProperty Count
               echo $($StateHistory | Measure-Object).Count
 
-              $size = $StateHistory | Measure-Object | Select-Object -ExpandProperty Count;
-              echo " - Historic State Files Found: $($StateHistory | Measure-Object).Count"  >> $env:GITHUB_STEP_SUMMARY
+              $size = $($StateHistory | Measure-Object).Count;
+              echo " - Historic State Files Found: $size"  >> $env:GITHUB_STEP_SUMMARY
             
               #$StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method DELETE})
             } else {
