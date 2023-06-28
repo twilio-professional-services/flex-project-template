@@ -37,19 +37,17 @@ jobs:
             if($StateHistory) {
               echo "Terraform State Files Found: "
               echo $StateHistory
-              echo $StateHistory | Measure-Object | Select-Object -ExpandProperty Count
-              echo $($StateHistory | Measure-Object).Count
 
               $size = $($StateHistory | Measure-Object).Count;
               echo " - Historic State Files Found: $size"  >> $env:GITHUB_STEP_SUMMARY
             
-              #$StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method DELETE})
+              $StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method DELETE})
             } else {
-              echo " - Historic State Files Found: 0"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - :warning: Historic State Files Found: 0"  >> $env:GITHUB_STEP_SUMMARY
             }
 
           } else {
-            echo ":warning: No artifacts found for repository"  >> $env:GITHUB_STEP_SUMMARY
+            echo " - :warning: Historic State Files Found: 0"  >> $env:GITHUB_STEP_SUMMARY
           }
         shell: pwsh
 
