@@ -8,33 +8,32 @@ on:
     # runs 3:15AM every saturday
     #- cron:  '15 3 * * 6'
 
-runs:
-  using: "composite"
-  steps:
-    - uses: actions/checkout@v2
-    - id: terraform
-      run: |
-        $Repo = "${{ github.repository }}"
-        $BaseUri = "https://api.github.com"
-        $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
-        $Token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText
-        $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token | Select-Object -ExpandProperty artifacts
-        if ($RestResponse){
-          write-host 'Rest response: $RestResponse'
-          $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
-          Write-Host "Most recent artifact URI = $MostRecentArtifactURI"
-          if ($MostRecentArtifactURI){
-            Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
-            Expand-Archive ./state.zip
-            # encrpyed state file now in ./state/terraform.tfstate.enc 
-          }
-        }
-      shell: pwsh
-    - uses: actions/upload-artifact@v2
-      with:
-        name: terraformstatefile
-        path: ./state/terraform.tfstate.enc
+jobs:
 
-branding:
-  icon: 'cloud'
-  color: 'gray-dark'
+  touch-state-file:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - id: download state
+        run: |
+          $Repo = "${{ github.repository }}"
+          $BaseUri = "https://api.github.com"
+          $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
+          $Token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText
+          $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token | Select-Object -ExpandProperty artifacts
+          if ($RestResponse){
+            write-host 'Rest response: $RestResponse'
+            $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
+            Write-Host "Most recent artifact URI = $MostRecentArtifactURI"
+            if ($MostRecentArtifactURI){
+              Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
+              Expand-Archive ./state.zip
+              # encrpyed state file now in ./state/terraform.tfstate.enc 
+            }
+          }
+        shell: pwsh
+      - uses: actions/upload-artifact@v2
+        with:
+          name: terraformstatefile
+          path: ./state/terraform.tfstate.enc
+
