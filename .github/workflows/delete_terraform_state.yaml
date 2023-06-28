@@ -28,7 +28,7 @@ jobs:
             Write-Host "Rest response: $RestResponse"
             $StateHistory = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}"
             
-            $StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method })
+            $StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method DELETE})
 
           }
         shell: pwsh
