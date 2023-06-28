@@ -34,6 +34,14 @@ runs:
       working-directory: ${{ inputs.path }}
       run: |
 
+        echo "running deploy terraform for ${{ env.ENVIRONMENT }}"
+        echo "### Job summary" >> $env:GITHUB_STEP_SUMMARY
+        echo " - Repo: ${{ github.repository }}"  >> $env:GITHUB_STEP_SUMMARY
+        echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
+        echo " - Artifact Name: terraformstatefile-${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
+        echo " --- "  >> $env:GITHUB_STEP_SUMMARY
+        echo "### Job Results "  >> $env:GITHUB_STEP_SUMMARY
+
         $Repo = "${{ github.repository }}"
         $BaseUri = "https://api.github.com"
         $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
@@ -43,9 +51,12 @@ runs:
           $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ inputs.environment }}" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
           Write-Host "Most recent artifact URI = $MostRecentArtifactURI"
           if ($MostRecentArtifactURI){
+            echo " - :white_check_mark: ${{ env.ENVIRONMENT }} terraform state found "  >> $env:GITHUB_STEP_SUMMARY
             Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
             Expand-Archive ./state.zip
             openssl enc -d -in ./state/terraform.tfstate.enc -aes-256-cbc -pbkdf2 -pass pass:"${{ inputs.encryptionkey }}" -out ./terraform.tfstate
+          } else {
+            echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, starting from scratch"  >> $env:GITHUB_STEP_SUMMARY
           }
         }
 
@@ -69,8 +80,20 @@ runs:
         $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
         $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
 
+        echo " - *SERVERLESS BACKENDS* " >> $env:GITHUB_STEP_SUMMARY
+        if($env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX) {
+         echo "   - :white_check_mark: serverless backend: ${{ env.TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX }}"  >> $env:GITHUB_STEP_SUMMARY
+        } else {
+          echo "   - :x: serverless backend: ${{ env.TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX }}"  >> $env:GITHUB_STEP_SUMMARY
+        }
+        if($env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER) {
+          echo "   - :white_check_mark: schedule manager: ${{ env.TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER }}"  >> $env:GITHUB_STEP_SUMMARY
+        } else {
+          echo "   - :x: serverless backend: ${{ env.TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX }}"  >> $env:GITHUB_STEP_SUMMARY
+        }
         # The following should only be imported when there is no state file
         if(!$MostRecentArtifactURI) {
+          echo " - Importing existing state for known definitions"  >> $env:GITHUB_STEP_SUMMARY
           ### TASK ROUTER ###
           # workspace
           $workspaces = twilio api:taskrouter:v1:workspaces:list -o json | ConvertFrom-Json 
@@ -81,7 +104,7 @@ runs:
             terraform import module.taskrouter.twilio_taskrouter_workspaces_v1.flex $tf_workspace_sid
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
-
+          echo "   - :white_check_mark: Task Router - Workspaces"  >> $env:GITHUB_STEP_SUMMARY
           # workflows
           $workflows = twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
 
@@ -110,7 +133,7 @@ runs:
             terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.internal_call $tf_workspace_sid/$tf_workflow_sid_internal_call
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
-
+          echo "   - :white_check_mark: Task Router - Workflows"  >> $env:GITHUB_STEP_SUMMARY
           # queues
           $queues = twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
 
@@ -138,7 +161,7 @@ runs:
             terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.internal_calls $tf_workspace_sid/$tf_queue_sid_internal_calls
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }   
-
+          echo "   - :white_check_mark: Task Router - Queues"  >> $env:GITHUB_STEP_SUMMARY
           # channels
           $channels = twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
 
@@ -154,7 +177,7 @@ runs:
             terraform import module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.chat $tf_workspace_sid/$tf_task_channel_sid_chat
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
-
+          echo "   - :white_check_mark: Task Router - Channels"  >> $env:GITHUB_STEP_SUMMARY
           # activities
           $activities = twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
 
@@ -183,6 +206,7 @@ runs:
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
+          echo "   - :white_check_mark: Task Router - Activities"  >> $env:GITHUB_STEP_SUMMARY
           ### STUDIO ###
           $flows = twilio api:studio:v2:flows:list -o json | ConvertFrom-Json
     
@@ -205,7 +229,7 @@ runs:
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
         }
-
+        echo "   - :white_check_mark: Studio - Flows"  >> $env:GITHUB_STEP_SUMMARY
         #############################################################################
         ### END OF SID EVALUATION
         #############################################################################
@@ -219,17 +243,27 @@ runs:
         terraform plan $custom_plan_flags
         if ($terraformapply){
           terraform apply -auto-approve $custom_apply_flags
-          if ($LASTEXITCODE) { echo "APPLY_EXIT_CODE=$LASTEXITCODE" >> $env:GITHUB_ENV  } 
+          if ($LASTEXITCODE) {
+            echo " - :x: Applying configuration failure"  >> $env:GITHUB_STEP_SUMMARY 
+            echo "APPLY_EXIT_CODE=$LASTEXITCODE" >> $env:GITHUB_ENV
+          } else {
+            echo " - :white_check_mark: Applying configuration success"  >> $env:GITHUB_STEP_SUMMARY 
+          }
         }
         $StateExists = Test-Path -Path ./terraform.tfstate -PathType Leaf
         if ($StateExists){
           openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"${{ inputs.encryptionkey }}" -out ./terraform.tfstate.enc
         }
       shell: pwsh
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
         name: terraformstatefile-${{ inputs.environment }}
         path: ${{ inputs.path }}/terraform.tfstate.enc
+        if-no-files-found: error
+    - id: report_complete
+        run: |
+          echo " - :white_check_mark: upload of terraform state file complete"  >> $env:GITHUB_STEP_SUMMARY
+        shell: pwsh
     - id: report-exit-code
       if: ${{ env.APPLY_EXIT_CODE }} != null
       shell: pwsh
