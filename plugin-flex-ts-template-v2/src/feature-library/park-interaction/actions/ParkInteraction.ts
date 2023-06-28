@@ -1,4 +1,4 @@
-import { TaskHelper, Notifications, templates } from '@twilio/flex-ui';
+import { TaskHelper, Notifications, templates, Manager } from '@twilio/flex-ui';
 
 import { ParkInteractionNotification } from '../flex-hooks/notifications';
 import { StringTemplates } from '../flex-hooks/strings';
@@ -43,6 +43,20 @@ export const parkInteraction = async (payload: ParkInteractionPayload) => {
     );
 
     Notifications.dismissNotificationById(ParkInteractionNotification.ParkError);
+
+    setTimeout(() => {
+      // Work around a Flex bug where a CONVERSATION_UPDATE happens after CONVERSATION_UNLOAD,
+      // which results in the conversation not loading until Flex UI is reloaded
+      Manager.getInstance().store.dispatch({
+        type: 'CONVERSATION_UNLOAD',
+        payload: {},
+        meta: {
+          conversationSid: agent.mediaProperties.conversationSid,
+          channelSid: agent.mediaProperties.conversationSid,
+        },
+      });
+    }, 2000);
+
     return Notifications.showNotification(ParkInteractionNotification.ParkSuccess);
   } catch (error) {
     let message = (error as any)?.message;
