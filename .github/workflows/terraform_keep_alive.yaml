@@ -4,7 +4,7 @@ description: 'Downloads and uploads the terraform state file to keep it alive pa
 on:
   workflow_dispatch:
 
-  schedule:
+  #schedule:
     # runs 3:15AM every saturday
     #- cron:  '15 3 * * 6'
 
