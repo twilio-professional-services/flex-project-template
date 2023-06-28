@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
   #schedule:
-    # runs 3:15AM every saturday
-    #- cron:  '15 3 * * 6'
+    # runs 3:15AM on the 1st of each month
+    #- cron:  '15 3 1 * *'
 
 jobs:
 
@@ -23,7 +23,6 @@ jobs:
           $Token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText
           $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token | Select-Object -ExpandProperty artifacts
           if ($RestResponse){
-            write-host 'Rest response: $RestResponse'
             $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
             Write-Host "Most recent artifact URI = $MostRecentArtifactURI"
             if ($MostRecentArtifactURI){
