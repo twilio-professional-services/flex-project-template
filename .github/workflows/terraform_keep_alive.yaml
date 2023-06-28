@@ -92,6 +92,7 @@ jobs:
       - id: examine_new_state
         run: |
 
+          Start-Sleep -Seconds 30
           $Repo = "${{ github.repository }}"
           $BaseUri = "https://api.github.com"
           $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
