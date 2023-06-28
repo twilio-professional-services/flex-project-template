@@ -204,10 +204,10 @@ runs:
         if ($report_exit_code) { exit $report_exit_code }
       shell: pwsh
     - uses: actions/upload-artifact@v2
-      working-directory: ${{ inputs.path }}
+      working-directory: 
       with:
         name: terraformstatefile
-        path: ./terraform.tfstate.enc
+        path: ${{ inputs.path }}/terraform.tfstate.enc
 branding:
   icon: 'cloud'
   color: 'gray-dark'
