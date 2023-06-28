@@ -78,7 +78,7 @@ jobs:
               exit 1
             }
         shell: pwsh
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: terraformstatefile-${{ env.ENVIRONMENT }}
           path: ./state/terraform.tfstate.enc
