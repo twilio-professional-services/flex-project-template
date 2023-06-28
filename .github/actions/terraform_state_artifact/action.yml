@@ -51,23 +51,23 @@ runs:
 
         terraform init
         
+        #############################################################################
+        ### THE FOLLOWING CAPTURES THE SIDS FROM THE ENVIRONMENT AND IMPORTS THEM
+        ### INTO TERRAFORM IF THEY EXIST AND THERE IS NO CURRENT STATE FILE
+        #############################################################################
+
+        ### SERVERLESS DOMAINS: ALWAYS REQUIRED INPUT VARIABLES ###
+        $services = twilio api:serverless:v1:services:list -o json | ConvertFrom-Json
+
+        $tf_severless_sid_custom_flex = $services | where {$_.uniqueName -eq 'custom-flex-extensions-serverless'} | Select -property sid -ExpandProperty sid
+        $tf_severless_sid_schedule_manager = $services | where {$_.uniqueName -eq 'schedule-manager'} | Select -property sid -ExpandProperty sid
+
+        $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
+        $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
+
+        # The following should only be imported when there is no state file
         if(!$MostRecentArtifactURI) {
-          #############################################################################
-          ### THE FOLLOWING CAPTURES THE SIDS FROM THE ENVIRONMENT AND IMPORTS THEM
-          ### INTO TERRAFORM IF THEY EXIST 
-          #############################################################################
-
-          ### SERVERLESS DOMAIN ###
-          $services = twilio api:serverless:v1:services:list -o json | ConvertFrom-Json
-
-          $tf_severless_sid_custom_flex = $services | where {$_.uniqueName -eq 'custom-flex-extensions-serverless'} | Select -property sid -ExpandProperty sid
-          $tf_severless_sid_schedule_manager = $services | where {$_.uniqueName -eq 'schedule-manager'} | Select -property sid -ExpandProperty sid
-
-          $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
-          $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
-
           ### TASK ROUTER ###
-
           # workspace
           $workspaces = twilio api:taskrouter:v1:workspaces:list -o json | ConvertFrom-Json 
           
@@ -200,11 +200,11 @@ runs:
             terraform import module.studio.twilio_studio_flows_v2.chat $tf_flow_sid_chat_flow
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
-
-          #############################################################################
-          ### END OF SID EVALUATION
-          #############################################################################
         }
+
+        #############################################################################
+        ### END OF SID EVALUATION
+        #############################################################################
 
         $terraformapply = "${{ inputs.apply }}"
         $custom_plan_flags = "${{ inputs.custom_plan_flags }}"
