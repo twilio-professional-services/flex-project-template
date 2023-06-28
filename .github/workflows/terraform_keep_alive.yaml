@@ -86,7 +86,7 @@ jobs:
         run: |
 
           # need to pause to ensure rest request gets latest file
-          Start-Sleep 5
+          Start-Sleep -Seconds 5
           $Repo = "${{ github.repository }}"
           $BaseUri = "https://api.github.com"
           $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
