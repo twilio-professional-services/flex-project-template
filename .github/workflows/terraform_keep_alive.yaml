@@ -82,6 +82,13 @@ jobs:
         with:
           name: terraformstatefile-${{ env.ENVIRONMENT }}
           path: ./state/terraform.tfstate.enc
+
+  check-state-file-dev:
+    env:
+      ENVIRONMENT: dev
+    runs-on: ubuntu-latest
+    needs: [touch-state-file-dev]
+    steps:
       - id: examine_new_state
         run: |
 
@@ -89,36 +96,35 @@ jobs:
           $BaseUri = "https://api.github.com"
           $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
           $Token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText
-          $RestResponse_1 = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token -Headers {"Cache-Control"="no-cache"} | Select-Object -ExpandProperty artifacts
+          $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token -Headers {"Cache-Control"="no-cache"} | Select-Object -ExpandProperty artifacts
           
-          if ($RestResponse_1){
-            $MostRecentArtifact_1 = $RestResponse_1 | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}" | Select-Object -First 1
+          if ($RestResponse){
+            $MostRecentArtifact = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}" | Select-Object -First 1
 
-            if ($MostRecentArtifact_1){
+            if ($MostRecentArtifact){
 
               echo "Terraform state file found:"
-              echo $MostRecentArtifact_1
+              echo $MostRecentArtifact
 
-              $MostRecentArtifactURI_1 = $MostRecentArtifact_1 | Select-Object -ExpandProperty archive_download_url
+              $MostRecentArtifactURI_1 = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
               
               echo "#### new state file "  >> $env:GITHUB_STEP_SUMMARY
-              $id_1 = $($MostRecentArtifact_1).id
-              $name_1 = $($MostRecentArtifact_1).name
-              $created_at_1 =  $($MostRecentArtifact_1).created_at
-              $expires_at_1 = $($MostRecentArtifact_1).expires_at
+              $id = $($MostRecentArtifact).id
+              $name = $($MostRecentArtifact).name
+              $created_at =  $($MostRecentArtifact).created_at
+              $expires_at = $($MostRecentArtifact).expires_at
 
-              echo " - id: $id_1"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - name: $name_1"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - created_at: $created_at_1"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - expires_at: $expires_at_1"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - id: $id"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - name: $name"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - created_at: $created_at"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - expires_at: $expires_at"  >> $env:GITHUB_STEP_SUMMARY
 
             } else {
-              echo " - :warning:  No Terraform state files found, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - :warning:  No Terraform state files found, somethig went wrong"  >> $env:GITHUB_STEP_SUMMARY
               exit 1
             }
           } else {
-              echo " - :warning:  No Terraform state files found, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - :warning:  No Terraform state files found, something went wrong"  >> $env:GITHUB_STEP_SUMMARY
               exit 1
             }
         shell: pwsh
-
