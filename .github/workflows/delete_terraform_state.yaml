@@ -28,8 +28,8 @@ jobs:
             Write-Host "Rest response: $RestResponse"
             $StateHistory = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}"
             
-            $StateHistory.ForEach({ echo $_.url })
-            $StateHistory.ForEach( { $artifact_id = $_ | Select-Object -ExpandProperty archive_download_url, Invoke-RestMethod -uri $ArtifactUri/$artifact_id -Token $Token -Authentication bearer -Method DELETE })
+            $StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method })
+
           }
         shell: pwsh
 
