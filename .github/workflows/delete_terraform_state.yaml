@@ -27,7 +27,7 @@ jobs:
           $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token | Select-Object -ExpandProperty artifacts
           if ($RestResponse){
             Write-Host "Rest response: $RestResponse"
-            $StateHistory = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}
+            $StateHistory = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}"
             
             StateHistory.ForEach( { $artifact_id = Select-Object -ExpandProperty archive_download_url, Invoke-RestMethod -uri $ArtifactUri/$artifact_id -Token $Token -Authentication bearer -Method DELETE })
           }
