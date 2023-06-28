@@ -29,7 +29,7 @@ jobs:
       - id: download_state
         run: |
 
-          echo "running download_state"
+          echo "running download_state for ${{ env.ENVIRONMENT }}"
           echo "### Job summary" >> $env:GITHUB_STEP_SUMMARY
           echo " - Repo: ${{ github.repository }}"  >> $env:GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
@@ -52,18 +52,22 @@ jobs:
 
             if ($MostRecentArtifact){
 
-              echo "${{ env.ENVIRONMENT }} Terraform state file found: %0A $MostRecentArtifact"
-  
+              echo "${{ env.ENVIRONMENT }} Terraform state file found:"
+              echo $MostRecentArtifact
 
               $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
               
 
+              echo "#### existing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
               $id = $($MostRecentArtifact).id
               $name = $($MostRecentArtifact).name
               $created_at =  $($MostRecentArtifact).created_at
               $expires_at = $($MostRecentArtifact).expires_at
 
-              echo "#### refershing ${{ env.ENVIRONMENT }} state file%0A - id: $id%0A - name: $name%0A - created_at: $created_at%0A - expires_at: $expires_at%0A"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - id: $id"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - name: $name"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - created_at: $created_at"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - expires_at: $expires_at"  >> $env:GITHUB_STEP_SUMMARY
 
               # download the artifact
               Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
@@ -72,11 +76,11 @@ jobs:
               Expand-Archive ./state.zip
 
             } else {
-              echo " - :warning:  No Terraform state files found, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
               exit 1
             }
           } else {
-              echo " - :warning:  No Terraform state files found, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
               exit 1
             }
         shell: pwsh
@@ -87,5 +91,151 @@ jobs:
           if-no-files-found: error
       - id: report_complete
         run: |
-          echo ":white_check_mark: refresh complete "  >> $env:GITHUB_STEP_SUMMARY
+          echo ":white_check_mark: ${{ env.ENVIRONMENT }} refresh complete "  >> $env:GITHUB_STEP_SUMMARY
+        shell: pwsh
+
+  touch-state-file-qa:
+    env:
+      ENVIRONMENT: qa
+    runs-on: ubuntu-latest
+    steps:
+      - id: download_state
+        run: |
+
+          echo "running download_state for ${{ env.ENVIRONMENT }}"
+          echo "### Job summary" >> $env:GITHUB_STEP_SUMMARY
+          echo " - Repo: ${{ github.repository }}"  >> $env:GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
+          echo " - Artifact Name: terraformstatefile-${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
+          echo " --- "  >> $env:GITHUB_STEP_SUMMARY
+          echo "### Job Results "  >> $env:GITHUB_STEP_SUMMARY
+
+          # Perform the request
+          $Repo = "${{ github.repository }}"
+          $BaseUri = "https://api.github.com"
+          $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
+          $Token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText
+          $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token -DisableKeepAlive | Select-Object -ExpandProperty artifacts
+          
+          # If there was a response
+          if ($RestResponse){
+            
+            # get the most result artifact from the artifact list
+            $MostRecentArtifact = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}" | Select-Object -First 1
+
+            if ($MostRecentArtifact){
+
+              echo "${{ env.ENVIRONMENT }} Terraform state file found:"
+              echo $MostRecentArtifact
+
+              $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
+              
+
+              echo "#### existing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
+              $id = $($MostRecentArtifact).id
+              $name = $($MostRecentArtifact).name
+              $created_at =  $($MostRecentArtifact).created_at
+              $expires_at = $($MostRecentArtifact).expires_at
+
+              echo " - id: $id"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - name: $name"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - created_at: $created_at"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - expires_at: $expires_at"  >> $env:GITHUB_STEP_SUMMARY
+
+              # download the artifact
+              Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
+              # expand the zip file
+              # this is expected to produce a file ./state/terraform.tfstate.enc
+              Expand-Archive ./state.zip
+
+            } else {
+              echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
+              exit 1
+            }
+          } else {
+              echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
+              exit 1
+            }
+        shell: pwsh
+      - uses: actions/upload-artifact@v3
+        with:
+          name: terraformstatefile-${{ env.ENVIRONMENT }}
+          path: ./state/terraform.tfstate.enc
+          if-no-files-found: error
+      - id: report_complete
+        run: |
+          echo ":white_check_mark: ${{ env.ENVIRONMENT }} refresh complete "  >> $env:GITHUB_STEP_SUMMARY
+        shell: pwsh
+
+  touch-state-file-test:
+    env:
+      ENVIRONMENT: test
+    runs-on: ubuntu-latest
+    steps:
+      - id: download_state
+        run: |
+
+          echo "running download_state for ${{ env.ENVIRONMENT }}"
+          echo "### Job summary" >> $env:GITHUB_STEP_SUMMARY
+          echo " - Repo: ${{ github.repository }}"  >> $env:GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
+          echo " - Artifact Name: terraformstatefile-${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
+          echo " --- "  >> $env:GITHUB_STEP_SUMMARY
+          echo "### Job Results "  >> $env:GITHUB_STEP_SUMMARY
+
+          # Perform the request
+          $Repo = "${{ github.repository }}"
+          $BaseUri = "https://api.github.com"
+          $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
+          $Token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText
+          $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token -DisableKeepAlive | Select-Object -ExpandProperty artifacts
+          
+          # If there was a response
+          if ($RestResponse){
+            
+            # get the most result artifact from the artifact list
+            $MostRecentArtifact = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}" | Select-Object -First 1
+
+            if ($MostRecentArtifact){
+
+              echo "${{ env.ENVIRONMENT }} Terraform state file found:"
+              echo $MostRecentArtifact
+
+              $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
+              
+
+              echo "#### existing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
+              $id = $($MostRecentArtifact).id
+              $name = $($MostRecentArtifact).name
+              $created_at =  $($MostRecentArtifact).created_at
+              $expires_at = $($MostRecentArtifact).expires_at
+
+              echo " - id: $id"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - name: $name"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - created_at: $created_at"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - expires_at: $expires_at"  >> $env:GITHUB_STEP_SUMMARY
+
+              # download the artifact
+              Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
+              # expand the zip file
+              # this is expected to produce a file ./state/terraform.tfstate.enc
+              Expand-Archive ./state.zip
+
+            } else {
+              echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
+              exit 1
+            }
+          } else {
+              echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
+              exit 1
+            }
+        shell: pwsh
+      - uses: actions/upload-artifact@v3
+        with:
+          name: terraformstatefile-${{ env.ENVIRONMENT }}
+          path: ./state/terraform.tfstate.enc
+          if-no-files-found: error
+      - id: report_complete
+        run: |
+          echo ":white_check_mark: ${{ env.ENVIRONMENT }} refresh complete "  >> $env:GITHUB_STEP_SUMMARY
         shell: pwsh
