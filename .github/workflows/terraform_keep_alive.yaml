@@ -55,10 +55,10 @@ jobs:
               
 
               echo " #### existing state file "  >> $env:GITHUB_STEP_SUMMARY
-              echo " - id: $MostRecentArtifact.id"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - name: $MostRecentArtifact.name"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - created_at: $MostRecentArtifact.created_at"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - expires_at: $MostRecentArtifact.created_at"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - id: $($MostRecentArtifact).id"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - name: $($MostRecentArtifact).name"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - created_at: $($MostRecentArtifact).created_at"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - expires_at: $($MostRecentArtifact).created_at"  >> $env:GITHUB_STEP_SUMMARY
 
 
               Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
@@ -99,10 +99,10 @@ jobs:
               $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
               
 
-              echo " - id: $MostRecentArtifact.id"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - name: $MostRecentArtifact.name"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - created_at: $MostRecentArtifact.created_at"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - expires_at: $MostRecentArtifact.created_at"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - id: $($MostRecentArtifact).id"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - name: $($MostRecentArtifact).name"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - created_at: $($MostRecentArtifact).created_at"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - expires_at: $($MostRecentArtifact).created_at"  >> $env:GITHUB_STEP_SUMMARY
 
             } else {
               echo " - :warning:  No Terraform state files found, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
