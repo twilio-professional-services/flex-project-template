@@ -12,7 +12,7 @@ on:
       environment:
         required: true
         type: environment
-        description: 'Environment to run tests against'
+        description: 'Environment to use for deployment'
       deploy_terraform:
         required: true
         type: boolean

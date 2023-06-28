@@ -4,37 +4,37 @@ sidebar_position: 2
 title: Deploy to hosted Flex
 ---
 
-*WARNING* : These deploy steps will inject taskrouter configuration overwriting resources that may already be there.  This includes
 
-Task Router - Task Queues:
- - Everyone
- - Template Example Sales
- - Template Example Support
- - Internal Calls
+:::caution
+These deploy steps will setup taskrouter configuration possibly overwriting resources that may already be there. 
 
-Task Router - Workflows
- - Assign To Anyone
- - Chat Transfer
- - Callback
- - Internal Call
+*If you do not want to overwrite any changes uncheck the `Deploy Terraform?` input box when running the github action to deploy flex* 
 
-Task Router - Activities
- - Offline
- - Available
- - Unavailable
- - Break
-
-Task Router - Task Channels
- - Voice
- - Chat
-
-Studio Flows
- - Messaging Flow
- - Chat Flow
- - Voice IVR
+![image](/img/guides/github-trigger.png)
 
 
-_~5 minutes_
+:::
+
+:::note
+
+Resources effected
+
+## TaskRouter
+
+| Workflows | Task Queues | Activities | Task Channels |
+------------|-------------|------------|---------------|
+| `Asssign To Anyone`, `Chat Transfer`, `Callback`, `Internal Call` | `Everyone`, `Template Example Sales`, `Template Example Support`, `Internal Calls` | `Offline`, `Available`, `Unavailable`, `Break` | `Voice`, `Chat`|
+
+## Studio
+
+| Flows |
+--------|
+| `Voice IVR`, `Messaging Flow`, `Chat Flow` |
+
+:::
+
+
+_~8 minutes_
 
 1. Use the template to [create your own repository](https://github.com/twilio-professional-services/flex-project-template/generate) 
    - (Optionally) after creating your repo you may also want to attach the history to your new repository for future updates - details [here](/setup-guides/managing-future-updates-from-the-template)
