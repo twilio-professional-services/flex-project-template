@@ -39,15 +39,15 @@ jobs:
               echo $StateHistory
 
               $size = $($StateHistory | Measure-Object).Count;
-              echo " - Historic State Files Found: $size"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - Historic State Files Found For Deletion: $size"  >> $env:GITHUB_STEP_SUMMARY
             
               $StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method DELETE})
             } else {
-              echo " - :warning: Historic State Files Found: 0"  >> $env:GITHUB_STEP_SUMMARY
+              echo " - :warning:  Historic State Files Found For Deletion: 0"  >> $env:GITHUB_STEP_SUMMARY
             }
 
           } else {
-            echo " - :warning: Historic State Files Found: 0"  >> $env:GITHUB_STEP_SUMMARY
+            echo " - :warning:  Historic State Files Found For Deletion: 0"  >> $env:GITHUB_STEP_SUMMARY
           }
         shell: pwsh
 
