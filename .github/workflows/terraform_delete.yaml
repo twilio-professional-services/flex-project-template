@@ -9,6 +9,17 @@ on:
         description: 'Environment to use for deployment'
 
 # Note your actions must have read and write workflow permissions enabled
+# this script is intended for development and troubleshooting purposes
+#
+# terraform is only concered with resources in the definition and in its 
+# state.
+#
+# if the resource definition defines something that already exists
+# then it is expected to exist in the state.
+#
+# if the state exists we can use terraform import statements to update
+# the state (see .github/actions/terraform_state_artifact)
+
 jobs:
   delete-terraform-state:
     environment: ${{ github.event.inputs.environment }}
