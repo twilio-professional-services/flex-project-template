@@ -125,7 +125,7 @@ jobs:
               $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
               
 
-              echo " - refershing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
+              echo " - refreshing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
               $id = $($MostRecentArtifact).id
               $name = $($MostRecentArtifact).name
               $created_at =  $($MostRecentArtifact).created_at
@@ -192,7 +192,7 @@ jobs:
               $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
               
 
-              echo " - refershing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
+              echo " - refreshing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
               $id = $($MostRecentArtifact).id
               $name = $($MostRecentArtifact).name
               $created_at =  $($MostRecentArtifact).created_at
