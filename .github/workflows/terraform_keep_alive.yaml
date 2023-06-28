@@ -85,8 +85,6 @@ jobs:
       - id: examine_new_state
         run: |
 
-          # need to pause to ensure rest request gets latest file
-          Start-Sleep -Seconds 5
           $Repo = "${{ github.repository }}"
           $BaseUri = "https://api.github.com"
           $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
