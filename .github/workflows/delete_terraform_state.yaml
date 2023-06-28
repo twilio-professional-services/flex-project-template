@@ -11,6 +11,7 @@ on:
 # Note your actions must have read and write workflow permissions enabled
 jobs:
   delete-terraform-state:
+    environment: ${{ github.event.inputs.environment }}
     env:
       ENVIRONMENT: ${{ github.event.inputs.environment }}
     runs-on: ubuntu-latest
