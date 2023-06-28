@@ -80,7 +80,7 @@ runs:
         $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
         $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
 
-        echo " - *SERVERLESS BACKENDS* " >> $env:GITHUB_STEP_SUMMARY
+        echo " - *Discovering Serverless Backends* " >> $env:GITHUB_STEP_SUMMARY
         if($env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX) {
          echo "   - :white_check_mark: serverless backend: ${{ env.TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX }}"  >> $env:GITHUB_STEP_SUMMARY
         } else {
@@ -93,7 +93,7 @@ runs:
         }
         # The following should only be imported when there is no state file
         if(!$MostRecentArtifactURI) {
-          echo " - Importing existing state for known definitions"  >> $env:GITHUB_STEP_SUMMARY
+          echo " - Discovering and importing existing state for known definitions"  >> $env:GITHUB_STEP_SUMMARY
           ### TASK ROUTER ###
           # workspace
           $workspaces = twilio api:taskrouter:v1:workspaces:list -o json | ConvertFrom-Json 
@@ -228,8 +228,8 @@ runs:
             terraform import module.studio.twilio_studio_flows_v2.chat $tf_flow_sid_chat_flow
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
+          echo "   - :white_check_mark: Studio - Flows"  >> $env:GITHUB_STEP_SUMMARY
         }
-        echo "   - :white_check_mark: Studio - Flows"  >> $env:GITHUB_STEP_SUMMARY
         #############################################################################
         ### END OF SID EVALUATION
         #############################################################################
