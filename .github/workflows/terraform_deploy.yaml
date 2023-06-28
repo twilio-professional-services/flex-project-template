@@ -33,6 +33,7 @@ jobs:
         with:
           encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
           path: ./infra-as-code/terraform/environments/default
+          environment: ${{ github.event.inputs.environment }}
 
 
 
