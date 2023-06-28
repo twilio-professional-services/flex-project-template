@@ -97,9 +97,11 @@ jobs:
           $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
           $Token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText
           $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token -DisableKeepAlive | Select-Object -ExpandProperty artifacts
+          $WebResponse = Invoke-WebRequest -Authentication Bearer -Uri $ArtifactUri -Token $Token -Method "GET"
           
           echo $RestResponse
-          echo `$RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}"`
+          echo $WebResponse
+
           if ($RestResponse){
             $MostRecentArtifact = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}" | Select-Object -First 1
 
