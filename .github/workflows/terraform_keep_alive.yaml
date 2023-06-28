@@ -52,22 +52,18 @@ jobs:
 
             if ($MostRecentArtifact){
 
-              echo "Terraform state file found:"
-              echo $MostRecentArtifact
+              echo "${{ env.ENVIRONMENT }} Terraform state file found: \n $MostRecentArtifact"
+  
 
               $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
               
 
-              echo "#### existing state file "  >> $env:GITHUB_STEP_SUMMARY
               $id = $($MostRecentArtifact).id
               $name = $($MostRecentArtifact).name
               $created_at =  $($MostRecentArtifact).created_at
               $expires_at = $($MostRecentArtifact).expires_at
 
-              echo " - id: $id"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - name: $name"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - created_at: $created_at"  >> $env:GITHUB_STEP_SUMMARY
-              echo " - expires_at: $expires_at"  >> $env:GITHUB_STEP_SUMMARY
+              echo "#### refershing ${{ env.ENVIRONMENT }} state file\n - id: $id\n - name: $name\n - created_at: $created_at\n - expires_at: $expires_at\n"  >> $env:GITHUB_STEP_SUMMARY
 
               # download the artifact
               Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
