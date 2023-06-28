@@ -1,0 +1,8 @@
+{
+  "PSParkError": "Ocorreu um erro ao tentar colocar a conversa em espera: {{message}}",
+  "PSParkInteraction": "Interação em espera",
+  "PSParkWebhookError": "URL de webhook inválido. Não é suportado colocar uma interação em espera ao executar localmente.",
+  "PSParkSuccess": "A conversa está em espera.",
+  "PSParkNonCbmError": "Colocar em espera está disponível apenas para tarefas de mensagens baseadas em conversas.",
+  "PSParkMultipleParticipantsError": "Esta conversa não pode ser colocada em espera porque há vários participantes internos."
+}

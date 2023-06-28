@@ -1,3 +1,9 @@
+import esES from './es-es.json';
+import esMX from './es-mx.json';
+import ptBR from './pt-br.json';
+import th from './th.json';
+import zhHans from './zh-hans.json';
+
 // Export the template names as an enum for better maintainability when accessing them elsewhere
 export enum StringTemplates {
   ParkSuccess = 'PSParkSuccess',
@@ -18,4 +24,9 @@ export const stringHook = () => ({
     [StringTemplates.MultipleParticipantsError]:
       'This conversation cannot be parked because there are multiple internal participants.',
   },
+  'es-ES': esES,
+  'es-MX': esMX,
+  'pt-BR': ptBR,
+  th,
+  'zh-Hans': zhHans,
 });
