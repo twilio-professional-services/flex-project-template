@@ -20,7 +20,7 @@ jobs:
       - id: download_state
         run: |
 
-          echo "### Deleting Terraform State for ${{ env.ENVIRONMENT }}" >> $GITHUB_STEP_SUMMARY
+          echo "### Deleting Terraform State for ${{ env.ENVIRONMENT }}" >> $env:GITHUB_STEP_SUMMARY
 
           $Repo = "${{ github.repository }}"
           $BaseUri = "https://api.github.com"
