@@ -21,6 +21,10 @@ inputs:
     description: 'Terraform configuration path'
     required: false
     default: ''
+  environment:
+    description: 'Envirnoment associated with the state file'
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -36,7 +40,7 @@ runs:
         $Token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText
         $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token | Select-Object -ExpandProperty artifacts
         if ($RestResponse){
-          $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
+          $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ inputs.environment }}" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
           Write-Host "Most recent artifact URI = $MostRecentArtifactURI"
           if ($MostRecentArtifactURI){
             Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
@@ -224,7 +228,7 @@ runs:
       shell: pwsh
     - uses: actions/upload-artifact@v2
       with:
-        name: terraformstatefile
+        name: terraformstatefile-${{ inputs.environment }}
         path: ${{ inputs.path }}/terraform.tfstate.enc
     - id: report-exit-code
       if: ${{ env.APPLY_EXIT_CODE }} != null

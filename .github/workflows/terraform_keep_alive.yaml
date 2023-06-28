@@ -9,7 +9,9 @@ on:
 
 jobs:
 
-  touch-state-file:
+  touch-state-file-dev:
+    env:
+      ENVIRONMENT: dev
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -22,7 +24,7 @@ jobs:
           $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token | Select-Object -ExpandProperty artifacts
           if ($RestResponse){
             write-host 'Rest response: $RestResponse'
-            $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
+            $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
             Write-Host "Most recent artifact URI = $MostRecentArtifactURI"
             if ($MostRecentArtifactURI){
               Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
@@ -33,6 +35,6 @@ jobs:
         shell: pwsh
       - uses: actions/upload-artifact@v2
         with:
-          name: terraformstatefile
+          name: terraformstatefile-${{ env.ENVIRONMENT }}
           path: ./state/terraform.tfstate.enc
 
