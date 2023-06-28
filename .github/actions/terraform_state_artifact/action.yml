@@ -82,14 +82,14 @@ runs:
 
         echo " - *Discovering Serverless Backends* " >> $env:GITHUB_STEP_SUMMARY
         if($env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX) {
-         echo "   - :white_check_mark: serverless backend: ${{ env.TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX }}"  >> $env:GITHUB_STEP_SUMMARY
+         echo "   - :white_check_mark: serverless backend: $env.TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX"  >> $env:GITHUB_STEP_SUMMARY
         } else {
-          echo "   - :x: serverless backend: ${{ env.TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX }}"  >> $env:GITHUB_STEP_SUMMARY
+          echo "   - :x: serverless backend not found"  >> $env:GITHUB_STEP_SUMMARY
         }
         if($env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER) {
-          echo "   - :white_check_mark: schedule manager: ${{ env.TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER }}"  >> $env:GITHUB_STEP_SUMMARY
+          echo "   - :white_check_mark: schedule manager: $env.TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER"  >> $env:GITHUB_STEP_SUMMARY
         } else {
-          echo "   - :x: serverless backend: ${{ env.TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX }}"  >> $env:GITHUB_STEP_SUMMARY
+          echo "   - :x: serverless backend not found"  >> $env:GITHUB_STEP_SUMMARY
         }
         # The following should only be imported when there is no state file
         if(!$MostRecentArtifactURI) {
