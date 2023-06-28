@@ -1,5 +1,4 @@
 name: 'Terraform Keep Alive'
-description: 'Downloads and uploads the terraform state file to keep it alive past the github actions retention policy.'
 
 on:
   workflow_dispatch:
