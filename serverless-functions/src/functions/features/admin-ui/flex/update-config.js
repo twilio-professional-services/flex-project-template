@@ -7,7 +7,14 @@ const requiredParameters = [{ key: 'attributesUpdate', purpose: 'ui_attributes t
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    const { attributesUpdate } = event;
+    const { attributesUpdate, TokenResult } = event;
+
+    if (TokenResult.roles.indexOf('admin') < 0) {
+      response.setStatusCode(403);
+      response.setBody('Not authorized');
+      return callback(null, response);
+    }
+
     const result = await Configuration.updateUiAttributes({
       attributesUpdate,
       context,

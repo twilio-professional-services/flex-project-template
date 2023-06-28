@@ -1,8 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
-import { random } from 'lodash';
 
 import { EncodedParams } from '../../../types/serverless';
 import { getFeatureFlags } from '../../configuration';
+
+const MAX_ATTEMPTS = 10;
+const MAX_RETRY_DELAY = 3000;
+const RETRY_INTERVAL = 100;
 
 async function delay<T>(ms: number, result?: T) {
   return new Promise((resolve) => setTimeout(() => resolve(result), ms));
@@ -61,8 +64,13 @@ export default abstract class ApiService {
         try {
           // Generic retry when calls return a 'too many requests' response
           // request is delayed by a random number which grows with the number of retries
-          if (error.status === 429 && attempts < 10) {
-            await delay(random(100, 750) + attempts * 100);
+          if (error.status === 429 && attempts < MAX_ATTEMPTS) {
+            // Calculate the exponential backoff delay
+            const backoffDelay = Math.min(MAX_RETRY_DELAY, RETRY_INTERVAL * Math.pow(2, attempts));
+            // Apply full jitter to the delay; reduces load
+            // https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+            const jitterDelay = Math.floor(backoffDelay * Math.random());
+            await delay(jitterDelay);
             return await this.fetchJsonWithReject<T>(url, config, attempts + 1);
           }
           return error.json().then((response: any) => {
