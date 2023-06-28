@@ -219,7 +219,7 @@ runs:
         if ($StateExists){
           openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"${{ inputs.encryptionkey }}" -out ./terraform.tfstate.enc
         }
-      
+      shell: pwsh
     - uses: actions/upload-artifact@v2
       with:
         name: terraformstatefile
