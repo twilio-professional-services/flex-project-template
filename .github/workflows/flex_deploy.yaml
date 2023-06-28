@@ -54,12 +54,16 @@ jobs:
       - name: install top-level packages
         run: |
           npm install
+          echo " - :white_check_mark: installed top level packages"  >> $GITHUB_STEP_SUMMARY
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
           npm install
+          echo " - :white_check_mark: installed severless functions packages"  >> $GITHUB_STEP_SUMMARY
           npm run install-serverless-plugin
+          echo " - :white_check_mark: installed serverless plugin"  >> $GITHUB_STEP_SUMMARY
           npm run deploy:$ENVIRONMENT
+          echo " - :white_check_mark: serverless deployment complete"  >> $GITHUB_STEP_SUMMARY
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
