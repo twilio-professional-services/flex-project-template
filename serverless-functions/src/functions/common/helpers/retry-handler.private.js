@@ -39,6 +39,10 @@ exports.retryHandler = async (error, parameters, callback) => {
   const retryAttemptsMessage = attempts === 1 ? `${attempts} retry attempt` : `${attempts} retry attempts`;
   const message = errorMessage ? errorMessage : error;
 
+  // Perform retries only on retry-able response status codes
+  // 412: Received upon ETag conflict; retry without delay
+  // 429: Rate limited; retry with delay
+  // 503: Internal error; retry with delay
   if (
     (status === 412 || status === 429 || status === 503) &&
     isNumber(attempts) &&
