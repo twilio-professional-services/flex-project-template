@@ -17,11 +17,12 @@ jobs:
     steps:
       - id: delete_terraform_state
         run: |
+          echo "running delete_terraform_state"
           echo "### Job summary" >> $env:GITHUB_STEP_SUMMARY
           echo " - Repo: ${{ github.repository }}"  >> $env:GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
           echo " --- "  >> $env:GITHUB_STEP_SUMMARY
-          echo "# Job Results "  >> $env:GITHUB_STEP_SUMMARY
+          echo "### Job Results "  >> $env:GITHUB_STEP_SUMMARY
 
           $Repo = "${{ github.repository }}"
           $BaseUri = "https://api.github.com"
@@ -32,9 +33,8 @@ jobs:
             $StateHistory = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}"
 
             echo $StateHistory
-            $size = $StateHistory | Measure
 
-            echo " - Historic State Files Found: $size"  >> $env:GITHUB_STEP_SUMMARY
+            echo " - Historic State Files Found: $StateHistory.Length"  >> $env:GITHUB_STEP_SUMMARY
             
             $StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method DELETE})
 
