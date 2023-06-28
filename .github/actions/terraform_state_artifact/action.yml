@@ -34,11 +34,11 @@ runs:
       working-directory: ${{ inputs.path }}
       run: |
 
-        echo "running deploy terraform for ${{ env.ENVIRONMENT }}"
+        echo "running deploy terraform for ${{ inputs.environment }}"
         echo "### Job summary" >> $env:GITHUB_STEP_SUMMARY
         echo " - Repo: ${{ github.repository }}"  >> $env:GITHUB_STEP_SUMMARY
-        echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
-        echo " - Artifact Name: terraformstatefile-${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
+        echo " - Environment: ${{ inputs.environment }}"  >> $env:GITHUB_STEP_SUMMARY
+        echo " - Artifact Name: terraformstatefile-${{ inputs.environment }}"  >> $env:GITHUB_STEP_SUMMARY
         echo " --- "  >> $env:GITHUB_STEP_SUMMARY
         echo "### Job Results "  >> $env:GITHUB_STEP_SUMMARY
 
@@ -51,12 +51,12 @@ runs:
           $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ inputs.environment }}" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
           Write-Host "Most recent artifact URI = $MostRecentArtifactURI"
           if ($MostRecentArtifactURI){
-            echo " - :white_check_mark: ${{ env.ENVIRONMENT }} terraform state found "  >> $env:GITHUB_STEP_SUMMARY
+            echo " - :white_check_mark: ${{ inputs.environment }} terraform state found "  >> $env:GITHUB_STEP_SUMMARY
             Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
             Expand-Archive ./state.zip
             openssl enc -d -in ./state/terraform.tfstate.enc -aes-256-cbc -pbkdf2 -pass pass:"${{ inputs.encryptionkey }}" -out ./terraform.tfstate
           } else {
-            echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, starting from scratch"  >> $env:GITHUB_STEP_SUMMARY
+            echo " - :warning:  No Terraform state files found for ${{ inputs.environment }}, starting from scratch"  >> $env:GITHUB_STEP_SUMMARY
           }
         }
 

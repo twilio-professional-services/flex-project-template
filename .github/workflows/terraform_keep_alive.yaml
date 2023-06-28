@@ -3,9 +3,9 @@ name: 'Terraform Keep Alive'
 on:
   workflow_dispatch:
 
-  #schedule:
+  schedule:
     # runs 3:15AM on the 1st of each month
-    #- cron:  '15 3 1 * *'
+    - cron:  '15 3 1 * *'
 
 
 # this is an example script for maintaining the terraform
@@ -58,7 +58,7 @@ jobs:
               $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
               
 
-              echo " - existing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
+              echo " - refreshing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
               $id = $($MostRecentArtifact).id
               $name = $($MostRecentArtifact).name
               $created_at =  $($MostRecentArtifact).created_at
@@ -77,22 +77,16 @@ jobs:
 
             } else {
               echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
-              exit 1
             }
           } else {
               echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
-              exit 1
             }
         shell: pwsh
       - uses: actions/upload-artifact@v3
         with:
           name: terraformstatefile-${{ env.ENVIRONMENT }}
           path: ./state/terraform.tfstate.enc
-          if-no-files-found: error
-      - id: report_complete
-        run: |
-          echo " - :white_check_mark: ${{ env.ENVIRONMENT }} refresh complete "  >> $env:GITHUB_STEP_SUMMARY
-        shell: pwsh
+          if-no-files-found: warn
 
   touch-state-file-qa:
     env:
@@ -131,7 +125,7 @@ jobs:
               $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
               
 
-              echo " - existing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
+              echo " - refershing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
               $id = $($MostRecentArtifact).id
               $name = $($MostRecentArtifact).name
               $created_at =  $($MostRecentArtifact).created_at
@@ -150,22 +144,16 @@ jobs:
 
             } else {
               echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
-              exit 1
             }
           } else {
               echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
-              exit 1
             }
         shell: pwsh
       - uses: actions/upload-artifact@v3
         with:
           name: terraformstatefile-${{ env.ENVIRONMENT }}
           path: ./state/terraform.tfstate.enc
-          if-no-files-found: error
-      - id: report_complete
-        run: |
-          echo " - :white_check_mark: ${{ env.ENVIRONMENT }} refresh complete "  >> $env:GITHUB_STEP_SUMMARY
-        shell: pwsh
+          if-no-files-found: warn
 
   touch-state-file-test:
     env:
@@ -204,7 +192,7 @@ jobs:
               $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
               
 
-              echo " - existing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
+              echo " - refershing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
               $id = $($MostRecentArtifact).id
               $name = $($MostRecentArtifact).name
               $created_at =  $($MostRecentArtifact).created_at
@@ -223,22 +211,16 @@ jobs:
 
             } else {
               echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
-              exit 1
             }
           } else {
               echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
-              exit 1
             }
         shell: pwsh
       - uses: actions/upload-artifact@v3
         with:
           name: terraformstatefile-${{ env.ENVIRONMENT }}
           path: ./state/terraform.tfstate.enc
-          if-no-files-found: error
-      - id: report_complete
-        run: |
-          echo " - :white_check_mark: ${{ env.ENVIRONMENT }} refresh complete "  >> $env:GITHUB_STEP_SUMMARY
-        shell: pwsh
+          if-no-files-found: warn
 
   touch-state-file-prod:
     env:
@@ -277,7 +259,7 @@ jobs:
               $MostRecentArtifactURI = $MostRecentArtifact | Select-Object -ExpandProperty archive_download_url
               
 
-              echo " - existing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
+              echo " - refreshing ${{ env.ENVIRONMENT }} state file "  >> $env:GITHUB_STEP_SUMMARY
               $id = $($MostRecentArtifact).id
               $name = $($MostRecentArtifact).name
               $created_at =  $($MostRecentArtifact).created_at
@@ -296,19 +278,13 @@ jobs:
 
             } else {
               echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
-              exit 1
             }
           } else {
               echo " - :warning:  No Terraform state files found for ${{ env.ENVIRONMENT }}, nothing to preserve"  >> $env:GITHUB_STEP_SUMMARY
-              exit 1
             }
         shell: pwsh
       - uses: actions/upload-artifact@v3
         with:
           name: terraformstatefile-${{ env.ENVIRONMENT }}
           path: ./state/terraform.tfstate.enc
-          if-no-files-found: error
-      - id: report_complete
-        run: |
-          echo " - :white_check_mark: ${{ env.ENVIRONMENT }} refresh complete "  >> $env:GITHUB_STEP_SUMMARY
-        shell: pwsh
+          if-no-files-found: warn
