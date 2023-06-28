@@ -31,7 +31,7 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     const CHAT_SERVICE_NAME = /(Flex.*Service)/
 
     const ANYONE_WORKFLOW_NAME = /(Assign.*Anyone)/
-    const CHAT_WORRKFLOW_NAME = "Chat Transfer"
+    const CHAT_WORKFLOW_NAME = "Chat Transfer"
     const CALLBACK_WORKFLOW_NAME = "Callback"
     const INTERNAL_CALL_WORKFLOW_NAME = "Internal Call";
 
@@ -56,7 +56,7 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     var workflows = shell.exec(`twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid=${result.taskrouter_workspace_sid}`, {silent: true});
     if (workflows.length > 0) {
       result.everyoneWorkflow = workflows.grep(ANYONE_WORKFLOW_NAME).stdout.split(" ")[0].trim();
-      result.chatTransferWorkFlow = workflows.grep(CHAT_WORRKFLOW_NAME).stdout.split(" ")[0].trim();
+      result.chatTransferWorkFlow = workflows.grep(CHAT_WORKFLOW_NAME).stdout.split(" ")[0].trim();
       result.callbackWorkflow = workflows.grep(CALLBACK_WORKFLOW_NAME).stdout.split(" ")[0].trim();
       result.internalCallWorkflow = workflows.grep(INTERNAL_CALL_WORKFLOW_NAME).stdout.split(" ")[0].trim();
     } else {

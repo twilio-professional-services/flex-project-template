@@ -1,1 +1,12 @@
-[]
+[{
+  "minimum": null,
+  "multivalue": false,
+  "name": "template_example_support",
+  "maximum": null
+},
+{
+  "minimum": null,
+  "multivalue": false,
+  "name": "template_example_sales",
+  "maximum": null
+}]
