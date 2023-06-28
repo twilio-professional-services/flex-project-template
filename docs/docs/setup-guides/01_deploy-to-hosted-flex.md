@@ -16,7 +16,7 @@ doing this however will mean some features will need manual setup, the steps of 
 
 :::
 
-:::info Resources effected
+:::info Resources affected
 
 
 
