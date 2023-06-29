@@ -17,7 +17,13 @@ This feature is enabled by default and requires no further configuration.
 
 If you are using an infrastructure-as-code deployment strategy, exposing a configuration interface outside of the code repository is undesirable. For such deployments, it is suggested to disable this feature, and set the `OVERWRITE_CONFIG=true` environment variable as part of the flex-config deployment (this is set up as an input variable on the `Deploy Flex` github actions script). This will result in the repository flex-config as the source of truth.
 
-When running Flex UI locally, keep in mind that the configuration in `public/appConfig.js` overrides any global settings. As such, the settings in admin-ui may not reflect the actual locally running configuration, unless the overrides in `public/appConfig.js` are removed.
+::: info local development
+
+When running Flex UI locally, the configuration in `public/appConfig.js` overrides any global settings. As such, the settings in admin-ui may not reflect the actual locally running configuration, unless the overrides in `public/appConfig.js` are removed.
+
+For this reason, the admin panel is automatically disabled locally.
+
+::: 
 
 ## How does it work?
 
