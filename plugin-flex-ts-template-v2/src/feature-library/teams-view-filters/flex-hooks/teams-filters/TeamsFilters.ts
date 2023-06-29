@@ -1,6 +1,7 @@
 import { FilterDefinition } from '@twilio/flex-ui';
 
 import {
+  isActivitiesFilterEnabled,
   isDepartmentFilterEnabled,
   isEmailFilterEnabled,
   isQueueNoWorkerDataFilterEnabled,
@@ -8,6 +9,7 @@ import {
   isTeamFilterEnabled,
   isAgentSkillsFilterEnabled,
 } from '../../config';
+import { activitiesFilter } from '../../filters/activitiesFilter';
 import { departmentFilter } from '../../filters/departmentFilter';
 import { emailFilter } from '../../filters/emailFilter';
 import { queueNoWorkerDataFilter } from '../../filters/queueNoWorkerDataFilter';
@@ -17,6 +19,10 @@ import { agentSkillsFilter } from '../../filters/agentSkillsFilter';
 
 export const teamsFilterHook = async function getSampleFilters() {
   const enabledFilters = [] as Array<FilterDefinition>;
+
+  if (isActivitiesFilterEnabled()) {
+    enabledFilters.push(activitiesFilter());
+  }
 
   if (isDepartmentFilterEnabled()) {
     enabledFilters.push(departmentFilter());
