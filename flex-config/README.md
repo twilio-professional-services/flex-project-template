@@ -7,7 +7,10 @@ This is a simple set of scripts that help deploy Flex configuration settings. Cu
 The version controlled configuration is merged with the configuration already existing in the environment.
 
 
-## To Use Locally
+## To deploy to a hosted account from local (not typically neccessary)
+
+_Note_ when running locally `plugin-flex-ts-template-v2/public/appConfig.js` will take precedence over anything deployed
+
 1. Make sure the dependent modules are installed
 ```bash
 npm install
@@ -20,12 +23,8 @@ cp .env.example .env
     - follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key if you dont have one
 4. Add `TWILIO_ACCOUNT_SID` and `TWILIO_API_KEY` and `TWILIO_API_SECRET` values to the `.env` file
 5. Review/Edit the `taskrouter_skills.json` and ensure the skills match the ones you want to deploy.  This is used on every environment to deploy a common set of skills.  Note the skills in the file will be merged with any skills existing in the environment.
-6. cp the `ui_attributes.example.json` to `ui_attributes.local.json`.
-```bash
-cp ui_attributes.example.json ui_attributes.local.json
-```
-7. Run `npm run deploy:local` to update the Flex configuration.
-
+6. Run `npm run deploy` to update the hosted flex configuration.
+  - this will generate a ui_attributes.my_hosted_flex.json, any settings in here will override any in ui_attributes.common.json when deployed to your hosted account
 ---
 
 ## To use with release pipeline
