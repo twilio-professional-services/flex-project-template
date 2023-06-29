@@ -247,6 +247,16 @@ exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv
     if(!shell.test('-e', scheduleManagerEnv)){
       shell.cp(scheduleManagerEnvExample, scheduleManagerEnv);
     }
+
+    if(account_sid){
+      shell.sed('-i', /<YOUR_TWILIO_ACCOUNT_SID>/g, `${account_sid}`, scheduleManagerEnv);
+    }
+    if(auth_token){
+      shell.sed('-i', /<YOUR_TWILIO_AUTH_TOKEN>/g, `${auth_token}`, scheduleManagerEnv);
+    }
+
+
+
   } catch (error) {
     console.error(error);
     console.log(`Error attempting to generate schedule manager environment file ${serverlessEnv}`);
