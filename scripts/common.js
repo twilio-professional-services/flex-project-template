@@ -169,7 +169,7 @@ exports.buildVideoAppQuickstart = function buildNPMVideoAppQuickstart() {
   shell.cd("../..");
 }
 
-exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv(context, serverlessEnv) {
+exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv(context, serverlessEnv, environmentName) {
 
   try {
     const serverlessEnvExample = `./${serverlessDir}/.env.example`;
