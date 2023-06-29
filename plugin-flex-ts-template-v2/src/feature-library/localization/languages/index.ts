@@ -1,4 +1,5 @@
 import { Language } from '../types/Language';
+import esES from './es-es.json';
 import esMX from './es-mx.json';
 import ptBR from './pt-br.json';
 import th from './th.json';
@@ -11,12 +12,17 @@ export default [
     strings: {},
   },
   {
-    name: 'Español',
+    name: 'Español (España)',
+    key: 'es-ES',
+    strings: esES,
+  },
+  {
+    name: 'Español (México)',
     key: 'es-MX',
     strings: esMX,
   },
   {
-    name: 'Português',
+    name: 'Português (Brasil)',
     key: 'pt-BR',
     strings: ptBR,
   },
