@@ -1,0 +1,12 @@
+{
+  "PSConferenceFailedHangupNotification": "Llamada abandonada: No se pudo quitar a todos los participantes del modo en espera al finalizar la llamada. Si este problema persiste, intente quitar manualmente a los participantes del modo en espera antes de abandonar la llamada.",
+  "PSExternalWarmTransferInvalidPhoneNumber": "No se pudo agregar al participante. {{message}}",
+  "PSConferenceAddConferenceParticipant": "Agregar participante de conferencia",
+  "PSConferencePhoneNumber": "Número de teléfono",
+  "PSConferencePhoneNumberError": "Ingrese un número telefónico para agregar a la conferencia.",
+  "PSConferenceDial": "Marcar",
+  "PSConferenceHoldParticipant": "Colocar participante en espera",
+  "PSConferenceUnholdParticipant": "Reanudar participante",
+  "PSConferenceRemoveParticipant": "Eliminar participante",
+  "PSConferenceUnknown": "Desconocido"
+}

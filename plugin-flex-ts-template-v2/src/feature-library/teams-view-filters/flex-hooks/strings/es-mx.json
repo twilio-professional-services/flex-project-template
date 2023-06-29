@@ -1,15 +1,16 @@
 {
   "QueueFilterParseNotification": "No se pudo analizar la expresión de la cola, ignorando el filtro de cola.",
   "QueueFilterParseORsNotification": "No se pueden aplicar filtros de cola a colas que contienen expresiones OR. Se está ignorando el filtro de cola.",
-  "QueueFilterQueueNotFound": "No se encontró la referencia de la cola, se ignorará el filtro de cola",
+  "QueueFilterQueueNotFound": "No se encontró la referencia de cola, se ignorará el filtro de cola",
   "PSTeamsViewFilterOnly": "Solo {{selected}}",
-  "PSTeamsViewFilterContaining": "\"Conteniendo \"{{selected}}\"\"",
-  "PSTeamsViewSelectItem": "Seleccione un elemento...",
-  "PSTeamsViewMultiSelectItems": " uno o más elementos...",
+  "PSTeamsViewSelectItem": "Seleccionar un elemento...",
+  "PSTeamsViewFilterContaining": "Conteniendo \"{{selected}}\"",
+  "PSTeamsViewMultiSelectItems": "Selecciona uno o más elementos...",
   "PSTeamsViewMultiSelectedItems": "Elementos seleccionados:",
-  "PSTeamsViewAgentSkills": "Habilidades del Agente",
-  "PSTeamsViewDepartment": "Departamento",
   "PSTeamsViewEmailAddress": "Dirección de correo electrónico",
-  "PSTeamsViewQueueEligibility": "Elegibilidad de cola",
-  "PSTeamsViewTeam": "Equipo"
+  "PSTeamsViewAgentSkills": "Habilidades del agente",
+  "PSTeamsViewTeam": "Equipo",
+  "PSTeamsViewDepartment": "Departamento",
+  "PSTeamsViewQueueEligibility": "Elegibilidad de la cola",
+  "PSTeamsViewActivities": "Actividades"
 }

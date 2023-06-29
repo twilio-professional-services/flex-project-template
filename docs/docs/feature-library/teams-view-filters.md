@@ -7,6 +7,7 @@ The [Advanced Team View Filters](https://www.twilio.com/docs/flex/developer/ui/t
 
 This configurable feature provides sample filters typically used in most contact centers
 
+- Activities
 - Agent Skills
 - Department
 - Email Address
@@ -47,6 +48,7 @@ To use the sample features, most of the filters can simply be toggled on in the 
         "enabled": true,
         "log_filters": false,
         "applied_filters": {
+          "activities": true,
           "email": true,
           "department" : true,
           "queue_no_worker_data": true,
@@ -185,3 +187,7 @@ The filter looks like the following
     values: ["Skill 1", "Skill 2"]
 }
 ```
+
+## activities
+
+This filter replaces the out-of-box activities filter. The only difference is that this one can be localized.
