@@ -56,12 +56,13 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           npm install
+          npm run populate-missing-placeholders $ENVIRONMENT
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
           npm install
           npm run install-serverless-plugin
-          npm run deploy:$ENVIRONMENT
+          npm run deploy-env
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
@@ -177,7 +178,7 @@ jobs:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-      OVERWRITE_CONFIG: ${{ github.event.inputs.overwrite_config }}
+      OVERWRITE_CONFIG: ${{ github.event.inputs.initial_release == 'true' || github.event.inputs.overwrite_config }}
     needs: [deploy-serverless, deploy-schedule-manager]
     steps:
       - uses: actions/checkout@v3
