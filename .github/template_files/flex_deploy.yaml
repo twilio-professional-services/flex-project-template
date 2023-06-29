@@ -194,7 +194,7 @@ jobs:
         working-directory: flex-config
         run: |
           npm install
-          npm run deploy:$ENVIRONMENT
+          node index.js
 
   deploy-release-plugin:
     runs-on: ubuntu-latest

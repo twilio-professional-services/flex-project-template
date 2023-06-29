@@ -131,7 +131,7 @@ jobs:
         run: |
           npm install
           npm run install-serverless-plugin
-          npm run deploy:$ENVIRONMENT
+          npm run deploy
 
   deploy-schedule-manager:
     if: |    
@@ -194,7 +194,7 @@ jobs:
         working-directory: flex-config
         run: |
           npm install
-          npm run deploy:$ENVIRONMENT
+          npm run deploy
 
   deploy-release-plugin:
     runs-on: ubuntu-latest
