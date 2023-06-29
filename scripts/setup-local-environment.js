@@ -75,7 +75,7 @@ getActiveTwilioProfile().then((profile_result) => {
       }
 
       if(context.account_sid) {
-        generateServerlessFunctionsEnv(context, serverlessEnv);
+        generateServerlessFunctionsEnv(context, serverlessEnv, "local");
         generateFlexConfigEnv(context, flexConfigEnv);
         generateAppConfigForPlugins();
         generateVideoAppConfigEnv(context, true);

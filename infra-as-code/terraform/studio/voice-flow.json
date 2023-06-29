@@ -1,0 +1,57 @@
+{
+    "description": "IVR for creating a Flex voice task",
+    "states": [
+      {
+        "name": "Trigger",
+        "type": "trigger",
+        "transitions": [
+          {
+            "event": "incomingMessage"
+          },
+          {
+            "next": "SendCallToAgent",
+            "event": "incomingCall"
+          },
+          {
+            "event": "incomingRequest"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 0,
+            "y": -10
+          }
+        }
+      },
+      {
+        "name": "SendCallToAgent",
+        "type": "send-to-flex",
+        "transitions": [
+          {
+            "event": "callComplete"
+          },
+          {
+            "event": "failedToEnqueue"
+          },
+          {
+            "event": "callFailure"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 30,
+            "y": 180
+          },
+          "waitUrlMethod": "POST",
+          "waitUrl": "https://${DOMAIN_CUSTOM_FLEX}/features/callback-and-voicemail/studio/wait-experience?mode=initialize",
+          "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
+          "channel": "${VOICE_CHANNEL_SID}",
+          "attributes": "{ \"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\", \"conversations\": {\"hang_up_by\": \"Customer\"} }"
+        }
+      }
+    ],
+    "initial_state": "Trigger",
+    "flags": {
+      "allow_concurrent_calls": true
+    }
+  }

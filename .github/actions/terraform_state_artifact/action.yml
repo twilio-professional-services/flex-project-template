@@ -1,0 +1,276 @@
+name: 'terraform_state_artifact'
+description: 'Sets up and runs Terraform, and creates an encrypted Terraform artifact'
+author: 'Sturla Bragason'
+inputs:
+  encryptionkey:
+    description: 'Used to read artifact and as a key to encrypt and decrypt the state file artifact'
+    required: true
+  apply:
+    description: 'terraform apply'
+    required: false
+    default: true
+  custom_plan_flags:
+    description: 'Add custom flags to the terraform plan command'
+    required: false
+    default: ''
+  custom_apply_flags:
+    description: 'Add custom flags to the terraform apply command'
+    required: false
+    default: ''
+  path:
+    description: 'Terraform configuration path'
+    required: false
+    default: ''
+  environment:
+    description: 'Envirnoment associated with the state file'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v2
+    - uses: hashicorp/setup-terraform@v2
+    - id: terraform
+      working-directory: ${{ inputs.path }}
+      run: |
+
+        echo "running deploy terraform for ${{ inputs.environment }}"
+        echo "### Job summary" >> $env:GITHUB_STEP_SUMMARY
+        echo " - Repo: ${{ github.repository }}"  >> $env:GITHUB_STEP_SUMMARY
+        echo " - Environment: ${{ inputs.environment }}"  >> $env:GITHUB_STEP_SUMMARY
+        echo " - Artifact Name: terraformstatefile-${{ inputs.environment }}"  >> $env:GITHUB_STEP_SUMMARY
+        echo " --- "  >> $env:GITHUB_STEP_SUMMARY
+        echo "### Job Results "  >> $env:GITHUB_STEP_SUMMARY
+
+        $Repo = "${{ github.repository }}"
+        $BaseUri = "https://api.github.com"
+        $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
+        $Token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText
+        $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token | Select-Object -ExpandProperty artifacts
+        if ($RestResponse){
+          $MostRecentArtifactURI = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ inputs.environment }}" | Select-Object -First 1 | Select-Object -ExpandProperty archive_download_url
+          Write-Host "Most recent artifact URI = $MostRecentArtifactURI"
+          if ($MostRecentArtifactURI){
+            echo " - :white_check_mark: ${{ inputs.environment }} terraform state found "  >> $env:GITHUB_STEP_SUMMARY
+            Invoke-RestMethod -uri $MostRecentArtifactURI -Token $Token -Authentication bearer -outfile ./state.zip
+            Expand-Archive ./state.zip
+            openssl enc -d -in ./state/terraform.tfstate.enc -aes-256-cbc -pbkdf2 -pass pass:"${{ inputs.encryptionkey }}" -out ./terraform.tfstate
+          } else {
+            echo " - :warning:  No Terraform state files found for ${{ inputs.environment }}, starting from scratch"  >> $env:GITHUB_STEP_SUMMARY
+          }
+        }
+
+        $tfdir = "${{ inputs.path }}"
+
+        npm install -g twilio-cli
+
+        terraform init
+        
+        #############################################################################
+        ### THE FOLLOWING CAPTURES THE SIDS FROM THE ENVIRONMENT AND IMPORTS THEM
+        ### INTO TERRAFORM IF THEY EXIST AND THERE IS NO CURRENT STATE FILE
+        #############################################################################
+
+        ### SERVERLESS DOMAINS: ALWAYS REQUIRED INPUT VARIABLES ###
+        $services = twilio api:serverless:v1:services:list -o json | ConvertFrom-Json
+
+        $tf_severless_sid_custom_flex = $services | where {$_.uniqueName -eq 'custom-flex-extensions-serverless'} | Select -property sid -ExpandProperty sid
+        $tf_severless_sid_schedule_manager = $services | where {$_.uniqueName -eq 'schedule-manager'} | Select -property sid -ExpandProperty sid
+
+        $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
+        $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
+
+        $temp1 = $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
+        $temp2 = $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
+        echo " - *Discovering Serverless Backends* " >> $env:GITHUB_STEP_SUMMARY
+        if($env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX) {
+         echo "   - :white_check_mark: serverless backend: $temp1"  >> $env:GITHUB_STEP_SUMMARY
+        } else {
+          echo "   - :x: serverless backend not found"  >> $env:GITHUB_STEP_SUMMARY
+        }
+        if($env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER) {
+          echo "   - :white_check_mark: schedule manager: $temp2"  >> $env:GITHUB_STEP_SUMMARY
+        } else {
+          echo "   - :x: schedule manager backend not found"  >> $env:GITHUB_STEP_SUMMARY
+        }
+        # The following should only be imported when there is no state file
+        if(!$MostRecentArtifactURI) {
+          echo " - Discovering and importing existing state for known definitions"  >> $env:GITHUB_STEP_SUMMARY
+          ### TASK ROUTER ###
+          # workspace
+          $workspaces = twilio api:taskrouter:v1:workspaces:list -o json | ConvertFrom-Json 
+          
+          $tf_workspace_sid = $workspaces | where {$_.friendlyName -eq 'Flex Task Assignment'} | Select -property sid -ExpandProperty sid
+
+          if ($tf_workspace_sid) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_v1.flex $tf_workspace_sid
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+          echo "   - :white_check_mark: Task Router - Workspaces"  >> $env:GITHUB_STEP_SUMMARY
+          # workflows
+          $workflows = twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
+
+          $tf_workflow_sid_assign_to_anyone = $workflows | where {$_.friendlyName -eq 'Assign to Anyone'} | Select -property sid -ExpandProperty sid
+          $tf_workflow_sid_chat_transfer = $workflows | where {$_.friendlyName -eq 'Chat Transfer'} | Select -property sid -ExpandProperty sid
+          $tf_workflow_sid_callback = $workflows | where {$_.friendlyName -eq 'Callback'} | Select -property sid -ExpandProperty sid
+          $tf_workflow_sid_internal_call = $workflows | where {$_.friendlyName -eq 'Internal Call'} | Select -property sid -ExpandProperty sid
+
+
+          if ($tf_workflow_sid_assign_to_anyone) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone $tf_workspace_sid/$tf_workflow_sid_assign_to_anyone
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_workflow_sid_chat_transfer) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.chat_transfer $tf_workspace_sid/$tf_workflow_sid_chat_transfer
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_workflow_sid_callback) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.callback $tf_workspace_sid/$tf_workflow_sid_callback
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_workflow_sid_internal_call) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.internal_call $tf_workspace_sid/$tf_workflow_sid_internal_call
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+          echo "   - :white_check_mark: Task Router - Workflows"  >> $env:GITHUB_STEP_SUMMARY
+          # queues
+          $queues = twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
+
+          $tf_queue_sid_everyone = $queues | where {$_.friendlyName -eq 'Everyone'} | Select -property sid -ExpandProperty sid
+          $tf_queue_sid_template_example_sales = $queues | where {$_.friendlyName -eq 'Template Example Sales'} | Select -property sid -ExpandProperty sid
+          $tf_queue_sid_template_example_support = $queues | where {$_.friendlyName -eq 'Template Example Support'} | Select -property sid -ExpandProperty sid
+          $tf_queue_sid_internal_calls = $queues | where {$_.friendlyName -eq 'Internal Calls'} | Select -property sid -ExpandProperty sid
+
+          if ($tf_queue_sid_everyone) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.everyone $tf_workspace_sid/$tf_queue_sid_everyone
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_queue_sid_template_example_sales) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_sales $tf_workspace_sid/$tf_queue_sid_template_example_sales
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_queue_sid_template_example_support) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_support $tf_workspace_sid/$tf_queue_sid_template_example_support
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_queue_sid_internal_calls) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.internal_calls $tf_workspace_sid/$tf_queue_sid_internal_calls
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }   
+          echo "   - :white_check_mark: Task Router - Queues"  >> $env:GITHUB_STEP_SUMMARY
+          # channels
+          $channels = twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
+
+          $tf_task_channel_sid_voice = $channels | where {$_.uniqueName -eq 'voice'} | Select -property sid -ExpandProperty sid
+          $tf_task_channel_sid_chat = $channels | where {$_.uniqueName -eq 'chat'} | Select -property sid -ExpandProperty sid
+
+          if ($tf_task_channel_sid_voice) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.voice $tf_workspace_sid/$tf_task_channel_sid_voice
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_task_channel_sid_chat) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.chat $tf_workspace_sid/$tf_task_channel_sid_chat
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+          echo "   - :white_check_mark: Task Router - Channels"  >> $env:GITHUB_STEP_SUMMARY
+          # activities
+          $activities = twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
+
+          $tf_activity_offline = $activities | where {$_.friendlyName -eq 'Offline'} | Select -property sid -ExpandProperty sid
+          $tf_activity_available = $activities | where {$_.friendlyName -eq 'Available'} | Select -property sid -ExpandProperty sid
+          $tf_activity_unavailable = $activities | where {$_.friendlyName -eq 'Unavailable'} | Select -property sid -ExpandProperty sid
+          $tf_activity_break = $activities | where {$_.friendlyName -eq 'Break'} | Select -property sid -ExpandProperty sid
+
+          if ($tf_activity_offline) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.offline $tf_workspace_sid/$tf_activity_offline
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_activity_available) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.available $tf_workspace_sid/$tf_activity_available
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_activity_unavailable) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.unavailable $tf_workspace_sid/$tf_activity_unavailable
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_activity_break) {
+            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.break $tf_workspace_sid/$tf_activity_break
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          echo "   - :white_check_mark: Task Router - Activities"  >> $env:GITHUB_STEP_SUMMARY
+          ### STUDIO ###
+          $flows = twilio api:studio:v2:flows:list -o json | ConvertFrom-Json
+    
+          $tf_flow_sid_voice_ivr = $flows | where {$_.friendlyName -eq 'Voice IVR'} | Select -property sid -ExpandProperty sid
+          $tf_flow_sid_messaging_flow = $flows | where {$_.friendlyName -eq 'Messaging Flow'} | Select -property sid -ExpandProperty sid
+          $tf_flow_sid_chat_flow = $flows | where {$_.friendlyName -eq 'Chat Flow'} | Select -property sid -ExpandProperty sid
+
+          if ($tf_flow_sid_voice_ivr) {
+            terraform import module.studio.twilio_studio_flows_v2.voice $tf_flow_sid_voice_ivr
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_flow_sid_messaging_flow) {
+            terraform import module.studio.twilio_studio_flows_v2.messaging $tf_flow_sid_messaging_flow
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+
+          if ($tf_flow_sid_chat_flow) {
+            terraform import module.studio.twilio_studio_flows_v2.chat $tf_flow_sid_chat_flow
+            if ($LASTEXITCODE) { exit $LASTEXITCODE } 
+          }
+          echo "   - :white_check_mark: Studio - Flows"  >> $env:GITHUB_STEP_SUMMARY
+        }
+        #############################################################################
+        ### END OF SID EVALUATION
+        #############################################################################
+
+        $terraformapply = "${{ inputs.apply }}"
+        $custom_plan_flags = "${{ inputs.custom_plan_flags }}"
+        $custom_apply_flags = "${{ inputs.custom_apply_flags }}"
+        if ($terraformapply -eq "false"){
+          $terraformapply = $false
+        }
+        terraform plan $custom_plan_flags
+        if ($terraformapply){
+          terraform apply -auto-approve $custom_apply_flags
+          if ($LASTEXITCODE) {
+            echo " - :x: Applying configuration failure"  >> $env:GITHUB_STEP_SUMMARY 
+            echo "APPLY_EXIT_CODE=$LASTEXITCODE" >> $env:GITHUB_ENV
+          } else {
+            echo " - :white_check_mark: Applying configuration success"  >> $env:GITHUB_STEP_SUMMARY 
+          }
+        }
+        $StateExists = Test-Path -Path ./terraform.tfstate -PathType Leaf
+        if ($StateExists){
+          openssl enc -in ./terraform.tfstate -aes-256-cbc -pbkdf2 -pass pass:"${{ inputs.encryptionkey }}" -out ./terraform.tfstate.enc
+        }
+      shell: pwsh
+    - uses: actions/upload-artifact@v3
+      with:
+        name: terraformstatefile-${{ inputs.environment }}
+        path: ${{ inputs.path }}/terraform.tfstate.enc
+        if-no-files-found: error
+    - id: report_complete
+      run: |
+          echo " - :white_check_mark: upload of terraform state file complete"  >> $env:GITHUB_STEP_SUMMARY
+      shell: pwsh
+    - id: report-exit-code
+      if: ${{ env.APPLY_EXIT_CODE }} != null
+      shell: pwsh
+      run: |
+        exit ${{ env.APPLY_EXIT_CODE }}
+branding:
+  icon: 'cloud'
+  color: 'gray-dark'
