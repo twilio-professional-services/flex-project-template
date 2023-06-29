@@ -21,7 +21,7 @@ If you are using an infrastructure-as-code deployment strategy, exposing a confi
 
 When running Flex UI locally, the configuration in `public/appConfig.js` overrides any global settings. As such, the settings in admin-ui may not reflect the actual locally running configuration, unless the overrides in `public/appConfig.js` are removed.
 
-For this reason, the admin panel is automatically disabled locally.
+For this reason, the admin panel is automatically disabled locally using appConfig settings to avoid any confusion.
 
 ::: 
 
