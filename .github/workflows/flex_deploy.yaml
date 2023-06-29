@@ -61,7 +61,7 @@ jobs:
         run: |
           npm install
           npm run install-serverless-plugin
-          npm run deploy:$ENVIRONMENT
+          npm run deploy-env
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
