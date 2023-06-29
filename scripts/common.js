@@ -237,6 +237,20 @@ exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv
     console.error(error);
     console.log(`Error attempting to generate serverless environment file ${serverlessEnv}`);
   }
+
+  try {
+    const scheduleManagerEnvExample = `./${scheduleManagerServerlessDir}/.env.example`;
+
+    const scheduleManagerEnv = `./${scheduleManagerServerlessDir}/.env.${environmentName}`;
+    
+
+    if(!shell.test('-e', scheduleManagerEnv)){
+      shell.cp(scheduleManagerEnvExample, scheduleManagerEnv);
+    }
+  } catch (error) {
+    console.error(error);
+    console.log(`Error attempting to generate schedule manager environment file ${serverlessEnv}`);
+  }
 }
 
 exports.generateFlexConfigEnv = function generateFlexConfigEnv(context, flexConfigEnv) {

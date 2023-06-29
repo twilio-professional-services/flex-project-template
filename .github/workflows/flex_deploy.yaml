@@ -131,7 +131,7 @@ jobs:
         run: |
           npm install
           npm run install-serverless-plugin
-          npm run deploy
+          npm run deploy-env
 
   deploy-schedule-manager:
     if: |    
@@ -157,12 +157,13 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           npm install
+          npm run populate-missing-placeholders $ENVIRONMENT
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
           npm install
           npm run install-serverless-plugin
-          npm run deploy:$ENVIRONMENT
+          npm run deploy-env
 
   deploy-flex-config:
     if: |    
