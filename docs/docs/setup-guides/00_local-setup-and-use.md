@@ -13,12 +13,17 @@ title: Local Setup & Use
 - `twilio profiles:list` has an active account set.
 - have the twilio auth token for your account ready (you can find this in the [Twilio Console](https://console.twilio.com/))
 
+_NOTE_ the admin panel will *not* be functional when working locally as [appConfig supersedes](#development-notes) the hosted config and the admin panel works directly with the hosted config.
+
+_NOTE_ some features may not be functional without a deployment of the taskrouter conofiguration and studio flows. It is recommended to do at least one initial deploy to your environment using the [release pipeline](/setup-guides/deploy-to-hosted-flex)
+
+
 ### Setup
 
 1. [Generate a new repository based on the template](https://github.com/twilio-professional-services/flex-project-template/generate)
 2. Clone the new repository that you just created
 
-- (Optionally) after creating your repo you may also want to attach the history to your new repository for future updates - details [here](#adding-history-to-your-repository)
+- (Optionally) after creating your repo you may also want to attach the history to your new repository for future updates - details [here](/setup-guides/managing-future-updates-from-the-template)
 
 3. make sure the twilio cli has the correct account set to active
 
@@ -39,9 +44,9 @@ npm install
 npm start
 ```
 
-### Development Notes
+### development notes
 
-When developing locally, Flex config is overridden by anything in your [appConfig.js](https://github.com/twilio-professional-services/flex-project-template/blob/main/plugin-flex-ts-template-v2/public/appConfig.example.js). Note: appConfig is only applicable when running the plugin locally, so you can edit this file to toggle features on and off for your locally running web server. You can also tweak the api endpoint for your serverless functions if you need to.
+When developing locally, Flex config is overridden by anything in your `plugin-flex-ts-template-v2/public/appConfig.js`. Note: appConfig is only applicable when running the plugin locally, so you can edit this file to toggle features on and off for your locally running web server. You can also tweak the api endpoint for your serverless functions if you need to.
 
 When running the plugin locally, this template has been set up to pair the plugin with the serverless functions also running locally on localhost:3001. The serverless functions can be debugged by attaching your debugger to the node instance. The following is a sample entry for ".vscode/launch.json" to connect vscode for debugging
 
@@ -62,49 +67,3 @@ When running the plugin locally, this template has been set up to pair the plugi
   ]
 }
 ```
-
----
-
-### Adding history to your repository
-
-As outlined on [github docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template), when creating a new repository from a template, you will be creating a repositroy with no history. One of the benefits of using the template this way instead of forking is that you can make it private.
-
-This means however, if you later want to take updates it can be difficult, but there is a solution. Attaching the history back into your repository allows you to take future updates with ease. You can do this with the following commands on your clone repository. Note, this is simplest to do when first creating your repo but can be done at any time, if doing at a later date BE CAREFUL as this will have downstream challanges with any branches you've created which will also have to be resolved.
-
-```bash
-git remote add upstream https://github.com/twilio-professional-services/flex-project-template.git
-git fetch upstream
-git rebase --onto <commit-id-from-template-when-cloning> <initial-commit-id-of-cloned-template> <branch-name>
-```
-
-where commit id from the template can be found by clicking on the commmit history
-
-![alt text](/img/guides/get-repository-commit-id-01.png)
-
-then clicking copy on the copy-id button of the commit
-
-![alt text](/img/guides/get-repository-commit-id-02.png)
-
-Similarly, the initial commit of the cloned template can be found in the same way.
-
-Finally `branch-name` can be main or an alternative branch name if you are performing the operation there instead.
-
-You then need to push this rebased history onto your branch
-
-```bash
-git push --force
-```
-
-And thats it, your repo now has the history!
-
-### Taking future updates from the template
-
-At a future date, you may want to grab the updates on the original template if you have added the history as mentioned above you can do this with the following commands
-
-```bash
-git checkout -b template-updates
-git remote add flex-template https://github.com/twilio-professional-services/flex-project-template.git
-git pull flex-template main
-```
-
-this will grab all the updates from the original template and apply them to your branch. You will of course have to manage any conflicts but if you have added the history correctly, this shouldnt be too complex. From here you can merge the changes into your parent branch as you see fit.

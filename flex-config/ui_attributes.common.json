@@ -20,25 +20,25 @@
         "enabled": true
       },
       "conversation_transfer": {
-        "enabled": false,
+        "enabled": true,
         "cold_transfer": true,
         "multi_participant": true
       },
       "chat_to_video_escalation": {
-        "enabled": false
+        "enabled": true
       },
       "conference": {
         "enabled": true,
         "hold_workaround": false
       },
       "enhanced_crm_container": {
-        "enabled": false,
+        "enabled": true,
         "url": "https://www.bing.com/search?q={{task.from}}",
         "should_display_url_when_no_tasks": false,
         "display_url_when_no_tasks": "https://www.bing.com"
       },
       "internal_call": {
-        "enabled": false
+        "enabled": true
       },
       "scrollable_activities": {
         "enabled": true
@@ -85,10 +85,10 @@
           "activities": true,
           "email": true,
           "department": true,
-          "queue_no_worker_data": true,
+          "queue_no_worker_data": false,
           "queue_worker_data": false,
           "team": true,
-          "agent_skills": false
+          "agent_skills": true
         },
         "department_options": [
           "General Management",
@@ -117,13 +117,13 @@
         "enabled": true
       },
       "schedule_manager": {
-        "enabled": false
+        "enabled": true
       },
       "multi_call": {
         "enabled": false
       },
       "hang_up_by": {
-        "enabled": false
+        "enabled": true
       },
       "chat_transfer": {
         "enabled": false
@@ -133,19 +133,21 @@
         "configuration": [
           {
             "channel": "voice",
-            "auto_accept": false,
-            "auto_select": false,
-            "auto_wrapup": false,
+            "auto_accept": true,
+            "auto_select": true,
+            "auto_wrapup": true,
             "required_attributes": [],
-            "wrapup_time": 30000
+            "wrapup_time": 30000,
+            "default_outcome": "Automatically completed"
           },
           {
             "channel": "chat",
-            "auto_accept": false,
-            "auto_select": false,
-            "auto_wrapup": false,
+            "auto_accept": true,
+            "auto_select": true,
+            "auto_wrapup": true,
             "required_attributes": [],
-            "wrapup_time": 30000
+            "wrapup_time": 30000,
+            "default_outcome": "Automatically completed"
           }
         ]
       },
@@ -158,7 +160,7 @@
         "location": "CRM"
       },
       "keyboard_shortcuts": {
-        "enabled": false
+        "enabled": true
       },
       "custom_hold_music": {
         "enabled": false,
@@ -169,7 +171,7 @@
         "use_paste_search_icon": false,
         "queue": {
           "enabled": true,
-          "show_only_queues_with_available_workers": true,
+          "show_only_queues_with_available_workers": false,
           "show_real_time_data": true,
           "enforce_queue_filter_from_worker_object": true,
           "enforce_global_exclude_filter": false,
@@ -221,7 +223,7 @@
         "show_menu": true
       },
       "park_interaction": {
-        "enabled": false
+        "enabled": true
       }
     }
   }

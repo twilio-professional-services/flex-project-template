@@ -1,0 +1,83 @@
+{
+    "description": "Bot flow for creating a Flex webchat task",
+    "states": [
+      {
+        "name": "Trigger",
+        "type": "trigger",
+        "transitions": [
+          {
+            "next": "SendMessageToAgent",
+            "event": "incomingMessage"
+          },
+          {
+            "event": "incomingCall"
+          },
+          {
+            "event": "incomingRequest"
+          },
+          {
+            "next": "SendConversationToAgent",
+            "event": "incomingConversationMessage"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 0,
+            "y": -10
+          }
+        }
+      },
+      {
+        "name": "SendMessageToAgent",
+        "type": "send-to-flex",
+        "transitions": [
+          {
+            "event": "callComplete"
+          },
+          {
+            "event": "failedToEnqueue"
+          },
+          {
+            "event": "callFailure"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 30,
+            "y": 180
+          },
+          "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
+          "channel": "${CHAT_CHANNEL_SID}",
+          "attributes": "{\"name\": \"{{trigger.message.ChannelAttributes.from}}\", \"channelType\": \"{{trigger.message.ChannelAttributes.channel_type}}\", \"channelSid\": \"{{trigger.message.ChannelSid}}\"}"
+        }
+      },
+      {
+        "name": "SendConversationToAgent",
+        "type": "send-to-flex",
+        "transitions": [
+          {
+            "event": "callComplete"
+          },
+          {
+            "event": "failedToEnqueue"
+          },
+          {
+            "event": "callFailure"
+          }
+        ],
+        "properties": {
+          "offset": {
+            "x": 380,
+            "y": 180
+          },
+          "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
+          "channel": "${CHAT_CHANNEL_SID}",
+          "attributes": "{\"from\": \"{{trigger.conversation.ChannelAttributes.pre_engagement_data.friendlyName}}\"}"
+        }
+      }
+    ],
+    "initial_state": "Trigger",
+    "flags": {
+      "allow_concurrent_calls": true
+    }
+  }

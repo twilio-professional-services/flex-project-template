@@ -1,4 +1,4 @@
-name: checks
+name: Checks
 
 on:
   pull_request:
@@ -31,7 +31,7 @@ jobs:
       - name: Install packages
         run: |
           npm install --no-save eslint
-          cd ${{ secrets.PLUGIN_FOLDER }}
+          cd plugin-flex-ts-template-v2
           npm install
           cd ../serverless-functions
           npm install
@@ -76,13 +76,13 @@ jobs:
         with:
           node-version: '16'
       - name: Install packages
-        working-directory: ./${{ secrets.PLUGIN_FOLDER }}
+        working-directory: ./plugin-flex-ts-template-v2
         run: npm install
       - name: Run tests
-        working-directory: ./${{ secrets.PLUGIN_FOLDER }}
+        working-directory: ./plugin-flex-ts-template-v2
         run: npm run test:ci
       - name: Publish test results
         uses: mikepenz/action-junit-report@v3
         if: always()
         with:
-          report_paths: './${{ secrets.PLUGIN_FOLDER }}/test-results/junit.xml'
+          report_paths: './plugin-flex-ts-template-v2/test-results/junit.xml'

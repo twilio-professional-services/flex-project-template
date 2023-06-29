@@ -1,0 +1,17 @@
+{
+  "task_routing": {
+    "filters": [
+      {
+        "filter_friendly_name": "Outbound",
+        "expression": "targetWorker != null",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_INTERNAL_CALLS}",
+            "expression": "task.targetWorker == worker.contact_uri",
+            "priority": 1000
+          }
+        ]
+      }
+    ]
+  }
+}
