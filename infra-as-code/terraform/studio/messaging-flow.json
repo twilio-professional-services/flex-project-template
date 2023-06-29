@@ -1,0 +1,225 @@
+{
+  "description": "Bot flow for creating a Flex messaging task",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "next": "SendMessageToAgent",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "incomingCall"
+        },
+        {
+          "next": "identify_queue",
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": -10
+        }
+      }
+    },
+    {
+      "name": "SendMessageToAgent",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 30,
+          "y": 180
+        },
+        "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
+        "channel": "${CHAT_CHANNEL_SID}",
+        "attributes": "{\"name\": \"{{trigger.message.ChannelAttributes.from}}\", \"channelType\": \"{{trigger.message.ChannelAttributes.channel_type}}\", \"channelSid\": \"{{trigger.message.ChannelSid}}\"}"
+      }
+    },
+    {
+      "name": "SendConversationToAgent",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 590,
+          "y": 980
+        },
+        "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
+        "channel": "${CHAT_CHANNEL_SID}",
+        "attributes": "{\"ivr_queue\": \"{{flow.variables.queue_name}}\"}"
+      }
+    },
+    {
+      "name": "identify_queue",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "check_response",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "next": "identify_queue",
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 420,
+          "y": 220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "To better assist you please say 1 for Sales and 2 for Support",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "check_response",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "set_queue_none",
+          "event": "noMatch"
+        },
+        {
+          "next": "set_queue_sales",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 1",
+              "arguments": [
+                "{{widgets.identify_queue.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "1"
+            }
+          ]
+        },
+        {
+          "next": "set_queue_support",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to 2",
+              "arguments": [
+                "{{widgets.identify_queue.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "2"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.identify_queue.inbound.Body}}",
+        "offset": {
+          "x": 430,
+          "y": 460
+        }
+      }
+    },
+    {
+      "name": "set_queue_sales",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "SendConversationToAgent",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "template_example_sales",
+            "key": "queue_name"
+          }
+        ],
+        "offset": {
+          "x": 580,
+          "y": 690
+        }
+      }
+    },
+    {
+      "name": "set_queue_support",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "SendConversationToAgent",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "template_example_support",
+            "key": "queue_name"
+          }
+        ],
+        "offset": {
+          "x": 910,
+          "y": 690
+        }
+      }
+    },
+    {
+      "name": "set_queue_none",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "SendConversationToAgent",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "none",
+            "key": "queue_name"
+          }
+        ],
+        "offset": {
+          "x": 240,
+          "y": 690
+        }
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}

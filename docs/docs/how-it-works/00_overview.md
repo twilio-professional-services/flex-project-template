@@ -1,22 +1,24 @@
 ---
 sidebar_label: Overview
 sidebar_position: 1
-title: Okay tell me more, what does it do exactly?
+title: Okay tell me more, how does it work?
 ---
 
-Well the template provides a means to version control the [Flex Configuration](/how-it-works/flex-config), [the plugin code](/how-it-works/plugin-flex-ts-template-v2) itself as well as the supporting [serverless functions](/how-it-works/serverless-functions). There is also a solution to manage [task router configuration](/how-it-works/infra-as-code). The infrastructure as code is a bit more involved to setup and we are currently working on making that easier but there are guides available for the sample provided [here](https://www.twilio.com/blog/intro-to-infrastructure-as-code-with-twilio-part-1). There is also an example yaml file for building a release pipeline using github actions.
+The Twilio platform is a suite of tools that can be threaded together to create incredible custom solutions.  The biggest challenge here is the gap in tools readily available to automatically configure and thread these different tools together from an single image. 
 
-The template comes with a [library of example features](/feature-library/overview) that cover a lot of typical extensions to Flex. These features can easily be turned on or off or simply just removed by leveraging the [scripts](/how-it-works/scripts) provided. If you use the scripts to [remove all the features](/how-it-works/scripts#removing-features), you will be left with just the structure of the template plus some handy utilities and serverless functions.
+Well that's where the template comes in.  It provides a means to version control the following assets which make up a flex solution, all from a single image.  By doing this we can aggregate a lot of work developers have done to show how many [different features](/feature-library/overview) can be robustly implemented on the Flex platform.  It can take developers from 0 to 100 by putting them right in the position of developing feature enhancements instead of worrying about the headache of how to manage assets and dependencies on the platform.  Furthermore, with the rich library of examples and conventions, developers can quickly see how to approach different problems on the platform by seeing working code that they can easily reverse engineer.
 
-You might be asking why would i want the serverless functions? Well you may be aware already, Twilio accounts have a maximum API concurrency limit of 100. Some specific APIs have their own specific rate limit and so its [best practice](https://support.twilio.com/hc/en-us/articles/360044308153-Twilio-API-response-Error-429-Too-Many-Requests-) to handle the 429 responses that can come back. The serverless functions provide an example of how to do this in the serverless and plugin layer. There are also operations in there that improve the quality of the Flex solution, for example, you can update task attributes using an [ETAG](https://www.twilio.com/docs/taskrouter/api/task#task-version) to improve transaction safety and this isnt currently available on the front end sdk.
+Visit the following links to see more information on each asset.
 
-At the root of the repository you will find the following packages
+ - [flex configuration - aka "environment variables"](/how-it-works/flex-config), 
+ - [the plugin code aka "the presentation layer"](/how-it-works/plugin-flex-ts-template-v2) 
+ - [serverless functions aka "the backend"](/how-it-works/serverless-functions).
+ - [twilio account configuration aka "flex dependencies" like task router and studio flows](/how-it-works/infra-as-code).
+ - [release management via github actions](/how-it-works/github)
+ - [web-app-examples](/how-it-works/web-app-examples)
 
-- [flex-config](/how-it-works/flex-config)
-- [infra-as-code](/how-it-works/infra-as-code)
-- [plugin-flex-ts-template-v2](/how-it-works/plugin-flex-ts-template-v2)
-- [serverless-functions](/how-it-works/serverless-functions)
-- [serverless-schedule-manager](/how-it-works/serverless-schedule-manager)
-- [web-app-examples](/how-it-works/web-app-examples)
-- [scripts](/how-it-works/scripts)
-- [.github](/how-it-works/github)
+To see this template in action, you can [deploy it to your account with just an Account SID, API key and an API Secret](https://twilio-professional-services.github.io/flex-project-template/setup-guides/deploy-to-hosted-flex)
+
+
+It's worth noting, the template comes with a [library of example features](/feature-library/overview) that cover a lot of typical extensions to Flex. The template creates a system of encapsulation and self discovery for each feature.  As a result, features can be identified and removed just by deleting a folder. Alternatively, if you use the scripts to [remove all the features](/how-it-works/scripts#removing-features), you will be left with just the structure of the template plus some handy utilities and serverless functions.
+

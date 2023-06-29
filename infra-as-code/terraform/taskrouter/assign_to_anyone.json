@@ -1,0 +1,51 @@
+{
+  "task_routing": {
+    "filters": [
+      {
+        "filter_friendly_name": "Route Back To Agent->Support (Park Interaction)",
+        "expression": "originalRouting.queueName == \"Template Example Support\"",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_TEMPLATE_EXAMPLE_SUPPORT}",
+            "known_worker_sid": "task.originalRouting.workerSid",
+            "timeout": 30
+          },
+          {}
+        ]
+      },
+      {
+        "filter_friendly_name": "Route Back To Agent->Sales (Park Interaction)",
+        "expression": "originalRouting.queueName == \"Template Example Sales\"",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_TEMPLATE_EXAMPLE_SALES}",
+            "known_worker_sid": "task.originalRouting.workerSid",
+            "timeout": 30
+          },
+          {}
+        ]
+      },
+      {
+        "filter_friendly_name": "Route To Sales",
+        "expression": "ivr_queue == \"template_example_sales\"",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_TEMPLATE_EXAMPLE_SALES}"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Route To Support",
+        "expression": "ivr_queue == \"template_example_support\"",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_TEMPLATE_EXAMPLE_SUPPORT}"
+          }
+        ]
+      }
+    ],
+    "default_filter": {
+      "queue": "${QUEUE_SID_EVERYONE}"
+    }
+  }
+}

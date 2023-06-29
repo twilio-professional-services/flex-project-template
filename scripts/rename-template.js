@@ -108,7 +108,7 @@ if(shell.test('-e', `${fullPluginName}/src/feature-library/chat-to-video-escalat
 shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/types/manager/ServiceConfiguration.ts`);
 shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/utils/serverless/ApiService/ApiService.test.ts`);
 shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/src/utils/serverless/ApiService/index.ts`);
-shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/test-utils/flex-service-configuration.js`);
+shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/test-utils/flex-service-configuration.ts`);
 
 shell.sed('-i', /serverless_functions_domain[_]*[a-z]*/g, `serverless_functions_domain_${packageSuffixUndercore}`, `${fullPluginName}/public/appConfig.example.js`);
 
@@ -124,7 +124,8 @@ if(shell.test('-e', './serverless-functions/.twiliodeployinfo')){
 
 // update references to the plugin in the actions scripts
 var oldPluginNamdRegex = RegExp(`${pluginDir}`); 
-shell.sed('-i', oldPluginNamdRegex, fullPluginName, `./.github/*/flex_deploy_*.yaml`);
+shell.sed('-i', oldPluginNamdRegex, fullPluginName, `./.github/*/flex_deploy.yaml`);
+shell.sed('-i', oldPluginNamdRegex, fullPluginName, `./.github/*/checks.yaml`);
 
 
 console.log(`Re-evaluating npm package-lock for ${fullPluginName}...`);
