@@ -10,7 +10,7 @@ export const componentHook = function addCannedResponsesDropdownToMessageInputAc
   _manager: Flex.Manager,
 ) {
   const options: Flex.ContentFragmentProps = {
-    sortOrder: 4,
+    sortOrder: -1,
   };
   if (getUILocation() === 'MessageInputActions') {
     flex.MessageInputActions.Content.add(<CannedResponsesDropdown key="canned-responses-dropdown-button" />, options);
