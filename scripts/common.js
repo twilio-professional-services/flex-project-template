@@ -365,6 +365,9 @@ exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
         let flexConfigFileData = fs.readFileSync(commonFlexConfig, "utf8");
         let flexConfigJsonData = JSON.parse(flexConfigFileData);
         
+        // disable admin panel for local
+        flexConfigJsonData.custom_data.features.admin_ui.enabled = false
+        
         appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
         
         fs.writeFileSync(pluginAppConfig, appConfigFileData, 'utf8');
