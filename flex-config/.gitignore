@@ -1,3 +1,4 @@
 *.env
 *.log
 ui_attributes.local.json
+ui_attributes.my_hosted_flex.json

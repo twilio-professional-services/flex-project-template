@@ -53,6 +53,8 @@ jobs:
           node-version: '16'
       - name: install top-level packages
         run: |
+          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           npm install
       - name: deploy serverless
         working-directory: serverless-functions
@@ -115,6 +117,8 @@ jobs:
       - name: install npm and apply missing environment variables
         id: initial-env
         run: |
+          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           npm install
           npm run populate-missing-placeholders $ENVIRONMENT
       - name: install npm and build video-app-assets
@@ -150,6 +154,8 @@ jobs:
           node-version: '16'
       - name: install top-level packages
         run: |
+          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           npm install
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
@@ -178,15 +184,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: install npm and apply missing environment variables
+      - name: install root npm
         run: |
+          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
+          echo " - Overwrite Config: ${{ env.OVERWRITE_CONFIG }}"  >> $GITHUB_STEP_SUMMARY
           npm install
-          npm run populate-missing-placeholders $ENVIRONMENT
       - name: deploy flex config
         working-directory: flex-config
         run: |
           npm install
-          npm run deploy:$ENVIRONMENT
+          node index.js
 
   deploy-release-plugin:
     runs-on: ubuntu-latest
@@ -208,6 +216,9 @@ jobs:
 
       - name: deploy and release flex-plugin
         run: |
+          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ github.event.inputs.environment }}"  >> $GITHUB_STEP_SUMMARY
+          echo " - Plugin Folder: ${{ env.PLUGIN_FOLDER }}"  >> $GITHUB_STEP_SUMMARY
           cd $PLUGIN_FOLDER
           npm install
           npm run install-flex-plugin

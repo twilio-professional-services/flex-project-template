@@ -4,11 +4,7 @@
   "description": "CLI tool for merging new data into Flex configuration",
   "main": "index.js",
   "scripts": {
-    "deploy:local": "ENVIRONMENT=local node index.js",
-    "deploy:dev": "ENVIRONMENT=dev node index.js",
-    "deploy:test": "ENVIRONMENT=test node index.js",
-    "deploy:qa": "ENVIRONMENT=qa node index.js",
-    "deploy:prod": "ENVIRONMENT=prod node index.js"
+    "deploy": "node index.js"
   },
   "author": "",
   "license": "ISC",

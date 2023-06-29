@@ -181,3 +181,7 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+#ignore local env
+.env.local
+.env.my_hosted_flex
