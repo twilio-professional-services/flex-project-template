@@ -1,6 +1,6 @@
 const axios = require("axios");
 const dotenv = require("dotenv");
-const fs = require('fs');
+const { promises: fs } = require('fs');
 const _ = require('lodash');
 const { getServerlessServices, populateFlexConfigPlaceholders } = require ('../scripts/common');
 
