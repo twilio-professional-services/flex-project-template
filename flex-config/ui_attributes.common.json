@@ -157,7 +157,7 @@
       },
       "canned_responses": {
         "enabled": true,
-        "location": "CRM"
+        "location": "MessageInputActions"
       },
       "keyboard_shortcuts": {
         "enabled": true
