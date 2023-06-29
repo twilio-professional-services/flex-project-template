@@ -62,14 +62,11 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
 
     // first ensure envirnment specific file exists
     if(!envExists){
-      await fs.copyFile(defaultEnvFileName, envFileName, (err) => {
-        if (err) {
-          console.log("Error Found:", err);
-        }
-        else {
-          console.log(`Environment config generated ${envFileName}`);
-        }
-      });
+      try {
+        await fs.copyFile(defaultEnvFileName, envFileName)
+      } catch (error) {
+        console.log(`Error copying file ${defaultEnvFileName} to ${envFileName}: ${error}`);
+      }
     }
 
     // then populate it using the twilio cli
