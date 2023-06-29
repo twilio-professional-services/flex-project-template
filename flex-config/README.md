@@ -20,9 +20,9 @@ cp .env.example .env
     - follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key if you dont have one
 4. Add `TWILIO_ACCOUNT_SID` and `TWILIO_API_KEY` and `TWILIO_API_SECRET` values to the `.env` file
 5. Review/Edit the `taskrouter_skills.json` and ensure the skills match the ones you want to deploy.  This is used on every environment to deploy a common set of skills.  Note the skills in the file will be merged with any skills existing in the environment.
-6. cp the `ui_attributes.example.json` to `ui_attributes.local.json`.
+6. optionally - if you want to define your own overrides cp the `ui_attributes.example.json` to `ui_attributes.<environment-name>.json`.
 ```bash
-cp ui_attributes.example.json ui_attributes.local.json
+cp ui_attributes.example.json ui_attributes.<environment-name>.json
 ```
 7. Run `npm run deploy:local` to update the Flex configuration.
 

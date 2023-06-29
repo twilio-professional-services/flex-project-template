@@ -184,13 +184,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
-      - name: install npm and apply missing environment variables
+      - name: install root npm
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Overwrite Config: ${{ env.OVERWRITE_CONFIG }}"  >> $GITHUB_STEP_SUMMARY
           npm install
-          npm run populate-missing-placeholders $ENVIRONMENT
       - name: deploy flex config
         working-directory: flex-config
         run: |
