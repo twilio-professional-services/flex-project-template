@@ -12,7 +12,12 @@ export const init = async (flex: typeof Flex, manager: Flex.Manager) => {
     customFilters = customFilters.concat(hookFilters);
   }
 
-  flex.TeamsView.defaultProps.filters = [flex.TeamsView.activitiesFilter, ...customFilters];
+  if (customFilters.length < 1) {
+    // If no teams view filter hooks, let's use the default set.
+    return;
+  }
+
+  flex.TeamsView.defaultProps.filters = customFilters;
 };
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {

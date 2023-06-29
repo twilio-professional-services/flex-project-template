@@ -1,3 +1,4 @@
+import esES from './es-es.json';
 import esMX from './es-mx.json';
 import ptBR from './pt-br.json';
 import th from './th.json';
@@ -52,6 +53,7 @@ export const stringHook = () => ({
     [StringTemplates.PanelCoaching]: '{{supervisor}} is coaching',
     [StringTemplates.PanelMonitoring]: '{{supervisor}} is monitoring',
   },
+  'es-ES': esES,
   'es-MX': esMX,
   'pt-BR': ptBR,
   th,

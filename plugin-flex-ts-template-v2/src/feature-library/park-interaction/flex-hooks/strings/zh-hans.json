@@ -1,0 +1,8 @@
+{
+  "PSParkSuccess": "谈话被搁置。",
+  "PSParkError": "尝试搁置对话时发生错误：{{message}}",
+  "PSParkWebhookError": "Webhook URL 无效。 本地运行时不支持暂停对话。",
+  "PSParkInteraction": "搁置互动",
+  "PSParkNonCbmError": "搁置对话仅适用于基于对话的消息传递任务。",
+  "PSParkMultipleParticipantsError": "由于有多个内部参与者，因此无法搁置此对话。"
+}

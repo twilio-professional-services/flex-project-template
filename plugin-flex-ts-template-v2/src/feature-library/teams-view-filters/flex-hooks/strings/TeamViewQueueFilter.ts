@@ -1,3 +1,4 @@
+import esES from './es-es.json';
 import esMX from './es-mx.json';
 import ptBR from './pt-br.json';
 import th from './th.json';
@@ -18,6 +19,7 @@ export enum StringTemplates {
   EmailAddress = 'PSTeamsViewEmailAddress',
   QueueEligibility = 'PSTeamsViewQueueEligibility',
   Team = 'PSTeamsViewTeam',
+  Activities = 'PSTeamsViewActivities',
 }
 
 export const stringHook = () => ({
@@ -36,7 +38,9 @@ export const stringHook = () => ({
     [StringTemplates.EmailAddress]: 'Email Address',
     [StringTemplates.QueueEligibility]: 'Queue Eligibility',
     [StringTemplates.Team]: 'Team',
+    [StringTemplates.Activities]: 'Activities',
   },
+  'es-ES': esES,
   'es-MX': esMX,
   'pt-BR': ptBR,
   th,

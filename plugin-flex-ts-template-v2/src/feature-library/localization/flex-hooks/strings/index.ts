@@ -1,4 +1,5 @@
 import languages from '../../languages';
+import esES from './es-es.json';
 import esMX from './es-mx.json';
 import ptBR from './pt-br.json';
 import th from './th.json';
@@ -24,6 +25,7 @@ export const stringHook = () => ({
   'pt-BR': ptBR,
   th,
   'zh-Hans': zhHans,
+  'es-ES': esES,
 });
 
 export const systemStringHook = () => {

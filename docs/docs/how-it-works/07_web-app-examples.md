@@ -8,4 +8,4 @@ This package contains web application examples that build off feature functional
 
 ## Applications
 
-- [Video App Quickstart](https://github.com/twilio-professional-services/flex-project-template/tree/main/web-app-examples/video-app-quickstart) - aimed at standing up a 1:1 video room solution rapidly, building off of the [Chat to Video Escalation](/feature-library/flex-v2/chat-to-video-escalation) feature
+- [Video App Quickstart](https://github.com/twilio-professional-services/flex-project-template/tree/main/web-app-examples/video-app-quickstart) - aimed at standing up a 1:1 video room solution rapidly, building off of the [Chat to Video Escalation](/feature-library/chat-to-video-escalation) feature
