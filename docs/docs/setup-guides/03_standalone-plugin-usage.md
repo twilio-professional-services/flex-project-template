@@ -1,7 +1,7 @@
 ---
-sidebar_label: Standalone Plugin Usage
+sidebar_label: Use Template As Delivery Platform
 sidebar_position: 4
-title: Using template for a standalone plugin
+title: Using template shell to deliver my own features
 ---
 
 # Creating a standalone feature
