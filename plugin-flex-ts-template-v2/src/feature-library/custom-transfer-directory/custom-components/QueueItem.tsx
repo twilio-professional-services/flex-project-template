@@ -43,8 +43,9 @@ export const QueueItem = (props: QueueItemProps) => {
   const callWarmTransferEnabled =
     Manager.getInstance().store.getState().flex.featureFlags.features['flex-warm-transfers']?.enabled;
 
-  const isWarmTransferEnabled = TaskHelper.isCBMTask(task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;
-  const isColdTransferEnabled = TaskHelper.isCBMTask(task) ? isCbmColdTransferEnabled() : true;
+  const isWarmTransferEnabled =
+    task && TaskHelper.isCBMTask(task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;
+  const isColdTransferEnabled = task && TaskHelper.isCBMTask(task) ? isCbmColdTransferEnabled() : true;
 
   return (
     <Flex
@@ -86,7 +87,7 @@ export const QueueItem = (props: QueueItemProps) => {
               size="circle"
               onClick={onWarmTransferClick}
             >
-              {TaskHelper.isChatBasedTask(task) ? (
+              {task && TaskHelper.isChatBasedTask(task) ? (
                 <ChatIcon key={`queue-item-warm-transfer-icon-${queue.sid}`} decorative={false} title="" />
               ) : (
                 <CallTransferIcon key={`queue-item-warm-transfer-icon-${queue.sid}`} decorative={false} title="" />
@@ -109,7 +110,7 @@ export const QueueItem = (props: QueueItemProps) => {
               size="circle"
               onClick={onColdTransferClick}
             >
-              {TaskHelper.isChatBasedTask(task) ? (
+              {task && TaskHelper.isChatBasedTask(task) ? (
                 <SendIcon key={`queue-item-cold-transfer-icon-${queue.sid}`} decorative={false} title="" />
               ) : (
                 <CallOutgoingIcon key={`queue-item-cold-transfer-icon-${queue.sid}`} decorative={false} title="" />
