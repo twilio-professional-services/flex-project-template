@@ -4,7 +4,7 @@ sidebar_position: 3
 title: Deploy to hosted Flex from the command line (Not Recommended)
 ---
 
-:::danger Terraform
+:::info Terraform
 
 There are currently no steps provided for manually deploying terraform from your command line.  You can deploy terraform config independently from the github actions script `Deploy Terraform Only`
 
