@@ -157,7 +157,7 @@
       },
       "canned_responses": {
         "enabled": true,
-        "location": "CRM"
+        "location": "MessageInputActions"
       },
       "keyboard_shortcuts": {
         "enabled": true
@@ -178,7 +178,7 @@
           "global_exclude_filter": ""
         },
         "external_directory": {
-          "enabled": false,
+          "enabled": true,
           "skipPhoneNumberValidation": false,
           "directory": [
             {
@@ -191,9 +191,9 @@
         }
       },
       "dispositions": {
-        "enabled": false,
+        "enabled": true,
         "enable_notes": true,
-        "require_disposition": true,
+        "require_disposition": false,
         "global_dispositions": [
           "Resolved",
           "Not Resolved",

@@ -247,6 +247,16 @@ exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv
     if(!shell.test('-e', scheduleManagerEnv)){
       shell.cp(scheduleManagerEnvExample, scheduleManagerEnv);
     }
+
+    if(account_sid){
+      shell.sed('-i', /<YOUR_TWILIO_ACCOUNT_SID>/g, `${account_sid}`, scheduleManagerEnv);
+    }
+    if(auth_token){
+      shell.sed('-i', /<YOUR_TWILIO_AUTH_TOKEN>/g, `${auth_token}`, scheduleManagerEnv);
+    }
+
+
+
   } catch (error) {
     console.error(error);
     console.log(`Error attempting to generate schedule manager environment file ${serverlessEnv}`);
@@ -354,6 +364,9 @@ exports.generateAppConfigForPlugins = function generateAppConfigForPlugins() {
         let appConfigFileData = fs.readFileSync(pluginAppConfig, "utf8");
         let flexConfigFileData = fs.readFileSync(commonFlexConfig, "utf8");
         let flexConfigJsonData = JSON.parse(flexConfigFileData);
+        
+        // disable admin panel for local
+        flexConfigJsonData.custom_data.features.admin_ui.enabled = false
         
         appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
         
