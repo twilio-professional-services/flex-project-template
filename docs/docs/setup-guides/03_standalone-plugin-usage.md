@@ -52,4 +52,4 @@ npm start
 ```
 
 7. Push your changes to your repository - this is your new baseline
-8. You can follow the instructions for [local development setup](/setup-guides/local-setup-and-use) and then [adding a feature](/how-it-works/building-with-template#adding-a-feature)
+8. You can follow the instructions for [local development setup](/setup-guides/local-setup-and-use) and then [adding a feature](/how-it-works/plugin-flex-ts-template-v2#adding-a-feature)
