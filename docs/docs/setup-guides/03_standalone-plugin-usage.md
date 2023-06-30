@@ -1,7 +1,7 @@
 ---
-sidebar_label: Standalone Plugin Usage
+sidebar_label: Use Template As Delivery Platform
 sidebar_position: 4
-title: Using template for a standalone plugin
+title: Using template shell to deliver my own features
 ---
 
 # Creating a standalone feature
@@ -52,4 +52,4 @@ npm start
 ```
 
 7. Push your changes to your repository - this is your new baseline
-8. You can follow the instructions for [local development setup](/setup-guides/local-setup-and-use) and then [adding a feature](/how-it-works/building-with-template#adding-a-feature)
+8. You can follow the instructions for [local development setup](/setup-guides/local-setup-and-use) and then [adding a feature](/how-it-works/plugin-flex-ts-template-v2#adding-a-feature)

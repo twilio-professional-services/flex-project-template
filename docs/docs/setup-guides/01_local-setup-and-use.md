@@ -1,7 +1,7 @@
 ---
-sidebar_label: Local Setup & Use
-sidebar_position: 1
-title: Local Setup & Use
+sidebar_label: Run Flex Locally
+sidebar_position: 2
+title: Run Flex Locally
 ---
 
 ### Prerequisites
@@ -13,41 +13,43 @@ title: Local Setup & Use
 - `twilio profiles:list` has an active account set.
 - have the twilio auth token for your account ready (you can find this in the [Twilio Console](https://console.twilio.com/))
 
-_NOTE_ the admin panel will *not* be functional when working locally as [appConfig supersedes](#development-notes) the hosted config and the admin panel works directly with the hosted config.
+:::info Feature Limitation
+the admin panel is disabled by default when working locally. See the [admin panel docs](/feature-library/admin-ui) for more informatioon
+:::
 
-_NOTE_ some features may not be functional without a deployment of the taskrouter conofiguration and studio flows. It is recommended to do at least one initial deploy to your environment using the [release pipeline](/setup-guides/deploy-to-hosted-flex)
-
+:::caution Feature Functionality
+ some features may not be functional without a deployment of the taskrouter conofiguration and studio flows. It is recommended to do at least one initial deploy to your environment using the [Deploy Flex github action script](/setup-guides/deploy-to-hosted-flex)
+:::
 
 ### Setup
 
-1. [Generate a new repository based on the template](https://github.com/twilio-professional-services/flex-project-template/generate)
+1. Follow the steps to do an initial [deploy to hosted flex](/setup-guides/deploy-to-hosted-flex) at least once
 2. Clone the new repository that you just created
-
-- (Optionally) after creating your repo you may also want to attach the history to your new repository for future updates - details [here](/setup-guides/managing-future-updates-from-the-template)
-
-3. make sure the twilio cli has the correct account set to active
+``` bash
+git clone <repo-url>
+```
+3. make sure the twilio cli has the correct account set to active, if not create one
 
 ```bash
 twilio profiles:list
 ```
-
 4. cd into the repository and execute the following (this installs all sub-project package dependencies and generates .env configuration for you)
 
 ```bash
 npm install
 ```
-
 5. follow the prompt and provide your auth token
-6. Run the serverless functions and plugin locally by running
+6. Run the serverless functions and plugin together locally by running the following at the top level of the checkout
 
 ```bash
 npm start
 ```
 
-### development notes
+:::caution Development Gotcha
+When developing locally, Flex config is overridden by anything in your `plugin-flex-ts-template-v2/public/appConfig.js`. appConfig is only applicable when running the plugin locally, so you can edit this file to toggle features on and off for your locally running web server. You can also tweak the api endpoint for your serverless functions if you need to.
+:::
 
-When developing locally, Flex config is overridden by anything in your `plugin-flex-ts-template-v2/public/appConfig.js`. Note: appConfig is only applicable when running the plugin locally, so you can edit this file to toggle features on and off for your locally running web server. You can also tweak the api endpoint for your serverless functions if you need to.
-
+:::info Development Tip!
 When running the plugin locally, this template has been set up to pair the plugin with the serverless functions also running locally on localhost:3001. The serverless functions can be debugged by attaching your debugger to the node instance. The following is a sample entry for ".vscode/launch.json" to connect vscode for debugging
 
 ```json
@@ -67,3 +69,4 @@ When running the plugin locally, this template has been set up to pair the plugi
   ]
 }
 ```
+:::

@@ -32,7 +32,7 @@ The [Flex Project Template Documentation Site](https://twilio-professional-servi
 
 1. [Feature library Information](https://twilio-professional-services.github.io/flex-project-template/feature-library/overview)
 2. [Setup Guides](#setup-guides)
-   1. [Deploy to hosted flex (Recommended ~5 mins)](https://twilio-professional-services.github.io/flex-project-template/setup-guides/deploy-to-hosted-flex)
+   1. [Deploy to hosted flex (Recommended ~8 mins)](https://twilio-professional-services.github.io/flex-project-template/setup-guides/deploy-to-hosted-flex)
    2. [Running locally](https://twilio-professional-services.github.io/flex-project-template/setup-guides/local-setup-and-use)
    3. [Using template for a standalone plugin](https://twilio-professional-services.github.io/flex-project-template/setup-guides/standalone-plugin-usage)
 

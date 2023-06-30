@@ -1,3 +1,9 @@
+---
+sidebar_label: Merge Future Updates
+sidebar_position: 5
+title: Merge Future Updates
+---
+
 # Manging future updates from the template
 
 As outlined on [github docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template), when creating a new repository from a template, you will be creating a repositroy with no history. One of the benefits of using the template this way instead of forking is that you can make it private.
@@ -5,7 +11,7 @@ As outlined on [github docs](https://docs.github.com/en/repositories/creating-an
 This means however, if you later want to take updates it can be difficult, but there is a solution.  You can [attach the orignal history](#adding-history-to-your-repository) back into your clone meaning you can then [take future updates](#taking-future-updates-from-the-template) with ease.
 
 
-
+Time to complete: _~10 minutes_
 
 ### Adding history to your repository
 
