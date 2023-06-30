@@ -227,9 +227,6 @@
       },
       "park_interaction": {
         "enabled": true
-      },
-      "my_new_feature": {
-        "enabled": false
       }
     }
   }
