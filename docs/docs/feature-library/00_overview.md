@@ -10,7 +10,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 
 | Feature                         | Description                                                                 | Feature Docs Page                                                                           | Enabled By Default |
 | ------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------ |
-| Admin UI                        | _adds a feature settings view to Flex for customizing the template_         | [admin-ui](/feature-library/admin-ui)                                               | ✅                 |
+| Admin UI                        | _adds a feature settings view to Flex for customizing the template_ <br/><br/> **note by default this is disabled locally as this feature is only intended for hosted flex.*       | [admin-ui](/feature-library/admin-ui)                                               | ✅                 |
 | Agent Automation                | _adds auto accept and auto wrapup behaviors to agent desktop_               | [agent-automation](/feature-library/agent-automation)                               | ✅                 |
 | Attribute Viewer                | _easily view task and worker attributes within Flex_                        | [attribute-viewer](/feature-library/attribute-viewer)                               | ✅                 |
 | Canned Responses               | _provide agents with pre-canned chat responses_                                                     | [canned-responses](/feature-library/canned-responses)                                 | ✅                 |

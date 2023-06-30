@@ -7,6 +7,14 @@ title: admin-ui
 
 This feature adds a user interface to Flex for easily managing the configuration of features within the template. Every feature can be enabled or disabled, and each feature's deployed configuration is editable. Configuration changes can be made globally or to only the current user, allowing for easy testing and development. The admin panel is fully dynamic, automatically showing features added to the template. In most cases, feature developers do not need to do anything for the feature to be shown and manage-able via admin-ui. However, features with complex configuration requirements may use the provided hook pattern to register their own configuration component (see "Extending the configuration interface" below).
 
+:::info local development
+
+When running Flex locally, the configuration in `public/appConfig.js` overrides any global settings. Admin-UI works only with the hosted flex configuration. As such `appConfig.js` overrides can create confusion when using this feature.
+
+For this reason, the admin-ui panel is automatically disabled by default when the local envirnment is initially setup.  This is again doine using `appConfig.js` and is done to avoid confusion with the feature.  The panel can still be enabled locally but it is advised when doing so to first clear out all the overrides from `appConfig.js` under `custom_data.features`.
+
+::: 
+
 ## Flex User Experience
 
 ![Admin-ui demo](/img/features/admin-ui/admin-ui.gif)
@@ -16,14 +24,6 @@ This feature adds a user interface to Flex for easily managing the configuration
 This feature is enabled by default and requires no further configuration.
 
 If you are using an infrastructure-as-code deployment strategy, exposing a configuration interface outside of the code repository is undesirable. For such deployments, it is suggested to disable this feature, and set the `OVERWRITE_CONFIG=true` environment variable as part of the flex-config deployment (this is set up as an input variable on the `Deploy Flex` github actions script). This will result in the repository flex-config as the source of truth.
-
-::: info local development
-
-When running Flex UI locally, the configuration in `public/appConfig.js` overrides any global settings. As such, the settings in admin-ui may not reflect the actual locally running configuration, unless the overrides in `public/appConfig.js` are removed.
-
-For this reason, the admin panel is automatically disabled locally using appConfig settings to avoid any confusion.
-
-::: 
 
 ## How does it work?
 
