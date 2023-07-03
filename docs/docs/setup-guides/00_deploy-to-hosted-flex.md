@@ -1,7 +1,7 @@
 ---
-sidebar_label: Deploy with Github Actions (Recommended)
+sidebar_label: Deploy with GitHub Actions (Recommended)
 sidebar_position: 1
-title: Deploy to hosted Flex - Github Actions (Recommended)
+title: Deploy to hosted Flex - GitHub Actions (Recommended)
 ---
 
 
@@ -61,8 +61,7 @@ Time to complete: _~8 minutes_
    
 7. Run the workflow.
    - this will deploy the assets to your environment with the default features enabled, See [Feature library Information](/feature-library/overview) for further details of whats enabled by default.
-   - serverless-functions will auto-identify any missing environment variables for the default features.  If you want to have dedicated controls over the environment copy the [environment example](https://github.com/twilio-professional-services/flex-project-template/blob/main/serverless-functions/.env.example) and rename it to .env.<envirnoment-name\> and commit it to version control.
-   - flex-config will auto-identify the domain name for the deployed serverless-functions and schedule-manager. If you want to have dedicated controls over the environment copy the [ui_attributes example](https://github.com/twilio-professional-services/flex-project-template/blob/main/flex-config/ui_attributes.example.json) and rename it to ui_attributes.<environment-name\>.json and commit it to version control.
+   - envrionment properties will be automatically populated based on the deployed Flex configuration, including service and workflow SIDs. See [override environment properties](/setup-guides/override-environment-properties) for information on how to influence this configuration.
  
 
 

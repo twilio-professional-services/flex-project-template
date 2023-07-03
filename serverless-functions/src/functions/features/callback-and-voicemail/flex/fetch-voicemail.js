@@ -7,18 +7,9 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   const { recordingSid } = event;
 
   try {
-    const recordingResult = await VoiceOperations.fetchRecording({
-      context,
-      recordingSid,
-    });
-
-    if (!recordingResult.recordingProperties.mediaUrl) {
-      return handleError('Missing mediaUrl for provided recording sid');
-    }
-
     const result = await VoiceOperations.fetchRecordingMedia({
       context,
-      recordingUrl: recordingResult.recordingProperties.mediaUrl,
+      recordingSid,
     });
 
     const { recording, status, type } = result;

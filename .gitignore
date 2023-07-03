@@ -182,6 +182,6 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-#ignore local env
-.env.local
-.env.my_hosted_flex
+# Ignore local env(s), allowing only the example env
+.env.*
+!.env.example
