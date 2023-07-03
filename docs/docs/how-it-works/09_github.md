@@ -4,4 +4,4 @@ sidebar_position: 10
 title: .github
 ---
 
-This directory contains the GitHub Actions workflows used for deployment of each of the packages within this repository. While these examples are written for GitHub Actions, the underlying scripts can easily be moulded for use in alternative release management tools. [Here is a test broken link.](/setup-guides/1234)
+This directory contains the GitHub Actions workflows used for deployment of each of the packages within this repository. While these examples are written for GitHub Actions, the underlying scripts can easily be moulded for use in alternative release management tools.
