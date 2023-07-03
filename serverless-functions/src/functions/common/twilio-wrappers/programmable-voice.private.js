@@ -238,15 +238,15 @@ exports.fetchRecording = async (parameters) => {
  * @param {object} parameters the parameters for the function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
- * @param {string} parameters.recordingUrl the recording url to fetch
+ * @param {string} parameters.recordingSid the recording sid to fetch
  * @returns {object} the recording audio file encoded as base64
- * @description fetches recording by url
+ * @description fetches recording by sid
  */
-exports.fetchRecordingMedia = async function fetchConfiguration(parameters) {
-  const { recordingUrl } = parameters;
+exports.fetchRecordingMedia = async (parameters) => {
+  const { recordingSid } = parameters;
 
-  if (!isString(recordingUrl))
-    throw new Error('Invalid parameters object passed. Parameters must contain recordingUrl string');
+  if (!isString(recordingSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain recordingSid string');
 
   try {
     const config = {
@@ -257,7 +257,10 @@ exports.fetchRecordingMedia = async function fetchConfiguration(parameters) {
       responseType: 'arraybuffer',
     };
 
-    const getResponse = await axios.get(`${recordingUrl}.mp3`, config);
+    const getResponse = await axios.get(
+      `https://api.twilio.com/2010-04-01/Accounts/${process.env.ACCOUNT_SID}/Recordings/${recordingSid}.mp3`,
+      config,
+    );
 
     return {
       success: true,
