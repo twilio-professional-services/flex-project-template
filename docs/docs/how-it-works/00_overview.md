@@ -1,6 +1,6 @@
 ---
 sidebar_label: Overview
-sidebar_position: 1
+sidebar_position: 0
 title: How does it work?
 ---
 
