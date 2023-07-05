@@ -52,7 +52,7 @@ Time to complete: _~8 minutes_
      - `TWILIO_API_SECRET` - the api secret
      - `TF_ENCRYPTION_KEY` this can be any string value you want
 
-   - your environment secrets should look something like this (TF_ENCYPTION_KEY can be a repo or environment secret)
+   - your environment secrets should look something like this (TF_ENCRYPTION_KEY can be a repo or environment secret)
    ![image](/img/guides/github-secrets.png)
 
 4. Login into Flex and make sure in the admin panel, the version of flex you are using meets the minimal version allowed by the plugin (at time of writing, Flex 2.x is minimum allowed)
@@ -63,7 +63,7 @@ Time to complete: _~8 minutes_
    
 7. Run the workflow.
    - this will deploy the assets to your environment with the default features enabled, See [Feature library Information](/feature-library/overview) for further details of whats enabled by default.
-   - envrionment properties will be automatically populated based on the deployed Flex configuration, including service and workflow SIDs. See [override environment properties](/setup-guides/override-environment-properties) for information on how to influence this configuration.
+   - environment properties will be automatically populated based on the deployed Flex configuration, including service and workflow SIDs. See [override environment properties](/setup-guides/override-environment-properties) for information on how to influence this configuration.
  
 
 
