@@ -1,5 +1,5 @@
 {
-  "PSParkSuccess": "La conversación ahora está en espera.",
+  "PSParkSuccess": "La conversación está en espera.",
   "PSParkError": "Se produjo un error al intentar poner la conversación en espera: {{message}}",
   "PSParkInteraction": "Conversación en espera",
   "PSParkNonCbmError": "Poner la conversación en espera solo está disponible para tareas de mensajería basadas en conversaciones.",

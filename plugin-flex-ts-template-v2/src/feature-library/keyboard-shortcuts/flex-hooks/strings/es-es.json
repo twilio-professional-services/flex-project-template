@@ -23,7 +23,7 @@
   "KeyboardMgrModalInputLabel": "Nuevo atajo de teclado",
   "KeyboardMgrModalThrottleInput ": "Control de velocidad",
   "KeyboardMgrSaveChangesButton": "Guardar cambios",
-  "KeyboardMgrModalThrottleHelpText": "Ingrese el tiempo de espera de lo atajo",
+  "KeyboardMgrModalThrottleHelpText": "Ingrese el tiempo de espera del atajo",
   "KeyboardMgrModalHelpText": "Ingrese su nuevo atajo de teclado",
   "KeyboardMgrModalInputPlaceholder ": "Carácter único",
   "KeyboardMgrModalThrottlePlaceholder ": "Número en milisegundos",
