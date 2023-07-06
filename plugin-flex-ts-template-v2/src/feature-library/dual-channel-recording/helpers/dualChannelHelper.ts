@@ -3,10 +3,11 @@ import { ConferenceParticipant, ITask, Manager, TaskHelper } from '@twilio/flex-
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 import { FetchedRecording } from '../../../types/serverless/twilio-api';
 import { getChannelToRecord } from '../config';
+import DualChannelService from './DualChannelService';
 
 const manager = Manager.getInstance();
 
-export const addCallDataToTask = async (task: ITask, callSid: string | null, recording: FetchedRecording | null) => {
+const addCallDataToTask = async (task: ITask, callSid: string | null, recording: FetchedRecording | null) => {
   const { conference } = task;
 
   let newAttributes = {} as any;
@@ -89,7 +90,7 @@ const isTaskActive = (task: ITask) => {
   return manager.workerClient?.reservations.has(reservationSid);
 };
 
-export const waitForConferenceParticipants = async (task: ITask): Promise<ConferenceParticipant[]> =>
+const waitForConferenceParticipants = async (task: ITask): Promise<ConferenceParticipant[]> =>
   new Promise((resolve) => {
     const waitTimeMs = 100;
     // For outbound calls, the customer participant doesn't join the conference
@@ -163,7 +164,7 @@ export const waitForConferenceParticipants = async (task: ITask): Promise<Confer
     }, maxWaitTimeMs);
   });
 
-export const waitForActiveCall = async (task: ITask): Promise<string> =>
+const waitForActiveCall = async (task: ITask): Promise<string> =>
   new Promise((resolve) => {
     const waitTimeMs = 100;
     // For internal calls, there is no conference, so we only have the active call to work with.
@@ -216,4 +217,60 @@ export const addMissingCallDataIfNeeded = async (task: ITask) => {
     // have the desired call and conference metadata
     await addCallDataToTask(task, null, null);
   }
+};
+
+const startRecording = async (task: ITask, callSid: string | undefined) => {
+  if (!callSid) {
+    console.warn('Unable to determine call SID for recording');
+    return;
+  }
+
+  try {
+    const recording = await DualChannelService.startDualChannelRecording(callSid);
+    await addCallDataToTask(task, callSid, recording);
+  } catch (error) {
+    console.error('Unable to start dual channel recording.', error);
+  }
+};
+
+export const recordInternalCall = async (task: ITask) => {
+  // internal call - always record based on call SID, as conference state is unknown by Flex
+  // Record only the outbound leg to prevent duplicate recordings
+  console.debug('Waiting for internal call to begin');
+  const callSid = await waitForActiveCall(task);
+  console.debug('Recorded internal call:', callSid);
+
+  await startRecording(task, callSid);
+};
+
+export const recordExternalCall = async (task: ITask) => {
+  // We want to wait for all participants (customer and worker) to join the
+  // conference before we start the recording
+  console.debug('Waiting for customer and worker to join the conference');
+  const participants = await waitForConferenceParticipants(task);
+
+  let participantLeg;
+  switch (getChannelToRecord()) {
+    case 'customer': {
+      participantLeg = participants.find((p) => p.participantType === 'customer');
+      break;
+    }
+    case 'worker': {
+      participantLeg = participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker);
+      break;
+    }
+    default:
+      break;
+  }
+
+  console.debug('Recorded Participant: ', participantLeg);
+
+  if (!participantLeg) {
+    console.warn('No customer or worker participant. Not starting the call recording');
+    return;
+  }
+
+  const { callSid } = participantLeg;
+
+  await startRecording(task, callSid);
 };
