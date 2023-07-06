@@ -91,7 +91,7 @@ const DispositionTab = (props: OwnProps) => {
   }, [props.task?.status]);
 
   return (
-    <Box padding="space80">
+    <Box padding="space80" overflowY="scroll">
       <Stack orientation="vertical" spacing="space80">
         {getDispositionsForQueue(props.task?.queueSid ?? '').length > 0 && (
           <RadioGroup
