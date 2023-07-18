@@ -20,7 +20,7 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
       style={{ width: 150 }}
       content={(item: WorkerItem) => item.worker.attributes.team_name}
     />,
-    { sortOrder: 4 }
+    { sortOrder: 4, }
   );
 
   flex.WorkersDataTable.Content.add(
@@ -30,6 +30,6 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
       style={{ width: 200 }}
       content={(item: WorkerItem) => getSkills(item)}
     />,
-    { sortOrder: 5 }
+    { sortOrder: 5, }
   );
 };
