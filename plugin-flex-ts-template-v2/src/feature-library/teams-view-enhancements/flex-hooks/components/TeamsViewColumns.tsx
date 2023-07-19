@@ -1,8 +1,9 @@
 import React from 'react';
 import * as Flex from '@twilio/flex-ui';
-
+import { Template, templates } from '@twilio/flex-ui';
 import { Worker } from '../../../../types/task-router';
 import { FlexComponent } from '../../../../types/feature-loader';
+import { StringTemplates } from '../strings';
 
 interface WorkerItem {
   worker: Worker;
@@ -26,10 +27,11 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
   flex.WorkersDataTable.Content.add(
     <flex.ColumnDefinition
       key="skills"
-      header={'Skills'}
+      header={ <Template source={templates[StringTemplates.TeamsViewColumnSkills] } /> } 
       style={{ width: 200 }}
       content={(item: WorkerItem) => getSkills(item)}
     />,
     { sortOrder: 5 },
   );
 };
+<Template source={templates.WorkerCanvasSkillsHeader} />
