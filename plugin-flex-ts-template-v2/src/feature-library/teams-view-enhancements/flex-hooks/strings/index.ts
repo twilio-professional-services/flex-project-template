@@ -10,4 +10,9 @@ export const stringHook = () => ({
     [StringTemplates.TeamsViewColumnTeamName]: 'Team Name',
     [StringTemplates.TeamsViewColumnSkills]: 'Skills',
   },
+  'es-MX':{
+    [StringTemplates.TeamsViewColumnTeamName]: 'Equipo',
+    [StringTemplates.TeamsViewColumnSkills]: 'Habilidades',
+  }
+
 });

@@ -1,7 +1,6 @@
 import React from 'react';
 import * as Flex from '@twilio/flex-ui';
 
-import { Template, templates } from '@twilio/flex-ui';
 import { Worker } from '../../../../types/task-router';
 import { FlexComponent } from '../../../../types/feature-loader';
 import { StringTemplates } from '../strings';
@@ -14,11 +13,11 @@ const getSkills = (item: WorkerItem) => {
   return item.worker.attributes.routing ? item.worker?.attributes?.routing?.skills?.join(', ') : '-';
 };
 export const componentName = FlexComponent.TaskCanvasHeader;
-export const componentHook = function addWorkersDataTableColumns(flex: typeof Flex) {
+export const componentHook = function addWorkersDataTableColumns(flex: typeof Flex, manager: Flex.Manager) {
   flex.WorkersDataTable.Content.add(
     <flex.ColumnDefinition
       key="team"
-      header={'Team'}
+      header={ (manager.strings as any) [StringTemplates.TeamsViewColumnTeamName] } 
       style={{ width: 150 }}
       content={(item: WorkerItem) => item.worker.attributes.team_name}
     />,
@@ -28,7 +27,7 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
   flex.WorkersDataTable.Content.add(
     <flex.ColumnDefinition
       key="skills"
-      header={ <Template source={templates[StringTemplates.TeamsViewColumnSkills]} /> } 
+      header={ (manager.strings as any) [StringTemplates.TeamsViewColumnSkills] } 
       style={{ width: 200 }}
       content={(item: WorkerItem) => getSkills(item)}
     />,
