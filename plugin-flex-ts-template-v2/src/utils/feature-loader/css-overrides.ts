@@ -1,4 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
+import { merge } from 'lodash';
 
 let overrides = {};
 
@@ -15,8 +16,5 @@ export const init = (manager: Flex.Manager) => {
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
   console.info(`Feature ${feature} registered CSS override hook: %c${hook.cssOverrideHook.name}`, 'font-weight:bold');
   const override = hook.cssOverrideHook(flex, manager);
-  overrides = {
-    ...overrides,
-    ...override,
-  };
+  overrides = merge(overrides, override);
 };
