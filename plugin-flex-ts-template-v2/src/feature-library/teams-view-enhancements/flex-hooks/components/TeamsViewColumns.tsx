@@ -24,7 +24,6 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
     <flex.ColumnDefinition
       key="team"
       header={(manager.strings as any)[StringTemplates.TeamsViewColumnTeamName]}
-      style={{ width: 150 }}
       content={(item: WorkerItem) => item.worker.attributes.team_name}
     />,
     { sortOrder: 4, if: () => isTeamColumnEnabled() },
@@ -33,7 +32,6 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
     <flex.ColumnDefinition
       key="department"
       header={(manager.strings as any)[StringTemplates.TeamsViewColumnDepartment]}
-      style={{ width: 150 }}
       content={(item: WorkerItem) => item.worker.attributes.department_name}
     />,
     { sortOrder: 5, if: () => isDepartmentColumnEnabled() },
@@ -42,7 +40,6 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
     <flex.ColumnDefinition
       key="location"
       header={(manager.strings as any)[StringTemplates.TeamsViewColumnLocation]}
-      style={{ width: 150 }}
       content={(item: WorkerItem) => item.worker.attributes.location}
     />,
     { sortOrder: 6, if: () => isLocationColumnEnabled() },
@@ -51,7 +48,6 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
     <flex.ColumnDefinition
       key="skills"
       header={(manager.strings as any)[StringTemplates.TeamsViewColumnSkills]}
-      style={{ width: 200 }}
       content={(item: WorkerItem) => getSkills(item)}
     />,
     { sortOrder: 7, if: () => isAgentSkillsColumnEnabled() },
