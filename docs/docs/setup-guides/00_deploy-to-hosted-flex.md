@@ -42,7 +42,7 @@ Time to complete: _~8 minutes_
 2. Create a twilio api key and secret for your account follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key.
 3. In github, navigate to the repository you created in step 1, click the settings tab -> environments -> "New Environment"
    
-   - For the environment name, do not include spaces or other special characters
+   - For the environment name, do not include spaces or other special characters except hyphens and underscores
    
    - _NOTE_ if you are on the free tier, the repository will need to be public to use environments.  If you are on the free tier and still want to use a private repo you will need to clone the deploy script to have dedicated secrets per environment
 
