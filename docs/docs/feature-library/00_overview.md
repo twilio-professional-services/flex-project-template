@@ -34,7 +34,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | Supervisor Capacity             | _allow supervisors to update worker capacity configuration within Flex_     | [supervisor-capacity](/feature-library/supervisor-capacity)                         | ✅                 |
 | Supervisor Complete Reservation | _allows supervisor to remotely complete agent tasks_                        | [supervisor-complete-reservation](/feature-library/supervisor-complete-reservation) | ✅                 |
 | Teams View Filters              | _adds additional filtering options to the supervisor teams view_            | [teams-view-filters](/feature-library/teams-view-filters)                           | ✅                 |
-| Teams View Enhancements              | _adds additional columns for Worker Skills and Team Name_            | [teams-view-enhancements](/feature-library/teams-view-enhancements)                           | ✅                 |
+| Teams View Enhancements              | _adds optional columns (Team, Dept, Location, Skills) to the Workers Table_            | [teams-view-enhancements](/feature-library/teams-view-enhancements)                           | ✅                 |
 
 ---
 

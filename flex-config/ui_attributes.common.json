@@ -229,7 +229,13 @@
         "enabled": true
       },
       "teams_view_enhancements": {
-        "enabled": true
+        "enabled": true,
+        "columns": {
+          "team": true,
+          "department": false,
+          "location": false,
+          "agent_skills": true
+        }
       }
     }
   }
