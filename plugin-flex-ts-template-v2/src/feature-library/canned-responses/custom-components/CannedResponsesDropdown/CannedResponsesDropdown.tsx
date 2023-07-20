@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ITask, TaskHelper, templates } from '@twilio/flex-ui';
+import { ITask, templates } from '@twilio/flex-ui';
 import { Box } from '@twilio-paste/core/box';
 import { Tooltip } from '@twilio-paste/tooltip';
 import { Menu, MenuButton, useMenuState } from '@twilio-paste/core/menu';
@@ -15,10 +15,12 @@ import CategorySubMenu from './CategorySubMenu';
 
 interface CannedResponsesDropdownProps {
   task: ITask;
+  disabledReason?: string;
 }
 
-const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownProps> = ({ task }) => {
+const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownProps> = ({ task, disabledReason }) => {
   const [isLoading, setIsLoading] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [error, setError] = useState(false);
   const [responseCategories, setResponseCategories] = useState<undefined | CannedResponseCategories>(undefined);
 
@@ -42,17 +44,20 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
     getResponses();
   }, []);
 
+  useEffect(() => {
+    if (!disabledReason || disabledReason === templates.SendMessageTooltip()) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  }, [disabledReason]);
+
   return (
     <Box>
       {isLoading && <SkeletonLoader />}
       {Boolean(responseCategories) && !isLoading && (
         <>
-          <MenuButton
-            {...menu}
-            variant="reset"
-            disabled={TaskHelper.isInWrapupMode(task)}
-            element="CANNED_RESPONSES_MENU_BUTTON"
-          >
+          <MenuButton {...menu} variant="reset" disabled={isDisabled} element="CANNED_RESPONSES_MENU_BUTTON">
             <ChatIcon decorative title={templates[StringTemplates.CannedResponses]()} />
           </MenuButton>
           <Menu {...menu} aria-label="canned-responses">
