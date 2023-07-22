@@ -18,8 +18,6 @@ export const rerservedSystemActivities: string[] = [
 const UNKNOWN_ACTIVITY = 'unknown';
 const TASK_STATUS_ACCEPTED = 'accepted';
 const TASK_STATUS_WRAPPING = 'wrapping';
-const TASK_STATUS_PENDING = 'pending';
-const DIRECTION_OUTBOUND = 'outbound';
 
 // some helper functions for readability later
 const manager = Manager.getInstance();
@@ -42,12 +40,7 @@ const getWorkerTasks = () => {
 // exporting to be used by SetActivity
 export const hasAcceptedTasks = (): boolean => {
   if (!getWorkerTasks()) return false;
-  return [...getWorkerTasks().values()].some((task) => {
-    return (
-      task.status === TASK_STATUS_ACCEPTED ||
-      (task.status === TASK_STATUS_PENDING && task.attributes.direction === DIRECTION_OUTBOUND)
-    );
-  });
+  return [...getWorkerTasks().values()].some((task) => task.status === TASK_STATUS_ACCEPTED);
 };
 
 // exporting to be used by SetActivity
@@ -73,7 +66,7 @@ export const getCurrentWorkerActivity = (): Activity | undefined => {
 const getCurrentWorkerActivityName = (): string => {
   return getCurrentWorkerActivity()?.name || UNKNOWN_ACTIVITY;
 };
-const isCurrentlyInASystemActivity = (): boolean => {
+export const isCurrentlyInASystemActivity = (): boolean => {
   return rerservedSystemActivities.map((a) => a.toLowerCase()).includes(getCurrentWorkerActivityName().toLowerCase());
 };
 

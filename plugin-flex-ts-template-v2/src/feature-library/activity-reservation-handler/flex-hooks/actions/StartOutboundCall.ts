@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
-import ActivityManager, { getCurrentWorkerActivity } from '../../helper/ActivityManager';
+import ActivityManager, { getCurrentWorkerActivity, isCurrentlyInASystemActivity } from '../../helper/ActivityManager';
 import { getSystemActivityNames } from '../../config';
 
 export const actionEvent = FlexActionEvent.before;
@@ -20,7 +20,7 @@ export const actionHook = function changeWorkerActivityBeforeOutboundCall(flex: 
     const workerActivity = getCurrentWorkerActivity();
     const newActivity = workerActivity?.available ? onATask : onATaskNoAcd;
 
-    ActivityManager.storePendingActivityChange(workerActivity?.name || 'UNKNOWN');
+    if (!isCurrentlyInASystemActivity()) ActivityManager.storePendingActivityChange(workerActivity?.name || 'UNKNOWN');
     await ActivityManager.setWorkerActivity(newActivity);
   });
 };
