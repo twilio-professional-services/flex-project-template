@@ -227,6 +227,15 @@
       },
       "park_interaction": {
         "enabled": true
+      },
+      "teams_view_enhancements": {
+        "enabled": true,
+        "columns": {
+          "team": true,
+          "department": false,
+          "location": false,
+          "agent_skills": true
+        }
       }
     }
   }
