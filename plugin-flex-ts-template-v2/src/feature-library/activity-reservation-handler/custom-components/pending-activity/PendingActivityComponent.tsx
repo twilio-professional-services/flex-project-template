@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Flex, Text } from '@twilio-paste/core';
 import { Template, templates } from '@twilio/flex-ui';
 
-import ActivityManager from '../../helper/ActivityManager';
+import ActivityManager, { getCurrentWorkerActivity } from '../../helper/ActivityManager';
 import { StringTemplates } from '../../flex-hooks/strings/ActivityReservationHandler';
 
 const PendingActivity = () => {
@@ -23,7 +23,7 @@ const PendingActivity = () => {
 
   return (
     <>
-      {pendingActivity && pendingActivity.name && (
+      {pendingActivity && pendingActivity.name !== getCurrentWorkerActivity()?.name && (
         <Flex vertical marginRight="space20" hAlignContent="center">
           <Text as="p" color="colorTextInverse" fontSize="fontSize20" fontWeight="fontWeightBold">
             <Template source={templates[StringTemplates.PendingActivity]} />
