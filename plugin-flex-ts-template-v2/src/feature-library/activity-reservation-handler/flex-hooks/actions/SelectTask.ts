@@ -10,6 +10,6 @@ export const actionHook = function SetActivity(flex: typeof Flex, _manager: Flex
     // the system auto selects outbound tasks and this would cause an issue
     // with creating the outbound call as ActivityManager.updateState is a
     // blocking operation
-    if ((!payload.task?.attributes?.direction as unknown as string) === 'outbound') await ActivityManager.updateState();
+    if ((payload.task?.status as string) !== 'pending') await ActivityManager.updateState();
   });
 };
