@@ -12,7 +12,7 @@ The _Flex Project Template_ is a starting point for Flex solutions of any size. 
 - It can be used for large projects or simple standalone features
 - Many of the most common features requested by Flex customers are packaged in the template
 - Each feature is self contained and easily removed if desired  
-- Features can be turned on and off using an [adminstration panel](https://twilio-professional-services.github.io/flex-project-template/feature-library/flex-v2/admin-ui)
+- Features can be turned on and off using an [adminstration panel](https://twilio-professional-services.github.io/flex-project-template/feature-library/admin-ui)
 - You can [deploy this solution and use it to build in just a few minutes](https://twilio-professional-services.github.io/flex-project-template/setup-guides/deploy-to-hosted-flex) by cloning the template and providing your account sid, api key and api secret.
 
 The primary aims of this template are
@@ -31,7 +31,7 @@ The [Flex Project Template Documentation Site](https://twilio-professional-servi
 ---
 
 1. [Feature library Information](https://twilio-professional-services.github.io/flex-project-template/feature-library/overview)
-2. [Setup Guides](#setup-guides)
+2. Setup Guides
    1. [Deploy to hosted flex (Recommended ~8 mins)](https://twilio-professional-services.github.io/flex-project-template/setup-guides/deploy-to-hosted-flex)
    2. [Running locally](https://twilio-professional-services.github.io/flex-project-template/setup-guides/local-setup-and-use)
    3. [Using template for a standalone plugin](https://twilio-professional-services.github.io/flex-project-template/setup-guides/standalone-plugin-usage)
