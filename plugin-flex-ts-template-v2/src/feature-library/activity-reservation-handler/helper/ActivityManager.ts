@@ -18,6 +18,7 @@ export const rerservedSystemActivities: string[] = [
 const UNKNOWN_ACTIVITY = 'unknown';
 const TASK_STATUS_ACCEPTED = 'accepted';
 const TASK_STATUS_WRAPPING = 'wrapping';
+const TASK_STATUS_PENDING = 'pending';
 
 // some helper functions for readability later
 const manager = Manager.getInstance();
@@ -48,6 +49,13 @@ export const hasWrappingTasks = (): boolean => {
   if (!getWorkerTasks()) return false;
   return [...getWorkerTasks().values()].some((task) => task.status === TASK_STATUS_WRAPPING);
 };
+
+// exporting to be used by SetActivity
+export const hasPendingTasks = (): boolean => {
+  if (!getWorkerTasks()) return false;
+  return [...getWorkerTasks().values()].some((task) => task.status === TASK_STATUS_PENDING);
+};
+
 const getSelectedTaskSid = (): string | undefined => {
   return getflexState().view.selectedTaskSid;
 };
@@ -190,6 +198,14 @@ class ActivityManager {
     const { onATask, onATaskNoAcd, wrapup, wrapupNoAcd } = systemActivityNames;
     const selectedTaskStatus = getSelectedTaskStatus();
     const pendingActivity = this.getPendingActivity();
+
+    // flex won't let us change activity while on a pending task
+    // other than to an offline activity which will reject the task
+    // for this reason it is recommended to have auto accept configured
+    // as part of the agent automation feature and take note that
+    // selecting a task while a pending task is out there
+    // will fail to switch to the appropriate "on a task" or "wrapup" state.
+    if (hasPendingTasks()) return getCurrentWorkerActivityName();
 
     if (selectedTaskStatus === TASK_STATUS_ACCEPTED) {
       if (newAvailabilityStatus) return onATask;
