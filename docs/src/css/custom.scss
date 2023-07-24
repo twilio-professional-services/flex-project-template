@@ -188,14 +188,6 @@ header h1 {
   --ifm-h1-font-size: 3rem;
 }
 
-#__docusaurus {
-  max-width: 1600px;
-  box-shadow: 0 30px 50px rgb(0 0 0 / 10%);
-
-  margin: 0 auto !important;
-  height: auto !important;
-}
-
 /* Support images in dark and light modes */
 [data-theme='light'] img[src$='#gh-dark-mode-only'],
 [data-theme='dark'] img[src$='#gh-light-mode-only'] {
