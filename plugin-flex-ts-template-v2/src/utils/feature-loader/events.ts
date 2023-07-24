@@ -1,6 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 
 import { FlexEvent } from '../../types/feature-loader';
+import Activity from '../../types/task-router/Activity';
 
 const taskEvents = [
   FlexEvent.taskAccepted,
@@ -43,6 +44,14 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
   } else if (isTaskEvent(event)) {
     manager.events.addListener(event, (task) => {
       hook.eventHook(flex, manager, task);
+    });
+  } else if (event === FlexEvent.workerActivityUpdated) {
+    manager.events.addListener(event, (activity: Activity, allActivities: Map<string, Activity>) => {
+      hook.eventHook(flex, manager, activity, allActivities);
+    });
+  } else if (event === FlexEvent.workerAttributesUpdated) {
+    manager.events.addListener(event, (newAttributes: Record<string, any>) => {
+      hook.eventHook(flex, manager, newAttributes);
     });
   }
 };
