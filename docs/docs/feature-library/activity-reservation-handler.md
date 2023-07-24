@@ -60,6 +60,7 @@ sequenceDiagram
     participant afterSelectTask
     participant beforeStartOutboundCall
     taskEvent(s)->>ActivityManager: updateState()
+    Note over ActivityManager: evaluateState()
     workerActivityUpdated->>ActivityManager: updateState()
     Note over ActivityManager: evaluateState()
     afterSelectTask->>ActivityManager: updateState()
