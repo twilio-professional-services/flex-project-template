@@ -30,6 +30,8 @@ Flex allows supervisors to move the Activity of an agent from the Supervisor Tea
 1. The agent will be in the wrong state for a second
 2. If the agents client is not running, there will be nothing to process the event and could end up in an erroneous state.
 
+For this reason, when using this feature, you may want to consider moving the logic to a backend solution when ultimately evaluating the Activity change.
+
 ## Flex User Experience
 
 !["Activity Reservation Handler"](/img/features/activity-reservation-handler/activty-reservation-handler.gif)
