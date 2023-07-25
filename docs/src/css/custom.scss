@@ -1,0 +1,214 @@
+@use '../../node_modules/@twilio-paste/design-tokens/dist/themes/twilio/tokens.default.scss' as paste;
+@use '../../node_modules/@twilio-paste/design-tokens/dist/themes/twilio-dark/tokens.default.scss' as pasteDark;
+
+:root {
+  --ifm-font-family-base: #{paste.$font-family-text};
+  --ifm-font-family-monospace: #{paste.$font-family-code};
+  --ifm-font-color-base: #{paste.$color-text};
+  --ifm-background-color: #{paste.$color-background-body};
+  --ifm-background-surface-color: #{paste.$color-background};
+
+  --ipd-announcement-bar-background-color: #{paste.$color-background-primary-weaker};
+
+  --ifm-color-white: #{paste.$color-background-body};
+  --ifm-color-black: #{paste.$color-background-primary-strongest};
+
+  --ifm-color-gray-0: #{paste.$color-gray-0};
+  --ifm-color-gray-100: #{paste.$color-gray-10};
+  --ifm-color-gray-200: #{paste.$color-gray-20};
+  --ifm-color-gray-300: #{paste.$color-gray-30};
+  --ifm-color-gray-400: #{paste.$color-gray-40};
+  --ifm-color-gray-500: #{paste.$color-gray-50};
+  --ifm-color-gray-600: #{paste.$color-gray-60};
+  --ifm-color-gray-700: #{paste.$color-gray-70};
+  --ifm-color-gray-800: #{paste.$color-gray-80};
+  --ifm-color-gray-900: #{paste.$color-gray-90};
+  --ifm-color-gray-1000: #{paste.$color-gray-100};
+
+  --ifm-color-primary: #{paste.$color-brand};
+  --ifm-color-primary-dark: #{paste.$color-background-primary-strong};
+  --ifm-color-primary-darker: #{paste.$color-background-primary-stronger};
+  --ifm-color-primary-darkest: #{paste.$color-background-primary-strongest};
+  --ifm-color-primary-light: #{paste.$color-background-primary-weak};
+  --ifm-color-primary-lighter: #{paste.$color-background-primary-weaker};
+  --ifm-color-primary-lightest: #{paste.$color-background-primary-weakest};
+
+  --ifm-link-color: #{paste.$color-text-link};
+  --ifm-link-decoration: underline;
+
+  --ifm-color-secondary: #{paste.$color-text-brand-highlight};
+  --ifm-color-secondary-dark: #{paste.$color-background-required};
+  --ifm-color-secondary-darker: #{paste.$color-background-unavailable};
+  --ifm-color-secondary-darkest: #{paste.$color-text-error-strong};
+  --ifm-color-secondary-light: #{paste.$color-background-destructive-weak};
+  --ifm-color-secondary-lighter: #{paste.$color-background-destructive-weaker};
+  --ifm-color-secondary-lightest: #{paste.$color-background-destructive-weakest};
+
+  --ifm-color-success: #{paste.$color-text-icon-success};
+  --ifm-color-success-dark: rgb(11, 96, 45);
+  --ifm-color-success-darker: #{paste.$color-data-visualization-3};
+  --ifm-color-success-darkest: #{paste.$color-data-visualization-3};
+  --ifm-color-success-light: #{paste.$color-background-success};
+  --ifm-color-success-lighter: #{paste.$color-border-success-weak};
+  --ifm-color-success-lightest: rgb(123, 234, 165);
+
+  --ifm-color-info: #{paste.$color-background-primary};
+  --ifm-color-info-dark: rgb(4, 60, 181);
+  --ifm-color-info-darker: #{paste.$color-background-primary-strong};
+  --ifm-color-info-darkest: #{paste.$color-background-primary-stronger};
+  --ifm-color-info-light: #{paste.$color-data-visualization-4};
+  --ifm-color-info-lighter: #{paste.$color-border-neutral-weak};
+  --ifm-color-info-lightest: #{paste.$color-background-primary-weak};
+
+  --ifm-color-warning: rgb(133, 92, 21);
+  --ifm-color-warning-dark: rgb(133, 92, 21);
+  --ifm-color-warning-darker: rgb(84, 51, 8);
+  --ifm-color-warning-darkest: rgb(84, 51, 8);
+  --ifm-color-warning-light: rgb(194, 142, 0);
+  --ifm-color-warning-lighter: rgb(232, 180, 7);
+  --ifm-color-warning-lightest: rgb(250, 209, 0);
+
+  --ifm-color-danger: #{paste.$color-text-error};
+  --ifm-color-danger-dark: #{paste.$color-text-error-strong};
+  --ifm-color-danger-darker: #{paste.$color-background-error-strong};
+  --ifm-color-danger-darkest: #{paste.$color-background-error-stronger};
+  --ifm-color-danger-light: #{paste.$color-text-error-weak};
+  --ifm-color-danger-lighter: #{paste.$color-border-error-weak};
+  --ifm-color-danger-lightest: #{paste.$color-border-destructive-weak};
+
+  --ifm-code-font-size: 95%;
+
+  --docusaurus-highlighted-code-line-bg: var(--ifm-color-gray-200);
+}
+
+html[data-theme='dark'] {
+  --ifm-font-color-base: #{pasteDark.$color-text};
+  --ifm-background-color: #{pasteDark.$color-background-body};
+  --ifm-background-surface-color: #{pasteDark.$color-background};
+
+  --ipd-announcement-bar-background-color: #{pasteDark.$color-background-primary};
+
+  --ifm-color-white: #{pasteDark.$color-background-body};
+  --ifm-color-black: #{pasteDark.$color-background-primary-strongest};
+
+  --ifm-color-gray-0: #{pasteDark.$color-gray-0};
+  --ifm-color-gray-100: #{pasteDark.$color-gray-10};
+  --ifm-color-gray-200: #{pasteDark.$color-gray-20};
+  --ifm-color-gray-300: #{pasteDark.$color-gray-30};
+  --ifm-color-gray-400: #{pasteDark.$color-gray-40};
+  --ifm-color-gray-500: #{pasteDark.$color-gray-50};
+  --ifm-color-gray-600: #{pasteDark.$color-gray-60};
+  --ifm-color-gray-700: #{pasteDark.$color-gray-70};
+  --ifm-color-gray-800: #{pasteDark.$color-gray-80};
+  --ifm-color-gray-900: #{pasteDark.$color-gray-90};
+  --ifm-color-gray-1000: #{pasteDark.$color-gray-100};
+
+  --ifm-color-primary: #{pasteDark.$color-text-link};
+  --ifm-color-primary-dark: #{pasteDark.$color-background-primary-strong};
+  --ifm-color-primary-darker: #{pasteDark.$color-background-primary-stronger};
+  --ifm-color-primary-darkest: #{pasteDark.$color-background-primary-strongest};
+  --ifm-color-primary-light: #{pasteDark.$color-background-primary-weak};
+  --ifm-color-primary-lighter: #{pasteDark.$color-background-primary-weaker};
+  --ifm-color-primary-lightest: #{pasteDark.$color-background-primary-weakest};
+
+  --ifm-link-color: #{pasteDark.$color-text-link};
+
+  --ifm-color-secondary: #{pasteDark.$color-text-brand-highlight};
+  --ifm-color-secondary-dark: #{pasteDark.$color-background-required};
+  --ifm-color-secondary-darker: #{pasteDark.$color-background-unavailable};
+  --ifm-color-secondary-darkest: #{pasteDark.$color-text-error-strong};
+  --ifm-color-secondary-light: #{pasteDark.$color-background-destructive-weak};
+  --ifm-color-secondary-lighter: #{pasteDark.$color-background-destructive-weaker};
+  --ifm-color-secondary-lightest: #{pasteDark.$color-background-destructive-weakest};
+
+  --ifm-color-success: #{pasteDark.$color-text-icon-success};
+  --ifm-color-success-dark: rgb(11, 96, 45);
+  --ifm-color-success-darker: #{pasteDark.$color-data-visualization-3};
+  --ifm-color-success-darkest: #{pasteDark.$color-data-visualization-3};
+  --ifm-color-success-light: #{pasteDark.$color-background-success};
+  --ifm-color-success-lighter: #{pasteDark.$color-border-success-weak};
+  --ifm-color-success-lightest: rgb(123, 234, 165);
+
+  --ifm-color-info: #{pasteDark.$color-background-primary};
+  --ifm-color-info-dark: rgb(4, 60, 181);
+  --ifm-color-info-darker: #{pasteDark.$color-background-primary-strong};
+  --ifm-color-info-darkest: #{pasteDark.$color-background-primary-stronger};
+  --ifm-color-info-light: #{pasteDark.$color-data-visualization-4};
+  --ifm-color-info-lighter: #{pasteDark.$color-border-neutral-weak};
+  --ifm-color-info-lightest: #{pasteDark.$color-background-primary-weak};
+
+  --ifm-color-warning: rgb(133, 92, 21);
+  --ifm-color-warning-dark: rgb(133, 92, 21);
+  --ifm-color-warning-darker: rgb(84, 51, 8);
+  --ifm-color-warning-darkest: rgb(84, 51, 8);
+  --ifm-color-warning-light: rgb(194, 142, 0);
+  --ifm-color-warning-lighter: rgb(232, 180, 7);
+  --ifm-color-warning-lightest: rgb(250, 209, 0);
+
+  --ifm-color-danger: #{pasteDark.$color-text-error};
+  --ifm-color-danger-dark: #{pasteDark.$color-text-error-strong};
+  --ifm-color-danger-darker: #{pasteDark.$color-background-error-strong};
+  --ifm-color-danger-darkest: #{pasteDark.$color-background-error-stronger};
+  --ifm-color-danger-light: #{pasteDark.$color-text-error-weak};
+  --ifm-color-danger-lighter: #{pasteDark.$color-border-error-weak};
+  --ifm-color-danger-lightest: #{pasteDark.$color-border-destructive-weak};
+
+  --docusaurus-highlighted-code-line-bg: var(--ifm-color-gray-800);
+}
+
+.table-of-contents a,
+.menu a,
+.navbar a,
+.pagination-nav a {
+  text-decoration: none;
+}
+
+.footer--dark {
+  --ifm-footer-background-color: var(--ifm-color-primary-darkest);
+  --ifm-footer-color: var(--ifm-color-white);
+  --ifm-footer-link-color: var(--ifm-color-white);
+  --ifm-footer-title-color: var(--ifm-color-white);
+}
+
+[data-theme='dark'] .footer--dark {
+  --ifm-footer-background-color: var(--ifm-background-surface-color);
+  --ifm-footer-color: var(--ifm-font-color-base);
+  --ifm-footer-link-color: var(--ifm-font-color-base);
+  --ifm-footer-title-color: var(--ifm-font-color-base);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -.02rem;
+  font-weight: #{paste.$font-weight-semibold};
+}
+
+header h1 {
+  font-family: 'TwilioSansDisplay', #{paste.$font-family-text} !important;
+  font-weight: #{paste.$font-weight-extrabold};
+  --ifm-h1-font-size: 3rem;
+}
+
+/* Support images in dark and light modes */
+[data-theme='light'] img[src$='#gh-dark-mode-only'],
+[data-theme='dark'] img[src$='#gh-light-mode-only'] {
+  display: none;
+}
+
+/* Responsive Tweaks */
+
+/* Hide "Search..." placeholder on tiny screens */
+@media screen and (max-width: 400px) {
+  .aa-DetachedSearchButtonPlaceholder {
+    display: none;
+  }
+}
+
+/*
+  work-around for mermaid bug:
+  https://github.com/mermaid-js/mermaid/issues/1984
+*/
+[id^='mermaid'] {
+  // Unfortunately, there's not an easy way to get mermaid to use dark mode, so we force a white background
+  background-color: #{paste.$color-background-body};
+  height: auto;
+}

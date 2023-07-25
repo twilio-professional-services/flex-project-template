@@ -14,11 +14,11 @@ title: Run Flex Locally
 - have the twilio auth token for your account ready (you can find this in the [Twilio Console](https://console.twilio.com/))
 
 :::info Feature Limitation
-the admin panel is disabled by default when working locally. See the [admin panel docs](/feature-library/admin-ui) for more informatioon
+the admin panel is disabled by default when working locally. See the [admin panel docs](/feature-library/admin-ui) for more information
 :::
 
 :::caution Feature Functionality
- some features may not be functional without a deployment of the taskrouter conofiguration and studio flows. It is recommended to do at least one initial deploy to your environment using the [Deploy Flex github action script](/setup-guides/deploy-to-hosted-flex)
+ some features may not be functional without a deployment of the taskrouter configuration and studio flows. It is recommended to do at least one initial deploy to your environment using the [Deploy Flex github action script](/setup-guides/deploy-to-hosted-flex)
 :::
 
 ### Setup

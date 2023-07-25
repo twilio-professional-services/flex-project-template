@@ -9,9 +9,9 @@ This feature adds a user interface to Flex for easily managing the configuration
 
 :::info local development
 
-When running Flex locally, the configuration in `public/appConfig.js` overrides any global settings. Admin-UI works only with the hosted flex configuration. As such `appConfig.js` overrides can create confusion when using this feature.
+When running Flex locally, the configuration in `public/appConfig.js` overrides any global settings. Admin UI works only with the hosted Flex configuration. As such, `appConfig.js` overrides can create confusion when using this feature.
 
-For this reason, the admin-ui panel is automatically disabled by default when the local envirnment is initially setup.  This is again doine using `appConfig.js` and is done to avoid confusion with the feature.  The panel can still be enabled locally but it is advised when doing so to first clear out all the overrides from `appConfig.js` under `custom_data.features`.
+For this reason, the admin-ui feature is automatically disabled by default when the local environment is initially setup.  This is done using `appConfig.js` to avoid confusion with the feature. The panel can still be enabled locally, but it is advised when doing so to first clear out all the overrides from `appConfig.js` under `custom_data.features`.
 
 ::: 
 
