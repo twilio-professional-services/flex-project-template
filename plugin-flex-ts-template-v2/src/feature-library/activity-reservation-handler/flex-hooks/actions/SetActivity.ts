@@ -38,7 +38,7 @@ export const actionHook = function beforeSetActivity(flex: typeof Flex, _manager
         activityName,
       });
 
-      // disallow switching states while tasks are in flight and
+      // disallow switching states while tasks are in flight
       abortFunction();
     }
   });
