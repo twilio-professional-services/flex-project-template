@@ -62,7 +62,7 @@ variable "SCHEDULE_MANAGER_DOMAIN" {
 
 variable "SCHEDULE_MANAGER_SID" {
   type        = string
-  description = "serverless sid"
+  description = "schedule manager sid"
   validation {
     condition     = length(var.SCHEDULE_MANAGER_SID) > 2 && substr(var.SCHEDULE_MANAGER_SID, 0, 2) == "ZS"
     error_message = "SCHEDULE_MANAGER_SID expected to start with \"ZS\"."
@@ -80,7 +80,7 @@ variable "SCHEDULE_MANAGER_ENV_SID" {
 
 variable "FUNCTION_CREATE_CALLBACK" {
   type        = string
-  description = "get customer by phone function sid"
+  description = "create callback function sid"
   validation {
     condition     = length(var.FUNCTION_CREATE_CALLBACK) > 2 && substr(var.FUNCTION_CREATE_CALLBACK, 0, 2) == "ZH"
     error_message = "FUNCTION_CREATE_CALLBACK expected to start with \"ZH\"."
@@ -89,7 +89,7 @@ variable "FUNCTION_CREATE_CALLBACK" {
 
 variable "FUNCTION_CHECK_SCHEDULE_SID" {
   type        = string
-  description = "get customer by phone function sid"
+  description = "check schedule function sid"
   validation {
     condition     = length(var.FUNCTION_CHECK_SCHEDULE_SID) > 2 && substr(var.FUNCTION_CHECK_SCHEDULE_SID, 0, 2) == "ZH"
     error_message = "FUNCTION_CHECK_SCHEDULE_SID expected to start with \"ZH\"."
