@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Flex, Text } from '@twilio-paste/core';
-import { Template, templates } from '@twilio/flex-ui';
+import { Manager, Template, templates } from '@twilio/flex-ui';
 
-import { getPendingActivity } from '../../helpers/pendingActivity';
-import WorkerActivity from '../../helpers/workerActivityHelper';
+import ActivityManager from '../../helper/ActivityManager';
 import { StringTemplates } from '../../flex-hooks/strings/ActivityReservationHandler';
 
 const PendingActivity = () => {
   const [clock, setClock] = useState(true);
-  const [pendingActivity, setPendingActivity] = useState(getPendingActivity());
+  const [pendingActivity, setPendingActivity] = useState(ActivityManager.getPendingActivity());
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -19,12 +18,12 @@ const PendingActivity = () => {
   }, []);
 
   useEffect(() => {
-    setPendingActivity(getPendingActivity());
+    setPendingActivity(ActivityManager.getPendingActivity());
   }, [clock]);
 
   return (
     <>
-      {pendingActivity && pendingActivity.name && WorkerActivity.activitySid !== pendingActivity.sid && (
+      {pendingActivity && pendingActivity.name !== Manager.getInstance().workerClient?.activity.name && (
         <Flex vertical marginRight="space20" hAlignContent="center">
           <Text as="p" color="colorTextInverse" fontSize="fontSize20" fontWeight="fontWeightBold">
             <Template source={templates[StringTemplates.PendingActivity]} />

@@ -3,87 +3,73 @@ sidebar_label: activity-reservation-handler
 title: activity-reservation-handler
 ---
 
-This feature demonstrates how you can dynamically change worker activities over the course of a task, as well as having the ability to define activites that should not be manually selected and preventing the worker from changing their activity while they're on task.
+## Overview
+
+This feature synchronizes the agent's [TaskRouter Activity](https://www.twilio.com/docs/taskrouter/api/activity) with the state of the tasks they are working on.
+
 
 ---
 
-## Overview
+## Business Use Case
 
-This feature addresses a few common needs in many contact centers:
+In many typical legacy contact centers there is a concept of an [Aux Code](https://cxcentral.com.au/glossary/auxiliary-codes/) which is used to track the reason that an agent is not receiving work from the Automatic Call Distributor (ACD). This Aux code includes explicitly distinguishing when an agent is on a live task and when an agent is in wrap up.
 
-- Changing the worker's activity when they're handling tasks and when their tasks are in wrapup.
-  - This makes it easier to monitor what workers are doing in realtime, and improves workforce management visibility in Flex Insights for historical reporting
-- Ability to define activities that should not be manually selected, such as the activities used to indicate the worker is handling tasks or in wrapup
-- Preventing the worker from changing their activity while they're on a task, delaying that activity change until after they've completed their tasks
-  - Changing to another activity like "Break" while the agent is actively handling tasks can result in inaccurate activity based reporting. Preventing that change until they're actually complete with their tasks aids in reporting and monitoring accuracy.
+Twilio TaskRouter models things slightly differently. An agent's [Activity](https://www.twilio.com/docs/taskrouter/api/activity) is the concept in TaskRouter that manages availability for the agent to receive the next item of work.  This Activity status does not change throughout the life cycle of a task.  In Twilio Flex, reporting on an agent's productivity is typically done via the examining the lifecycle of the tasks worked.
 
-## Configuration
+This paradigm shift can be a difficult one for legacy contact centers to adopt when migrating to Twilio Flex so this feature aims to make that easier by introducing a mechanism to automatically sync the agent Activity with the status of the work the agent is handling. This can aid with reporting strategies.
 
-### TaskRouter Activities
+## Known Issues
 
-This plugin is built to support the following activities for tracking if an agent has an assigned task:
+### issue one
+Flex places a limitation on changing Activity while a task is in a pending state.  In other words, if a task has been pushed to the agent but the agent has not accepted, then Flex can only change Activity to an offline Activity which will reject the task.
 
-- **On a Task** (`Available: true`)
-  - This is an Available activity and is used after accepting an inbound task from the queue, or when an outbound call is placed while in an Available activity
-  - Indicates the worker has at least one assigned task not in a `wrapping` state
-- **Wrap Up** (`Available: true`)
-  - This is an Available activity and is used when all assigned tasks are in a `wrapping` state
-  - In the case of an outbound call task in `wrapping` state, this is used if the outbound call was placed while in an Available activity
-- **On a Task, No ACD** (`Available: false`)
-  - This is a non-Available activity and is used when an outbound call is placed while in a non-Available activity
-  - Using a non-Available activity in this scenario ensures the worker doesn't receive any unexpected tasks from the queue when their activity is automatically changed
-- **Wrap Up, No ACD** (`Available: false`)
-  - This is a non-Available activity and is used when an outbound call that was placed while in a non-Available activity enters the `wrapping` state and the worker has no other non-wrapping assigned tasks
-  - Using a non-Available activity in this scenario ensures the worker doesn't receive any unexpected tasks from the queue when their activity is automatically changed
+As a result, while a pending task appears in an agents task list, toggling between tasks will not update the Activity.  For this reason it is recommended to use this feature along with an [agent automation](/flex-project-template/feature-library/agent-automation) to auto accept tasks.
 
-If these activity names suit your requirements, you simply need to add them to your TaskRouter configuration in the Twilio Console -> TaskRouter -> [Workspace] -> Activities. Please pay attention to the `Available` boolean following each activity name above and use that same boolean value when creating the activity in the Twilio Console.
+### issue two
+Flex allows supervisors to move the Activity of an agent from the Supervisor Teams View.  Doing so pushes an Activity update to the worker which triggers the event `workerActivityUpdated` on the agent's client, which in turn triggers a re-evaluation of the correct state to be in, again on the client side. This has two drawbacks:
+1. The agent will be in the wrong state for a second
+2. If the agents client is not running, there will be nothing to process the event and could end up in an erroneous state.
 
-If you'd prefer to use different names for these activities, after creating the desired activities in the Twilio Console, you will need to change the activity string names from confiuration.
+For this reason, when using this feature, you may want to consider moving the logic to a backend solution when ultimately evaluating the Activity change.
 
-This feature relies on custom configuration being applied to your underlying [Flex configuration](https://www.twilio.com/docs/flex/developer/ui/configuration#modifying-configuration-for-flextwiliocom). This is accomplished using the [Flex Configuration Updater](https://github.com/twilio-professional-services/twilio-proserv-flex-project-template/tree/main/flex-config) package in this repository.
+## Flex User Experience
 
-In your `ui_attributes.{environment}.json` file, update "custom.data.features.activity_reservation_handler.system_activity_names" to a JSON object with the attributes available, onATask etc along with a string representing the name of the activity in the TaskRouter Workspace.
+!["Activity Reservation Handler"](/img/features/activity-reservation-handler/activty-reservation-handler.gif)
 
+## Setup and Dependencies
+
+This feature depends on the configured Activities for the different ACD states.  A terraform deploy will deploy the default Activities that are assigned. These can be changed through the admin panel at any time.
+
+## Technical Details
+
+### high level implementation
+This feature initializes a helper class called `ActivityManager` which exposes a method called `enforceEvaluatedState`.  This method evaluates the current tasks in flight to determine which, if any, Activity the worker should be forced onto, or whether they should be moved to their pending state.  If the worker wishes to move to a new activity while they have tasks in flight, the activity will be suspended until it can be performed automatically after tasks have been completed.
+
+This method is triggered on `taskAccepted` event as well as the various end state events for the workerClient, namely `taskCanceled`, `taskCompleted`, `taskRejected`, `taskRescinded`, `taskTimeout`, `taskWrapup` as well as `workerActivityUpdated`.  It is also triggered on `SelectTask` and `SetActivity`.
+
+The `enforceEvaluatedState` method uses a semaphore to ensure only one update is performed and completed at a time, completion includes the confirmation that the state has been updated which can wait up to a maximum of 3000ms to confirm the state update before posting a warning and continuing.  Subsequent updates requested while the process is running are added to an array and executed in order received.
+
+It is due to this blocking operation that when starting an outbound call, an attempt to change the state when the task is pending can cause the outbound call to abandon.  This is why the `taskReceived` event is omitted from the events listed above.  Instead we use the `beforeStartOutboundCall` to move the agent into the appropriate activity first.
+
+### sequence diagram
+
+```mermaid
+sequenceDiagram
+    participant taskEvent(s)
+    participant workerActivityUpdated
+    participant afterSelectTask
+    participant beforeStartOutboundCall
+    taskEvent(s)->>ActivityManager: enforceEvaluatedState()
+    Note over ActivityManager: evaluateState(), setWorkerActivity()
+    workerActivityUpdated->>ActivityManager: enforceEvaluatedState()
+    Note over ActivityManager: evaluateState(), setWorkerActivity()
+    afterSelectTask->>ActivityManager: enforceEvaluatedState()
+    Note over ActivityManager: evaluateState(), setWorkerActivity()
+    beforeStartOutboundCall->>ActivityManager: storePendingActivityChange()
+    beforeStartOutboundCall->>ActivityManager: setWorkerActivity()
 ```
-{
-  available: 'Available',
-  onATask: 'On a Task',
-  onATaskNoAcd: 'On a Task, No ACD',
-  wrapup: 'Wrap Up',
-  wrapupNoAcd: 'Wrap Up, No ACD'
-}
-```
 
-For example, if you wanted to use "On a Call" to indicate when the worker was on a task and "After Call Work" to indicate a worker's assigned tasks are in `wrapping`, and carry those same base values to the non-Available variants, your modified object would look like:
 
-```
- {
-  available: 'Available',
-  onATask: 'On a Call',
-  onATaskNoAcd: 'On a Call, No ACD',
-  wrapup: 'After Call Work',
-  wrapupNoAcd: 'After Call Work, No ACD'
-}
-```
 
-If you are using your own activity names, please ensure the `Available` boolean values in the activity list at the start of this section are maintained. For example, "After Call Work" would still be `Available: true`, while "After Call Work, No ACD" would still be `Available: false`.
 
-# flex-user-experience
 
-This section provides visual examples of what to expect for each feature above.
-
-### "On a Task" and "Wrap Up" Activity Change (Inbound Queue Call)
-
-!["On a Task" and "Wrap Up" Activity Change, Inbound Queue Call](/img/features/activity-reservation-handler/plugin-activity-handler-inbound-acd.gif)
-
-### "On a Task, No ACD" and "Wrap Up, No ACD" Activity Change (Outbound Call from non-Available Activity)
-
-!["On a Task, No ACD" and "Wrap Up, No ACD" Activity Change, Outbound Call from non-Available Activity](/img/features/activity-reservation-handler/plugin-activity-handler-outbound-no-acd.gif)
-
-### Preventing Selection of Restricted Activities
-
-![Preventing Selection of Restricted Activities](/img/features/activity-reservation-handler/plugin-activity-handler-restricted-activities.gif)
-
-### Delaying Activity Change Until Tasks Are Completed
-
-![Delaying Activity Change Until Tasks Are Completed](/img/features/activity-reservation-handler/plugin-activity-handler-delayed-activity-change.gif)

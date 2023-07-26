@@ -1,19 +1,28 @@
 import * as Flex from '@twilio/flex-ui';
 
-import WorkerState from '../../helpers/workerActivityHelper';
-import { storeCurrentActivitySidIfNeeded } from '../../helpers/pendingActivity';
-import { onTaskActivity, onTaskNoAcdActivity } from '../../helpers/systemActivities';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import ActivityManager, { isWorkerCurrentlyInASystemActivity } from '../../helper/ActivityManager';
+import { getSystemActivityNames } from '../../config';
+import FlexHelper from '../../../../utils/flex-helper';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.StartOutboundCall;
 export const actionHook = function changeWorkerActivityBeforeOutboundCall(flex: typeof Flex, _manager: Flex.Manager) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (_payload, _abortFunction) => {
-    storeCurrentActivitySidIfNeeded();
+    // for outbound calls, because we want to change activity
+    // immediately but the task comes in on a pending state
+    // and only changes to accepted when answered, we have to manage the state
+    // manually prior to starting the call
 
-    const targetActivity = WorkerState.activity?.available ? onTaskActivity : onTaskNoAcdActivity;
+    // the ideal solution would be to handle all state management in
+    // AcitivtyManager.#evaluateNewState however as this is a blocking
+    // operation it causes the outbound call to fail
+    const { onATask, onATaskNoAcd } = getSystemActivityNames();
+    const workerActivity = await FlexHelper.getWorkerActivity();
+    const newActivity = workerActivity?.available ? onATask : onATaskNoAcd;
+    const isCurrentlySystemActivity = await isWorkerCurrentlyInASystemActivity();
 
-    WorkerState.setWorkerActivity(targetActivity?.sid);
-    await WorkerState.waitForWorkerActivityChange(targetActivity?.sid);
+    if (!isCurrentlySystemActivity) ActivityManager.storePendingActivityChange(workerActivity?.name || 'UNKNOWN');
+    await ActivityManager.setWorkerActivity(newActivity);
   });
 };

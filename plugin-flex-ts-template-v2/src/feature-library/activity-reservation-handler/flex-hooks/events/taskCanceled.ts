@@ -1,9 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
 
-import taskEndedHandler from '../../helpers/taskEndedHandler';
 import { FlexEvent } from '../../../../types/feature-loader';
+import ActivityManager from '../../helper/ActivityManager';
 
 export const eventName = FlexEvent.taskCanceled;
-export const eventHook = (_flex: typeof Flex, _manager: Flex.Manager, task: Flex.ITask) => {
-  taskEndedHandler(task, eventName);
+export const eventHook = async (_flex: typeof Flex, _manager: Flex.Manager, task: Flex.ITask) => {
+  console.log(`activity-reservation-handler: handle ${eventName} for ${task.sid}`);
+
+  await ActivityManager.enforceEvaluatedState();
 };
