@@ -8,11 +8,13 @@ export const eventName = FlexEvent.workerActivityUpdated;
 export const eventHook = async (_flex: typeof Flex, _manager: Flex.Manager, activity: Activity) => {
   console.log(`activity-reservation-handler: handle ${eventName} for ${activity.name}`);
 
-  // workaround to deal with race condition between starting an outbound call
-  // which sets the agents activity
-  // and the worker activity updated handler which will immediately reset
-  // if there is a pendinding activity but no tasks yet (pending task
-  // takes a moment to appear)
+  // This event is needed to handle activity changes by a supervisor, but it also
+  // runs for local changes made by the worker or this feature. When we set activity
+  // before starting an outbound call, there is a timing hole where this event will
+  // be triggered before the outbound call task is delivered. When that happens,
+  // enforceEvaluatedState will see no tasks and flip back to the pending activity.
+  // Adding this timeout gives the task time to arrive before we call
+  // enforceEvaluatedState.
   await new Promise((f) => setTimeout(f, 3000));
 
   // this will ensuer that if the supervisor changes

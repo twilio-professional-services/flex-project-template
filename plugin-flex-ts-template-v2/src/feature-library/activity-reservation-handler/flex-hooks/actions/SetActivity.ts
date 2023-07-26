@@ -30,7 +30,7 @@ export const actionHook = function beforeSetActivity(flex: typeof Flex, _manager
     } else if (hasAcceptedTasks || hasWrappingTasks) {
       // if worker requested to go to an offline state or an online state
       // and we are currently in the opposite, this will toggle acd status
-      await ActivityManager.enforceStateAfterSelectingActivity(activityAvailable);
+      await ActivityManager.enforceEvaluatedState(activityAvailable);
       ActivityManager.storePendingActivityChange(activityName);
 
       // Notify User

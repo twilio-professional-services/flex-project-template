@@ -67,17 +67,7 @@ class ActivityManager {
   // when in a reserved system state but want to go unavailable
   // this method uses a semaphore to enforce a single execution
   // at a time.
-  enforceEvaluatedState = async () => {
-    return new Promise(async (resolve, reject) => {
-      this.currentRequests.push({
-        resolve,
-        reject,
-      } as CallbackPromise);
-      await this.#tryNext();
-    });
-  };
-
-  enforceStateAfterSelectingActivity = async (available: boolean) => {
+  enforceEvaluatedState = async (available?: boolean) => {
     return new Promise(async (resolve, reject) => {
       this.currentRequests.push({
         resolve,
@@ -91,15 +81,13 @@ class ActivityManager {
   // externally exposed for use in StartOutboundCall
   setWorkerActivity = async (activityName: string) => {
     if (activityName === this.getPendingActivity()?.name) this.#clearPendingActivity();
-    Actions.invokeAction('SetActivity', {
+    await Actions.invokeAction('SetActivity', {
       activityName,
       isInvokedByPlugin: true,
       options: {
         rejectPendingReservations: true,
       },
     });
-
-    await this.#waitForWorkerActivityChange(activityName);
   };
 
   // externally exposed for PendingActivityComponent
@@ -200,31 +188,6 @@ class ActivityManager {
   #clearPendingActivity = (): void => {
     localStorage.removeItem(this.pendingActivityChangeItemKey);
   };
-
-  #waitForWorkerActivityChange = async (activityName: string | undefined, workerSid?: string) =>
-    new Promise(async (resolve) => {
-      if (activityName && activityName === (await FlexHelper.getWorkerActivityName(workerSid))) {
-        resolve(null);
-      } else {
-        console.debug('WorkerState, waitForWorkerActivityChange, waiting for worker activity SID to be', activityName);
-        // Arbitrary maxWaitTime value. Trying to balance allowing for an unexpected
-        // delay updating worker activity while not holding up the calling function too long
-        const maxWaitTime = 3000;
-        const waitBetweenChecks = 100;
-        let activityCheckCount = 0;
-        const activityCheckInterval = setInterval(async () => {
-          if (waitBetweenChecks * activityCheckCount > maxWaitTime) {
-            console.warn('Timed out waiting for worker activity SID to be', activityName);
-            clearInterval(activityCheckInterval);
-            resolve(null);
-          } else if (activityName === (await FlexHelper.getWorkerActivityName(workerSid))) {
-            clearInterval(activityCheckInterval);
-            resolve(null);
-          }
-          activityCheckCount += 1;
-        }, waitBetweenChecks);
-      }
-    });
 }
 
 const ActivityManagerSingleton = new ActivityManager();
