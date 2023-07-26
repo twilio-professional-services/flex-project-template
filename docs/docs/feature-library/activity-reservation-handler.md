@@ -43,11 +43,11 @@ This feature depends on the configured Activities for the different ACD states. 
 ## Technical Details
 
 ### high level implementation
-This feature initializes a helper class called `ActivityManager` which exposes a method called `updateState`.  This method evaluates the current tasks in flight to determine which, if any, system Activity the worker should be on.  If the worker should be moved into a new Activity, the method goes on to cache which Activity the worker is currently on in localStorage.
+This feature initializes a helper class called `ActivityManager` which exposes a method called `enforceEvaluatedState`.  This method evaluates the current tasks in flight to determine which, if any, Activity the worker should be forced onto, or whether they should be moved to their pending state.  If the worker wishes to move to a new activty while they have tasks in flight, the activity will be suspended until it can be perfomed automaically after tasks have been completed.
 
-This method is triggered on `TaskAccepted` event as well as the various end state events for the workerClient, namely `TaskCanceled`, `TaskCompleted`, `TaskRejected`, `TaskRescinded`, `TaskTimeout`, `TaskWrapup` and `WorkerActivityUpdated`.  It is also triggered on `SelectTask` and `SetActivity`.
+This method is triggered on `TaskAccepted` event as well as the various end state events for the workerClient, namely `TaskCanceled`, `TaskCompleted`, `TaskRejected`, `TaskRescinded`, `TaskTimeout`, `TaskWrapup` as well as `WorkerActivityUpdated`.  It is also triggered on `SelectTask` and `SetActivity`.
 
-The `updateState` method uses a semaphore to ensure only one update is performed and completed at a time, completion includes the confirmation that the state has been updated which can wait up to a maxmimum of 3000ms to confirm the state upate before posting a warning and continuing.  Subsequent updates requested while the processs is running are added to an array and executed in order recieved.
+The `enforceEvaluatedState` method uses a semaphore to ensure only one update is performed and completed at a time, completion includes the confirmation that the state has been updated which can wait up to a maxmimum of 3000ms to confirm the state upate before posting a warning and continuing.  Subsequent updates requested while the processs is running are added to an array and executed in order recieved.
 
 It is due to this blocking operation that when starting an outbound call, an attempt to change the state when the task is pending can cause the outbound call to abandon.  This is why the `TaskReceived` event is ommitted from the events listed above.  Instead we use the `beforeStartOutboundCall` to move the agent into the appropriate activity first.
 
@@ -59,12 +59,12 @@ sequenceDiagram
     participant workerActivityUpdated
     participant afterSelectTask
     participant beforeStartOutboundCall
-    taskEvent(s)->>ActivityManager: updateState()
-    Note over ActivityManager: evaluateState()
-    workerActivityUpdated->>ActivityManager: updateState()
-    Note over ActivityManager: evaluateState()
-    afterSelectTask->>ActivityManager: updateState()
-    Note over ActivityManager: evaluateState()
+    taskEvent(s)->>ActivityManager: enforceEvaluatedState()
+    Note over ActivityManager: evaluateState(), setWorkerActivity()
+    workerActivityUpdated->>ActivityManager: enforceEvaluatedState()
+    Note over ActivityManager: evaluateState(), setWorkerActivity()
+    afterSelectTask->>ActivityManager: enforceEvaluatedState()
+    Note over ActivityManager: evaluateState(), setWorkerActivity()
     beforeStartOutboundCall->>ActivityManager: storePendingActivityChange()
     beforeStartOutboundCall->>ActivityManager: setWorkerActivity()
 ```
