@@ -7,7 +7,7 @@ import FlexHelper from '../../../utils/flex-helper';
 const systemActivityNames = getSystemActivityNames();
 
 // create a string array of these system names for
-// comparison later exporrted for StartOutboundCall
+// comparison later exported for StartOutboundCall
 export const rerservedSystemActivities: string[] = [
   systemActivityNames.onATask,
   systemActivityNames.onATaskNoAcd,
@@ -114,7 +114,7 @@ class ActivityManager {
   };
 
   // performs the algorithm to evaluate whether we should switch Activity and
-  // moves them if neccessary
+  // moves them if necessary
   #enforceEvaluatedState = async (availability?: boolean) => {
     const { available } = systemActivityNames;
 
@@ -134,7 +134,7 @@ class ActivityManager {
     const currentActivity = currentWorkerActivity?.name || 'UNKNOWN';
 
     // if leaving the current activity save the current state for later
-    // as long as we are not oon a system activity
+    // as long as we are not on a system activity
     if (newActivity !== currentActivity && !onSystemActivity)
       this.storePendingActivityChange(currentWorkerActivity?.name || available);
 
@@ -181,7 +181,7 @@ class ActivityManager {
       if (!hasAcceptedTasks && !hasWrappingTasks && !hasPendingTasks && isInSystemActivity) return available;
     }
 
-    // if none of the above iss true, no state change neccessary
+    // if none of the above is true, no state change necessary
     return FlexHelper.getWorkerActivityName();
   };
 

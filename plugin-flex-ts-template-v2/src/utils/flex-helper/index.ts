@@ -7,7 +7,7 @@ import { WorkerIndexItem, ReservationIndexItem } from '../index-query/InstantQue
 enum RESERVATION_STATUS {
   ACCEPTED = 'accepted',
   WRAPPING = 'wrapping',
-  WRAPUP = 'wrapup', // for reservations looked up in the index, the status is indexplicably WRAPUP instead of WRAPPING
+  WRAPUP = 'wrapup', // for reservations looked up in the index, the status is inexplicably WRAPUP instead of WRAPPING
   PENDING = 'pending',
   COMPLETED = 'completed',
   REJECTED = 'rejected',

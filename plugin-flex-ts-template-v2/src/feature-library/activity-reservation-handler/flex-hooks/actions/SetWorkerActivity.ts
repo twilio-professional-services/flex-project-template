@@ -25,7 +25,7 @@ export const actionHook = function beforeSetActivity(flex: typeof Flex, _manager
       workerSid,
     );
 
-    // for reservations looked up in the index, the status is indexplicably WRAPUP instead of WRAPPING
+    // for reservations looked up in the index, the status is inexplicably WRAPUP instead of WRAPPING
     const hasWrappingTasks = await FlexHelper.doesWorkerHaveReservationsInState(
       FlexHelper.RESERVATION_STATUS.WRAPUP,
       workerSid,
@@ -43,7 +43,7 @@ export const actionHook = function beforeSetActivity(flex: typeof Flex, _manager
       // the activity will change immediately
       // on the workers client side the workerActivityUpdated event
       // will trigger a re-evaluation to make sure they are on the right state
-      // and move them back into a system state if neccessary.
+      // and move them back into a system state if necessary.
 
       // Notify Supervisor of expected pending switch
       Flex.Notifications.showNotification(NotificationIds.SupervisorActivityChangeDelayed, {

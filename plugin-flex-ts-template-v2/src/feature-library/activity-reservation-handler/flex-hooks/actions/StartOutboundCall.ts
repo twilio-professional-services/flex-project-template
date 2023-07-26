@@ -11,7 +11,7 @@ export const actionHook = function changeWorkerActivityBeforeOutboundCall(flex: 
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (_payload, _abortFunction) => {
     // for outbound calls, because we want to change activity
     // immediately but the task comes in on a pending state
-    // and only changes to accepted when answered, we have to manage the stte
+    // and only changes to accepted when answered, we have to manage the state
     // manually prior to starting the call
 
     // the ideal solution would be to handle all state management in

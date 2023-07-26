@@ -17,7 +17,7 @@ export const eventHook = async (_flex: typeof Flex, _manager: Flex.Manager, acti
   // enforceEvaluatedState.
   await new Promise((f) => setTimeout(f, 3000));
 
-  // this will ensuer that if the supervisor changes
+  // this will ensure that if the supervisor changes
   // the agent state, if the agents client is active
   // it will promptly restore them to the correct state
   await ActivityManager.enforceEvaluatedState();
