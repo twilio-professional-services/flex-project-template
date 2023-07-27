@@ -1,5 +1,7 @@
 name: Deploy Flex
 
+# Within this file, FEATURE and END FEATURE blocks are used only by the remove-features script.
+
 on:
   # Run on merge to main
   #push:
@@ -63,12 +65,14 @@ jobs:
           npm install
           npm run install-serverless-plugin
           npm run deploy-env
+# FEATURE: schedule-manager
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
           npm install
           npm run install-serverless-plugin
           npm run deploy-env
+# END FEATURE: schedule-manager
 
   deploy-terraform:
     if: | 
@@ -122,11 +126,13 @@ jobs:
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           npm install
           npm run populate-missing-placeholders $ENVIRONMENT
+# FEATURE: chat-to-video-escalation
       - name: install npm and build video-app-assets
         working-directory: web-app-examples/video-app-quickstart
         run: |
           npm install
           npm run build
+# END FEATURE: chat-to-video-escalation
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
@@ -134,6 +140,7 @@ jobs:
           npm run install-serverless-plugin
           npm run deploy-env
 
+# FEATURE: schedule-manager
   deploy-schedule-manager:
     if: |    
       always() &&
@@ -165,6 +172,7 @@ jobs:
           npm install
           npm run install-serverless-plugin
           npm run deploy-env
+# END FEATURE: schedule-manager
 
   deploy-flex-config:
     if: |    
@@ -179,7 +187,11 @@ jobs:
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       OVERWRITE_CONFIG: ${{ github.event.inputs.initial_release == 'true' || github.event.inputs.overwrite_config == 'true' }}
-    needs: [deploy-serverless, deploy-schedule-manager]
+    needs:
+      - deploy-serverless
+# FEATURE: schedule-manager
+      - deploy-schedule-manager
+# END FEATURE: schedule-manager
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
