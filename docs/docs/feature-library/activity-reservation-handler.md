@@ -2,6 +2,8 @@
 sidebar_label: activity-reservation-handler
 title: activity-reservation-handler
 ---
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 ## Overview
 
@@ -43,13 +45,25 @@ This feature depends on the configured Activities for the different ACD states. 
 ## Technical Details
 
 ### high level implementation
+
+#### inbound tasks, selecting tasks and selecting activity
+
 This feature initializes a helper class called `ActivityManager` which exposes a method called `enforceEvaluatedState`.  This method evaluates the current tasks in flight to determine which, if any, Activity the worker should be forced onto, or whether they should be moved to their pending state.  If the worker wishes to move to a new activity while they have tasks in flight, the activity will be suspended until it can be performed automatically after tasks have been completed.
 
-This method is triggered on `taskAccepted` event as well as the various end state events for the workerClient, namely `taskCanceled`, `taskCompleted`, `taskRejected`, `taskRescinded`, `taskTimeout`, `taskWrapup` as well as `workerActivityUpdated`.  It is also triggered on `SelectTask` and `SetActivity`.
+This method is triggered on taskrouter events that could signal a neccessary state change.  It is also triggered on `SelectTask` and as part of `SetActivity`. 
 
-The `enforceEvaluatedState` method uses a semaphore to ensure only one update is performed and completed at a time, completion includes the confirmation that the state has been updated which can wait up to a maximum of 3000ms to confirm the state update before posting a warning and continuing.  Subsequent updates requested while the process is running are added to an array and executed in order received.
+The `enforceEvaluatedState` method uses a semaphore to ensure only one update is performed and completed at a time.  Subsequent updates requested while the process is running are added to an array and executed in order received.  This avoids any errors thrown beause an activity state change is pending.
 
-It is due to this blocking operation that when starting an outbound call, an attempt to change the state when the task is pending can cause the outbound call to abandon.  This is why the `taskReceived` event is omitted from the events listed above.  Instead we use the `beforeStartOutboundCall` to move the agent into the appropriate activity first.
+#### outbound tasks
+
+When an outbound call is placed it remains in a `pending` state until the call is answered, when it is answered it moves to an `accepted` status. As an exception case to [typical pending task behavior](https://assets.flex.twilio.com/docs/releases/flex-ui/2.0.0-beta.1/ui-actions/Actions#SetActivity) __no__ activity state is possible while an outbound call is in a `pending` state, which is the time the call is ringing.
+
+As we want to place a worker into a variant of the `On A Task` activity while the call is ringing, we use the `beforeStartOutboundCall` to move the agent into the appropriate activity before placing the call. Note [Known Issue 1](#issue-one).
+
+#### supervisor interference
+
+As vanilla Flex enables a supervisor to move an agents activity from the TeamsView.  It is possible for such a change to interfere with the agents-Activity correctly reflecting the agents tasks-in-flight.  Although "system activities" such as `On A Task` are rejected if the supervisor tries to select them.  To preserve existing functionality, non "system activities" are not.  The state change will be pushed and the `workerActivityUpdated` event handler on the agents side will then push the agent back into the correct "system activity" they are supposd to be in. Note [Known Issue 2](#issue-two). If a supervisor wishes to move an agent to a non "system activity" while the agent has tasks in flight, the agent will first need to make sure the tasks are completed.  This can be accomplished by enabling the [supervisor-complete-reservation](/feature-library/supervisor-complete-reservation) feature.
+
 
 ### sequence diagram
 
@@ -69,6 +83,43 @@ sequenceDiagram
     beforeStartOutboundCall->>ActivityManager: setWorkerActivity()
 ```
 
+### Flex Hooks
+
+<Tabs>
+<TabItem value="events" label="Event Hooks" default>
+
+| Event Name | Description |
+| --------- | ----------- |
+| taskAccepted | triggers ActivityManager.enforceEvaluatedState() |
+| taskCanceled | triggers ActivityManager.enforceEvaluatedState() |
+| taskCompleted | triggers ActivityManager.enforceEvaluatedState() |
+| taskRejected | triggers ActivityManager.enforceEvaluatedState() |
+| taskRescinded | triggers ActivityManager.enforceEvaluatedState() |
+| taskTimeout | triggers ActivityManager.enforceEvaluatedState() |
+| taskWrapup | triggers ActivityManager.enforceEvaluatedState() |
+| workerActivityUpdated | triggers ActivityManager.enforceEvaluatedState() |
+
+</TabItem>
+
+<TabItem value="actions" label="Action Hooks">
+
+| Action Hook | Action Name | Description |
+| ----------- | ----------- | ----------- |
+| before | SelectTask | triggers ActivityManager.enforceEvaluatedState() |
+| before | SetActivity | triggers ActivityManager.enforceEvaluatedState(), ActivityManager.storePendingActivityChange() |
+| before | StartOutboundCall | triggers ActivityManager.storePendingActivityChange, ActivityManager.setWorkerActivity(newActivity) |
+| before | SetWorkerActivity | blocks system activities, otherwise posts event |
+
+</TabItem>
+
+<TabItem value="component" label="Component Hooks">
+
+| Component Hook | Component Name | Options | Related CustomComponent | Description |
+| -------------- | -------------- | ------- | ----------------------- | ----------- |
+| add            | MainHeader     | `sortOrder: -999`, `align: 'end'` | PendingActivityComponent | Adds a visual indicator of any pending activity change that will be executed once all tasks are completed |
+
+</TabItem>
+</Tabs>
 
 
 
