@@ -1,6 +1,6 @@
 ---
 sidebar_label: Merge Future Updates
-sidebar_position: 5
+sidebar_position: 4
 title: Merge Future Updates
 ---
 

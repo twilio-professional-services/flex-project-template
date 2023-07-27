@@ -1,6 +1,6 @@
 ---
 sidebar_label: Run Flex Locally
-sidebar_position: 2
+sidebar_position: 1
 title: Run Flex Locally
 ---
 
