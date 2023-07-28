@@ -70,6 +70,10 @@ A terraform deploy will deploy the default Activities that are assigned. If you 
 
 If you are not using terraform you can create the activities manually in the [console](https://twilio.com/console).  You can then modify the feature configuration using your preferred [configuration management](/setup-guides/configure_the_template) method.
 
+## Custom Changes
+
+_this section is a placeholder for documentation of any changes performed over and above the original template implementation_
+
 
 ## Technical Details
 
