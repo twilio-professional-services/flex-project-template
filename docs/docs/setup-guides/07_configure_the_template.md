@@ -18,7 +18,7 @@ When running flex locally, the configuration from [hosted flex configuration](ht
 ### config management
 
 #### the custom_data object
-The template maintains the configuration that is deployed to [hosted flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) in version control under the `flex-config` folder.  Here you will find `ui_attributes.common.json` file containing the main configuration set.  
+The template maintains the configuration that is deployed to [hosted flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) in version control under the [`flex-config`](/how-it-works/flex-config) folder.  Here you will find `ui_attributes.common.json` file containing the main configuration set.  
 
 At the time of a GitHub action script deploy of the flex template, when an environment is provided, a new file is generated from `ui_attributes.example.json` and it is called `ui_attributes.<env-name>.json`.  After creating this file any placeholder values in the file are replaced as part of the GitHub deployment scripts.  The contents of this file are merged over the top of the `ui_attributes.common.json` file and the output creates the final configuration set that is pushed to the [hosted flex configuration api](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes).
 
@@ -56,7 +56,7 @@ Wheen running [locally](#local-configuration), this feature directly ignores wha
 
 #### version control
 
-Alternatively you can also choose to manage the configuration via version control.  As the default management style is to use the [admin-ui feature](/feature-library/admin-ui) when doing a deploy of flex-config it will only deploy the *net new* changes by merging the config with that which is hosted already.  To override this behavior and deploy exactly what is in version control you can use the "Override config set by Admin UI Panel" when deploying via the github actions script.
+Alternatively you can also choose to manage the configuration via version control.  As the default management style is to use the [admin-ui feature](/feature-library/admin-ui) when doing a deploy of [`flex-config`](/how-it-works/flex-config) it will only deploy the *net new* changes by merging the config with that which is hosted already.  To override this behavior and deploy exactly what is in version control you can use the "Override config set by Admin UI Panel" when deploying via the github actions script.
 
 <img src={GithubOverrideConfig} style={{width: 250}} />
 <br/><br/>
