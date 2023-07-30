@@ -136,9 +136,8 @@ class ActivityManager {
     const currentActivity = currentWorkerActivity?.name || 'UNKNOWN';
     const isNewActivitySystemActivity = isSystemActivity(newActivity);
 
-    // if leaving the current activity save the current state for later
-    // as long as we are not on a system activity and we are moving
-    // to a system activity
+    // if leaving the current activity
+    // and we are leaving a non-system activity for a system activity
     if (newActivity !== currentActivity && !onSystemActivity && isNewActivitySystemActivity)
       this.storePendingActivityChange(currentWorkerActivity?.name || available);
 
