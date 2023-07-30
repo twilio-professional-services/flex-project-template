@@ -24,7 +24,7 @@ At the time of a GitHub action script deploy of the flex template, when an envir
 
 #### the data model
 
-The custom_data model that is pushed into ui_attributes follows this pattern
+The custom_data model that lives in ui_attributes follows this pattern
 
 ```json
 {
@@ -38,6 +38,10 @@ The custom_data model that is pushed into ui_attributes follows this pattern
 }
 ```
 
+:::note Developer Note
+  if using the add-feature script. The feature name provided may include hyphens, however the feature name used in the custom_data will replace the hyphens with underscores to make the variable name javascript parser compliant
+:::
+
 Ultimately, enablement of each feature is managed by this variable as it appears in the [hosted flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) (or appConfig.js if running [locally](#local-configuration))
 
 ### updating the config
@@ -50,11 +54,13 @@ You can use the [admin-ui feature](/feature-library/admin-ui), which is the defa
 
 :::tip Developer Tip 
 
-Wheen running [locally](#local-configuration), this feature directly ignores what is in `appConfig.js` and shows only what is in [hosted flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes).  As a result this can cause confusion and for that reason is disabled by default when running flex project template locally.
+When running [locally](#local-configuration), this feature directly ignores what is in `appConfig.js` and shows only what is in [hosted flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) or what has been overridden using the [per-worker feature overrides](/feature-library/admin_ui#how-does-it-work).  As a result this can cause confusion and for that reason is disabled by default when running flex project template locally.
+
+Please note if worker overrides have been created, these will take precedence whether the admin-ui feature is enabled or not
 
 ::: 
 
-#### version control
+#### infrastructure as code (version control)
 
 Alternatively you can also choose to manage the configuration via version control.  As the default management style is to use the [admin-ui feature](/feature-library/admin-ui) when doing a deploy of [`flex-config`](/how-it-works/flex-config) it will only deploy the *net new* changes by merging the config with that which is hosted already.  To override this behavior and deploy exactly what is in version control you can use the "Override config set by Admin UI Panel" when deploying via the github actions script.
 

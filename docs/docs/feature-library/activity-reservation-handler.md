@@ -47,6 +47,21 @@ The reason we cannot change the agent's state directly to the correct resolved s
 
 ### configuration options
 
+```json
+{
+  "activity_reservation_handler": {
+    "enabled": false,
+    "system_activity_names": {
+      "available": "Available",
+      "onATask": "On a Task",
+      "onATaskNoAcd": "On a Task, No ACD",
+      "wrapup": "Wrap Up",
+      "wrapupNoAcd": "Wrap Up, No ACD"
+    }
+  }
+}
+```
+
 This feature depends on a configured set of Activities for the different ACD states. After [enabling](/setup-guides/configure_the_template#the-data-model) the feature the following configuration is required
 
 The following are the descriptions of the configuration objects and what they represent 
@@ -90,7 +105,7 @@ The `enforceEvaluatedState` method uses a semaphore to ensure only one update is
 
 #### outbound tasks
 
-When an outbound call is placed it remains in a `pending` state until the call is answered, when it is answered it moves to an `accepted` status. As an exception case to [typical pending task behavior](https://assets.flex.twilio.com/docs/releases/flex-ui/2.0.0-beta.1/ui-actions/Actions#SetActivity) __no__ activity state is possible while an outbound call is in a `pending` state, which is the time the call is ringing.
+When an outbound call is placed it remains in a `pending` state until the call is answered, when it is answered it moves to an `accepted` status. As an exception case to [typical pending task behavior](https://assets.flex.twilio.com/docs/releases/flex-ui/latest/ui-actions/Actions#SetActivity) __no__ activity state is possible while an outbound call is in a `pending` state, which is the time the call is ringing.
 
 As we want to place a worker into a variant of the `On A Task` activity while the call is ringing, we use the `beforeStartOutboundCall` to move the agent into the appropriate activity before placing the call. Note [Known Issue 1](#issue-one).
 
