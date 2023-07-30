@@ -54,7 +54,7 @@ You can use the [admin-ui feature](/feature-library/admin-ui), which is the defa
 
 :::tip Developer Tip 
 
-When running [locally](#local-configuration), this feature directly ignores what is in `appConfig.js` and shows only what is in [hosted flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) or what has been overridden using the [per-worker feature overrides](/feature-library/admin_ui#how-does-it-work).  As a result this can cause confusion and for that reason is disabled by default when running flex project template locally.
+When running [locally](#local-configuration), this feature directly ignores what is in `appConfig.js` and shows only what is in [hosted flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) or what has been overridden using the [per-worker feature overrides](/feature-library/admin-ui#how-does-it-work).  As a result this can cause confusion and for that reason is disabled by default when running flex project template locally.
 
 Please note if worker overrides have been created, these will take precedence whether the admin-ui feature is enabled or not
 
