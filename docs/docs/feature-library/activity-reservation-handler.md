@@ -33,10 +33,11 @@ As a result, while a pending task appears in an agents task list, toggling betwe
 
 ### issue two
 Flex allows supervisors to move the Activity of an agent from the Supervisor Teams View.  Doing so pushes an Activity update to the worker which triggers the event `workerActivityUpdated` on the agent's client, which in turn triggers a re-evaluation of the correct state to be in, again on the client side. This has two drawbacks:
+
 1. The agent will be in the wrong state for a second
 2. If the agents client is not running, there will be nothing to process the event and could end up in an erroneous state.
 
-For this reason, when using this feature, you may want to consider moving the logic to a backend solution when ultimately evaluating the Activity change.
+The reason we cannot change the agent's state directly to the correct resolved state is because we have no direct access to update the pending state on the agents local storage.  To accomplish this a future update will be required to leverage a different messaging schema that can trigger the evaluation on the agents side.
 
 ## Flex User Experience
 
