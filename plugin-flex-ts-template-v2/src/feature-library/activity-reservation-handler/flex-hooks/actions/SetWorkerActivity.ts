@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import { Activity } from 'types/task-router';
 
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
-import { rerservedSystemActivities } from '../../helper/ActivityManager';
+import { reservedSystemActivities } from '../../helper/ActivityManager';
 import { NotificationIds } from '../notifications/ActivityReservationHandler';
 import FlexHelper from '../../../../utils/flex-helper';
 
@@ -32,7 +32,7 @@ export const actionHook = function beforeSetActivity(flex: typeof Flex, _manager
     );
 
     // disallow any state change to reserved activities
-    if (rerservedSystemActivities.map((a) => a.toLowerCase()).includes(activity.name.toLowerCase())) {
+    if (reservedSystemActivities.map((a) => a.toLowerCase()).includes(activity.name.toLowerCase())) {
       abortFunction();
       // Notify Supervisor
       Flex.Notifications.showNotification(NotificationIds.RestrictedActivities, {
