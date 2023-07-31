@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect} from 'react';
 import * as Flex from '@twilio/flex-ui';
 
 import { FlexComponent } from '../../../../types/feature-loader';
@@ -19,6 +19,15 @@ export const componentHook = function addTaskCardWrapper(flex: typeof Flex, mana
   if (isHTHighlightEnabled()) {
     flex.Supervisor.TaskCard.Content.addWrapper((Original) => (originalProps) => {
       const now = new Date();
+      const [clock, setClock] = useState(true);
+      // Add clock toggle to re-render every 10s
+      useEffect(() => {
+        const interval = setInterval(() => {
+          setClock((currentClock) => !currentClock);
+        }, 10000);
+        return () => clearInterval(interval);
+      }, []);
+    
       const task = originalProps.task;
       const dateUpdated = task?.dateUpdated;
       let taskAge = 1;
