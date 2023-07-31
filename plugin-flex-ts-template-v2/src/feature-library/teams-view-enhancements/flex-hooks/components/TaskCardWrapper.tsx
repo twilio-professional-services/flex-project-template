@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import * as Flex from '@twilio/flex-ui';
 
 import { FlexComponent } from '../../../../types/feature-loader';
@@ -27,7 +27,7 @@ export const componentHook = function addTaskCardWrapper(flex: typeof Flex, mana
         }, 10000);
         return () => clearInterval(interval);
       }, []);
-    
+
       const task = originalProps.task;
       const dateUpdated = task?.dateUpdated;
       let taskAge = 1;
