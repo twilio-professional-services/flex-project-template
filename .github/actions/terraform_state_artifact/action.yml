@@ -22,13 +22,13 @@ inputs:
     required: false
     default: ''
   environment:
-    description: 'Envirnoment associated with the state file'
+    description: 'Environment associated with the state file'
     required: true
 
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - uses: hashicorp/setup-terraform@v2
     - id: terraform
       working-directory: ${{ inputs.path }}
