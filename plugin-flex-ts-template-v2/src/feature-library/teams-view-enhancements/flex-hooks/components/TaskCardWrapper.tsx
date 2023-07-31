@@ -1,8 +1,7 @@
 import React from 'react';
 import * as Flex from '@twilio/flex-ui';
-
 import { FlexComponent } from '../../../../types/feature-loader';
-import { TaskCardBox } from './TaskCardWrapper.Styles';
+import { TaskCardBox, TaskCardInnerBox } from './TaskCardWrapper.Styles';
 import {
   isHTHighlightEnabled,
   getHTWarningThreshold,
@@ -27,7 +26,9 @@ export const componentHook = function addTaskCardWrapper(flex: typeof Flex, mana
       }
       return (
         <TaskCardBox age={taskAge} redLine={getHTExceededThreshold()} yellowLine={getHTWarningThreshold()}>
-          <Original {...originalProps} />
+          <TaskCardInnerBox>
+            <Original {...originalProps} />
+          </TaskCardInnerBox>
         </TaskCardBox>
       );
     });

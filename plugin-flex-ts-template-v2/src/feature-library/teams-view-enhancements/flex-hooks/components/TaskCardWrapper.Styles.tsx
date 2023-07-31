@@ -7,7 +7,7 @@ export interface OwnProps {
 }
 
 const getTaskHighlightColor = (props: OwnProps) => {
-  let color = 'white';
+  let color = 'transparent';
   const taskAge = props.age;
   if (taskAge > props.redLine) color = 'red';
   else if (taskAge > props.yellowLine) color = 'yellow';
@@ -15,9 +15,13 @@ const getTaskHighlightColor = (props: OwnProps) => {
 };
 
 export const TaskCardBox = styled('div')<OwnProps>`
-  padding-left: 5px;
   border-width: 3px;
-  border-radius: 10px;
+  border-radius: 6px;
   border-style: solid;
   border-color: ${(props) => getTaskHighlightColor(props)};
+  overflow: hidden;
+`;
+
+export const TaskCardInnerBox = styled('div')`
+  margin: -8px -16px -8px 0;
 `;
