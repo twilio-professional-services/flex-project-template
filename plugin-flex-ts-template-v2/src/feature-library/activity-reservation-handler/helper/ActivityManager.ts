@@ -8,17 +8,19 @@ const systemActivityNames = getSystemActivityNames();
 
 // create a string array of these system names for
 // comparison later exported for StartOutboundCall
-export const rerservedSystemActivities: string[] = [
+export const reservedSystemActivities: string[] = [
   systemActivityNames.onATask,
   systemActivityNames.onATaskNoAcd,
   systemActivityNames.wrapup,
   systemActivityNames.wrapupNoAcd,
 ];
 
+const isSystemActivity = (activityName: string): boolean => {
+  return reservedSystemActivities.map((a) => a.toLowerCase()).includes(activityName.toLowerCase());
+};
+
 export const isWorkerCurrentlyInASystemActivity = async (): Promise<boolean> => {
-  return rerservedSystemActivities
-    .map((a) => a.toLowerCase())
-    .includes((await FlexHelper.getWorkerActivityName())?.toLowerCase());
+  return isSystemActivity(await FlexHelper.getWorkerActivityName());
 };
 
 interface PendingActivity {
@@ -132,14 +134,19 @@ class ActivityManager {
     // put is in a different state.
     const onSystemActivity = await isWorkerCurrentlyInASystemActivity();
     const currentActivity = currentWorkerActivity?.name || 'UNKNOWN';
+    const isNewActivitySystemActivity = isSystemActivity(newActivity);
 
-    // if leaving the current activity save the current state for later
-    // as long as we are not on a system activity
-    if (newActivity !== currentActivity && !onSystemActivity)
+    // if leaving the current activity
+    // and we are leaving a non-system activity for a system activity
+    if (newActivity !== currentActivity && !onSystemActivity && isNewActivitySystemActivity)
       this.storePendingActivityChange(currentWorkerActivity?.name || available);
 
     // update the activity/state only if we are not currently in that activity/state.
     if (newActivity !== currentWorkerActivity?.name) await this.setWorkerActivity(newActivity);
+
+    // if our final activity is not a system activity
+    // we have no need for a pending state
+    if (!isNewActivitySystemActivity) this.#clearPendingActivity();
   };
 
   // evaluates which state we should be in given an availability status
