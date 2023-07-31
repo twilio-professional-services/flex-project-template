@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Flex from '@twilio/flex-ui';
+
 import { FlexComponent } from '../../../../types/feature-loader';
 import { TaskCardBox, TaskCardInnerBox } from './TaskCardWrapper.Styles';
 import {
