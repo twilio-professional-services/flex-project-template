@@ -19,7 +19,7 @@ export const componentHook = function addTaskCardWrapper(flex: typeof Flex, mana
   if (isHTHighlightEnabled()) {
     flex.Supervisor.TaskCard.Content.addWrapper((Original) => (originalProps) => {
       const now = new Date();
-      const [clock, setClock] = useState(true);
+      const [, setClock] = useState(true);
       // Add clock toggle to re-render every 10s
       useEffect(() => {
         const interval = setInterval(() => {
