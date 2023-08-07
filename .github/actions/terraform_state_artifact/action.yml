@@ -74,21 +74,33 @@ runs:
         ### SERVERLESS DOMAINS: ALWAYS REQUIRED INPUT VARIABLES ###
         $services = twilio api:serverless:v1:services:list -o json | ConvertFrom-Json
 
-        $tf_severless_sid_custom_flex = $services | where {$_.uniqueName -eq 'custom-flex-extensions-serverless'} | Select -property sid -ExpandProperty sid
-        $tf_severless_sid_schedule_manager = $services | where {$_.uniqueName -eq 'schedule-manager'} | Select -property sid -ExpandProperty sid
+        $env:TF_VAR_SERVERLESS_SID = $services | where {$_.uniqueName -eq 'custom-flex-extensions-serverless'} | Select -property sid -ExpandProperty sid
+        $env:TF_VAR_SCHEDULE_MANAGER_SID = $services | where {$_.uniqueName -eq 'schedule-manager'} | Select -property sid -ExpandProperty sid
 
-        $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_custom_flex -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
-        $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER = twilio api:serverless:v1:services:environments:list --service-sid $tf_severless_sid_schedule_manager -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
+        $env:TF_VAR_SERVERLESS_DOMAIN = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SERVERLESS_SID -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
+        $env:TF_VAR_SERVERLESS_ENV_SID = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SERVERLESS_SID -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property sid -ExpandProperty sid
+        $env:TF_VAR_SCHEDULE_MANAGER_DOMAIN = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SCHEDULE_MANAGER_SID -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
+        $env:TF_VAR_SCHEDULE_MANAGER_ENV_SID = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SCHEDULE_MANAGER_SID -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property sid -ExpandProperty sid
 
-        $temp1 = $env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX
-        $temp2 = $env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER
+        ### FUNCTIONS
+        $serverless_functions = twilio api:serverless:v1:services:functions:list --service-sid $env:TF_VAR_SERVERLESS_SID -o json | ConvertFrom-Json
+        $schedule_manager_functions = twilio api:serverless:v1:services:functions:list --service-sid $env:TF_VAR_SCHEDULE_MANAGER_SID -o json | ConvertFrom-Json
+
+        ### SERVERLESS FUNCTIONS
+        $env:TF_VAR_FUNCTION_CREATE_CALLBACK = $serverless_functions | where {$_.friendlyName -eq '/features/callback-and-voicemail/studio/create-callback'} | Select -property sid -ExpandProperty sid
+        ### SCHEDULE MANAGER FUNCTIONS
+        $env:TF_VAR_FUNCTION_CHECK_SCHEDULE_SID = $schedule_manager_functions | where {$_.friendlyName -eq '/check-schedule'} | Select -property sid -ExpandProperty sid
+
+
+        $temp1 = $env:TF_VAR_SERVERLESS_DOMAIN
+        $temp2 = $env:TF_VAR_SCHEDULE_MANAGER_DOMAIN
         echo " - *Discovering Serverless Backends* " >> $env:GITHUB_STEP_SUMMARY
-        if($env:TF_VAR_SERVERLESS_DOMAIN_CUSTOM_FLEX) {
+        if($env:TF_VAR_SERVERLESS_DOMAIN) {
          echo "   - :white_check_mark: serverless backend: $temp1"  >> $env:GITHUB_STEP_SUMMARY
         } else {
           echo "   - :x: serverless backend not found"  >> $env:GITHUB_STEP_SUMMARY
         }
-        if($env:TF_VAR_SERVERLESS_DOMAIN_SCHEDULE_MANAGER) {
+        if($env:TF_VAR_SCHEDULE_MANAGER_DOMAIN) {
           echo "   - :white_check_mark: schedule manager: $temp2"  >> $env:GITHUB_STEP_SUMMARY
         } else {
           echo "   - :x: schedule manager backend not found"  >> $env:GITHUB_STEP_SUMMARY

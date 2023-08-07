@@ -8,6 +8,8 @@ export enum FlexEvent {
   taskRescinded = 'taskRescinded',
   taskTimeout = 'taskTimeout',
   taskWrapup = 'taskWrapup',
+  workerActivityUpdated = 'workerActivityUpdated',
+  workerAttributesUpdated = 'workerAttributesUpdated',
   pluginsInitialized = 'pluginsInitialized',
   tokenUpdated = 'tokenUpdated',
 }

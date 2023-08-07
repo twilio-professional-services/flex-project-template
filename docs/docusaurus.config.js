@@ -8,7 +8,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 const config = {
   title: "Flex Project Template",
   tagline: "Twilio Professional Services",
-  favicon: "img/twilio.png",
+  favicon: "img/logos/flex.png",
 
   // Set the production url of your site here
   url: "https://twilio-professional-services.github.io",
@@ -43,7 +43,7 @@ const config = {
         },
         blog: false,
         theme: {
-          customCss: require.resolve("./src/css/custom.css"),
+          customCss: require.resolve("./src/css/custom.scss"),
           //docsRouteBaseBath: "/",
         },
       }),
@@ -66,6 +66,11 @@ const config = {
         language: "en",
       },
     ],
+    'docusaurus-plugin-sass'
+  ],
+  
+  stylesheets: [
+    'https://assets.twilio.com/public_assets/paste-fonts/1.5.1/fonts.css',
   ],
 
   themeConfig:
@@ -76,8 +81,8 @@ const config = {
       navbar: {
         title: "Flex Project Template",
         logo: {
-          alt: "Twilio Logo",
-          src: "img/twilio.png",
+          alt: "Twilio Flex Logo",
+          src: "img/logos/flex.png",
         },
         items: [
           {
@@ -120,6 +125,13 @@ const config = {
         darkTheme: darkCodeTheme,
       },
     }),
+
+  themes: ['@docusaurus/theme-mermaid'],
+    // In order for Mermaid code blocks in Markdown to work,
+    // you also need to enable the Remark plugin with this option
+    markdown: {
+      mermaid: true,
+    },
 };
 
 module.exports = config;

@@ -63,7 +63,7 @@ Time to complete: _~8 minutes_
    
 7. Run the workflow.
    - this will deploy the assets to your environment with the default features enabled, See [Feature library Information](/feature-library/overview) for further details of whats enabled by default.
-   - environment properties will be automatically populated based on the deployed Flex configuration, including service and workflow SIDs. See [override environment properties](/setup-guides/override-environment-properties) for information on how to influence this configuration.
+   - environment properties will be automatically populated based on the deployed Flex configuration, including service and workflow SIDs. See [override environment properties](/setup-guides/configure_the_template) for information on how to influence this configuration.
  
 
 

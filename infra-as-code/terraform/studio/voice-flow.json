@@ -1,57 +1,141 @@
 {
-    "description": "IVR for creating a Flex voice task",
-    "states": [
-      {
-        "name": "Trigger",
-        "type": "trigger",
-        "transitions": [
-          {
-            "event": "incomingMessage"
-          },
-          {
-            "next": "SendCallToAgent",
-            "event": "incomingCall"
-          },
-          {
-            "event": "incomingRequest"
-          }
-        ],
-        "properties": {
-          "offset": {
-            "x": 0,
-            "y": -10
-          }
+  "description": "IVR for creating a Flex voice task",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "next": "check_schedule",
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
         }
-      },
-      {
-        "name": "SendCallToAgent",
-        "type": "send-to-flex",
-        "transitions": [
-          {
-            "event": "callComplete"
-          },
-          {
-            "event": "failedToEnqueue"
-          },
-          {
-            "event": "callFailure"
-          }
-        ],
-        "properties": {
-          "offset": {
-            "x": 30,
-            "y": 180
-          },
-          "waitUrlMethod": "POST",
-          "waitUrl": "https://${DOMAIN_CUSTOM_FLEX}/features/callback-and-voicemail/studio/wait-experience?mode=initialize",
-          "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
-          "channel": "${VOICE_CHANNEL_SID}",
-          "attributes": "{ \"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\", \"conversations\": {\"hang_up_by\": \"Customer\"} }"
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": -10
         }
       }
-    ],
-    "initial_state": "Trigger",
-    "flags": {
-      "allow_concurrent_calls": true
+    },
+    {
+      "name": "SendCallToAgent",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "waitUrl": "https://${SERVERLESS_DOMAIN}/features/callback-and-voicemail/studio/wait-experience?mode=initialize",
+        "offset": {
+          "x": 570,
+          "y": 600
+        },
+        "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
+        "channel": "${VOICE_CHANNEL_SID}",
+        "attributes": "{ \"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\", \"conversations\": {\"hang_up_by\": \"Customer\"} }",
+        "waitUrlMethod": "POST"
+      }
+    },
+    {
+      "name": "check_schedule",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "is_open",
+          "event": "success"
+        },
+        {
+          "next": "SendCallToAgent",
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "${SCHEDULE_MANAGER_SID}",
+        "environment_sid": "${SCHEDULE_MANAGER_ENV_SID}",
+        "offset": {
+          "x": 40,
+          "y": 170
+        },
+        "function_sid": "${FUNCTION_CHECK_SCHEDULE_SID}",
+        "parameters": [
+          {
+            "value": "Example",
+            "key": "name"
+          }
+        ],
+        "url": "https://${SCHEDULE_MANAGER_DOMAIN}/check-schedule"
+      }
+    },
+    {
+      "name": "is_open",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "say_closed",
+          "event": "noMatch"
+        },
+        {
+          "next": "SendCallToAgent",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": [
+                "{{widgets.check_schedule.parsed.isOpen}}"
+              ],
+              "type": "equal_to",
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.check_schedule.parsed.isOpen}}",
+        "offset": {
+          "x": 40,
+          "y": 480
+        }
+      }
+    },
+    {
+      "name": "say_closed",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 40,
+          "y": 710
+        },
+        "loop": 1,
+        "say": "{% case widgets.check_schedule.parsed.closedReason  %}\n\n{% when 'manual' %}\n\nWe are currently closed due to unforseen circumstances. Please call back later.\n\n{% when 'holiday' %}\n\nWe are currently closed due to the holiday. Please call back during our normal business hours.\n\n{% else %}\n\nWe are currently closed. Please call back during our normal business hours.\n\n{% endcase %}\n\nThank you for calling and have a great day."
+      }
     }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
   }
+}

@@ -114,7 +114,9 @@ const waitForConferenceParticipants = async (task: ITask): Promise<ConferencePar
       if (Array.isArray(participants) && participants.length < 2) {
         return;
       }
-      const worker = participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker);
+      const worker = participants.find(
+        (p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined',
+      );
       const customer = participants.find((p) => p.participantType === 'customer');
 
       if (!worker || !customer) {
@@ -132,7 +134,9 @@ const waitForConferenceParticipants = async (task: ITask): Promise<ConferencePar
 
         participants = storeConference.source.participants;
 
-        const storeWorker = participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker);
+        const storeWorker = participants.find(
+          (p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined',
+        );
         const storeCustomer = participants.find((p) => p.participantType === 'customer');
 
         if (!storeWorker?.callSid || !storeCustomer?.callSid) {
@@ -256,7 +260,9 @@ export const recordExternalCall = async (task: ITask) => {
       break;
     }
     case 'worker': {
-      participantLeg = participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker);
+      participantLeg = participants.find(
+        (p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined',
+      );
       break;
     }
     default:

@@ -63,8 +63,15 @@ export default abstract class ApiService {
         // https://gist.github.com/odewahn/5a5eeb23279eed6a80d7798fdb47fe91
         try {
           // Generic retry when calls return a 'too many requests' response
+          // or when Fetch API returns a TypeError due to a network error
           // request is delayed by a random number which grows with the number of retries
-          if (error.status === 429 && attempts < MAX_ATTEMPTS) {
+          if (
+            ((error instanceof TypeError &&
+              (error.message === 'Failed to fetch' ||
+                error.message === 'NetworkError when attempting to fetch resource.')) ||
+              error.status === 429) &&
+            attempts < MAX_ATTEMPTS
+          ) {
             // Calculate the exponential backoff delay
             const backoffDelay = Math.min(MAX_RETRY_DELAY, RETRY_INTERVAL * Math.pow(2, attempts));
             // Apply full jitter to the delay; reduces load

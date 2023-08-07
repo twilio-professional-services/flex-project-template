@@ -31,7 +31,7 @@ exports.createCallbackTask = async (parameters) => {
   // setup required task attributes for task
   const attributes = {
     taskType: recordingSid ? 'voicemail' : 'callback',
-    name: `${recordingSid ? 'Voicemail' : 'Callback'} (${numberToCall})`,
+    name: numberToCall,
     flow_execution_sid: flexFlowSid,
     message: message || null,
     callBackData: {
