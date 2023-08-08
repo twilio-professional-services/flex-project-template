@@ -1,0 +1,27 @@
+name: Deploy Flex on Merge
+
+# This is an example workflow for automatically triggered deployments
+# Copy this file to the workflows directory to use it
+
+on:
+  push:
+    branches:
+      # Change the branches below to match your desired configuration
+      # These should be protected branches
+      - develop
+      - main
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/flex_deploy.yaml
+    with:
+      # Change inputs below to match your desired configuration
+      # Uses the 'production' env when pushing to the main branch, or 'dev' env when pushing to the develop branch
+      environment: ${{ github.ref_name == 'main' && 'production' || 'dev' }}
+      deploy_terraform: true
+      overwrite_config: false
+    secrets:
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TF_ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}

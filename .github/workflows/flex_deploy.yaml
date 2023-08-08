@@ -3,12 +3,28 @@ name: Deploy Flex
 # Within this file, FEATURE and END FEATURE blocks are used only by the remove-features script.
 
 on:
-  # Run on merge to main
-  #push:
-  #  branches:
-  #  - main
-
-  # Enable running this workflow manually from the Actions tab
+  # To run this workflow via automated triggers, see the .github/examples directory.
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      deploy_terraform:
+        required: true
+        type: boolean
+      overwrite_config:
+        required: true
+        type: boolean
+    secrets:
+      TWILIO_ACCOUNT_SID:
+        required: true
+      TWILIO_API_KEY:
+        required: true
+      TWILIO_API_SECRET:
+        required: true
+      TF_ENCRYPTION_KEY:
+        required: true
+  # Enables running this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       environment:
@@ -38,12 +54,12 @@ jobs:
   # the domain name can be pulled in for the terraform deploy
   perform-initial-serverless-release:
     if: |
-      (github.event.inputs.initial_release == 'true' && 
-       github.event.inputs.deploy_terraform == 'true')
+      (inputs.initial_release == true && 
+       inputs.deploy_terraform == true)
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ inputs.environment }}
     env:
-      ENVIRONMENT: ${{ github.event.inputs.environment }}
+      ENVIRONMENT: ${{ inputs.environment }}
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
@@ -79,11 +95,11 @@ jobs:
       always() &&
         !contains(needs.*.result, 'failure') &&
         !contains(needs.*.result, 'cancelled') &&
-      github.event.inputs.deploy_terraform == 'true'
+      inputs.deploy_terraform == true
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ inputs.environment }}
     env:
-      ENVIRONMENT: ${{ github.event.inputs.environment }}
+      ENVIRONMENT: ${{ inputs.environment }}
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
@@ -92,12 +108,12 @@ jobs:
       TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     needs: [perform-initial-serverless-release]
     steps:
-      - uses: actions/checkout@v1 
+      - uses: actions/checkout@v3
       - uses: ./.github/actions/terraform_state_artifact
         with:
           encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
           path: ./infra-as-code/terraform/environments/default
-          environment: ${{ github.event.inputs.environment }}
+          environment: ${{ inputs.environment }}
 
 
   deploy-serverless:
@@ -106,9 +122,9 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ inputs.environment }}
     env:
-      ENVIRONMENT: ${{ github.event.inputs.environment }}
+      ENVIRONMENT: ${{ inputs.environment }}
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
@@ -147,9 +163,9 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ inputs.environment }}
     env:
-      ENVIRONMENT: ${{ github.event.inputs.environment }}
+      ENVIRONMENT: ${{ inputs.environment }}
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
@@ -179,14 +195,14 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     env:
-      ENVIRONMENT:  ${{ github.event.inputs.environment }}
+      ENVIRONMENT: ${{ inputs.environment }}
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-      OVERWRITE_CONFIG: ${{ github.event.inputs.initial_release == 'true' || github.event.inputs.overwrite_config == 'true' }}
+      OVERWRITE_CONFIG: ${{ inputs.initial_release == true || inputs.overwrite_config == true }}
     needs:
       - deploy-serverless
 # FEATURE: schedule-manager
@@ -212,7 +228,7 @@ jobs:
 
   deploy-release-plugin:
     runs-on: ubuntu-latest
-    environment: ${{ github.event.inputs.environment }}
+    environment: ${{ inputs.environment }}
     env:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
@@ -231,7 +247,7 @@ jobs:
       - name: deploy and release flex-plugin
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
-          echo " - Environment: ${{ github.event.inputs.environment }}"  >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ inputs.environment }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Plugin Folder: ${{ env.PLUGIN_FOLDER }}"  >> $GITHUB_STEP_SUMMARY
           cd $PLUGIN_FOLDER
           npm install
