@@ -4,6 +4,8 @@ title: activity-skill-filter
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
+import Enabled from '/img/features/activity-skill-filter/feature-enabled.png';
+import Disabled from '/img/features/activity-skill-filter/feature-disabled.png';
 
 ## Overview
 
@@ -30,7 +32,11 @@ On older Twilio Flex accounts a TaskRouter Activity of "Reserved" may be present
 
 ## Flex User Experience
 
-N/A
+The following example images show the behavior of the Activity skill filter might behave when the system Activities from [activity reservation handler](/flex-project-template/feature-library/activity-reservation-handler) are hidden using non-existent skills and the `Offline` Activity is set to last position.  As can be seen, the other Activities are ordered alphabetically.
+
+| With Feature   | Without Feature  |
+| -------------- | ---------------- | 
+| <img src={Enabled} width="200"/>| <img src={Disabled} width="200"/>|
 
 ## Configuration Options and Dependencies
 
@@ -41,7 +47,7 @@ N/A
   "enabled": true, // controls whether this feature is enabled
   "filter_teams_view": true, // controls whether this feature affects the Teams view WorkProfile activity menu
   "rules": {
-    "<ACTIVITY_NAME>": {
+    "<ACTIVITY_NAME_OR_SID>": {
       "required_skill": "skill_name", // name of skill required to allow this activity, or null to allow all workers
       "sort_order": order // zero-based integer
     }
@@ -59,11 +65,11 @@ The following are the descriptions of the configuration objects and what they re
 
 this object allows the administrator to customize which activities are associated with which skills and what order they should appear in
 
-- **<ACTIVITY_NAME>**:  this element name represents the name of the activity for which you want to set a rule
+- **<ACTIVITY_NAME_OR_SID>**:  this element name represents the name of the activity or the SID of the activity for which you want to set a rule
 
-#### activity_name
+#### activity_name_or_sid
 
-- **required_skill**: this variable represents the skill name that is required to see the activity in the drop down menu.
+- **required_skill**: this variable represents the skill name that is required to see the activity in the drop down menu.  It can be set to `null` for no skill required or a non-existent skill to make sure no agent can manually select it.
 - **sort_order**: this variable represents the order the activity should appear in the drop down menu, if two items have the same sort_order they will be ordered alphabetically.  This value should be zero or greater.
 
 #### example
@@ -138,7 +144,7 @@ sequenceDiagram
 
 | Component Hook | Component Name | Options | Related Custom Component | Description |
 | -------------- | -------------- | ------- | ----------------------- | ----------- |
-| addWrapper     | MainHeader     |         | ActivityWrapper         | Wraps MainHeader with a div that injects css targeting lower level components |
+| addWrapper     | MainHeader     |         | ActivityWrapper         | Wraps MainHeader with a div that injects css, targeting lower level components |
 | replace        | WorkerProfile.info | `align: 'start', sortOrder: 2` | WorkerProfileInfo | replaces info panel on WorkerProfile so activities can be directly controlled so sort and filter based on skills |
 
 </TabItem>
