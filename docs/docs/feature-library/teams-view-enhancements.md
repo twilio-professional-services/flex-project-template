@@ -3,10 +3,47 @@ sidebar_label: teams-view-enhancements
 title: teams-view-enhancements
 ---
 
-The Teams View can be modified by adding and removing columns in the [WorkersDataTable](https://www.twilio.com/docs/flex/developer/ui/components#add-columns-to-workersdatatable). 
+# Overview
+ In Flex, Supervisors can monitory agent activity in the [Teams View](https://www.twilio.com/docs/flex/end-user-guide/insights/monitor-agent-activity). The Teams View displays the agent's status and the tasks they are working on. Supervisors can also listen to live calls and view the chat/messaging conversations. 
 
-# flex-user-experience
+The Teams View can be modified by adding and removing columns in the [WorkersDataTable](https://www.twilio.com/docs/flex/developer/ui/components#add-columns-to-workersdatatable) to display some of the agent attributes or their skills.  The TaskCard component can be enhanced to show different information for each task or to change it's visual appearance.
+
+# How does it work?
+
+The workers skills array can be re-formatted and shown in an additional column in the WorksDataTable of the Teams View.  This gives Supervisors a quicker way to review worker skills. Additionally, extra columns can be added to display worker attributes such as `team_name`, `department_name`, `location` or other custom attributes. It is highly recommended to configure these worker attributes via [Flex SSO](https://www.twilio.com/docs/flex/admin-guide/setup/sso-configuration#flex-insights)
+
+We can highlight tasks that have a long handle time by adding a colored border around the Task Card based on the task age. For example, if the task is older than 3 minutes (180 seconds) we can show a yellow border. And if the task age exceeds 5 minutes (300 seconds) we can show red border. This task highlighting may assist supervisors with observing how agents are performing, or if they are having challenges completing tasks within expected handling time ranges.  
+
+By default, the [SupervisorTaskCardHeader template string](https://www.twilio.com/docs/flex/developer/ui/v1/localization-and-templating#list-of-available-content-strings) displays the `{{task.defaultFrom}}` value which can be either the caller's phone number or the chat customer's name (identity).  This specific task detail may not be useful for Supervisors so we could change that template string to `{{task.queueName}}` to be able to see which queues the agent is working in. 
+
+# Setup
+
+This feature can be enabled via the `flex-config` attributes. Just set the `teams_view_enhancements` `enabled` flag to `true` and set up the desired configuration.
+
+In the list of `columns`, select which worker attributes to display in the WorkersTable.
+
+To enable TaskCard highlighting based on the task age, set `highlight_handle_time: true` and specify the warning threshold (default 180 seconds) and "handle time exceeded" threshold (default 300 seconds).
+
+To display the Task's Queue Name instead of the customer's phone number (or name), set the `display_task_queue_name: true`.
+
+```json
+  "teams_view_enhancements": {
+      "enabled": true,
+      "highlight_handle_time": true,
+      "handle_time_warning_threshold": 180,
+      "handle_time_exceeded_threshold": 300,
+      "display_task_queue_name": true,
+      "columns": {
+        "team": true,
+        "department": false,
+        "location": false,
+        "agent_skills": true
+      }
+    }
+```
+
+# Flex User Experience
 
 ![TeamsViewColumns](/img/features/teams-view-enhancements/teams-view-columns.png)
 
-The workers skills array can be re-formatted and shown in an additional column in the WorksDataTable of the Teams View.  This gives Supervisors a quicker way to review worker skills. Additionally, extra columns can be added to display worker attributes such as `team_name`, `department_name`, `location` or other custom attributes.
+![TeamsViewTaskHighlight](/img/features/teams-view-enhancements/TeamsViewTaskHighlight.png)
