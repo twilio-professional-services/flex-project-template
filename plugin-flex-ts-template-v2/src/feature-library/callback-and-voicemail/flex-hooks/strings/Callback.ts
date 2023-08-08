@@ -24,6 +24,8 @@ export enum StringTemplates {
   VoicemailLoading = 'PSCallbackVoicemailLoading',
   VoicemailError = 'PSCallbackVoicemailError',
   VoicemailTryAgain = 'PSCallbackVoicemailTryAgain',
+  Callback = 'PSCallbackCallback',
+  Voicemail = 'PSCallbackVoicemail',
 }
 
 export const stringHook = () => ({
@@ -47,6 +49,8 @@ export const stringHook = () => ({
     [StringTemplates.VoicemailLoading]: 'Loading voicemail...',
     [StringTemplates.VoicemailError]: 'Error loading voicemail.',
     [StringTemplates.VoicemailTryAgain]: 'Try again',
+    [StringTemplates.Callback]: 'Callback',
+    [StringTemplates.Voicemail]: 'Voicemail',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,

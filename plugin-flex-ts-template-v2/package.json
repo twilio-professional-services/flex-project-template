@@ -38,7 +38,7 @@
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-private-methods": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
-    "@twilio/flex-ui": "2.3.3",
+    "@twilio/flex-ui": "^2",
     "@types/jest": "^29.5.0",
     "@types/luxon": "^3.1.0",
     "@types/react-redux": "^7.1.1",
@@ -50,7 +50,6 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-junit": "^16.0.0",
     "react-test-renderer": "17.0.2",
-    "twilio-taskrouter": "0.8.2",
     "typescript": "^5"
   },
   "jest": {

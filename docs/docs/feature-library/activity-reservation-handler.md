@@ -24,6 +24,9 @@ This paradigm shift can be a difficult one for legacy contact centers to adopt w
 ### objective
 This feature aims to make such a shift easier by introducing a mechanism to automatically sync the agent Activity with the status of the work the agent is handling. This can aid with reporting strategies.
 
+### other comments
+Given it is not desirable to select the system activities, the [agent skill filter](/flex-project-template/feature-library/activity-skill-filter) is a useful feature to enable in unison with this one.  This feature will allow you to effectively hide the system activities from view.
+
 ## Known Issues
 
 ### issue one

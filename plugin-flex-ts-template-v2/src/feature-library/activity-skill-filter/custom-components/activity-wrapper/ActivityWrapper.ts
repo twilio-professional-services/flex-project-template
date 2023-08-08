@@ -12,11 +12,13 @@ const buildActivityCss = (config: ActivityCssConfig) => {
   const { idx, display, order } = config;
   // NOTE: idx/order are 0-based, CSS order and nth-of-type are 1-based
   return `
-    & > div.Twilio-MainHeader > div.Twilio-MainHeader-end > div > div[data-test="activity-menu"] > button:nth-of-type(${
-      idx + 1
-    }) {
-      display: ${display};
-      order: ${order + 1};
+    & > div.Twilio-MainHeader > div.Twilio-MainHeader-end > div > div[data-test="activity-menu"] {
+      display: flex;
+      flex-direction: column;
+      > button:nth-of-type(${idx + 1}) {
+        display: ${display};
+        order: ${order + 1};
+      }
     }
   `;
 };
