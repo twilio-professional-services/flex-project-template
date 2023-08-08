@@ -1,6 +1,6 @@
 ---
 sidebar_label: Merge future updates
-sidebar_position: 5
+sidebar_position: 4
 title: Managing future updates from the template
 ---
 

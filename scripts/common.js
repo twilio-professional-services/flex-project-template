@@ -6,8 +6,9 @@ var { getPaths } = require("./select-plugin");
 const serverlessDir = 'serverless-functions';
 const scheduleManagerServerlessDir = 'serverless-schedule-manager';
 const flexConfigDir = 'flex-config';
+const videoAppDir = 'web-app-examples/video-app-quickstart';
+const gitHubWorkflowDir = '.github/workflows';
 const serverlessSrc = `${serverlessDir}/src`;
-const flexConfigTemplateDir = `${flexConfigDir}/template-files`
 
 // the following function will use twilio cli
 // to try to fetch the sids of template dependencies based on typical 
@@ -36,7 +37,7 @@ exports.getEnvironmentVariables = function getEnvironmentVariables() {
     const INTERNAL_CALL_WORKFLOW_NAME = "Internal Call";
 
 
-    console.log("Loading environment variables..");
+    console.log("Loading environment variables...");
 
     const workspace_raw = shell.exec("twilio api:taskrouter:v1:workspaces:list", {silent: true})
     if(workspace_raw.length > 0){
@@ -122,54 +123,51 @@ exports.getActiveTwilioProfile = async function getActiveTwilioProfile() {
 
 }
 
-exports.installNPMServerlessFunctions = function installNPMServerlessFunctions() {
-  console.log("Installing npm dependencies for serverless functions..");
-  shell.cd("./serverless-functions")
-  shell.exec("npm install", {silent:true});
-  shell.cd("..");
-}
-
-exports.installNPMServerlessSchmgrFunctions = function installNPMServerlessSchmgrFunctions() {
-  if (shell.test('-d', scheduleManagerServerlessDir)) {
-    console.log("Installing npm dependencies for serverless schedule manager..");
-    shell.cd(`./${scheduleManagerServerlessDir}`)
+exports.installNPMPackage = function installNPMPackage(packageDir) {
+  if (shell.test('-d', packageDir)) {
+    console.log(`Installing npm dependencies for ${packageDir}...`);
+    shell.cd(`./${packageDir}`)
     shell.exec("npm install", {silent:true});
-    shell.cd("..");
+    const dirDepth = packageDir.split("/").length;
+    for (let i = 0; i < dirDepth; i++) {
+      shell.cd("..");
+    }
   }
 }
 
+exports.installNPMServerlessFunctions = function installNPMServerlessFunctions() {
+  exports.installNPMPackage(serverlessDir);
+}
+
+exports.installNPMServerlessSchmgrFunctions = function installNPMServerlessSchmgrFunctions() {
+  exports.installNPMPackage(scheduleManagerServerlessDir);
+}
+
 exports.installNPMFlexConfig = function installNPMFlexConfig() {
-  console.log("Installing npm dependencies for flex-config...");
-  shell.cd("./flex-config");
-  shell.exec("npm install", {silent:true});
-  shell.cd("..");
+  exports.installNPMPackage(flexConfigDir);
 }
 
 exports.installNPMPlugin = function installNPMPlugin() {
   var { pluginDir } = getPaths();
   if ( pluginDir && pluginDir != "" ) {
-    console.log(`Installing npm dependencies for ${pluginDir}...`);
-    shell.cd(`./${pluginDir}`)
-    shell.exec(`npm install`, {silent:true});
-    shell.cd("..");
+    exports.installNPMPackage(pluginDir);
   }
 }
 
 exports.installNPMVideoAppQuickstart = function installNPMVideoAppQuickstart() {
-  console.log("Installing npm dependencies for web-app-examples/video-app-quickstart...");
-  shell.cd("./web-app-examples/video-app-quickstart");
-  shell.exec("npm install", {silent:true});
-  shell.cd("../..");
+  exports.installNPMPackage(videoAppDir);
 }
 
 exports.buildVideoAppQuickstart = function buildNPMVideoAppQuickstart() {
-  console.log("building assets for video app quickstart");
-  shell.cd("./web-app-examples/video-app-quickstart");
-  shell.exec("npm run build", {silent:true});
-  shell.cd("../..");
+  if (shell.test('-d', videoAppDir)) {
+    console.log("building assets for video app quickstart...");
+    shell.cd(`./${videoAppDir}`);
+    shell.exec("npm run build", {silent:true});
+    shell.cd("../..");
+  }
 }
 
-exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv(context, serverlessEnv, environmentName) {
+exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv(context, serverlessEnv) {
 
   try {
     const serverlessEnvExample = `./${serverlessDir}/.env.example`;
@@ -237,29 +235,35 @@ exports.generateServerlessFunctionsEnv = function generateServerlessFunctionsEnv
     console.error(error);
     console.log(`Error attempting to generate serverless environment file ${serverlessEnv}`);
   }
+}
 
+exports.generateScheduleManagerFunctionsEnv = function generateScheduleManagerFunctionsEnv(context, scheduleManagerEnv) {
   try {
+    if (!shell.test('-d', scheduleManagerServerlessDir)) { return };
+    var {
+      account_sid,
+      auth_token,
+    } = context;
+      
     const scheduleManagerEnvExample = `./${scheduleManagerServerlessDir}/.env.example`;
-
-    const scheduleManagerEnv = `./${scheduleManagerServerlessDir}/.env.${environmentName}`;
     
-
     if(!shell.test('-e', scheduleManagerEnv)){
       shell.cp(scheduleManagerEnvExample, scheduleManagerEnv);
     }
-
-    if(account_sid){
-      shell.sed('-i', /<YOUR_TWILIO_ACCOUNT_SID>/g, `${account_sid}`, scheduleManagerEnv);
+    if(shell.test('-e', scheduleManagerEnv)){
+      if(account_sid){
+        shell.sed('-i', /<YOUR_TWILIO_ACCOUNT_SID>/g, `${account_sid}`, scheduleManagerEnv);
+      }
+      if(auth_token){
+        shell.sed('-i', /<YOUR_TWILIO_AUTH_TOKEN>/g, `${auth_token}`, scheduleManagerEnv);
+      }
+      console.log(`Setting up environment ${serverlessEnv}: complete`);
+    } else {
+      console.warn("Unable to configure schedule manager environment file, it will need to be done manually");
     }
-    if(auth_token){
-      shell.sed('-i', /<YOUR_TWILIO_AUTH_TOKEN>/g, `${auth_token}`, scheduleManagerEnv);
-    }
-
-
-
   } catch (error) {
     console.error(error);
-    console.log(`Error attempting to generate schedule manager environment file ${serverlessEnv}`);
+    console.log(`Error attempting to generate schedule manager environment file ${scheduleManagerEnv}`);
   }
 }
 
@@ -303,9 +307,10 @@ exports.generateFlexConfigEnv = function generateFlexConfigEnv(context, flexConf
 }
 
 exports.generateVideoAppConfigEnv = function generateVideoAppConfigEnv(context, isLocal) {
-
-  const videoAppConfig = `./web-app-examples/video-app-quickstart/.env`;
-  const videoAppEnvExample = `./web-app-examples/video-app-quickstart/.env.example`;
+  if (!shell.test('-d', videoAppDir)) { return; }
+  
+  const videoAppConfig = `./${videoAppDir}/.env`;
+  const videoAppEnvExample = `./${videoAppDir}/.env.example`;
   const localEnvironment = 'http://localhost:3001'
 
   // create file from example if it does not exist  
@@ -421,9 +426,9 @@ exports.printEnvironmentSummary = function printEnvironmentSummary(context){
 exports.serverlessDir =  serverlessDir;
 exports.scheduleManagerServerlessDir = scheduleManagerServerlessDir;
 exports.flexConfigDir = flexConfigDir;
+exports.gitHubWorkflowDir = gitHubWorkflowDir;
 
 
 
 exports.serverlessSrc = serverlessSrc;
-exports.flexConfigTemplateDir = flexConfigTemplateDir;
 

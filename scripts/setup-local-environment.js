@@ -1,4 +1,4 @@
-const { flexConfigDir, serverlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, installNPMServerlessSchmgrFunctions, generateServerlessFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPlugins, installNPMVideoAppQuickstart, generateVideoAppConfigEnv, buildVideoAppQuickstart } = require ('./common');
+const { flexConfigDir, serverlessDir, scheduleManagerServerlessDir, getEnvironmentVariables, getActiveTwilioProfile, installNPMServerlessFunctions, installNPMServerlessSchmgrFunctions, generateServerlessFunctionsEnv, generateScheduleManagerFunctionsEnv, printEnvironmentSummary, installNPMFlexConfig, generateFlexConfigEnv, installNPMPlugin, generateAppConfigForPlugins, installNPMVideoAppQuickstart, generateVideoAppConfigEnv, buildVideoAppQuickstart } = require ('./common');
 const prompt = require('prompt');
 prompt.colors = false;
 
@@ -8,6 +8,7 @@ console.log(" ----- START OF POST INSTALL SCRIPT ----- ");
 console.log("");
 
 var serverlessEnv = `./${serverlessDir}/.env`;
+var scheduleManagerEnv = `./${scheduleManagerServerlessDir}/.env`;
 var flexConfigEnv = `./${flexConfigDir}/.env`;
 
 var context;
@@ -75,7 +76,8 @@ getActiveTwilioProfile().then((profile_result) => {
       }
 
       if(context.account_sid) {
-        generateServerlessFunctionsEnv(context, serverlessEnv, "local");
+        generateServerlessFunctionsEnv(context, serverlessEnv);
+        generateScheduleManagerFunctionsEnv(context, scheduleManagerEnv);
         generateFlexConfigEnv(context, flexConfigEnv);
         generateAppConfigForPlugins();
         generateVideoAppConfigEnv(context, true);

@@ -1,6 +1,6 @@
 ---
 sidebar_label: Deploy with GitHub Actions (Recommended)
-sidebar_position: 1
+sidebar_position: 0
 title: Deploy to hosted Flex - GitHub Actions (Recommended)
 ---
 

@@ -1,6 +1,6 @@
 ---
 sidebar_label: Deploy from the command line
-sidebar_position: 3
+sidebar_position: 2
 title: Deploy to hosted Flex from the command line (Not Recommended)
 ---
 
@@ -30,7 +30,7 @@ npm run deploy
 
 - Next, to deploy the schedule manager feature, deploy its serverless functions as well:
 
-make sure you are using the same twilio profile that matches your .env.local
+make sure you are using the same twilio profile that matches your .env
 
 :::caution CAUTION
 this is not the same command to check the account sids
@@ -38,12 +38,12 @@ this is not the same command to check the account sids
 
 ```bash
 cd ../serverless-schedule-manager
-export env=`cat .env.local | grep ACCOUNT_SID | cut -d '=' -f 2`; export profile=`twilio profiles:list | grep true | cut -d ' ' -f 5`; echo -e 'schedule-manager: \t' ${env}; echo -e 'profile: \t' ${profile}
+export env=`cat .env | grep ACCOUNT_SID | cut -d '=' -f 2`; export profile=`twilio profiles:list | grep true | cut -d ' ' -f 5`; echo -e 'schedule-manager: \t' ${env}; echo -e 'profile: \t' ${profile}
 ```
 
 after confirming they are the same
 ```bash
-export ENVIRONMENT=local; npm run deploy-env
+npm run deploy
 ```
 :::note heads up!
 you may see an error like, "Unable to read from flex-config, fetching domain via API... Error: ENOENT: no such file or directory, open '../flex-config/ui_attributes.local.json'"

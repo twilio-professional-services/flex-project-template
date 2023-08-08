@@ -1,6 +1,6 @@
 ---
 sidebar_label: Use Template As Delivery Platform
-sidebar_position: 4
+sidebar_position: 3
 title: Using template shell to deliver my own features
 ---
 
