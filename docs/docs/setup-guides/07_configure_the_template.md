@@ -1,11 +1,9 @@
 ---
-sidebar_label: Configure The Template
+sidebar_label: Configure the template
 sidebar_position: 7
-title: Configure The Template
+title: Flex Project Template Configuration
 ---
 import GithubOverrideConfig from '../../static/img/guides/github-override-config.png';
-
-# Flex Project Template Configuration
 
 ## The Flex-Config (Front End Configuration)
 
@@ -14,6 +12,10 @@ Generally speaking, when running the *flex-project-template* it loads configurat
 
 ### local configuration
 When running flex locally, the configuration from [hosted flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) is loaded but the configuration in `plugin-flex-ts-template-v2/public/appConfig.js` overrides anything in hosted configuration. Note the appConfig.js config is only used locally and has no bearing on a deploy or when on hosted flex.
+
+:::note Initial setup
+The `appConfig.js` file is created for you as part of the initial local environment setup script, which executes when running `npm install` in the root template directory. The file is automatically populated with the feature config from the `flex-config/ui_attributes.common.json` file at the time of creation, as long as the file does not already exist.
+:::
 
 ### config management
 
