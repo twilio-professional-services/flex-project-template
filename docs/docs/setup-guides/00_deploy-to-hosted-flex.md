@@ -90,7 +90,7 @@ Time to complete: _~8 minutes_
 
 :::info INFO
 
-these steps require a base Flex version of 2.x to be installed
+these steps require a base Flex version of 2.x to be configured on your flex account.
 
 :::
 
