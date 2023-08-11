@@ -19,6 +19,6 @@ if you are just getting started
 - and you can think of flex-hooks as where you declare how your components extend or get triggered by actions.
 - the template discovers any folder in the feature library and identifies the hooks in flex-hooks to add it in
 
-A simple example to get startd with is the [caller-id](feature-library/caller-id) feature that simply adds a component to the dialpad view for selecting your caller-id.  There is not a lot of code there so its easy to see whats going on.
+A simple example to get startd with is the [caller-id](/feature-library/caller-id) feature that simply adds a component to the dialpad view for selecting your caller-id.  There is not a lot of code there so its easy to see whats going on.
 
 For more details on any of these concepts see the information page over on the [plugin-flex-ts-template-v2](/how-it-works/plugin-flex-ts-template-v2)

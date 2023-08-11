@@ -88,7 +88,7 @@ To test this feature locally:
 
 1. Create an [API Key and Secret](https://support.twilio.com/hc/en-us/articles/9318455807771-API-Keys-and-How-to-Change-Them)
 
-2. Ensure the API key and secret are populated in the `.env` file within `../../../../serverless-functions` along with the other following variables
+2. Ensure the API key and secret are populated in the `.env` file within `<root-folder>/serverless-functions` along with the other following variables
 
    ```
    TWILIO_FLEX_SYNC_SID=ISxxxxxxxxxxxxxxxxxx

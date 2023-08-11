@@ -39,6 +39,19 @@ twilio profiles:list
 npm install
 ```
 5. follow the prompt and provide your auth token
+
+:::info developer note
+
+if you saw the following
+
+WARNING: YOUR_API_KEY not found, you may need to replace this in your serverless-functions/.env file manually to use chat-to-video feature.
+
+WARNING: YOUR_API_SECRET not found, you may need to replace this in your serverless-functions/.env file manually to use chat-to-video feature.
+
+and you wish to use the chat-to-video feature follow the steps [here](/feature-library/chat-to-video-escalation#local-development) to perform the additional setup
+
+:::
+
 6. Run the serverless functions and plugin together locally by running the following at the top level of the checkout
 
 ```bash
