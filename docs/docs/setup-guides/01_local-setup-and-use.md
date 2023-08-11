@@ -48,7 +48,7 @@ WARNING: YOUR_API_KEY not found, you may need to replace this in your serverless
 
 WARNING: YOUR_API_SECRET not found, you may need to replace this in your serverless-functions/.env file manually to use chat-to-video feature.
 
-and you wish to use the chat-to-video feature follow the steps [here](/feature-library/chat-to-video-escalation#local-development) to perform the additional setup
+and you wish to use the chat-to-video feature follow the steps [here](/feature-library/chat-to-video-escalation#local-development) to perform the additional setup otherwise you can ignore this and continue
 
 :::
 
