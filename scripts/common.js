@@ -257,7 +257,7 @@ exports.generateScheduleManagerFunctionsEnv = function generateScheduleManagerFu
       if(auth_token){
         shell.sed('-i', /<YOUR_TWILIO_AUTH_TOKEN>/g, `${auth_token}`, scheduleManagerEnv);
       }
-      console.log(`Setting up environment ${serverlessEnv}: complete`);
+      console.log(`Setting up environment ${scheduleManagerEnv}: complete`);
     } else {
       console.warn("Unable to configure schedule manager environment file, it will need to be done manually");
     }
