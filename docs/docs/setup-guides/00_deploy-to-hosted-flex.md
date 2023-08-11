@@ -3,7 +3,8 @@ sidebar_label: Deploy with GitHub Actions (Recommended)
 sidebar_position: 0
 title: Deploy to hosted Flex - GitHub Actions (Recommended)
 ---
-
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
 
 :::danger IMPORTANT UNDERSTANDING
 These deploy steps will setup taskrouter configuration possibly overwriting resources that may already be there. 
@@ -22,20 +23,76 @@ doing this however will mean some features will need manual setup, the steps of 
 
 ## TaskRouter
 
-| Workflows | Task Queues | Activities | Task Channels |
-------------|-------------|------------|---------------|
-| `Asssign To Anyone`, `Chat Transfer`, `Callback`, `Internal Call` | `Everyone`, `Template Example Sales`, `Template Example Support`, `Internal Calls` | `Offline`, `Available`, `Unavailable`, `Break` | `Voice`, `Chat`|
+<Tabs>
+
+<TabItem value="workflows" label="Workflows" default>
+
+| Name | Existing in vanilla Flex or New | Description |
+| -----| --------------------| ------------|
+| Assign To Anyone | Existing | Modified to support [Park Interaction](/feature-library/park-interaction) and Demonstrate filters for Sales and Support queues|
+| Chat Transfer | New | Workflow that supports the [Conversation Transfer](/feature-library/conversation-transfer) feature |
+| Callback | New | Workflow that supports the requeuing of callbacks and voicemails from the [callback and voicemails](/feature-library/callback-and-voicemail) feature |
+| Internal Call | New | Workflow that supports the  [Internal Call](/feature-library/internal-call) feature|
+
+</TabItem>
+
+<TabItem value="queues" label="Task Queues" >
+
+| Name | Existing Vanilla Flex or New  | Description |
+| -----| --------------------| ------------|
+| Everyone | Existing | No modifications from vanilla flex version  |
+| Template Example Sales| New | Sample queue for "Sales" calls |
+| Template Example Support | New | Sample queue for "Support" calls |
+| Internal Calls | New | Queue that supports the [Internal Call](/feature-library/internal-call) feature|
+
+</TabItem>
+
+<TabItem value="activities" label="Activities" >
+
+| Name | Existing Vanilla Flex or New  | Description |
+| -----| --------------------| ------------|
+| Offline | Existing | No modifications from vanilla flex version  |
+| Available | Existing | No modifications from vanilla flex version  |
+| Unavailable | Existing | No modifications from vanilla flex version  |
+| Break | Existing | No modifications from vanilla flex version  |
+| On A Task | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
+| On A Task, No ACD | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
+| Wrap Up | New | New to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
+| Wrap Up, No ACD | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
+
+</TabItem>
+
+<TabItem value="channels" label="Task Channels" >
+
+| Name | Existing Vanilla Flex or New  | Description |
+| -----| --------------------| ------------|
+| Voice | Existing | No modifications from vanilla flex version  |
+| Chat | Existing | No modifications from vanilla flex version  |
+
+</TabItem>
+
+</Tabs>
+
 
 ## Studio
 
-| Flows |
---------|
-| `Voice IVR`, `Messaging Flow`, `Chat Flow` |
+| Name | Existing Vanilla Flex or New  | Description |
+| -----| --------------------| ------------|
+| Voice IVR | Existing | Modified to include a schedule manager lookup and to add a callback or voicemail option while waiting in queue |
+| Messaging Flow | Existing | Modified to provide a sales or support routing option |
+| Chat Flow | Existing | No modifications from vanilla flex version |
+
 
 :::
 
 
 Time to complete: _~8 minutes_
+
+:::info INFO
+
+these steps require a base Flex version of 2.x to be configured on your flex account.
+
+:::
 
 1. Use the template to [create your own repository](https://github.com/twilio-professional-services/flex-project-template/generate) 
    - (Optional) after creating your repo you may also want to attach the history to your new repository for future updates - details [here](/setup-guides/managing-future-updates-from-the-template) - this can also be done later
