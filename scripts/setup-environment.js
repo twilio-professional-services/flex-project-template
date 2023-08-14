@@ -19,9 +19,32 @@ const execute = async () => {
   console.log(account);
   console.log(environment);
   
-  // TODO: Fetch and save env files
-  // do this for each package
-  const environmentData = await fetchEnvironment(constants.scheduleManagerServerlessDir, environment);
+  // Fetch and save env files for each package
+  const packages = [
+    constants.serverlessDir,
+    constants.scheduleManagerServerlessDir,
+    constants.flexConfigDir,
+    constants.videoAppDir,
+  ];
+  
+  for (const path of packages) {
+    let environmentData = await fetchEnvironment(path, environment);
+    
+    // Populate account information from profile if present
+    // TODO: Do this better
+    if (account.accountSid) {
+      environmentData.ACCOUNT_SID = account.accountSid;
+    }
+    if (account.authToken) {
+      environmentData.AUTH_TOKEN = account.authToken;
+    }
+    
+    console.log('environment data:', environmentData);
+    // TODO: Figure out handling of flex-config and video app envs
+    // TODO: Save
+  }
+  
+  // TODO: Do ui_attributes files
   
   // TODO: Generate appConfig.js if local
   

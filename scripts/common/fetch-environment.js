@@ -1,14 +1,11 @@
-import 'dotenv';
+import dotenv from 'dotenv';
 import { promises as fs } from 'fs';
 import shell from 'shelljs';
 
 import constants from "./constants.js";
 
-let serverlessDomains = null;
-let syncServices = null;
-let chatServices = null;
-let trWorkspaces = null;
-let trWorkflows = null;
+let fetchedTypes = [];
+let resultCache = {};
 
 // Initialize env file if necessary, then parse its contents
 const readEnv = async (envFile, exampleFile) => {
@@ -49,19 +46,20 @@ const fillKnownEnvVars = (envVars) => {
 
 // Reusable function for filtering the desired objects to fetch per type
 const filterWantedVars = (type) => {
-  let wanted = [];
+  let wanted = {};
   
-  for (const varName of constants.varNameMapping) {
+  for (const varName in constants.varNameMapping) {
     if (constants.varNameMapping[varName].type !== type) {
       continue;
     }
     
-    wanted.push(constants.varNameMapping[varName]);
+    wanted[varName] = constants.varNameMapping[varName];
   }
   
   return wanted;
 }
 
+// Reusable function for running and parsing Twilio CLI command output
 const execTwilioCli = (command) => {
   const outputRaw = shell.exec(command, {silent: true});
   
@@ -79,6 +77,7 @@ const execTwilioCli = (command) => {
   }
 }
 
+// Reusable function for string compare including regex
 const isMatch = (searchValue, valueToCheck, allowFuzz) => {
   if (searchValue instanceof RegExp) {
     return searchValue.test(valueToCheck);
@@ -94,197 +93,210 @@ const isMatch = (searchValue, valueToCheck, allowFuzz) => {
 }
 
 const fetchServerlessDomains = () => {
-  // If we already fetched these, return the result
-  if (serverlessDomains) {
-    return serverlessDomains;
+  const type = "serverless-domain";
+  // If we already fetched these, no need to do it again
+  if (fetchedTypes.includes(type)) {
+    return;
   }
   
-  // First, get the list of domains we need to fetch from the constant
-  let wantedDomains = filterWantedVars("serverless-domain");
+  console.log("Fetching serverless domains...");
   
-  // Then, fetch serverless services
+  let wantedDomains = filterWantedVars(type);
   const serverlessServices = execTwilioCli("twilio api:serverless:v1:services:list -o json");
   
-  if (!serverlessServices) {
-    return [];
+  if (!serverlessServices || serverlessServices.length < 1) {
+    return;
   }
   
-  // for each of the services we found, if it is one we are interested in, get its environments and add to the array
-  let serverlessDomainsFound = [];
-  
+  // for each of the services we found, if it is one we are interested in, get its environments and add to the cache
   for (const service of serverlessServices) {
-    let isWanted = false;
-    for (const wanted of wantedDomains) {
-      if (isMatch(wanted.name, service.uniqueName, false)) {
-        isWanted = true;
+    for (const wanted in wantedDomains) {
+      if (isMatch(wantedDomains[wanted].name, service.uniqueName, false)) {
+        const serviceEnvironments = execTwilioCli(`twilio api:serverless:v1:services:environments:list --service-sid=${service.sid} -o json`);
+        
+        if (!serviceEnvironments || serviceEnvironments.length < 1) {
+          continue;
+        }
+        
+        resultCache[wanted] = serviceEnvironments[0].domainName;
+        
         break;
       }
     }
-    if (!isWanted) {
-      continue;
-    }
-    
-    const serviceEnvironments = execTwilioCli(`twilio api:serverless:v1:services:environments:list --service-sid=${service.sid} -o json`);
-    
-    if (!serviceEnvironments || serviceEnvironments.length < 1) {
-      continue;
-    }
-    
-    serverlessDomainsFound.push({
-      serviceName: service.uniqueName,
-      serviceSid: serviceEnvironments[0].serviceSid,
-      domainName: serviceEnvironments[0].domainName,
-    });
   }
   
-  // save in a global var so that we don't need to re-fetch later
-  serverlessDomains = serverlessDomainsFound;
-  return serverlessDomains;
+  fetchedTypes.push(type);
 }
 
 const fetchTrWorkflows = (workspaceSid) => {
-  // If we already fetched these, return the result
-  if (trWorkflows) {
-    return trWorkflows;
+  const type = "tr-workflow";
+  // If we already fetched these, no need to do it again
+  if (fetchedTypes.includes(type)) {
+    return;
   }
   
-  const wantedWorkflows = filterWantedVars("tr-workflow");
+  if (!workspaceSid) {
+    console.warn("TaskRouter workspace SID missing; unable to fetch workflows");
+    return;
+  }
+  
+  console.log("Fetching TaskRouter workflows...");
+  
+  const wantedWorkflows = filterWantedVars(type);
   const workflows = execTwilioCli(`twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid=${workspaceSid} -o json`);
   
   if (!workflows || workflows.length < 1) {
-    return [];
+    return;
   }
   
-  let workflowsFound = [];
-  
+  // if the workflow was requested, save it in the cache
   for (const workflow of workflows) {
-    let isWanted = false;
-    for (const wanted of wantedWorkflows) {
-      if (isMatch(wanted.name, workflow.friendlyName, true) || isMatch(wanted.fallback, workflow.friendlyName, true)) {
-        isWanted = true;
+    for (const wanted in wantedWorkflows) {
+      if (isMatch(wantedWorkflows[wanted].name, workflow.friendlyName, true) || isMatch(wantedWorkflows[wanted].fallback, workflow.friendlyName, true)) {
+        resultCache[wanted] = workflow.sid;
         break;
       }
     }
-    
-    if (isWanted) {
-      workflowsFound.push(workflow);
-    }
   }
   
-  trWorkflows = workflowsFound;
-  return trWorkflows;
+  fetchedTypes.push(type);
 }
 
 const fetchTrWorkspaces = () => {
-  // If we already fetched these, return the result
-  if (trWorkspaces) {
-    return trWorkspaces;
+  const type = "tr-workspace";
+  // If we already fetched these, no need to do it again
+  if (fetchedTypes.includes(type)) {
+    return;
   }
   
-  const wantedWorkspaces = filterWantedVars("tr-workspace");
+  console.log("Fetching TaskRouter workspaces...");
+  
+  const wantedWorkspaces = filterWantedVars(type);
   const workspaces = execTwilioCli("twilio api:taskrouter:v1:workspaces:list -o json");
   
   if (!workspaces || workspaces.length < 1) {
     console.error("No TaskRouter workspaces found! Is this a Flex account?");
-    return [];
+    return;
   }
   
-  let workspacesFound = [];
-  
   for (const workspace of workspaces) {
-    let isWanted = false;
-    for (const wanted of wantedWorkspaces) {
-      if (isMatch(wanted.name, workspace.friendlyName, false)) {
-        isWanted = true;
+    for (const wanted in wantedWorkspaces) {
+      if (isMatch(wantedWorkspaces[wanted].name, workspace.friendlyName, false)) {
+        resultCache[wanted] = workspace.sid;
         break;
       }
     }
-    if (!isWanted) {
-      continue;
-    }
-    
-    workspacesFound.push(workspace);
   }
   
-  trWorkspaces = workspacesFound;
-  return trWorkspaces;
+  fetchedTypes.push(type);
 }
 
 const fetchSyncServices = () => {
-  // If we already fetched these, return the result
-  if (syncServices) {
-    return syncServices;
+  const type = "sync-service";
+  // If we already fetched these, no need to do it again
+  if (fetchedTypes.includes(type)) {
+    return;
   }
   
-  const wantedServices = filterWantedVars("sync-service");
+  console.log("Fetching Sync services...");
+  
+  const wantedServices = filterWantedVars(type);
   const services = execTwilioCli("twilio api:sync:v1:services:list -o json");
   
   if (!services || services.length < 1) {
     console.error("No Sync services found! Is this a Flex account?");
-    return [];
+    return;
   }
   
-  let servicesFound = [];
-  
   for (const service of services) {
-    let isWanted = false;
-    for (const wanted of wantedServices) {
-      if (isMatch(wanted.name, service.friendlyName, false)) {
-        isWanted = true;
+    for (const wanted in wantedServices) {
+      if (isMatch(wantedServices[wanted].name, service.friendlyName, false)) {
+        resultCache[wanted] = service.sid;
         break;
       }
     }
-    if (!isWanted) {
-      continue;
-    }
-    
-    servicesFound.push(service);
   }
   
-  syncServices = servicesFound;
-  return syncServices;
+  fetchedTypes.push(type);
 }
 
 const fetchChatServices = () => {
-  // If we already fetched these, return the result
-  if (chatServices) {
-    return chatServices;
+  const type = "chat-service";
+  // If we already fetched these, no need to do it again
+  if (fetchedTypes.includes(type)) {
+    return;
   }
   
-  const wantedServices = filterWantedVars("chat-service").map(wanted => wanted.name);
+  console.log("Fetching chat services...");
+  
+  const wantedServices = filterWantedVars(type);
   const services = execTwilioCli("twilio api:chat:v2:services:list -o json");
   
   if (!services || services.length < 1) {
     console.error("No chat services found! Is this a Flex account?");
-    return [];
+    return;
   }
   
-  let servicesFound = [];
-  
   for (const service of services) {
-    let isWanted = false;
-    for (const wanted of wantedServices) {
-      if (isMatch(wanted.name, service.friendlyName, false)) {
-        isWanted = true;
+    for (const wanted in wantedServices) {
+      if (isMatch(wantedServices[wanted].name, service.friendlyName, false)) {
+        resultCache[wanted] = service.sid;
         break;
       }
     }
-    if (!isWanted) {
+  }
+  
+  fetchedTypes.push(type);
+}
+
+// For vars still unknown, fetches needed vars from the API and fills in as appropriate
+const fillUnknownEnvVars = (envVars) => {
+  for (const key in envVars) {
+    if (envVars[key] !== `<YOUR_${key}>` || !constants.varNameMapping[key]) {
+      // If this isn't a placeholder value, ignore it.
+      // This variable isn't in the constant, so we can't do anything else with it.
       continue;
     }
     
-    servicesFound.push(service);
+    if (resultCache[key]) {
+      // This value was cached previously
+      envVars[key] = resultCache[key];
+      continue;
+    }
+    
+    // we haven't yet fetched the value; do that based on type
+    switch (constants.varNameMapping[key].type) {
+      case "serverless-domain":
+      fetchServerlessDomains();
+      break;
+      case "tr-workspace":
+      fetchTrWorkspaces();
+      break;
+      case "tr-workflow":
+      // Workflows require the TR workspace SID; fetch them if that has not yet happened
+      if (!resultCache.TWILIO_FLEX_WORKSPACE_SID) {
+        fetchTrWorkspaces();
+      }
+      let workspaceSid = resultCache.TWILIO_FLEX_WORKSPACE_SID;
+      fetchTrWorkflows(workspaceSid);
+      break;
+      case "sync-service":
+      fetchSyncServices();
+      break;
+      case "chat-service":
+      fetchChatServices();
+      break;
+      default:
+      console.warn(`Unknown placeholder variable type: ${constants.varNameMapping[key].type}`);
+      break;
+    }
+    
+    // Get the newly fetched value from cache
+    if (resultCache[key]) {
+      envVars[key] = resultCache[key];
+    }
   }
   
-  chatServices = servicesFound;
-  return chatServices;
-}
-
-const fillUnknownEnvVars = (envVars) => {
-  // TODO
-  // 1. for each placeholder var
-  // 2. check the map for a definition
-  // 3. check the fetched data for a value
   return envVars;
 }
 
