@@ -14,6 +14,11 @@ const varNameMapping = {
     type: "serverless-domain",
     name: "schedule-manager",
   },
+  "NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN": {
+    type: "serverless-domain",
+    name: "custom-flex-extensions-serverless",
+    localValue: "localhost:3001",
+  },
   "TWILIO_FLEX_WORKSPACE_SID": {
     type: "tr-workspace",
     name: "Flex Task Assignment",

@@ -1,6 +1,9 @@
 import getTwilioAccount from "./common/get-account.js";
 import { installAllPackages, buildVideoApp } from "./common/install-packages.js";
-import fetchEnvironment from "./common/fetch-environment.js";
+import * as fetchEnvironment from "./common/fetch-environment.js";
+import fillEnvironment from "./common/fill-environment.js";
+import saveAppConfig from "./common/save-appconfig.js";
+import saveReplacements from "./common/save-replacements.js";
 import constants from "./common/constants.js";
 
 // valid usage:
@@ -16,8 +19,8 @@ const execute = async () => {
   console.log("");
   
   const account = await getTwilioAccount();
-  console.log(account);
-  console.log(environment);
+  // console.log(account);
+  // console.log(environment);
   
   // Fetch and save env files for each package
   const packages = [
@@ -28,30 +31,26 @@ const execute = async () => {
   ];
   
   for (const path of packages) {
-    let environmentData = await fetchEnvironment(path, environment);
-    
-    // Populate account information from profile if present
-    // TODO: Do this better
-    if (account.accountSid) {
-      environmentData.ACCOUNT_SID = account.accountSid;
-    }
-    if (account.authToken) {
-      environmentData.AUTH_TOKEN = account.authToken;
-    }
-    
-    console.log('environment data:', environmentData);
-    // TODO: Figure out handling of flex-config and video app envs
-    // TODO: Save
+    let environmentData = await fillEnvironment(path, account, environment);
+    // console.log('environment data for ' + path, environmentData);
+    await saveReplacements(environmentData, `./${path}/.env${environment ? `.${environment}` : ''}`);
   }
   
-  // TODO: Do ui_attributes files
-  
-  // TODO: Generate appConfig.js if local
+  if (environment) {
+    // TODO When running for a specific environment, we need to populate flex-config
+    // Create a fill-attributes module for this?
+    // await saveReplacements({}, `./${constants.flexConfigDir}/ui_attributes.${environment}.json`);
+  } else {
+    // When running locally, we need to generate appConfig.js
+    saveAppConfig();
+  }
   
   if (!skipInstallStep) {
     installAllPackages();
     buildVideoApp();
   }
+  
+  // TODO: Display summary -- what to show?
   
   console.log("");
   console.log(" ----- END OF POST INSTALL SCRIPT ----- ");

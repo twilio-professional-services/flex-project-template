@@ -59,9 +59,9 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
 
     defaultEnvFileName = './ui_attributes.example.json';
     envFileName = `./ui_attributes.${environment}.json`;
-    envExists = await exists(envFileName);
+    const envExists = await exists(envFileName);
 
-    // first ensure envirnment specific file exists
+    // first ensure environment specific file exists
     if(!envExists){
       try {
         await fs.copyFile(defaultEnvFileName, envFileName)
