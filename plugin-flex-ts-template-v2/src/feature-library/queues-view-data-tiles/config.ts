@@ -6,7 +6,7 @@ const {
   activeTasksDataTile = false,
   waitingTasksDataTile = false,
   longestWaitTimeDataTile = false,
-  agentsByActivityBarChart = false,
+  agentsByActivityBarChart = true,
   channels = {
     voice: {
       color: '#ADD8E6',
@@ -25,7 +25,7 @@ const {
     },
   },
   allChannelsDataTile = true,
-  enhancedAgentByActivityPieChart = true,
+  enhancedAgentByActivityPieChart = false,
   agentActivityConfiguration = {
     Available: { color: 'green', icon: 'Accept' },
     Outbound: { color: 'greenyellow', icon: 'Call' },

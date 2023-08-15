@@ -74,12 +74,27 @@ export const ChannelIcon = styled('div')`
   margin-bottom: 0px;
   height: 24px;
 `;
+export const Handled = styled('div')`
+  display: flex;
+  flex-direction: row;
+  height: 25px;
+`;
 
 export const Label = styled('div')`
   color: #121c2d;
   font-size: 12px;
   font-weight: bold;
+  width: 100px;
   padding: 2px;
+`;
+
+export const Metric = styled('div')`
+  color: #121c2d;
+  font-size: 12px;
+  font-weight: bold;
+  width: 50px;
+  padding: 2px;
+  text-align: right;
 `;
 
 function getColor(props: OwnProps) {

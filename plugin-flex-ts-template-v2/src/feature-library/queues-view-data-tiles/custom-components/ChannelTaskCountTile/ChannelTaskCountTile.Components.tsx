@@ -47,9 +47,25 @@ export const Description = styled('div')<ThemeOnlyProps>`
   line-height: ${({ theme }) => theme.tokens.lineHeights.lineHeight10};
 `;
 
+export const TaskCount = styled('div')`
+  display: flex;
+  flex-direction: row;
+  height: 25px;
+`;
+
 export const Label = styled('div')`
   color: #121c2d;
   font-size: 12px;
   font-weight: bold;
+  width: 100px;
   padding: 2px;
+`;
+
+export const Metric = styled('div')`
+  color: #121c2d;
+  font-size: 12px;
+  font-weight: bold;
+  width: 50px;
+  padding: 2px;
+  text-align: right;
 `;

@@ -1,11 +1,10 @@
 import React from 'react';
 import { Icon, useFlexSelector } from '@twilio/flex-ui';
 import { WorkerQueue } from '@twilio/flex-ui/src/state/QueuesState';
-import { Table, TBody, Tr, Td } from '@twilio-paste/core';
 import AppState from 'types/manager/AppState';
 
 import QueueDataUtil from '../../utils/QueueDataUtil';
-import { TileWrapper, Title, Channel, ChannelIcon, Content, Label } from './ChannelSLATile.Components';
+import { TileWrapper, Title, Channel, ChannelIcon, Content, Label, Metric, Handled } from './ChannelSLATile.Components';
 import { ChannelSLMetrics, SLMetrics } from '../../types';
 
 interface ComponentProps {
@@ -36,31 +35,14 @@ const ChannelSLATileV2 = (props: ComponentProps) => {
         <Title className="Twilio-AggregatedDataTile-Title">{`${channelName} SLA`}</Title>
       </Channel>
       <Content className="Twilio-AggregatedDataTile-Content">{content}</Content>
-      <Table variant="borderless">
-        <TBody>
-          <Tr>
-            <Td colSpan={2}>
-              <hr />
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>
-              <Label>Handled Today:</Label>{' '}
-            </Td>
-            <Td textAlign="center">
-              <Label> {sla.handledTasks} </Label>
-            </Td>
-          </Tr>
-          <Tr>
-            <Td>
-              <Label>Within SL:</Label>{' '}
-            </Td>
-            <Td textAlign="center">
-              <Label> {sla.handledTasksWithinSL} </Label>
-            </Td>
-          </Tr>
-        </TBody>
-      </Table>
+      <Handled>
+        <Label>Handled Today: </Label>
+        <Metric>{sla.handledTasks}</Metric>
+      </Handled>
+      <Handled>
+        <Label>Within SL: </Label>
+        <Metric>{sla.handledTasksWithinSL}</Metric>
+      </Handled>
     </TileWrapper>
   );
 };
