@@ -1,6 +1,7 @@
 import getTwilioAccount from "./common/get-account.js";
 import { installAllPackages, buildVideoApp } from "./common/install-packages.js";
 import fillReplacements from "./common/fill-replacements.js";
+import printReplacements from "./common/print-replacements.js";
 import saveAppConfig from "./common/save-appconfig.js";
 import constants from "./common/constants.js";
 
@@ -63,11 +64,7 @@ const execute = async () => {
     buildVideoApp();
   }
   
-  // TODO: Display summary -- what to show?
-  // Match to the constants map to get a grouping.
-  // Manually pick out the auth stuff.
-  // Show "the rest" as custom section (from env etc)
-  console.log(allReplacements);
+  printReplacements(allReplacements);
   
   outputEnd();
 }
