@@ -9,23 +9,23 @@
       "activity_skill_filter": {
         "enabled": true,
         "rules": {
-          "On a Task" : {
+          "On a Task": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "On a Task, No ACD" : {
+          "On a Task, No ACD": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "Wrap Up" : {
+          "Wrap Up": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "Wrap Up, No ACD" : {
+          "Wrap Up, No ACD": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "Offline" : {
+          "Offline": {
             "required_skill": null,
             "sort_order": 100
           }
@@ -261,6 +261,66 @@
           "department": false,
           "location": false,
           "agent_skills": true
+        }
+      },
+      "queues_view_data_tiles": {
+        "enabled": true,
+        "activeTasksDataTile": false,
+        "waitingTasksDataTile": false,
+        "longestWaitTimeDataTile": false,
+        "agentsByActivityBarChart": false,
+        "channels": {
+          "voice": {
+            "color": "#ADD8E6",
+            "SLADataTile": true,
+            "taskCountsDataTile": true
+          },
+          "chat": {
+            "color": "#87CEFA",
+            "SLADataTile": false,
+            "taskCountsDataTile": false
+          },
+          "sms": {
+            "color": "#4682B4",
+            "SLADataTile": true,
+            "taskCountsDataTile": true
+          }
+        },
+        "allChannelsDataTile": true,
+        "enhancedAgentByActivityPieChart": true,
+        "agentActivityConfiguration": {
+          "Available": {
+            "color": "green",
+            "icon": "Accept"
+          },
+          "Outbound": {
+            "color": "greenyellow",
+            "icon": "Call"
+          },
+          "Break": {
+            "color": "goldenrod",
+            "icon": "Hold"
+          },
+          "Lunch": {
+            "color": "darkorange",
+            "icon": "Hamburger"
+          },
+          "Training": {
+            "color": "red",
+            "icon": "Bulb"
+          },
+          "Unavailable": {
+            "color": "darkred",
+            "icon": "Close"
+          },
+          "Offline": {
+            "color": "grey",
+            "icon": "Minus"
+          }
+        },
+        "queuesStatsColumns": {
+          "assignedTasksColumn": true,
+          "wrappingTasksColumn": true
         }
       }
     }
