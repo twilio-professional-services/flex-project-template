@@ -5,6 +5,7 @@ const videoAppDir = 'web-app-examples/video-app-quickstart';
 const gitHubWorkflowDir = '.github/workflows';
 const defaultPluginDir = 'plugin-flex-ts-template-v2';
 
+// Definitions for fetching values from API
 const varNameMapping = {
   "SERVERLESS_DOMAIN": {
     type: "serverless-domain",

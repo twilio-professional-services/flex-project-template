@@ -25,8 +25,13 @@ const execTwilioCli = (command) => {
   const outputRaw = shell.exec(command, {silent: true});
   
   if (outputRaw.code !== 0) {
-    console.error("Failed to execute Twilio CLI command", outputRaw.stderr);
-    return null;
+    // TODO: Is it possible to identify retry-able error codes?
+    throw new Error(`Failed to execute Twilio CLI command. Did you provide valid credentials? Error: ${outputRaw.stderr}`);
+  }
+  
+  if (!outputRaw.stdout) {
+    // No results
+    return [];
   }
   
   try {
@@ -59,6 +64,7 @@ export const fetchServerlessDomains = () => {
   if (fetchedTypes.includes(type)) {
     return;
   }
+  fetchedTypes.push(type);
   
   console.log("Fetching serverless domains...");
   
@@ -83,8 +89,6 @@ export const fetchServerlessDomains = () => {
       }
     }
   }
-  
-  fetchedTypes.push(type);
 }
 
 export const fetchTrWorkflows = (workspaceSid) => {
@@ -93,6 +97,7 @@ export const fetchTrWorkflows = (workspaceSid) => {
   if (fetchedTypes.includes(type)) {
     return;
   }
+  fetchedTypes.push(type);
   
   if (!workspaceSid) {
     console.warn("TaskRouter workspace SID missing; unable to fetch workflows");
@@ -116,8 +121,6 @@ export const fetchTrWorkflows = (workspaceSid) => {
       }
     }
   }
-  
-  fetchedTypes.push(type);
 }
 
 export const fetchTrWorkspaces = () => {
@@ -126,6 +129,7 @@ export const fetchTrWorkspaces = () => {
   if (fetchedTypes.includes(type)) {
     return;
   }
+  fetchedTypes.push(type);
   
   console.log("Fetching TaskRouter workspaces...");
   
@@ -144,8 +148,6 @@ export const fetchTrWorkspaces = () => {
       }
     }
   }
-  
-  fetchedTypes.push(type);
 }
 
 export const fetchSyncServices = () => {
@@ -154,6 +156,7 @@ export const fetchSyncServices = () => {
   if (fetchedTypes.includes(type)) {
     return;
   }
+  fetchedTypes.push(type);
   
   console.log("Fetching Sync services...");
   
@@ -172,8 +175,6 @@ export const fetchSyncServices = () => {
       }
     }
   }
-  
-  fetchedTypes.push(type);
 }
 
 export const fetchChatServices = () => {
@@ -182,6 +183,7 @@ export const fetchChatServices = () => {
   if (fetchedTypes.includes(type)) {
     return;
   }
+  fetchedTypes.push(type);
   
   console.log("Fetching chat services...");
   
@@ -200,8 +202,6 @@ export const fetchChatServices = () => {
       }
     }
   }
-  
-  fetchedTypes.push(type);
 }
 
 export const getFetchedVars = () => resultCache;

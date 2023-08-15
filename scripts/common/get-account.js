@@ -1,6 +1,12 @@
 import prompt from "prompt";
 import shell from "shelljs";
 
+const printProfileWarning = () => {
+  console.log("*****     WARNING       *****");
+  console.log(`Twilio CLI profile not detected. Please set an active profile with`);
+  console.log(`twilio profiles:use <profile-name>`);
+}
+
 // Gets and returns the account SID of the active Twilio CLI profile if present
 const getActiveCliProfile = () => {
   try {
@@ -8,6 +14,7 @@ const getActiveCliProfile = () => {
     
     if (!profiles) {
       console.warn("Unable to list profiles from the Twilio CLI.");
+      printProfileWarning();
       return;
     }
     
@@ -16,12 +23,14 @@ const getActiveCliProfile = () => {
     
     if (activeProfiles.length < 1) {
       console.warn("No active Twilio CLI profiles found.");
+      printProfileWarning();
       return;
     }
 
     return activeProfiles[0];
   } catch (error) {
     console.warn("Unable to detect the active Twilio CLI profile.", error);
+    printProfileWarning();
     return;
   }
 }

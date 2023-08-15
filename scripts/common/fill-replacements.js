@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import shell from 'shelljs';
 
 import constants from "./constants.js";
-import * as fetchEnvironment from "./fetch-environment.js";
+import * as fetchCli from "./fetch-cli.js";
 
 // Initialize env file if necessary, then parse its contents
 const readEnv = async (envFile, exampleFile) => {
@@ -54,9 +54,9 @@ const fillUnknownEnvVars = (envVars, environment) => {
       continue;
     }
     
-    if (fetchEnvironment.getFetchedVars()[key]) {
+    if (fetchCli.getFetchedVars()[key]) {
       // This value was cached previously
-      envVars[key] = fetchEnvironment.getFetchedVars()[key];
+      envVars[key] = fetchCli.getFetchedVars()[key];
       continue;
     }
     
@@ -69,24 +69,24 @@ const fillUnknownEnvVars = (envVars, environment) => {
     // we haven't yet fetched the value; do that based on type
     switch (constants.varNameMapping[key].type) {
       case "serverless-domain":
-      fetchEnvironment.fetchServerlessDomains();
+      fetchCli.fetchServerlessDomains();
       break;
       case "tr-workspace":
-      fetchEnvironment.fetchTrWorkspaces();
+      fetchCli.fetchTrWorkspaces();
       break;
       case "tr-workflow":
       // Workflows require the TR workspace SID; fetch them if that has not yet happened
-      if (!fetchEnvironment.getFetchedVars().TWILIO_FLEX_WORKSPACE_SID) {
-        fetchEnvironment.fetchTrWorkspaces();
+      if (!fetchCli.getFetchedVars().TWILIO_FLEX_WORKSPACE_SID) {
+        fetchCli.fetchTrWorkspaces();
       }
-      let workspaceSid = fetchEnvironment.getFetchedVars().TWILIO_FLEX_WORKSPACE_SID;
-      fetchEnvironment.fetchTrWorkflows(workspaceSid);
+      let workspaceSid = fetchCli.getFetchedVars().TWILIO_FLEX_WORKSPACE_SID;
+      fetchCli.fetchTrWorkflows(workspaceSid);
       break;
       case "sync-service":
-      fetchEnvironment.fetchSyncServices();
+      fetchCli.fetchSyncServices();
       break;
       case "chat-service":
-      fetchEnvironment.fetchChatServices();
+      fetchCli.fetchChatServices();
       break;
       default:
       console.warn(`Unknown placeholder variable type: ${constants.varNameMapping[key].type}`);
@@ -94,8 +94,8 @@ const fillUnknownEnvVars = (envVars, environment) => {
     }
     
     // Get the newly fetched value from cache
-    if (fetchEnvironment.getFetchedVars()[key]) {
-      envVars[key] = fetchEnvironment.getFetchedVars()[key];
+    if (fetchCli.getFetchedVars()[key]) {
+      envVars[key] = fetchCli.getFetchedVars()[key];
     }
   }
   
@@ -119,28 +119,43 @@ const fillAccountVars = (envVars, account) => {
   return envVars;
 }
 
-export default async (path, examplePath, account, environment) => {
+const saveReplacements = async (data, path) => {
   try {
-    // Initialize the env vars
-    let envVars = await readEnv(path, examplePath);
-    
-    if (!envVars) {
-      console.error(`Unable to create the environment file ${path}.`);
-      return null;
+    for (const key in data) {
+      shell.sed('-i', new RegExp(`<YOUR_${key}>`, 'g'), data[key], path);
     }
-    
+  } catch (error) {
+    console.error(`Error saving file ${path}`, error);
+  }
+}
+
+export default async (path, examplePath, account, environment) => {
+  console.log(`Setting up ${path}...`);
+  
+  // Initialize the env vars
+  let envVars = await readEnv(path, examplePath);
+  
+  if (!envVars) {
+    console.error(`Unable to create the file ${path}.`);
+    return null;
+  }
+  
+  try {
     // Fill known env vars from process.env
     envVars = fillKnownEnvVars(envVars);
     
     // Fill known account vars
     envVars = fillAccountVars(envVars, account);
-    
-    // Fetch unknown env vars from the API
-    envVars = fillUnknownEnvVars(envVars, environment);
-    
-    return envVars;
   } catch (error) {
-    console.error('Error fetching environment variables', error);
+    console.error('Error fetching variables', error);
     return null;
   }
+  
+  // Fetch unknown env vars from the API
+  envVars = fillUnknownEnvVars(envVars, environment);
+  
+  // Save!
+  await saveReplacements(envVars, path);
+  
+  return envVars;
 }
