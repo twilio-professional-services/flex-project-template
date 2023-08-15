@@ -1,4 +1,3 @@
-import dotenv from 'dotenv';
 import { promises as fs } from 'fs';
 import shell from 'shelljs';
 
@@ -22,7 +21,11 @@ const readEnv = async (envFile, exampleFile) => {
   
   // read and parse the env file
   const initialEnv = await fs.readFile(envFile, "utf8");
-  return dotenv.parse(initialEnv);
+  let result = {};
+  for (const match of initialEnv.matchAll(/<YOUR_(.*)>/g)) {
+    result[match[1]] = match[0];
+  }
+  return result;
 }
 
 // Fills placeholder variables from process.env if present
@@ -106,7 +109,7 @@ const fillAccountVars = (envVars, account) => {
       continue;
     }
     
-    if ((key == 'ACCOUNT_SID' || key == 'TWILIO_ACCOUNT_SID') && account.accountSid) {
+    if ((key == 'ACCOUNT_SID') && account.accountSid) {
       envVars[key] = account.accountSid;
     } else if (key == 'AUTH_TOKEN' && account.authToken) {
       envVars[key] = account.authToken;
@@ -116,17 +119,13 @@ const fillAccountVars = (envVars, account) => {
   return envVars;
 }
 
-export default async (packageDir, account, environment) => {
+export default async (path, examplePath, account, environment) => {
   try {
-    // Generate filenames
-    const envFile = `./${packageDir}/.env${environment ? `.${environment}` : ''}`;
-    const exampleFile = `./${packageDir}/.env.example`;
-    
     // Initialize the env vars
-    let envVars = await readEnv(envFile, exampleFile);
+    let envVars = await readEnv(path, examplePath);
     
     if (!envVars) {
-      console.error(`Unable to create the environment file ${envFile}.`);
+      console.error(`Unable to create the environment file ${path}.`);
       return null;
     }
     

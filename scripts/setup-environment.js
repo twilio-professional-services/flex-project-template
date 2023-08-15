@@ -21,6 +21,7 @@ const execute = async () => {
   const account = await getTwilioAccount();
   // console.log(account);
   // console.log(environment);
+  let replacements = {};
   
   // Fetch and save env files for each package
   const packages = [
@@ -31,15 +32,20 @@ const execute = async () => {
   ];
   
   for (const path of packages) {
-    let environmentData = await fillEnvironment(path, account, environment);
-    // console.log('environment data for ' + path, environmentData);
-    await saveReplacements(environmentData, `./${path}/.env${environment ? `.${environment}` : ''}`);
+    const envFile = `./${path}/.env${environment ? `.${environment}` : ''}`;
+    const exampleFile = `./${path}/.env.example`;
+    let environmentData = await fillEnvironment(envFile, exampleFile, account, environment);
+    replacements = { ...replacements, ...environmentData };
+    await saveReplacements(environmentData, envFile);
   }
   
   if (environment) {
-    // TODO When running for a specific environment, we need to populate flex-config
-    // Create a fill-attributes module for this?
-    // await saveReplacements({}, `./${constants.flexConfigDir}/ui_attributes.${environment}.json`);
+    // When running for a specific environment, we need to populate flex-config
+    const configFile = `./${constants.flexConfigDir}/ui_attributes.${environment}.json`;
+    const exampleFile = `./${constants.flexConfigDir}/ui_attributes.example.json`;
+    let configData = await fillEnvironment(configFile, exampleFile, account, environment);
+    replacements = { ...replacements, ...configData };
+    await saveReplacements(configData, configFile);
   } else {
     // When running locally, we need to generate appConfig.js
     saveAppConfig();
@@ -51,6 +57,7 @@ const execute = async () => {
   }
   
   // TODO: Display summary -- what to show?
+  console.log(replacements);
   
   console.log("");
   console.log(" ----- END OF POST INSTALL SCRIPT ----- ");
