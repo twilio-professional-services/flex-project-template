@@ -1,7 +1,7 @@
 var shell = require("shelljs");
 var fs = require("fs").promises;
 
-var { getPaths } = require("./select-plugin");
+var getPaths = require("./common/get-plugin");
 const { templateDirectory, featureDirectory, pluginSrc, pluginDir } = getPaths();
 
 var featureName;

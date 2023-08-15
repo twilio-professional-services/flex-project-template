@@ -2,10 +2,10 @@ var shell = require("shelljs");
 // https://github.com/shelljs/shelljs#shellstringstr
 var fs = require("fs").promises;
 
-const { serverlessSrc, flexConfigDir, gitHubWorkflowDir, scheduleManagerServerlessDir } = require ('./common');
+const { serverlessSrc, flexConfigDir, gitHubWorkflowDir, scheduleManagerServerlessDir } = require ('./common/constants');
 
-var { getPaths } = require("./select-plugin");
-const { featureDirectory} = getPaths();
+var getPaths = require("./common/get-plugin");
+const { featureDirectory } = getPaths();
 
 const gitHubWorkflowRemovals = [
   {

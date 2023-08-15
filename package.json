@@ -3,10 +3,8 @@
   "version": "1.1.0",
   "description": "This repository provides development teams with a starting point for flex projects or developing flex features.",
   "scripts": {
-    "postinstall": "node scripts/setup-local-environment.js",
-    "generate-env": "node scripts/setup-local-environment.js false",
-    "populate-missing-placeholders": "node scripts/populate-missing-placeholders.js",
-    "show-env": "node scripts/show-env-vars.js",
+    "postinstall": "node scripts/setup-environment.js",
+    "generate-env": "node scripts/setup-environment.js --skip-install",
     "add-feature": "node scripts/add-feature.js",
     "remove-features": "node scripts/remove-features.js",
     "rename-template": "node scripts/rename-template.js",
