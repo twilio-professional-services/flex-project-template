@@ -11,7 +11,7 @@ import constants from "./common/constants.js";
 // node setup-environment.js dev
 // node setup-environment.js --skip-install dev
 const skipInstallStep = process.argv.length > 2 && process.argv[2] == '--skip-install';
-const environment = skipInstallStep ? (process.argv.length > 3 ? process.argv[3] : '') : process.argv.length > 2 ? process.argv[2] : '';
+const environment = (skipInstallStep ? (process.argv.length > 3 ? process.argv[3] : '') : process.argv.length > 2 ? process.argv[2] : '') || process.env.ENVIRONMENT;
 
 const outputEnd = () => {
   console.log("");
@@ -65,6 +65,11 @@ const execute = async () => {
   }
   
   printReplacements(allReplacements);
+  
+  if (!skipInstallStep) {
+    console.log("You can now run the following command to start your local serverless functions and Flex plugin together:");
+    console.log("\tnpm start");
+  }
   
   outputEnd();
 }

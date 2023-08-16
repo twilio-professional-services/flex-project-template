@@ -15,7 +15,7 @@ const varNameMapping = {
     type: "serverless-domain",
     name: "schedule-manager",
   },
-  "NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN": {
+  "VIDEO_SERVERLESS_DOMAIN": {
     type: "serverless-domain",
     name: "custom-flex-extensions-serverless",
     localValue: "localhost:3001",

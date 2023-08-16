@@ -40,15 +40,14 @@ const printLine = (name, value) => {
     value = "(missing)";
   }
   
-  console.log(`${formatName(name)}:\t\t\t${value}`);
+  console.log(`${formatName(name)}:  ${value}`);
 }
 
 export default (allReplacements) => {
   const alreadyOutput = [];
+  let printHeader = true;
   console.log("");
   console.log("Environment configuration summary:");
-  console.log("");
-  console.log("---- INSTANCE SIDS -----------------------------------------");
   for (const key in allReplacements) {
     if (!constants.varNameMapping[key] || !(
       constants.varNameMapping[key].type == "tr-workspace" || 
@@ -58,41 +57,65 @@ export default (allReplacements) => {
       continue;
     }
     
+    if (printHeader) {
+      console.log("");
+      console.log("---- INSTANCE SIDS -----------------------------------------");
+      printHeader = false;
+    }
+    
     printLine(key, allReplacements[key]);
     alreadyOutput.push(key);
   }
-  console.log("");
-  console.log("---- WORKFLOW SIDS -----------------------------------------");
+  printHeader = true;
   for (const key in allReplacements) {
     if (!constants.varNameMapping[key] || constants.varNameMapping[key].type != "tr-workflow") {
       continue;
     }
     
-    printLine(key, allReplacements[key]);
-    alreadyOutput.push(key);
-  }
-  console.log("");
-  console.log("---- SERVERLESS DOMAINS ------------------------------------");
-  for (const key in allReplacements) {
-    if (!constants.varNameMapping[key] || constants.varNameMapping[key].type != "serverless-domain") {
-      continue;
+    if (printHeader) {
+      console.log("");
+      console.log("---- WORKFLOW SIDS -----------------------------------------");
+      printHeader = false;
     }
     
     printLine(key, allReplacements[key]);
     alreadyOutput.push(key);
   }
-  console.log("");
-  console.log("---- CUSTOM DATA -------------------------------------------");
+  printHeader = true;
+  for (const key in allReplacements) {
+    if (!constants.varNameMapping[key] || constants.varNameMapping[key].type != "serverless-domain") {
+      continue;
+    }
+    
+    if (printHeader) {
+      console.log("");
+      console.log("---- SERVERLESS DOMAINS ------------------------------------");
+      printHeader = false;
+    }
+    
+    printLine(key, allReplacements[key]);
+    alreadyOutput.push(key);
+  }
+  printHeader = true;
   for (const key in allReplacements) {
     if (alreadyOutput.includes(key) || ignoreKeys.includes(key)) {
       continue;
+    }
+    
+    if (printHeader) {
+      console.log("");
+      console.log("---- CUSTOM DATA -------------------------------------------");
+      printHeader = false;
     }
     
     printLine(key, allReplacements[key]);
   }
   
   console.log("");
-  console.log("If there are missing workflow SIDs, you can set those up for those features manually later.");
-  console.log("You can now run the following command to start your local serverless functions and Flex plugin together:");
-  console.log("\tnpm start");
+  
+  if (Object.keys(allReplacements).length < 1) {
+    console.log("All local environment files are already fully populated.")
+  } else {
+    console.log("If there are missing workflow SIDs, you can set those up for those features manually later.");
+  }
 }

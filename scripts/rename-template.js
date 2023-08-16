@@ -1,5 +1,7 @@
-var shell = require("shelljs");
+import shell from "shelljs";
 // https://github.com/shelljs/shelljs#shellstringstr
+import { flexConfigDir, serverlessDir } from "./common/constants.js";
+import getPluginDirs from "./common/get-plugin.js";
 
 function capitalizeFirstLetter(string) {
   return string[0].toUpperCase() + string.slice(1);
@@ -9,10 +11,7 @@ function onlyValidCharacters(str) {
   return /^[0-9a-zA-Z_-]+$/.test(str);
 }
 
-const { flexConfigDir, serverlessDir } = require ('./common');
-
-var { getPaths } = require("./select-plugin");
-const { pluginDir, pluginSrc } = getPaths();
+const { pluginDir, pluginSrc } = getPluginDirs();
 
 shell.echo(`renaming plugin: `, pluginDir);
 shell.echo("");
