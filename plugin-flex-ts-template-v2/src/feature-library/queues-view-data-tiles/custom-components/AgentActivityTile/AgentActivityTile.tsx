@@ -2,11 +2,10 @@ import React from 'react';
 import { PieChart } from 'react-minimal-pie-chart';
 import { BaseDataEntry, Data } from 'react-minimal-pie-chart/types/commonTypes';
 import { Icon, useFlexSelector } from '@twilio/flex-ui';
-import { Table, TBody, Tr, Td } from '@twilio-paste/core';
 import AppState from 'types/manager/AppState';
 import { ActivityStatistic } from '@twilio/flex-ui/src/state/QueuesState';
 
-import { TileWrapper, Summary, Chart, Title, Label, Metric } from './AgentActivityTile.Components';
+import { TileWrapper, Summary, Chart, Title, AgentActivity, Label, Metric } from './AgentActivityTile.Components';
 
 interface ActivityCounts {
   [key: string]: number;
@@ -42,27 +41,16 @@ const AgentActivityTile = (props: ComponentProps) => {
   return (
     <TileWrapper className="Twilio-AggregatedDataTile">
       <Summary>
-        <Table variant="borderless">
-          <TBody>
-            {activityNames.map((activity) => {
-              const count = workerActivityCounts[activity] || 0;
-              return (
-                <Tr key={activity} verticalAlign="middle">
-                  <Td>
-                    {' '}
-                    <Icon icon={activityConfig[activity]?.icon} />
-                  </Td>
-                  <Td>
-                    <Label bgColor={activityConfig[activity]?.color}>{activity}:</Label>
-                  </Td>
-                  <Td textAlign="center">
-                    <Metric>{count} </Metric>
-                  </Td>
-                </Tr>
-              );
-            })}
-          </TBody>
-        </Table>
+        {activityNames.map((activity) => {
+          const count = workerActivityCounts[activity] || 0;
+          return (
+            <AgentActivity>
+              <Icon icon={activityConfig[activity]?.icon} />
+              <Label bgColor={activityConfig[activity]?.color}>{activity}:</Label>
+              <Metric> {count} </Metric>
+            </AgentActivity>
+          );
+        })}
       </Summary>
       <Chart>
         <Title>Agent Activity</Title>
