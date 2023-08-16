@@ -79,7 +79,6 @@ class QueueDataUtil {
         });
       }
     });
-    console.log('SL METRICS:', slMetrics);
     channelList.forEach((ch) => {
       if (slMetrics[ch]?.handledTasks > 0)
         slMetrics[ch].serviceLevelPct = Math.floor(
