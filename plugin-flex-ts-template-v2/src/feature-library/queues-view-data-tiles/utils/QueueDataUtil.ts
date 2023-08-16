@@ -3,8 +3,6 @@ import { WorkerQueueChannel } from '@twilio/flex-ui/src/state/QueuesState/Queues
 
 import { SLMetrics, TaskCounts } from '../types';
 
-const channelList = ['chat', 'sms', 'voice'];
-
 class QueueDataUtil {
   getTasksByGroup = (queues: WorkerQueue[] = [], group = '') => {
     let activeTasks = 0;
@@ -39,19 +37,16 @@ class QueueDataUtil {
     return taskCounts;
   };
 
-  getTaskCountsByChannel = (queues: WorkerQueue[] = []) => {
+  getTaskCountsByChannel = (queues: WorkerQueue[] = [], channelList: string[]) => {
     const initCounts = { activeTasks: 0, assignedTasks: 0, wrappingTasks: 0, waitingTasks: 0 };
-    const taskCounts: TaskCounts = {
-      chat: { ...initCounts },
-      sms: { ...initCounts },
-      voice: { ...initCounts },
-    };
+    const taskCounts: TaskCounts = {};
     if (queues.length === 0) return taskCounts;
     queues.forEach((q) => {
       if (q.channels) {
         q.channels.forEach((ch: WorkerQueueChannel) => {
           const wqChannelName = ch.unique_name ? ch.unique_name : 'unknown';
           if (channelList.includes(wqChannelName) && ch.tasks_now) {
+            if (!taskCounts[wqChannelName]) taskCounts[wqChannelName] = { ...initCounts };
             const assignedTasks = ch?.tasks_now?.assigned_tasks;
             const wrappingTasks = ch?.tasks_now?.wrapping_tasks;
             taskCounts[wqChannelName].assignedTasks += assignedTasks;
@@ -68,27 +63,25 @@ class QueueDataUtil {
     return taskCounts;
   };
 
-  getSLTodayByChannel = (queues: WorkerQueue[] = []) => {
+  getSLTodayByChannel = (queues: WorkerQueue[] = [], channelList: string[]) => {
     const initSLMetrics = { handledTasks: 0, handledTasksWithinSL: 0, serviceLevelPct: 0 };
-    const slMetrics: SLMetrics = {
-      chat: { ...initSLMetrics },
-      sms: { ...initSLMetrics },
-      voice: { ...initSLMetrics },
-    };
+    const slMetrics: SLMetrics = {};
     if (queues.length === 0) return slMetrics;
     queues.forEach((q) => {
       if (q.channels) {
         q.channels.forEach((ch: WorkerQueueChannel) => {
           const wqChannelName = ch.unique_name ? ch.unique_name : 'unknown';
           if (channelList.includes(wqChannelName) && ch.sla_today) {
+            if (!slMetrics[wqChannelName]) slMetrics[wqChannelName] = { ...initSLMetrics };
             slMetrics[wqChannelName].handledTasks += ch?.sla_today?.handled_tasks_count;
             slMetrics[wqChannelName].handledTasksWithinSL += ch?.sla_today?.handled_tasks_within_sl_threshold_count;
           }
         });
       }
     });
+    console.log('SL METRICS:', slMetrics);
     channelList.forEach((ch) => {
-      if (slMetrics[ch].handledTasks > 0)
+      if (slMetrics[ch]?.handledTasks > 0)
         slMetrics[ch].serviceLevelPct = Math.floor(
           (slMetrics[ch].handledTasksWithinSL / slMetrics[ch].handledTasks) * 100,
         );

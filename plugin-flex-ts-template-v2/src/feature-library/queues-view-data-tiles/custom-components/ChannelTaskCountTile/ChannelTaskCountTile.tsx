@@ -8,14 +8,15 @@ import { ChannelTaskCounts, TaskCounts } from '../../types';
 
 interface ComponentProps {
   channelName: string;
+  channelList: string[];
   bgColor?: string;
 }
 
 const ChannelTaskCountTile = (props: ComponentProps) => {
-  const { channelName, bgColor } = props;
+  const { channelName, channelList, bgColor } = props;
   const taskCounts: ChannelTaskCounts = useFlexSelector((state: AppState) => {
     const queues = Object.values(state.flex.realtimeQueues.queuesList);
-    const allTaskCounts: TaskCounts = QueueDataUtil.getTaskCountsByChannel(queues);
+    const allTaskCounts: TaskCounts = QueueDataUtil.getTaskCountsByChannel(queues, channelList);
     return allTaskCounts[channelName];
   });
 
