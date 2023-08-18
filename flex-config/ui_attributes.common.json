@@ -7,8 +7,30 @@
   "custom_data": {
     "features": {
       "activity_skill_filter": {
-        "enabled": false,
-        "filter_teams_view": false
+        "enabled": true,
+        "rules": {
+          "On a Task" : {
+            "required_skill": "system_activities",
+            "sort_order": 0
+          },
+          "On a Task, No ACD" : {
+            "required_skill": "system_activities",
+            "sort_order": 0
+          },
+          "Wrap Up" : {
+            "required_skill": "system_activities",
+            "sort_order": 0
+          },
+          "Wrap Up, No ACD" : {
+            "required_skill": "system_activities",
+            "sort_order": 0
+          },
+          "Offline" : {
+            "required_skill": null,
+            "sort_order": 100
+          }
+        },
+        "filter_teams_view": true
       },
       "callback_and_voicemail": {
         "enabled": true,
@@ -230,6 +252,10 @@
       },
       "teams_view_enhancements": {
         "enabled": true,
+        "highlight_handle_time": true,
+        "handle_time_warning_threshold": 180,
+        "handle_time_exceeded_threshold": 300,
+        "display_task_queue_name": true,
         "columns": {
           "team": true,
           "department": false,

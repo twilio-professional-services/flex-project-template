@@ -25,7 +25,7 @@ function WorkerProfileInfo(props: Props) {
     Flex.Actions.invokeAction('SetWorkerActivity', { workerSid: worker.sid, activitySid: event.target.value });
   }
 
-  const activities = AgentActivities.getEligibleActivites(worker);
+  const activities = AgentActivities.getEligibleActivities(worker);
   const currentActivity = activities.find((activity) => activity.name === worker.activityName);
 
   return (

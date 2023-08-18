@@ -23,6 +23,10 @@ However, if you'd like to keep certain features, you may include them as additio
 npm run remove-features except admin-ui attribute-viewer dual-channel-recording
 ```
 
+:::info Note
+If you have already deployed to the environment before removing features, the configuration for removed features will remain in the environment. This will result in them appearing in the admin-ui panel unless the configuration is adjusted manually via API.
+:::
+
 ## How it works
 
 The `remove-features` script performs the following operations:
