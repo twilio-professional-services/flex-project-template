@@ -22,12 +22,12 @@ const ChannelSLATileV2 = (props: ComponentProps) => {
   });
 
   let content = '-';
-  if (sla.handledTasks && sla.handledTasks > 0) {
+  if (sla?.handledTasks && sla?.handledTasks > 0) {
     content = `${sla.serviceLevelPct}%`;
   }
 
   return (
-    <TileWrapper value={sla.serviceLevelPct} count={sla.handledTasks} className="Twilio-AggregatedDataTile">
+    <TileWrapper value={sla?.serviceLevelPct} count={sla?.handledTasks} className="Twilio-AggregatedDataTile">
       <Channel>
         <ChannelIcon>
           <Icon icon={getChannelIcon(channelName)} />
@@ -37,11 +37,11 @@ const ChannelSLATileV2 = (props: ComponentProps) => {
       <Content className="Twilio-AggregatedDataTile-Content">{content}</Content>
       <Handled>
         <Label>Handled Today: </Label>
-        <Metric>{sla.handledTasks}</Metric>
+        <Metric>{sla?.handledTasks}</Metric>
       </Handled>
       <Handled>
         <Label>Within SL: </Label>
-        <Metric>{sla.handledTasksWithinSL}</Metric>
+        <Metric>{sla?.handledTasksWithinSL}</Metric>
       </Handled>
     </TileWrapper>
   );
