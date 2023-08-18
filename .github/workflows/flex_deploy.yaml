@@ -124,8 +124,9 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
           npm install skip-postinstall
-          npm run generate-env
+          npm run generate-env  >> $GITHUB_STEP_SUMMARY
 # FEATURE: chat-to-video-escalation
       - name: install npm and build video-app-assets
         working-directory: web-app-examples/video-app-quickstart
