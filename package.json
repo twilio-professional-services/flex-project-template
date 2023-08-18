@@ -34,8 +34,5 @@
     "prompt": "^1.3.0",
     "shelljs": "^0.8.5",
     "twilio-cli": "5.5.0"
-  },
-  "dependencies": {
-    "skip-postinstall": "^1.0.0"
   }
 }
