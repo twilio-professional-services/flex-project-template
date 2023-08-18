@@ -2,6 +2,7 @@
   "name": "schedule-manager",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "test": "echo 'Tests to come'; exit 1",
     "start": "twilio serverless:start",
