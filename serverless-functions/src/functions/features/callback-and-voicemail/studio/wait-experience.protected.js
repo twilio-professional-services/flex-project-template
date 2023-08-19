@@ -32,7 +32,7 @@ const options = {
     callbackAndVoicemailUnavailable:
       'The option to request a callback or leave a voicemail is not available at this time. Please continue to hold.',
     processingError: 'Sorry, we were unable to perform this operation. Please remain on the line.',
-    invalidInput: 'You have not entered valid input, please try again later'
+    invalidInput: 'You have not entered valid input, please try again later',
   },
 };
 
@@ -247,15 +247,13 @@ exports.handler = async (context, event, callback) => {
       return callback(null, twiml);
 
     case 'handle-callback-choice':
-
       if (Digits && Digits === '1') {
-
         twiml.redirect(
           `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=submit-callback&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}&to=${event.Caller}`,
         );
         return callback(null, twiml);
       } else if (Digits && Digits === '2') {
-        //Get phone number from customer as input to request a callback
+        // Get phone number from customer as input to request a callback
         const gather = twiml.gather({
           input: 'dtmf',
           timeout: 10,
@@ -275,10 +273,13 @@ exports.handler = async (context, event, callback) => {
 
     case 'handle-callback-for-other-number-confirmation-option':
       if (Digits) {
-        const say = twiml.say(`You entered `)
-        say.sayAs({
-          'interpret-as': 'telephone'
-        }, Digits.trim());
+        const say = twiml.say(`You entered `);
+        say.sayAs(
+          {
+            'interpret-as': 'telephone',
+          },
+          Digits.trim(),
+        );
 
         const gather = twiml.gather({
           input: 'dtmf',
@@ -286,7 +287,7 @@ exports.handler = async (context, event, callback) => {
           numDigits: 1,
           finishOnKey: '#',
           action: `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=handle-callback-for-other-number-confirmation&enqueuedTaskSid=${enqueuedTaskSid}&updatedPhoneNumber=${Digits.trim()}`,
-          method: 'GET'
+          method: 'GET',
         });
         gather.say(` press 1 to confirm and 2 to re-enter`);
       } else {
@@ -298,7 +299,7 @@ exports.handler = async (context, event, callback) => {
       if (Digits && Digits === '1') {
         twiml.redirect(
           `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=submit-callback&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}&to=${event.updatedPhoneNumber}`,
-        )
+        );
       } else {
         const gather = twiml.gather({
           input: 'dtmf',
