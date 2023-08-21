@@ -1,6 +1,6 @@
 import shell from 'shelljs';
 
-import constants from "./constants.js";
+import constants from "./constants.mjs";
 
 let fetchedTypes = [];
 let resultCache = {};

@@ -1,7 +1,7 @@
 import shell from "shelljs";
 // https://github.com/shelljs/shelljs#shellstringstr
-import { flexConfigDir, serverlessDir } from "./common/constants.js";
-import getPluginDirs from "./common/get-plugin.js";
+import { flexConfigDir, serverlessDir } from "./common/constants.mjs";
+import getPluginDirs from "./common/get-plugin.mjs";
 
 function capitalizeFirstLetter(string) {
   return string[0].toUpperCase() + string.slice(1);

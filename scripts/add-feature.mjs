@@ -1,7 +1,7 @@
 import shell from "shelljs";
 import { promises as fs } from 'fs';
 
-import getPluginDirs from "./common/get-plugin.js";
+import getPluginDirs from "./common/get-plugin.mjs";
 const { templateDirectory, featureDirectory, pluginSrc, pluginDir } = getPluginDirs();
 
 var featureName;

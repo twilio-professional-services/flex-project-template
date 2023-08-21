@@ -1,8 +1,8 @@
 import shell from "shelljs";
 import { promises as fs } from 'fs';
 
-import { serverlessSrc, flexConfigDir, gitHubWorkflowDir, scheduleManagerServerlessDir } from './common/constants.js';
-import getPluginDirs from "./common/get-plugin.js";
+import { serverlessSrc, flexConfigDir, gitHubWorkflowDir, scheduleManagerServerlessDir } from './common/constants.mjs';
+import getPluginDirs from "./common/get-plugin.mjs";
 
 const { featureDirectory } = getPluginDirs();
 

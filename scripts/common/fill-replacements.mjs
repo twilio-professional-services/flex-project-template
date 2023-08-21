@@ -1,8 +1,8 @@
 import { promises as fs } from 'fs';
 import shell from 'shelljs';
 
-import constants from "./constants.js";
-import * as fetchCli from "./fetch-cli.js";
+import constants from "./constants.mjs";
+import * as fetchCli from "./fetch-cli.mjs";
 
 // Initialize env file if necessary, then parse its contents
 const readEnv = async (envFile, exampleFile) => {

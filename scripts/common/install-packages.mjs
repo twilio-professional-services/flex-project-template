@@ -1,7 +1,7 @@
 import shell from "shelljs";
 
-import constants from "./constants.js";
-import getPluginDirs from "./get-plugin.js";
+import constants from "./constants.mjs";
+import getPluginDirs from "./get-plugin.mjs";
 
 const installNpmPackage = (packageDir) => {
   if (packageDir && shell.test('-d', packageDir)) {

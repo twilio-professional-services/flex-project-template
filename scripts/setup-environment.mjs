@@ -1,9 +1,9 @@
-import getTwilioAccount from "./common/get-account.js";
-import { installAllPackages, buildVideoApp } from "./common/install-packages.js";
-import fillReplacements from "./common/fill-replacements.js";
-import printReplacements from "./common/print-replacements.js";
-import saveAppConfig from "./common/save-appconfig.js";
-import constants from "./common/constants.js";
+import getTwilioAccount from "./common/get-account.mjs";
+import { installAllPackages, buildVideoApp } from "./common/install-packages.mjs";
+import fillReplacements from "./common/fill-replacements.mjs";
+import printReplacements from "./common/print-replacements.mjs";
+import saveAppConfig from "./common/save-appconfig.mjs";
+import constants from "./common/constants.mjs";
 
 // valid usage:
 // node setup-environment.js

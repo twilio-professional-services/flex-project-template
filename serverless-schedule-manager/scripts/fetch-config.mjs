@@ -1,8 +1,9 @@
 import { promises as fs } from 'fs';
 import { homedir } from 'os';
-import { default as axios } from 'axios';
 
-import { fetchServerlessDomains, getFetchedVars } from '../../scripts/common/fetch-cli.js';
+import axios from 'axios';
+
+import { fetchServerlessDomains, getFetchedVars } from '../../scripts/common/fetch-cli.mjs';
 
 if (!process.argv[2]) {
   throw new Error('Please provide an output path');

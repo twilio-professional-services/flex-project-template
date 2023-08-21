@@ -2,8 +2,8 @@ import { promises as fs } from 'fs';
 import JSON5 from 'json5';
 import shell from 'shelljs';
 
-import getPluginDirs from "./get-plugin.js";
-import constants from "./constants.js";
+import getPluginDirs from "./get-plugin.mjs";
+import constants from "./constants.mjs";
 
 export default async () => {
   var { pluginDir } = getPluginDirs();
