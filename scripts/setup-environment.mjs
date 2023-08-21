@@ -6,10 +6,10 @@ import saveAppConfig from "./common/save-appconfig.mjs";
 import constants from "./common/constants.mjs";
 
 // valid usage:
-// node setup-environment.js
-// node setup-environment.js --skip-install
-// node setup-environment.js dev
-// node setup-environment.js --skip-install dev
+// node setup-environment.mjs
+// node setup-environment.mjs --skip-install
+// node setup-environment.mjs dev
+// node setup-environment.mjs --skip-install dev
 const skipInstallStep = process.argv.length > 2 && process.argv[2] == '--skip-install';
 const environment = (skipInstallStep ? (process.argv.length > 3 ? process.argv[3] : '') : process.argv.length > 2 ? process.argv[2] : '') || process.env.ENVIRONMENT;
 
