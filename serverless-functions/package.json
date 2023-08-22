@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "test": "echo 'Tests to come'; exit 1",
-    "start": "twilio serverless:start",
+    "start": "twilio serverless:start --inspect=localhost --port=3001",
     "deploy": "twilio serverless:deploy --override-existing-project --runtime node16",
     "deploy-env": "npm run deploy -- --env \".env.$ENVIRONMENT\"",
     "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v2",

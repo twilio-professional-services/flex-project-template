@@ -1,5 +1,15 @@
+const crypto = require('crypto');
+
+const axios = require('axios');
 const { isObject, isString } = require('lodash');
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
+const randomstring = require('randomstring');
+
+const { createDocument, fetchDocument, updateDocumentData } = require(Runtime.getFunctions()[
+  'common/twilio-wrappers/sync'
+].path);
+
+snooze = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const prepareFunction = (context, event, callback, requiredParameters, handlerFn) => {
   const response = new Twilio.Response();
@@ -95,9 +105,149 @@ exports.prepareStudioFunction = (requiredParameters, handlerFn) => {
 /**
  * @param {object} object
  * @returns {object}
- * @description convenience method to safely extract the standad elements in the response back to flex from serverless functions.  This can be used with any object that is returrned from any twilio-wrapper function.
+ * @description convenience method to safely extract the standard elements in the response back to flex from serverless functions.  This can be used with any object that is returned from any twilio-wrapper function.
  */
 exports.extractStandardResponse = (object) => {
   const { success, message, twilioDocPage, twilioErrorCode } = object;
   return { success, message, twilioDocPage, twilioErrorCode };
+};
+
+/**
+ * @param context
+ * @param url
+ * @param payload
+ * @returns {object}
+ * @description convenience method for making a signed post request with application/json
+ */
+exports.signedHTTPPostWithJson = async (context, url, payload) => {
+  // generate signatures
+  const payloadString = JSON.stringify(payload || {});
+  const hashBody256 = crypto.createHash('sha256', context.AUTH_TOKEN).update(payloadString).digest('hex');
+  const signedUrl = `${url}?bodySHA256=${hashBody256}`;
+  const hashBufferUrl = crypto.createHmac('sha1', context.AUTH_TOKEN).update(signedUrl).digest();
+  const signature = hashBufferUrl.toString('base64');
+
+  const config = {
+    headers: {
+      'content-type': 'application/json; charset=utf-8',
+      'x-twilio-Signature': signature,
+    },
+  };
+
+  try {
+    await axios.post(signedUrl, payloadString, config);
+  } catch (error) {
+    console.log(`Error making request to ${signedUrl}
+    ${error}`);
+  }
+};
+
+/**
+ * @param context         original context object
+ * @param events          original event that triggered operation
+ * @param function_path   path to function to handoff to
+ * @param payload         data to be passed to function
+ * @returns {object}
+ * @description convenience method for handing over work to another function
+ */
+exports.handOffProcessing = async (context, event, function_path, payload) => {
+  let document;
+  const domain = event.request.headers.host || context.DOMAIN_NAME;
+  const url = `https://${domain}/${function_path}`;
+
+  let handoffSid;
+
+  if (event.handoffSid) {
+    handoffSid = event.handoffSid;
+    document = await updateDocumentData({
+      context,
+      documentSid: handoffSid,
+      updateData: {
+        complete: false,
+        total: payload.total,
+        remaining: payload.remaining,
+        last_updated: new Date(),
+      },
+    });
+  } else {
+    const docName = `handoff-${randomstring.generate(20)}`;
+
+    document = await createDocument({
+      context,
+      uniqueName: docName,
+      ttl: '3600', // expires after an hour
+      data: {
+        complete: false,
+        total: payload.total,
+        remaining: payload.remaining,
+        last_updated: new Date(),
+      },
+    });
+  }
+
+  payload = { ...payload, handoffSid: document.document.sid };
+
+  exports.signedHTTPPostWithJson(context, url, payload);
+
+  // eslint-disable-next-line no-shadow
+  const documentUpdated = (context, documentSid) =>
+    new Promise((resolve) => {
+      let tries = 0;
+      const interval = setInterval(async () => {
+        // eslint-disable-next-line no-plusplus
+        tries++;
+        // eslint-disable-next-line no-shadow
+        let document;
+        try {
+          document = await fetchDocument({ context, documentSid });
+        } catch (error) {
+          console.log('error', error);
+        }
+        if ((document && document.document.data.complete) || tries > 10) {
+          if (process.env.LOG_EVENTS === 'true')
+            console.log(`handoff complete for ${documentSid} after ${tries} tries`);
+          clearInterval(interval);
+          resolve(true);
+        }
+      }, 800);
+    });
+
+  await documentUpdated(context, document.document.sid);
+  return document.document;
+};
+
+receiveHandOff = async (context, event) => {
+  const { handoffSid } = event;
+
+  try {
+    await updateDocumentData({
+      context,
+      documentSid: handoffSid,
+      updateData: {
+        complete: true,
+        total: event.total,
+        remaining: event.remaining,
+        last_updated: new Date(),
+      },
+    });
+  } catch (error) {
+    console.log('Error updating doc for handoff', error);
+  }
+};
+
+exports.prepareHandoffFunction = (requiredParameters, handlerFn) => {
+  return (context, event, callback) => {
+    receiveHandOff(context, event);
+    prepareFunction(context, event, callback, requiredParameters, handlerFn);
+  };
+};
+
+exports.prepareStudioFunction = (requiredParameters, handlerFn) => {
+  return (context, event, callback) => prepareFunction(context, event, callback, requiredParameters, handlerFn);
+};
+
+exports.prepareFlexFunction = (requiredParameters, handlerFn) => {
+  return TokenValidator((context, event, callback) =>
+    prepareFunction(context, event, callback, requiredParameters, handlerFn),
+  );
 };
