@@ -11,6 +11,14 @@ This means, however, if you later want to take updates it can be difficult, but 
 
 Time to complete: _~10 minutes_
 
+## Pre-requisite: Add upstream remote
+
+Before either of the following sections may be completed, you will need to add the upstream remote to your local repository by running this command:
+
+```bash
+git remote add upstream https://github.com/twilio-professional-services/flex-project-template.git
+```
+
 ## Adding history to your repository
 
 :::info Note
@@ -18,11 +26,15 @@ This is simplest to do when first creating your repo, but can be done at any tim
 
 :::
 
-You can do this with the following commands on your clone repository.
+First, fetch from upstream:
 
 ```bash
-git remote add upstream https://github.com/twilio-professional-services/flex-project-template.git
 git fetch upstream
+```
+
+Then, use the following command to rebase your repository onto the upstream history:
+
+```bash
 git rebase --onto <commit-id-from-template-when-cloning> <initial-commit-id-of-cloned-template> <branch-name>
 ```
 

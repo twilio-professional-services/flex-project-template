@@ -19,6 +19,12 @@ module.exports = {
     'prefer-destructuring': 'off',
     'prefer-named-capture-group': 'off',
     'prefer-promise-reject-errors': 'off',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
     'sonarjs/cognitive-complexity': 'off',
     'sonarjs/no-identical-functions': 'off',
     'sonarjs/no-duplicate-string': 'off',
