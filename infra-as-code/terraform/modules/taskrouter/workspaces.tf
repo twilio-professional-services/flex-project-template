@@ -9,7 +9,7 @@ terraform {
 
 resource "twilio_taskrouter_workspaces_v1" "flex" {
   friendly_name = "Flex Task Assignment"
-  event_callback_url = "${serverless_domain}/features/tr-events/event-handler"
+  event_callback_url = "${var.serverless_domain}/features/tr-events/event-handler"
   events_filter = "task-queue.created,task-queue.expression.updated,worker.attributes.update,worker.created"
 }
 
