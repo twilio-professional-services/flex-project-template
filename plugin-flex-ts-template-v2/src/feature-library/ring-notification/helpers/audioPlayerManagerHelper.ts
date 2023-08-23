@@ -1,4 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
+
 import { getFeatureFlags } from '../../../utils/configuration';
 
 class AudioPlayerManagerHelper {
@@ -14,7 +15,7 @@ class AudioPlayerManagerHelper {
 
   stop = (): void => {
     if (this._mediaId) {
-        Flex.AudioPlayerManager.stop(this._mediaId);
+      Flex.AudioPlayerManager.stop(this._mediaId);
     }
   };
 }
