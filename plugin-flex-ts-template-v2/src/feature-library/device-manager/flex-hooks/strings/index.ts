@@ -9,6 +9,8 @@ export enum StringTemplates {
   SelectAudioDevice = 'PSDeviceMgrSelectAudioDevice',
   SetDeviceSuccess = 'PSDeviceMgrSetDeviceSuccess',
   SetDeviceError = 'PSDeviceMgrSetDeviceError',
+  SelectOutputDevice = 'PSDeviceMgrSelectOutputDevice',
+  SelectInputDevice = 'PSDeviceMgrSelectInputDevice',
 }
 
 export const stringHook = () => ({
@@ -16,6 +18,8 @@ export const stringHook = () => ({
     [StringTemplates.SelectAudioDevice]: 'Select an audio device',
     [StringTemplates.SetDeviceSuccess]: 'Set {{selectedDevice}} as your audio device.',
     [StringTemplates.SetDeviceError]: 'There was an error attempting to set {{selectedDevice}} as your audio device.',
+    [StringTemplates.SelectOutputDevice]: 'Select an output device',
+    [StringTemplates.SelectInputDevice]: 'Select an input device',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,
