@@ -31,7 +31,7 @@ exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttrib
     workerAttributes = JSON.parse(WorkerAttributes);
     return await WorkerUpdates.syncWorkerAttributesWithEligibleQueues(context, workerSid, workerAttributes);
   } catch (error) {
-    console.log(`Error in workerAttributesUpdated.syncWorkerAttributesWithEligibleQueues: ${error}`);
+    console.log(`TR EVENT: Error in workerAttributesUpdated.syncWorkerAttributesWithEligibleQueues: ${error}`);
     return false;
   }
 };

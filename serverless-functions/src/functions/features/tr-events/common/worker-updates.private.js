@@ -47,7 +47,7 @@ exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttrib
 
     return success;
   } catch (error) {
-    console.error(`Error in worker-updates.syncWorkerAttributesWithEligibleQueues: ${error}`);
+    console.error(`TR EVENT: Error in worker-updates.syncWorkerAttributesWithEligibleQueues: ${error}`);
     return false;
   }
 };

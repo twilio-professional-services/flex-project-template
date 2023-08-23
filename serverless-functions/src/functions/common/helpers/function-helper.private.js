@@ -150,7 +150,7 @@ exports.signedHTTPPostWithJson = async (context, url, payload) => {
  * @returns {object}      the sync doc containing progress details of the work
  * @description           method that manages a protocol for handing work to another function. Can be used to daisy chain functions together for processing larger volumes of data.
  */
-exports.handOffProcessing = async (context, event, function_path, payload) => {
+exports.processBatch = async (context, event, function_path, payload) => {
   let document;
   let handoffSid;
 
@@ -175,10 +175,51 @@ exports.handOffProcessing = async (context, event, function_path, payload) => {
 
   if (event.handoffSid) {
     handoffSid = event.handoffSid;
+
+    // complete work
+    if (tasks.length === 0) {
+      console.log(`BATCH PROCESSING: processing complete for ${handoffSid} with ${total} tasks processed`);
+
+      document = await updateDocumentData({
+        context,
+        documentSid: handoffSid,
+        updateData: {
+          status: 'completed',
+          complete: true,
+          total,
+          remaining,
+          last_updated: new Date(),
+        },
+      });
+      return document.document;
+    }
+
+    // circuit breaker for stuck processing
+    old_doc = await fetchDocument({ context, documentSid: handoffSid });
+    previous_remaining = old_doc.document.data.remaining;
+    if (previous_remaining === remaining) {
+      console.warn(
+        'BATCH PROCESSING: possible infinite loop detected, batch processed but nothing progressed. stopping batch processing',
+      );
+      document = await updateDocumentData({
+        context,
+        documentSid: handoffSid,
+        updateData: {
+          status: 'cancelled',
+          complete: true,
+          total: payload.total,
+          remaining: payload.remaining,
+          last_updated: new Date(),
+        },
+      });
+      return document.document;
+    }
+
     document = await updateDocumentData({
       context,
       documentSid: handoffSid,
       updateData: {
+        status: 'running',
         complete: false,
         total: payload.total,
         remaining: payload.remaining,
@@ -193,6 +234,7 @@ exports.handOffProcessing = async (context, event, function_path, payload) => {
       uniqueName: docName,
       ttl: '3600', // expires after an hour
       data: {
+        status: 'running',
         complete: false,
         total: payload.total,
         remaining: payload.remaining,
@@ -217,13 +259,12 @@ exports.handOffProcessing = async (context, event, function_path, payload) => {
         try {
           document = await fetchDocument({ context, documentSid });
         } catch (error) {
-          console.error('error', error);
+          console.error('BATCH PROCESSING: error', error);
         }
         if ((document && document.document.data.complete) || tries > 10) {
+          if (tries > 10) console.warn(`BATCH PROCESSING: handoff unconfirmed for ${documentSid} after ${tries} tries`);
           clearInterval(interval);
           resolve(true);
-        } else {
-          console.warning(`handoff unconfirmed for ${documentSid} after ${tries} tries`);
         }
       }, 1000);
     });
@@ -237,11 +278,14 @@ receiveHandOff = async (context, event) => {
 
   try {
     if (process.env.LOG_HANDOVER_EVENTS === 'true')
-      console.log(`handoff received for ${handoffSid} with ${remaining} of ${total} tasks to be processed`);
+      console.log(
+        `BATCH PROCESSING: handoff received for ${handoffSid} with ${remaining} of ${total} tasks to be processed`,
+      );
     await updateDocumentData({
       context,
       documentSid: handoffSid,
       updateData: {
+        status: 'running',
         complete: true,
         total,
         remaining,
@@ -249,11 +293,11 @@ receiveHandOff = async (context, event) => {
       },
     });
   } catch (error) {
-    console.log('Error updating doc for handoff', error);
+    console.log('BATCH PROCESSING: Error updating doc for handoff', error);
   }
 };
 
-exports.prepareHandoffFunction = (requiredParameters, handlerFn) => {
+exports.prepareBatchProcessingFunction = (requiredParameters, handlerFn) => {
   return (context, event, callback) => {
     receiveHandOff(context, event);
     prepareFunction(context, event, callback, requiredParameters, handlerFn);

@@ -43,7 +43,7 @@ exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttrib
 
     return await WorkerUpdates.syncWorkerAttributesWithEligibleQueues(context, workerSid, workerAttributes);
   } catch (error) {
-    console.log(`Error in workerCreated.syncWorkerAttributesWithEligibleQueues: ${error}`);
+    console.log(`TR EVENT: Error in workerCreated.syncWorkerAttributesWithEligibleQueues: ${error}`);
     return false;
   }
 };

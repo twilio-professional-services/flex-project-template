@@ -1,4 +1,4 @@
-const { handOffProcessing } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { processBatch } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 
 const TaskRouter = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
@@ -39,13 +39,13 @@ exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttrib
       remaining: workers.length,
     };
 
-    await handOffProcessing(
+    await processBatch(
       context,
       event,
       'features/tr-events/batch-processors/sync-worker-attributes-with-queue',
       toBeProcessed,
     );
   } catch (error) {
-    console.log(`Error in workerCreated.syncAttributesWithEligibleQueues: ${error}`);
+    console.log(`TR EVENT: Error in workerCreated.syncAttributesWithEligibleQueues: ${error}`);
   }
 };
