@@ -37,4 +37,5 @@ module "studio" {
 
 module "taskrouter" {
   source           = "../../modules/taskrouter"
+  serverless_domain = var.SERVERLESS_DOMAIN
 }

@@ -12,3 +12,9 @@ resource "twilio_taskrouter_workspaces_v1" "flex" {
   event_callback_url = "${SERVERLESS_DOMAIN}/features/tr-events/event-handler"
   events_filter = "task-queue.created,task-queue.expression.updated,worker.attributes.update,worker.created"
 }
+
+locals{
+  params = {
+    "SERVERLESS_DOMAIN" = var.serverless_domain
+  }
+}
