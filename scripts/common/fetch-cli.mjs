@@ -22,7 +22,7 @@ const filterWantedVars = (type) => {
 
 // Reusable function for running and parsing Twilio CLI command output
 const execTwilioCli = (command) => {
-  const outputRaw = shell.exec(command, {silent: true});
+  const outputRaw = shell.exec(`${command} --no-limit -o json`, {silent: true});
   
   if (outputRaw.code !== 0) {
     // TODO: Is it possible to identify retry-able error codes?
@@ -69,7 +69,7 @@ export const fetchServerlessDomains = () => {
   console.log("Fetching serverless domains...");
   
   let wantedDomains = filterWantedVars(type);
-  const serverlessServices = execTwilioCli("twilio api:serverless:v1:services:list -o json");
+  const serverlessServices = execTwilioCli("twilio api:serverless:v1:services:list");
   
   if (!serverlessServices || serverlessServices.length < 1) {
     return;
@@ -79,7 +79,7 @@ export const fetchServerlessDomains = () => {
   for (const service of serverlessServices) {
     for (const wanted in wantedDomains) {
       if (isMatch(wantedDomains[wanted].name, service.uniqueName, false)) {
-        const serviceEnvironments = execTwilioCli(`twilio api:serverless:v1:services:environments:list --service-sid=${service.sid} -o json`);
+        const serviceEnvironments = execTwilioCli(`twilio api:serverless:v1:services:environments:list --service-sid=${service.sid}`);
         
         if (!serviceEnvironments || serviceEnvironments.length < 1) {
           continue;
@@ -107,7 +107,7 @@ export const fetchTrWorkflows = (workspaceSid) => {
   console.log("Fetching TaskRouter workflows...");
   
   const wantedWorkflows = filterWantedVars(type);
-  const workflows = execTwilioCli(`twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid=${workspaceSid} -o json`);
+  const workflows = execTwilioCli(`twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid=${workspaceSid}`);
   
   if (!workflows || workflows.length < 1) {
     return;
@@ -134,7 +134,7 @@ export const fetchTrWorkspaces = () => {
   console.log("Fetching TaskRouter workspaces...");
   
   const wantedWorkspaces = filterWantedVars(type);
-  const workspaces = execTwilioCli("twilio api:taskrouter:v1:workspaces:list -o json");
+  const workspaces = execTwilioCli("twilio api:taskrouter:v1:workspaces:list");
   
   if (!workspaces || workspaces.length < 1) {
     console.error("No TaskRouter workspaces found! Is this a Flex account?");
@@ -161,7 +161,7 @@ export const fetchSyncServices = () => {
   console.log("Fetching Sync services...");
   
   const wantedServices = filterWantedVars(type);
-  const services = execTwilioCli("twilio api:sync:v1:services:list -o json");
+  const services = execTwilioCli("twilio api:sync:v1:services:list");
   
   if (!services || services.length < 1) {
     console.error("No Sync services found! Is this a Flex account?");
@@ -188,7 +188,7 @@ export const fetchChatServices = () => {
   console.log("Fetching chat services...");
   
   const wantedServices = filterWantedVars(type);
-  const services = execTwilioCli("twilio api:chat:v2:services:list -o json");
+  const services = execTwilioCli("twilio api:chat:v2:services:list");
   
   if (!services || services.length < 1) {
     console.error("No chat services found! Is this a Flex account?");
