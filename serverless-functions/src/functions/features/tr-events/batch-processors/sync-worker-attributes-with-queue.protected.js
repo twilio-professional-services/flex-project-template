@@ -43,13 +43,11 @@ exports.handler = prepareHandoffFunction(
   requiredParameters,
   async (context, event, callback, response, handleError) => {
     try {
-      console.log('BATCH PROCESSOR TASK COUNT:', event.tasks.length);
-
       let { tasks } = event;
 
       let x = 0;
       const promiseArray = [];
-      const batchSize = process.env.PROCESSING_BATCH_SIZE;
+      const batchSize = process.env.TR_EVENTS_PROCESSING_BATCH_SIZE;
       const maxLength = tasks.length;
 
       while (x < batchSize && x < maxLength) {

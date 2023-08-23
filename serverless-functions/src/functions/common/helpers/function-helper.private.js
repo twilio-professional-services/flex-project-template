@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 
 const axios = require('axios');
-const { isObject, isString } = require('lodash');
+const { isObject, isString, isNumber, isArray } = require('lodash');
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 const randomstring = require('randomstring');
 
@@ -147,15 +147,31 @@ exports.signedHTTPPostWithJson = async (context, url, payload) => {
  * @param events          original event that triggered operation
  * @param function_path   path to function to handoff to
  * @param payload         data to be passed to function
- * @returns {object}
- * @description convenience method for handing over work to another function
+ * @returns {object}      the sync doc containing progress details of the work
+ * @description           method that manages a protocol for handing work to another function. Can be used to daisy chain functions together for processing larger volumes of data.
  */
 exports.handOffProcessing = async (context, event, function_path, payload) => {
   let document;
+  let handoffSid;
+
+  // this resolves domain name for local environment when using ngrok
   const domain = event.request.headers.host || context.DOMAIN_NAME;
   const url = `https://${domain}/${function_path}`;
 
-  let handoffSid;
+  const { total, remaining, tasks } = payload;
+
+  if (!isNumber(total))
+    throw new Error(
+      `Invalid payload object, payload must contain a number element 'total' that defines the total number of tasks to complete`,
+    );
+  if (!isNumber(remaining))
+    throw new Error(
+      `Invalid payload object, payload must contain a number element 'remaining' that defines the remaining number of tasks to complete`,
+    );
+  if (!isArray(tasks))
+    throw new Error(
+      `Invalid payload object, payload must contain an array element 'tasks' that contains the selection of tasks to be worked in batch`,
+    );
 
   if (event.handoffSid) {
     handoffSid = event.handoffSid;
@@ -201,15 +217,15 @@ exports.handOffProcessing = async (context, event, function_path, payload) => {
         try {
           document = await fetchDocument({ context, documentSid });
         } catch (error) {
-          console.log('error', error);
+          console.error('error', error);
         }
         if ((document && document.document.data.complete) || tries > 10) {
-          if (process.env.LOG_EVENTS === 'true')
-            console.log(`handoff complete for ${documentSid} after ${tries} tries`);
           clearInterval(interval);
           resolve(true);
+        } else {
+          console.warning(`handoff unconfirmed for ${documentSid} after ${tries} tries`);
         }
-      }, 800);
+      }, 1000);
     });
 
   await documentUpdated(context, document.document.sid);
@@ -217,16 +233,18 @@ exports.handOffProcessing = async (context, event, function_path, payload) => {
 };
 
 receiveHandOff = async (context, event) => {
-  const { handoffSid } = event;
+  const { handoffSid, total, remaining } = event;
 
   try {
+    if (process.env.LOG_HANDOVER_EVENTS === 'true')
+      console.log(`handoff received for ${handoffSid} with ${remaining} of ${total} tasks to be processed`);
     await updateDocumentData({
       context,
       documentSid: handoffSid,
       updateData: {
         complete: true,
-        total: event.total,
-        remaining: event.remaining,
+        total,
+        remaining,
         last_updated: new Date(),
       },
     });

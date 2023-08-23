@@ -14,6 +14,7 @@ const requiredParameters = [];
 
 exports.handler = prepareStudioFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
+    const { TR_EVENTS_LOG_EVENTS } = process.env;
     const { EventType } = event;
     // console.log(event);
 
@@ -25,22 +26,21 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
 
     switch (EventType) {
       case 'worker.created':
-        if (process.env.LOG_EVENTS === 'true')
+        if (TR_EVENTS_LOG_EVENTS === 'true')
           console.log(`Event Received: Worker "${event.WorkerName}":${event.WorkerSid} created`);
         await WorkerCreated.syncWorkerAttributesWithEligibleQueues(context, event);
         break;
       case 'worker.attributes.update':
-        if (process.env.LOG_EVENTS === 'true')
+        if (TR_EVENTS_LOG_EVENTS === 'true')
           console.log(`Event Received: Worker "${event.WorkerName}":${event.WorkerSid} attributes updated`);
         await WorkerAttributesUpdated.syncWorkerAttributesWithEligibleQueues(context, event);
         break;
       case 'task-queue.created':
-        if (process.env.LOG_EVENTS === 'true')
-          console.log(`Event Received: Task Queue "${event.TaskQueueName}" created`);
+        if (TR_EVENTS_LOG_EVENTS === 'true') console.log(`Event Received: Task Queue "${event.TaskQueueName}" created`);
         await TaskQueueCreated.syncWorkerAttributesWithEligibleQueues(context, event);
         break;
       case 'task-queue.expression.updated':
-        if (process.env.LOG_EVENTS === 'true')
+        if (TR_EVENTS_LOG_EVENTS === 'true')
           console.log(
             `Event Received: Task Queue "${event.TaskQueueName}" Updated: "${event.TaskQueueTargetExpression}"`,
           );
