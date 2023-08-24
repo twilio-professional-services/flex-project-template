@@ -1,4 +1,5 @@
 import { FilterDefinition, Manager } from '@twilio/flex-ui';
+import { sortBy } from 'lodash';
 
 import SelectFilter from '../custom-components/SelectFilter';
 import SelectFilterLabel from '../custom-components/SelectFilterLabel';
@@ -26,7 +27,7 @@ export const agentSkillsFilter = () =>
     id: 'data.attributes.routing.skills',
     title: (Manager.getInstance().strings as any)[StringTemplates.AgentSkills],
     fieldName: 'skills',
-    options: skillsArray ? skillsArray : [],
+    options: skillsArray ? sortBy(skillsArray, ['label']) : [],
     customStructure: {
       field: <SelectFilter IsMulti={true} />,
       label: <SelectFilterLabel />,
