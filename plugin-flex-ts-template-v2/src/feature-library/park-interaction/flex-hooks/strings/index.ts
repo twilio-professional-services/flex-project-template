@@ -12,6 +12,7 @@ export enum StringTemplates {
   WebhookError = 'PSParkWebhookError',
   NonCbmError = 'PSParkNonCbmError',
   MultipleParticipantsError = 'PSParkMultipleParticipantsError',
+  ParkInteractionTitle = 'PSParkTitle',
 }
 
 export const stringHook = () => ({

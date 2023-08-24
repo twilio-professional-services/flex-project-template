@@ -17,7 +17,8 @@ To enable the parking feature, under your `flex-config` attributes set the `park
 
 ```json
 "park_interaction": {
-    "enabled": true
+    "enabled": true,
+    "show_menu": false
 }
 ```
 
