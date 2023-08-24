@@ -1,6 +1,4 @@
-const { prepareStudioFunction, extractStandardResponse } = require(Runtime.getFunctions()[
-  'common/helpers/function-helper'
-].path);
+const { prepareStudioFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 
 const WorkerAttributesUpdated = require(Runtime.getFunctions()['features/tr-events/handlers/workerAttributesUpdated']
   .path);
@@ -12,6 +10,7 @@ const TaskQueueExpressionUpdated = require(Runtime.getFunctions()[
 
 const requiredParameters = [];
 
+// general ingestion point for all task router events that are desired to be handled
 exports.handler = prepareStudioFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
     const { TR_EVENTS_LOG_EVENTS, TR_EVENTS_SYNC_WORKERS_WITH_QUEUES } = process.env;

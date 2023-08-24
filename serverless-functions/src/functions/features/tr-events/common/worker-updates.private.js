@@ -2,6 +2,10 @@ const { isEqual } = require('lodash');
 
 const TaskRouter = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
+// common function that takes a worker sid and their current attributes
+// from the worker sid it determines which queues they should have on their
+// attributes.  Which are then compared to the current attributes to determine
+// if the attributes need updated.
 exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttributesWithEligibleQueues(
   context,
   workerSid,

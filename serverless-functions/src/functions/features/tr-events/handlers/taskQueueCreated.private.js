@@ -1,9 +1,7 @@
 const { processBatch } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
-
 const TaskRouter = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 /* Example Event
-
   EventType: 'task-queue.created',
   ResourceType: 'taskqueue',
   TaskQueueName: 'MyTestQueue',
@@ -20,6 +18,11 @@ const TaskRouter = require(Runtime.getFunctions()['common/twilio-wrappers/taskro
   ResourceSid: 'WQ...'
 */
 
+// when a task queue is created this function will
+// identify all the eligible workers for that queue
+// and ensure their queues list includes the new queue
+// by passing the identified list of eligible workers
+// to a batch processor.
 exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttributesWithEligibleQueues(context, event) {
   try {
     // get the eligible queues for that worker
@@ -31,19 +34,11 @@ exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttrib
 
     const { workers } = eligibleWorkersList;
 
-    // set up object to be processed in batch.
-    toBeProcessed = {
+    await processBatch(context, event, 'features/tr-events/batch-processors/sync-worker-attributes-with-queue', {
       tasks: workers,
       total: workers.length,
       remaining: workers.length,
-    };
-
-    await processBatch(
-      context,
-      event,
-      'features/tr-events/batch-processors/sync-worker-attributes-with-queue',
-      toBeProcessed,
-    );
+    });
   } catch (error) {
     console.log(`TR EVENT: Error in workerCreated.syncAttributesWithEligibleQueues: ${error}`);
   }

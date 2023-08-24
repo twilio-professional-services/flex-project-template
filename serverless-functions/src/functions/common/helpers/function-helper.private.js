@@ -40,6 +40,33 @@ const prepareFunction = (context, event, callback, requiredParameters, handlerFn
   return handlerFn(context, event, callback, response, handleError);
 };
 
+// function for handling the protocol around an inbound handoff request
+// primarily sets the 'complete' status to true so that the previous function
+// can complete
+const receiveHandOff = async (context, event) => {
+  const { handoffSid, total, remaining } = event;
+
+  try {
+    if (process.env.LOG_HANDOVER_EVENTS === 'true')
+      console.log(
+        `BATCH PROCESSING: handoff received for ${handoffSid} with ${remaining} of ${total} tasks to be processed`,
+      );
+    await updateDocumentData({
+      context,
+      documentSid: handoffSid,
+      updateData: {
+        status: 'running',
+        complete: true,
+        total,
+        remaining,
+        last_updated: new Date(),
+      },
+    });
+  } catch (error) {
+    console.log('BATCH PROCESSING: Error updating doc for handoff', error);
+  }
+};
+
 /**
  * @param {string} callingFunctionPath
  * @param {object} parameterObject
@@ -271,30 +298,6 @@ exports.processBatch = async (context, event, function_path, payload) => {
 
   await documentUpdated(context, document.document.sid);
   return document.document;
-};
-
-receiveHandOff = async (context, event) => {
-  const { handoffSid, total, remaining } = event;
-
-  try {
-    if (process.env.LOG_HANDOVER_EVENTS === 'true')
-      console.log(
-        `BATCH PROCESSING: handoff received for ${handoffSid} with ${remaining} of ${total} tasks to be processed`,
-      );
-    await updateDocumentData({
-      context,
-      documentSid: handoffSid,
-      updateData: {
-        status: 'running',
-        complete: true,
-        total,
-        remaining,
-        last_updated: new Date(),
-      },
-    });
-  } catch (error) {
-    console.log('BATCH PROCESSING: Error updating doc for handoff', error);
-  }
 };
 
 exports.prepareBatchProcessingFunction = (requiredParameters, handlerFn) => {

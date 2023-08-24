@@ -1,21 +1,33 @@
 const { processBatch, prepareBatchProcessingFunction } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-
 const TaskRouter = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const WorkerUpdates = require(Runtime.getFunctions()['features/tr-events/common/worker-updates'].path);
 
-const requiredParameters = [];
+const requiredParameters = [
+  {
+    key: 'tasks',
+    purpose: 'array of remaining work item objects that contain worker SIDs to be processed',
+  },
+  {
+    key: 'total',
+    purpose: 'the total number of tasks to be processed when this was batch was started',
+  },
+];
 
 snooze = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// single promise operation that takes the runtime context
+// and a single work item to resolve as a completed piece of
+// work.  When the work is completed it marks the work item
+// as successfully completed.
 updateWorkerAttributesWithQueues = (context, workItem) =>
   new Promise(async (resolve) => {
     const { sid: workerSid } = workItem;
 
     try {
       // worker read has a much higher limit than worker
-      // update so not worry about retries within the batch here
+      // update so not worrying about retries within the batch here
       const getWorkerResult = await TaskRouter.getWorker({
         context,
         workerSid,
@@ -40,6 +52,11 @@ updateWorkerAttributesWithQueues = (context, workItem) =>
     }
   });
 
+// default handler for the function
+// pulls off the first TR_EVENTS_PROCESSING_BATCH_SIZE items from
+// the tasks array and generates a promise array to be executed concurrently
+// any successful items are then removed from the tasks array and
+// passed along to the next batch processor.
 exports.handler = prepareBatchProcessingFunction(
   requiredParameters,
   async (context, event, callback, response, handleError) => {

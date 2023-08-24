@@ -1,5 +1,4 @@
 const { processBatch } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
-
 const TaskRouter = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 /* Example Event
@@ -19,6 +18,16 @@ const TaskRouter = require(Runtime.getFunctions()['common/twilio-wrappers/taskro
   ResourceSid: 'WQ..'
 */
 
+// when a task queue expression is updated
+// this function will trigger all workers to be re-evaluated for their
+// eligible queues.  This is necessary as we potentially need to remove the queue
+// from some workers and add the queue to others.  Ideally we would keep a cache
+// of the eligible worker sids for a queue so we could compare with the new list
+// and update only thee deltas (ones removed and ones added to the list) however
+// a robust caching mechanism with the tools available is quite hard to accomplish
+// for an unbound object size.  Given how robust and quick the updates are, solution
+// opted for is to just re-evaluate all the workers.
+
 exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttributesWithEligibleQueues(context, event) {
   try {
     // when we update a queue we may need to remove the queue from
@@ -32,19 +41,11 @@ exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttrib
 
     const { workers } = eligibleWorkersList;
 
-    // set up object to be processed in batch.
-    toBeProcessed = {
+    await processBatch(context, event, 'features/tr-events/batch-processors/sync-worker-attributes-with-queue', {
       tasks: workers,
       total: workers.length,
       remaining: workers.length,
-    };
-
-    await processBatch(
-      context,
-      event,
-      'features/tr-events/batch-processors/sync-worker-attributes-with-queue',
-      toBeProcessed,
-    );
+    });
   } catch (error) {
     console.log(`TR EVENT: Error in workerCreated.syncAttributesWithEligibleQueues: ${error}`);
   }

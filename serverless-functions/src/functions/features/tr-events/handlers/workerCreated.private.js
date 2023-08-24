@@ -25,6 +25,8 @@ const WorkerUpdates = require(Runtime.getFunctions()['features/tr-events/common/
 
 */
 
+// function when worker is created that will evaluate which queues the worker
+// is eligible for and updates that specific worker if necessary.
 exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttributesWithEligibleQueues(context, event) {
   try {
     const { WorkerSid: workerSid } = event;
@@ -37,8 +39,6 @@ exports.syncWorkerAttributesWithEligibleQueues = async function syncWorkerAttrib
     if (!getWorkerResult.success)
       throw new Error('workerCreated.syncWorkerAttributesWithEligibleQueues: Unable to get worker');
 
-    // grab the worker attributes from the event
-    // showing the new updated attributes
     workerAttributes = getWorkerResult.worker.attributes;
 
     return await WorkerUpdates.syncWorkerAttributesWithEligibleQueues(context, workerSid, workerAttributes);
