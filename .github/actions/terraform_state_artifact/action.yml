@@ -64,7 +64,7 @@ runs:
 
         npm install -g twilio-cli
 
-        terraform init
+        terraform init -input=false
         
         #############################################################################
         ### THE FOLLOWING CAPTURES THE SIDS FROM THE ENVIRONMENT AND IMPORTS THEM
@@ -72,19 +72,19 @@ runs:
         #############################################################################
 
         ### SERVERLESS DOMAINS: ALWAYS REQUIRED INPUT VARIABLES ###
-        $services = twilio api:serverless:v1:services:list -o json | ConvertFrom-Json
+        $services = twilio api:serverless:v1:services:list --no-limit -o json | ConvertFrom-Json
 
         $env:TF_VAR_SERVERLESS_SID = $services | where {$_.uniqueName -eq 'custom-flex-extensions-serverless'} | Select -property sid -ExpandProperty sid
         $env:TF_VAR_SCHEDULE_MANAGER_SID = $services | where {$_.uniqueName -eq 'schedule-manager'} | Select -property sid -ExpandProperty sid
 
-        $env:TF_VAR_SERVERLESS_DOMAIN = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SERVERLESS_SID -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
-        $env:TF_VAR_SERVERLESS_ENV_SID = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SERVERLESS_SID -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property sid -ExpandProperty sid
-        $env:TF_VAR_SCHEDULE_MANAGER_DOMAIN = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SCHEDULE_MANAGER_SID -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
-        $env:TF_VAR_SCHEDULE_MANAGER_ENV_SID = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SCHEDULE_MANAGER_SID -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property sid -ExpandProperty sid
+        $env:TF_VAR_SERVERLESS_DOMAIN = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SERVERLESS_SID --no-limit -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
+        $env:TF_VAR_SERVERLESS_ENV_SID = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SERVERLESS_SID --no-limit -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property sid -ExpandProperty sid
+        $env:TF_VAR_SCHEDULE_MANAGER_DOMAIN = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SCHEDULE_MANAGER_SID --no-limit -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property domainName -ExpandProperty domainName
+        $env:TF_VAR_SCHEDULE_MANAGER_ENV_SID = twilio api:serverless:v1:services:environments:list --service-sid $env:TF_VAR_SCHEDULE_MANAGER_SID --no-limit -o json | ConvertFrom-Json | where {$_.uniqueName -eq 'dev-environment'} | Select -property sid -ExpandProperty sid
 
         ### FUNCTIONS
-        $serverless_functions = twilio api:serverless:v1:services:functions:list --service-sid $env:TF_VAR_SERVERLESS_SID -o json | ConvertFrom-Json
-        $schedule_manager_functions = twilio api:serverless:v1:services:functions:list --service-sid $env:TF_VAR_SCHEDULE_MANAGER_SID -o json | ConvertFrom-Json
+        $serverless_functions = twilio api:serverless:v1:services:functions:list --service-sid $env:TF_VAR_SERVERLESS_SID --no-limit -o json | ConvertFrom-Json
+        $schedule_manager_functions = twilio api:serverless:v1:services:functions:list --service-sid $env:TF_VAR_SCHEDULE_MANAGER_SID --no-limit -o json | ConvertFrom-Json
 
         ### SERVERLESS FUNCTIONS
         $env:TF_VAR_FUNCTION_CREATE_CALLBACK = $serverless_functions | where {$_.friendlyName -eq '/features/callback-and-voicemail/studio/create-callback'} | Select -property sid -ExpandProperty sid
@@ -110,17 +110,17 @@ runs:
           echo " - Discovering and importing existing state for known definitions"  >> $env:GITHUB_STEP_SUMMARY
           ### TASK ROUTER ###
           # workspace
-          $workspaces = twilio api:taskrouter:v1:workspaces:list -o json | ConvertFrom-Json 
+          $workspaces = twilio api:taskrouter:v1:workspaces:list --no-limit -o json | ConvertFrom-Json 
           
           $tf_workspace_sid = $workspaces | where {$_.friendlyName -eq 'Flex Task Assignment'} | Select -property sid -ExpandProperty sid
 
           if ($tf_workspace_sid) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_v1.flex $tf_workspace_sid
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_v1.flex $tf_workspace_sid
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
           echo "   - :white_check_mark: Task Router - Workspaces"  >> $env:GITHUB_STEP_SUMMARY
           # workflows
-          $workflows = twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
+          $workflows = twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $tf_workspace_sid --no-limit -o json | ConvertFrom-Json
 
           $tf_workflow_sid_assign_to_anyone = $workflows | where {$_.friendlyName -eq 'Assign to Anyone'} | Select -property sid -ExpandProperty sid
           $tf_workflow_sid_chat_transfer = $workflows | where {$_.friendlyName -eq 'Chat Transfer'} | Select -property sid -ExpandProperty sid
@@ -129,27 +129,27 @@ runs:
 
 
           if ($tf_workflow_sid_assign_to_anyone) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone $tf_workspace_sid/$tf_workflow_sid_assign_to_anyone
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone $tf_workspace_sid/$tf_workflow_sid_assign_to_anyone
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_workflow_sid_chat_transfer) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.chat_transfer $tf_workspace_sid/$tf_workflow_sid_chat_transfer
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.chat_transfer $tf_workspace_sid/$tf_workflow_sid_chat_transfer
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_workflow_sid_callback) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.callback $tf_workspace_sid/$tf_workflow_sid_callback
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.callback $tf_workspace_sid/$tf_workflow_sid_callback
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_workflow_sid_internal_call) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.internal_call $tf_workspace_sid/$tf_workflow_sid_internal_call
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.internal_call $tf_workspace_sid/$tf_workflow_sid_internal_call
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
           echo "   - :white_check_mark: Task Router - Workflows"  >> $env:GITHUB_STEP_SUMMARY
           # queues
-          $queues = twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
+          $queues = twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $tf_workspace_sid --no-limit -o json | ConvertFrom-Json
 
           $tf_queue_sid_everyone = $queues | where {$_.friendlyName -eq 'Everyone'} | Select -property sid -ExpandProperty sid
           $tf_queue_sid_template_example_sales = $queues | where {$_.friendlyName -eq 'Template Example Sales'} | Select -property sid -ExpandProperty sid
@@ -157,43 +157,43 @@ runs:
           $tf_queue_sid_internal_calls = $queues | where {$_.friendlyName -eq 'Internal Calls'} | Select -property sid -ExpandProperty sid
 
           if ($tf_queue_sid_everyone) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.everyone $tf_workspace_sid/$tf_queue_sid_everyone
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.everyone $tf_workspace_sid/$tf_queue_sid_everyone
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_queue_sid_template_example_sales) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_sales $tf_workspace_sid/$tf_queue_sid_template_example_sales
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_sales $tf_workspace_sid/$tf_queue_sid_template_example_sales
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_queue_sid_template_example_support) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_support $tf_workspace_sid/$tf_queue_sid_template_example_support
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_support $tf_workspace_sid/$tf_queue_sid_template_example_support
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_queue_sid_internal_calls) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.internal_calls $tf_workspace_sid/$tf_queue_sid_internal_calls
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.internal_calls $tf_workspace_sid/$tf_queue_sid_internal_calls
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }   
           echo "   - :white_check_mark: Task Router - Queues"  >> $env:GITHUB_STEP_SUMMARY
           # channels
-          $channels = twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
+          $channels = twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid $tf_workspace_sid --no-limit -o json | ConvertFrom-Json
 
           $tf_task_channel_sid_voice = $channels | where {$_.uniqueName -eq 'voice'} | Select -property sid -ExpandProperty sid
           $tf_task_channel_sid_chat = $channels | where {$_.uniqueName -eq 'chat'} | Select -property sid -ExpandProperty sid
 
           if ($tf_task_channel_sid_voice) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.voice $tf_workspace_sid/$tf_task_channel_sid_voice
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.voice $tf_workspace_sid/$tf_task_channel_sid_voice
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_task_channel_sid_chat) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.chat $tf_workspace_sid/$tf_task_channel_sid_chat
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.chat $tf_workspace_sid/$tf_task_channel_sid_chat
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
           echo "   - :white_check_mark: Task Router - Channels"  >> $env:GITHUB_STEP_SUMMARY
           # activities
-          $activities = twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid -o json | ConvertFrom-Json
+          $activities = twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $tf_workspace_sid --no-limit -o json | ConvertFrom-Json
 
           $tf_activity_offline = $activities | where {$_.friendlyName -eq 'Offline'} | Select -property sid -ExpandProperty sid
           $tf_activity_available = $activities | where {$_.friendlyName -eq 'Available'} | Select -property sid -ExpandProperty sid
@@ -206,65 +206,65 @@ runs:
           $tf_activity_wrap_up_no_acd = $activities | where {$_.friendlyName -eq 'Wrap Up, No ACD'} | Select -property sid -ExpandProperty sid
 
           if ($tf_activity_offline) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.offline $tf_workspace_sid/$tf_activity_offline
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_activities_v1.offline $tf_workspace_sid/$tf_activity_offline
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_activity_available) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.available $tf_workspace_sid/$tf_activity_available
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_activities_v1.available $tf_workspace_sid/$tf_activity_available
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_activity_unavailable) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.unavailable $tf_workspace_sid/$tf_activity_unavailable
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_activities_v1.unavailable $tf_workspace_sid/$tf_activity_unavailable
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_activity_break) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.break $tf_workspace_sid/$tf_activity_break
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_activities_v1.break $tf_workspace_sid/$tf_activity_break
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_activity_on_a_task) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.on_a_task $tf_workspace_sid/$tf_activity_on_a_task
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_activities_v1.on_a_task $tf_workspace_sid/$tf_activity_on_a_task
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_activity_on_a_task_no_acd) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.on_a_task_no_acd $tf_workspace_sid/$tf_activity_on_a_task_no_acd
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_activities_v1.on_a_task_no_acd $tf_workspace_sid/$tf_activity_on_a_task_no_acd
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_activity_wrap_up) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.wrap_up $tf_workspace_sid/$tf_activity_wrap_up
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_activities_v1.wrap_up $tf_workspace_sid/$tf_activity_wrap_up
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_activity_wrap_up_no_acd) {
-            terraform import module.taskrouter.twilio_taskrouter_workspaces_activities_v1.wrap_up_no_acd $tf_workspace_sid/$tf_activity_wrap_up_no_acd
+            terraform import -input=false module.taskrouter.twilio_taskrouter_workspaces_activities_v1.wrap_up_no_acd $tf_workspace_sid/$tf_activity_wrap_up_no_acd
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           echo "   - :white_check_mark: Task Router - Activities"  >> $env:GITHUB_STEP_SUMMARY
           ### STUDIO ###
-          $flows = twilio api:studio:v2:flows:list -o json | ConvertFrom-Json
+          $flows = twilio api:studio:v2:flows:list --no-limit -o json | ConvertFrom-Json
     
           $tf_flow_sid_voice_ivr = $flows | where {$_.friendlyName -eq 'Voice IVR'} | Select -property sid -ExpandProperty sid
           $tf_flow_sid_messaging_flow = $flows | where {$_.friendlyName -eq 'Messaging Flow'} | Select -property sid -ExpandProperty sid
           $tf_flow_sid_chat_flow = $flows | where {$_.friendlyName -eq 'Chat Flow'} | Select -property sid -ExpandProperty sid
 
           if ($tf_flow_sid_voice_ivr) {
-            terraform import module.studio.twilio_studio_flows_v2.voice $tf_flow_sid_voice_ivr
+            terraform import -input=false module.studio.twilio_studio_flows_v2.voice $tf_flow_sid_voice_ivr
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_flow_sid_messaging_flow) {
-            terraform import module.studio.twilio_studio_flows_v2.messaging $tf_flow_sid_messaging_flow
+            terraform import -input=false module.studio.twilio_studio_flows_v2.messaging $tf_flow_sid_messaging_flow
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
 
           if ($tf_flow_sid_chat_flow) {
-            terraform import module.studio.twilio_studio_flows_v2.chat $tf_flow_sid_chat_flow
+            terraform import -input=false module.studio.twilio_studio_flows_v2.chat $tf_flow_sid_chat_flow
             if ($LASTEXITCODE) { exit $LASTEXITCODE } 
           }
           echo "   - :white_check_mark: Studio - Flows"  >> $env:GITHUB_STEP_SUMMARY
@@ -279,9 +279,9 @@ runs:
         if ($terraformapply -eq "false"){
           $terraformapply = $false
         }
-        terraform plan $custom_plan_flags
+        terraform plan -input=false $custom_plan_flags
         if ($terraformapply){
-          terraform apply -auto-approve $custom_apply_flags
+          terraform apply -input=false -auto-approve $custom_apply_flags
           if ($LASTEXITCODE) {
             echo " - :x: Applying configuration failure"  >> $env:GITHUB_STEP_SUMMARY 
             echo "APPLY_EXIT_CODE=$LASTEXITCODE" >> $env:GITHUB_ENV
