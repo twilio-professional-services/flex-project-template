@@ -84,19 +84,11 @@ exports.handler = prepareBatchProcessingFunction(
         }
       });
 
-      // set up object to be processed in batch.
-      toBeProcessed = {
+      await processBatch(context, event, 'features/tr-events/batch-processors/sync-worker-attributes-with-queue', {
         tasks,
         total: event.total,
         remaining: tasks.length,
-      };
-
-      await processBatch(
-        context,
-        event,
-        'features/tr-events/batch-processors/sync-worker-attributes-with-queue',
-        toBeProcessed,
-      );
+      });
 
       return callback(null, response);
     } catch (error) {
