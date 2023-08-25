@@ -78,7 +78,8 @@
         "default_max_capacity": 2
       },
       "device_manager": {
-        "enabled": true
+        "enabled": true,
+        "input_select": false
       },
       "dual_channel_recording": {
         "enabled": false,
