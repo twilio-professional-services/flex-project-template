@@ -55,7 +55,7 @@ After the above requirements have been met:
    ```
 
    ```
-   NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN=http://localhost:3001
+   NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN=localhost:3001
    ```
 
 3. Run the following command to build the application and automatically transfer the build output to the `../../serverless-functions/src/assets/features/chat-to-video` folder:

@@ -73,8 +73,8 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install
-          npm run populate-missing-placeholders $ENVIRONMENT
+          npm install skip-postinstall
+          npm run generate-env
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
@@ -140,8 +140,9 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install
-          npm run populate-missing-placeholders $ENVIRONMENT
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm install skip-postinstall
+          npm run generate-env  >> $GITHUB_STEP_SUMMARY
 # FEATURE: chat-to-video-escalation
       - name: install npm and build video-app-assets
         working-directory: web-app-examples/video-app-quickstart
@@ -180,8 +181,8 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install
-          npm run populate-missing-placeholders $ENVIRONMENT
+          npm install skip-postinstall
+          npm run generate-env
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
@@ -219,7 +220,8 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Overwrite Config: ${{ env.OVERWRITE_CONFIG }}"  >> $GITHUB_STEP_SUMMARY
-          npm install
+          npm install skip-postinstall
+          npm run generate-env
       - name: deploy flex config
         working-directory: flex-config
         run: |
