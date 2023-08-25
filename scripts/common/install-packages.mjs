@@ -1,6 +1,6 @@
 import shell from "shelljs";
 
-import constants from "./constants.mjs";
+import * as constants from "./constants.mjs";
 import getPluginDirs from "./get-plugin.mjs";
 
 const installNpmPackage = (packageDir) => {

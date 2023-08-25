@@ -1,6 +1,6 @@
 import shell from "shelljs";
 
-import constants from "./constants.mjs";
+import { defaultPluginDir } from "./constants.mjs";
 
 const getDirectoryName = (originalName, regex) => {
   var tempPluginDir = "";
@@ -28,7 +28,7 @@ const getDirectoryName = (originalName, regex) => {
 export default () => {
   // The plugin can be renamed via the rename-template script,
   // so we must do some searching before relying on constants.
-  const pluginDir = getDirectoryName(constants.defaultPluginDir, /flex-template-.*/);
+  const pluginDir = getDirectoryName(defaultPluginDir, /flex-template-.*/);
   const templateDirectory = `${pluginDir}/template-files`;
   const featureDirectory = `${pluginDir}/src/feature-library`;
   const pluginSrc = `${pluginDir}/src`;

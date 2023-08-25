@@ -1,6 +1,6 @@
 import shell from 'shelljs';
 
-import constants from "./constants.mjs";
+import { varNameMapping } from "./constants.mjs";
 
 let fetchedTypes = [];
 let resultCache = {};
@@ -9,12 +9,12 @@ let resultCache = {};
 const filterWantedVars = (type) => {
   let wanted = {};
   
-  for (const varName in constants.varNameMapping) {
-    if (constants.varNameMapping[varName].type !== type) {
+  for (const varName in varNameMapping) {
+    if (varNameMapping[varName].type !== type) {
       continue;
     }
     
-    wanted[varName] = constants.varNameMapping[varName];
+    wanted[varName] = varNameMapping[varName];
   }
   
   return wanted;

@@ -1,12 +1,13 @@
-const serverlessDir = 'serverless-functions';
-const scheduleManagerServerlessDir = 'serverless-schedule-manager';
-const flexConfigDir = 'flex-config';
-const videoAppDir = 'web-app-examples/video-app-quickstart';
-const gitHubWorkflowDir = '.github/workflows';
-const defaultPluginDir = 'plugin-flex-ts-template-v2';
+export const serverlessDir = 'serverless-functions';
+export const serverlessSrc = `${serverlessDir}/src`;
+export const scheduleManagerServerlessDir = 'serverless-schedule-manager';
+export const flexConfigDir = 'flex-config';
+export const videoAppDir = 'web-app-examples/video-app-quickstart';
+export const gitHubWorkflowDir = '.github/workflows';
+export const defaultPluginDir = 'plugin-flex-ts-template-v2';
 
 // Definitions for fetching values from API
-const varNameMapping = {
+export const varNameMapping = {
   "SERVERLESS_DOMAIN": {
     type: "serverless-domain",
     name: "custom-flex-extensions-serverless",
@@ -45,15 +46,4 @@ const varNameMapping = {
     type: "tr-workflow",
     name: "Internal Call",
   },
-};
-
-export default {
-  serverlessDir,
-  scheduleManagerServerlessDir,
-  flexConfigDir,
-  videoAppDir,
-  gitHubWorkflowDir,
-  defaultPluginDir,
-  serverlessSrc: `${serverlessDir}/src`,
-  varNameMapping,
 };

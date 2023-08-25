@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import shell from 'shelljs';
 
-import constants from "./constants.mjs";
+import { varNameMapping } from "./constants.mjs";
 import * as fetchCli from "./fetch-cli.mjs";
 
 // Initialize env file if necessary, then parse its contents
@@ -48,7 +48,7 @@ const fillKnownEnvVars = (envVars) => {
 // For vars still unknown, fetches needed vars from the API and fills in as appropriate
 const fillUnknownEnvVars = (envVars, environment) => {
   for (const key in envVars) {
-    if (envVars[key] !== `<YOUR_${key}>` || !constants.varNameMapping[key]) {
+    if (envVars[key] !== `<YOUR_${key}>` || !varNameMapping[key]) {
       // If this isn't a placeholder value, ignore it.
       // This variable isn't in the constant, so we can't do anything else with it.
       continue;
@@ -60,14 +60,14 @@ const fillUnknownEnvVars = (envVars, environment) => {
       continue;
     }
     
-    if (!environment && constants.varNameMapping[key].localValue) {
+    if (!environment && varNameMapping[key].localValue) {
       // Running locally, use the local value if specified
-      envVars[key] = constants.varNameMapping[key].localValue;
+      envVars[key] = varNameMapping[key].localValue;
       continue;
     }
     
     // we haven't yet fetched the value; do that based on type
-    switch (constants.varNameMapping[key].type) {
+    switch (varNameMapping[key].type) {
       case "serverless-domain":
       fetchCli.fetchServerlessDomains();
       break;
@@ -89,7 +89,7 @@ const fillUnknownEnvVars = (envVars, environment) => {
       fetchCli.fetchChatServices();
       break;
       default:
-      console.warn(`Unknown placeholder variable type: ${constants.varNameMapping[key].type}`);
+      console.warn(`Unknown placeholder variable type: ${varNameMapping[key].type}`);
       break;
     }
     

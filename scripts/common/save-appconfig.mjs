@@ -3,14 +3,14 @@ import JSON5 from 'json5';
 import shell from 'shelljs';
 
 import getPluginDirs from "./get-plugin.mjs";
-import constants from "./constants.mjs";
+import { flexConfigDir } from "./constants.mjs";
 
 export default async () => {
   var { pluginDir } = getPluginDirs();
 
   var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`;
   var pluginAppConfig = `./${pluginDir}/public/appConfig.js`;
-  var commonFlexConfig = `./${constants.flexConfigDir}/ui_attributes.common.json`;
+  var commonFlexConfig = `./${flexConfigDir}/ui_attributes.common.json`;
   
   if (!pluginDir) {
     return;

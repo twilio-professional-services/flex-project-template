@@ -1,4 +1,4 @@
-import constants from "./constants.mjs";
+import { varNameMapping } from "./constants.mjs";
 
 const acronyms = ['sid', 'id', 'ui', 'sip', 'pstn', 'sms', 'crm', 'sla', 'cbm', 'url'];
 const ignoreKeys = ['ACCOUNT_SID', 'AUTH_TOKEN', 'TWILIO_API_KEY', 'TWILIO_API_SECRET'];
@@ -49,10 +49,10 @@ export default (allReplacements) => {
   console.log("");
   console.log("Environment configuration summary:");
   for (const key in allReplacements) {
-    if (!constants.varNameMapping[key] || !(
-      constants.varNameMapping[key].type == "tr-workspace" || 
-      constants.varNameMapping[key].type == "sync-service" || 
-      constants.varNameMapping[key].type == "chat-service"
+    if (!varNameMapping[key] || !(
+      varNameMapping[key].type == "tr-workspace" || 
+      varNameMapping[key].type == "sync-service" || 
+      varNameMapping[key].type == "chat-service"
     )) {
       continue;
     }
@@ -68,7 +68,7 @@ export default (allReplacements) => {
   }
   printHeader = true;
   for (const key in allReplacements) {
-    if (!constants.varNameMapping[key] || constants.varNameMapping[key].type != "tr-workflow") {
+    if (!varNameMapping[key] || varNameMapping[key].type != "tr-workflow") {
       continue;
     }
     
@@ -83,7 +83,7 @@ export default (allReplacements) => {
   }
   printHeader = true;
   for (const key in allReplacements) {
-    if (!constants.varNameMapping[key] || constants.varNameMapping[key].type != "serverless-domain") {
+    if (!varNameMapping[key] || varNameMapping[key].type != "serverless-domain") {
       continue;
     }
     
