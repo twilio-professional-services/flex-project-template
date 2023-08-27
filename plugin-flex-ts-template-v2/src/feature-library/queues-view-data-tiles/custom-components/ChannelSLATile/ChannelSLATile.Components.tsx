@@ -12,7 +12,7 @@ export interface ThemeOnlyProps {
   theme?: any;
 }
 
-export const TileWrapper = styled('div') <OwnProps>`
+export const TileWrapper = styled('div')<OwnProps>`
   display: flex;
   flex-direction: column;
   padding: ${({ theme }) => theme.tokens.spacings.space40};
@@ -24,7 +24,7 @@ export const TileWrapper = styled('div') <OwnProps>`
   color: ${({ theme }) => theme.tokens.textColors.colorText};
 `;
 
-export const Title = styled('p') <ThemeOnlyProps>`
+export const Title = styled('p')<ThemeOnlyProps>`
   min-height: ${({ theme }) => theme.tokens.sizings.sizeSquare70};
   margin-top: ${({ theme }) => theme.tokens.spacings.space0};
   margin-bottom: ${({ theme }) => theme.tokens.spacings.space0};
@@ -36,7 +36,7 @@ export const Title = styled('p') <ThemeOnlyProps>`
   display: flex;
 `;
 
-export const Content = styled('div') <ThemeOnlyProps>`
+export const Content = styled('div')<ThemeOnlyProps>`
   margin-top: ${({ theme }) => theme.tokens.spacings.space50};
   font-size: ${({ theme }) => theme.tokens.fontSizes.fontSize90};
   line-height: ${({ theme }) => theme.tokens.lineHeights.lineHeight90};
@@ -46,12 +46,12 @@ export const Content = styled('div') <ThemeOnlyProps>`
   display: flex;
 `;
 
-export const Description = styled('div') <ThemeOnlyProps>`
+export const Description = styled('div')<ThemeOnlyProps>`
   font-size: ${({ theme }) => theme.tokens.fontSizes.fontSize20};
   line-height: ${({ theme }) => theme.tokens.lineHeights.lineHeight10};
 `;
 
-export const TileWrapper1 = styled('div') <OwnProps>`
+export const TileWrapper1 = styled('div')<OwnProps>`
   background-color: ${(props) => getColor(props)};
   color: ${(props) => props.theme.calculated.textColor};
   padding: 12px;
