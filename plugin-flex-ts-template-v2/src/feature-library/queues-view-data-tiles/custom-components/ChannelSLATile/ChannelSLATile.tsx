@@ -5,7 +5,17 @@ import AppState from 'types/manager/AppState';
 
 import { getChannelIcon } from '../../utils/helpers';
 import QueueDataUtil from '../../utils/QueueDataUtil';
-import { TileWrapper, Title, Channel, ChannelIcon, Content, Label, Metric, Handled } from './ChannelSLATile.Components';
+import {
+  TileWrapper,
+  Title,
+  Channel,
+  ChannelIcon,
+  Content,
+  Label,
+  Metric,
+  Handled,
+  MetricsContainer,
+} from './ChannelSLATile.Components';
 import { ChannelSLMetrics, SLMetrics } from '../../types';
 
 interface ComponentProps {
@@ -35,14 +45,17 @@ const ChannelSLATileV2 = (props: ComponentProps) => {
         <Title className="Twilio-AggregatedDataTile-Title">{`${channelName} SLA`}</Title>
       </Channel>
       <Content className="Twilio-AggregatedDataTile-Content">{content}</Content>
-      <Handled>
-        <Label>Handled Today: </Label>
-        <Metric>{sla?.handledTasks}</Metric>
-      </Handled>
-      <Handled>
-        <Label>Within SL: </Label>
-        <Metric>{sla?.handledTasksWithinSL}</Metric>
-      </Handled>
+      <Label>Today</Label>
+      <MetricsContainer>
+        <Handled>
+          <Label>Handled</Label>
+          <Metric>{sla?.handledTasks}</Metric>
+        </Handled>
+        <Handled>
+          <Label>Within&nbsp;SL</Label>
+          <Metric>{sla?.handledTasksWithinSL}</Metric>
+        </Handled>
+      </MetricsContainer>
     </TileWrapper>
   );
 };

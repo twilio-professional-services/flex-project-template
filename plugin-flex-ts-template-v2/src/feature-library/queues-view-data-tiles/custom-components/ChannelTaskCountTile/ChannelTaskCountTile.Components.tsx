@@ -47,25 +47,35 @@ export const Description = styled('div')<ThemeOnlyProps>`
   line-height: ${({ theme }) => theme.tokens.lineHeights.lineHeight10};
 `;
 
-export const TaskCount = styled('div')`
-  display: flex;
+export const MetricsContainer = styled('div')`
   flex-direction: row;
-  height: 25px;
+  display: flex;
+  justify-content: center;
+  padding: 2px;
+`;
+
+export const TaskCount = styled('div')`
+  flex-direction: column;
+  justify-content: center;
+  border-width: 1px;
+  border-radius: 6px;
+  border-style: solid;
+  border-color: grey;
+  margin-left: 2px;
+  margin-right: 2px;
 `;
 
 export const Label = styled('div')`
   color: #121c2d;
-  font-size: 12px;
-  font-weight: bold;
-  width: 100px;
-  padding: 2px;
+  font-size: 11px;
+  padding: 2px 8px;
+  text-align: center;
 `;
 
 export const Metric = styled('div')`
   color: #121c2d;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
-  width: 50px;
   padding: 2px;
-  text-align: right;
+  text-align: center;
 `;

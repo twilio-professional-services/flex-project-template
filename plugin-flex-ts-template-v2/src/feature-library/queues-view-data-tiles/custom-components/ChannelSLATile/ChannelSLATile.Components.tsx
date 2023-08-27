@@ -12,7 +12,7 @@ export interface ThemeOnlyProps {
   theme?: any;
 }
 
-export const TileWrapper = styled('div')<OwnProps>`
+export const TileWrapper = styled('div') <OwnProps>`
   display: flex;
   flex-direction: column;
   padding: ${({ theme }) => theme.tokens.spacings.space40};
@@ -24,7 +24,7 @@ export const TileWrapper = styled('div')<OwnProps>`
   color: ${({ theme }) => theme.tokens.textColors.colorText};
 `;
 
-export const Title = styled('p')<ThemeOnlyProps>`
+export const Title = styled('p') <ThemeOnlyProps>`
   min-height: ${({ theme }) => theme.tokens.sizings.sizeSquare70};
   margin-top: ${({ theme }) => theme.tokens.spacings.space0};
   margin-bottom: ${({ theme }) => theme.tokens.spacings.space0};
@@ -36,7 +36,7 @@ export const Title = styled('p')<ThemeOnlyProps>`
   display: flex;
 `;
 
-export const Content = styled('div')<ThemeOnlyProps>`
+export const Content = styled('div') <ThemeOnlyProps>`
   margin-top: ${({ theme }) => theme.tokens.spacings.space50};
   font-size: ${({ theme }) => theme.tokens.fontSizes.fontSize90};
   line-height: ${({ theme }) => theme.tokens.lineHeights.lineHeight90};
@@ -46,12 +46,12 @@ export const Content = styled('div')<ThemeOnlyProps>`
   display: flex;
 `;
 
-export const Description = styled('div')<ThemeOnlyProps>`
+export const Description = styled('div') <ThemeOnlyProps>`
   font-size: ${({ theme }) => theme.tokens.fontSizes.fontSize20};
   line-height: ${({ theme }) => theme.tokens.lineHeights.lineHeight10};
 `;
 
-export const TileWrapper1 = styled('div')<OwnProps>`
+export const TileWrapper1 = styled('div') <OwnProps>`
   background-color: ${(props) => getColor(props)};
   color: ${(props) => props.theme.calculated.textColor};
   padding: 12px;
@@ -74,27 +74,38 @@ export const ChannelIcon = styled('div')`
   margin-bottom: 0px;
   height: 24px;
 `;
-export const Handled = styled('div')`
-  display: flex;
+
+export const MetricsContainer = styled('div')`
   flex-direction: row;
-  height: 25px;
+  display: flex;
+  justify-content: center;
+  padding: 2px;
+`;
+
+export const Handled = styled('div')`
+  flex-direction: column;
+  justify-content: center;
+  border-width: 1px;
+  border-radius: 6px;
+  border-style: solid;
+  border-color: grey;
+  margin-left: 2px;
+  margin-right: 2px;
 `;
 
 export const Label = styled('div')`
   color: #121c2d;
-  font-size: 12px;
-  font-weight: bold;
-  width: 100px;
-  padding: 2px;
+  font-size: 11px;
+  padding: 2px 8px;
+  text-align: center;
 `;
 
 export const Metric = styled('div')`
   color: #121c2d;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
-  width: 50px;
   padding: 2px;
-  text-align: right;
+  text-align: center;
 `;
 
 function getColor(props: OwnProps) {
