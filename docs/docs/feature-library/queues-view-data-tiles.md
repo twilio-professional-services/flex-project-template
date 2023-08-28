@@ -121,4 +121,4 @@ This feature can be enabled via the `flex-config` attributes. Just set the `queu
 
 # Flex User Experience
 
-![QueuesViewDataTiles](/img/features/queues-view-data-tiles/QueuesViewDataTiles.png)
+![QueuesViewDataTiles](/img/features/queues-view-data-tiles/QueuesViewDataTiles2.png)
