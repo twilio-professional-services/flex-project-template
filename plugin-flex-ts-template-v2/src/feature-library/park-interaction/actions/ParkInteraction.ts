@@ -2,8 +2,9 @@ import { TaskHelper, Notifications, templates, Manager } from '@twilio/flex-ui';
 
 import { ParkInteractionNotification } from '../flex-hooks/notifications';
 import { StringTemplates } from '../flex-hooks/strings';
-import ParkInteractionPayload from '../types/ParkInteractionPayload';
+import ParkInteractionPayload, { UnparkInteractionPayload } from '../types/ParkInteractionPayload';
 import ParkInteractionService from '../utils/ParkInteractionService';
+import UnparkInteractionService from '../utils/UnparkInteractionService';
 
 const getAgent = async (payload: ParkInteractionPayload) => {
   const participants = await payload.task.getParticipants(payload.task.attributes.flexInteractionChannelSid);
@@ -70,4 +71,8 @@ export const parkInteraction = async (payload: ParkInteractionPayload) => {
       message,
     });
   }
+};
+
+export const unparkInteraction = async (payload: UnparkInteractionPayload) => {
+  await UnparkInteractionService.unparkInteraction(payload.ConversationSid, payload.WebhookSid);
 };

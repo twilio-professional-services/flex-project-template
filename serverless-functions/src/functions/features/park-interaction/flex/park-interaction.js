@@ -3,6 +3,9 @@ const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunc
 ].path);
 const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
 const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
+const SyncClient = require('twilio-sync').Client;
+
+const syncToken = require(Runtime.getFunctions()['common/twilio-wrappers/get-sync-token'].path);
 
 const requiredParameters = [
   { key: 'channelSid', purpose: 'interaction channel sid' },
@@ -16,9 +19,12 @@ const requiredParameters = [
   { key: 'queueSid', purpose: 'current queue sid' },
   { key: 'taskAttributes', purpose: 'task attributes to copy' },
   { key: 'workerSid', purpose: 'agent worker sid' },
+  { key: 'workerName', purpose: 'agent worker name' },
 ];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
+  const sync = await syncToken.getSyncToken(context);
+  const syncClient = new SyncClient(sync.token);
   try {
     const {
       channelSid,
@@ -32,6 +38,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       queueSid,
       taskAttributes,
       workerSid,
+      workerName,
     } = event;
 
     // Create the webhook
@@ -74,6 +81,37 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         conversationSid,
         attributes: JSON.stringify(attributes),
       });
+
+      // Open a Sync Map by unique name and update its data
+      await syncClient
+        .map(workerName)
+        .then(async (map) => {
+          console.log('Successfully added/updated a map. SID:', map.sid);
+          try {
+            await map.set(
+              conversationSid,
+              {
+                interactionSid,
+                flexInteractionChannelSid: channelSid,
+                participantSid,
+                workflowSid,
+                taskChannelUniqueName,
+                taskAttributes,
+                webhookSid: webhookResult.webhook.sid,
+              },
+              { ttl: 86400 },
+            );
+            console.log('webhook sid: ', webhookResult.webhook.sid);
+          } catch (error) {
+            console.error('#### Sync - add Map Item failed', error);
+          }
+          map.on('itemUpdated', (updatedEvent) => {
+            console.log('Received an "itemUpdated" event:', updatedEvent);
+          });
+        })
+        .catch((error) => {
+          console.error('Unexpected error adding a MAP', error);
+        });
     }
 
     const { webhook, status } = webhookResult;
