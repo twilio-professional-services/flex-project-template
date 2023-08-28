@@ -1,6 +1,6 @@
 import { TaskHelper, Notifications, templates, Manager } from '@twilio/flex-ui';
 
-import { ParkInteractionNotification } from '../flex-hooks/notifications';
+import { ParkInteractionNotification, UnparkInteractionNotification } from '../flex-hooks/notifications';
 import { StringTemplates } from '../flex-hooks/strings';
 import ParkInteractionPayload, { UnparkInteractionPayload } from '../types/ParkInteractionPayload';
 import ParkInteractionService from '../utils/ParkInteractionService';
@@ -74,5 +74,13 @@ export const parkInteraction = async (payload: ParkInteractionPayload) => {
 };
 
 export const unparkInteraction = async (payload: UnparkInteractionPayload) => {
-  await UnparkInteractionService.unparkInteraction(payload.ConversationSid, payload.WebhookSid);
+  try {
+    await UnparkInteractionService.unparkInteraction(payload.ConversationSid, payload.WebhookSid);
+    return Notifications.showNotification(UnparkInteractionNotification.UnparkSuccess);
+  } catch (error) {
+    const message = (error as any)?.message;
+    return Notifications.showNotification(UnparkInteractionNotification.UnparkError, {
+      message,
+    });
+  }
 };

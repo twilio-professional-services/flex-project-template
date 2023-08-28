@@ -101,7 +101,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
               },
               { ttl: 86400 },
             );
-            console.log('webhook sid: ', webhookResult.webhook.sid);
           } catch (error) {
             console.error('#### Sync - add Map Item failed', error);
           }

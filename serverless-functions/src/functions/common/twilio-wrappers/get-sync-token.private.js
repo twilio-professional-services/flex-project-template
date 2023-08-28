@@ -3,7 +3,7 @@ const AccessToken = require('twilio').jwt.AccessToken;
 const SyncGrant = AccessToken.SyncGrant;
 
 // Used by other other functions
-export async function getSyncToken(context) {
+exports.getSyncToken = async (context) => {
   // Used when generating any kind of tokens
   // To set up environmental variables, see http://twil.io/secure
   const twilioAccountSid = context.ACCOUNT_SID;
@@ -29,4 +29,4 @@ export async function getSyncToken(context) {
   } catch (error) {
     return error;
   }
-}
+};
