@@ -21,28 +21,36 @@ interface ComponentProps {
 }
 const AgentActivityTile = (props: ComponentProps) => {
   const { activityConfig } = props;
-  const workerActivityCounts: ActivityCounts = useFlexSelector((state: AppState) => {
-    const activityCounts: ActivityCounts = {};
-    const activityStats = state.flex.realtimeQueues.workspaceStats?.activity_statistics || [];
-    activityStats.forEach((activity: ActivityStatistic) => {
-      activityCounts[activity.friendly_name] = activity.workers;
-    });
-    return activityCounts;
+  const workerActivityCounts: ActivityStatistic[] = useFlexSelector((state: AppState) => {
+    return state.flex.realtimeQueues.workspaceStats?.activity_statistics || [];
   });
-  const activityNames = Object.keys(activityConfig);
-
+  const activityCounts: ActivityCounts = {};
+  let otherUnavailable = 0;
   const data: Data = [];
-  activityNames.forEach((activity) => {
-    const count = workerActivityCounts[activity] || 0;
-    const dataEntry: BaseDataEntry = { title: activity, value: count, color: activityConfig[activity].color };
-    if (count && activityConfig[activity]) data.push(dataEntry);
+  workerActivityCounts.forEach((activity) => {
+    const count = activity.workers;
+    if (count && activityConfig[activity.friendly_name]) {
+      activityCounts[activity.friendly_name] = count;
+      const dataEntry: BaseDataEntry = {
+        title: activity.friendly_name,
+        value: count,
+        color: activityConfig[activity.friendly_name]?.color,
+      };
+      data.push(dataEntry);
+    } else otherUnavailable += count;
   });
+  if (otherUnavailable > 0) {
+    activityCounts.OTHER = otherUnavailable;
+    const other: BaseDataEntry = { title: 'OTHER', value: otherUnavailable, color: activityConfig.OTHER?.color };
+    data.push(other);
+  }
+  const activityNames = Object.keys(activityConfig);
 
   return (
     <TileWrapper className="Twilio-AggregatedDataTile">
       <Summary>
         {activityNames.map((activity) => {
-          const count = workerActivityCounts[activity] || 0;
+          const count = activityCounts[activity] || 0;
           return (
             <AgentActivity>
               <Icon icon={activityConfig[activity]?.icon} />
@@ -60,7 +68,7 @@ const AgentActivityTile = (props: ComponentProps) => {
             fill: 'White',
           }}
           data={data}
-          label={({ dataEntry }: { dataEntry: BaseDataEntry }) => dataEntry.value}
+          label={({ dataEntry }) => dataEntry.value}
         />
       </Chart>
     </TileWrapper>

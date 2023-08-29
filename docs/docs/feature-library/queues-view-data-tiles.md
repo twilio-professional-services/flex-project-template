@@ -40,7 +40,7 @@ The background color of the Channel SLA Tile changes based on the Service Level 
 This data tile combines the Service Level % for all configured channels with a Pie Chart to display a breakdown of all Handled Tasks for Today. When this combination Data Tile is enabled, you may not need to enable the individual Channel SLA tiles. 
 
 ### Enhanced Agent Activity Tile
-The native Agent Activity Tile adds up all Unavailable activities into 1 category (Unavailable) and does not show the agent counts for each specific Unavailable activity (for example, Break, Training, Lunch etc).  The Workspace agent activity data can be aggregated by Activity to display this more granular breakdown. The 
+The native Agent Activity Bar Chart adds up all Unavailable activities into 1 category (Unavailable) and does not show the agent counts for each specific Unavailable activity (for example, Break, Training, Lunch etc).  The Workspace agent activity data can be aggregated by Activity to display this more granular breakdown. For any worker activity that is not explicitly configured with a color & icon, the worker count will be combined under the OTHER category. Due to the limited space in the Data Tiles section, we suggest you configure no more than 6 or 7 Activities to highlight in this tile (and use the OTHER category for all other unavailable activities).
 
 ### Queues View Columns
 This feature also includes the option to show two additional columns in the Queues Stats View: Assigned Tasks and Wrapping Tasks. Again, the Active task count column is the sum of Assigned Tasks and Wrapping Tasks. Displaying these metrics separately may give Supervisors additional insight into how their agents are performing.
@@ -103,8 +103,8 @@ This feature can be enabled via the `flex-config` attributes. Just set the `queu
             "color": "red",
             "icon": "Bulb"
           },
-          "Unavailable": {
-            "color": "darkred",
+          "OTHER": {
+            "color": "More",
             "icon": "Close"
           },
           "Offline": {
