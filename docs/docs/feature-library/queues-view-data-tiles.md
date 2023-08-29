@@ -104,8 +104,8 @@ This feature can be enabled via the `flex-config` attributes. Just set the `queu
             "icon": "Bulb"
           },
           "OTHER": {
-            "color": "More",
-            "icon": "Close"
+            "color": "darkred",
+            "icon": "More"
           },
           "Offline": {
             "color": "grey",
