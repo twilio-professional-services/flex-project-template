@@ -12,17 +12,20 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
     const webhookSid = event.WebhookSid;
 
     // Remove webhook so it doesn't keep triggering if parked more than once
-    ConversationsOperations.removeWebhook({
+    const webhookResult = await ConversationsOperations.removeWebhook({
       context,
       conversationSid,
       webhookSid,
     });
+    if (!webhookResult.success) throw webhookResult.message;
+    console.log('webhook ', webhookResult);
 
     // Fetch the conversation attributes updated when parked
     const conversation = await ConversationsOperations.getConversation({
       conversationSid,
       context,
     });
+    if (!conversation.success) throw conversation.message;
     const {
       interactionSid,
       channelSid,

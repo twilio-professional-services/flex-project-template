@@ -53,13 +53,14 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (webhookResult.success) {
       // Remove the agent
-      await InteractionsOperations.participantUpdate({
+      const removeAgentResponse = await InteractionsOperations.participantUpdate({
         context,
         interactionSid,
         channelSid,
         participantSid,
         status: 'closed',
       });
+      if (!removeAgentResponse.success) throw removeAgentResponse.message;
 
       // update conversation attributes
       const attributes = {
@@ -76,17 +77,18 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         webhookSid: webhookResult.webhook.sid,
       };
 
-      await ConversationsOperations.updateAttributes({
+      const updateAttributesResponse = await ConversationsOperations.updateAttributes({
         context,
         conversationSid,
         attributes: JSON.stringify(attributes),
       });
+      if (!updateAttributesResponse.success) throw updateAttributesResponse.message;
 
       // Open a Sync Map by unique name and update its data
       await syncClient
         .map(workerName)
         .then(async (map) => {
-          console.log('Successfully added/updated a map. SID:', map.sid);
+          console.log('Successfully added/updated a map. SID: ', map.sid);
           try {
             await map.set(
               conversationSid,
@@ -101,15 +103,15 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
               },
               { ttl: 86400 },
             );
-          } catch (error) {
-            console.error('#### Sync - add Map Item failed', error);
+          } catch (setMapItemError) {
+            console.error('Unexpected error adding a Sync Map item', setMapItemError);
           }
           map.on('itemUpdated', (updatedEvent) => {
-            console.log('Received an "itemUpdated" event:', updatedEvent);
+            console.log('Received an "itemUpdated" event', updatedEvent);
           });
         })
-        .catch((error) => {
-          console.error('Unexpected error adding a MAP', error);
+        .catch((createUpdateMapError) => {
+          console.error('Unexpected error adding a Sync Map', createUpdateMapError);
         });
     }
 
@@ -118,7 +120,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     response.setBody({ webhook, ...extractStandardResponse(webhookResult) });
 
     return callback(null, response);
-  } catch (error) {
-    return handleError(error);
+  } catch (parkingError) {
+    return handleError(parkingError);
   }
 });
