@@ -38,7 +38,6 @@ const ParkView = () => {
     };
 
     mapItemStateUpdate();
-    console.log('#### Interactions Details Component mounted');
   }, []);
   const resumeInteraction = async (ConversationSid: string, WebhookSid: string) => {
     setIsUnparking(true);

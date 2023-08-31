@@ -24,6 +24,7 @@ export enum StringTemplates {
   ColumnAction = 'PSAction',
   ResumeInteraction = 'PSResumeInteraction',
   NoItemsToList = 'PSNoItemsToList',
+  UnparkListError = 'PSUnparkListError',
 }
 
 export const stringHook = () => ({
@@ -46,6 +47,7 @@ export const stringHook = () => ({
     [StringTemplates.ColumnAction]: 'Action',
     [StringTemplates.ResumeInteraction]: 'Resume Interaction',
     [StringTemplates.NoItemsToList]: 'No items to list',
+    [StringTemplates.UnparkListError]: 'Error loading recent interaction list: {{message}}',
   },
   'es-ES': esES,
   'es-MX': esMX,

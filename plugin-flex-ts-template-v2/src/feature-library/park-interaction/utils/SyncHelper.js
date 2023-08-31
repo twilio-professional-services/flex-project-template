@@ -1,5 +1,7 @@
-import { Manager } from '@twilio/flex-ui';
+import { Manager, Notifications } from '@twilio/flex-ui';
 import { SyncClient } from 'twilio-sync';
+
+import { UnparkInteractionNotification } from '../flex-hooks/notifications';
 
 const SYNC_CLIENT = new SyncClient(Manager.getInstance().user.token);
 
@@ -21,6 +23,7 @@ export default class SyncHelper {
       return this.pageHandler(paginator);
     } catch (error) {
       console.error('Map getItems() failed', error);
+      Notifications.showNotification(UnparkInteractionNotification.UnparkListError, { message: error });
       return [];
     }
   }
