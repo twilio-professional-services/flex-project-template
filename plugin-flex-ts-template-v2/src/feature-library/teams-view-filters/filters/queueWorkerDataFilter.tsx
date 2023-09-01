@@ -1,4 +1,5 @@
 import { FilterDefinition, Manager } from '@twilio/flex-ui';
+import { sortBy } from 'lodash';
 
 import SelectFilter from '../custom-components/SelectFilter';
 import SelectFilterLabel from '../custom-components/SelectFilterLabel';
@@ -36,7 +37,7 @@ export const queueWorkerDataFilter = async () => {
       label: <SelectFilterLabel />,
       field: <SelectFilter IsMulti={true} />,
     },
-    options,
+    options: sortBy(options, ['label']),
     condition: 'IN',
   } as FilterDefinition;
 };

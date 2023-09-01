@@ -78,7 +78,8 @@
         "default_max_capacity": 2
       },
       "device_manager": {
-        "enabled": true
+        "enabled": true,
+        "input_select": false
       },
       "dual_channel_recording": {
         "enabled": false,
@@ -155,7 +156,7 @@
         "configuration": [
           {
             "channel": "voice",
-            "auto_accept": true,
+            "auto_accept": false,
             "auto_select": true,
             "auto_wrapup": true,
             "required_attributes": [],
@@ -164,7 +165,7 @@
           },
           {
             "channel": "chat",
-            "auto_accept": true,
+            "auto_accept": false,
             "auto_select": true,
             "auto_wrapup": true,
             "required_attributes": [],
