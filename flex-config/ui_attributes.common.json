@@ -284,6 +284,11 @@
             "color": "#4682B4",
             "SLADataTile": true,
             "taskCountsDataTile": true
+          },
+          "video": {
+            "color": "#00CED1",
+            "SLADataTile": false,
+            "taskCountsDataTile": false
           }
         },
         "allChannelsDataTile": true,
@@ -309,9 +314,9 @@
             "color": "red",
             "icon": "Bulb"
           },
-          "Unavailable": {
+          "OTHER": {
             "color": "darkred",
-            "icon": "Close"
+            "icon": "More"
           },
           "Offline": {
             "color": "grey",
