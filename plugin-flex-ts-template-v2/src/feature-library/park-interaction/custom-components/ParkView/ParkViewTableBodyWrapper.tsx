@@ -38,11 +38,13 @@ const ParkViewTableBodyWrapper = (props: ParkViewTableBodyWrapperProps) => {
 
   if (props.isEmpty) {
     return (
-      <Tr>
-        <Td textAlign="center" colSpan={5}>
-          {templates[StringTemplates.NoItemsToList]()}
-        </Td>
-      </Tr>
+      <TBody>
+        <Tr>
+          <Td textAlign="center" colSpan={5}>
+            {templates[StringTemplates.NoItemsToList]()}
+          </Td>
+        </Tr>
+      </TBody>
     );
   }
 

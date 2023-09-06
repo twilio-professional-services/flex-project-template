@@ -28,7 +28,15 @@ const ParkView = () => {
         if (typeof data.taskAttributes === 'string') {
           data.taskAttributes = JSON.parse(data.taskAttributes);
         }
-        const parkingDate = new Date(mapItem.item.descriptor.date_created);
+        let parkingDate;
+        if (mapItem.item.descriptor.date_created) {
+          parkingDate = new Date(mapItem.item.descriptor.date_created);
+        } else {
+          // Bug: right after sync map item created, the date_created attribute is not available in the object
+          // So we need to use the date_updated, which is the same initially
+          parkingDate = mapItem.item.dateUpdated;
+        }
+
         return {
           key: mapItem.item.descriptor.key,
           channel: `${data.taskChannelUniqueName[0].toUpperCase()}${data.taskChannelUniqueName.slice(1)}`,

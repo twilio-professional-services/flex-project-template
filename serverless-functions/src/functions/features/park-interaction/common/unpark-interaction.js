@@ -18,7 +18,6 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       webhookSid,
     });
     if (!webhookResult.success) throw webhookResult.message;
-    console.log('webhook ', webhookResult);
 
     // Fetch the conversation attributes updated when parked
     const conversation = await ConversationsOperations.getConversation({
@@ -47,6 +46,8 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
         properties: {
           workspace_sid: context.TWILIO_FLEX_WORKSPACE_SID,
           workflow_sid: workflowSid,
+          queue_sid: queueSid,
+          worker_sid: workerSid,
           task_channel_unique_name: taskChannelUniqueName,
           attributes: { ...JSON.parse(taskAttributes), originalRouting: { queueName, queueSid, workerSid } },
         },
