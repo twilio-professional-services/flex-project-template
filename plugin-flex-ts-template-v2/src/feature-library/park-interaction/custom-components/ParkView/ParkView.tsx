@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Box, Table, THead, TBody, Tr, Th, Td, SkeletonLoader, Button } from '@twilio-paste/core';
-import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
-import { Actions, Manager, templates } from '@twilio/flex-ui';
+import { Box } from '@twilio-paste/core';
+import { Manager, templates } from '@twilio/flex-ui';
 import { Heading } from '@twilio-paste/core/heading';
 
 import SyncHelper from '../../utils/SyncHelper.js';
-// import Moment from 'react-moment';
 import { StringTemplates } from '../../flex-hooks/strings';
+import ParkViewTable from './ParkViewTable';
 
 const ParkView = () => {
-  const [mapItems, setMapItems] = useState([]);
+  const [recentInteractionsList, setRecentInteractionsList] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isUnparking, setIsUnparking] = useState(false);
 
   useEffect(() => {
-    const mapItemStateUpdate = async () => {
-      const workerName = await Manager?.getInstance()?.workerClient?.name;
+    const getRecentInteractionList = async () => {
+      const workerName = Manager?.getInstance()?.workerClient?.name;
+      const instanceLanguage = Manager?.getInstance().configuration.language;
       const getSyncMapItems = await SyncHelper.getMapItems(workerName);
 
       if (getSyncMapItems.length === 0) {
@@ -25,62 +24,29 @@ const ParkView = () => {
       }
 
       const formattedSyncMapItems = getSyncMapItems.map((mapItem: any) => {
-        const formattedMapItem = mapItem.item.descriptor.data;
-        formattedMapItem.mapKey = mapItem.item.descriptor.key;
-        formattedMapItem.dateCreated = mapItem.item.descriptor.date_created;
-        if (typeof formattedMapItem.taskAttributes === 'string')
-          formattedMapItem.taskAttributes = JSON.parse(formattedMapItem.taskAttributes);
-        return formattedMapItem;
+        const data = mapItem.item.descriptor.data;
+        if (typeof data.taskAttributes === 'string') {
+          data.taskAttributes = JSON.parse(data.taskAttributes);
+        }
+        const parkingDate = new Date(mapItem.item.descriptor.date_created);
+        return {
+          key: mapItem.item.descriptor.key,
+          channel: `${data.taskChannelUniqueName[0].toUpperCase()}${data.taskChannelUniqueName.slice(1)}`,
+          phoneOrEmail: data.taskAttributes.customers?.phone || data.taskAttributes.customers?.email,
+          customerName: data.taskAttributes?.from,
+          parkingDate: new Intl.DateTimeFormat(instanceLanguage, { dateStyle: 'long', timeStyle: 'short' }).format(
+            parkingDate,
+          ),
+          webhookSid: data.webhookSid,
+        };
       });
 
-      setMapItems(formattedSyncMapItems);
+      setRecentInteractionsList(formattedSyncMapItems);
       setIsLoaded(true);
     };
 
-    mapItemStateUpdate();
+    getRecentInteractionList();
   }, []);
-  const resumeInteraction = async (ConversationSid: string, WebhookSid: string) => {
-    setIsUnparking(true);
-    try {
-      await Actions.invokeAction('UnparkInteraction', { ConversationSid, WebhookSid });
-    } catch (error) {
-      console.error(error);
-    }
-    setIsUnparking(false);
-  };
-
-  const loadingRowsSkeleton = (rowsNumber: number = 3) => {
-    return [...Array(rowsNumber)].map((_, rowIndex: number) => (
-      <Tr key={`row-${rowIndex}`}>
-        <Td>
-          <SkeletonLoader width="35%" />
-        </Td>
-        <Td>
-          <SkeletonLoader width="50%" />
-        </Td>
-        <Td>
-          <SkeletonLoader width="50%" />
-        </Td>
-        <Td>
-          <SkeletonLoader width="35%" />
-        </Td>
-        <Td>
-          <SkeletonLoader width="35%" />
-        </Td>
-        <Td>
-          <SkeletonLoader width="20%" />
-        </Td>
-      </Tr>
-    ));
-  };
-
-  const emptyState = () => (
-    <Tr>
-      <Td textAlign="center" colSpan={6}>
-        {templates[StringTemplates.NoItemsToList]()}
-      </Td>
-    </Tr>
-  );
 
   return (
     <Box width="100%">
@@ -89,49 +55,7 @@ const ParkView = () => {
           {templates[StringTemplates.RecentInteractionList]()}
         </Heading>
       </Box>
-      <Table scrollHorizontally>
-        <THead>
-          <Tr>
-            <Th>{templates[StringTemplates.ColumnChannel]()}</Th>
-            <Th>{templates[StringTemplates.ColumnPhoneEmail]()}</Th>
-            <Th>{templates[StringTemplates.ColumnCustomerName]()}</Th>
-            <Th>{templates[StringTemplates.ColumnDateAndTime]()}</Th>
-            <Th>{templates[StringTemplates.ColumnQueue]()}</Th>
-            <Th>{templates[StringTemplates.ColumnAction]()}</Th>
-          </Tr>
-        </THead>
-        <TBody>
-          {isLoaded &&
-            mapItems.map((mapItem: any) => {
-              // REMOVE THIS ANY
-              return (
-                <Tr key={mapItem.mapKey}>
-                  <Td>{mapItem?.taskChannelUniqueName}</Td>
-                  <Td>{mapItem?.taskAttributes?.customers?.phone || mapItem?.taskAttributes?.customers?.email}</Td>
-                  <Td>{mapItem?.taskAttributes?.from}</Td>
-                  <Td>{mapItem?.dateCreated}</Td>
-                  <Td>{mapItem?.taskAttributes?.originalRouting?.queueName || '-'}</Td>
-                  <Td>
-                    <Button
-                      variant="secondary_icon"
-                      size="reset"
-                      loading={isUnparking}
-                      onClick={async () => resumeInteraction(mapItem.mapKey, mapItem.webhookSid)}
-                    >
-                      <ChatIcon
-                        decorative={false}
-                        size="sizeIcon40"
-                        title={templates[StringTemplates.ResumeInteraction]()}
-                      />
-                    </Button>
-                  </Td>
-                </Tr>
-              );
-            })}
-          {!isLoaded && loadingRowsSkeleton(3)}
-          {isLoaded && !mapItems.length && emptyState()}
-        </TBody>
-      </Table>
+      <ParkViewTable recentInteractionsList={recentInteractionsList} isLoaded={isLoaded} />
     </Box>
   );
 };

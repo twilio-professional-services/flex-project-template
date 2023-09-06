@@ -79,6 +79,8 @@ export const unparkInteraction = async (payload: UnparkInteractionPayload) => {
     return Notifications.showNotification(UnparkInteractionNotification.UnparkSuccess);
   } catch (error) {
     const message = (error as any)?.message;
+    console.log(message);
+    if (message.status === 400) return Notifications.showNotification(UnparkInteractionNotification.UnparkError);
     return Notifications.showNotification(UnparkInteractionNotification.UnparkError, {
       message,
     });
