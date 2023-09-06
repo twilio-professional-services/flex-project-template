@@ -1,8 +1,8 @@
-var shell = require("shelljs");
-var fs = require("fs").promises;
+import shell from "shelljs";
+import { promises as fs } from 'fs';
 
-var { getPaths } = require("./select-plugin");
-const { templateDirectory, featureDirectory, pluginSrc, pluginDir } = getPaths();
+import getPluginDirs from "./common/get-plugin.mjs";
+const { templateDirectory, featureDirectory, pluginSrc, pluginDir } = getPluginDirs();
 
 var featureName;
 var featureClassName;

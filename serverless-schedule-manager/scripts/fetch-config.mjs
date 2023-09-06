@@ -1,9 +1,9 @@
-const fs = require('fs');
-const homedir = require('os').homedir();
+import { promises as fs } from 'fs';
+import { homedir } from 'os';
 
-const axios = require('axios').default;
+import axios from 'axios';
 
-const { getServerlessServices } = require('../../scripts/common');
+import { fetchServerlessDomains, getFetchedVars } from '../../scripts/common/fetch-cli.mjs';
 
 if (!process.argv[2]) {
   throw new Error('Please provide an output path');
@@ -14,7 +14,7 @@ let apiSecret = process.env.TWILIO_API_SECRET;
 if (!apiKey || !apiSecret) {
   // Fall back to Twilio CLI profile if present
   try {
-    const profileConfig = JSON.parse(fs.readFileSync(`${homedir}/.twilio-cli/config.json`, 'utf8'));
+    const profileConfig = JSON.parse(await fs.readFile(`${homedir}/.twilio-cli/config.json`, 'utf8'));
     if (profileConfig.activeProject && profileConfig.profiles) {
       const profile = profileConfig.profiles[profileConfig.activeProject];
 
@@ -36,12 +36,10 @@ let domain = '';
 const outputPath = process.argv[2];
 const environment = process.argv[3];
 
-console.log('Fetching serverless domain...');
-
 if (environment) {
   // First, attempt to get domain via flex-config
   try {
-    const flexConfig = JSON.parse(fs.readFileSync(`../flex-config/ui_attributes.${environment}.json`, 'utf8'));
+    const flexConfig = JSON.parse(await fs.readFile(`../flex-config/ui_attributes.${environment}.json`, 'utf8'));
     const configDomain = flexConfig?.custom_data?.features?.schedule_manager?.serverless_domain;
 
     if (configDomain && configDomain.includes('twil.io')) {
@@ -54,7 +52,11 @@ if (environment) {
 
 if (!domain) {
   // Fall back to fetching domain via API
-  domain = getServerlessServices()?.scheduledFunctionsDomain;
+  fetchServerlessDomains();
+  const results = getFetchedVars();
+  if (results?.SCHEDULE_MANAGER_DOMAIN) {
+    domain = results.SCHEDULE_MANAGER_DOMAIN;
+  }
 }
 
 console.log('Fetching latest deployed config...');
@@ -62,8 +64,8 @@ console.log('Fetching latest deployed config...');
 if (domain) {
   axios
     .get(`https://${domain}/admin/fetch-config?apiKey=${apiKey}&apiSecret=${apiSecret}`)
-    .then((response) => {
-      fs.writeFileSync(outputPath, JSON.stringify(response.data, null, 2), 'utf8');
+    .then(async (response) => {
+      await fs.writeFile(outputPath, JSON.stringify(response.data, null, 2), 'utf8');
       console.log(`Saved latest deployed config to ${outputPath}`);
     })
     .catch((error) => {
