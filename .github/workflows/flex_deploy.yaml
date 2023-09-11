@@ -24,13 +24,14 @@ on:
         required: true
       TF_ENCRYPTION_KEY:
         required: true
+
   # Enables running this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       environment:
         required: true
         type: environment
-        description: 'Environment to use for deployment'
+        description: "Environment to use for deployment"
       deploy_terraform:
         required: true
         type: boolean
@@ -51,13 +52,12 @@ concurrency:
   group: flex-deploy-${{ inputs.environment || github.event.inputs.environment }}
 
 jobs:
-
   # When performing an initial release
-  # the serverless backend needs an initial deploy so 
+  # the serverless backend needs an initial deploy so
   # the domain name can be pulled in for the terraform deploy
   perform-initial-serverless-release:
     if: |
-      (inputs.initial_release == true && 
+      (inputs.initial_release == true &&
        inputs.deploy_terraform == true)
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
@@ -68,7 +68,7 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: "16"
       - name: set github environment variables
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
@@ -86,43 +86,32 @@ jobs:
           npm install
           npm run install-serverless-plugin
           npm run deploy-env
-# FEATURE: schedule-manager
+      # FEATURE: schedule-manager
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
           npm install
           npm run install-serverless-plugin
           npm run deploy-env
-# END FEATURE: schedule-manager
-
+  # END FEATURE: schedule-manager
   deploy-terraform:
-    if: | 
+    needs: [perform-initial-serverless-release]
+    if: |
       always() &&
-        !contains(needs.*.result, 'failure') &&
-        !contains(needs.*.result, 'cancelled') &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') &&
       inputs.deploy_terraform == true
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    env:
-      ENVIRONMENT: ${{ inputs.environment }}
+    uses: ./.github/workflows/terraform_deploy.yaml
+    with:
+      environment: ${{ inputs.environment }}
+    secrets:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-      TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-    needs: [perform-initial-serverless-release]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/terraform_state_artifact
-        with:
-          encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
-          path: ./infra-as-code/terraform/environments/default
-          environment: ${{ inputs.environment }}
-
+      TF_ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
 
   deploy-serverless:
-    if: |    
+    if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -136,7 +125,7 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: "16"
       - name: set github environment variables
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
@@ -150,21 +139,21 @@ jobs:
           echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
           npm install --ignore-scripts
           npm run postinstall -- --packages=serverless-functions >> $GITHUB_STEP_SUMMARY
-# FEATURE: chat-to-video-escalation
+      # FEATURE: chat-to-video-escalation
       - name: install npm and build video-app-assets
         run: |
           echo "### chat-to-video-escalation configuration output"  >> $GITHUB_STEP_SUMMARY
           npm run postinstall -- --packages=web-app-examples/video-app-quickstart >> $GITHUB_STEP_SUMMARY
-# END FEATURE: chat-to-video-escalation
+      # END FEATURE: chat-to-video-escalation
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
           npm run install-serverless-plugin
           npm run deploy-env
 
-# FEATURE: schedule-manager
+  # FEATURE: schedule-manager
   deploy-schedule-manager:
-    if: |    
+    if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -178,7 +167,7 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: "16"
       - name: set github environment variables
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
@@ -195,10 +184,9 @@ jobs:
         run: |
           npm run install-serverless-plugin
           npm run deploy-env
-# END FEATURE: schedule-manager
-
+  # END FEATURE: schedule-manager
   deploy-flex-config:
-    if: |    
+    if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -209,15 +197,15 @@ jobs:
       OVERWRITE_CONFIG: ${{ inputs.initial_release == true || inputs.overwrite_config == true }}
     needs:
       - deploy-serverless
-# FEATURE: schedule-manager
+      # FEATURE: schedule-manager
       - deploy-schedule-manager
-# END FEATURE: schedule-manager
+    # END FEATURE: schedule-manager
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: "16"
       - name: set github environment variables
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
@@ -234,6 +222,7 @@ jobs:
       - name: deploy flex config
         working-directory: flex-config
         run: |
+          npm install
           npm run deploy
 
   deploy-release-plugin:
@@ -249,8 +238,8 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          
+          node-version: "16"
+
       - name: install twilio cli
         run: npm install --ignore-scripts
 
