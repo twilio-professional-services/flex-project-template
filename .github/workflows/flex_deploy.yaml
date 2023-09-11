@@ -48,7 +48,7 @@ on:
         description: Overwrite config set by Admin UI Panel?
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ inputs.environment }}-${{ github.ref }}
 
 jobs:
 
