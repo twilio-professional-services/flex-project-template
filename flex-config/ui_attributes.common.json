@@ -9,23 +9,23 @@
       "activity_skill_filter": {
         "enabled": true,
         "rules": {
-          "On a Task" : {
+          "On a Task": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "On a Task, No ACD" : {
+          "On a Task, No ACD": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "Wrap Up" : {
+          "Wrap Up": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "Wrap Up, No ACD" : {
+          "Wrap Up, No ACD": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "Offline" : {
+          "Offline": {
             "required_skill": null,
             "sort_order": 100
           }
@@ -263,6 +263,9 @@
           "location": false,
           "agent_skills": true
         }
+      },
+      "sip_mute": {
+        "enabled": false
       }
     }
   }
