@@ -11,7 +11,7 @@ export default interface QueuesViewDataTilesConfig {
     activities: {
       [key: string]: ActivityConfig;
     };
-    OTHER: ActivityConfig;
+    other: ActivityConfig;
   };
   queuesStatsColumns: {
     assignedTasksColumn: boolean;

@@ -282,7 +282,7 @@
             "taskCountsDataTile": false
           },
           "sms": {
-            "color": "#4682B4",
+            "color": "#59cef8",
             "SLADataTile": true,
             "taskCountsDataTile": true
           },
@@ -321,7 +321,7 @@
               "icon": "Minus"
             }
           },
-          "OTHER": {
+          "other": {
             "color": "darkred",
             "icon": "More"
           }

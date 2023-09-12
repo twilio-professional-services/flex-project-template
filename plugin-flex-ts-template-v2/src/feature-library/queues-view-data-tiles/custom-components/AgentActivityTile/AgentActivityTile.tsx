@@ -20,7 +20,7 @@ interface ComponentProps {
         icon: string;
       };
     };
-    OTHER: {
+    other: {
       color: string;
       icon: string;
     };
@@ -47,8 +47,8 @@ const AgentActivityTile = (props: ComponentProps) => {
     } else otherUnavailable += count;
   });
   if (otherUnavailable > 0) {
-    activityCounts.OTHER = otherUnavailable;
-    const other: BaseDataEntry = { title: 'OTHER', value: otherUnavailable, color: activityConfig.OTHER?.color };
+    activityCounts.other = otherUnavailable;
+    const other: BaseDataEntry = { title: 'Other', value: otherUnavailable, color: activityConfig.other?.color };
     data.push(other);
   }
   const activityNames = Object.keys(activityConfig.activities);
@@ -66,12 +66,12 @@ const AgentActivityTile = (props: ComponentProps) => {
             </AgentActivity>
           );
         })}
-        <AgentActivity key="OTHER">
-          <Icon icon={activityConfig.OTHER?.icon} />
-          <Label bgColor={activityConfig.OTHER?.color}>
+        <AgentActivity key="other">
+          <Icon icon={activityConfig.other?.icon} />
+          <Label bgColor={activityConfig.other?.color}>
             <Template source={templates[StringTemplates.Other]} />
           </Label>
-          <Metric> {activityCounts.OTHER} </Metric>
+          <Metric> {activityCounts.other} </Metric>
         </AgentActivity>
       </Summary>
       <Chart>

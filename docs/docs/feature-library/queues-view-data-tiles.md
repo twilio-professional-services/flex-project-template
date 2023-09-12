@@ -75,7 +75,7 @@ This feature can be enabled via the `flex-config` attributes. Just set the `queu
             "taskCountsDataTile": false
           },
           "sms": {
-            "color": "#4682B4",
+            "color": "#59cef8",
             "SLADataTile": true,
             "taskCountsDataTile": true
           }
@@ -83,33 +83,35 @@ This feature can be enabled via the `flex-config` attributes. Just set the `queu
         "allChannelsDataTile": true,
         "enhancedAgentByActivityPieChart": true,
         "agentActivityConfiguration": {
-          "Available": {
-            "color": "green",
-            "icon": "Accept"
+          "activities": {
+            "Available": {
+              "color": "green",
+              "icon": "Accept"
+            },
+            "Outbound": {
+              "color": "darkgreen",
+              "icon": "Call"
+            },
+            "Break": {
+              "color": "goldenrod",
+              "icon": "Hold"
+            },
+            "Lunch": {
+              "color": "darkorange",
+              "icon": "Hamburger"
+            },
+            "Training": {
+              "color": "red",
+              "icon": "Bulb"
+            },
+            "Offline": {
+              "color": "grey",
+              "icon": "Minus"
+            }
           },
-          "Outbound": {
-            "color": "greenyellow",
-            "icon": "Call"
-          },
-          "Break": {
-            "color": "goldenrod",
-            "icon": "Hold"
-          },
-          "Lunch": {
-            "color": "darkorange",
-            "icon": "Hamburger"
-          },
-          "Training": {
-            "color": "red",
-            "icon": "Bulb"
-          },
-          "OTHER": {
+          "other": {
             "color": "darkred",
             "icon": "More"
-          },
-          "Offline": {
-            "color": "grey",
-            "icon": "Minus"
           }
         },
         "queuesStatsColumns": {

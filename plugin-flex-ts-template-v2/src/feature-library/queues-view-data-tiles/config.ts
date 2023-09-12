@@ -6,7 +6,7 @@ const {
   activeTasksDataTile = false,
   waitingTasksDataTile = false,
   longestWaitTimeDataTile = false,
-  agentsByActivityBarChart = false,
+  agentsByActivityBarChart = true,
   channels = {
     voice: {
       color: '#ADD8E6',
@@ -20,8 +20,8 @@ const {
     },
     sms: {
       color: '#59cef8',
-      SLADataTile: false,
-      taskCountsDataTile: false,
+      SLADataTile: true,
+      taskCountsDataTile: true,
     },
     video: {
       color: '#00CED1',
@@ -29,8 +29,8 @@ const {
       taskCountsDataTile: true,
     },
   },
-  allChannelsDataTile = true,
-  enhancedAgentByActivityPieChart = true,
+  allChannelsDataTile = false,
+  enhancedAgentByActivityPieChart = false,
   agentActivityConfiguration = {
     activities: {
       Available: { color: 'green', icon: 'Accept' },
@@ -40,7 +40,7 @@ const {
       Training: { color: 'red', icon: 'Bulb' },
       Offline: { color: 'grey', icon: 'Minus' },
     },
-    OTHER: { color: 'darkred', icon: 'More' },
+    other: { color: 'darkred', icon: 'More' },
   },
 } = (getFeatureFlags()?.features?.queues_view_data_tiles as QueuesViewDataTilesConfig) || {};
 
