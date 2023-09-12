@@ -17,6 +17,7 @@ interface MapItemItem {
 }
 
 export interface MapItemDescriptor {
+  key: string;
   date_created: Date;
   date_updated: Date;
   data: ParkedInteraction;
