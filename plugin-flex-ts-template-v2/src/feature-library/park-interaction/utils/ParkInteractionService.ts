@@ -7,6 +7,32 @@ export interface ParkInteractionResponse {
   recording: FetchedRecording;
 }
 
+export interface ParkedInteraction {
+  channelSid: string;
+  interactionSid: string;
+  participantSid: string;
+  conversationSid: string;
+  taskSid: string;
+  workflowSid: string;
+  taskChannelUniqueName: string;
+  queueName: string;
+  queueSid: string;
+  taskAttributes: CustomTask;
+  workerSid: string;
+  workerName: string;
+  webhookSid: string;
+}
+
+interface CustomTask {
+  customers: Customers;
+  from: string;
+}
+
+interface Customers {
+  phone?: string;
+  email?: string;
+}
+
 class ParkInteractionService extends ApiService {
   parkInteraction = async (
     channelSid: string,

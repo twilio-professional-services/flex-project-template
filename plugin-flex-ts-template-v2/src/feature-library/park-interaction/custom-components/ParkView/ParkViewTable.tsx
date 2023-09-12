@@ -1,6 +1,6 @@
 import { TBody, THead, Table, Td, Th, Tr, Button } from '@twilio-paste/core';
 import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
-import { Actions, templates } from '@twilio/flex-ui';
+import { Actions, Manager, templates } from '@twilio/flex-ui';
 import { useState } from 'react';
 
 import { StringTemplates } from '../../flex-hooks/strings';
@@ -16,12 +16,13 @@ interface ParkViewItem {
   channel: string;
   phoneOrEmail: string;
   customerName: string;
-  parkingDate: string;
+  parkingDate: Date;
   webhookSid: string;
 }
 
 const ParkViewTable = (props: ParkViewTableProps) => {
   const [isUnparkingSid, setIsUnparkingSid] = useState('');
+  const instanceLanguage = Manager?.getInstance().configuration.language || 'en-US';
 
   const resumeInteraction = async (ConversationSid: string, WebhookSid: string) => {
     setIsUnparkingSid(ConversationSid);
@@ -31,6 +32,10 @@ const ParkViewTable = (props: ParkViewTableProps) => {
       console.error(error);
     }
     setIsUnparkingSid('');
+  };
+
+  const formatDate = (date: Date, language: string) => {
+    return new Intl.DateTimeFormat(language, { dateStyle: 'long', timeStyle: 'short' }).format(date);
   };
 
   return (
@@ -53,7 +58,7 @@ const ParkViewTable = (props: ParkViewTableProps) => {
                   <Td>{interaction.channel}</Td>
                   <Td>{interaction.phoneOrEmail}</Td>
                   <Td>{interaction.customerName}</Td>
-                  <Td>{interaction.parkingDate}</Td>
+                  <Td>{formatDate(interaction.parkingDate, instanceLanguage)}</Td>
                   <Td>
                     <Button
                       variant="secondary_icon"

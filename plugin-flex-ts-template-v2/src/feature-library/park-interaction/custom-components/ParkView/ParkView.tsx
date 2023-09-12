@@ -6,6 +6,21 @@ import { Heading } from '@twilio-paste/core/heading';
 import SyncHelper from '../../utils/SyncHelper.js';
 import { StringTemplates } from '../../flex-hooks/strings';
 import ParkViewTable from './ParkViewTable';
+import { ParkedInteraction } from '../../utils/ParkInteractionService';
+
+interface MapItem {
+  item: MapItemItem;
+}
+interface MapItemItem {
+  descriptor: MapItemDescriptor;
+  dateUpdated: Date;
+}
+
+export interface MapItemDescriptor {
+  date_created: Date;
+  date_updated: Date;
+  data: ParkedInteraction;
+}
 
 const ParkView = () => {
   const [recentInteractionsList, setRecentInteractionsList] = useState([]);
@@ -14,7 +29,6 @@ const ParkView = () => {
   useEffect(() => {
     const getRecentInteractionList = async () => {
       const workerName = Manager?.getInstance()?.workerClient?.name;
-      const instanceLanguage = Manager?.getInstance().configuration.language;
       const getSyncMapItems = await SyncHelper.getMapItems(workerName);
 
       if (getSyncMapItems.length === 0) {
@@ -23,7 +37,7 @@ const ParkView = () => {
         return;
       }
 
-      const formattedSyncMapItems = getSyncMapItems.map((mapItem: any) => {
+      const formattedSyncMapItems = getSyncMapItems.map((mapItem: MapItem) => {
         const data = mapItem.item.descriptor.data;
         if (typeof data.taskAttributes === 'string') {
           data.taskAttributes = JSON.parse(data.taskAttributes);
@@ -42,14 +56,15 @@ const ParkView = () => {
           channel: `${data.taskChannelUniqueName[0].toUpperCase()}${data.taskChannelUniqueName.slice(1)}`,
           phoneOrEmail: data.taskAttributes.customers?.phone || data.taskAttributes.customers?.email,
           customerName: data.taskAttributes?.from,
-          parkingDate: new Intl.DateTimeFormat(instanceLanguage, { dateStyle: 'long', timeStyle: 'short' }).format(
-            parkingDate,
-          ),
+          parkingDate,
           webhookSid: data.webhookSid,
         };
       });
+      const sortedSyncMapItemsByMostRecent = formattedSyncMapItems.sort(
+        (a: any, b: any) => b.parkingDate - a.parkingDate,
+      );
 
-      setRecentInteractionsList(formattedSyncMapItems);
+      setRecentInteractionsList(sortedSyncMapItemsByMostRecent);
       setIsLoaded(true);
     };
 
