@@ -146,6 +146,7 @@ jobs:
 # FEATURE: chat-to-video-escalation
       - name: install npm and build video-app-assets
         run: |
+          echo "### chat-to-video-escalation configuration output"  >> $GITHUB_STEP_SUMMARY
           npm run postinstall -- --packages=web-app-examples/video-app-quickstart >> $GITHUB_STEP_SUMMARY
 # END FEATURE: chat-to-video-escalation
       - name: deploy serverless
@@ -216,6 +217,7 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Overwrite Config: ${{ env.OVERWRITE_CONFIG }}"  >> $GITHUB_STEP_SUMMARY
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
           npm install --ignore-scripts
           npm run postinstall -- --packages=flex-config >> $GITHUB_STEP_SUMMARY
       - name: deploy flex config

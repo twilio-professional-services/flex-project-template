@@ -25,14 +25,18 @@ for (let i = 2; i < process.argv.length; i++) {
 }
 
 const outputEnd = () => {
-  console.log("");
-  console.log(" ----- END OF POST INSTALL SCRIPT ----- ");
-  console.log("");
+  if (!skipInstallStep && !environment) {
+    console.log("");
+    console.log(" ----- END OF POST INSTALL SCRIPT ----- ");
+    console.log("");
+  }
 }
 
 const execute = async () => {
-  console.log(" ----- START OF POST INSTALL SCRIPT ----- ");
-  console.log("");
+  if (!skipInstallStep && !environment) {
+    console.log(" ----- START OF POST INSTALL SCRIPT ----- ");
+    console.log("");
+  }
   
   const account = await getTwilioAccount();
   
@@ -88,7 +92,12 @@ const execute = async () => {
   
   printReplacements(allReplacements);
   
-  if (!skipInstallStep) {
+  if (!skipInstallStep && !environment) {
+    if (Object.keys(allReplacements).length < 1) {
+      console.log("All local environment files are already fully populated.");
+    } else {
+      console.log("If there are missing workflow SIDs, you can set those up for those features manually later.");
+    }
     console.log("You can now run the following command to start your local serverless functions and Flex plugin together:");
     console.log("\tnpm start");
   }
