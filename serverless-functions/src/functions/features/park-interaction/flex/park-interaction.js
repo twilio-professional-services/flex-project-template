@@ -20,6 +20,7 @@ const requiredParameters = [
   { key: 'taskAttributes', purpose: 'task attributes to copy' },
   { key: 'workerSid', purpose: 'agent worker sid' },
   { key: 'workerName', purpose: 'agent worker name' },
+  { key: 'createUpdateSyncMapItem', purpose: 'create or update sync map item' },
 ];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
@@ -40,6 +41,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       workerSid,
       workerName,
     } = event;
+    const createUpdateSyncMapItem = event.createUpdateSyncMapItem === 'true' || false;
 
     // Create the webhook
     const webhookResult = await ConversationsOperations.addWebhook({
@@ -84,35 +86,37 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       });
       if (!updateAttributesResponse.success) throw updateAttributesResponse.message;
 
-      // Open a Sync Map by unique name and update its data
-      await syncClient
-        .map(workerName)
-        .then(async (map) => {
-          console.log('Successfully added/updated a map. SID: ', map.sid);
-          try {
-            await map.set(
-              conversationSid,
-              {
-                interactionSid,
-                flexInteractionChannelSid: channelSid,
-                participantSid,
-                workflowSid,
-                taskChannelUniqueName,
-                taskAttributes,
-                webhookSid: webhookResult.webhook.sid,
-              },
-              { ttl: 86400 },
-            );
-          } catch (setMapItemError) {
-            console.error('Unexpected error adding a Sync Map item', setMapItemError);
-          }
-          map.on('itemUpdated', (updatedEvent) => {
-            console.log('Received an "itemUpdated" event', updatedEvent);
+      if (createUpdateSyncMapItem) {
+        // Open a Sync Map by unique name and update its data
+        await syncClient
+          .map(workerName)
+          .then(async (map) => {
+            console.log('Successfully added/updated a map. SID: ', map.sid);
+            try {
+              await map.set(
+                conversationSid,
+                {
+                  interactionSid,
+                  flexInteractionChannelSid: channelSid,
+                  participantSid,
+                  workflowSid,
+                  taskChannelUniqueName,
+                  taskAttributes,
+                  webhookSid: webhookResult.webhook.sid,
+                },
+                { ttl: 86400 },
+              );
+            } catch (setMapItemError) {
+              console.error('Unexpected error adding a Sync Map item', setMapItemError);
+            }
+            map.on('itemUpdated', (updatedEvent) => {
+              console.log('Received an "itemUpdated" event', updatedEvent);
+            });
+          })
+          .catch((createUpdateMapError) => {
+            console.error('Unexpected error adding a Sync Map', createUpdateMapError);
           });
-        })
-        .catch((createUpdateMapError) => {
-          console.error('Unexpected error adding a Sync Map', createUpdateMapError);
-        });
+      }
     }
 
     const { webhook, status } = webhookResult;
