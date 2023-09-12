@@ -1,4 +1,6 @@
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 export const serverlessDir = 'serverless-functions';
 export const serverlessSrc = `${serverlessDir}/src`;
@@ -8,5 +10,5 @@ export const videoAppDir = 'web-app-examples/video-app-quickstart';
 export const gitHubWorkflowDir = '.github/workflows';
 export const defaultPluginDir = 'plugin-flex-ts-template-v2';
 
-// Definitions for fetching values from API
-export const varNameMapping = JSON.parse(fs.readFileSync('./scripts/config/mappings.json'));
+const mappingDefinitionPath = '../config/mappings.json';
+export const varNameMapping = JSON.parse(fs.readFileSync(path.resolve(path.dirname(fileURLToPath(import.meta.url)), mappingDefinitionPath)));

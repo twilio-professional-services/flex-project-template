@@ -179,7 +179,7 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           npm install --ignore-scripts
-          npm run postinstall -- --packages=serverless-schedule-manager >> $GITHUB_STEP_SUMMARY
+          npm run postinstall -- --packages=serverless-schedule-manager
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
