@@ -1,7 +1,8 @@
 import React from 'react';
-import { useFlexSelector } from '@twilio/flex-ui';
+import { Icon, useFlexSelector } from '@twilio/flex-ui';
 import AppState from 'types/manager/AppState';
 
+import { getChannelIcon } from '../../utils/helpers';
 import QueueDataUtil from '../../utils/QueueDataUtil';
 import {
   TileWrapper,
@@ -13,6 +14,7 @@ import {
   MetricsContainer,
 } from './ChannelTaskCountTile.Components';
 import { ChannelTaskCounts, TaskCounts } from '../../types';
+import { Channel, ChannelIcon } from '../ChannelSLATile/ChannelSLATile.Components';
 
 interface ComponentProps {
   channelName: string;
@@ -25,12 +27,17 @@ const ChannelTaskCountTile = (props: ComponentProps) => {
   const taskCounts: ChannelTaskCounts = useFlexSelector((state: AppState) => {
     const queues = Object.values(state.flex.realtimeQueues.queuesList);
     const allTaskCounts: TaskCounts = QueueDataUtil.getTaskCountsByChannel(queues, channelList);
-    return allTaskCounts[channelName];
+    return allTaskCounts[channelName.toLowerCase()];
   });
 
   return (
     <TileWrapper className="Twilio-AggregatedDataTile" bgColor={bgColor}>
-      <Title className="Twilio-AggregatedDataTile-Title">{`${channelName} Active`}</Title>
+      <Channel>
+        <ChannelIcon>
+          <Icon icon={getChannelIcon(channelName)} />
+        </ChannelIcon>
+        <Title className="Twilio-AggregatedDataTile-Title">{`${channelName} Active`}</Title>
+      </Channel>
       <Content className="Twilio-AggregatedDataTile-Content">{taskCounts?.activeTasks || 0}</Content>
       <MetricsContainer>
         <TaskCount>

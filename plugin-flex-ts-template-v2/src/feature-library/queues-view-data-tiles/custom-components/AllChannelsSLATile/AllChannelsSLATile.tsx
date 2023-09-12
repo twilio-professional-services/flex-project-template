@@ -36,7 +36,7 @@ const AllChannelsSLATile = (props: ComponentProps) => {
           const handled = sla[ch]?.handledTasks || 0;
           const slPct = sla[ch]?.serviceLevelPct;
           return (
-            <Channel>
+            <Channel key={ch}>
               <Icon icon={getChannelIcon(ch)} />
               <Label bgColor={colors[ch]}>{ch}</Label>
               {handled > 0 ? <SLPct value={slPct}> {slPct}% </SLPct> : <Metric> - </Metric>}

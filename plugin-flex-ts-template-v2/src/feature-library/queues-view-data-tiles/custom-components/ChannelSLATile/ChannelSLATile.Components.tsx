@@ -63,7 +63,6 @@ export const TileWrapper1 = styled('div')<OwnProps>`
 export const Channel = styled('div')`
   display: flex;
   flex-direction: row;
-  height: 30px;
   vertical-align: top;
   justify-content: center;
 `;

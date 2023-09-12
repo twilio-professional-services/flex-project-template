@@ -28,7 +28,7 @@ const ChannelSLATileV2 = (props: ComponentProps) => {
   const sla: ChannelSLMetrics = useFlexSelector((state: AppState) => {
     const queues: WorkerQueue[] = Object.values(state.flex.realtimeQueues.queuesList);
     const allSLMetrics: SLMetrics = QueueDataUtil.getSLTodayByChannel(queues, channelList);
-    return allSLMetrics[channelName];
+    return allSLMetrics[channelName.toLowerCase()];
   });
 
   let content = '-';
@@ -49,11 +49,11 @@ const ChannelSLATileV2 = (props: ComponentProps) => {
       <MetricsContainer>
         <Handled>
           <Label>Handled</Label>
-          <Metric>{sla?.handledTasks}</Metric>
+          <Metric>{sla?.handledTasks || 0}</Metric>
         </Handled>
         <Handled>
           <Label>Within&nbsp;SL</Label>
-          <Metric>{sla?.handledTasksWithinSL}</Metric>
+          <Metric>{sla?.handledTasksWithinSL || 0}</Metric>
         </Handled>
       </MetricsContainer>
     </TileWrapper>

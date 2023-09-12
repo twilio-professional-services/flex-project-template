@@ -34,7 +34,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
       <ChannelTaskCountTile
         key="voice-tasks"
-        channelName="voice"
+        channelName="Voice"
         bgColor={getChannelVoice_Color()}
         channelList={getChannelNames()}
       />,
@@ -45,7 +45,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
       <ChannelTaskCountTile
         key="chat-tasks"
-        channelName="chat"
+        channelName="Chat"
         bgColor={getChannelChat_Color()}
         channelList={getChannelNames()}
       />,
@@ -56,7 +56,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
       <ChannelTaskCountTile
         key="sms-tasks"
-        channelName="sms"
+        channelName="SMS"
         bgColor={getChannelSMS_Color()}
         channelList={getChannelNames()}
       />,
@@ -65,13 +65,13 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
   }
   if (isChannelVoice_SLAEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <ChannelSLATile key="voice-sla-tile" channelName="voice" channelList={getChannelNames()} />,
+      <ChannelSLATile key="voice-sla-tile" channelName="Voice" channelList={getChannelNames()} />,
       { sortOrder: -3 },
     );
   }
   if (isChannelChat_SLAEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <ChannelSLATile key="chat-sla-tile" channelName="chat" channelList={getChannelNames()} />,
+      <ChannelSLATile key="chat-sla-tile" channelName="Chat" channelList={getChannelNames()} />,
       {
         sortOrder: -2,
       },
@@ -79,7 +79,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
   }
   if (isChannelSMS_SLAEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <ChannelSLATile key="sms-sla-tile" channelName="sms" channelList={getChannelNames()} />,
+      <ChannelSLATile key="sms-sla-tile" channelName="SMS" channelList={getChannelNames()} />,
       {
         sortOrder: -1,
       },

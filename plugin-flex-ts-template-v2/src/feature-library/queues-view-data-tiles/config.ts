@@ -15,13 +15,13 @@ const {
     },
     chat: {
       color: '#87CEFA',
-      SLADataTile: false,
-      taskCountsDataTile: false,
-    },
-    sms: {
-      color: '#4682B4',
       SLADataTile: true,
       taskCountsDataTile: true,
+    },
+    sms: {
+      color: '#59cef8',
+      SLADataTile: false,
+      taskCountsDataTile: false,
     },
     video: {
       color: '#00CED1',
@@ -33,7 +33,7 @@ const {
   enhancedAgentByActivityPieChart = true,
   agentActivityConfiguration = {
     Available: { color: 'green', icon: 'Accept' },
-    Outbound: { color: 'greenyellow', icon: 'Call' },
+    Outbound: { color: 'darkgreen', icon: 'Call' },
     Break: { color: 'goldenrod', icon: 'Hold' },
     Lunch: { color: 'darkorange', icon: 'Hamburger' },
     Training: { color: 'red', icon: 'Bulb' },

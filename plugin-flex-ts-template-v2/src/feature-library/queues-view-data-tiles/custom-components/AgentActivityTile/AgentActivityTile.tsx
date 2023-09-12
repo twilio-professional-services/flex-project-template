@@ -52,9 +52,9 @@ const AgentActivityTile = (props: ComponentProps) => {
         {activityNames.map((activity) => {
           const count = activityCounts[activity] || 0;
           return (
-            <AgentActivity>
+            <AgentActivity key={activity}>
               <Icon icon={activityConfig[activity]?.icon} />
-              <Label bgColor={activityConfig[activity]?.color}>{activity}:</Label>
+              <Label bgColor={activityConfig[activity]?.color}>{activity}</Label>
               <Metric> {count} </Metric>
             </AgentActivity>
           );
