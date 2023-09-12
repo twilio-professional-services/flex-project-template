@@ -24,7 +24,7 @@ const ParkSideLink = (props: OwnProps) => {
       onClick={navigate}
       key="park-interaction-side-link"
     >
-      {ParkInteraction[StringTemplates.ParkInteractionTitle]}
+      {ParkInteraction[StringTemplates.RecentInteractionList]}
     </SideLink>
   );
 };
