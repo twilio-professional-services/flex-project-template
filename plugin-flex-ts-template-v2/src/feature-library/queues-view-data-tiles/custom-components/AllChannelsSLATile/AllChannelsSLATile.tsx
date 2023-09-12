@@ -9,7 +9,6 @@ import { getChannelIcon } from '../../utils/helpers';
 import { TileWrapper, Title, Summary, Chart, Channel, Label, Metric, SLPct } from './AllChannelsSLATile.Components';
 import QueueDataUtil from '../../utils/QueueDataUtil';
 import { SLMetrics } from '../../types';
-import { StringTemplates } from '../../flex-hooks/strings';
 
 interface ComponentProps {
   channelList: string[];
@@ -33,7 +32,7 @@ const AllChannelsSLATile = (props: ComponentProps) => {
     <TileWrapper className="Twilio-AggregatedDataTile">
       <Summary>
         <Title>
-          <Template source={templates[StringTemplates.ServiceLevelAgreement]} />
+          <Template source={templates.QueuesStatsHeaderSLA} />
           &nbsp;
           <Template source={templates.QueuesStatsSubHeaderToday} />
         </Title>

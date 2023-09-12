@@ -87,6 +87,7 @@ export const Metric = styled('div')`
   width: 40px;
   text-align: right;
   margin: 2px;
+  background-color: #f4f4f6;
 `;
 
 export const SLPct = styled('div')<OwnProps>`

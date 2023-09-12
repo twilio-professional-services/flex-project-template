@@ -46,7 +46,7 @@ const ChannelSLATileV2 = (props: ComponentProps) => {
         <Title className="Twilio-AggregatedDataTile-Title">
           {`${channelName}`}
           &nbsp;
-          <Template source={templates[StringTemplates.ServiceLevelAgreement]} />
+          <Template source={templates.QueuesStatsHeaderSLA} />
         </Title>
       </Channel>
       <Content className="Twilio-AggregatedDataTile-Content">{content}</Content>

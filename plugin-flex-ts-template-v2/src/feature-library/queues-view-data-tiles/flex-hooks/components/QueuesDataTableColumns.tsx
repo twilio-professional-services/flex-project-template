@@ -6,13 +6,13 @@ import { FlexComponent } from '../../../../types/feature-loader';
 import { isAssignedTasksColumnEnabled, isWrappingTasksColumnEnabled } from '../../config';
 
 export const componentName = FlexComponent.QueueStats;
-export const componentHook = function addQueuesDataTableColumns(flex: typeof Flex) {
+export const componentHook = function addQueuesDataTableColumns(flex: typeof Flex, manager: Flex.Manager) {
   if (isAssignedTasksColumnEnabled()) {
     flex.QueuesStats.QueuesDataTable.Content.add(
       <flex.ColumnDefinition
         key="assigned-tasks"
-        header="Assigned"
-        subHeader="Now"
+        header={manager.strings.TaskAssigned}
+        subHeader={manager.strings.QueuesStatsSubHeaderNow}
         content={(queue: WorkerQueue) => {
           const assignedTasks = queue.tasks_by_status?.assigned || 0;
           return <span>{assignedTasks}</span>;
@@ -25,8 +25,8 @@ export const componentHook = function addQueuesDataTableColumns(flex: typeof Fle
     flex.QueuesStats.QueuesDataTable.Content.add(
       <flex.ColumnDefinition
         key="wrapping-tasks"
-        header="Wrapping"
-        subHeader="Now"
+        header={manager.strings.TaskWrapup}
+        subHeader={manager.strings.QueuesStatsSubHeaderNow}
         content={(queue: WorkerQueue) => {
           const wrappingTasks = queue.tasks_by_status?.wrapping || 0;
           return <span>{wrappingTasks}</span>;

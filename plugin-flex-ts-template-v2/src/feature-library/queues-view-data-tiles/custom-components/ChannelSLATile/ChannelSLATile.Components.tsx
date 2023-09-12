@@ -99,10 +99,9 @@ export const Metric = styled('div')`
 `;
 
 function getColor(props: OwnProps) {
-  const { value = 0, count, theme } = props;
+  const { value = 0, count } = props;
   let { greenLine, yellowLine } = props;
-  // No color if handled tasks count = 0 (N/A)
-  if (!count) return theme.tokens.backgroundColors.colorBackgroundBody;
+  if (!count) return '#f4f4f6';
   if (!greenLine) greenLine = 90;
   if (!yellowLine) yellowLine = 60;
   if (value >= greenLine) {
