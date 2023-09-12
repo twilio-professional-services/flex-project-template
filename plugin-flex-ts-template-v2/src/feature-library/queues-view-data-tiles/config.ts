@@ -32,17 +32,17 @@ const {
   allChannelsDataTile = true,
   enhancedAgentByActivityPieChart = true,
   agentActivityConfiguration = {
-    Available: { color: 'green', icon: 'Accept' },
-    Outbound: { color: 'darkgreen', icon: 'Call' },
-    Break: { color: 'goldenrod', icon: 'Hold' },
-    Lunch: { color: 'darkorange', icon: 'Hamburger' },
-    Training: { color: 'red', icon: 'Bulb' },
+    activities: {
+      Available: { color: 'green', icon: 'Accept' },
+      Outbound: { color: 'darkgreen', icon: 'Call' },
+      Break: { color: 'goldenrod', icon: 'Hold' },
+      Lunch: { color: 'darkorange', icon: 'Hamburger' },
+      Training: { color: 'red', icon: 'Bulb' },
+      Offline: { color: 'grey', icon: 'Minus' },
+    },
     OTHER: { color: 'darkred', icon: 'More' },
-    Offline: { color: 'grey', icon: 'Minus' },
   },
 } = (getFeatureFlags()?.features?.queues_view_data_tiles as QueuesViewDataTilesConfig) || {};
-console.log('Channels:', channels);
-console.log('Activity Config:', agentActivityConfiguration);
 
 const { assignedTasksColumn = true, wrappingTasksColumn = true } =
   getFeatureFlags()?.features?.queues_view_data_tiles?.queuesStatsColumns || {};

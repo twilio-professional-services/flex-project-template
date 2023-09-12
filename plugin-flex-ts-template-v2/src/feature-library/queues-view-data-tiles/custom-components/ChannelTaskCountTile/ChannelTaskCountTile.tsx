@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, useFlexSelector } from '@twilio/flex-ui';
+import { Icon, useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import AppState from 'types/manager/AppState';
 
 import { getChannelIcon } from '../../utils/helpers';
@@ -36,22 +36,31 @@ const ChannelTaskCountTile = (props: ComponentProps) => {
         <ChannelIcon>
           <Icon icon={getChannelIcon(channelName)} />
         </ChannelIcon>
-        <Title className="Twilio-AggregatedDataTile-Title">{`${channelName} Active`}</Title>
+        <Title className="Twilio-AggregatedDataTile-Title">
+          {`${channelName}`}&nbsp;
+          <Template source={templates.QueuesStatsHeaderActiveTasks} />
+        </Title>
       </Channel>
       <Content className="Twilio-AggregatedDataTile-Content">{taskCounts?.activeTasks || 0}</Content>
       <MetricsContainer>
         <TaskCount>
-          <Label>Assigned</Label>
+          <Label>
+            <Template source={templates.TaskAssigned} />
+          </Label>
           <Metric>{taskCounts?.assignedTasks || 0}</Metric>
         </TaskCount>
         <TaskCount>
-          <Label>Wrapping</Label>
+          <Label>
+            <Template source={templates.TaskWrapup} />
+          </Label>
           <Metric>{taskCounts?.wrappingTasks || 0}</Metric>
         </TaskCount>
       </MetricsContainer>
       <MetricsContainer>
         <TaskCount>
-          <Label>Waiting</Label>
+          <Label>
+            <Template source={templates.QueuesStatsHeaderWaitingTasks} />
+          </Label>
           <Metric>{taskCounts?.waitingTasks || 0}</Metric>
         </TaskCount>
       </MetricsContainer>

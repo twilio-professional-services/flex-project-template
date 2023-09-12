@@ -49,16 +49,6 @@ export const Description = styled('div')<ThemeOnlyProps>`
   line-height: ${({ theme }) => theme.tokens.lineHeights.lineHeight10};
 `;
 
-export const TileWrapper1 = styled('div')<ThemeOnlyProps>`
-  background-color: ${(props) => props.theme.colors.base2};
-  color: ${(props) => props.theme.calculated.textColor};
-  padding: 12px;
-  box-shadow: ${(props) => props.theme.colors.base4} 0 -1px 0 inset;
-  display: flex;
-  flex-direction: row;
-  min-width: 250px;
-  flex: 1 1 auto;
-`;
 export const Summary = styled('div')`
   flex-direction: column;
   padding-right: 16px;

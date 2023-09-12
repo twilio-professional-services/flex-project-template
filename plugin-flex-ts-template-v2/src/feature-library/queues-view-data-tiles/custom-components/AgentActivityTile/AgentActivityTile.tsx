@@ -1,11 +1,12 @@
 import React from 'react';
 import { PieChart } from 'react-minimal-pie-chart';
 import { BaseDataEntry, Data } from 'react-minimal-pie-chart/types/commonTypes';
-import { Icon, useFlexSelector } from '@twilio/flex-ui';
+import { Icon, useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import AppState from 'types/manager/AppState';
 import { ActivityStatistic } from '@twilio/flex-ui/src/state/QueuesState';
 
 import { TileWrapper, Summary, Chart, Title, AgentActivity, Label, Metric } from './AgentActivityTile.Components';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 interface ActivityCounts {
   [key: string]: number;
@@ -13,7 +14,13 @@ interface ActivityCounts {
 
 interface ComponentProps {
   activityConfig: {
-    [key: string]: {
+    activities: {
+      [key: string]: {
+        color: string;
+        icon: string;
+      };
+    };
+    OTHER: {
       color: string;
       icon: string;
     };
@@ -29,12 +36,12 @@ const AgentActivityTile = (props: ComponentProps) => {
   const data: Data = [];
   workerActivityCounts.forEach((activity) => {
     const count = activity.workers;
-    if (count && activityConfig[activity.friendly_name]) {
+    if (count && activityConfig.activities[activity.friendly_name]) {
       activityCounts[activity.friendly_name] = count;
       const dataEntry: BaseDataEntry = {
         title: activity.friendly_name,
         value: count,
-        color: activityConfig[activity.friendly_name]?.color,
+        color: activityConfig.activities[activity.friendly_name]?.color,
       };
       data.push(dataEntry);
     } else otherUnavailable += count;
@@ -44,7 +51,7 @@ const AgentActivityTile = (props: ComponentProps) => {
     const other: BaseDataEntry = { title: 'OTHER', value: otherUnavailable, color: activityConfig.OTHER?.color };
     data.push(other);
   }
-  const activityNames = Object.keys(activityConfig);
+  const activityNames = Object.keys(activityConfig.activities);
 
   return (
     <TileWrapper className="Twilio-AggregatedDataTile">
@@ -53,15 +60,24 @@ const AgentActivityTile = (props: ComponentProps) => {
           const count = activityCounts[activity] || 0;
           return (
             <AgentActivity key={activity}>
-              <Icon icon={activityConfig[activity]?.icon} />
-              <Label bgColor={activityConfig[activity]?.color}>{activity}</Label>
+              <Icon icon={activityConfig.activities[activity]?.icon} />
+              <Label bgColor={activityConfig.activities[activity]?.color}>{activity}</Label>
               <Metric> {count} </Metric>
             </AgentActivity>
           );
         })}
+        <AgentActivity key="OTHER">
+          <Icon icon={activityConfig.OTHER?.icon} />
+          <Label bgColor={activityConfig.OTHER?.color}>
+            <Template source={templates[StringTemplates.Other]} />
+          </Label>
+          <Metric> {activityCounts.OTHER} </Metric>
+        </AgentActivity>
       </Summary>
       <Chart>
-        <Title>Agent Activity</Title>
+        <Title>
+          <Template source={templates.AgentsByActivityTileTitle} />
+        </Title>
         <PieChart
           labelStyle={{
             fontSize: '14px',

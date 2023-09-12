@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, useFlexSelector } from '@twilio/flex-ui';
+import { Icon, useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import { PieChart } from 'react-minimal-pie-chart';
 import { Data } from 'react-minimal-pie-chart/types/commonTypes';
 import AppState from 'types/manager/AppState';
@@ -9,6 +9,7 @@ import { getChannelIcon } from '../../utils/helpers';
 import { TileWrapper, Title, Summary, Chart, Channel, Label, Metric, SLPct } from './AllChannelsSLATile.Components';
 import QueueDataUtil from '../../utils/QueueDataUtil';
 import { SLMetrics } from '../../types';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 interface ComponentProps {
   channelList: string[];
@@ -31,7 +32,11 @@ const AllChannelsSLATile = (props: ComponentProps) => {
   return (
     <TileWrapper className="Twilio-AggregatedDataTile">
       <Summary>
-        <Title>SLA Today</Title>
+        <Title>
+          <Template source={templates[StringTemplates.ServiceLevelAgreement]} />
+          &nbsp;
+          <Template source={templates.QueuesStatsSubHeaderToday} />
+        </Title>
         {channelList.map((ch) => {
           const handled = sla[ch]?.handledTasks || 0;
           const slPct = sla[ch]?.serviceLevelPct;
@@ -45,7 +50,11 @@ const AllChannelsSLATile = (props: ComponentProps) => {
         })}
       </Summary>
       <Chart>
-        <Title>Handled Today</Title>
+        <Title>
+          <Template source={templates.QueuesStatsHeaderHandled} />
+          &nbsp;
+          <Template source={templates.QueuesStatsSubHeaderToday} />
+        </Title>
         <PieChart
           labelStyle={{
             fontSize: '14px',

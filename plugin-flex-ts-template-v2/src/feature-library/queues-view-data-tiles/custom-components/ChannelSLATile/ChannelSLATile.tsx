@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, useFlexSelector } from '@twilio/flex-ui';
+import { Icon, useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import { WorkerQueue } from '@twilio/flex-ui/src/state/QueuesState';
 import AppState from 'types/manager/AppState';
 
@@ -17,6 +17,7 @@ import {
   MetricsContainer,
 } from './ChannelSLATile.Components';
 import { ChannelSLMetrics, SLMetrics } from '../../types';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 interface ComponentProps {
   channelName: string;
@@ -42,17 +43,27 @@ const ChannelSLATileV2 = (props: ComponentProps) => {
         <ChannelIcon>
           <Icon icon={getChannelIcon(channelName)} />
         </ChannelIcon>
-        <Title className="Twilio-AggregatedDataTile-Title">{`${channelName} SLA`}</Title>
+        <Title className="Twilio-AggregatedDataTile-Title">
+          {`${channelName}`}
+          &nbsp;
+          <Template source={templates[StringTemplates.ServiceLevelAgreement]} />
+        </Title>
       </Channel>
       <Content className="Twilio-AggregatedDataTile-Content">{content}</Content>
-      <Label>Today</Label>
+      <Label>
+        <Template source={templates.QueuesStatsSubHeaderToday} />
+      </Label>
       <MetricsContainer>
         <Handled>
-          <Label>Handled</Label>
+          <Label>
+            <Template source={templates.QueuesStatsHeaderHandled} />
+          </Label>
           <Metric>{sla?.handledTasks || 0}</Metric>
         </Handled>
         <Handled>
-          <Label>Within&nbsp;SL</Label>
+          <Label>
+            <Template source={templates[StringTemplates.WithinSL]} />
+          </Label>
           <Metric>{sla?.handledTasksWithinSL || 0}</Metric>
         </Handled>
       </MetricsContainer>

@@ -18,7 +18,7 @@ export const componentHook = function addQueuesDataTableColumns(flex: typeof Fle
           return <span>{assignedTasks}</span>;
         }}
       />,
-      { sortOrder: -10 },
+      { sortOrder: 0 },
     );
   }
   if (isWrappingTasksColumnEnabled()) {
@@ -32,7 +32,7 @@ export const componentHook = function addQueuesDataTableColumns(flex: typeof Fle
           return <span>{wrappingTasks}</span>;
         }}
       />,
-      { sortOrder: -9 },
+      { sortOrder: 0 },
     );
   }
 };

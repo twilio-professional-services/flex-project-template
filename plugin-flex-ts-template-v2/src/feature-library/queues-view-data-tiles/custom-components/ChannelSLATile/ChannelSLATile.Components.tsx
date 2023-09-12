@@ -51,15 +51,6 @@ export const Description = styled('div')<ThemeOnlyProps>`
   line-height: ${({ theme }) => theme.tokens.lineHeights.lineHeight10};
 `;
 
-export const TileWrapper1 = styled('div')<OwnProps>`
-  background-color: ${(props) => getColor(props)};
-  color: ${(props) => props.theme.calculated.textColor};
-  padding: 12px;
-  box-shadow: ${(props) => props.theme.colors.base4} 0 -1px 0 inset;
-  display: flex;
-  flex-direction: column;
-`;
-
 export const Channel = styled('div')`
   display: flex;
   flex-direction: row;
