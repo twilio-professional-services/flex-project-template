@@ -7,18 +7,24 @@ title: park-interaction
 
 This feature adds a pause/park button to messaging conversations so that while waiting for a response, an agent can be freed up for new work, while also maintaining conversation history. Next time the customer writes a message, if the conversation was parked, it will route through the workflow again for worker assignment, and the history of the conversation will be present when a worker accepts the task.
 
+Furthermore, you have the option to enable the 'Recent Interaction List' menu, which empowers agents to access and manage parked conversations, with a specific focus on Web Chat and WhatsApp. This menu allows agents to efficiently unpark conversations directly from their interface. The feature leverages Sync MapItems to store the state of recently parked interactions, with a time-to-live (TTL) of 24 hours. Attempting to unpark a closed or failed conversation will result in an error, as MapItems associated with conversations are currently retained even after the conversation has concluded.
+
 ## Flex User Experience
 
 ![Park interaction demo](/img/features/park-interaction/park-interaction.gif)
 
+Additional Recent Interaction List
+
+![Unpark interaction demo](/img/features/park-interaction/unpark-interaction.gif)
+
 ## Setup and dependencies
 
-To enable the parking feature, under your `flex-config` attributes set the `park_interaction` `enabled` flag to `true`:
+To enable the parking feature, under your `flex-config` attributes set the `park_interaction` `enabled` flag to `true`. To enable the recent interaction view, set the `show_menu` to `true`.
 
 ```json
 "park_interaction": {
     "enabled": true,
-    "show_menu": false
+    "show_menu": true
 }
 ```
 
