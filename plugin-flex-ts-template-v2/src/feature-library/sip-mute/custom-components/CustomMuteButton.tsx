@@ -3,21 +3,25 @@ import { StringTemplates } from '../flex-hooks/strings/Mute';
 import { getLocalParticipantForTask } from '../helpers/CallControlHelper';
 import CallControlService from '../helpers/CallControlService';
 import { useEffect, useState } from 'react';
+import * as Flex from '@twilio/flex-ui';
 
 export interface OwnProps {
   task?: ITask;
 }
 const CustomMuteButton = (props: OwnProps) => {
-  const [muted, setMuted] = useState(false);
   const isLiveCall = props.task ? TaskHelper.isLiveCall(props.task) : false;
+  const [muted, setMuted] = useState(false);
+  const [pending, setPending] = useState(false);
 
   useEffect(() => {
-    if (!props.task) return;
-    const workerParticipant = getLocalParticipantForTask(props.task);
+    if (!props.task?.conference) return;
+    const workerParticipant = props.task.conference.participants.find((p) => p.isCurrentWorker);
 
     if (workerParticipant) {
       setMuted(workerParticipant.muted);
     }
+
+    setPending(false);
   }, [props.task?.conference, props.task?.conference?.participants]);
 
   const handleClick = async () => {
@@ -38,19 +42,27 @@ const CustomMuteButton = (props: OwnProps) => {
       return;
     }
 
+    setPending(true);
+    // Note that it may seem redundant to set the mute state here as well as above
+    // however it is set here to support the scenario where Flex UI has been refreshed
+    // during an active call, which means there will be no state in Redux
+    // This should not occur generally but if it does this will resolve the UI mute state
     if (muted) {
-      await CallControlService.unmuteParticipant(conferenceSid, participantCallSid);
+      CallControlService.unmuteParticipant(conferenceSid, participantCallSid)
+        .then(() => setMuted(false))
+        .finally(() => setPending(false));
     } else {
-      await CallControlService.muteParticipant(conferenceSid, participantCallSid);
+      CallControlService.muteParticipant(conferenceSid, participantCallSid)
+        .then(() => setMuted(true))
+        .finally(() => setPending(false));
     }
-    setMuted(!muted);
   };
 
   return (
     <>
       <IconButton
         icon={muted ? 'MuteLargeBold' : 'MuteLarge'}
-        disabled={!isLiveCall}
+        disabled={!isLiveCall || pending}
         onClick={handleClick}
         variant="secondary"
         title={templates[StringTemplates.MuteParticipant]()}
