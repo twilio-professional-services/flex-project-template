@@ -5,7 +5,6 @@ export enum StringTemplates {
   WithinSL = 'PSWithinSL',
   Other = 'PSOther',
 }
-// Service Level Agreement (SLA) = Acuerdo de Nivel de Servicio (SNA)
 
 export const stringHook = () => ({
   'en-US': {
