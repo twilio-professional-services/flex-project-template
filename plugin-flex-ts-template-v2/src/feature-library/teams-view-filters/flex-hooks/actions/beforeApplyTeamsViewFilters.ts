@@ -124,7 +124,6 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
 
         let parseFailure = false;
         expressionComponents.forEach((expression) => {
-          
           let values: string[] = []; // Initialize values as an empty array
 
           const tempNameMatch = RegExp(/(\b\S+(?:\.\S+)?\b)/, 'i').exec(expression);
@@ -134,7 +133,7 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
           const tempName = tempNameMatch ? tempNameMatch[1] : null;
           const tempCondition = tempConditionMatch ? tempConditionMatch[1] : null;
           const tempValue = tempValueMatch ? tempValueMatch[0] : null;
-// pulling out the same value multiple times
+          // pulling out the same value multiple times
           // even though we expect it only to pull it out once so just checking
           // result is > 0
           // we than parse out any invalid characters such as spaces and format
@@ -153,22 +152,20 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
             const name = `data.attributes.${tempName}`;
             const condition = tempCondition.replace(/has/i, 'IN').replace(/[^a-zA-Z=!]/g, '');
 
-            if (tempValue) {
-              // Check if the value starts with '[' and ends with ']'
-              if (tempValue.startsWith('[') && tempValue.endsWith(']')) {
-                values = tempValue
-                  .slice(1, -1) // Remove the brackets
-                  .split(',') // Split the string by comma
-                  .map((item) =>
-                    item
-                      .trim() // Trim each item
-                      .replace(/[^0-9a-zA-Z_-]/g, ''),
-                  ); // Remove any unwanted characters
-              } else if (tempValue.startsWith('"') && tempValue.endsWith('"')) {
-                values.push(tempValue.slice(1, -1)); // Preserve the content between double quotes
-              } else {
-                values.push(tempValue.replace(/[^0-9a-zA-Z_-]/g, ''));
-              }
+            // Check if the value starts with '[' and ends with ']'
+            if (tempValue.startsWith('[') && tempValue.endsWith(']')) {
+              values = tempValue
+                .slice(1, -1) // Remove the brackets
+                .split(',') // Split the string by comma
+                .map((item) =>
+                  item
+                    .trim() // Trim each item
+                    .replace(/[^0-9a-zA-Z_-]/g, ''),
+                ); // Remove any unwanted characters
+            } else if (tempValue.startsWith('"') && tempValue.endsWith('"')) {
+              values.push(tempValue.slice(1, -1)); // Preserve the content between double quotes
+            } else {
+              values.push(tempValue.replace(/[^0-9a-zA-Z_-]/g, ''));
             }
 
             const tempFilter = {
@@ -197,4 +194,3 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
     },
   );
 }
-
