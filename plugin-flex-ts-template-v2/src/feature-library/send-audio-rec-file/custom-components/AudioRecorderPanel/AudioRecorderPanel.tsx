@@ -2,10 +2,8 @@ import React from 'react';
 import * as Flex from '@twilio/flex-ui';
 import { Actions, IconButton, templates } from '@twilio/flex-ui';
 import MicRecorder from 'mic-recorder-to-mp3';
-import { Grid, Card, Text, Paragraph } from '@twilio-paste/core';
+import { Grid, Card, Text } from '@twilio-paste/core';
 import { Spinner } from '@twilio-paste/core/spinner';
-
-// import { RecordIcon } from '@twilio-paste/icons/esm/RecordIcon';
 
 import { AudioRecorderWrapper, AudioRecorderPopover } from './AudioRecorderPanel.Styles';
 import { StringTemplates } from '../../flex-hooks/strings';
@@ -15,6 +13,7 @@ const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 export interface OwnProps {
   showRecorder: boolean;
   audioFile?: any;
+  openHideRecorder: () => void;
 }
 
 export type Props = OwnProps;
@@ -29,17 +28,16 @@ class AudioRecorderPanel extends React.Component<Props> {
     showRecorder: this.props.showRecorder,
     audioFile: null,
     confirmSendFile: false,
-    recordingMessage: '',
     flashing: false,
   };
 
   startRec = () => {
     if (this.state.isBlocked) {
-      console.log('Permission Denied');
+      console.log('send-audio-rec-file: Access to Microphone Permission denied');
     } else {
       Mp3Recorder.start()
         .then(() => {
-          this.setState({ isRecording: true, recordingMessage: 'Recording in progress ' });
+          this.setState({ isRecording: true });
         })
         .catch((e: any) => console.error(e.message));
     }
@@ -76,10 +74,10 @@ class AudioRecorderPanel extends React.Component<Props> {
 
         this.setState({ isRecording: false, audioFile: null });
       } else {
-        console.log('No audio file to detach.');
+        console.log('send-audio-rec-file: No audio file to detach.');
       }
     } catch (error) {
-      console.log('Error during file detachment:', error);
+      console.log('send-audio-rec-file: Error during file detachment:', error);
     }
   };
 
@@ -96,8 +94,21 @@ class AudioRecorderPanel extends React.Component<Props> {
 
     this.setState({ audioFile }, () => {
       const updatedAudioFile = this.state.audioFile;
-      console.log('Updated audioFile:', updatedAudioFile);
+      console.log('send-audio-rec-file: audioFile:', updatedAudioFile);
     });
+  };
+
+  handleAfterSendMessage = (payload: { attachedFiles: string | any[] }) => {
+    if (payload.attachedFiles && payload.attachedFiles.length > 0) {
+      const firstFile = payload.attachedFiles[0];
+      if (firstFile.name === 'voice-recording.mp3') {
+        this.setState({ showRecorder: false });
+        this.props.openHideRecorder();
+      } else {
+        console.log('send-audio-rec-file: not a voice recording file.');
+      }
+    } else {
+    }
   };
 
   componentDidMount() {
@@ -105,14 +116,19 @@ class AudioRecorderPanel extends React.Component<Props> {
       navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then(() => {
-          console.log('Permission granted');
+          console.log('send-audio-rec-file: Microphone acess is granted');
           this.setState({ isBlocked: false });
+          Actions.addListener('afterSendMessage', this.handleAfterSendMessage);
         })
         .catch(() => {
-          console.log('Permission denied');
+          console.log('send-audio-rec-file: Microphone acess denied');
           this.setState({ isBlocked: true });
         });
     }
+  }
+
+  componentWillUnmount() {
+    Actions.removeListener('afterSendMessage', this.handleAfterSendMessage);
   }
 
   render() {
@@ -127,31 +143,45 @@ class AudioRecorderPanel extends React.Component<Props> {
                   <Text as="p" marginBottom="space30" color="colorTextWeak">
                     {templates[StringTemplates.AudioRecorder]()}
                   </Text>
-                  <Text as="p" marginBottom="space20"></Text>
-                  <audio src={this.state.blobURL} controls={!this.state.isRecording} />
-                  <Paragraph marginBottom="space0">
-                    {this.state.isRecording ? (
-                      <>
-                        <audio src={this.state.audioURL} controls={this.state.isRecording} />
-                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                          <Text as="p" marginBottom="space20" style={{ marginRight: '10px' }}>
+                  <audio src={this.state.blobURL} controls={this.state.audioFile ?? false} />
+                  {this.state.isBlocked ? (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Text as="p" marginBottom="space30" color="colorTextWeak">
+                        {templates[StringTemplates.MicBlockedMessage]()}
+                      </Text>
+                    </div>
+                  ) : (
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      {this.state.isRecording ? (
+                        <>
+                          <IconButton
+                            icon="MuteLargeBold"
+                            title={templates[StringTemplates.StopRecButton]()}
+                            onClick={this.stopRec}
+                          />
+                          <Text as="p" marginLeft="space30" marginRight="space30">
                             {templates[StringTemplates.RecordingMessage]()}
                           </Text>
-                          <Spinner decorative={false} title="Loading" color="colorTextError" />
-                        </div>
-                        <IconButton icon="MuteLargeBold" onClick={this.stopRec} />
-                      </>
-                    ) : (
-                      <React.Fragment>
-                        <IconButton icon="MuteLarge" onClick={this.startRec} />
-                        {this.state.audioFile ? (
-                          <>
-                            <IconButton icon="Close" onClick={this.dontSendRec} />
-                          </>
-                        ) : null}
-                      </React.Fragment>
-                    )}
-                  </Paragraph>
+                          <Spinner decorative={true} color="colorTextError" />
+                        </>
+                      ) : (
+                        <>
+                          <IconButton
+                            icon="MuteLarge"
+                            title={templates[StringTemplates.StartRecButton]()}
+                            onClick={this.startRec}
+                          />
+                          {this.state.audioFile ? (
+                            <IconButton
+                              icon="Close"
+                              onClick={this.dontSendRec}
+                              title={templates[StringTemplates.RemoveRecButton]()}
+                            />
+                          ) : null}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </Card>
               </Grid>
             </AudioRecorderPopover>

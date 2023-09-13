@@ -1,7 +1,5 @@
 import { styled } from '@twilio/flex-ui';
 
-// import styledCss, { keyframes, css } from 'styled-components';
-
 export const AudioRecorderWrapper = styled('div')`
   position: relative;
   display: flex;
@@ -10,6 +8,7 @@ export const AudioRecorderWrapper = styled('div')`
 
 export const AudioRecorderPopover = styled('div')`
   position: absolute;
+  width: 300px;
   bottom: 40px;
   left: 0;
 `;

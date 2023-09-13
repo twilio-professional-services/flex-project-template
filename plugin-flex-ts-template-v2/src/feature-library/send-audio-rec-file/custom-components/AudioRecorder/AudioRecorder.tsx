@@ -16,6 +16,7 @@ export type Props = OwnProps;
 class AudioRecorder extends React.Component<Props, AudioRecorderState> {
   state = {
     showRecorder: this.props.showRecorder,
+    isListening: false,
   };
 
   dismiss = () => this.setState({ showRecorder: false });
@@ -32,7 +33,11 @@ class AudioRecorder extends React.Component<Props, AudioRecorderState> {
     return (
       <div className="Twilio-MessageInputActions-default">
         <IconButton icon="Voice" onClick={this.openHideRecorder} />
-        <AudioRecorderPanel showRecorder={this.state.showRecorder} />
+        {this.state.showRecorder ? (
+          <AudioRecorderPanel showRecorder={this.state.showRecorder} openHideRecorder={this.openHideRecorder} />
+        ) : (
+          <></>
+        )}
       </div>
     );
   }
