@@ -60,15 +60,17 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install top-level packages
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
@@ -125,9 +127,6 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     needs: [deploy-terraform]
     steps:
       - uses: actions/checkout@v3
@@ -135,6 +134,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install npm and apply missing environment variables
         id: initial-env
         run: |
@@ -167,9 +171,6 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     needs: [deploy-terraform]
     steps:
       - uses: actions/checkout@v3
@@ -177,6 +178,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install top-level packages
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
@@ -200,9 +206,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       OVERWRITE_CONFIG: ${{ inputs.initial_release == true || inputs.overwrite_config == true }}
     needs:
       - deploy-serverless
@@ -215,6 +218,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install root npm
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
