@@ -30,11 +30,12 @@ class AdminUiService extends ApiService {
     });
   };
 
-  updateUiAttributes = async (attributesUpdate: string): Promise<AdminUiServiceReponse> => {
+  updateUiAttributes = async (attributesUpdate: string, mergeFeature: boolean): Promise<AdminUiServiceReponse> => {
     return new Promise((resolve, reject) => {
       const encodedParams: EncodedParams = {
         Token: encodeURIComponent(this.manager.store.getState().flex.session.ssoTokenPayload.token),
         attributesUpdate: encodeURIComponent(attributesUpdate),
+        mergeFeature: encodeURIComponent(mergeFeature),
       };
 
       this.fetchJsonWithReject<AdminUiServiceReponse>(

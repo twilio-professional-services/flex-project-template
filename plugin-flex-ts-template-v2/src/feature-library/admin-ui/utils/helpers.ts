@@ -96,7 +96,7 @@ export const saveUserConfig = async (feature: string, config: any): Promise<bool
   return true;
 };
 
-export const saveGlobalConfig = async (feature: string, config: any): Promise<any> => {
+export const saveGlobalConfig = async (feature: string, config: any, mergeFeature: boolean): Promise<any> => {
   let returnVal = false;
   try {
     const updateResponse = await AdminUiService.updateUiAttributes(
@@ -107,6 +107,7 @@ export const saveGlobalConfig = async (feature: string, config: any): Promise<an
           },
         },
       }),
+      mergeFeature,
     );
     if (updateResponse?.configuration?.custom_data?.features) {
       returnVal = updateResponse.configuration.custom_data.features;
