@@ -7,7 +7,7 @@ const requiredParameters = [{ key: 'attributesUpdate', purpose: 'ui_attributes t
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    const { attributesUpdate, TokenResult } = event;
+    const { attributesUpdate, mergeFeature, TokenResult } = event;
 
     if (TokenResult.roles.indexOf('admin') < 0) {
       response.setStatusCode(403);
@@ -17,6 +17,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     const result = await Configuration.updateUiAttributes({
       attributesUpdate,
+      mergeFeature,
       context,
     });
 
