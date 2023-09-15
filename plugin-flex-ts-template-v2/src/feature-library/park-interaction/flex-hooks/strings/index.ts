@@ -13,7 +13,7 @@ export enum StringTemplates {
   NonCbmError = 'PSParkNonCbmError',
   MultipleParticipantsError = 'PSParkMultipleParticipantsError',
   ParkInteractionTitle = 'PSParkTitle',
-  RecentInteractionList = 'PSRecentInteractionList',
+  ParkedInteractions = 'PSParkedInteractions',
   UnparkSuccess = 'PSUnparkSuccess',
   UnparkGenericError = 'PSUnparkGenericError',
   UnparkError = 'PSUnparkError',
@@ -36,7 +36,7 @@ export const stringHook = () => ({
     [StringTemplates.NonCbmError]: 'Parking is only available for conversation-based messaging tasks.',
     [StringTemplates.MultipleParticipantsError]:
       'This conversation cannot be parked because there are multiple internal participants.',
-    [StringTemplates.RecentInteractionList]: 'Recent Interaction List',
+    [StringTemplates.ParkedInteractions]: 'Parked Interactions',
     [StringTemplates.UnparkSuccess]: 'The conversation is now unparked.',
     [StringTemplates.UnparkGenericError]: 'An error occurred while attempting to unpark the conversation: {{message}}',
     [StringTemplates.UnparkError]: 'Error while unparking, conversation is already closed or failed.',

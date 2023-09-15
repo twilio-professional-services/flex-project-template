@@ -28,7 +28,7 @@ const ParkView = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    const getRecentInteractionList = async () => {
+    const getParkedInteractions = async () => {
       const workerName = Manager?.getInstance()?.workerClient?.name;
       const getSyncMapItems = await SyncHelper.getMapItems(workerName);
 
@@ -69,14 +69,14 @@ const ParkView = () => {
       setIsLoaded(true);
     };
 
-    getRecentInteractionList();
+    getParkedInteractions();
   }, []);
 
   return (
     <Box width="100%">
       <Box paddingTop="space40" paddingLeft="space60">
         <Heading as="h3" variant="heading30">
-          {templates[StringTemplates.RecentInteractionList]()}
+          {templates[StringTemplates.ParkedInteractions]()}
         </Heading>
       </Box>
       <ParkViewTable recentInteractionsList={recentInteractionsList} isLoaded={isLoaded} />

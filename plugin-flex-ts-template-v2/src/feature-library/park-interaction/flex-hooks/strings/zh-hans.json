@@ -5,7 +5,7 @@
   "PSParkWebhookError": "无效的 Webhook URL。本地运行时不支持搁置对话。",
   "PSParkNonCbmError": "仅基于对话的消息传递任务可用于搁置。",
   "PSParkMultipleParticipantsError": "由于存在多个内部参与者，无法搁置此对话。",
-  "PSRecentInteractionList": "最近互动列表",
+  "PSParkedInteractions": "暂停互动",
   "PSUnparkSuccess": "对话已成功取消搁置。",
   "PSUnparkGenericError": "尝试取消搁置对话时发生错误：{{message}}",
   "PSUnparkError": "取消搁置时出现错误，对话已关闭或失败。",
