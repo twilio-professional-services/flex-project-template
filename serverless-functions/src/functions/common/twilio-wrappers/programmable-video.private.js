@@ -6,10 +6,10 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  * @param {object} parameters the parameters for the function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
- * @param {boolean} parameters.recordParticipantsOnConnect the channel to be updated
- * @param {string} parameters.type the attributes to apply to the channel
- * @param {number} parameters.emptyRoomTimeout the attributes to apply to the channel
- * @param {string} parameters.uniqueName the attributes to apply to the channel
+ * @param {boolean} parameters.recordParticipantsOnConnect whether the video room should be recorded
+ * @param {string} parameters.type the type of video room
+ * @param {number} parameters.emptyRoomTimeout the idle timeout for the room
+ * @param {string} parameters.uniqueName the unique name of the video room
  * @returns {object} An object containing the new room
  * @description the following method is used to create a video room
  */
