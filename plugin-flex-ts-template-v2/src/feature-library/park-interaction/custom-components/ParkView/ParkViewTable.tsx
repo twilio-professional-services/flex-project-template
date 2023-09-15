@@ -14,7 +14,7 @@ interface ParkViewTableProps {
 interface ParkViewItem {
   key: string;
   channel: string;
-  phoneOrEmail: string;
+  address: string;
   customerName: string;
   parkingDate: Date;
   webhookSid: string;
@@ -42,10 +42,10 @@ const ParkViewTable = (props: ParkViewTableProps) => {
     <Table scrollHorizontally>
       <THead>
         <Tr>
-          <Th>{templates[StringTemplates.ColumnChannel]()}</Th>
-          <Th>{templates[StringTemplates.ColumnPhoneEmail]()}</Th>
           <Th>{templates[StringTemplates.ColumnCustomerName]()}</Th>
-          <Th>{templates[StringTemplates.ColumnParkingDateAndTime]()}</Th>
+          <Th>{templates[StringTemplates.ColumnAddress]()}</Th>
+          <Th>{templates[StringTemplates.ColumnDateTimeParked]()}</Th>
+          <Th>{templates[StringTemplates.ColumnChannel]()}</Th>
           <Th>{templates[StringTemplates.ColumnAction]()}</Th>
         </Tr>
       </THead>
@@ -55,10 +55,10 @@ const ParkViewTable = (props: ParkViewTableProps) => {
             props.recentInteractionsList.map((interaction: ParkViewItem) => {
               return (
                 <Tr key={interaction.key}>
-                  <Td>{interaction.channel}</Td>
-                  <Td>{interaction.phoneOrEmail}</Td>
                   <Td>{interaction.customerName}</Td>
+                  <Td>{interaction.address}</Td>
                   <Td>{formatDate(interaction.parkingDate, instanceLanguage)}</Td>
+                  <Td>{interaction.channel}</Td>
                   <Td>
                     <Button
                       variant="secondary_icon"

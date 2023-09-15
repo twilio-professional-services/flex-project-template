@@ -55,7 +55,7 @@ const ParkView = () => {
         return {
           key: mapItem.item.descriptor.key,
           channel: `${data.taskChannelUniqueName[0].toUpperCase()}${data.taskChannelUniqueName.slice(1)}`,
-          phoneOrEmail: data.taskAttributes.customers?.phone || data.taskAttributes.customers?.email,
+          address: data.taskAttributes.customers?.phone || data.taskAttributes.customers?.email,
           customerName: data.taskAttributes?.from,
           parkingDate,
           webhookSid: data.webhookSid,
