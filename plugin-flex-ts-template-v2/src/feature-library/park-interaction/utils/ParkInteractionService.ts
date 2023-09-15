@@ -34,6 +34,11 @@ interface Customers {
   email?: string;
 }
 
+interface UnparkInteractionResponse {
+  success: boolean;
+  recording: FetchedRecording;
+}
+
 class ParkInteractionService extends ApiService {
   parkInteraction = async (
     channelSid: string,
@@ -78,6 +83,31 @@ class ParkInteractionService extends ApiService {
         })
         .catch((error) => {
           console.log('Error parking interaction', error);
+          reject(error);
+        });
+    });
+  };
+
+  unparkInteraction = async (ConversationSid: string, WebhookSid: string): Promise<any> => {
+    return new Promise((resolve, reject) => {
+      const encodedParams: EncodedParams = {
+        ConversationSid: encodeURIComponent(ConversationSid),
+        WebhookSid: encodeURIComponent(WebhookSid),
+      };
+
+      this.fetchJsonWithReject<UnparkInteractionResponse>(
+        `${this.serverlessProtocol}://${this.serverlessDomain}/features/park-interaction/common/unpark-interaction`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: this.buildBody(encodedParams),
+        },
+      )
+        .then((resp: any) => {
+          resolve(resp.recording);
+        })
+        .catch((error) => {
+          console.log('Error unparking interaction', error);
           reject(error);
         });
     });

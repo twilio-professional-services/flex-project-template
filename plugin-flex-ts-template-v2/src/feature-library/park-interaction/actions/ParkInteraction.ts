@@ -4,7 +4,6 @@ import { ParkInteractionNotification, UnparkInteractionNotification } from '../f
 import { StringTemplates } from '../flex-hooks/strings';
 import ParkInteractionPayload, { UnparkInteractionPayload } from '../types/ParkInteractionPayload';
 import ParkInteractionService from '../utils/ParkInteractionService';
-import UnparkInteractionService from '../utils/UnparkInteractionService';
 
 const getAgent = async (payload: ParkInteractionPayload) => {
   const participants = await payload.task.getParticipants(payload.task.attributes.flexInteractionChannelSid);
@@ -75,7 +74,7 @@ export const parkInteraction = async (payload: ParkInteractionPayload) => {
 
 export const unparkInteraction = async (payload: UnparkInteractionPayload) => {
   try {
-    await UnparkInteractionService.unparkInteraction(payload.ConversationSid, payload.WebhookSid);
+    await ParkInteractionService.unparkInteraction(payload.ConversationSid, payload.WebhookSid);
     return Notifications.showNotification(UnparkInteractionNotification.UnparkSuccess);
   } catch (error) {
     const message = (error as any)?.message;
