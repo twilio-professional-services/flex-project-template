@@ -75,7 +75,7 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install skip-postinstall
+          npm install --ignore-scripts
           npm run generate-env
       - name: deploy serverless
         working-directory: serverless-functions
@@ -145,19 +145,17 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
-          npm install skip-postinstall
-          npm run generate-env  >> $GITHUB_STEP_SUMMARY
+          npm install --ignore-scripts
+          npm run postinstall -- --packages=serverless-functions >> $GITHUB_STEP_SUMMARY
 # FEATURE: chat-to-video-escalation
       - name: install npm and build video-app-assets
-        working-directory: web-app-examples/video-app-quickstart
         run: |
-          npm install
-          npm run build
+          echo "### chat-to-video-escalation configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm run postinstall -- --packages=web-app-examples/video-app-quickstart >> $GITHUB_STEP_SUMMARY
 # END FEATURE: chat-to-video-escalation
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
-          npm install
           npm run install-serverless-plugin
           npm run deploy-env
 
@@ -187,12 +185,11 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install skip-postinstall
-          npm run generate-env
+          npm install --ignore-scripts
+          npm run postinstall -- --packages=serverless-schedule-manager,flex-config
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
-          npm install
           npm run install-serverless-plugin
           npm run deploy-env
 # END FEATURE: schedule-manager
@@ -228,12 +225,12 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Overwrite Config: ${{ env.OVERWRITE_CONFIG }}"  >> $GITHUB_STEP_SUMMARY
-          npm install skip-postinstall
-          npm run generate-env
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm install --ignore-scripts
+          npm run postinstall -- --packages=flex-config >> $GITHUB_STEP_SUMMARY
       - name: deploy flex config
         working-directory: flex-config
         run: |
-          npm install
           npm run deploy
 
   deploy-release-plugin:
@@ -252,7 +249,7 @@ jobs:
           node-version: '16'
           
       - name: install twilio cli
-        run: npm install skip-postinstall
+        run: npm install --ignore-scripts
 
       - name: deploy and release flex-plugin
         run: |
