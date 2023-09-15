@@ -19,12 +19,12 @@ Additional Recent Interaction List
 
 ## Setup and dependencies
 
-To enable the parking feature, under your `flex-config` attributes set the `park_interaction` `enabled` flag to `true`. To enable the recent interaction view, set the `show_menu` to `true`.
+To enable the parking feature, under your `flex-config` attributes set the `park_interaction` `enabled` flag to `true`. To enable the recent interaction view, set the `show_list` to `true`.
 
 ```json
 "park_interaction": {
     "enabled": true,
-    "show_menu": true
+    "show_list": true
 }
 ```
 

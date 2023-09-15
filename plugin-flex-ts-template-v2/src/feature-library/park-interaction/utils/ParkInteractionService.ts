@@ -1,7 +1,7 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedRecording } from '../../../types/serverless/twilio-api';
-import { isMenuEnabled } from '../config';
+import { isListEnabled } from '../config';
 
 export interface ParkInteractionResponse {
   success: boolean;
@@ -61,7 +61,7 @@ class ParkInteractionService extends ApiService {
         taskAttributes: encodeURIComponent(taskAttributes),
         workerSid: encodeURIComponent(this.manager.store.getState().flex.worker.worker?.sid ?? ''),
         workerName: encodeURIComponent(this.manager.store.getState().flex.worker.worker?.name ?? ''),
-        createUpdateSyncMapItem: encodeURIComponent(isMenuEnabled()),
+        createUpdateSyncMapItem: encodeURIComponent(isListEnabled()),
         Token: encodeURIComponent(this.manager.user.token),
       };
 

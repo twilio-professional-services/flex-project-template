@@ -2,11 +2,11 @@ import * as Flex from '@twilio/flex-ui';
 
 import { FlexComponent } from '../../../../types/feature-loader';
 import ParkView from '../../custom-components/ParkView/ParkView';
-import { isMenuEnabled } from '../../config';
+import { isListEnabled } from '../../config';
 
 export const componentName = FlexComponent.ViewCollection;
 export const componentHook = function addParkInteractionView(flex: typeof Flex) {
-  if (!isMenuEnabled()) {
+  if (!isListEnabled()) {
     return;
   }
 

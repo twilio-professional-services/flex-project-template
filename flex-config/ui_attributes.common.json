@@ -250,7 +250,7 @@
       },
       "park_interaction": {
         "enabled": true,
-        "show_menu": false
+        "show_list": false
       },
       "teams_view_enhancements": {
         "enabled": true,
