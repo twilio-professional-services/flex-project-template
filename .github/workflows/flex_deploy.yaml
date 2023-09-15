@@ -145,7 +145,7 @@ jobs:
           npm run generate-env  >> $GITHUB_STEP_SUMMARY
 # FEATURE: chat-to-video-escalation
       - name: install npm and build video-app-assets
-        working-directory: web-app-examples/video-app-quickstart
+        working-directory: web-app-examples/twilio-video-demo-app
         run: |
           npm install
           npm run build

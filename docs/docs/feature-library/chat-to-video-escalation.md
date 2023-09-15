@@ -3,7 +3,7 @@ sidebar_label: chat-to-video
 title: chat-to-video-escalation
 ---
 
-This feature shows how an agent can initiate a video room from a webchat conversation within Flex. This plugin was built for **Flex 2.0**.
+This feature shows how an agent can initiate a video room from a messaging conversation within Flex.
 
 ---
 
@@ -27,19 +27,17 @@ This feature is broken down into three main sections:
 
 - **Flex Plugin** - starting at the root of the directory:
   - The `./custom-components` folder contains the components to initiate and join the video room
-  - The `./helpers` library contains utility functions related to updating the chat task attributes and attaching the audio/video tracks to the UI
 - **Twilio Serverless** - within the `/serverless-functions/src/functions/features/chat-to-video-escalation` directory:
-  - This houses the Twilio Function paths which orchestrate the facilitation of access token generation, sync document management, and video room creation
-  - The assets are utilized to host the build output of the [customer-facing web application](https://github.com/twilio-professional-services/flex-project-template/tree/main/web-app-examples/video-app-quickstart) that joins the customer into the video session, ultimately connecting them to the agent; for further details on how this application works & setup, see the [application folder](https://github.com/twilio-professional-services/flex-project-template/tree/main/web-app-examples/video-app-quickstart) within the `/web-app-examples` folder at the root of this template
-- **Customer Facing Video App** - within the `/web-app-examples/video-app-quickstart` directory:
+  - This houses the Twilio Function paths which orchestrate the facilitation of access token generation and video room creation
+  - The assets are utilized to host the build output of the [video web application](https://github.com/twilio-professional-services/flex-project-template/tree/main/web-app-examples/twilio-video-demo-app) that joins the agent and customer into the video session; for further details on how this application works & setup, see the [application folder](https://github.com/twilio-professional-services/flex-project-template/tree/main/web-app-examples/twilio-video-demo-app) within the `/web-app-examples` folder at the root of this template
+- **Video App** - within the `/web-app-examples/twilio-video-demo-app` directory:
   - A Next JS application built with React, TypeScript, and Twilio Paste design system
-  - This application is used by the customer to connect to the video session
+  - This application is used by the agent (embedded into Flex) and the customer (via invite link) to connect to the video session
 
 ### Technical Components
 
 - **Twilio Serverless Functions** - used to orchestrate the API requests to generate access tokens
 - **Twilio Serverless Assets** - used to host the customer-side video room UI
-- **Twilio Sync** - utilized as the source of truth to store information about the video room and requests
 - **Twilio Video JS** - used for connecting and monitoring the video rooms on the client side
 
 ### Example Walkthrough
@@ -80,8 +78,6 @@ The following diagram demonstrates how a chat session can be escalated to video.
 
 ![alt text](/img/features/chat-to-video/Chat-to-Video-Diagram.png)
 
----
-
 ## Local Development
 
 To test this feature locally:
@@ -100,17 +96,6 @@ To test this feature locally:
    VIDEO_ROOM_TYPE=group
    VIDEO_RECORD_BY_DEFAULT=false
    ```
-
-
----
-
-## Changelog
-
-### 1.0.0
-
-**September 7, 2022**
-
-- Updated README and pushed code.
 
 ## Reference
 
