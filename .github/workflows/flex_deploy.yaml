@@ -47,6 +47,9 @@ on:
         default: false
         description: Overwrite config set by Admin UI Panel?
 
+concurrency:
+  group: flex-deploy-${{ inputs.environment || github.event.inputs.environment }}
+
 jobs:
 
   # When performing an initial release
@@ -60,20 +63,22 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     steps:
       - uses: actions/checkout@v3
       - name: setup node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install top-level packages
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install skip-postinstall
+          npm install --ignore-scripts
           npm run generate-env
       - name: deploy serverless
         working-directory: serverless-functions
@@ -125,9 +130,6 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     needs: [deploy-terraform]
     steps:
       - uses: actions/checkout@v3
@@ -135,25 +137,28 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install npm and apply missing environment variables
         id: initial-env
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
-          npm install skip-postinstall
-          npm run generate-env  >> $GITHUB_STEP_SUMMARY
+          npm install --ignore-scripts
+          npm run postinstall -- --packages=serverless-functions >> $GITHUB_STEP_SUMMARY
 # FEATURE: chat-to-video-escalation
       - name: install npm and build video-app-assets
-        working-directory: web-app-examples/twilio-video-demo-app
         run: |
-          npm install
-          npm run build
+          echo "### chat-to-video-escalation configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm run postinstall -- --packages=web-app-examples/twilio-video-demo-app >> $GITHUB_STEP_SUMMARY
 # END FEATURE: chat-to-video-escalation
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
-          npm install
           npm run install-serverless-plugin
           npm run deploy-env
 
@@ -167,9 +172,6 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     needs: [deploy-terraform]
     steps:
       - uses: actions/checkout@v3
@@ -177,16 +179,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install top-level packages
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install skip-postinstall
-          npm run generate-env
+          npm install --ignore-scripts
+          npm run postinstall -- --packages=serverless-schedule-manager,flex-config
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
-          npm install
           npm run install-serverless-plugin
           npm run deploy-env
 # END FEATURE: schedule-manager
@@ -200,9 +206,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       OVERWRITE_CONFIG: ${{ inputs.initial_release == true || inputs.overwrite_config == true }}
     needs:
       - deploy-serverless
@@ -215,17 +218,22 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install root npm
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Overwrite Config: ${{ env.OVERWRITE_CONFIG }}"  >> $GITHUB_STEP_SUMMARY
-          npm install skip-postinstall
-          npm run generate-env
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm install --ignore-scripts
+          npm run postinstall -- --packages=flex-config >> $GITHUB_STEP_SUMMARY
       - name: deploy flex config
         working-directory: flex-config
         run: |
-          npm install
           npm run deploy
 
   deploy-release-plugin:
@@ -244,7 +252,7 @@ jobs:
           node-version: '16'
           
       - name: install twilio cli
-        run: npm install skip-postinstall
+        run: npm install --ignore-scripts
 
       - name: deploy and release flex-plugin
         run: |

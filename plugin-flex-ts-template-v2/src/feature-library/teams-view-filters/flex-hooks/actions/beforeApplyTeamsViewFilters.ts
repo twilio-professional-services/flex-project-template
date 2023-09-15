@@ -101,10 +101,10 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
 
       // if the targetWorkers is 1==1 we can ignore it
       if (targetWorkers !== '1==1') {
-        // assuming expressions are formatted as explained above
         const expressionComponents = targetWorkers.match(
-          /((\b(?:\.)+\S+\b|\b(?:\S+)+\S+\b)(\s)+(HAS|==|EQ|!=|CONTAINS|IN|NOT IN)(\s)+(('|")\S+('|")))/gi,
+          /\b\S+(?:\.\S+)?\b\s*((HAS|==|EQ|!=|CONTAINS|IN|NOT IN))\s*(['"].+?['"]|\S+)/gi,
         );
+
         const containsORs = targetWorkers.includes(' OR ');
 
         // validate expressions have been parsed and that there are no OR'd statements
@@ -121,12 +121,18 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
         }
 
         // for each expression break it down and create a filter
+
         let parseFailure = false;
         expressionComponents.forEach((expression) => {
-          const tempName = RegExp(/(\b(?:\.)+\S+\b|\b(?:\S+)+\S+\b)/, 'i').exec(expression);
-          const tempCondition = RegExp(/( HAS |==|!=| CONTAINS | IN | NOT IN )/, 'i').exec(expression);
-          const tempValue = RegExp(/(('|")\S+('|"))/, 'i').exec(expression);
+          let values: string[] = []; // Initialize values as an empty array
 
+          const tempNameMatch = RegExp(/(\b\S+(?:\.\S+)?\b)/, 'i').exec(expression);
+          const tempConditionMatch = RegExp(/(HAS|==|EQ|!=|CONTAINS|IN|NOT IN)/i).exec(expression);
+          const tempValueMatch = RegExp(/(\[.*?\])|(['"].+?['"])|(\S+)$/i).exec(expression);
+
+          const tempName = tempNameMatch ? tempNameMatch[1] : null;
+          const tempCondition = tempConditionMatch ? tempConditionMatch[1] : null;
+          const tempValue = tempValueMatch ? tempValueMatch[0] : null;
           // pulling out the same value multiple times
           // even though we expect it only to pull it out once so just checking
           // result is > 0
@@ -143,9 +149,24 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
             tempValue &&
             tempValue.length > 0
           ) {
-            const name = `data.attributes.${tempName[0]}`;
-            const condition = tempCondition[0].replace(/has/i, 'IN').replace(/[^a-zA-Z=!]/g, '');
-            const values = [tempValue[0].replace(/[^0-9a-zA-Z_-]/g, '')];
+            const name = `data.attributes.${tempName}`;
+            const condition = tempCondition.replace(/has/i, 'IN').replace(/[^a-zA-Z=!]/g, '');
+
+            // Check if the value starts with '[' and ends with ']'
+            if (tempValue.startsWith('[') && tempValue.endsWith(']')) {
+              values = tempValue
+                .slice(1, -1) // Remove the brackets
+                .split(',') // Split the string by comma
+                .map((item) =>
+                  item
+                    .trim() // Trim each item
+                    .replace(/[^0-9a-zA-Z_-]/g, ''),
+                ); // Remove any unwanted characters
+            } else if (tempValue.startsWith('"') && tempValue.endsWith('"')) {
+              values.push(tempValue.slice(1, -1)); // Preserve the content between double quotes
+            } else {
+              values.push(tempValue.replace(/[^0-9a-zA-Z_-]/g, ''));
+            }
 
             const tempFilter = {
               name,
