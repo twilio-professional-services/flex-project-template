@@ -3,9 +3,7 @@ const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunc
 ].path);
 const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
 const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
-const SyncClient = require('twilio-sync').Client;
-
-const syncToken = require(Runtime.getFunctions()['common/twilio-wrappers/get-sync-token'].path);
+const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sync'].path);
 
 const requiredParameters = [
   { key: 'channelSid', purpose: 'interaction channel sid' },
@@ -24,8 +22,6 @@ const requiredParameters = [
 ];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
-  const sync = await syncToken.getSyncToken(context);
-  const syncClient = new SyncClient(sync.token);
   try {
     const {
       channelSid,
@@ -88,34 +84,29 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
       if (createUpdateSyncMapItem) {
         // Open a Sync Map by unique name and update its data
-        await syncClient
-          .map(workerName)
-          .then(async (map) => {
-            console.log('Successfully added/updated a map. SID: ', map.sid);
-            try {
-              await map.set(
-                conversationSid,
-                {
-                  interactionSid,
-                  flexInteractionChannelSid: channelSid,
-                  participantSid,
-                  workflowSid,
-                  taskChannelUniqueName,
-                  taskAttributes,
-                  webhookSid: webhookResult.webhook.sid,
-                },
-                { ttl: 86400 },
-              );
-            } catch (setMapItemError) {
-              console.error('Unexpected error adding a Sync Map item', setMapItemError);
-            }
-            map.on('itemUpdated', (updatedEvent) => {
-              console.log('Received an "itemUpdated" event', updatedEvent);
-            });
-          })
-          .catch((createUpdateMapError) => {
-            console.error('Unexpected error adding a Sync Map', createUpdateMapError);
+        const syncMap = await SyncOperations.createMap({
+          context,
+          uniqueName: workerName,
+        });
+
+        // If map already exists, use the unique name to access it
+        if (syncMap.sid || workerName) {
+          await SyncOperations.createMapItem({
+            context,
+            mapSid: syncMap.sid || workerName,
+            key: conversationSid,
+            ttl: 86400, // One day
+            data: {
+              interactionSid,
+              flexInteractionChannelSid: channelSid,
+              participantSid,
+              workflowSid,
+              taskChannelUniqueName,
+              taskAttributes,
+              webhookSid: webhookResult.webhook.sid,
+            },
           });
+        }
       }
     }
 
