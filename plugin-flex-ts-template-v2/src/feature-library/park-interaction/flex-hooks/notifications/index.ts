@@ -12,6 +12,7 @@ export enum UnparkInteractionNotification {
   UnparkGenericError = 'PSUnparkGenericError',
   UnparkError = 'PSUnparkError',
   UnparkListError = 'PSUnparkListError',
+  UnparkDeleteItemError = 'PSUnparkDeleteItemError',
 }
 
 // Return an array of Flex.Notification
@@ -55,6 +56,13 @@ export const notificationHook = (flex: typeof Flex) => [
     id: UnparkInteractionNotification.UnparkListError,
     type: flex.NotificationType.error,
     content: StringTemplates.UnparkListError,
+    closeButton: true,
+    timeout: 5000,
+  },
+  {
+    id: UnparkInteractionNotification.UnparkDeleteItemError,
+    type: flex.NotificationType.error,
+    content: StringTemplates.UnparkDeleteItemError,
     closeButton: true,
     timeout: 5000,
   },

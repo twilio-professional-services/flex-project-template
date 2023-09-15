@@ -26,10 +26,10 @@ export interface MapItemDescriptor {
 const ParkView = () => {
   const [recentInteractionsList, setRecentInteractionsList] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const workerName = Manager?.getInstance()?.workerClient?.name || '';
 
   useEffect(() => {
     const getParkedInteractions = async () => {
-      const workerName = Manager?.getInstance()?.workerClient?.name;
       const getSyncMapItems = await SyncHelper.getMapItems(workerName);
 
       if (getSyncMapItems.length === 0) {
@@ -79,7 +79,7 @@ const ParkView = () => {
           {templates[StringTemplates.ParkedInteractions]()}
         </Heading>
       </Box>
-      <ParkViewTable recentInteractionsList={recentInteractionsList} isLoaded={isLoaded} />
+      <ParkViewTable recentInteractionsList={recentInteractionsList} isLoaded={isLoaded} workerName={workerName} />
     </Box>
   );
 };

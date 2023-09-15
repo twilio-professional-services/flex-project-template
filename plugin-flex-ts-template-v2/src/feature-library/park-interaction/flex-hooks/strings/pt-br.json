@@ -16,5 +16,6 @@
   "PSAction": "Ação",
   "PSResumeInteraction": "Retomar Interação",
   "PSNoItemsToList": "Sem itens para listar",
-  "PSUnparkListError": "Erro ao carregar a lista de interações recentes: {{message}}"
+  "PSUnparkListError": "Erro ao carregar a lista de interações recentes: {{message}}",
+  "PSUnparkDeleteItemError": "Erro ao deletar sync map item: {{message}}"
 }

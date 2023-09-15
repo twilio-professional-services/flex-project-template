@@ -16,5 +16,6 @@
   "PSAction": "การดำเนินการ",
   "PSResumeInteraction": "ดำเนินการสนทนาอีกครั้ง",
   "PSNoItemsToList": "ไม่มีรายการที่จะแสดง",
-  "PSUnparkListError": "เกิดข้อผิดพลาดในการโหลดรายการสนทนาล่าสุด: {{message}}"
+  "PSUnparkListError": "เกิดข้อผิดพลาดในการโหลดรายการสนทนาล่าสุด: {{message}}",
+  "PSUnparkDeleteItemError": "เกิดข้อผิดพลาดในการลบรายการแผนที่ที่ซิงค์: {{message}}"
 }

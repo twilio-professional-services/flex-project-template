@@ -16,5 +16,6 @@
   "PSAction": "操作",
   "PSResumeInteraction": "恢复互动",
   "PSNoItemsToList": "无可列示项目",
-  "PSUnparkListError": "加载最近互动列表时发生错误：{{message}}"
+  "PSUnparkListError": "加载最近互动列表时发生错误：{{message}}",
+  "PSUnparkDeleteItemError": "删除同步地图项目时出错：{{message}}"
 }

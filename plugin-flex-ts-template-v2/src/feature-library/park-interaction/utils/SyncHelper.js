@@ -1,9 +1,7 @@
-import { Manager, Notifications } from '@twilio/flex-ui';
-import { SyncClient } from 'twilio-sync';
+import { Notifications } from '@twilio/flex-ui';
 
+import SyncClient from '../../../utils/sdk-clients/sync/SyncClient';
 import { UnparkInteractionNotification } from '../flex-hooks/notifications';
-
-const SYNC_CLIENT = new SyncClient(Manager.getInstance().user.token);
 
 export default class SyncHelper {
   static pageHandler(paginator) {
@@ -18,11 +16,22 @@ export default class SyncHelper {
 
   static async getMapItems(mapName) {
     try {
-      const map = await SYNC_CLIENT.map(mapName);
+      const map = await SyncClient.map(mapName);
       const paginator = await map.getItems();
       return this.pageHandler(paginator);
     } catch (error) {
       console.error('Map getItems() failed', error);
+      Notifications.showNotification(UnparkInteractionNotification.UnparkListError, { message: error });
+      return [];
+    }
+  }
+
+  static async deleteMapItem(mapKey, mapItemKey) {
+    try {
+      const map = await SyncClient.map(mapKey);
+      return await map.remove(mapItemKey);
+    } catch (error) {
+      console.error('Sync deleteMapItem() failed', error);
       Notifications.showNotification(UnparkInteractionNotification.UnparkListError, { message: error });
       return [];
     }

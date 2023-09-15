@@ -25,6 +25,7 @@ export enum StringTemplates {
   ResumeInteraction = 'PSResumeInteraction',
   NoItemsToList = 'PSNoItemsToList',
   UnparkListError = 'PSUnparkListError',
+  UnparkDeleteItemError = 'PSUnparkDeleteItemError',
 }
 
 export const stringHook = () => ({
@@ -48,6 +49,7 @@ export const stringHook = () => ({
     [StringTemplates.ResumeInteraction]: 'Resume Interaction',
     [StringTemplates.NoItemsToList]: 'No items to list',
     [StringTemplates.UnparkListError]: 'Error loading recent interaction list: {{message}}',
+    [StringTemplates.UnparkDeleteItemError]: 'Error deleting Sync Map item: {{message}}',
   },
   'es-ES': esES,
   'es-MX': esMX,
