@@ -10,6 +10,8 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
   try {
     const conversationSid = event.ConversationSid;
     const webhookSid = event.WebhookSid;
+    // RouteToSameWorker is only set when worker is unparking
+    const routeToSameWorker = event.RouteToSameWorker === 'true';
 
     // Remove webhook so it doesn't keep triggering if parked more than once
     const webhookResult = await ConversationsOperations.removeWebhook({
@@ -38,6 +40,12 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
 
     // Create a new task through the invites endpoint. Alternatively you can pass
     // a queue_sid and a worker_sid inside properties to add a specific agent back to the interaction
+
+    const additionalProperties = {};
+    if (routeToSameWorker) {
+      additionalProperties.queue_sid = queueSid;
+      additionalProperties.worker_sid = workerSid;
+    }
     const result = await InteractionsOperations.participantCreateInvite({
       context,
       interactionSid,
@@ -46,8 +54,7 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
         properties: {
           workspace_sid: context.TWILIO_FLEX_WORKSPACE_SID,
           workflow_sid: workflowSid,
-          queue_sid: queueSid,
-          worker_sid: workerSid,
+          ...additionalProperties,
           task_channel_unique_name: taskChannelUniqueName,
           attributes: { ...JSON.parse(taskAttributes), originalRouting: { queueName, queueSid, workerSid } },
         },

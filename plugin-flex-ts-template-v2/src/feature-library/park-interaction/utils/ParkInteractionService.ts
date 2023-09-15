@@ -93,6 +93,7 @@ class ParkInteractionService extends ApiService {
       const encodedParams: EncodedParams = {
         ConversationSid: encodeURIComponent(ConversationSid),
         WebhookSid: encodeURIComponent(WebhookSid),
+        RouteToSameWorker: encodeURIComponent(true),
       };
 
       this.fetchJsonWithReject<UnparkInteractionResponse>(
