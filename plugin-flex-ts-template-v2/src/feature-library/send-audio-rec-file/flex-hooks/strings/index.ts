@@ -21,7 +21,7 @@ export const stringHook = () => ({
     [StringTemplates.StartRecButton]: 'Start Recording',
     [StringTemplates.StopRecButton]: 'Stop Recording',
     [StringTemplates.RemoveRecButton]: 'Discard Recording',
-    [StringTemplates.MicBlockedMessage]: 'Allow this page to access your Microphone before use this feature.',
+    [StringTemplates.MicBlockedMessage]: 'Allow this page to access your microphone before using this feature.',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,

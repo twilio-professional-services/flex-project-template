@@ -1,3 +1,4 @@
+/* eslint-disable no-negated-condition */
 import React from 'react';
 import * as Flex from '@twilio/flex-ui';
 import { Actions, IconButton, templates } from '@twilio/flex-ui';
@@ -13,7 +14,9 @@ const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 export interface OwnProps {
   showRecorder: boolean;
   audioFile?: any;
+  lastAudioFile?: any;
   openHideRecorder: () => void;
+  updateLatestAudioFile: (audioFile: any) => void;
 }
 
 export type Props = OwnProps;
@@ -21,20 +24,37 @@ export type Props = OwnProps;
 class AudioRecorderPanel extends React.Component<Props> {
   state = {
     isRecording: false,
-    audioURL: '',
     blobURL: '',
-    recorder: null,
     isBlocked: false,
     showRecorder: this.props.showRecorder,
+    lastAudioFile: this.props.lastAudioFile,
     audioFile: null,
-    confirmSendFile: false,
-    flashing: false,
   };
 
-  startRec = () => {
+  startRec = async () => {
     if (this.state.isBlocked) {
-      console.log('send-audio-rec-file: Access to Microphone Permission denied');
+      console.log('send-audio-rec-file: Microphone access denied');
+    } else if (this.state.audioFile !== null) {
+      console.log('send-audio-rec-file: Audio file is already recorded.');
+      try {
+        const { audioFile } = this.state;
+
+        if (audioFile) {
+          await this.dontSendRec();
+
+          // Only start recording if the file detachment is successful
+          this.setState({ isRecording: false, audioFile: null });
+          Mp3Recorder.start()
+            .then(() => {
+              this.setState({ isRecording: true });
+            })
+            .catch((e: any) => console.error(e.message));
+        }
+      } catch (error) {
+        console.error('send-audio-rec-file: Error during file detachment:', error);
+      }
     } else {
+      // Start recording directly
       Mp3Recorder.start()
         .then(() => {
           this.setState({ isRecording: true });
@@ -50,34 +70,39 @@ class AudioRecorderPanel extends React.Component<Props> {
         const blobURL = URL.createObjectURL(blob);
         const conversationSid = Flex.Manager.getInstance().store.getState().flex.chat.messageList.activeConversation;
 
-        // Detach existing file before sending the new one
+        // Detach the existing file before sending the new one
         await this.dontSendRec();
 
         return this.sendRec(buffer, conversationSid).then(() => {
           this.setState({ blobURL, isRecording: false });
         });
       })
-      .catch((e: any) => console.log(e.message));
+      .catch((e: any) => console.error(e.message));
   };
 
-  dontSendRec = async () => {
-    try {
-      const { audioFile } = this.state;
+  dontSendRec = async (lastAudioFile?: any) => {
+    const conv = Flex.Manager.getInstance().store.getState().flex.chat.messageList.activeConversation;
+    if (lastAudioFile) {
+      await Actions.invokeAction('DetachFile', {
+        file: lastAudioFile,
+        conversationSid: conv,
+      });
 
-      if (audioFile) {
-        const conv = Flex.Manager.getInstance().store.getState().flex.chat.messageList.activeConversation;
+      this.setState({ isRecording: false, audioFile: null });
+    } else {
+      try {
+        const { audioFile } = this.state;
+        if (audioFile) {
+          await Actions.invokeAction('DetachFile', {
+            file: audioFile,
+            conversationSid: conv,
+          });
 
-        await Actions.invokeAction('DetachFile', {
-          file: audioFile,
-          conversationSid: conv,
-        });
-
-        this.setState({ isRecording: false, audioFile: null });
-      } else {
-        console.log('send-audio-rec-file: No audio file to detach.');
+          this.setState({ isRecording: false, audioFile: null });
+        }
+      } catch (error) {
+        console.error('send-audio-rec-file: Error during file detachment:', error);
       }
-    } catch (error) {
-      console.log('send-audio-rec-file: Error during file detachment:', error);
     }
   };
 
@@ -92,10 +117,7 @@ class AudioRecorderPanel extends React.Component<Props> {
       conversationSid,
     });
 
-    this.setState({ audioFile }, () => {
-      const updatedAudioFile = this.state.audioFile;
-      console.log('send-audio-rec-file: audioFile:', updatedAudioFile);
-    });
+    this.setState({ audioFile });
   };
 
   handleAfterSendMessage = (payload: { attachedFiles: string | any[] }) => {
@@ -104,10 +126,7 @@ class AudioRecorderPanel extends React.Component<Props> {
       if (firstFile.name === 'voice-recording.mp3') {
         this.setState({ showRecorder: false });
         this.props.openHideRecorder();
-      } else {
-        console.log('send-audio-rec-file: not a voice recording file.');
       }
-    } else {
     }
   };
 
@@ -116,12 +135,13 @@ class AudioRecorderPanel extends React.Component<Props> {
       navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then(() => {
-          console.log('send-audio-rec-file: Microphone acess is granted');
+          console.log('send-audio-rec-file: Microphone access is granted');
           this.setState({ isBlocked: false });
           Actions.addListener('afterSendMessage', this.handleAfterSendMessage);
+          this.dontSendRec(this.state.lastAudioFile);
         })
         .catch(() => {
-          console.log('send-audio-rec-file: Microphone acess denied');
+          console.error('send-audio-rec-file: Microphone access denied');
           this.setState({ isBlocked: true });
         });
     }
@@ -129,6 +149,8 @@ class AudioRecorderPanel extends React.Component<Props> {
 
   componentWillUnmount() {
     Actions.removeListener('afterSendMessage', this.handleAfterSendMessage);
+    const { audioFile } = this.state;
+    this.props.updateLatestAudioFile(audioFile);
   }
 
   render() {
@@ -172,11 +194,15 @@ class AudioRecorderPanel extends React.Component<Props> {
                             onClick={this.startRec}
                           />
                           {this.state.audioFile ? (
-                            <IconButton
-                              icon="Close"
-                              onClick={this.dontSendRec}
-                              title={templates[StringTemplates.RemoveRecButton]()}
-                            />
+                            <>
+                              <IconButton
+                                icon="Close"
+                                onClick={() => {
+                                  this.dontSendRec(this.state.audioFile);
+                                }}
+                                title={templates[StringTemplates.RemoveRecButton]()}
+                              />
+                            </>
                           ) : null}
                         </>
                       )}
