@@ -1,6 +1,6 @@
 import React from 'react';
 import { Flex, Text } from '@twilio-paste/core';
-import { Manager, Template, templates } from '@twilio/flex-ui';
+import { Template, templates, useFlexSelector } from '@twilio/flex-ui';
 import { useSelector } from 'react-redux';
 
 import { StringTemplates } from '../../flex-hooks/strings/ActivityReservationHandler';
@@ -12,10 +12,11 @@ const PendingActivity = () => {
   const { pendingActivity } = useSelector(
     (state: AppState) => state[reduxNamespace].activityReservationHandler as ActivityReservationHandlerState,
   );
+  const { activity: currentActivity } = useFlexSelector((state: AppState) => state.flex.worker);
 
   return (
     <>
-      {pendingActivity && pendingActivity.name !== Manager.getInstance().workerClient?.activity.name && (
+      {pendingActivity && pendingActivity.name !== currentActivity.name && (
         <Flex vertical marginRight="space20" hAlignContent="center">
           <Text as="p" color="colorTextInverse" fontSize="fontSize20" fontWeight="fontWeightBold">
             <Template source={templates[StringTemplates.PendingActivity]} />
