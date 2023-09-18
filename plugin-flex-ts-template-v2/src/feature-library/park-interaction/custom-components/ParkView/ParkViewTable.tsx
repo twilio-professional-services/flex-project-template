@@ -3,7 +3,6 @@ import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 import { Actions, Manager, templates } from '@twilio/flex-ui';
 import { useState } from 'react';
 
-import SyncHelper from '../../utils/SyncHelper';
 import { StringTemplates } from '../../flex-hooks/strings';
 import ParkViewTableBodyWrapper from './ParkViewTableBodyWrapper';
 
@@ -30,7 +29,6 @@ const ParkViewTable = (props: ParkViewTableProps) => {
     setIsUnparkingSid(ConversationSid);
     try {
       await Actions.invokeAction('UnparkInteraction', { ConversationSid, WebhookSid });
-      await SyncHelper.deleteMapItem(props.workerName, ConversationSid);
     } catch (error) {
       console.error(error);
     }

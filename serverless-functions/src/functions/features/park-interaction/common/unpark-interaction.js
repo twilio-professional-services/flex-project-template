@@ -3,6 +3,7 @@ const { prepareStudioFunction, extractStandardResponse } = require(Runtime.getFu
 ].path);
 const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
 const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
+const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sync'].path);
 
 const requiredParameters = [{ key: 'ConversationSid', purpose: 'conversation sid' }];
 
@@ -36,6 +37,8 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       queueSid,
       workerSid,
       workflowSid,
+      mapSid,
+      mapItemKey,
     } = JSON.parse(conversation.conversation.attributes);
 
     // Create a new task through the invites endpoint. Alternatively you can pass
@@ -60,6 +63,14 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
         },
       },
     });
+
+    if (mapSid && mapItemKey) {
+      await SyncOperations.deleteMapItem({
+        context,
+        mapSid,
+        key: mapItemKey,
+      });
+    }
 
     const { participantInvite, status } = result;
     response.setStatusCode(status);

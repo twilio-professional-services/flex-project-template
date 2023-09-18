@@ -25,15 +25,4 @@ export default class SyncHelper {
       return [];
     }
   }
-
-  static async deleteMapItem(mapKey, mapItemKey) {
-    try {
-      const map = await SyncClient.map(mapKey);
-      return await map.remove(mapItemKey);
-    } catch (error) {
-      console.error('Sync deleteMapItem() failed', error);
-      Notifications.showNotification(UnparkInteractionNotification.UnparkListError, { message: error });
-      return [];
-    }
-  }
 }

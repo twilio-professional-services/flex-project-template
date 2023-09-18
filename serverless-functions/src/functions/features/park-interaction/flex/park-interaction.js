@@ -60,6 +60,35 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       });
       if (!removeAgentResponse.success) throw removeAgentResponse.message;
 
+      let createMapItem = {};
+      if (createUpdateSyncMapItem) {
+        // Open a Sync Map by unique name and update its data
+        const syncMap = await SyncOperations.createMap({
+          context,
+          uniqueName: workerName,
+        });
+
+        // If map already exists, use the unique name to access it
+        if (syncMap.sid || workerName) {
+          const createMapItemResponse = await SyncOperations.createMapItem({
+            context,
+            mapSid: syncMap.sid || workerName,
+            key: conversationSid,
+            ttl: 86400, // One day
+            data: {
+              interactionSid,
+              flexInteractionChannelSid: channelSid,
+              participantSid,
+              workflowSid,
+              taskChannelUniqueName,
+              taskAttributes,
+              webhookSid: webhookResult.webhook.sid,
+            },
+          });
+          createMapItem = createMapItemResponse.mapItem;
+        }
+      }
+
       // update conversation attributes
       const attributes = {
         interactionSid,
@@ -75,39 +104,17 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         webhookSid: webhookResult.webhook.sid,
       };
 
+      if (createUpdateSyncMapItem && createMapItem.mapSid && createMapItem.key) {
+        attributes.mapSid = createMapItem.mapSid;
+        attributes.mapItemKey = createMapItem.key;
+      }
+
       const updateAttributesResponse = await ConversationsOperations.updateAttributes({
         context,
         conversationSid,
         attributes: JSON.stringify(attributes),
       });
       if (!updateAttributesResponse.success) throw updateAttributesResponse.message;
-
-      if (createUpdateSyncMapItem) {
-        // Open a Sync Map by unique name and update its data
-        const syncMap = await SyncOperations.createMap({
-          context,
-          uniqueName: workerName,
-        });
-
-        // If map already exists, use the unique name to access it
-        if (syncMap.sid || workerName) {
-          await SyncOperations.createMapItem({
-            context,
-            mapSid: syncMap.sid || workerName,
-            key: conversationSid,
-            ttl: 86400, // One day
-            data: {
-              interactionSid,
-              flexInteractionChannelSid: channelSid,
-              participantSid,
-              workflowSid,
-              taskChannelUniqueName,
-              taskAttributes,
-              webhookSid: webhookResult.webhook.sid,
-            },
-          });
-        }
-      }
     }
 
     const { webhook, status } = webhookResult;
