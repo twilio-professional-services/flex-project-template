@@ -2,7 +2,7 @@ import { getFeatureFlags } from '../../utils/configuration';
 import QueuesViewDataTilesConfig from './types/ServiceConfiguration';
 
 const {
-  enabled = true,
+  enabled = false,
   activeTasksDataTile = false,
   waitingTasksDataTile = false,
   longestWaitTimeDataTile = false,
@@ -15,8 +15,8 @@ const {
     },
     chat: {
       color: '#87CEFA',
-      SLADataTile: true,
-      taskCountsDataTile: true,
+      SLADataTile: false,
+      taskCountsDataTile: false,
     },
     sms: {
       color: '#59cef8',
@@ -25,8 +25,8 @@ const {
     },
     video: {
       color: '#00CED1',
-      SLADataTile: true,
-      taskCountsDataTile: true,
+      SLADataTile: false,
+      taskCountsDataTile: false,
     },
   },
   allChannelsDataTile = false,

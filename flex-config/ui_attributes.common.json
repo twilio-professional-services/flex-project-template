@@ -265,11 +265,11 @@
         }
       },
       "queues_view_data_tiles": {
-        "enabled": true,
+        "enabled": false,
         "activeTasksDataTile": false,
         "waitingTasksDataTile": false,
         "longestWaitTimeDataTile": false,
-        "agentsByActivityBarChart": false,
+        "agentsByActivityBarChart": true,
         "channels": {
           "voice": {
             "color": "#ADD8E6",
@@ -292,8 +292,8 @@
             "taskCountsDataTile": false
           }
         },
-        "allChannelsDataTile": true,
-        "enhancedAgentByActivityPieChart": true,
+        "allChannelsDataTile": false,
+        "enhancedAgentByActivityPieChart": false,
         "agentActivityConfiguration": {
           "activities": {
             "Available": {
