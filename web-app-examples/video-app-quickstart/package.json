@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "npm run build",
     "dev": "next dev",
-    "build": "next build && next export && npm run transfer-assets",
+    "build": "env-cmd -f \".env.$ENVIRONMENT\" --fallback next build && next export && npm run transfer-assets",
     "transfer-assets": "rm -rfv ../../serverless-functions/src/assets/features/chat-to-video/ && mkdir ../../serverless-functions/src/assets/features/chat-to-video/ && cp -R ./out/* ../../serverless-functions/src/assets/features/chat-to-video/",
     "start": "next start",
     "lint": "next lint",
@@ -14,6 +14,7 @@
   "dependencies": {
     "@twilio-paste/core": "^15.0.0",
     "@twilio-paste/icons": "^9.0.0",
+    "env-cmd": "^10.1.0",
     "next": "^12.1.6",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
