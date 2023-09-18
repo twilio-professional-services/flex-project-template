@@ -39,7 +39,8 @@
         "auto_select_task": true
       },
       "caller_id": {
-        "enabled": true
+        "enabled": true,
+        "include_outgoing_only_numbers": true
       },
       "conversation_transfer": {
         "enabled": true,
