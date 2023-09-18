@@ -18,8 +18,7 @@
     "lodash": "^4.17.21",
     "randomstring": "^1.2.2",
     "twilio": "^4.11.0",
-    "twilio-flex-token-validator": "^1.5.6",
-    "twilio-sync": "^3.3.3"
+    "twilio-flex-token-validator": "^1.5.6"
   },
   "devDependencies": {
     "eslint": "^8.37.0",

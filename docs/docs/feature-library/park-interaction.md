@@ -11,7 +11,7 @@ Furthermore, you have the option to enable the 'Parked Interactions' list, which
 - The feature leverages Sync MapItems to store the state of recently parked interactions, with a time-to-live (TTL) of 24 hours
 - Attempting to unpark a closed or failed conversation will result in an error
 - Once attempting to unpark an interaction, the associated Sync MapItem is deleted
-- If the unparking is worker-initiated from the list, `queue_id` and `worder_sid` attributes are added to the request, so the it's routed directly to the worker. Otherwise, if customer-initiated, these are not added
+- If the unparking is worker-initiated from the list, `queue_id` and `worder_sid` attributes are added to the request, so the interaction is routed directly to the worker. Otherwise, if customer-initiated, these are not added
 
 ## Flex User Experience
 
