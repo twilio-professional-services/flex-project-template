@@ -3,6 +3,9 @@ import TeamsViewEnhancementsConfig from './types/ServiceConfiguration';
 
 const {
   enabled = false,
+  task_summary = true,
+  team_activity = true,
+  team_names = ['Sales', 'Service', 'Magic'],
   highlight_handle_time = true,
   handle_time_warning_threshold = 180,
   handle_time_exceeded_threshold = 300,
@@ -18,6 +21,18 @@ const {
 
 export const isFeatureEnabled = () => {
   return enabled;
+};
+
+export const isTaskSummaryEnabled = () => {
+  return task_summary;
+};
+
+export const isTeamActivityEnabled = () => {
+  return team_activity;
+};
+
+export const getTeamNames = () => {
+  return team_names;
 };
 
 export const isTeamColumnEnabled = () => {

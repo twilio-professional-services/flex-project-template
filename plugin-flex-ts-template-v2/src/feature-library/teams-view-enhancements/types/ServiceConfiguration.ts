@@ -1,5 +1,8 @@
 export default interface TeamsViewEnhancementsConfig {
   enabled: boolean;
+  task_summary: boolean;
+  team_activity: boolean;
+  team_names: string[];
   highlight_handle_time: boolean;
   handle_time_warning_threshold: number;
   handle_time_exceeded_threshold: number;
