@@ -9,23 +9,23 @@
       "activity_skill_filter": {
         "enabled": true,
         "rules": {
-          "On a Task" : {
+          "On a Task": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "On a Task, No ACD" : {
+          "On a Task, No ACD": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "Wrap Up" : {
+          "Wrap Up": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "Wrap Up, No ACD" : {
+          "Wrap Up, No ACD": {
             "required_skill": "system_activities",
             "sort_order": 0
           },
-          "Offline" : {
+          "Offline": {
             "required_skill": null,
             "sort_order": 100
           }
@@ -39,7 +39,8 @@
         "auto_select_task": true
       },
       "caller_id": {
-        "enabled": true
+        "enabled": true,
+        "include_outgoing_only_numbers": true
       },
       "conversation_transfer": {
         "enabled": true,
@@ -263,6 +264,73 @@
           "department": false,
           "location": false,
           "agent_skills": true
+        }
+      },
+      "queues_view_data_tiles": {
+        "enabled": false,
+        "activeTasksDataTile": false,
+        "waitingTasksDataTile": false,
+        "longestWaitTimeDataTile": false,
+        "agentsByActivityBarChart": true,
+        "channels": {
+          "voice": {
+            "color": "#ADD8E6",
+            "SLADataTile": true,
+            "taskCountsDataTile": true
+          },
+          "chat": {
+            "color": "#87CEFA",
+            "SLADataTile": false,
+            "taskCountsDataTile": false
+          },
+          "sms": {
+            "color": "#59cef8",
+            "SLADataTile": true,
+            "taskCountsDataTile": true
+          },
+          "video": {
+            "color": "#00CED1",
+            "SLADataTile": false,
+            "taskCountsDataTile": false
+          }
+        },
+        "allChannelsDataTile": false,
+        "enhancedAgentByActivityPieChart": false,
+        "agentActivityConfiguration": {
+          "activities": {
+            "Available": {
+              "color": "green",
+              "icon": "Accept"
+            },
+            "Outbound": {
+              "color": "darkgreen",
+              "icon": "Call"
+            },
+            "Break": {
+              "color": "goldenrod",
+              "icon": "Hold"
+            },
+            "Lunch": {
+              "color": "darkorange",
+              "icon": "Hamburger"
+            },
+            "Training": {
+              "color": "red",
+              "icon": "Bulb"
+            },
+            "Offline": {
+              "color": "grey",
+              "icon": "Minus"
+            }
+          },
+          "other": {
+            "color": "darkred",
+            "icon": "More"
+          }
+        },
+        "queuesStatsColumns": {
+          "assignedTasksColumn": true,
+          "wrappingTasksColumn": true
         }
       }
     }
