@@ -1,9 +1,8 @@
 import { IconButton, TaskHelper, ITask, templates } from '@twilio/flex-ui';
-import { StringTemplates } from '../flex-hooks/strings/Mute';
+import { useEffect, useState } from 'react';
+
 import { getLocalParticipantForTask } from '../helpers/CallControlHelper';
 import CallControlService from '../helpers/CallControlService';
-import { useEffect, useState } from 'react';
-import * as Flex from '@twilio/flex-ui';
 
 export interface OwnProps {
   task?: ITask;
@@ -65,7 +64,7 @@ const CustomMuteButton = (props: OwnProps) => {
         disabled={!isLiveCall || pending}
         onClick={handleClick}
         variant="secondary"
-        title={templates[StringTemplates.MuteParticipant]()}
+        title={muted ? templates.MuteButtonAriaLabel : templates.UnmuteAriaLabel}
       />
     </>
   );
