@@ -86,14 +86,10 @@ It will
 - rename the variable used in flex-config to identify the serverless domain to `serverless_functions_domain_my_feature_name`
 - rename references to the serverless domain within the plugin to match `serverless_functions_domain_my_feature_name`
 
-## show-env-vars
+## postinstall
 
-convenience script for showing the SIDs of key services on your twilio account via the twilio cli
-
-## setup-local-environment
-
-convenience script for simplifying local setup and development, triggered as part of an `npm install` at the root of the repository
+convenience script for simplifying local setup and development, also triggered as part of an `npm install` at the root of the repository
 
 ## generate-env
 
-convenience script that does the same as setup-local-environment except it won't install npm packages again. Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli
+convenience script that does the same as postinstall except it won't install npm packages again. Useful if you want to re-generate the serverless-functions env configuration from the current active profile in twilio-cli

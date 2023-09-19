@@ -45,8 +45,12 @@ const execTwilioCli = (command) => {
 
 // Reusable function for string compare including regex
 const isMatch = (searchValue, valueToCheck, allowFuzz) => {
-  if (searchValue instanceof RegExp) {
-    return searchValue.test(valueToCheck);
+  if (!searchValue) {
+    return false;
+  }
+  
+  if (searchValue.startsWith('/') && searchValue.startsWith('/') && searchValue.length > 2) {
+    return new RegExp(searchValue.slice(1, searchValue.length - 1)).test(valueToCheck);
   }
   
   // assume string

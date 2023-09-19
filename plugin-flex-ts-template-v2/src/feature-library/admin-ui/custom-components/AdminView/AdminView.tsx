@@ -88,7 +88,7 @@ const AdminView = () => {
     setUserConfig(featuresUser);
   };
 
-  const handleSave = async (feature: string, config: any): Promise<boolean> => {
+  const handleSave = async (feature: string, config: any, mergeFeature: boolean): Promise<boolean> => {
     if (configureFor === 'user') {
       const saveResult = await saveUserConfig(feature, config);
 
@@ -102,7 +102,7 @@ const AdminView = () => {
         return false;
       }
 
-      const saveResult = await saveGlobalConfig(feature, config);
+      const saveResult = await saveGlobalConfig(feature, config, mergeFeature);
 
       if (saveResult) {
         publishMessage({ event: streamEvent });

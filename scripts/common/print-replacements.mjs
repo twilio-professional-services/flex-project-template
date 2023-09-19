@@ -112,10 +112,4 @@ export default (allReplacements) => {
   }
   
   console.log("");
-  
-  if (Object.keys(allReplacements).length < 1) {
-    console.log("All local environment files are already fully populated.")
-  } else {
-    console.log("If there are missing workflow SIDs, you can set those up for those features manually later.");
-  }
 }
