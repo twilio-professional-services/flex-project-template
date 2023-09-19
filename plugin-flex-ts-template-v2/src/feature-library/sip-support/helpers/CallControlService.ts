@@ -60,6 +60,36 @@ class CallControlService extends ApiService {
   unmuteParticipant = async (conference: string, participantSid: string): Promise<string> => {
     return this._toggleMuteParticipant(conference, participantSid, false);
   };
+
+  // NOTE:
+  // This duplicates code from the 'conference' feature in the PS template,
+  // It is included here so it can be a stand alone feature
+  removeParticipant = async (conference: string, participantSid: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const encodedParams: EncodedParams = {
+        conference: encodeURIComponent(conference),
+        participant: encodeURIComponent(participantSid),
+        Token: encodeURIComponent(this.manager.user.token),
+      };
+
+      this.fetchJsonWithReject<RemoveParticipantResponse>(
+        `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/remove-participant`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: this.buildBody(encodedParams),
+        },
+      )
+        .then((_response: RemoveParticipantResponse) => {
+          console.log(`Participant ${participantSid} removed from conference`);
+          resolve(participantSid);
+        })
+        .catch((error) => {
+          console.error(`Error removing participant ${participantSid} from conference\r\n`, error);
+          reject(error);
+        });
+    });
+  };
 }
 
 export default new CallControlService();

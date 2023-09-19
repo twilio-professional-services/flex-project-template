@@ -6,6 +6,7 @@ import CallControlService from '../helpers/CallControlService';
 
 export interface OwnProps {
   task?: ITask;
+  renderAsLink: boolean;
 }
 const CustomMuteButton = (props: OwnProps) => {
   const isLiveCall = props.task ? TaskHelper.isLiveCall(props.task) : false;
@@ -57,16 +58,16 @@ const CustomMuteButton = (props: OwnProps) => {
     }
   };
 
-  return (
-    <>
-      <IconButton
-        icon={muted ? 'MuteLargeBold' : 'MuteLarge'}
-        disabled={!isLiveCall || pending}
-        onClick={handleClick}
-        variant="secondary"
-        title={muted ? templates.MuteButtonAriaLabel : templates.UnmuteAriaLabel}
-      />
-    </>
+  return props.renderAsLink ? (
+    <div onClick={handleClick}>{muted ? templates.UnmuteAriaLabel() : templates.MuteButtonAriaLabel()}</div>
+  ) : (
+    <IconButton
+      icon={muted ? 'MuteLargeBold' : 'MuteLarge'}
+      disabled={!isLiveCall || pending}
+      onClick={handleClick}
+      variant="secondary"
+      title={muted ? templates.UnmuteAriaLabel() : templates.MuteButtonAriaLabel()}
+    />
   );
 };
 
