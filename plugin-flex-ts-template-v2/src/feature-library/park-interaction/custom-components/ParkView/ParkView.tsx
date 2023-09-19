@@ -26,11 +26,11 @@ export interface MapItemDescriptor {
 const ParkView = () => {
   const [recentInteractionsList, setRecentInteractionsList] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const workerName = Manager?.getInstance()?.workerClient?.name || '';
+  const workerSid = Manager?.getInstance()?.workerClient?.sid || '';
 
   useEffect(() => {
     const getParkedInteractions = async () => {
-      const getSyncMapItems = await SyncHelper.getMapItems(workerName);
+      const getSyncMapItems = await SyncHelper.getMapItems(`ParkedInteractions_${workerSid}`);
 
       if (getSyncMapItems.length === 0) {
         console.warn('Sync Map is empty.');
@@ -79,7 +79,7 @@ const ParkView = () => {
           {templates[StringTemplates.ParkedInteractions]()}
         </Heading>
       </Box>
-      <ParkViewTable recentInteractionsList={recentInteractionsList} isLoaded={isLoaded} workerName={workerName} />
+      <ParkViewTable recentInteractionsList={recentInteractionsList} isLoaded={isLoaded} />
     </Box>
   );
 };

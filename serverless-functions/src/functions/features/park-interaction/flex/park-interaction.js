@@ -17,7 +17,6 @@ const requiredParameters = [
   { key: 'queueSid', purpose: 'current queue sid' },
   { key: 'taskAttributes', purpose: 'task attributes to copy' },
   { key: 'workerSid', purpose: 'agent worker sid' },
-  { key: 'workerName', purpose: 'agent worker name' },
   { key: 'createUpdateSyncMapItem', purpose: 'create or update sync map item' },
 ];
 
@@ -35,7 +34,6 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       queueSid,
       taskAttributes,
       workerSid,
-      workerName,
     } = event;
     const createUpdateSyncMapItem = event.createUpdateSyncMapItem === 'true' || false;
 
@@ -65,14 +63,14 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         // Open a Sync Map by unique name and update its data
         const syncMap = await SyncOperations.createMap({
           context,
-          uniqueName: workerName,
+          uniqueName: `ParkedInteractions_${workerSid}`,
         });
 
         // If map already exists, use the unique name to access it
-        if (syncMap.sid || workerName) {
+        if (syncMap.sid || workerSid) {
           const createMapItemResponse = await SyncOperations.createMapItem({
             context,
-            mapSid: syncMap.sid || workerName,
+            mapSid: syncMap.sid || `ParkedInteractions_${workerSid}`,
             key: conversationSid,
             ttl: 86400, // One day
             data: {

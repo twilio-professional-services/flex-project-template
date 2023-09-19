@@ -9,7 +9,6 @@ import ParkViewTableBodyWrapper from './ParkViewTableBodyWrapper';
 interface ParkViewTableProps {
   recentInteractionsList: Array<any>;
   isLoaded: boolean;
-  workerName: string;
 }
 
 interface ParkViewItem {

@@ -20,7 +20,6 @@ export interface ParkedInteraction {
   queueSid: string;
   taskAttributes: CustomTask;
   workerSid: string;
-  workerName: string;
   webhookSid: string;
 }
 
@@ -65,7 +64,6 @@ class ParkInteractionService extends ApiService {
         queueSid: encodeURIComponent(queueSid),
         taskAttributes: encodeURIComponent(taskAttributes),
         workerSid: encodeURIComponent(this.manager.store.getState().flex.worker.worker?.sid ?? ''),
-        workerName: encodeURIComponent(this.manager.store.getState().flex.worker.worker?.name ?? ''),
         createUpdateSyncMapItem: encodeURIComponent(isListEnabled()),
         Token: encodeURIComponent(this.manager.user.token),
       };
