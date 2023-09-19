@@ -28,7 +28,17 @@ jobs:
       TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     steps:
-      - uses: actions/checkout@v1 
+      - uses: actions/checkout@v1
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: detect serverless projects
+        run: |
+          cd infra-as-code/util
+          npm i
+          npm run buildServiceManifest -- --servicesRoot=../../services
+          cat ../../services/services-manifest.yaml
       - uses: ./.github/actions/terraform_state_artifact
         with:
           encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}

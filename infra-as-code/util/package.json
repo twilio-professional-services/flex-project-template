@@ -1,0 +1,18 @@
+{
+  "name": "ps-infra-utils",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "buildServiceManifest": "node src/buildServiceManifest.js"
+  },
+  "dependencies": {
+    "minimist": "^1.2.8",
+    "yaml": "^2.3.2",
+    "glob": "^10.3.4",
+    "mime-types": "^2.1.35"
+  },
+  "author": "",
+  "license": "ISC"
+}
