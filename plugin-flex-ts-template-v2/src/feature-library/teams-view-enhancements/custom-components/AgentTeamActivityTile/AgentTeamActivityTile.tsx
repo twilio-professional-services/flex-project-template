@@ -28,17 +28,17 @@ const AgentTeamActivityTile = () => {
         <Table variant="default">
           <THead stickyHeader top={0}>
             <Tr key="headerRow">
-              <Th>
+              <Th element="COMPACT_TABLE">
                 <Heading> Team </Heading>
               </Th>
-              <Th textAlign="center">
+              <Th element="COMPACT_TABLE" textAlign="center">
                 <Tooltip title="Total Agents" placement="top" arrow={true}>
                   <Heading>
                     <Icon icon="Agents" />
                   </Heading>
                 </Tooltip>
               </Th>
-              <Th>
+              <Th element="COMPACT_TABLE">
                 <AgentActivity bgColor={statusIdle.color}>
                   <Tooltip title={statusIdle.label} placement="top" arrow={true}>
                     <Heading>
@@ -47,7 +47,7 @@ const AgentTeamActivityTile = () => {
                   </Tooltip>
                 </AgentActivity>
               </Th>
-              <Th>
+              <Th element="COMPACT_TABLE">
                 <AgentActivity bgColor={statusBusy.color}>
                   <Tooltip title={statusBusy.label} placement="top" arrow={true}>
                     <Heading>
@@ -58,7 +58,7 @@ const AgentTeamActivityTile = () => {
               </Th>
               {activityNames.map((activity) => {
                 return (
-                  <Th key={activity}>
+                  <Th element="COMPACT_TABLE" key={activity}>
                     <AgentActivity bgColor={activityConfig.activities[activity].color}>
                       <Tooltip title={activity} placement="top" arrow={true}>
                         <Heading>
@@ -76,21 +76,21 @@ const AgentTeamActivityTile = () => {
               const agentCount = workerActivityCounts[team].totalAgentCount;
               return (
                 <Tr key={team}>
-                  <Td>
+                  <Td element="COMPACT_TABLE">
                     <Label> {team} </Label>
                   </Td>
-                  <Td textAlign="center">
+                  <Td element="COMPACT_TABLE" textAlign="center">
                     <Label>{agentCount} </Label>
                   </Td>
-                  <Td textAlign="center">
+                  <Td element="COMPACT_TABLE" textAlign="center">
                     <Label>{workerActivityCounts[team].activities.Idle} </Label>
                   </Td>
-                  <Td textAlign="center">
+                  <Td element="COMPACT_TABLE" textAlign="center">
                     <Label>{workerActivityCounts[team].activities.Busy} </Label>
                   </Td>
                   {activityNames.map((activity) => {
                     return (
-                      <Td textAlign="center" key={activity}>
+                      <Td element="COMPACT_TABLE" textAlign="center" key={activity}>
                         <Label>{workerActivityCounts[team].activities[activity]}</Label>
                       </Td>
                     );
@@ -99,21 +99,21 @@ const AgentTeamActivityTile = () => {
               );
             })}
             <Tr key="All">
-              <Td>
+              <Td element="COMPACT_TABLE">
                 <Label> Total (All) </Label>
               </Td>
-              <Td textAlign="center">
+              <Td element="COMPACT_TABLE" textAlign="center">
                 <Label>{workerActivityCounts.All.totalAgentCount} </Label>
               </Td>
-              <Td textAlign="center">
+              <Td element="COMPACT_TABLE" textAlign="center">
                 <Label>{workerActivityCounts.All.activities.Idle} </Label>
               </Td>
-              <Td textAlign="center">
+              <Td element="COMPACT_TABLE" textAlign="center">
                 <Label>{workerActivityCounts.All.activities.Busy} </Label>
               </Td>
               {activityNames.map((activity) => {
                 return (
-                  <Td textAlign="center" key={activity}>
+                  <Td element="COMPACT_TABLE" textAlign="center" key={activity}>
                     <Label> {workerActivityCounts.All.activities[activity] || 0} </Label>
                   </Td>
                 );

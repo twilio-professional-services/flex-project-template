@@ -14,7 +14,7 @@ export interface ThemeOnlyProps {
 }
 
 export const TileWrapper = styled('div')<ThemeOnlyProps>`
-  max-height: 240px;
+  max-height: 220px;
   display: flex;
   flex-direction: column;
   padding: ${({ theme }) => theme.tokens.spacings.space40};
