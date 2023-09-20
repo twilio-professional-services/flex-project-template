@@ -6,13 +6,10 @@ export interface ThemeOnlyProps {
 }
 
 export const TileWrapper = styled('div')<ThemeOnlyProps>`
+  max-height: 240px;
   display: flex;
   flex-direction: column;
   padding: ${({ theme }) => theme.tokens.spacings.space40};
-  border-style: solid;
-  border-width: ${({ theme }) => theme.tokens.borderWidths.borderWidth20};
-  border-radius: ${({ theme }) => theme.tokens.radii.borderRadius20};
-  border-color: ${({ theme }) => theme.tokens.borderColors.colorBorderWeaker};
   background-color: ${(props) => props.bgColor || props.theme.tokens.backgroundColors.colorBackgroundBody};
   color: ${({ theme }) => theme.tokens.textColors.colorText};
 `;
@@ -34,10 +31,10 @@ export const Content = styled('div')<ThemeOnlyProps>`
 `;
 
 export const Channel = styled('div')<ThemeOnlyProps>`
+  color: #121c2d;
   background-color: ${(props) => props.bgColor || props.theme.tokens.backgroundColors.colorBackgroundBody};
   display: flex;
   flex-direction: row;
-  vertical-align: top;
   justify-content: center;
   border-width: 0px;
   border-radius: 12px;
@@ -52,5 +49,6 @@ export const Heading = styled('div')<ThemeOnlyProps>`
   flex-direction: row;
   font-size: 12px;
   font-weight: bold;
+  padding-left: 6px;
   padding-right: 6px;
 `;

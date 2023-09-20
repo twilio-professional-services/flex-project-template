@@ -5,7 +5,9 @@ const {
   enabled = false,
   task_summary = true,
   team_activity = true,
-  team_names = ['Sales', 'Service', 'Magic'],
+  team_names = ['Sales', 'Service', 'Magic', 'Support', 'Membership'],
+  idle_status = { label: 'Idle (No Tasks)', color: 'limegreen', icon: 'AcceptLarge' },
+  busy_status = { label: 'Busy (1+ Tasks)', color: 'darkgreen', icon: 'GenericTask' },
   highlight_handle_time = true,
   handle_time_warning_threshold = 180,
   handle_time_exceeded_threshold = 300,
@@ -13,7 +15,7 @@ const {
 } = (getFeatureFlags()?.features?.teams_view_enhancements as TeamsViewEnhancementsConfig) || {};
 
 const {
-  team = false,
+  team = true,
   department = false,
   location = false,
   agent_skills = true,
@@ -29,6 +31,14 @@ export const isTaskSummaryEnabled = () => {
 
 export const isTeamActivityEnabled = () => {
   return team_activity;
+};
+
+export const getIdleStatusConfig = () => {
+  return idle_status;
+};
+
+export const getBusyStatusConfig = () => {
+  return busy_status;
 };
 
 export const getTeamNames = () => {

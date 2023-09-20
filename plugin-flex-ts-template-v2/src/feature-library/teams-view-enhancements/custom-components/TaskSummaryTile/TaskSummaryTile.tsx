@@ -1,6 +1,6 @@
 import { Icon, useFlexSelector } from '@twilio/flex-ui';
 import * as React from 'react';
-import { Table, THead, TBody, Th, Tr, Td } from '@twilio-paste/core';
+import { Box, Table, THead, TBody, Th, Tr, Td } from '@twilio-paste/core';
 import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definition';
 import AppState from 'types/manager/AppState';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -23,87 +23,95 @@ const TaskSummaryTile = () => {
   });
   return (
     <TileWrapper className="Twilio-AggregatedDataTile">
-      <Table variant="default">
-        <THead>
-          <Tr>
-            <Th>
-              <Heading> Team </Heading>
-            </Th>
-            <Th textAlign="center">
-              <Channel bgColor={getChannelVoice_Color()}>
-                <Tooltip title="Inbound Calls" placement="top" arrow={true}>
-                  <Heading>
-                    &rarr;
-                    <Icon icon="Call" />
-                  </Heading>
-                </Tooltip>
-              </Channel>
-            </Th>
-            <Th textAlign="center">
-              <Channel bgColor={getChannelVoice_Color()}>
-                <Tooltip title="Outbound Calls" placement="top" arrow={true}>
-                  <Heading>
-                    <Icon icon="Call" />
-                    &rarr;
-                  </Heading>
-                </Tooltip>
-              </Channel>
-            </Th>
-            <Th textAlign="center">
-              <Channel bgColor={getChannelChat_Color()}>
-                <Icon icon="Message" />
-                <Heading> Chat </Heading>
-              </Channel>
-            </Th>
-            <Th textAlign="center">
-              <Channel bgColor={getChannelSMS_Color()}>
-                <Icon icon="Sms" />
-                <Heading> SMS </Heading>
-              </Channel>
-            </Th>
-          </Tr>
-        </THead>
-        <TBody>
-          {teams.map((team) => {
-            return (
-              <Tr key={team}>
-                <Td>
-                  <Label> {team} </Label>
-                </Td>
-                <Td textAlign="center">
-                  <Label> {taskCounts[team].tasks.voice_inbound} </Label>
-                </Td>
-                <Td textAlign="center">
-                  <Label> {taskCounts[team].tasks.voice_outbound} </Label>
-                </Td>
-                <Td textAlign="center">
-                  <Label> {taskCounts[team].tasks.chat} </Label>
-                </Td>
-                <Td textAlign="center">
-                  <Label> {taskCounts[team].tasks.sms} </Label>
-                </Td>
-              </Tr>
-            );
-          })}
-          <Tr key="Total">
-            <Td>
-              <Label> Total (All) </Label>
-            </Td>
-            <Td textAlign="center">
-              <Label> {taskCounts.All.tasks.voice_inbound} </Label>
-            </Td>
-            <Td textAlign="center">
-              <Label> {taskCounts.All.tasks.voice_outbound} </Label>
-            </Td>
-            <Td textAlign="center">
-              <Label> {taskCounts.All.tasks.chat} </Label>
-            </Td>
-            <Td textAlign="center">
-              <Label> {taskCounts.All.tasks.sms} </Label>
-            </Td>
-          </Tr>
-        </TBody>
-      </Table>
+      <Box overflowY="auto" maxHeight="240px">
+        <Table variant="default">
+          <THead stickyHeader top={0}>
+            <Tr>
+              <Th>
+                <Heading> Team </Heading>
+              </Th>
+              <Th textAlign="center">
+                <Channel bgColor={getChannelVoice_Color()}>
+                  <Tooltip title="Inbound Calls" placement="top" arrow={true}>
+                    <Heading>
+                      &rarr;
+                      <Icon icon="Call" />
+                    </Heading>
+                  </Tooltip>
+                </Channel>
+              </Th>
+              <Th textAlign="center">
+                <Channel bgColor={getChannelVoice_Color()}>
+                  <Tooltip title="Outbound Calls" placement="top" arrow={true}>
+                    <Heading>
+                      <Icon icon="Call" />
+                      &rarr;
+                    </Heading>
+                  </Tooltip>
+                </Channel>
+              </Th>
+              <Th textAlign="center">
+                <Channel bgColor={getChannelChat_Color()}>
+                  <Tooltip title="Chat" placement="top" arrow={true}>
+                    <Heading>
+                      <Icon icon="Message" />
+                    </Heading>
+                  </Tooltip>
+                </Channel>
+              </Th>
+              <Th textAlign="center">
+                <Channel bgColor={getChannelSMS_Color()}>
+                  <Tooltip title="SMS" placement="top" arrow={true}>
+                    <Heading>
+                      <Icon icon="Sms" />
+                    </Heading>
+                  </Tooltip>
+                </Channel>
+              </Th>
+            </Tr>
+          </THead>
+          <TBody>
+            {teams.map((team) => {
+              return (
+                <Tr key={team}>
+                  <Td>
+                    <Label> {team} </Label>
+                  </Td>
+                  <Td textAlign="center">
+                    <Label> {taskCounts[team].tasks.voice_inbound} </Label>
+                  </Td>
+                  <Td textAlign="center">
+                    <Label> {taskCounts[team].tasks.voice_outbound} </Label>
+                  </Td>
+                  <Td textAlign="center">
+                    <Label> {taskCounts[team].tasks.chat} </Label>
+                  </Td>
+                  <Td textAlign="center">
+                    <Label> {taskCounts[team].tasks.sms} </Label>
+                  </Td>
+                </Tr>
+              );
+            })}
+            <Tr key="Total">
+              <Td>
+                <Label> Total (All) </Label>
+              </Td>
+              <Td textAlign="center">
+                <Label> {taskCounts.All.tasks.voice_inbound} </Label>
+              </Td>
+              <Td textAlign="center">
+                <Label> {taskCounts.All.tasks.voice_outbound} </Label>
+              </Td>
+              <Td textAlign="center">
+                <Label> {taskCounts.All.tasks.chat} </Label>
+              </Td>
+              <Td textAlign="center">
+                <Label> {taskCounts.All.tasks.sms} </Label>
+              </Td>
+            </Tr>
+          </TBody>
+        </Table>
+      </Box>
     </TileWrapper>
   );
 };

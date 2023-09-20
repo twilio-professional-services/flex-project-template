@@ -7,46 +7,55 @@ const _manager = Manager.getInstance();
 const workerActivities = _manager.store.getState().flex?.worker?.activities || new Map();
 
 const STATUS_AVAILABLE = 'Available';
-const STATUS_BUSY = 'Busy';
-const STATUS_IDLE = 'Idle';
 const TASK_CHANNEL_VOICE = 'voice';
 
 export function getAgentStatusCounts(workers: SupervisorWorkerState[] = [], teams: string[] = []) {
-  // If task count == 0, Status = 'Idle'
-  // If task count > 0, Status = 'Busy'
-  const activityCounts: ActivityCounts = {};
-  activityCounts.All = { teamName: 'All', totalAgentCount: 0, activities: { Idle: 0, Busy: 0 } };
+  const ac: ActivityCounts = {};
+  ac.All = { teamName: 'All', totalAgentCount: 0, activities: { Idle: 0, Busy: 0 } };
   // Init activity counts
   teams.forEach((team) => {
-    activityCounts[team] = { teamName: team, totalAgentCount: 0, activities: { Idle: 0, Busy: 0 } };
+    ac[team] = { teamName: team, totalAgentCount: 0, activities: { Idle: 0, Busy: 0 } };
     workerActivities.forEach((value) => {
-      activityCounts[team].activities[value.name] = 0;
-      activityCounts.All.activities[value.name] = 0;
+      ac[team].activities[value.name] = 0;
+      ac.All.activities[value.name] = 0;
     });
   });
 
   // Aggregate Activity/Status by Team
   workers.forEach((wk) => {
-    let workerStatus = wk.worker.activityName;
+    const workerStatus = wk.worker.activityName;
+    const tasks = wk?.tasks || [];
     const tm: string = wk.worker?.attributes?.team_name || 'Other';
-    if (workerStatus === STATUS_AVAILABLE) {
-      // Determine Busy status (1+ tasks) vs. Idle (0 tasks)
-      const tasks = wk?.tasks || [];
-      workerStatus = STATUS_IDLE;
-      if (tasks.length > 0) workerStatus = STATUS_BUSY;
-    }
     if (teams.includes(tm)) {
-      const count = activityCounts[tm].activities[workerStatus] ? activityCounts[tm].activities[workerStatus] : 0;
-      activityCounts[tm].activities[workerStatus] = count + 1;
-      activityCounts[tm].totalAgentCount += 1;
+      const count = ac[tm].activities[workerStatus] ? ac[tm].activities[workerStatus] : 0;
+      ac[tm].activities[workerStatus] = count + 1;
+      ac[tm].totalAgentCount += 1;
+      if (workerStatus === STATUS_AVAILABLE) {
+        if (tasks.length > 0) {
+          const count = ac[tm].activities.Busy ? ac[tm].activities.Busy : 0;
+          ac[tm].activities.Busy = count + 1;
+        } else {
+          const count = ac[tm].activities.Idle ? ac[tm].activities.Idle : 0;
+          ac[tm].activities.Idle = count + 1;
+        }
+      }
     }
     // Total Count for All Workers/Teams
-    const count = activityCounts.All.activities[workerStatus] ? activityCounts.All.activities[workerStatus] : 0;
-    activityCounts.All.activities[workerStatus] = count + 1;
-    activityCounts.All.totalAgentCount += 1;
+    const count = ac.All.activities[workerStatus] ? ac.All.activities[workerStatus] : 0;
+    ac.All.activities[workerStatus] = count + 1;
+    if (workerStatus === STATUS_AVAILABLE) {
+      if (tasks.length > 0) {
+        const count = ac.All.activities.Busy ? ac.All.activities.Busy : 0;
+        ac.All.activities.Busy = count + 1;
+      } else {
+        const count = ac.All.activities.Idle ? ac.All.activities.Idle : 0;
+        ac.All.activities.Idle = count + 1;
+      }
+    }
+    ac.All.totalAgentCount += 1;
   });
 
-  return activityCounts;
+  return ac;
 }
 
 export function getTasksByTeamCounts(workers: SupervisorWorkerState[] = [], teams: string[] = []) {
