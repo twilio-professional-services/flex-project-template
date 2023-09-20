@@ -9,6 +9,8 @@ import ParkViewTableBodyWrapper from './ParkViewTableBodyWrapper';
 interface ParkViewTableProps {
   recentInteractionsList: Array<any>;
   isLoaded: boolean;
+  setDeletedMapItem: (mapItemKey: string) => void;
+  reloadTable: () => void;
 }
 
 interface ParkViewItem {
@@ -28,6 +30,8 @@ const ParkViewTable = (props: ParkViewTableProps) => {
     setIsUnparkingSid(ConversationSid);
     try {
       await Actions.invokeAction('UnparkInteraction', { ConversationSid, WebhookSid });
+      props.setDeletedMapItem(ConversationSid);
+      props.reloadTable();
     } catch (error) {
       console.error(error);
     }

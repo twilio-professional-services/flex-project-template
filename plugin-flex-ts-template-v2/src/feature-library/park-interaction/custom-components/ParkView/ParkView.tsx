@@ -26,19 +26,26 @@ export interface MapItemDescriptor {
 const ParkView = () => {
   const [recentInteractionsList, setRecentInteractionsList] = useState([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [deletedMapItem, setDeletedMapItem] = useState('');
   const workerSid = Manager?.getInstance()?.workerClient?.sid || '';
 
-  useEffect(() => {
-    const getParkedInteractions = async () => {
-      const getSyncMapItems = await SyncHelper.getMapItems(`ParkedInteractions_${workerSid}`);
+  const getParkedInteractions = async () => {
+    setIsLoaded(false);
+    const getSyncMapItems = await SyncHelper.getMapItems(`ParkedInteractions_${workerSid}`);
 
-      if (getSyncMapItems.length === 0) {
-        console.warn('Sync Map is empty.');
-        setIsLoaded(true);
-        return;
-      }
+    if (getSyncMapItems.length === 0) {
+      setRecentInteractionsList([]);
+      setIsLoaded(true);
+      return;
+    }
 
-      const formattedSyncMapItems = getSyncMapItems.map((mapItem: MapItem) => {
+    const formattedSyncMapItems = getSyncMapItems
+      .filter((mapItem: MapItem) => {
+        // Sometimes the item that was just deleted is still returned
+        // So I included this fallback check
+        return mapItem.item.descriptor.key !== deletedMapItem;
+      })
+      .map((mapItem: MapItem) => {
         const data = mapItem.item.descriptor.data;
         if (typeof data.taskAttributes === 'string') {
           data.taskAttributes = JSON.parse(data.taskAttributes);
@@ -61,14 +68,16 @@ const ParkView = () => {
           webhookSid: data.webhookSid,
         };
       });
-      const sortedSyncMapItemsByMostRecent = formattedSyncMapItems.sort(
-        (a: any, b: any) => b.parkingDate - a.parkingDate,
-      );
+    const sortedSyncMapItemsByMostRecent = formattedSyncMapItems.sort(
+      (a: any, b: any) => b.parkingDate - a.parkingDate,
+    );
 
-      setRecentInteractionsList(sortedSyncMapItemsByMostRecent);
-      setIsLoaded(true);
-    };
+    setRecentInteractionsList(sortedSyncMapItemsByMostRecent);
+    setDeletedMapItem('');
+    setIsLoaded(true);
+  };
 
+  useEffect(() => {
     getParkedInteractions();
   }, []);
 
@@ -79,7 +88,12 @@ const ParkView = () => {
           {templates[StringTemplates.ParkedInteractions]()}
         </Heading>
       </Box>
-      <ParkViewTable recentInteractionsList={recentInteractionsList} isLoaded={isLoaded} />
+      <ParkViewTable
+        recentInteractionsList={recentInteractionsList}
+        isLoaded={isLoaded}
+        setDeletedMapItem={setDeletedMapItem}
+        reloadTable={getParkedInteractions}
+      />
     </Box>
   );
 };
