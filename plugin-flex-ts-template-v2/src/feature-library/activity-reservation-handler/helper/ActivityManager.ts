@@ -2,6 +2,8 @@ import { Actions, Manager } from '@twilio/flex-ui';
 
 import { getSystemActivityNames } from '../config';
 import FlexHelper from '../../../utils/flex-helper';
+import { CallbackPromise, PendingActivity } from '../types/ActivityManager';
+import { updatePendingActivity } from '../flex-hooks/reducers/ActivityReservationHandler';
 
 // collect the configured activity names from the configuration
 const systemActivityNames = getSystemActivityNames();
@@ -23,16 +25,6 @@ export const isWorkerCurrentlyInASystemActivity = async (): Promise<boolean> => 
   return isSystemActivity(await FlexHelper.getWorkerActivityName());
 };
 
-interface PendingActivity {
-  name: string;
-}
-
-interface CallbackPromise {
-  resolve: any;
-  reject: any;
-  available?: boolean;
-}
-
 class ActivityManager {
   private pendingActivityChangeItemKey = `pendingActivityChange_${
     Manager.getInstance().serviceConfiguration.account_sid
@@ -48,6 +40,14 @@ class ActivityManager {
     this.currentRequests = [];
     this.runningRequests = 0;
     this.maxConcurrentRequests = maxConcurrentRequests;
+
+    const pendingActivity = this.#getPendingActivity();
+
+    if (pendingActivity) {
+      // Seed Redux with the saved pending activity if present
+      Manager.getInstance().store.dispatch(updatePendingActivity(pendingActivity));
+    }
+
     this.enforceEvaluatedState();
   }
 
@@ -60,6 +60,7 @@ class ActivityManager {
     } as PendingActivity;
 
     localStorage.setItem(this.pendingActivityChangeItemKey, JSON.stringify(pendingActivityChange));
+    Manager.getInstance().store.dispatch(updatePendingActivity(pendingActivityChange));
   };
 
   // exposed method to evaluate which state
@@ -82,7 +83,7 @@ class ActivityManager {
 
   // externally exposed for use in StartOutboundCall
   setWorkerActivity = async (activityName: string) => {
-    if (activityName === this.getPendingActivity()?.name) this.#clearPendingActivity();
+    if (activityName === this.#getPendingActivity()?.name) this.#clearPendingActivity();
     await Actions.invokeAction('SetActivity', {
       activityName,
       isInvokedByPlugin: true,
@@ -92,8 +93,7 @@ class ActivityManager {
     });
   };
 
-  // externally exposed for PendingActivityComponent
-  getPendingActivity = (): PendingActivity => {
+  #getPendingActivity = (): PendingActivity => {
     const item = localStorage.getItem(this.pendingActivityChangeItemKey);
     const pendingActivity: PendingActivity = item && JSON.parse(item);
     return pendingActivity;
@@ -154,7 +154,7 @@ class ActivityManager {
     const { available, onATask, onATaskNoAcd, wrapup, wrapupNoAcd } = systemActivityNames;
 
     const selectedTaskStatus = FlexHelper.getSelectedTaskStatus();
-    const pendingActivity = this.getPendingActivity();
+    const pendingActivity = this.#getPendingActivity();
     const isInSystemActivity = await isWorkerCurrentlyInASystemActivity();
 
     const hasPendingTasks = await FlexHelper.doesWorkerHaveReservationsInState(FlexHelper.RESERVATION_STATUS.PENDING);
@@ -194,6 +194,7 @@ class ActivityManager {
 
   #clearPendingActivity = (): void => {
     localStorage.removeItem(this.pendingActivityChangeItemKey);
+    Manager.getInstance().store.dispatch(updatePendingActivity(null));
   };
 }
 

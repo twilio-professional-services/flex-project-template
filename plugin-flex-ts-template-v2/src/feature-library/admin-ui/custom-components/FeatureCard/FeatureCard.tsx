@@ -13,7 +13,7 @@ interface Props {
   configureFor: string;
   isUserModified?: boolean;
   config: any;
-  handleSave: (feature: string, config: any) => Promise<boolean>;
+  handleSave: (feature: string, config: any, mergeFeature: boolean) => Promise<boolean>;
 }
 
 const FeatureCard = ({ feature, configureFor, isUserModified, config, handleSave }: Props) => {
@@ -24,13 +24,13 @@ const FeatureCard = ({ feature, configureFor, isUserModified, config, handleSave
 
   const handleReset = async () => {
     setIsSaving(true);
-    await handleSave(feature, undefined);
+    await handleSave(feature, undefined, true);
     setIsSaving(false);
   };
 
   const handleEnabledChanged = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSaving(true);
-    await handleSave(feature, { enabled: e.target.checked });
+    await handleSave(feature, { enabled: e.target.checked }, true);
     setIsSaving(false);
   };
 

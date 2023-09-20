@@ -16,7 +16,7 @@ interface Props {
   config: any;
   isOpen: boolean;
   handleClose: () => void;
-  handleSave: (feature: string, config: any) => Promise<boolean>;
+  handleSave: (feature: string, config: any, mergeFeature: boolean) => Promise<boolean>;
 }
 
 interface CustomComponentPayload {
@@ -103,7 +103,7 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
       }
     });
 
-    if (await handleSave(feature, modifiedConfig)) {
+    if (await handleSave(feature, modifiedConfig, false)) {
       handleClose();
     } else {
       setHasFailure(true);
@@ -114,7 +114,7 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
   const reset = async () => {
     setHasFailure(false);
     setIsResetting(true);
-    if (await handleSave(feature, undefined)) {
+    if (await handleSave(feature, undefined, true)) {
       handleClose();
     } else {
       setHasFailure(true);

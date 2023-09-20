@@ -41,7 +41,7 @@ exports.fetchUiAttributes = async function fetchConfiguration(parameters) {
  * @description updates config using flex api
  */
 exports.updateUiAttributes = async function updateUiAttributes(parameters) {
-  const { attributesUpdate } = parameters;
+  const { attributesUpdate, mergeFeature } = parameters;
 
   if (!isString(attributesUpdate))
     throw new Error('Invalid parameters object passed. Parameters must contain attributesUpdate string');
@@ -58,14 +58,20 @@ exports.updateUiAttributes = async function updateUiAttributes(parameters) {
     // we need to fetch the config first so that we do not overwrite another setting
     const getResponse = await axios.get(configUrl, config);
     const existingData = getResponse?.data?.ui_attributes;
+    const parsedUpdate = JSON.parse(attributesUpdate);
+
+    // if the feature's config should be overwritten, clear old data
+    if (mergeFeature === 'false' && parsedUpdate?.custom_data?.features) {
+      for (const featureName in parsedUpdate.custom_data.features) {
+        if (existingData?.custom_data?.features && existingData.custom_data.features[featureName]) {
+          existingData.custom_data.features[featureName] = {};
+        }
+      }
+    }
 
     // merge the objects
     const updatedAttributes = omitBy(
-      merge(
-        { account_sid: process.env.ACCOUNT_SID },
-        { ui_attributes: existingData },
-        { ui_attributes: JSON.parse(attributesUpdate) },
-      ),
+      merge({ account_sid: process.env.ACCOUNT_SID }, { ui_attributes: existingData }, { ui_attributes: parsedUpdate }),
       isNil,
     );
     const postResponse = await axios.post(configUrl, updatedAttributes, config);
