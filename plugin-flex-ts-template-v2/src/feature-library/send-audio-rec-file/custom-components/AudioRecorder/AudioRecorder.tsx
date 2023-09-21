@@ -3,10 +3,13 @@ import React from 'react';
 import { IconButton } from '@twilio/flex-ui';
 
 import AudioRecorderPanel from '../AudioRecorderPanel';
-import { initialState } from '../../flex-hooks/states/AudioRecorder';
 
-class AudioRecorder extends React.Component<typeof initialState> {
-  state = { ...initialState };
+class AudioRecorder extends React.Component {
+  state = {
+    showRecorder: false,
+    lastAudioFile: null,
+    blobURL: '',
+  };
 
   dismiss = () => this.setState({ showRecorder: false });
 
