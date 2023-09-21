@@ -28,7 +28,7 @@ This feature is broken down into three main sections:
 - **Flex Plugin** - starting at the root of the directory:
   - The `./custom-components` folder contains the components to initiate and join the video room
 - **Twilio Serverless** - within the `/serverless-functions/src/functions/features/chat-to-video-escalation` directory:
-  - This houses the Twilio Function paths which orchestrate the facilitation of access token generation and video room creation
+  - This houses the Twilio Function paths which orchestrate the facilitation of access token generation, video room creation, and video room completion
   - The assets are utilized to host the build output of the [video web application](https://github.com/twilio-professional-services/flex-project-template/tree/main/web-app-examples/twilio-video-demo-app) that joins the agent and customer into the video session; for further details on how this application works & setup, see the [application folder](https://github.com/twilio-professional-services/flex-project-template/tree/main/web-app-examples/twilio-video-demo-app) within the `/web-app-examples` folder at the root of this template
 - **Video App** - within the `/web-app-examples/twilio-video-demo-app` directory:
   - A Next JS application built with React, TypeScript, and Twilio Paste design system
@@ -44,39 +44,33 @@ This feature is broken down into three main sections:
 
 1. The video session can only be initiated by the Agent within Flex. Once determined a video session would be appropriate to resolve the customer's use case, the Agent clicks the `Video Icon` button in the `Task Canvas Header`:
 
-   ![alt text](/img/features/chat-to-video/video-button.png)
+   ![Agent switch to video button](/img/features/chat-to-video/video-button.png)
 
 2. After clicking the button, a request is sent to the Twilio function to generate a unique code, which serves as the video room name. Upon success, the unique code and full url to join the video session are returned to the Flex UI, which then auto-sends a message to the conversation with the customer:
 
-   ![alt text](/img/features/chat-to-video/join-video-message.png)
+   ![Join video message](/img/features/chat-to-video/join-video-message.png)
 
 3. Within the Flex UI, a new tab is visible to the Agent within the `Task Canvas Tabs`, labeled `Video Room`:
 
-   ![alt text](/img/features/chat-to-video/join-room-button.png)
+   ![Agent join video room button](/img/features/chat-to-video/join-room-button.png)
 
 4. After clicking `Join Video Room`, the agent is connected to the video room and can interact with the customer:
 
-   ![alt text](/img/features/chat-to-video/agent-video-room.png)
+   ![Agent in video room](/img/features/chat-to-video/agent-video-room.png)
 
 5. On the customer's end, they would click the link included in the message, which would open a new browser tab to join the video room:
 
-   ![alt text](/img/features/chat-to-video/customer-video-join.png)
+   ![Customer join video room button](/img/features/chat-to-video/customer-video-join.png)
 
 6. After clicking `Join Video Room`, the customer will connect to the room and interact with the Agent. The buttons below the video allow the customer to toggle their microphone and camera to on/off, share their screen, and disconnect from the video session:
 
-   ![alt text](/img/features/chat-to-video/customer-video-room.png)
+   ![Customer in video room](/img/features/chat-to-video/customer-video-room.png)
 
-7. Once the video session is complete and the customer disconnects from the room, there is a _Post Video UI_ where you could collect a CSAT or feedback:
+7. Once the video session is complete and the customer disconnects from the room, there is a _Post Video UI_ where you could optionally collect a CSAT or feedback:
 
-   ![alt text](/img/features/chat-to-video/post-video-room.png)
+   ![Disconnect message](/img/features/chat-to-video/post-video-room.png)
 
-**Note:** An agent will only be able to participate in one video session at a time. Additionally, an Agent must disconnect from the video session before being allowed to complete or wrap-up a task.
-
-### Escalating Chat to Video
-
-The following diagram demonstrates how a chat session can be escalated to video. More specifically, this flow outlines the technical details from agent initiation to connecting to the video room.
-
-![alt text](/img/features/chat-to-video/Chat-to-Video-Diagram.png)
+**Note:** An agent will only be able to participate in one video session at a time. Additionally, the agent will be automatically disconnected from the video session when wrapping up the task.
 
 ## Local Development
 
@@ -92,14 +86,17 @@ To test this feature locally:
    TWILIO_API_KEY=<YOUR_API_KEY>
    TWILIO_API_SECRET=<YOUR_API_SECRET>
    VIDEO_CODE_LENGTH=7
-   VIDEO_CODE_TTL=3600
+   VIDEO_CODE_TTL=60
+   VIDEO_ROOM_ALLOW_CREATE=false
    VIDEO_ROOM_TYPE=group
    VIDEO_RECORD_BY_DEFAULT=false
    ```
 
 ## Reference
 
-This plugin was created & inspired by a pre-existing solution located in [this repo](https://github.com/jlbrs/Twilio-Video-in-Twilio-Flex), for reference.
+This diagram explains the flow of events within the Video JS SDK:
+
+![Video JS SDK flow of events](/img/features/chat-to-video/VideoRoom-JS-SDK-Flow-Events.png)
 
 ## Disclaimer
 

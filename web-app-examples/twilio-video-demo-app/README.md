@@ -35,7 +35,7 @@ To get up and running locally with this repository, please see the [Local Develo
 
 ## Features
 
-- [x] Local Permissions Checks & pre-emptive warnings
+- [x] Local Permissions Checks & preemptive warnings
 - [x] Preflight API check
 - [x] Device configuration & local storage preferences
 - [x] Mute & unmute local camera & microphone
@@ -62,8 +62,8 @@ The application is broken down into four distinct stages of a typical video chat
 - The initial view that is loaded at the base URL
 - Provides the ability to create or join a video room
 - Form inputs for `Participant Name` (name shown in room) and `Room Name` (Twilio Video Room to join/create)
-- If you append the `identity` parameter to the URL, this will autopopulate the `Participant Name` field and disable it.  
-- If you append the `roomName` parameter to the URL, this will autopopulate the `Room Name` field and disable it.
+- If you append the `identity` parameter to the URL, this will auto-populate the `Participant Name` field and disable it.  
+- If you append the `roomName` parameter to the URL, this will auto-populate the `Room Name` field and disable it.
 - If you append both the `identity` and `roomName` parameters to the URL, this will automatically proceed to the `Pre-Join Screen`, without requiring any user input.
 
 ### [Pre-Join Screen](/components/screens/PreJoinScreen/PreJoinScreen.tsx)
@@ -74,7 +74,7 @@ The application is broken down into four distinct stages of a typical video chat
 
 - Preview and configure local devices prior to joining the room - changes to default devices will be stored in local storage to default to preferred device IDs
 - Optionally enter the video room with camera or microphone enabled/disabled
-- Retrieve Access Token scoped to the Video Room name
+- Retrieve Access Token scoped to the Video Room name - if the room exists and is not already completed
 - [Preflight API](https://www.twilio.com/docs/video/troubleshooting/preflight-api) check runs in the background when the Access Token is returned - `passed` result allows them to join the room, any failure results in disabling the `Join Room` button
 
 ### [Active Video Room Screen](/components/screens/ActiveVideoRoom/ActiveVideoRoom.tsx)
@@ -166,7 +166,7 @@ Storing these statistics will help diagnose potential quality issues faced by pa
 
 ### Store Survey Feedback
 
-After a room is completed, it is important to collect feedback on the quality of the participant's experience. Within the [Post Video Room Screen](#post-video-room-screen), a simple feedback collection example is setup to gauge if the quality was good or bad. If a thumbs down is indicated, the participant can select from a list of common issues, or add in a custom response.
+After a room is completed, it is important to collect feedback on the quality of the participant's experience. Within the [Post Video Room Screen](#post-video-room-screen), if a survey webhook is provided, a simple feedback collection example is setup to gauge if the quality was good or bad. If a thumbs down is indicated, the participant can select from a list of common issues, or add in a custom response.
 
 Once the `Submit Feedback` button is clicked, the response will be sent to another webhook along with the relevant room information:
 
