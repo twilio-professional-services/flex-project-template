@@ -49,6 +49,8 @@ export const useGetToken = (
     },
     {
       enabled: !roomName?.includes("undefined"),
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
     }
   );
 };

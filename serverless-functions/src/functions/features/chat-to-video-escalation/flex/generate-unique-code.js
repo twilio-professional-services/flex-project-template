@@ -34,6 +34,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     const attributesUpdate = {
       videoRoom: uniqueName,
+      videoRoomSid: roomResult?.room?.sid,
     };
 
     await TaskOperations.updateTaskAttributes({
@@ -45,6 +46,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     response.setStatusCode(roomResult.status);
     response.setBody({
       roomName: uniqueName,
+      roomSid: roomResult.sid,
     });
 
     return callback(null, response);

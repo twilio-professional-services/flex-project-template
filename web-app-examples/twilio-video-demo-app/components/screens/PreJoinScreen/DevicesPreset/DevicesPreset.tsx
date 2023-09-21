@@ -51,7 +51,7 @@ export default function DevicesPreset({}: DevicesPresetProps) {
   const [preflightStatus, setPreflightStatus] = useState("idle");
 
   const { roomName, identity } = formData;
-  const { data, status: tokenStatus } = useGetToken(roomName, identity);
+  const { data, isFetching, status: tokenStatus } = useGetToken(roomName, identity);
   const [loading, setLoading] = useState(false);
 
   const localVideo = localTracks.video;
@@ -236,7 +236,7 @@ export default function DevicesPreset({}: DevicesPresetProps) {
     if (tokenStatus === "success") {
       setPreflightStatus("loading");
       const { token } = data;
-      const preflightTest = Video.runPreflight(token);
+      const preflightTest = Video.runPreflight(token, { duration: Number(process.env.NEXT_PUBLIC_PREFLIGHT_DURATION) || 10000 });
 
       preflightTest.on("progress", (progress: any) => {
         console.log("progress ", progress);
@@ -254,6 +254,11 @@ export default function DevicesPreset({}: DevicesPresetProps) {
           variant: "error",
         });
         setPreflightStatus("failed");
+      });
+    } else if (tokenStatus === "error") {
+      toaster.push({
+        message: "Unable to join the requested room.",
+        variant: "error",
       });
     }
   }, [tokenStatus]);
@@ -331,7 +336,7 @@ export default function DevicesPreset({}: DevicesPresetProps) {
                   onClick={async () => await joinVideoClicked()}
                   loading={loading}
                   style={{ background: "#F22F46" }}
-                  disabled={preflightStatus !== "passed"}
+                  disabled={preflightStatus !== "passed" || tokenStatus !== "success" || isFetching}
                 >
                   {joinButtonText()}
                 </Button>
