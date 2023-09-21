@@ -8,11 +8,7 @@ const Home: NextPage = () => {
   return (
     <Box as="main">
       <Head>
-        <title>Twilio Video Demo App</title>
-        <link
-          rel="icon"
-          href="https://hosted-assets-2838-dev.twil.io/twilio.png"
-        />
+        <title>Twilio Video</title>
       </Head>
       <VideoProvider />
     </Box>
