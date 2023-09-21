@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
-import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import { FlexAction } from '../../../../types/feature-loader';
 import {
   getConferenceSidFromTask,
   getLocalParticipantForTask,
