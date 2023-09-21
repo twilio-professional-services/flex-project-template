@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
-import { FlexAction } from '../../../../types/feature-loader';
+import { FlexAction, FlexActionEvent } from '../../../../types/feature-loader';
 import {
   getConferenceSidFromTask,
   getLocalParticipantForTask,
@@ -8,7 +8,7 @@ import {
 } from '../../helpers/CallControlHelper';
 import CallControlService from '../../helpers/CallControlService';
 
-export const actionEvent = '';
+export const actionEvent = FlexActionEvent.replace;
 export const actionName = FlexAction.HangupCall;
 export const actionHook = function handleSipHangup(flex: typeof Flex, _manager: Flex.Manager) {
   if (isWorkerUsingWebRTC()) {
