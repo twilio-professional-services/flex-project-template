@@ -36,7 +36,7 @@ const TaskSummaryTile = () => {
                 <Channel bgColor={getChannelVoice_Color()}>
                   <Tooltip title="Inbound Calls" placement="top" arrow={true}>
                     <Heading>
-                      <CallIncomingIcon decorative={false} title="Inbound Calls" />
+                      <CallIncomingIcon decorative={false} title="In" />
                     </Heading>
                   </Tooltip>
                 </Channel>
@@ -45,7 +45,7 @@ const TaskSummaryTile = () => {
                 <Channel bgColor={getChannelVoice_Color()}>
                   <Tooltip title="Outbound Calls" placement="top" arrow={true}>
                     <Heading>
-                      <CallOutgoingIcon decorative={false} title="Outbound Calls" />
+                      <CallOutgoingIcon decorative={false} title="Out" />
                     </Heading>
                   </Tooltip>
                 </Channel>

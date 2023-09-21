@@ -38,6 +38,8 @@ export const Channel = styled('div')<ThemeOnlyProps>`
   justify-content: center;
   border-width: 0px;
   border-radius: 12px;
+  height: 24px;
+  min-width: 24px;
 `;
 
 export const Label = styled('div')<ThemeOnlyProps>`
@@ -45,8 +47,6 @@ export const Label = styled('div')<ThemeOnlyProps>`
 `;
 
 export const Heading = styled('div')<ThemeOnlyProps>`
-  display: flex;
-  flex-direction: row;
   font-size: 12px;
   font-weight: bold;
 `;

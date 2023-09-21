@@ -10,11 +10,20 @@ The Teams View can be modified by adding and removing columns in the [WorkersDat
 
 # How does it work?
 
+### Add Columns with Worker Attributes
 The workers skills array can be re-formatted and shown in an additional column in the WorksDataTable of the Teams View.  This gives Supervisors a quicker way to review worker skills. Additionally, extra columns can be added to display worker attributes such as `team_name`, `department_name`, `location` or other custom attributes. It is highly recommended to configure these worker attributes via [Flex SSO](https://www.twilio.com/docs/flex/admin-guide/setup/sso-configuration#flex-insights)
 
+### Highlght Tasks
 We can highlight tasks that have a long handle time by adding a colored border around the Task Card based on the task age. For example, if the task is older than 3 minutes (180 seconds) we can show a yellow border. And if the task age exceeds 5 minutes (300 seconds) we can show red border. This task highlighting may assist supervisors with observing how agents are performing, or if they are having challenges completing tasks within expected handling time ranges.  
 
 By default, the [SupervisorTaskCardHeader template string](https://www.twilio.com/docs/flex/developer/ui/v1/localization-and-templating#list-of-available-content-strings) displays the `{{task.defaultFrom}}` value which can be either the caller's phone number or the chat customer's name (identity).  This specific task detail may not be useful for Supervisors so we could change that template string to `{{task.queueName}}` to be able to see which queues the agent is working in. 
+
+### Teams View Data Tiles
+The Worker and Task data available in Redux for the Teams View can be aggregated by Team name attribute (if populated for all workers) and summarized in "Data Tiles" at the top of the page, similar to the Queues View.
+
+The Task Summary table provides a breakdown of all active tasks by Channel (Voice, Chat, SMS) and agent team. For the Voice channel the active call count is split into Inbound and Outbound calls.
+
+The Agent Activity Summary table shows the count of agents in each of the pre-configured activities (from the Enhanced Activity Tile in the Queues View configuration) by agent team.  Two additional columns are provided for Active Agents.  The "Idle" column shows the number of Available agents with No Tasks.  The "Busy" column shows the number of Available agents with at least one Task.
 
 # Setup
 
@@ -29,6 +38,11 @@ To display the Task's Queue Name instead of the customer's phone number (or name
 ```json
   "teams_view_enhancements": {
       "enabled": true,
+      "task_summary": true,
+      "team_activity": true,
+      "team_names": ["Sales", "Service", "Support"],
+      "idle_status": { "label": "Idle (No Tasks)", "color": "limegreen", "icon": "AcceptLarge" },
+      "busy_status": { "label": "Busy (1+ Tasks)", "color": "darkgreen", "icon": "GenericTask" },
       "highlight_handle_time": true,
       "handle_time_warning_threshold": 180,
       "handle_time_exceeded_threshold": 300,
@@ -47,3 +61,5 @@ To display the Task's Queue Name instead of the customer's phone number (or name
 ![TeamsViewColumns](/img/features/teams-view-enhancements/teams-view-columns.png)
 
 ![TeamsViewTaskHighlight](/img/features/teams-view-enhancements/TeamsViewTaskHighlight.png)
+
+Add Screenshot of Task Summary and Team Activity Tables.
