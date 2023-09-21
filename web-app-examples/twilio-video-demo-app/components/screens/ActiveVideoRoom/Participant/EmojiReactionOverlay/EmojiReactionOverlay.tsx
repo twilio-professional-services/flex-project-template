@@ -13,7 +13,7 @@ export default function EmojiReactionOverlay({
   isLocalParticipant,
   emojiPublication,
 }: EmojiReactionOverlayProps) {
-  const { localEmoji } = useVideoStore((state: VideoAppState) => state);
+  const { localEmoji } = isLocalParticipant ? useVideoStore((state: VideoAppState) => state) : { localEmoji: null };
   const remoteEmoji = !isLocalParticipant
     ? useRemoteEmojiDataTrack(emojiPublication)
     : null;

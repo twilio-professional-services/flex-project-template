@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { styled, css } from "@twilio-paste/styling-library";
 import { Stack, Text, Avatar } from "@twilio-paste/core";
 import {
@@ -75,10 +75,6 @@ export default function ParticipantInfo({
       backgroundColor: "#000000",
     })
   );
-
-  useEffect(() => {
-    console.log("Participant info rendered");
-  });
 
   return (
     <InfoContainer id={participant.sid}>

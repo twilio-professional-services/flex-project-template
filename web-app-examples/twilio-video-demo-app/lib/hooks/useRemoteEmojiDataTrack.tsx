@@ -4,7 +4,6 @@ import { LocalTrackPublication, RemoteTrackPublication } from "twilio-video";
 export default function useRemoteEmojiDataTrack(
   publication: LocalTrackPublication | RemoteTrackPublication | undefined
 ) {
-  const [track, setTrack] = useState(publication && publication.track);
   const [remoteEmoji, setRemoteEmoji] = useState("");
 
   const setTemporaryEmoji = (msg: string) => {
@@ -13,26 +12,35 @@ export default function useRemoteEmojiDataTrack(
       setRemoteEmoji("");
     }, 10000);
   };
+  
+  const handleMessage = (msg: string) => {
+    console.log("Received data", msg);
+    setTemporaryEmoji(msg);
+  }
+  
+  const dataTrackSubscribed = (track: any) => {
+    track.on("message", handleMessage);
+  };
+  
+  useEffect(() => {
+    return () => {
+      publication?.off("subscribed", dataTrackSubscribed);
+      publication?.track?.off("message", handleMessage);
+    }
+  }, []);
 
   useEffect(() => {
     // Reset the track when the 'publication' variable changes.
-    setTrack(publication && publication.track);
     if (publication) {
-      const removeTrack = () => setTrack(null);
-      console.log(track);
-      const dataTrackSubscribed = (track: any) => {
-        setTrack(track);
-        track.on("message", function (msg: string) {
-          console.log(msg);
-          setTemporaryEmoji(msg);
-        });
-      };
+      if (publication.track) {
+        // already subscribed
+        publication.track.on("message", handleMessage);
+      } else {
+        publication.on("subscribed", dataTrackSubscribed);
+      }
 
-      publication.on("subscribed", dataTrackSubscribed);
-      publication.on("unsubscribed", removeTrack);
       return () => {
         publication.off("subscribed", dataTrackSubscribed);
-        publication.off("unsubscribed", removeTrack);
       };
     }
   }, [publication]);
