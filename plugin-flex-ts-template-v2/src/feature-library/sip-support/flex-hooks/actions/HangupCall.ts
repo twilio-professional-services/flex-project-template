@@ -8,7 +8,7 @@ import {
 } from '../../helpers/CallControlHelper';
 import CallControlService from '../../helpers/CallControlService';
 
-export const actionEvent = FlexActionEvent.before;
+export const actionEvent = '';
 export const actionName = FlexAction.HangupCall;
 export const actionHook = function handleSipHangup(flex: typeof Flex, _manager: Flex.Manager) {
   if (isWorkerUsingWebRTC()) {
@@ -16,13 +16,12 @@ export const actionHook = function handleSipHangup(flex: typeof Flex, _manager: 
     return;
   }
 
-  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
+  flex.Actions.replaceAction(FlexAction.HangupCall, async (payload, original) => {
     if (!payload.task) {
-      console.log('SIP Support ERROR: No task found', 'background: red; color: white;');
+      console.log('SIP Support ERROR: No task found, calling original action', 'background: red; color: white;');
+      original(payload);
       return;
     }
-
-    console.log('*** SIP Support - Payload Task', payload.task);
 
     // Get the worker participant SID
     const workerCallSid = getLocalParticipantForTask(payload.task);
