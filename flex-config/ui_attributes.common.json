@@ -247,7 +247,8 @@
         "show_menu": true
       },
       "park_interaction": {
-        "enabled": true
+        "enabled": true,
+        "show_list": false
       },
       "teams_view_enhancements": {
         "enabled": true,
