@@ -16,9 +16,7 @@ export const actionHook = function handleSipHangup(flex: typeof Flex, _manager: 
     return;
   }
 
-  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
-    const { conference } = payload.task;
-
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
     if (!payload.task) {
       console.log('SIP Support ERROR: No task found', 'background: red; color: white;');
       return;
