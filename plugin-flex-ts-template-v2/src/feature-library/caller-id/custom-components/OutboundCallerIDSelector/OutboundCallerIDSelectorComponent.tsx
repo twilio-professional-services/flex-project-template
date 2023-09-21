@@ -4,7 +4,7 @@ import { Box } from '@twilio-paste/core/box';
 import { HelpText } from '@twilio-paste/core/help-text';
 import { Label } from '@twilio-paste/core/label';
 import { Select, Option } from '@twilio-paste/core/select';
-import { Template, templates } from '@twilio/flex-ui';
+import { Manager, Template, templates } from '@twilio/flex-ui';
 
 import { PhoneNumberItem } from '../../../../utils/serverless/PhoneNumbers/PhoneNumberService';
 import AppState from '../../../../types/manager/AppState';
@@ -43,9 +43,21 @@ const OutboundCallerIDSelectorComponent = () => {
       ]);
       setHelpText('');
 
-      // initialize state to the first number, which is what the Select control will display
-      if (!selectedCallerId && phoneNumbers.length > 0) {
-        dispatch(Actions.setCallerId(phoneNumbers[0].phoneNumber));
+      if (
+        phoneNumbers.length > 0 &&
+        (!selectedCallerId || !phoneNumbers.find((number) => number.phoneNumber === selectedCallerId))
+      ) {
+        // Either we have never chosen a number or our selection is no longer valid
+
+        const defaultFromNumber = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
+
+        if (phoneNumbers.find((number) => number.phoneNumber === defaultFromNumber)) {
+          // Use the configured default if present
+          dispatch(Actions.setCallerId(defaultFromNumber));
+        } else {
+          // Fall back to the first number
+          dispatch(Actions.setCallerId(phoneNumbers[0].phoneNumber));
+        }
       }
     }
   }, [isFetchingPhoneNumbers, fetchingPhoneNumbersFailed]);

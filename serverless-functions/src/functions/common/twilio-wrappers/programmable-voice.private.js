@@ -272,3 +272,27 @@ exports.fetchRecordingMedia = async (parameters) => {
     return retryHandler(error, parameters, exports.fetchRecordingMedia);
   }
 };
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @returns {Array<PhoneNumber>} An array of outbound caller ids for the account
+ * @description the following method is used to robustly retrieve
+ *   the outbound caller ids for the account
+ */
+exports.listOutgoingCallerIds = async function listOutgoingCallerIds(parameters) {
+  if (!isObject(parameters.context))
+    throw new Error('Invalid parameters object passed. Parameters must contain context object');
+
+  try {
+    const client = parameters.context.getTwilioClient();
+    const callerIds = await client.outgoingCallerIds.list({
+      limit: 1000,
+    });
+
+    return { success: true, callerIds, status: 200 };
+  } catch (error) {
+    return retryHandler(error, parameters, exports.listOutgoingCallerIds);
+  }
+};

@@ -1,11 +1,4 @@
-<a  href="https://twilio-professional-services.github.io/flex-project-template/">
-<img  src="https://static0.twilio.com/marketing/bundles/marketing/img/logos/wordmark-red.svg"  alt="Twilio"  width="250"  />
-</a>
-<br>
-
----
-
-# Flex Project Template
+# Twilio Flex Project Template
 
 The _Flex Project Template_ is a starting point for Flex solutions of any size. It provides a methodology for managing all the key artifacts of a Twilio Flex solution.  
 

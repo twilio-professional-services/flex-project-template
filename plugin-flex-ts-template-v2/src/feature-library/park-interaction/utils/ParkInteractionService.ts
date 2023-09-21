@@ -1,8 +1,39 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedRecording } from '../../../types/serverless/twilio-api';
+import { isListEnabled } from '../config';
 
 export interface ParkInteractionResponse {
+  success: boolean;
+  recording: FetchedRecording;
+}
+
+export interface ParkedInteraction {
+  channelSid: string;
+  interactionSid: string;
+  participantSid: string;
+  conversationSid: string;
+  taskSid: string;
+  workflowSid: string;
+  taskChannelUniqueName: string;
+  queueName: string;
+  queueSid: string;
+  taskAttributes: CustomTask;
+  workerSid: string;
+  webhookSid: string;
+}
+
+interface CustomTask {
+  customers: Customers;
+  from: string;
+}
+
+interface Customers {
+  phone?: string;
+  email?: string;
+}
+
+interface UnparkInteractionResponse {
   success: boolean;
   recording: FetchedRecording;
 }
@@ -33,6 +64,7 @@ class ParkInteractionService extends ApiService {
         queueSid: encodeURIComponent(queueSid),
         taskAttributes: encodeURIComponent(taskAttributes),
         workerSid: encodeURIComponent(this.manager.store.getState().flex.worker.worker?.sid ?? ''),
+        createUpdateSyncMapItem: encodeURIComponent(isListEnabled()),
         Token: encodeURIComponent(this.manager.user.token),
       };
 
@@ -49,6 +81,32 @@ class ParkInteractionService extends ApiService {
         })
         .catch((error) => {
           console.log('Error parking interaction', error);
+          reject(error);
+        });
+    });
+  };
+
+  unparkInteraction = async (ConversationSid: string, WebhookSid: string): Promise<any> => {
+    return new Promise((resolve, reject) => {
+      const encodedParams: EncodedParams = {
+        ConversationSid: encodeURIComponent(ConversationSid),
+        WebhookSid: encodeURIComponent(WebhookSid),
+        RouteToSameWorker: encodeURIComponent(true),
+      };
+
+      this.fetchJsonWithReject<UnparkInteractionResponse>(
+        `${this.serverlessProtocol}://${this.serverlessDomain}/features/park-interaction/common/unpark-interaction`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: this.buildBody(encodedParams),
+        },
+      )
+        .then((resp: any) => {
+          resolve(resp.recording);
+        })
+        .catch((error) => {
+          console.log('Error unparking interaction', error);
           reject(error);
         });
     });
