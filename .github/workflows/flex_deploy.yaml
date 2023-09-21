@@ -144,7 +144,7 @@ jobs:
       - name: install npm and build video-app-assets
         run: |
           echo "### chat-to-video-escalation configuration output"  >> $GITHUB_STEP_SUMMARY
-          npm run postinstall -- --packages=web-app-examples/video-app-quickstart >> $GITHUB_STEP_SUMMARY
+          npm run postinstall -- --packages=web-app-examples/twilio-video-demo-app >> $GITHUB_STEP_SUMMARY
 # END FEATURE: chat-to-video-escalation
       - name: deploy serverless
         working-directory: serverless-functions

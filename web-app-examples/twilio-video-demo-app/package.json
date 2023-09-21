@@ -1,0 +1,45 @@
+{
+  "name": "twilio-video-demo-app",
+  "version": "1.0.17",
+  "private": true,
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "npm run build",
+    "dev": "next dev -p 3010",
+    "build": "env-cmd -f \".env.$ENVIRONMENT\" --fallback next build && next export && npm run transfer-assets",
+    "transfer-assets": "rm -rfv ../../serverless-functions/src/assets/features/chat-to-video-escalation/ && mkdir ../../serverless-functions/src/assets/features/chat-to-video-escalation/ && cp -R ./out/* ../../serverless-functions/src/assets/features/chat-to-video-escalation/",
+    "start": "next start",
+    "lint": "next lint",
+    "tsc": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^2.9.10",
+    "@reduxjs/toolkit": "^1.9.1",
+    "@twilio-paste/core": "^17.0.0",
+    "@twilio-paste/icons": "^9.3.1",
+    "axios": "^1.2.0",
+    "emoji-picker-react": "^4.4.7",
+    "env-cmd": "^10.1.0",
+    "next": "^12.1.6",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.40.0",
+    "react-icons": "^4.7.1",
+    "react-query": "^3.39.2",
+    "twilio": "^3.83.4",
+    "twilio-video": "^2.27.0",
+    "yup": "^0.32.11",
+    "zustand": "^4.1.4"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.33",
+    "@types/twilio": "^3.19.3",
+    "@typescript-eslint/parser": "^6.7.0",
+    "eslint": "^7.32.0",
+    "typescript": "^4.6.4"
+  },
+  "resolutions": {
+    "@types/react": "^17.0.31"
+  }
+}
