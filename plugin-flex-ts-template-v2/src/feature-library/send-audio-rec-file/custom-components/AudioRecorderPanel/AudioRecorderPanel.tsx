@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-collapsible-if */
 /* eslint-disable no-negated-condition */
 import React from 'react';
 import * as Flex from '@twilio/flex-ui';
@@ -15,8 +16,9 @@ export interface OwnProps {
   showRecorder: boolean;
   audioFile?: any;
   lastAudioFile?: any;
+  blobURL?: any;
   openHideRecorder: () => void;
-  updateLatestAudioFile: (audioFile: any) => void;
+  updateLatestAudioFile: (audioFile: any, blobURL: any) => void;
 }
 
 export type Props = OwnProps;
@@ -24,11 +26,11 @@ export type Props = OwnProps;
 class AudioRecorderPanel extends React.Component<Props> {
   state = {
     isRecording: false,
-    blobURL: '',
+    blobURL: this.props.blobURL,
     isBlocked: false,
     showRecorder: this.props.showRecorder,
     lastAudioFile: this.props.lastAudioFile,
-    audioFile: null,
+    audioFile: this.props.lastAudioFile || null,
   };
 
   startRec = async () => {
@@ -72,6 +74,9 @@ class AudioRecorderPanel extends React.Component<Props> {
 
         // Detach the existing file before sending the new one
         await this.dontSendRec();
+
+        // Update the blobURL state with the audio URL
+        this.setState({ blobURL, isRecording: false });
 
         return this.sendRec(buffer, conversationSid).then(() => {
           this.setState({ blobURL, isRecording: false });
@@ -124,7 +129,7 @@ class AudioRecorderPanel extends React.Component<Props> {
     if (payload.attachedFiles && payload.attachedFiles.length > 0) {
       const firstFile = payload.attachedFiles[0];
       if (firstFile.name === 'voice-recording.mp3') {
-        this.setState({ showRecorder: false });
+        this.setState({ showRecorder: false, audioFile: null, blobURL: '' });
         this.props.openHideRecorder();
       }
     }
@@ -138,7 +143,11 @@ class AudioRecorderPanel extends React.Component<Props> {
           console.log('send-audio-rec-file: Microphone access is granted');
           this.setState({ isBlocked: false });
           Actions.addListener('afterSendMessage', this.handleAfterSendMessage);
-          this.dontSendRec(this.state.lastAudioFile);
+
+          // Checking if lastAudioFile is not null and update audioFile state
+          if (this.props.lastAudioFile) {
+            this.setState({ audioFile: this.props.lastAudioFile });
+          }
         })
         .catch(() => {
           console.error('send-audio-rec-file: Microphone access denied');
@@ -149,8 +158,8 @@ class AudioRecorderPanel extends React.Component<Props> {
 
   componentWillUnmount() {
     Actions.removeListener('afterSendMessage', this.handleAfterSendMessage);
-    const { audioFile } = this.state;
-    this.props.updateLatestAudioFile(audioFile);
+    const { audioFile, blobURL } = this.state;
+    this.props.updateLatestAudioFile(audioFile, blobURL);
   }
 
   render() {
@@ -165,7 +174,7 @@ class AudioRecorderPanel extends React.Component<Props> {
                   <Text as="p" marginBottom="space30" color="colorTextWeak">
                     {templates[StringTemplates.AudioRecorder]()}
                   </Text>
-                  <audio src={this.state.blobURL} controls={this.state.audioFile ?? false} />
+                  {this.state.audioFile ? <audio src={this.state.blobURL} controls={true} /> : null}
                   {this.state.isBlocked ? (
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <Text as="p" marginBottom="space30" color="colorTextWeak">

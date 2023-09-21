@@ -3,23 +3,10 @@ import React from 'react';
 import { IconButton } from '@twilio/flex-ui';
 
 import AudioRecorderPanel from '../AudioRecorderPanel';
+import { initialState } from '../../flex-hooks/states/AudioRecorder';
 
-interface AudioRecorderState {
-  showRecorder: boolean;
-  lastAudioFile: any;
-}
-
-export interface OwnProps {
-  showRecorder: boolean;
-}
-
-export type Props = OwnProps;
-
-class AudioRecorder extends React.Component<Props, AudioRecorderState> {
-  state = {
-    showRecorder: this.props.showRecorder,
-    lastAudioFile: null,
-  };
+class AudioRecorder extends React.Component<typeof initialState> {
+  state = { ...initialState };
 
   dismiss = () => this.setState({ showRecorder: false });
 
@@ -31,9 +18,9 @@ class AudioRecorder extends React.Component<Props, AudioRecorderState> {
     }
   };
 
-  // Callback function to update latestAudioFile
-  updateLatestAudioFile = (audioFile: any) => {
-    this.setState({ lastAudioFile: audioFile });
+  // Callback function to update latestAudioFile and blobURL
+  updateLatestAudioFile = (audioFile: any, blobURL: any) => {
+    this.setState({ lastAudioFile: audioFile, blobURL });
   };
 
   render() {
@@ -46,6 +33,7 @@ class AudioRecorder extends React.Component<Props, AudioRecorderState> {
             openHideRecorder={this.openHideRecorder}
             updateLatestAudioFile={this.updateLatestAudioFile}
             lastAudioFile={this.state.lastAudioFile}
+            blobURL={this.state.blobURL}
           />
         ) : (
           <></>
