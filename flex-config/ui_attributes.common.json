@@ -266,6 +266,9 @@
           "agent_skills": true
         }
       },
+      "send_audio_rec_file": {
+        "enabled": true
+      },
       "queues_view_data_tiles": {
         "enabled": false,
         "activeTasksDataTile": false,
