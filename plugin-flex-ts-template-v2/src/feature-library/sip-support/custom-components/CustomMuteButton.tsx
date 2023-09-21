@@ -1,7 +1,7 @@
 import { IconButton, TaskHelper, ITask, templates } from '@twilio/flex-ui';
 import { useEffect, useState } from 'react';
 
-import { getLocalParticipantForTask } from '../helpers/CallControlHelper';
+import { getConferenceSidFromTask, getLocalParticipantForTask } from '../helpers/CallControlHelper';
 import CallControlService from '../helpers/CallControlService';
 
 export interface OwnProps {
@@ -30,7 +30,7 @@ const CustomMuteButton = (props: OwnProps) => {
       return;
     }
 
-    const conferenceSid = props.task?.conference?.conferenceSid || props.task?.attributes?.conference?.sid;
+    const conferenceSid = getConferenceSidFromTask(props.task);
     if (!conferenceSid) {
       console.error(`No Conference SID`, props.task);
       return;
