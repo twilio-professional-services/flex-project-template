@@ -47,12 +47,21 @@ jobs:
         run: |
           npm install -g twilio-cli
           twilio plugins:install @twilio-labs/plugin-serverless
-      - name: detect serverless projects
+      - name: Detect serverless projects
         working-directory: ./infra-as-code/util
         run: |
           npm i
           npm run buildServiceManifest -- --servicesRoot=../../services
           cat ../../services/services-manifest.yaml
+      - name: Build serverless projects
+        env:
+          CI: false
+        working-directory: ./services
+        run: |
+          for service_folder in $(ls -d ./services/*); do \
+            echo $service_folder; \
+            cd $service_folder && yarn && yarn build;
+          done
       - name: Pull Terraform State
         id: pull-state
         working-directory: ./infra-as-code/state
