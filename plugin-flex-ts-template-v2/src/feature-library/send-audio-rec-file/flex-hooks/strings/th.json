@@ -1,0 +1,8 @@
+{
+    "PSAudioRecorder": "ตัวบันทึกเสียง",
+    "PSRecordingMessage": "อยู่ระหว่างการบันทึก",
+    "StartRecButton": "เริ่มบันทึกเสียง",
+    "StopRecButton": "หยุดบันทึกเสียง",
+    "RemoveRecButton": "ละทิ้งบันทึก",
+    "MicBlockedMessage": "ก่อนใช้คุณลักษณะนี้ โปรดอนุญาตให้หน้านี้เข้าถึงไมโครโฟนของคุณ"
+}

@@ -38,3 +38,14 @@ module "studio" {
 module "taskrouter" {
   source           = "../../modules/taskrouter"
 }
+
+locals {
+  services_manifest = yamldecode(file(var.SERVERLESS_MANIFEST))
+}
+
+module "serverless_services" {
+  source = "../../modules/serverless-services"
+
+  count = length(local.services_manifest)
+  service_manifest = local.services_manifest[count.index]
+}

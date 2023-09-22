@@ -302,3 +302,37 @@ exports.updateConference = async function updateConference(parameters) {
     return retryHandler(error, parameters, exports.updateConference);
   }
 };
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.conference the unique conference SID with the participant
+ * @param {string} parameters.participant the unique participant SID to modify
+ * @param {boolean} parameters.muted whether to mute the passed participant
+ * @returns {Participant} The newly updated conference participant
+ * @description sets endConferenceOnExit on the given conference participant
+ */
+exports.muteParticipant = async function updateParticipant(parameters) {
+  const { context, conference, participant, muted } = parameters;
+
+  if (!isObject(context))
+    throw new Error('Invalid parameters object passed. Parameters must contain reason context object');
+  if (!isString(conference))
+    throw new Error('Invalid parameters object passed. Parameters must contain conference string');
+  if (!isString(participant))
+    throw new Error('Invalid parameters object passed. Parameters must contain participant string');
+  if (!isBoolean(muted)) throw new Error('Invalid parameters object passed. Parameters must contain muted boolean');
+
+  try {
+    const client = context.getTwilioClient();
+
+    const participantsResponse = await client.conferences(conference).participants(participant).update({
+      muted,
+    });
+
+    return { success: true, participantsResponse, status: 200 };
+  } catch (error) {
+    return retryHandler(error, parameters, exports.updateParticipant);
+  }
+};

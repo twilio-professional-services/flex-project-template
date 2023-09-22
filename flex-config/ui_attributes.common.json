@@ -228,10 +228,7 @@
         "per_queue": {
           "exampleQueueSid": {
             "require_disposition": true,
-            "dispositions": [
-              "Promotional Sale",
-              "Renewal"
-            ]
+            "dispositions": ["Promotional Sale", "Renewal"]
           }
         }
       },
@@ -265,6 +262,9 @@
           "location": false,
           "agent_skills": true
         }
+      },
+      "send_audio_rec_file": {
+        "enabled": true
       },
       "queues_view_data_tiles": {
         "enabled": false,
@@ -332,6 +332,9 @@
           "assignedTasksColumn": true,
           "wrappingTasksColumn": true
         }
+      },
+      "sip_support": {
+        "enabled": false
       }
     }
   }

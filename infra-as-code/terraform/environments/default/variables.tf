@@ -96,3 +96,9 @@ variable "FUNCTION_CHECK_SCHEDULE_SID" {
   }
 }
 
+variable "SERVERLESS_MANIFEST" {
+  type = string
+  default = "../../../services/services-manifest.yaml"
+  description = "Path for Twilio Serverless services manifest"
+}
+
