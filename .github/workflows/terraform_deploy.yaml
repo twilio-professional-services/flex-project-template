@@ -64,7 +64,7 @@ jobs:
           for service_folder in */; do \
             if [ -d "$service_folder" ]; then
               echo $service_folder; \
-              cd $service_folder && yarn && yarn build; \
+              cd $service_folder && yarn && yarn build || echo "no build script detected for $service_folder"; \
             fi; \
           done
       - name: Pull Terraform State
