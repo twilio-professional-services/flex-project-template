@@ -61,9 +61,9 @@ jobs:
           CI: false
         working-directory: ./services
         run: |
-          for service_folder in $(ls -d */); do \
+          for service_folder in */; do \
             echo $service_folder; \
-            cd $service_folder && yarn && yarn build;
+            cd $service_folder && yarn && yarn build; \
           done
       - name: Pull Terraform State
         id: pull-state
