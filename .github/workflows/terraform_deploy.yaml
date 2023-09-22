@@ -62,8 +62,10 @@ jobs:
         working-directory: ./services
         run: |
           for service_folder in */; do \
-            echo $service_folder; \
-            cd $service_folder && yarn && yarn build; \
+            if [ -d "$service_folder" ]; then
+              echo $service_folder; \
+              cd $service_folder && yarn && yarn build; \
+            fi; \
           done
       - name: Pull Terraform State
         id: pull-state
