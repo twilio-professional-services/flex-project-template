@@ -6,7 +6,7 @@ const {
   activeTasksDataTile = false,
   waitingTasksDataTile = false,
   longestWaitTimeDataTile = false,
-  agentsByActivityBarChart = true,
+  agentsByActivityBarChart = false,
   channels = {
     voice: {
       color: '#ADD8E6',
@@ -15,13 +15,13 @@ const {
     },
     chat: {
       color: '#87CEFA',
-      SLADataTile: false,
-      taskCountsDataTile: false,
+      SLADataTile: true,
+      taskCountsDataTile: true,
     },
     sms: {
       color: '#59cef8',
-      SLADataTile: true,
-      taskCountsDataTile: true,
+      SLADataTile: false,
+      taskCountsDataTile: false,
     },
     video: {
       color: '#00CED1',
@@ -30,7 +30,7 @@ const {
     },
   },
   allChannelsDataTile = false,
-  enhancedAgentByActivityPieChart = false,
+  enhancedAgentByActivityPieChart = true,
   agentActivityConfiguration = {
     activities: {
       Available: { color: 'green', icon: 'Accept' },
