@@ -48,8 +48,8 @@ jobs:
           npm install -g twilio-cli
           twilio plugins:install @twilio-labs/plugin-serverless
       - name: detect serverless projects
+        working-directory: ./infra-as-code/util
         run: |
-          cd infra-as-code/util
           npm i
           npm run buildServiceManifest -- --servicesRoot=../../services
           cat ../../services/services-manifest.yaml
