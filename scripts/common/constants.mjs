@@ -6,7 +6,7 @@ export const serverlessDir = 'serverless-functions';
 export const serverlessSrc = `${serverlessDir}/src`;
 export const scheduleManagerServerlessDir = 'serverless-schedule-manager';
 export const flexConfigDir = 'flex-config';
-export const videoAppDir = 'web-app-examples/video-app-quickstart';
+export const videoAppDir = 'web-app-examples/twilio-video-demo-app';
 export const gitHubWorkflowDir = '.github/workflows';
 export const defaultPluginDir = 'plugin-flex-ts-template-v2';
 

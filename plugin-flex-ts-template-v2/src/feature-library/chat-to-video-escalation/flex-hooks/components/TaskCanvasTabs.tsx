@@ -12,7 +12,7 @@ export const componentHook = function addVideoRoomTabToTaskCanvasTabs(flex: type
     </Flex.Tab>,
     {
       sortOrder: 10,
-      if: (props: any) => props.task.attributes.videoRoom !== undefined,
+      if: (props: any) => props.task.taskStatus === 'assigned' && props.task.attributes.videoRoom !== undefined,
     },
   );
 };

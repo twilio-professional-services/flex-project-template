@@ -1,0 +1,20 @@
+name: Deploy Terraform Only
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: environment
+        description: "Environment to use for deployment"
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/terraform_deploy.yaml
+    with:
+      environment: ${{ inputs.environment }}
+    secrets:
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TF_ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
