@@ -5,14 +5,15 @@ import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definitio
 import AppState from 'types/manager/AppState';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { getTeamNames, getIdleStatusConfig, getBusyStatusConfig } from '../../config';
+import { getIdleStatusConfig, getBusyStatusConfig } from '../../config';
 import { TileWrapper, AgentActivity, Label, Heading } from './AgentTeamActivityTile.Components';
 import { getAgentStatusCounts } from '../../utils/WorkerDataUtil';
 import { ActivityCounts } from '../../types';
 import { getAgentActivityConfig } from '../../../queues-view-data-tiles/config';
+import { getTeamOptions } from '../../../teams-view-filters/config';
 
 const AgentTeamActivityTile = () => {
-  const teams = getTeamNames();
+  const teams = getTeamOptions();
   const workerActivityCounts: ActivityCounts = useFlexSelector((state: AppState) => {
     const workers: SupervisorWorkerState[] = state.flex.supervisor.workers;
     return getAgentStatusCounts(workers, teams);
@@ -72,6 +73,27 @@ const AgentTeamActivityTile = () => {
             </Tr>
           </THead>
           <TBody>
+            <Tr key="All">
+              <Td element="COMPACT_TABLE">
+                <Heading> Total (All) </Heading>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label>{workerActivityCounts.All.totalAgentCount} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label>{workerActivityCounts.All.activities.Idle} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label>{workerActivityCounts.All.activities.Busy} </Label>
+              </Td>
+              {activityNames.map((activity) => {
+                return (
+                  <Td element="COMPACT_TABLE" textAlign="center" key={activity}>
+                    <Label> {workerActivityCounts.All.activities[activity] || 0} </Label>
+                  </Td>
+                );
+              })}
+            </Tr>
             {teams.map((team) => {
               const agentCount = workerActivityCounts[team].totalAgentCount;
               return (
@@ -98,27 +120,6 @@ const AgentTeamActivityTile = () => {
                 </Tr>
               );
             })}
-            <Tr key="All">
-              <Td element="COMPACT_TABLE">
-                <Label> Total (All) </Label>
-              </Td>
-              <Td element="COMPACT_TABLE" textAlign="center">
-                <Label>{workerActivityCounts.All.totalAgentCount} </Label>
-              </Td>
-              <Td element="COMPACT_TABLE" textAlign="center">
-                <Label>{workerActivityCounts.All.activities.Idle} </Label>
-              </Td>
-              <Td element="COMPACT_TABLE" textAlign="center">
-                <Label>{workerActivityCounts.All.activities.Busy} </Label>
-              </Td>
-              {activityNames.map((activity) => {
-                return (
-                  <Td element="COMPACT_TABLE" textAlign="center" key={activity}>
-                    <Label> {workerActivityCounts.All.activities[activity] || 0} </Label>
-                  </Td>
-                );
-              })}
-            </Tr>
           </TBody>
         </Table>
         <Label>Note: Available = Busy + Idle. Busy = Available with 1+ Tasks. Idle = Available with No Tasks.</Label>

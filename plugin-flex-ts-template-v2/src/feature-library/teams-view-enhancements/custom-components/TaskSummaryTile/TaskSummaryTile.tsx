@@ -7,7 +7,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { CallIncomingIcon } from '@twilio-paste/icons/esm/CallIncomingIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 
-import { getTeamNames } from '../../config';
 import { TileWrapper, Channel, Label, Heading } from './TaskSummaryTile.Components';
 import { getTasksByTeamCounts } from '../../utils/WorkerDataUtil';
 import { TaskCounts } from '../../types';
@@ -16,9 +15,10 @@ import {
   getChannelChat_Color,
   getChannelSMS_Color,
 } from '../../../queues-view-data-tiles/config';
+import { getTeamOptions } from '../../../teams-view-filters/config';
 
 const TaskSummaryTile = () => {
-  const teams = getTeamNames();
+  const teams = getTeamOptions();
   const taskCounts: TaskCounts = useFlexSelector((state: AppState) => {
     const workers: SupervisorWorkerState[] = state.flex.supervisor.workers;
     return getTasksByTeamCounts(workers, teams);
@@ -71,6 +71,23 @@ const TaskSummaryTile = () => {
             </Tr>
           </THead>
           <TBody>
+            <Tr key="Total">
+              <Td element="COMPACT_TABLE">
+                <Heading> Total (All) </Heading>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label> {taskCounts.All.tasks.voice_inbound} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label> {taskCounts.All.tasks.voice_outbound} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label> {taskCounts.All.tasks.chat} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label> {taskCounts.All.tasks.sms} </Label>
+              </Td>
+            </Tr>
             {teams.map((team) => {
               return (
                 <Tr key={team}>
@@ -92,23 +109,6 @@ const TaskSummaryTile = () => {
                 </Tr>
               );
             })}
-            <Tr key="Total">
-              <Td element="COMPACT_TABLE">
-                <Label> Total (All) </Label>
-              </Td>
-              <Td element="COMPACT_TABLE" textAlign="center">
-                <Label> {taskCounts.All.tasks.voice_inbound} </Label>
-              </Td>
-              <Td element="COMPACT_TABLE" textAlign="center">
-                <Label> {taskCounts.All.tasks.voice_outbound} </Label>
-              </Td>
-              <Td element="COMPACT_TABLE" textAlign="center">
-                <Label> {taskCounts.All.tasks.chat} </Label>
-              </Td>
-              <Td element="COMPACT_TABLE" textAlign="center">
-                <Label> {taskCounts.All.tasks.sms} </Label>
-              </Td>
-            </Tr>
           </TBody>
         </Table>
       </Box>

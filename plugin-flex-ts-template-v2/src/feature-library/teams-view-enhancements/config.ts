@@ -5,7 +5,6 @@ const {
   enabled = false,
   task_summary = true,
   team_activity = true,
-  team_names = ['Sales', 'Service', 'Magic', 'Support', 'Membership'],
   idle_status = { label: 'Idle (No Tasks)', color: 'limegreen', icon: 'AcceptLarge' },
   busy_status = { label: 'Busy (1+ Tasks)', color: 'darkgreen', icon: 'GenericTask' },
   highlight_handle_time = true,
@@ -39,10 +38,6 @@ export const getIdleStatusConfig = () => {
 
 export const getBusyStatusConfig = () => {
   return busy_status;
-};
-
-export const getTeamNames = () => {
-  return team_names;
 };
 
 export const isTeamColumnEnabled = () => {

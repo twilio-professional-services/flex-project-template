@@ -4,7 +4,6 @@ export default interface TeamsViewEnhancementsConfig {
   team_activity: boolean;
   idle_status: StatusConfig;
   busy_status: StatusConfig;
-  team_names: string[];
   highlight_handle_time: boolean;
   handle_time_warning_threshold: number;
   handle_time_exceeded_threshold: number;

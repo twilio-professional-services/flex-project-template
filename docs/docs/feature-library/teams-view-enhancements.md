@@ -25,6 +25,8 @@ The Task Summary table provides a breakdown of all active tasks by Channel (Voic
 
 The Agent Activity Summary table shows the count of agents in each of the pre-configured activities (from the Enhanced Activity Tile in the Queues View configuration) by agent team.  Two additional columns are provided for Active Agents.  The "Idle" column shows the number of Available agents with No Tasks.  The "Busy" column shows the number of Available agents with at least one Task.
 
+This feature uses the list of Team names as configured in the Teams View Filters feature and the Activity configuration (colors and icons) from the Queues View Data Tiles.
+
 # Setup
 
 This feature can be enabled via the `flex-config` attributes. Just set the `teams_view_enhancements` `enabled` flag to `true` and set up the desired configuration.
@@ -35,12 +37,13 @@ To enable TaskCard highlighting based on the task age, set `highlight_handle_tim
 
 To display the Task's Queue Name instead of the customer's phone number (or name), set the `display_task_queue_name: true`.
 
+You can also enable the Task Summary tile and/or the Team Activity data tile.
+
 ```json
   "teams_view_enhancements": {
       "enabled": true,
       "task_summary": true,
       "team_activity": true,
-      "team_names": ["Sales", "Service", "Support"],
       "idle_status": { "label": "Idle (No Tasks)", "color": "limegreen", "icon": "AcceptLarge" },
       "busy_status": { "label": "Busy (1+ Tasks)", "color": "darkgreen", "icon": "GenericTask" },
       "highlight_handle_time": true,
@@ -62,4 +65,6 @@ To display the Task's Queue Name instead of the customer's phone number (or name
 
 ![TeamsViewTaskHighlight](/img/features/teams-view-enhancements/TeamsViewTaskHighlight.png)
 
-Add Screenshot of Task Summary and Team Activity Tables.
+When enabled, the Task Summary and Team Activity Tiles are added to the top of the Teams View.
+
+![TaskSummaryActivityByTeam](/img/features/teams-view-enhancements/TaskSummaryActivityByTeam.png)
