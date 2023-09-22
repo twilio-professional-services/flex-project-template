@@ -1,4 +1,7 @@
 on:
+  push:
+    branches:
+      - 'main'
   workflow_call:
     inputs:
       environment:
@@ -58,7 +61,7 @@ jobs:
           CI: false
         working-directory: ./services
         run: |
-          for service_folder in $(ls -d ./services/*); do \
+          for service_folder in $(ls -d */); do \
             echo $service_folder; \
             cd $service_folder && yarn && yarn build;
           done
