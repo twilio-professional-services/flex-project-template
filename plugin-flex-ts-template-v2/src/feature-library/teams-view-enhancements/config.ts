@@ -6,7 +6,7 @@ const {
   task_summary = true,
   team_activity = true,
   idle_status = { label: 'Idle (No Tasks)', color: 'limegreen', icon: 'AcceptLarge' },
-  busy_status = { label: 'Busy (1+ Tasks)', color: 'darkgreen', icon: 'GenericTask' },
+  busy_status = { label: 'Busy (1+ Tasks)', color: 'royalblue', icon: 'GenericTask' },
   highlight_handle_time = true,
   handle_time_warning_threshold = 180,
   handle_time_exceeded_threshold = 300,

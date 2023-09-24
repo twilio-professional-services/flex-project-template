@@ -80,10 +80,10 @@ const AgentTeamActivityTile = () => {
               <Td element="COMPACT_TABLE" textAlign="center">
                 <Label>{workerActivityCounts.All.totalAgentCount} </Label>
               </Td>
-              <Td element="COMPACT_TABLE" textAlign="center">
+              <Td element="COMPACT_TABLE_BG30" textAlign="center">
                 <Label>{workerActivityCounts.All.activities.Idle} </Label>
               </Td>
-              <Td element="COMPACT_TABLE" textAlign="center">
+              <Td element="COMPACT_TABLE_BG20" textAlign="center">
                 <Label>{workerActivityCounts.All.activities.Busy} </Label>
               </Td>
               {activityNames.map((activity) => {
@@ -104,10 +104,10 @@ const AgentTeamActivityTile = () => {
                   <Td element="COMPACT_TABLE" textAlign="center">
                     <Label>{agentCount} </Label>
                   </Td>
-                  <Td element="COMPACT_TABLE" textAlign="center">
+                  <Td element="COMPACT_TABLE_BG30" textAlign="center">
                     <Label>{workerActivityCounts[team].activities.Idle} </Label>
                   </Td>
-                  <Td element="COMPACT_TABLE" textAlign="center">
+                  <Td element="COMPACT_TABLE_BG20" textAlign="center">
                     <Label>{workerActivityCounts[team].activities.Busy} </Label>
                   </Td>
                   {activityNames.map((activity) => {
