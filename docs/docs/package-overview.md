@@ -1,22 +1,21 @@
 ---
 sidebar_position: 4
-title: How does it work?
+title: Package overview
 ---
 
 The Twilio platform is a suite of tools that can be threaded together to create incredible custom solutions.  The biggest challenge here is the gap in tools readily available to automatically configure and thread these different tools together from an single image. 
 
-Well that's where the template comes in.  It provides a means to version control the following assets which make up a flex solution, all from a single image.  By doing this we can aggregate a lot of work developers have done to show how many [different features](/feature-library/overview) can be robustly implemented on the Flex platform.  It can take developers from 0 to 100 by putting them right in the position of developing feature enhancements instead of worrying about the headache of how to manage assets and dependencies on the platform.  Furthermore, with the rich library of examples and conventions, developers can quickly see how to approach different problems on the platform by seeing working code that they can easily reverse engineer.
+Well that's where the template comes in.  It provides a means to version control the following assets which make up a Flex solution, all from a single image.  By doing this we can aggregate a lot of work developers have done to show how many [different features](/feature-library/overview) can be robustly implemented on the Flex platform.  It can take developers from 0 to 100 by putting them right in the position of developing feature enhancements instead of worrying about the headache of how to manage assets and dependencies on the platform.  Furthermore, with the rich library of examples and conventions, developers can quickly see how to approach different problems on the platform by seeing working code that they can easily reverse engineer.
 
-Visit the following links to see more information on each asset.
+Visit the following sections to see more information on each asset.
 
- - [flex configuration - aka "environment variables"](#flex-config)
- - [the plugin code aka "the presentation layer"](#plugin-flex-ts-template-v2)
- - [serverless functions aka "the backend"](#serverless-functions)
- - [twilio account configuration aka "flex dependencies" like task router and studio flows](#infra-as-code)
- - [web-app-examples](#web-app-examples)
+ - [Flex configuration - aka "environment variables"](#flex-config)
+ - [The plugin code - aka "the front-end"](#plugin-flex-ts-template-v2)
+ - [Serverless functions - aka "the back-end"](#serverless-functions)
+ - [Twilio account configuration - aka "Flex dependencies" like TaskRouter and Studio flows](#infra-as-code)
+ - [Web app examples](#web-app-examples)
 
-To see this template in action, you can [deploy it to your account with just an Account SID, API key and an API Secret](/getting-started/install-template)
-
+To see this template in action, you can [deploy it to your account with just an Account SID, API key and an API secret](/getting-started/install-template)
 
 It's worth noting, the template comes with a [library of example features](/feature-library/overview) that cover a lot of typical extensions to Flex. The template creates a system of encapsulation and self discovery for each feature.  As a result, features can be identified and removed just by deleting a folder. Alternatively, if you use the scripts to [remove all the features](/building/feature-management/remove-features), you will be left with just the structure of the template plus some handy utilities and serverless functions.
 
@@ -34,14 +33,14 @@ npm run start:docs
 
 ## flex-config
 
-This package manages a json artifact that can be used to version configuration elements on a per-twilio-account basis. We can think of this as allowing us to configure, dev, qa, test, production or any other environments individually. This configuration relates specifically to the the configuration for flex discussed [here](https://www.twilio.com/docs/flex/developer/ui/configuration) and works by injecting the custom object into ui_attributes within the flex configuration object. The plugin is then able to reference these variables. The first example being, hosting the domain name of the associated serverless-functions.
+This package manages a json artifact that can be used to version configuration elements on a per-Twilio-account basis. We can think of this as allowing us to configure, dev, qa, test, production or any other environments individually. This configuration relates specifically to the the configuration for Flex discussed [here](https://www.twilio.com/docs/flex/developer/ui/configuration) and works by injecting the custom object into ui_attributes within the Flex configuration object. The plugin is then able to reference these variables. The first example being, hosting the domain name of the associated serverless-functions.
 
-The scripts work by merging the common attributes with the environment specifc attributes and then deploying them as part of the release pipeline.
+The scripts work by merging the common attributes with the environment specific attributes and then deploying them as part of the release pipeline.
 
 _NOTE_ there are two mechanisms for managing the flex-config.
 
 1. manging the files via the [administration panel](/feature-library/admin-ui).  This is the default mechanism and as a result a deploy from the pipeline will only add new elements, it will not overwrite existing configuration.
-2.  manging completely through what is in version control.  Select `true` when launching the github actions script to `Overwrite config set by Admin UI Panel?`
+2.  manging completely through what is in version control.  Select `true` when launching the GitHub actions script to `Overwrite config set by Admin UI Panel?`
 
 Currently it only supports managing `ui_attributes` properties and `taskrouter_skills` within the [Flex UI Configuration](https://www.twilio.com/docs/flex/developer/ui/configuration).
 
@@ -49,9 +48,9 @@ Currently it only supports managing `ui_attributes` properties and `taskrouter_s
 - `taskrouter_skills` managed across all environments
 
 
-### To Use Locally (typically not neccessary)
+### To use locally (typically not necessary)
 
-_NOTE_ although not typically neccessary, these instructions are intended for completeness.  Local development should use `plugin-flex-ts-template-v2\public\appConfig.js`. For shared environments please use the github release pipeline scripts.
+_NOTE_ although not typically necessary, these instructions are intended for completeness.  Local development should use `plugin-flex-ts-template-v2\public\appConfig.js`. For shared environments please use the GitHub release pipeline scripts.
 
 1. Make sure the dependent modules are installed
 
@@ -65,8 +64,8 @@ npm install
 cp .env.example .env
 ```
 
-3. have a twilio api key and secret for your account
-   - follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key if you dont have one
+3. have a Twilio API key and secret for your account
+   - follow this [guide](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) to setup an API key if you don't have one
 
 4. Add `TWILIO_ACCOUNT_SID` and `TWILIO_API_KEY` and `TWILIO_API_SECRET` values to the `.env` file
 
@@ -82,7 +81,7 @@ cp ui_attributes.example.json ui_attributes.local.json
 
 ### To use with release pipeline
 
-follow the instructions for setting up the release pipeline [here](/getting-started/install-template)
+Follow the instructions for setting up the release pipeline [here](/getting-started/install-template).
 
 ### Configuring skills
 
@@ -117,19 +116,19 @@ Here is an example of how you can populate this file:
 
 ## infra-as-code
 
-This package contains the available infrastructure as code solutions, right now the only one in use is terraform, which is the default.
+This package contains the available infrastructure as code solutions, right now the only one in use is Terraform, which is the default.
 
 ### Terraform
 
-The terraform solution uses a combination of
+The Terraform solution uses a combination of
 
-- Twilio Functions Assets to store the terraform state using an encryption key
-- twilio cli to identify known and critical sids that can be injected into the terraform definition and import existing state
-- terraform configuration to manage studio flows and task router configuration that the features depend on.
+- Twilio Serverless assets to store the Terraform state using an encryption key
+- Twilio CLI to identify known and critical SIDs that can be injected into the Terraform definition and import existing state
+- Terraform configuration to manage Studio flows and TaskRouter configuration that the features depend on.
 
-It uses the [twilio terraform provider](https://github.com/twilio/terraform-provider-twilio) which at time of writing does not support data sources.
+It uses the [Twilio Terraform provider](https://github.com/twilio/terraform-provider-twilio) which at time of writing does not support data sources.
 
-The main ambition with this setup is to lower the barrier for entry and get development off the ground, the persistence of the terraform provider can be moved to another storage location as desired. Instructions on that piece still to come.
+The main ambition with this setup is to lower the barrier for entry and get development off the ground, the persistence of the Terraform provider can be moved to another storage location as desired. Instructions on that piece still to come.
 
 When running the release pipeline it will import and generate the state based on what is on the account but only with relation to resources declared in the configuration. Any resources not in the configuration will be ignored.
 
@@ -137,7 +136,7 @@ This solution pushes the configuration and will overwrite anything in your envir
 
 #### Adding resources
 
-When adding resources in the usual way to the terraform config, its also to add an associated entry into the action.yaml file in the `infra-as-code/terraform/environments/default/import_internal_state.sh' file that identifies this resource for import. Examples are given for each type of resource. Failure to do so may result in a collision on successive releases.
+When adding resources in the usual way to the Terraform config, its also necessary to add an associated entry into the action.yaml file in the `infra-as-code/terraform/environments/default/import_internal_state.sh' file that identifies this resource for import. Examples are given for each type of resource. Failure to do so may result in a collision on successive releases.
 
 ## plugin-flex-ts-template-v2
 
@@ -147,7 +146,7 @@ This plugin defines a package structure to make distributed development easier w
 
 ## serverless-functions
 
-This package manages the serverless functions that the _plugin-flex-ts-template-v2_ package is dependent on. In this package there are a suite of services already available to use, some of which are simply wrappers around existing twilio APIs but with added resilience around retrying given configurable parameters. These retry mechanisms are particularly useful when a twilio function needs to orchestrate multiple twilio APIs to perform an overall operation. It should be noted twilio functions still have a maximum runtime and therefore careful consideration of retries should be employed for each use case. This does however provide improved resiliency and performance when 429s, 412s or 503s occur.
+This package manages the serverless functions that the _plugin-flex-ts-template-v2_ package is dependent on. In this package there are a suite of services already available to use, some of which are simply wrappers around existing Twilio APIs but with added resilience around retrying given configurable parameters. These retry mechanisms are particularly useful when a Twilio function needs to orchestrate multiple Twilio APIs to perform an overall operation. It should be noted Twilio functions still have a maximum runtime and therefore careful consideration of retries should be employed for each use case. This does however provide improved resiliency and performance when 429s, 412s or 503s occur.
 
 ## serverless-schedule-manager
 
