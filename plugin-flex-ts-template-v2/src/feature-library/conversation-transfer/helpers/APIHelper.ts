@@ -4,6 +4,7 @@ import TaskService from '../../../utils/serverless/TaskRouter/TaskRouterService'
 import { EncodedParams } from '../../../types/serverless';
 import ApiService from '../../../utils/serverless/ApiService';
 import { getWorkerName } from './inviteTracker';
+import logger from '../../../utils/logger';
 
 const manager: any | undefined = Manager.getInstance();
 
@@ -51,7 +52,7 @@ const _queueNameFromSid = async (transferTargetSid: string) => {
   try {
     queues = await TaskService.getQueues();
   } catch (error) {
-    console.error('conversation-transfer: Unable to get queues', error);
+    logger.error('conversation-transfer: Unable to get queues', error);
   }
 
   const queueResult = queues
@@ -116,7 +117,7 @@ export const buildInviteParticipantAPIPayload = async (
   if (transferTargetSid.startsWith('WQ')) {
     transferQueueName = await _queueNameFromSid(transferTargetSid);
     if (!transferQueueName) {
-      console.error('Transfer failed. queueNameFromSid failed for', transferTargetSid);
+      logger.error('Transfer failed. queueNameFromSid failed for', transferTargetSid);
       return null;
     }
   } else {
@@ -126,7 +127,7 @@ export const buildInviteParticipantAPIPayload = async (
   const { flexInteractionSid = null, flexInteractionChannelSid = null, conversationSid = null } = task.attributes;
 
   if (!flexInteractionSid || !flexInteractionChannelSid) {
-    console.error('Transfer failed. Missing flexInteractionSid or flexInteractionChannelSid', task.sid);
+    logger.error('Transfer failed. Missing flexInteractionSid or flexInteractionChannelSid', task.sid);
     return null;
   }
 
@@ -142,7 +143,7 @@ export const buildInviteParticipantAPIPayload = async (
     removeFlexInteractionParticipantSid = _getMyParticipantSid(participants) || '';
 
     if (!removeFlexInteractionParticipantSid) {
-      console.error("Transfer failed. Didn't find flexInteractionPartipantSid", task.sid);
+      logger.error("Transfer failed. Didn't find flexInteractionPartipantSid", task.sid);
       return null;
     }
   }

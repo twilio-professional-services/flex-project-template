@@ -1,3 +1,5 @@
+import logger from '../../../utils/logger';
+
 let data: any = null;
 
 const fetchData = async () => {
@@ -7,7 +9,7 @@ const fetchData = async () => {
 
     data = await response.json();
   } catch (error) {
-    console.error('emoji-picker: Failed to fetch emoji data', error);
+    logger.error('emoji-picker: Failed to fetch emoji data', error);
   }
 };
 

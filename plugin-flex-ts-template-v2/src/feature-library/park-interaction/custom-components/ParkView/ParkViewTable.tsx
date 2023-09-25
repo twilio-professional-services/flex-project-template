@@ -5,6 +5,7 @@ import { useState } from 'react';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import ParkViewTableBodyWrapper from './ParkViewTableBodyWrapper';
+import logger from '../../../../utils/logger';
 
 interface ParkViewTableProps {
   recentInteractionsList: Array<any>;
@@ -33,7 +34,7 @@ const ParkViewTable = (props: ParkViewTableProps) => {
       props.setDeletedMapItem(ConversationSid);
       props.reloadTable();
     } catch (error) {
-      console.error(error);
+      logger.error(error);
     }
     setIsUnparkingSid('');
   };

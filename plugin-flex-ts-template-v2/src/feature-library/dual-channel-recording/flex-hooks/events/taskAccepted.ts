@@ -3,6 +3,7 @@ import * as Flex from '@twilio/flex-ui';
 import { recordExternalCall, recordInternalCall } from '../../helpers/dualChannelHelper';
 import { getChannelToRecord } from '../../config';
 import { FlexEvent } from '../../../../types/feature-loader';
+import logger from '../../../../utils/logger';
 
 export const eventName = FlexEvent.taskAccepted;
 export const eventHook = async (flex: typeof Flex, _manager: Flex.Manager, task: Flex.ITask) => {
@@ -26,7 +27,7 @@ export const eventHook = async (flex: typeof Flex, _manager: Flex.Manager, task:
     recordInternalCall(task);
   } else if (client_call) {
     // internal call, inbound leg - skip recording this leg
-    console.debug('Skipping recording for inbound internal call', task.sid);
+    logger.debug('Skipping recording for inbound internal call', task.sid);
   } else {
     // External call
     // Do not await so that event processing is not blocked

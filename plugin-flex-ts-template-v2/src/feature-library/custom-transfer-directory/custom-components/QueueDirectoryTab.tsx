@@ -28,6 +28,7 @@ import {
 import { CustomTransferDirectoryNotification } from '../flex-hooks/notifications/CustomTransferDirectory';
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
+import logger from '../../../utils/logger';
 
 export interface IRealTimeQueueData {
   total_tasks: number | null;
@@ -232,10 +233,10 @@ const QueueDirectoryTab = (props: OwnProps) => {
   // initial render
   useEffect(() => {
     // fetch the queues from the taskrouter sdk on initial render
-    fetchSDKTaskQueues().catch(console.error);
+    fetchSDKTaskQueues().catch(logger.error);
 
     // fetch the queues from the insights client on initial render
-    fetchInsightsQueueData().catch(console.error);
+    fetchInsightsQueueData().catch(logger.error);
 
     return () => {
       if (queueMap.current) {

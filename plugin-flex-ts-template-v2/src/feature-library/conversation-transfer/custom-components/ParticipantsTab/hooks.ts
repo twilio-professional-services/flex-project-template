@@ -4,6 +4,7 @@ import { ITask } from '@twilio/flex-ui';
 import { ParticipantDetails } from '../../types/ParticipantDetails';
 import { InvitedParticipantDetails, InvitedParticipants } from '../../types/InvitedParticipantDetails';
 import { ConversationState } from '../../../../types/conversations';
+import logger from '../../../../utils/logger';
 
 const manager = Flex.Manager.getInstance();
 
@@ -45,7 +46,7 @@ const getCBMParticipantsWrapper = async (task: ITask, flexInteractionChannelSid:
 
     if (!missingMediaProperties) return participants;
     retry += 1;
-    console.log('getCBMParticipantsWrapper retry', retry);
+    logger.debug('getCBMParticipantsWrapper retry', retry);
     wait(retryTimer);
     retryTimer *= 2;
   }
@@ -79,7 +80,7 @@ export const getUpdatedParticipantDetails = async (
 
   const conversationParticipants = Array.from(conversation?.participants.values());
 
-  console.log('getParticipantDetails', conversationParticipants, intertactionParticipants);
+  logger.debug('getParticipantDetails', conversationParticipants, intertactionParticipants);
 
   conversationParticipants.forEach((conversationParticipant) => {
     const intertactionParticipant = intertactionParticipants.find(

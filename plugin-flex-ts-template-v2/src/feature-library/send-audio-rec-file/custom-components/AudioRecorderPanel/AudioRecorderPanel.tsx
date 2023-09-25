@@ -9,6 +9,7 @@ import { Spinner } from '@twilio-paste/core/spinner';
 
 import { AudioRecorderWrapper, AudioRecorderPopover } from './AudioRecorderPanel.Styles';
 import { StringTemplates } from '../../flex-hooks/strings';
+import logger from '../../../../utils/logger';
 
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
@@ -35,9 +36,9 @@ class AudioRecorderPanel extends React.Component<Props> {
 
   startRec = async () => {
     if (this.state.isBlocked) {
-      console.log('send-audio-rec-file: Microphone access denied');
+      logger.debug('send-audio-rec-file: Microphone access denied');
     } else if (this.state.audioFile !== null) {
-      console.log('send-audio-rec-file: Audio file is already recorded.');
+      logger.debug('send-audio-rec-file: Audio file is already recorded.');
       try {
         const { audioFile } = this.state;
 
@@ -50,10 +51,10 @@ class AudioRecorderPanel extends React.Component<Props> {
             .then(() => {
               this.setState({ isRecording: true });
             })
-            .catch((e: any) => console.error(e.message));
+            .catch((e: any) => logger.error(e.message));
         }
       } catch (error) {
-        console.error('send-audio-rec-file: Error during file detachment:', error);
+        logger.error('send-audio-rec-file: Error during file detachment:', error);
       }
     } else {
       // Start recording directly
@@ -61,7 +62,7 @@ class AudioRecorderPanel extends React.Component<Props> {
         .then(() => {
           this.setState({ isRecording: true });
         })
-        .catch((e: any) => console.error(e.message));
+        .catch((e: any) => logger.error(e.message));
     }
   };
 
@@ -82,7 +83,7 @@ class AudioRecorderPanel extends React.Component<Props> {
           this.setState({ blobURL, isRecording: false });
         });
       })
-      .catch((e: any) => console.error(e.message));
+      .catch((e: any) => logger.error(e.message));
   };
 
   dontSendRec = async (lastAudioFile?: any) => {
@@ -106,7 +107,7 @@ class AudioRecorderPanel extends React.Component<Props> {
           this.setState({ isRecording: false, audioFile: null });
         }
       } catch (error) {
-        console.error('send-audio-rec-file: Error during file detachment:', error);
+        logger.error('send-audio-rec-file: Error during file detachment:', error);
       }
     }
   };
@@ -140,7 +141,7 @@ class AudioRecorderPanel extends React.Component<Props> {
       navigator.mediaDevices
         .getUserMedia({ audio: true })
         .then(() => {
-          console.log('send-audio-rec-file: Microphone access is granted');
+          logger.debug('send-audio-rec-file: Microphone access is granted');
           this.setState({ isBlocked: false });
           Actions.addListener('afterSendMessage', this.handleAfterSendMessage);
 
@@ -150,7 +151,7 @@ class AudioRecorderPanel extends React.Component<Props> {
           }
         })
         .catch(() => {
-          console.error('send-audio-rec-file: Microphone access denied');
+          logger.error('send-audio-rec-file: Microphone access denied');
           this.setState({ isBlocked: true });
         });
     }

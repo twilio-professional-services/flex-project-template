@@ -1,6 +1,7 @@
 import ApiService from '../../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../../types/serverless';
 import { FetchedReservation } from '../../../../types/serverless/twilio-api';
+import logger from '../../../../utils/logger';
 
 interface UpdateReservationResponse {
   success: boolean;
@@ -30,7 +31,7 @@ class SupervisorCompleteReservationService extends ApiService {
           resolve({ ...response.reservation, taskSid });
         })
         .catch((error) => {
-          console.log('Error updating reservation', error);
+          logger.debug('Error updating reservation', error);
           reject({ taskSid, error });
         });
     });

@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
+import logger from '../logger';
 import { getUserLanguage, defaultLanguage } from '../configuration';
 
 const userLanguage = getUserLanguage();
@@ -22,7 +23,7 @@ export const init = (manager: Flex.Manager) => {
 };
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
-  console.info(`Feature ${feature} registered string hook: %c${hook.stringHook.name}`, 'font-weight:bold');
+  logger.debug(`Feature ${feature} registered string hook: ${hook.stringHook.name}`);
   // Returns dictionary of language and string definitions to register
   const hookLanguages = hook.stringHook(flex, manager);
   let hookStrings = {};
@@ -33,7 +34,7 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
   } else if (hookLanguages[defaultLanguage]) {
     hookStrings = hookLanguages[defaultLanguage];
   } else {
-    console.error(
+    logger.error(
       `Feature ${feature} string hook is missing the user language (${userLanguage}) and the default language (${defaultLanguage}). Skipping.`,
     );
     return;
@@ -46,7 +47,7 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
 };
 
 export const addSystemHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
-  console.info(`Feature ${feature} registered system string hook: %c${hook.systemStringHook.name}`, 'font-weight:bold');
+  logger.debug(`Feature ${feature} registered system string hook: ${hook.systemStringHook.name}`);
   // Returns dictionary of language and string definitions to register
   const hookLanguages = hook.systemStringHook(flex, manager);
   let hookStrings = {};
@@ -56,7 +57,7 @@ export const addSystemHook = (flex: typeof Flex, manager: Flex.Manager, feature:
   } else if (hookLanguages[defaultLanguage]) {
     hookStrings = hookLanguages[defaultLanguage];
   } else {
-    console.error(
+    logger.error(
       `Feature ${feature} system string hook is missing the user language (${userLanguage}) and the default language (${defaultLanguage}). Skipping.`,
     );
     return;

@@ -8,6 +8,7 @@ import { reduxNamespace } from '../../../../utils/state';
 import { removeConnectingParticipant, ConferenceState } from '../../flex-hooks/states/ConferenceSlice';
 import ConferenceService from '../../utils/ConferenceService';
 import { FetchedCall } from '../../../../types/serverless/twilio-api';
+import logger from '../../../../utils/logger';
 
 export interface OwnProps {
   conference?: FlexConferenceState;
@@ -48,7 +49,7 @@ const ConnectingParticipants = (props: OwnProps) => {
             }
           })
           .catch((error) => {
-            console.log('ConnectingParticipant unable to check call status', error);
+            logger.debug('ConnectingParticipant unable to check call status', error);
           });
       });
   }, [clock]);

@@ -7,6 +7,7 @@ import { DispositionsState } from '../states';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 import { DispositionsNotification } from '../notifications';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
+import logger from '../../../../utils/logger';
 
 const handleAbort = (flex: typeof Flex, abortFunction: any) => {
   flex.Notifications.showNotification(DispositionsNotification.DispositionRequired);
@@ -84,7 +85,7 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
         true,
       );
     } catch (error) {
-      console.log(`Failed to set disposition attributes for ${payload.task.taskSid} to ${newConvAttributes}`, error);
+      logger.error(`Failed to set disposition attributes for ${payload.task.taskSid} to ${newConvAttributes}`, error);
     }
   });
 };

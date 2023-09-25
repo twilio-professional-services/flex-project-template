@@ -2,6 +2,7 @@ import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedRecording } from '../../../types/serverless/twilio-api';
 import { isListEnabled } from '../config';
+import logger from '../../../utils/logger';
 
 export interface ParkInteractionResponse {
   success: boolean;
@@ -80,7 +81,7 @@ class ParkInteractionService extends ApiService {
           resolve(resp.recording);
         })
         .catch((error) => {
-          console.log('Error parking interaction', error);
+          logger.debug('Error parking interaction', error);
           reject(error);
         });
     });
@@ -106,7 +107,7 @@ class ParkInteractionService extends ApiService {
           resolve(resp.recording);
         })
         .catch((error) => {
-          console.log('Error unparking interaction', error);
+          logger.debug('Error unparking interaction', error);
           reject(error);
         });
     });

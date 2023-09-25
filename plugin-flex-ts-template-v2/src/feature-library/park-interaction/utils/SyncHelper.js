@@ -2,6 +2,7 @@ import { Notifications } from '@twilio/flex-ui';
 
 import SyncClient from '../../../utils/sdk-clients/sync/SyncClient';
 import { UnparkInteractionNotification } from '../flex-hooks/notifications';
+import logger from '../../../utils/logger';
 
 export default class SyncHelper {
   static pageHandler(paginator) {
@@ -20,7 +21,7 @@ export default class SyncHelper {
       const paginator = await map.getItems();
       return this.pageHandler(paginator);
     } catch (error) {
-      console.error('Map getItems() failed', error);
+      logger.error('Map getItems() failed', error);
       Notifications.showNotification(UnparkInteractionNotification.UnparkListError, { message: error });
       return [];
     }

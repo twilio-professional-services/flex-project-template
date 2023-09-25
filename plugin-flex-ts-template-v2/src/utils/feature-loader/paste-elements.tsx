@@ -1,6 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 import { CustomizationProvider, PasteCustomCSS, CustomizationProviderProps } from '@twilio-paste/core/customization';
 
+import logger from '../logger';
+
 let customPasteElements = {};
 
 export const init = (flex: typeof Flex) => {
@@ -24,7 +26,7 @@ export const init = (flex: typeof Flex) => {
 };
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
-  console.info(`Feature ${feature} registered Paste element hook`);
+  logger.debug(`Feature ${feature} registered Paste element hook`);
   customPasteElements = {
     ...customPasteElements,
     ...hook.pasteElementHook,

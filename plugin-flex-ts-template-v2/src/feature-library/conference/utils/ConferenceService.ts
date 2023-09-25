@@ -8,6 +8,7 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedCall, FetchedConferenceParticipant } from '../../../types/serverless/twilio-api';
+import logger from '../../../utils/logger';
 
 export interface GetCallResponse {
   success: boolean;
@@ -42,11 +43,11 @@ class ConferenceService extends ApiService {
         },
       )
         .then((response: ParticipantResponse) => {
-          console.log(`${hold ? 'Hold' : 'Unhold'} successful for participant`, participantSid);
+          logger.debug(`${hold ? 'Hold' : 'Unhold'} successful for participant`, participantSid);
           resolve(response.participantsResponse.callSid);
         })
         .catch((error) => {
-          console.error(`Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`, error);
+          logger.error(`Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`, error);
           reject(error);
         });
     });
@@ -74,11 +75,11 @@ class ConferenceService extends ApiService {
         },
       )
         .then((response: ParticipantResponse) => {
-          console.log(`Participant ${participantSid} updated:\r\n`, response);
+          logger.debug(`Participant ${participantSid} updated:\r\n`, response);
           resolve(response.participantsResponse.callSid);
         })
         .catch((error) => {
-          console.error(`Error updating participant ${participantSid}\r\n`, error);
+          logger.error(`Error updating participant ${participantSid}\r\n`, error);
           reject(error);
         });
     });
@@ -102,11 +103,11 @@ class ConferenceService extends ApiService {
         },
       )
         .then((response: ParticipantResponse) => {
-          console.log('Participant added:\r\n  ', response);
+          logger.debug('Participant added:\r\n  ', response);
           resolve(response.participantsResponse.callSid);
         })
         .catch((error) => {
-          console.log('There is an error while adding participan', error);
+          logger.debug('There is an error while adding participan', error);
           reject(error);
         });
     });
@@ -137,11 +138,11 @@ class ConferenceService extends ApiService {
         },
       )
         .then((_response: RemoveParticipantResponse) => {
-          console.log(`Participant ${participantSid} removed from conference`);
+          logger.debug(`Participant ${participantSid} removed from conference`);
           resolve(participantSid);
         })
         .catch((error) => {
-          console.error(`Error removing participant ${participantSid} from conference\r\n`, error);
+          logger.error(`Error removing participant ${participantSid} from conference\r\n`, error);
           reject(error);
         });
     });
@@ -163,11 +164,11 @@ class ConferenceService extends ApiService {
         },
       )
         .then((resp: GetCallResponse) => {
-          console.log('The call properties are', resp.callProperties);
+          logger.debug('The call properties are', resp.callProperties);
           resolve(resp.callProperties);
         })
         .catch((error) => {
-          console.log('There is an error', error);
+          logger.error('There is an error', error);
           reject(error);
         });
     });

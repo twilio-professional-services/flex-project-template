@@ -2,6 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 
 import { EncodedParams } from '../../../../types/serverless';
 import ApiService from '../../../../utils/serverless/ApiService';
+import logger from '../../../../utils/logger';
 
 export interface ParticipantMuteCoach {
   success: boolean;
@@ -34,15 +35,15 @@ class BargeCoachService extends ApiService {
         coaching,
       );
       if (success) {
-        console.log(
+        logger.debug(
           `Successfully updated Conference:${conferenceSid} for Participant:${participantSid} - Muted Status = ${muted}`,
         );
-        console.log(`Coaching Status is ${coaching} for Agent: ${agentSid}`);
+        logger.debug(`Coaching Status is ${coaching} for Agent: ${agentSid}`);
       } else if (!success) {
-        console.log(
+        logger.debug(
           `Failed to updated Conference:${conferenceSid} for Participant:${participantSid} - Muted Status = ${muted}`,
         );
-        console.log(`Coaching Status is ${coaching} for Agent: ${agentSid}`);
+        logger.debug(`Coaching Status is ${coaching} for Agent: ${agentSid}`);
       }
       return success;
     } catch (error) {

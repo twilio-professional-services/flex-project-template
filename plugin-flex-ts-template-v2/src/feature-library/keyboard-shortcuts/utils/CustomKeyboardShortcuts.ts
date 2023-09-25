@@ -1,6 +1,7 @@
 import { Actions, Manager } from '@twilio/flex-ui';
 
 import { StringTemplates } from '../flex-hooks/strings';
+import logger from '../../../utils/logger';
 
 const manager = Manager.getInstance();
 
@@ -37,7 +38,7 @@ const navigateToQueuesView = () => {
 };
 
 const debuggingHelper = () => {
-  console.log(
+  logger.debug(
     `This information is for debugging purposes only:
     accountSid: ${Manager.getInstance().workerClient?.accountSid}
     workerSid: ${Manager.getInstance().workerClient?.sid}

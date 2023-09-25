@@ -24,6 +24,7 @@ import AdminUiService from '../../utils/AdminUiService';
 import { saveUserConfig, saveGlobalConfig, shouldShowFeature } from '../../utils/helpers';
 import { subscribe, unsubscribe, publishMessage, SyncStreamEvent } from '../../utils/sync-stream';
 import { AdminUiNotification } from '../../flex-hooks/notifications';
+import logger from '../../../../utils/logger';
 
 const AdminView = () => {
   const [configureFor, setConfigureFor] = useState('user');
@@ -79,7 +80,7 @@ const AdminView = () => {
       const newGlobalConfig = (await AdminUiService.fetchUiAttributes()).configuration.custom_data?.features || {};
       setGlobalConfig(newGlobalConfig);
     } catch (error) {
-      console.log('admin-ui: Unable to load global config', error);
+      logger.debug('admin-ui: Unable to load global config', error);
     }
   };
 

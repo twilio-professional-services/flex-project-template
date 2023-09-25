@@ -1,5 +1,6 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
+import logger from '../../../utils/logger';
 
 export interface AdminUiServiceReponse {
   configuration: any;
@@ -24,7 +25,7 @@ class AdminUiService extends ApiService {
           resolve(response);
         })
         .catch((error) => {
-          console.error(`Error fetching configuration\r\n`, error);
+          logger.error(`Error fetching configuration\r\n`, error);
           reject(error);
         });
     });
@@ -50,7 +51,7 @@ class AdminUiService extends ApiService {
           resolve(response);
         })
         .catch((error) => {
-          console.error(`Error updating configuration\r\n`, error);
+          logger.error(`Error updating configuration\r\n`, error);
           reject(error);
         });
     });

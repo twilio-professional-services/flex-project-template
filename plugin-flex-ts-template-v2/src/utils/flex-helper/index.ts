@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
+import logger from '../logger';
 import { Activity } from '../../types/task-router';
 import { WorkerInstantQuery, ReservationInstantQuery } from '../index-query/InstantQueryHelper';
 import { WorkerIndexItem, ReservationIndexItem } from '../index-query/InstantQueryHelper/types';
@@ -81,7 +82,7 @@ class FlexHelper {
   getWorker = async (workerSid: string): Promise<WorkerIndexItem | undefined> => {
     const workerResult = await WorkerInstantQuery(`data.worker_sid EQ "${workerSid}"`);
     const worker = workerResult[workerSid];
-    if (!worker) console.warn(`FlexHelper.getWorker(): unable to find worker for workersid ${workerSid}`);
+    if (!worker) logger.warn(`FlexHelper.getWorker(): unable to find worker for workersid ${workerSid}`);
     return worker;
   };
 

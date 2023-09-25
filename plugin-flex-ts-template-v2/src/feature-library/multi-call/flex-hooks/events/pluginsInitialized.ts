@@ -2,6 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 
 import { NotificationIds } from '../notifications/MultiCall';
 import { FlexEvent } from '../../../../types/feature-loader';
+import logger from '../../../../utils/logger';
 
 export const eventName = FlexEvent.pluginsInitialized;
 export const eventHook = () => {
@@ -11,6 +12,6 @@ export const eventHook = () => {
 
   if (allowIncomingWhileBusy) {
     Flex.Notifications.showNotification(NotificationIds.MultiCallBroken);
-    console.error('ERROR: allowIncomingWhileBusy is enabled, so the multi-call feature will not work properly.');
+    logger.error('ERROR: allowIncomingWhileBusy is enabled, so the multi-call feature will not work properly.');
   }
 };

@@ -4,6 +4,7 @@ import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
 import { isFeatureEnabled } from '../config';
 import { AdminUiNotification } from '../flex-hooks/notifications';
 import AdminUiService from './AdminUiService';
+import logger from '../../../utils/logger';
 
 const acronyms = ['id', 'ui', 'sip', 'pstn', 'sms', 'crm', 'sla', 'cbm', 'url'];
 const hiddenFeatures = ['admin_ui'];
@@ -85,7 +86,7 @@ export const saveUserConfig = async (feature: string, config: any): Promise<bool
   } catch (error) {
     Notifications.dismissNotificationById(AdminUiNotification.SAVE_SUCCESS);
     Notifications.showNotification(AdminUiNotification.SAVE_ERROR);
-    console.error('admin-ui: Unable to update user config', error);
+    logger.error('admin-ui: Unable to update user config', error);
     return false;
   }
 
@@ -112,10 +113,10 @@ export const saveGlobalConfig = async (feature: string, config: any, mergeFeatur
     if (updateResponse?.configuration?.custom_data?.features) {
       returnVal = updateResponse.configuration.custom_data.features;
     } else {
-      console.error('admin-ui: Unexpected response upon updating global config', updateResponse);
+      logger.error('admin-ui: Unexpected response upon updating global config', updateResponse);
     }
   } catch (error) {
-    console.error('admin-ui: Unable to update global config', error);
+    logger.error('admin-ui: Unable to update global config', error);
   }
 
   if (!returnVal) {

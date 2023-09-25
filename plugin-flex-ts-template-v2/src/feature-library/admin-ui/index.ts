@@ -6,6 +6,7 @@ import { isFeatureEnabled } from './config';
 import hooks from './flex-hooks/**/*.*';
 // @ts-ignore
 import adminHooks from '../*/admin-hook.tsx';
+import logger from '../../utils/logger';
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
@@ -20,12 +21,7 @@ export const register = (): FeatureDefinition => {
     Actions.addListener(adminEvent, async (payload, _abortFunction) => {
       adminHook.adminHook(payload);
     });
-    console.info(
-      `Feature admin-ui registered %c${adminEvent} %caction hook: %c${adminHook.adminHook.name}`,
-      'font-weight:bold',
-      'font-weight:normal',
-      'font-weight:bold',
-    );
+    logger.debug(`Feature admin-ui registered ${adminEvent} action hook: ${adminHook.adminHook.name}`);
   }
 
   return { name: 'admin-ui', hooks: typeof hooks === 'undefined' ? [] : hooks };

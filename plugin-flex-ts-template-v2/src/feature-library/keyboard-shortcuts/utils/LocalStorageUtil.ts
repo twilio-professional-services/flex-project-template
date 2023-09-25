@@ -1,3 +1,5 @@
+import logger from '../../../utils/logger';
+
 export const readFromLocalStorage = (key: string) => {
   if (!key || typeof key !== 'string') {
     throw new Error(`${key} is an invalid key.`);
@@ -6,7 +8,7 @@ export const readFromLocalStorage = (key: string) => {
   try {
     return localStorage.getItem(key);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw new Error(`Unable to read ${key} from localStorage.`);
   }
 };
@@ -23,7 +25,7 @@ export const writeToLocalStorage = (key: string, value: string | object) => {
       localStorage.setItem(key, value);
     }
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw new Error(`Unable to add ${key} to localStorage.`);
   }
 };
@@ -36,7 +38,7 @@ export const deleteFromLocalStorage = (key: string) => {
   try {
     localStorage.removeItem(key);
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw new Error(`Unable to delete ${key} from localStorage.`);
   }
 };
@@ -50,7 +52,7 @@ export const deleteMultipleFromLocalStorage = (key: string[]) => {
     const keyArray: string[] = key;
     keyArray.forEach((key: string) => localStorage.removeItem(key));
   } catch (error) {
-    console.error(error);
+    logger.error(error);
     throw new Error(`Unable to delete ${key} from localStorage.`);
   }
 };

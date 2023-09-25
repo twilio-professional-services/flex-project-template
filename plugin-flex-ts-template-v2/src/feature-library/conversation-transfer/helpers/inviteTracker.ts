@@ -3,6 +3,7 @@ import { Manager, ConversationState } from '@twilio/flex-ui';
 import { InvitedParticipants } from '../types/InvitedParticipantDetails';
 import { ParticipantInviteType } from '../types/ParticipantInvite';
 import ConversationsService from '../../../utils/serverless/Conversations/ConversationsService';
+import logger from '../../../utils/logger';
 
 const syncClient = Manager.getInstance()?.insightsClient;
 
@@ -18,12 +19,12 @@ const instantQuery = async (targetSid: string, targetType: ParticipantInviteType
       q.on('searchResult', (items) => {
         if (items && Object.keys(items).length > 0) {
           Object.entries(items).forEach(([key, value]) => {
-            console.log('instantQuery', key, value);
+            logger.debug('instantQuery', key, value);
             const name = targetType === 'Worker' ? (value as any).attributes.full_name : (value as any).queue_name;
             resolve(name);
           });
         } else {
-          console.log('Invite participant name instantQuery failed for ', targetSid);
+          logger.debug('Invite participant name instantQuery failed for ', targetSid);
           resolve(targetSid);
         }
       });
@@ -51,7 +52,7 @@ export const removeInvitedParticipant = async (conversationSid: string, currentA
     try {
       await ConversationsService.updateChannelAttributes(conversationSid, updatedAttributes);
     } catch (error) {
-      console.log('Error', error, conversationSid);
+      logger.debug('Error', error, conversationSid);
     }
 };
 

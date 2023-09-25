@@ -1,5 +1,6 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
+import logger from '../../../utils/logger';
 
 export interface GenerateCodeReponse {
   roomName: string;
@@ -33,7 +34,7 @@ class ChatToVideoService extends ApiService {
           resolve(response);
         })
         .catch((error) => {
-          console.error(`Error generating unique video code\r\n`, error);
+          logger.error(`Error generating unique video code\r\n`, error);
           reject(error);
         });
     });
@@ -58,7 +59,7 @@ class ChatToVideoService extends ApiService {
           resolve(response);
         })
         .catch((error) => {
-          console.error(`Error completing video room\r\n`, error);
+          logger.error(`Error completing video room\r\n`, error);
           reject(error);
         });
     });

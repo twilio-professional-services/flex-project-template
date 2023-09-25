@@ -1,5 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 
+import logger from '../logger';
+
 const componentHooks = [] as any[];
 
 export const init = (flex: typeof Flex, manager: Flex.Manager) => {
@@ -9,11 +11,6 @@ export const init = (flex: typeof Flex, manager: Flex.Manager) => {
 };
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
-  console.info(
-    `Feature ${feature} registered %c${hook.componentName} %ccomponent hook: %c${hook.componentHook.name}`,
-    'font-weight:bold',
-    'font-weight:normal',
-    'font-weight:bold',
-  );
+  logger.debug(`Feature ${feature} registered ${hook.componentName} component hook: ${hook.componentHook.name}`);
   componentHooks.push(hook);
 };

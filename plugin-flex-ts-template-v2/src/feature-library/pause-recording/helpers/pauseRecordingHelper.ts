@@ -6,6 +6,7 @@ import AppState from '../../../types/manager/AppState';
 import { reduxNamespace } from '../../../utils/state';
 import { PauseRecordingState, pause, resume } from '../flex-hooks/states/PauseRecordingSlice';
 import { isBannerIndicatorEnabled, isIncludeSilenceEnabled, isDualChannelEnabled, getChannelToRecord } from '../config';
+import logger from '../../../utils/logger';
 
 const manager = Manager.getInstance();
 
@@ -44,7 +45,7 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
   );
 
   if (recordingIndex >= 0) {
-    console.error(`Recording already paused for task ${task.sid}`);
+    logger.error(`Recording already paused for task ${task.sid}`);
     return false;
   }
 
@@ -62,7 +63,7 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
         );
         recordingSid = recording.sid;
       } else {
-        console.error('Unable to get call SID to pause recording');
+        logger.error('Unable to get call SID to pause recording');
       }
     } else if (task.conference) {
       const recording = await PauseRecordingService.pauseConferenceRecording(
@@ -83,7 +84,7 @@ export const pauseRecording = async (task: ITask): Promise<boolean> => {
       return true;
     }
   } catch (error) {
-    console.error('Failed to pause recording', error);
+    logger.error('Failed to pause recording', error);
   }
 
   Notifications.showNotification(NotificationIds.PAUSE_FAILED);
@@ -97,7 +98,7 @@ export const resumeRecording = async (task: ITask): Promise<boolean> => {
   );
 
   if (recordingIndex < 0) {
-    console.error(`Unable to find paused recording details for task ${task.sid}`);
+    logger.error(`Unable to find paused recording details for task ${task.sid}`);
     return false;
   }
 
@@ -113,7 +114,7 @@ export const resumeRecording = async (task: ITask): Promise<boolean> => {
         await PauseRecordingService.resumeCallRecording(callSid, recording.recordingSid);
         success = true;
       } else {
-        console.error('Unable to get call SID to resume recording');
+        logger.error('Unable to get call SID to resume recording');
       }
     } else if (task.conference) {
       await PauseRecordingService.resumeConferenceRecording(task.conference?.conferenceSid, recording.recordingSid);
@@ -126,7 +127,7 @@ export const resumeRecording = async (task: ITask): Promise<boolean> => {
       return true;
     }
   } catch (error) {
-    console.error('Unable to resume recording', error);
+    logger.error('Unable to resume recording', error);
   }
 
   Notifications.showNotification(NotificationIds.RESUME_FAILED);

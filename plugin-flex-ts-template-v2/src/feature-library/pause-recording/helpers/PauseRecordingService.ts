@@ -1,6 +1,7 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedRecording } from '../../../types/serverless/twilio-api';
+import logger from '../../../utils/logger';
 
 export interface RecordingResponse {
   success: boolean;
@@ -28,7 +29,7 @@ class PauseRecordingService extends ApiService {
           resolve(resp.recording);
         })
         .catch((error) => {
-          console.log('Error pausing recording', error);
+          logger.debug('Error pausing recording', error);
           reject(error);
         });
     });
@@ -54,7 +55,7 @@ class PauseRecordingService extends ApiService {
           resolve(resp.recording);
         })
         .catch((error) => {
-          console.log('Error resuming recording', error);
+          logger.debug('Error resuming recording', error);
           reject(error);
         });
     });
@@ -80,7 +81,7 @@ class PauseRecordingService extends ApiService {
           resolve(resp.recording);
         })
         .catch((error) => {
-          console.log('Error pausing recording', error);
+          logger.debug('Error pausing recording', error);
           reject(error);
         });
     });
@@ -106,7 +107,7 @@ class PauseRecordingService extends ApiService {
           resolve(resp.recording);
         })
         .catch((error) => {
-          console.log('Error resuming recording', error);
+          logger.debug('Error resuming recording', error);
           reject(error);
         });
     });

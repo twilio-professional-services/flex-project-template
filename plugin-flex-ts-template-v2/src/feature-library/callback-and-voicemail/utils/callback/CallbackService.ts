@@ -5,6 +5,7 @@ import { EncodedParams } from '../../../../types/serverless';
 import { TaskAttributes } from '../../../../types/task-router/Task';
 import { CallbackNotification } from '../../flex-hooks/notifications/Callback';
 import { Actions } from '../../flex-hooks/states/CallbackAndVoicemail';
+import logger from '../../../../utils/logger';
 
 export interface CreateCallbackResponse {
   success: boolean;
@@ -126,7 +127,7 @@ class CallbackService extends ApiService {
         await Flex.Actions.invokeAction('WrapupTask', { task });
       }
     } catch (error) {
-      console.log('Unable to requeue callback', error);
+      logger.debug('Unable to requeue callback', error);
     }
 
     return task;

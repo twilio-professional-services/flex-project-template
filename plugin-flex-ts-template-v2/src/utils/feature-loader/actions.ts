@@ -1,11 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
 
+import logger from '../logger';
+
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
-  console.info(
-    `Feature ${feature} registered %c${hook.actionEvent}${hook.actionName} %caction hook: %c${hook.actionHook.name}`,
-    'font-weight:bold',
-    'font-weight:normal',
-    'font-weight:bold',
+  logger.debug(
+    `Feature ${feature} registered ${hook.actionEvent}${hook.actionName} action hook: ${hook.actionHook.name}`,
   );
   hook.actionHook(flex, manager);
 };

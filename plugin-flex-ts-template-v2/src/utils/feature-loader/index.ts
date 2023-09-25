@@ -16,6 +16,7 @@ import * as Strings from './strings';
 import * as TeamsFilters from './teams-filters';
 import * as SyncClientTokenUpdated from '../sdk-clients/sync/tokenUpdated';
 import * as TaskRouterReplaceCompleteTask from '../serverless/TaskRouter/CompleteTask';
+import logger from '../logger';
 // @ts-ignore
 import features from '../../feature-library/*';
 
@@ -28,7 +29,7 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   for (const file of features) {
     // Each feature index file should export a `register` function for us to invoke
     if (!file.register) {
-      console.error('Feature found, but its index file does not export a `register` function', file);
+      logger.error('Feature found, but its index file does not export a `register` function', file);
       return;
     }
 
@@ -39,7 +40,7 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
         loadFeature(flex, manager, feature);
       }
     } catch (error) {
-      console.error('Error loading feature:', error);
+      logger.error('Error loading feature:', error);
     }
   }
 
@@ -60,7 +61,7 @@ export const loadFeature = (flex: typeof Flex, manager: Flex.Manager, feature: F
   // Features invoke this function to register their hooks
   const name = feature.name ?? 'unknown';
   const hooks = feature.hooks ?? [];
-  console.info(`%cFeature enabled: ${name}`, 'background: green; color: white;');
+  logger.debug(`Feature enabled: ${name}`);
 
   for (const hook of hooks) {
     // Each hook exports a function or property for us to handle.

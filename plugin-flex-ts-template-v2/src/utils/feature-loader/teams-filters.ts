@@ -1,5 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 
+import logger from '../logger';
+
 const teamsFilterHooks = [] as any[];
 
 let customFilters = [] as Array<Flex.FilterDefinition>;
@@ -34,6 +36,6 @@ export const init = async (flex: typeof Flex, manager: Flex.Manager) => {
 };
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
-  console.info(`Feature ${feature} registered teams filter hook: %c${hook.teamsFilterHook.name}`, 'font-weight:bold');
+  logger.debug(`Feature ${feature} registered teams filter hook: ${hook.teamsFilterHook.name}`);
   teamsFilterHooks.push(hook);
 };

@@ -1,4 +1,5 @@
 import client from '../../../../utils/sdk-clients/sync/SyncClient';
+import logger from '../../../../utils/logger';
 
 class SyncDocClass {
   // Getting the Sync Document
@@ -10,7 +11,7 @@ class SyncDocClass {
           resolve(doc);
         })
         .catch((error: any) => {
-          console.error('Sync Util: getSyncDoc: Error calling this function', error);
+          logger.error('Sync Util: getSyncDoc: Error calling this function', error);
         });
     });
   };
@@ -51,7 +52,7 @@ class SyncDocClass {
         }
       })
       .catch((error: any) => {
-        console.error('Sync Util: initSyncDocAgentAssistance: Error calling this function', error);
+        logger.error('Sync Util: initSyncDocAgentAssistance: Error calling this function', error);
       });
   };
 
@@ -95,7 +96,7 @@ class SyncDocClass {
         }
       })
       .catch((error: any) => {
-        console.error('Sync Util: initSyncDocSupervisors: Error calling this function', error);
+        logger.error('Sync Util: initSyncDocSupervisors: Error calling this function', error);
       });
   };
 
@@ -121,7 +122,7 @@ class SyncDocClass {
         });
       })
       .catch((error: any) => {
-        console.error('Sync Util: updateSyncDoc: Error calling this function', error);
+        logger.error('Sync Util: updateSyncDoc: Error calling this function', error);
       });
   };
 
@@ -135,7 +136,7 @@ class SyncDocClass {
         });
       })
       .catch((error: any) => {
-        console.error('Sync Util: clearSyncDoc: Error calling this function', error);
+        logger.error('Sync Util: clearSyncDoc: Error calling this function', error);
       });
   };
 }

@@ -5,10 +5,11 @@ import { NotificationIds } from '../flex-hooks/notifications/TransferResult';
 import ChatTransferService, { buildInviteParticipantAPIPayload } from '../helpers/APIHelper';
 import { isColdTransferEnabled, isMultiParticipantEnabled } from '../config';
 import { countOfOutstandingInvitesForConversation } from '../helpers/inviteTracker';
+import logger from '../../../utils/logger';
 
 const handleChatTransferAction = async (payload: TransferActionPayload) => {
   const { task, targetSid } = payload;
-  console.log('transfer', payload);
+  logger.debug('transfer', payload);
 
   const conversation = StateHelper.getConversationStateForTask(task);
 
@@ -49,7 +50,7 @@ const handleChatTransferAction = async (payload: TransferActionPayload) => {
       Notifications.showNotification(NotificationIds.ChatParticipantInvited);
     }
   } catch (error) {
-    console.error('transfer API request failed', error);
+    logger.error('transfer API request failed', error);
     Notifications.showNotification(NotificationIds.ChatTransferFailedGeneric);
   }
 };

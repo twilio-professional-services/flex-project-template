@@ -5,6 +5,7 @@ import React from 'react';
 import { TaskQualificationConfig } from '../../types/ServiceConfiguration';
 import { getMatchingTaskConfiguration } from '../../config';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
+import logger from '../../../../utils/logger';
 
 export type Props = {
   task: ITask;
@@ -44,7 +45,7 @@ const autoCompleteTask = async (task: ITask, taskConfig: TaskQualificationConfig
       }
     }, timeout);
   } catch (error) {
-    console.error(`Error attempting to set wrap up timeout for reservation: ${sid}`, error);
+    logger.error(`Error attempting to set wrap up timeout for reservation: ${sid}`, error);
   }
 };
 

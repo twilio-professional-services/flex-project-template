@@ -1,13 +1,10 @@
 import * as Flex from '@twilio/flex-ui';
 
+import logger from '../logger';
+
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
   // returns object with event and handler
   const { event, handler } = hook.chatOrchestratorHook(flex, manager);
-  console.info(
-    `Feature ${feature} registered %c${event} %cchat orchestrator hook: %c${handler.name}`,
-    'font-weight:bold',
-    'font-weight:normal',
-    'font-weight:bold',
-  );
+  logger.debug(`Feature ${feature} registered ${event} chat orchestrator hook: ${handler.name}`);
   flex.ChatOrchestrator.setOrchestrations(event, handler);
 };

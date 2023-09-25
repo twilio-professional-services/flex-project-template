@@ -3,6 +3,7 @@ import { SSOTokenPayload } from '@twilio/flex-ui/src/core/TokenStorage';
 
 import { SecondDevice } from '../../helpers/MultiCallHelper';
 import { FlexEvent } from '../../../../types/feature-loader';
+import logger from '../../../../utils/logger';
 
 export const eventName = FlexEvent.tokenUpdated;
 export const eventHook = (flex: typeof Flex, manager: Flex.Manager, tokenPayload: SSOTokenPayload) => {
@@ -14,5 +15,5 @@ export const eventHook = (flex: typeof Flex, manager: Flex.Manager, tokenPayload
 
   SecondDevice?.updateToken(tokenPayload.token);
 
-  console.log('MultiCall: Token updated');
+  logger.debug('MultiCall: Token updated');
 };

@@ -10,6 +10,7 @@ import {
 import { EncodedParams } from '../../../types/serverless';
 import ApiService from '../../../utils/serverless/ApiService';
 import { isFeatureEnabled, getServerlessDomain } from '../config';
+import logger from '../../../utils/logger';
 
 class ScheduleManagerService extends ApiService {
   readonly scheduleManagerServerlessDomain: string;
@@ -20,7 +21,7 @@ class ScheduleManagerService extends ApiService {
     this.scheduleManagerServerlessDomain = getServerlessDomain();
 
     if (isFeatureEnabled() && !this.scheduleManagerServerlessDomain) {
-      console.error('schedule_manager serverless_domain is not set in flex config');
+      logger.error('schedule_manager serverless_domain is not set in flex config');
     }
   }
 
@@ -28,7 +29,7 @@ class ScheduleManagerService extends ApiService {
     try {
       return await this.#list();
     } catch (error) {
-      console.log('Unable to list config', error);
+      logger.debug('Unable to list config', error);
       return null;
     }
   }
@@ -37,7 +38,7 @@ class ScheduleManagerService extends ApiService {
     try {
       return await this.#update(config);
     } catch (error: any) {
-      console.log('Unable to update config', error);
+      logger.debug('Unable to update config', error);
 
       if (error.status === 409) {
         return {
@@ -57,7 +58,7 @@ class ScheduleManagerService extends ApiService {
     try {
       return await this.#updateStatus({ buildSid });
     } catch (error) {
-      console.log('Unable to get config build status', error);
+      logger.debug('Unable to get config build status', error);
       return {
         success: false,
         buildStatus: 'error',
@@ -69,7 +70,7 @@ class ScheduleManagerService extends ApiService {
     try {
       return await this.#publish({ buildSid });
     } catch (error) {
-      console.log('Unable to publish config', error);
+      logger.debug('Unable to publish config', error);
       return {
         success: false,
         deploymentSid: 'error',
