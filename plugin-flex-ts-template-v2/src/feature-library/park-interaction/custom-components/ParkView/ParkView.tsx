@@ -63,7 +63,7 @@ const ParkView = () => {
         // better identify types of interaction (e.g. "Chat (Messenger)")
         let channelDisplayText = `${data.taskChannelUniqueName[0].toUpperCase()}${data.taskChannelUniqueName.slice(1)}`;
         if (data.channelType && data.channelType !== data.taskChannelUniqueName) {
-          channelDisplayText += `(${data.channelType[0].toUpperCase()}${data.channelType.slice(1)})`;
+          channelDisplayText += ` (${data.channelType[0].toUpperCase()}${data.channelType.slice(1)})`;
         }
 
         return {
