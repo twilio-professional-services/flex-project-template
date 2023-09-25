@@ -34,6 +34,7 @@ export const parkInteraction = async (payload: ParkInteractionPayload) => {
       agent.interactionSid,
       agent.participantSid,
       agent.mediaProperties.conversationSid,
+      agent.channelType,
       payload.task.taskSid,
       payload.task.workflowSid,
       payload.task.taskChannelUniqueName,
