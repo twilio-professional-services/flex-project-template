@@ -56,9 +56,9 @@ jobs:
           npm i
           npm run buildServiceManifest -- --servicesRoot=../../services
           echo "## Services Manifest" >> $GITHUB_STEP_SUMMARY 
-          echo "```yaml\n" >> $GITHUB_STEP_SUMMARY
-          cat ../../services/services-manifest.yaml) >> $GITHUB_STEP_SUMMARY
-          echo "\n```" >> $GITHUB_STEP_SUMMARY
+          echo ```yaml >> $GITHUB_STEP_SUMMARY
+          cat ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
+          echo ``` >> $GITHUB_STEP_SUMMARY
       - name: Build serverless projects
         env:
           CI: false
