@@ -5,7 +5,7 @@ import shell from 'shelljs';
 import getPluginDirs from "./get-plugin.mjs";
 import { flexConfigDir } from "./constants.mjs";
 
-export default async () => {
+export default async (overwrite) => {
   var { pluginDir } = getPluginDirs();
 
   var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`;
@@ -17,7 +17,7 @@ export default async () => {
   }
 
   try {
-    if (shell.test('-e', pluginAppConfig)) {
+    if (!overwrite && shell.test('-e', pluginAppConfig)) {
       return;
     }
     
