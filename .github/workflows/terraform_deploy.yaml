@@ -71,8 +71,9 @@ jobs:
           for service_folder in */; do \
             if [ -d "$service_folder" ]; then
               echo "### $service_folder" >> $GITHUB_STEP_SUMMARY; \
-              cd $service_folder && yarn && yarn build \
-                || echo "- :warning: No build script detected for $service_folder" >> $GITHUB_STEP_SUMMARY; \
+              cd $service_folder; \
+              yarn; \
+              yarn build || echo "- :warning: No build script detected for $service_folder" >> $GITHUB_STEP_SUMMARY; \
             fi; \
           done
       - name: Pull Terraform State
