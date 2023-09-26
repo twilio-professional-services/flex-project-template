@@ -105,7 +105,6 @@ class ServerlessProject {
     systemEnv() {
         const sysEnvs = {}
         for (const [envVar] of this.envExample) {
-            console.log(envVar);
             sysEnvs[envVar] = process.env[envVar] || 'missing';
         }
         return sysEnvs;
