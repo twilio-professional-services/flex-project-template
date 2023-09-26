@@ -58,8 +58,8 @@ jobs:
           npm run buildServiceManifest -- --servicesRoot=../../services
           echo "## Services" >> $GITHUB_STEP_SUMMARY
           echo "### Services Manifest" >> $GITHUB_STEP_SUMMARY 
-          grep " " ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
-          echo "### Missing env vars" >> $GITHUB_STEP_SUMMARY
+          cat ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
+          echo "### :warning: Missing env vars" >> $GITHUB_STEP_SUMMARY
           grep missing ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
       - name: Build serverless projects
         env:
@@ -70,7 +70,7 @@ jobs:
             if [ -d "$service_folder" ]; then
               echo "### $service_folder" >> $GITHUB_STEP_SUMMARY; \
               cd $service_folder && yarn && yarn build \
-                || echo "- No build script detected for $service_folder" >> $GITHUB_STEP_SUMMARY; \
+                || echo "- :warning: No build script detected for $service_folder" >> $GITHUB_STEP_SUMMARY; \
             fi; \
           done
       - name: Pull Terraform State
