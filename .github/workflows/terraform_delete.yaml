@@ -33,7 +33,20 @@ jobs:
         run: |
           npm install -g twilio-cli
           twilio plugins:install @twilio-labs/plugin-serverless
-      - id: delete_terraform_state
+
+      - name: Pull Terraform State
+        working-directory: ./infra-as-code/state
+        id: pull-state
+        run: |
+          ./pull_state.sh
+
+      - name: Load script variables
         working-directory: ./infra-as-code/state
         run: |
-          ./delete.sh
+          ./load_tf_vars.sh
+
+      - id: delete_terraform_state
+        working-directory: ./infra-as-code/terraform/environments/default
+        run: |
+          terraform destroy -auto-approve
+          twilio api:serverless:v1:services:remove --sid tfstate

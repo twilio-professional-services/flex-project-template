@@ -53,6 +53,12 @@ jobs:
           npm install -g twilio-cli
           twilio plugins:install @twilio-labs/plugin-serverless
 
+      - name: Pull Terraform State
+        working-directory: ./infra-as-code/state
+        id: pull-state
+        run: |
+          ./pull_state.sh
+
       - name: Detect serverless projects
         working-directory: ./infra-as-code/util
         run: |
@@ -79,12 +85,6 @@ jobs:
               yarn build || echo "- :warning: No build script detected for $service_folder" >> $GITHUB_STEP_SUMMARY; \
             fi; \
           done
-
-      - name: Pull Terraform State
-        working-directory: ./infra-as-code/state
-        id: pull-state
-        run: |
-          ./pull_state.sh
 
       - name: Load script variables
         working-directory: ./infra-as-code/state
