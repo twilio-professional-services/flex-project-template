@@ -26,4 +26,5 @@ yarn-error.log*
 .twiliodeployinfo
 
 .env*
+!.env.example
 /public/env.js
