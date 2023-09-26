@@ -107,7 +107,7 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY 
           terraform show -no-color tf.plan >> $GITHUB_STEP_SUMMARY 
           echo '```' >> $GITHUB_STEP_SUMMARY
-          terraform apply -input-false -auto-approve tf.plan
+          terraform apply -input=false -auto-approve tf.plan
 
       - name: Export State
         working-directory: ./infra-as-code/state
