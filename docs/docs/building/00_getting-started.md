@@ -1,5 +1,6 @@
 ---
-title: Getting started
+sidebar_label: Getting started
+title: Get started building with the template
 ---
 
 The template includes a robust development environment to help you better manage the complexity of a customized Flex solution.

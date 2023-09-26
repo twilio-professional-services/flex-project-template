@@ -1,6 +1,4 @@
 ---
-sidebar_label: Changelog
-sidebar_position: 5
 title: Changelog
 ---
 

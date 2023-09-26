@@ -1,7 +1,6 @@
 ---
 sidebar_label: Merge future updates
-sidebar_position: 2
-title: Managing future updates from the template
+title: Merging future template updates
 ---
 
 As outlined on [GitHub docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template), when creating a new repository from a template, you will be creating a repository with no history. One of the benefits of using the template this way instead of forking is that you can make it private.
