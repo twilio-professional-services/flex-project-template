@@ -37,7 +37,7 @@ importInternalState() {
 	echo " - Discovering and importing existing state for known definitions" >>$GITHUB_STEP_SUMMARY
 	workspaces=$(twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
 	TF_WORKSPACE_SID=$(get_value_from_json "$workspaces" "friendlyName" "Flex Task Assignment" "sid")
-	import_resource "$workspaces" "Flex Task Assignment" "module.taskrouter.twilio_taskrouter_workspaces_v1.flex" "friendlyName"
+	import_resource "$workspaces" "Flex Task Assignment" "module.taskrouter.twilio_taskrouter_workspaces_v1.flex" "friendlyName" false
 	echo "   - :white_check_mark: Task Router - Workspaces" >>$GITHUB_STEP_SUMMARY
 
 	workflows=$(twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json | jq 'map(del(.configuration))')
