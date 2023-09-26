@@ -15,7 +15,16 @@ the vanilla feature without any further customizations will look like this
 
 ## Enabling the feature
 
-There are no settings for caller-id, only enabling the feature in the flex-config asset for your environment.
+There are no additional dependencies for setup beyond ensuring the flag is enabled within the `flex-config` attributes.
+
+There is an optional configuration property (`include_outgoing_only_numbers`) controlling whether or not outgoing-only caller IDs (i.e. verified non-Twilio phone numbers) are displayed in the dropdown. This is enabled by default, but can be disabled to hide these numbers.
+
+```json
+"caller_id": {
+    "enabled": true,
+    "include_outgoing_only_numbers": false
+}
+```
 
 ## Outbound Call Configuration
 

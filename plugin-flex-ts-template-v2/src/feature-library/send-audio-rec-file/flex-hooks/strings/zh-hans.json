@@ -1,0 +1,8 @@
+{
+    "PSAudioRecorder": "音频录制器",
+    "PSRecordingMessage": "正在录音中",
+    "StartRecButton": "开始录音",
+    "StopRecButton": "录音中止",
+    "RemoveRecButton": "丢弃记录",
+    "MicBlockedMessage": "在使用此功能之前，请允许此页面访问您的麦克风。"
+}
