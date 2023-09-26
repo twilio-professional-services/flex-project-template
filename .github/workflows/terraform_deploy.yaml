@@ -98,7 +98,7 @@ jobs:
         if: env.TFSTATE_BUCKET == ''
         id: import_internal_state
 
-      - name: Terraform plan
+      - name: Terraform plan & apply
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
           terraform init
@@ -107,6 +107,7 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY 
           terraform show -no-color tf.plan >> $GITHUB_STEP_SUMMARY 
           echo '```' >> $GITHUB_STEP_SUMMARY
+          terraform apply -input-false -auto-approve tf.plan
 
       - name: Export State
         working-directory: ./infra-as-code/state
