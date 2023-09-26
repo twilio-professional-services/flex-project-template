@@ -54,6 +54,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | Dual Channel Recording         | _automatically record both inbound and outbound calls in dual channel_                              | [dual-channel-recording](/feature-library/dual-channel-recording)                     |
 | Localization                   | _adds the ability to view Flex in a different language_                                             | [localization](/feature-library/localization)                                       |
 | Omni Channel Management        | _method for mixing chat and voice channels_                                                         | [omni-channel-capacity-management](/feature-library/omni-channel-capacity-management) |
+| SIP Support                    | _adds call control functionality when using a non-WebRTC phone_                                     | [sip-support](/feature-library/sip-support) |
 
 </TabItem>
 <TabItem value="experimental" label="Experimental features">
