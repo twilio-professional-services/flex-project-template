@@ -74,13 +74,14 @@ jobs:
           CI: false
         working-directory: ./services
         run: |
-          for service_folder in */; do \
+          SERVICE_FOLDERS=`ls -d */ | xargs -I{} echo $(pwd)/{}`
+          for service_folder in $SERVICE_FOLDERS; do \
             if [ -d "$service_folder" ]; then
-              echo "### :open_file_folder: $service_folder" >> $GITHUB_STEP_SUMMARY; \
-              cd $service_folder; \
-              yarn; \
-              yarn build || echo "- :warning: No build script detected for $service_folder" >> $GITHUB_STEP_SUMMARY; \
-            fi; \
+              echo "### :open_file_folder: $service_folder" >> $GITHUB_STEP_SUMMARY
+              cd $service_folder
+              yarn
+              yarn build || echo "- :warning: No build script detected for $service_folder" >> $GITHUB_STEP_SUMMARY
+            fi
           done
 
       - name: Load script variables
@@ -100,7 +101,7 @@ jobs:
       - name: Terraform plan & apply
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
-          if [ $SKIP_TF_INIT -ne true ]; then
+          if [ $SKIP_TF_INIT != "true" ]; then
             terraform init -input=false
           fi
           echo '### Terraform plan' >> $GITHUB_STEP_SUMMARY
