@@ -161,6 +161,13 @@ The setup script when run via `npm install` performs the following operations:
 
 Several parameters are accepted when the script is run via `npm run postinstall`, which can be used to customize the script's functionality. These parameters can be set as follows:
 
+### overwrite
+By default, the script will fill placeholders in files that already exist, but if the already-filled placeholder needs to be changed, or if new variables were added, those changes would not be made. The overwrite option will always start with a fresh file based on the `example` file, allowing you to easily regenerate your environment files:
+
+```bash
+npm run postinstall -- --overwrite
+```
+
 ### skip-install
 Normally the script will run `npm install` for each package. However, if you only wish to perform configuration (such as if the install has already been performed), you may skip this step as follows:
 
