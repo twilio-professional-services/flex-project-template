@@ -101,7 +101,7 @@ jobs:
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
           if [ $SKIP_TF_INIT -ne true ]; then
-            terraform -chdir="../terraform/environments/default" init -input=false
+            terraform init -input=false
           fi
           echo '### Terraform plan' >> $GITHUB_STEP_SUMMARY
           terraform plan -out tf.plan
