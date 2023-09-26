@@ -37,7 +37,7 @@ These steps require Flex UI version 2.x to be configured on your Flex account.
    - `Deploy Terraform?`  (as *cautioned* below)
 
 :::danger Important!
-These deploy steps will set up TaskRouter and Studio configuration to allow more complex features to work out-of-the-box. The following resources will be overwritten when selecting the `Deploy Terraform?` option:
+These deploy steps will set up TaskRouter and Studio configuration to allow more complex features to work out-of-the-box. The following resources will be completely replaced and overwritten when selecting the `Deploy Terraform?` option:
 
 <details><summary>TaskRouter resources affected</summary>
 
@@ -45,7 +45,7 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 <TabItem value="workflows" label="Workflows" default>
 
-| Name | Existing in vanilla Flex or New | Description |
+| Name | Existing or New | Description |
 | -----| --------------------| ------------|
 | Assign To Anyone | Existing | Modified to support [Park Interaction](/feature-library/park-interaction) and Demonstrate filters for Sales and Support queues|
 | Chat Transfer | New | Workflow that supports the [Conversation Transfer](/feature-library/conversation-transfer) feature |
@@ -56,9 +56,9 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 <TabItem value="queues" label="Task Queues" >
 
-| Name | Existing Vanilla Flex or New  | Description |
+| Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| Everyone | Existing | No modifications from vanilla flex version  |
+| Everyone | Existing | No modifications from out-of-box Flex version  |
 | Template Example Sales| New | Sample queue for "Sales" calls |
 | Template Example Support | New | Sample queue for "Support" calls |
 | Internal Calls | New | Queue that supports the [Internal Call](/feature-library/internal-call) feature|
@@ -67,25 +67,25 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 <TabItem value="activities" label="Activities" >
 
-| Name | Existing Vanilla Flex or New  | Description |
+| Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| Offline | Existing | No modifications from vanilla flex version  |
-| Available | Existing | No modifications from vanilla flex version  |
-| Unavailable | Existing | No modifications from vanilla flex version  |
-| Break | Existing | No modifications from vanilla flex version  |
+| Offline | Existing | No modifications from out-of-box Flex version  |
+| Available | Existing | No modifications from out-of-box Flex version  |
+| Unavailable | Existing | No modifications from out-of-box Flex version  |
+| Break | Existing | No modifications from out-of-box Flex version  |
 | On A Task | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
 | On A Task, No ACD | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
-| Wrap Up | New | New to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
+| Wrap Up | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
 | Wrap Up, No ACD | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
 
 </TabItem>
 
 <TabItem value="channels" label="Task Channels" >
 
-| Name | Existing Vanilla Flex or New  | Description |
+| Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| Voice | Existing | No modifications from vanilla flex version  |
-| Chat | Existing | No modifications from vanilla flex version  |
+| Voice | Existing | No modifications from out-of-box Flex version  |
+| Chat | Existing | No modifications from out-of-box Flex version  |
 
 </TabItem>
 
@@ -94,11 +94,11 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 <details><summary>Studio resources affected</summary>
 
-| Name | Existing Vanilla Flex or New  | Description |
+| Name | Existing or New  | Description |
 | -----| --------------------| ------------|
 | Voice IVR | Existing | Modified to include a schedule manager lookup and to add a callback or voicemail option while waiting in queue |
 | Messaging Flow | Existing | Modified to provide a sales or support routing option |
-| Chat Flow | Existing | No modifications from vanilla flex version |
+| Chat Flow | Existing | No modifications from out-of-box Flex version |
 
 </details>
 
