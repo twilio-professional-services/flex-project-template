@@ -48,5 +48,6 @@ jobs:
       - id: delete_terraform_state
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
+          terraform init
           terraform destroy -auto-approve
           twilio api:serverless:v1:services:remove --sid tfstate
