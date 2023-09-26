@@ -90,7 +90,7 @@ jobs:
         working-directory: ./infra-as-code/state
         run: |
           ./import_internal_state.sh
-        if: env.tfstate_bucket == ''
+        if: env.TFSTATE_BUCKET == ''
         id: import_internal_state
 
       - name: Terraform plan

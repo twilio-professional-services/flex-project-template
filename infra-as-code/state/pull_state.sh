@@ -7,7 +7,7 @@ echo "### Job Results "
 IFS="|" read -ra tf_state_files <<<"$TF_STATE_FILES"
 
 tfstate_bucket=$(twilio api:serverless:v1:services:fetch --sid tfstate -o json | jq -c '.[].domainBase // empty' | sed 's/"//g')
-echo $tfstate_bucket >> $GITHUB_ENV;
+echo "TFSTATE_BUCKET=$tfstate_bucket" >> "$GITHUB_ENV";
 
 if [ -n "$tfstate_bucket" ]; then
 	tfstate_bucket_url="$tfstate_bucket.twil.io"
