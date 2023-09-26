@@ -1,9 +1,9 @@
-import { Icon, useFlexSelector } from '@twilio/flex-ui';
+import { Icon, Template, templates, useFlexSelector } from '@twilio/flex-ui';
 import * as React from 'react';
-import { Box, Table, THead, TBody, Th, Tr, Td } from '@twilio-paste/core';
+import { Box, Table, THead, TBody, Th, Tr, Td, Tooltip } from '@twilio-paste/core';
 import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definition';
 import AppState from 'types/manager/AppState';
-import Tooltip from '@material-ui/core/Tooltip';
+// import Tooltip from '@material-ui/core/Tooltip';
 import { CallIncomingIcon } from '@twilio-paste/icons/esm/CallIncomingIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 
@@ -16,6 +16,7 @@ import {
   getChannelSMS_Color,
 } from '../../../queues-view-data-tiles/config';
 import { getTeamOptions } from '../../../teams-view-filters/config';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 const TaskSummaryTile = () => {
   const teams = getTeamOptions();
@@ -30,29 +31,31 @@ const TaskSummaryTile = () => {
           <THead stickyHeader top={0}>
             <Tr>
               <Th element="COMPACT_TABLE">
-                <Heading> Team </Heading>
+                <Heading>
+                  <Template source={templates[StringTemplates.TeamsViewColumnTeamName]} />
+                </Heading>
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center">
                 <Channel bgColor={getChannelVoice_Color()}>
-                  <Tooltip title="Inbound Calls" placement="top" arrow={true}>
+                  <Tooltip text="Inbound Calls" placement="top">
                     <Heading>
-                      <CallIncomingIcon decorative={false} title="In" />
+                      <CallIncomingIcon decorative={true} />
                     </Heading>
                   </Tooltip>
                 </Channel>
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center">
                 <Channel bgColor={getChannelVoice_Color()}>
-                  <Tooltip title="Outbound Calls" placement="top" arrow={true}>
+                  <Tooltip text="Outbound Calls" placement="top">
                     <Heading>
-                      <CallOutgoingIcon decorative={false} title="Out" />
+                      <CallOutgoingIcon decorative={true} />
                     </Heading>
                   </Tooltip>
                 </Channel>
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center">
                 <Channel bgColor={getChannelChat_Color()}>
-                  <Tooltip title="Chat" placement="top" arrow={true}>
+                  <Tooltip text="Chat" placement="top">
                     <Heading>
                       <Icon icon="Message" />
                     </Heading>
@@ -61,7 +64,7 @@ const TaskSummaryTile = () => {
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center">
                 <Channel bgColor={getChannelSMS_Color()}>
-                  <Tooltip title="SMS" placement="top" arrow={true}>
+                  <Tooltip text="SMS" placement="top">
                     <Heading>
                       <Icon icon="Sms" />
                     </Heading>
@@ -73,19 +76,21 @@ const TaskSummaryTile = () => {
           <TBody>
             <Tr key="Total">
               <Td element="COMPACT_TABLE">
-                <Heading> Total (All) </Heading>
+                <Heading>
+                  <Template source={templates[StringTemplates.TeamsViewSummaryAll]} />
+                </Heading>
               </Td>
               <Td element="COMPACT_TABLE" textAlign="center">
-                <Label> {taskCounts.All.tasks.voice_inbound} </Label>
+                <Heading> {taskCounts.All.tasks.voice_inbound} </Heading>
               </Td>
               <Td element="COMPACT_TABLE" textAlign="center">
-                <Label> {taskCounts.All.tasks.voice_outbound} </Label>
+                <Heading> {taskCounts.All.tasks.voice_outbound} </Heading>
               </Td>
               <Td element="COMPACT_TABLE" textAlign="center">
-                <Label> {taskCounts.All.tasks.chat} </Label>
+                <Heading> {taskCounts.All.tasks.chat} </Heading>
               </Td>
               <Td element="COMPACT_TABLE" textAlign="center">
-                <Label> {taskCounts.All.tasks.sms} </Label>
+                <Heading> {taskCounts.All.tasks.sms} </Heading>
               </Td>
             </Tr>
             {teams.map((team) => {

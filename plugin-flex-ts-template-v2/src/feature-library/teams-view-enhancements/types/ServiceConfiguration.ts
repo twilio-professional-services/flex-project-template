@@ -17,7 +17,6 @@ export default interface TeamsViewEnhancementsConfig {
 }
 
 interface StatusConfig {
-  label: string;
   color: string;
   icon: string;
 }

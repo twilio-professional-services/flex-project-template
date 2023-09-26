@@ -1,7 +1,7 @@
 import { Manager } from '@twilio/flex-ui';
 import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definition';
 
-import { ActivityCounts, TaskCounts } from '../types';
+import { ActivityCounts, TaskCounts, TasksAndCapacity } from '../types';
 
 const _manager = Manager.getInstance();
 const workerActivities = _manager.store.getState().flex?.worker?.activities || new Map();
@@ -84,4 +84,36 @@ export function getTasksByTeamCounts(workers: SupervisorWorkerState[] = [], team
     });
   });
   return taskCounts;
+}
+
+export function getTasksAndCapacity(workers: SupervisorWorkerState[] = []) {
+  const initTasks = { voice_inbound: 0, voice_outbound: 0, sms: 0, chat: 0 };
+  const initCapacity = { voice: 0, sms: 0, chat: 0 };
+
+  const tasksAndCapacity: TasksAndCapacity = {
+    tasks: { ...initTasks },
+    capacity: { ...initCapacity },
+  };
+  workers.forEach((wk) => {
+    let channel = '';
+    const tasks = wk?.tasks || [];
+    tasks.forEach((task) => {
+      if (task.taskChannelUniqueName === TASK_CHANNEL_VOICE) {
+        channel = `voice_${task.attributes?.direction || 'inbound'}`;
+      } else {
+        channel = task.taskChannelUniqueName;
+      }
+      const count = tasksAndCapacity?.tasks[channel] ? tasksAndCapacity.tasks[channel] : 0;
+      tasksAndCapacity.tasks[channel] = count + 1;
+    });
+    const wkCh = wk.worker?.attributes?.channels;
+    const wkMaxSms: number = wkCh?.sms?.available && wkCh?.sms?.capacity ? wkCh?.sms?.capacity : 0;
+    const wkMaxChat: number = wkCh?.chat?.available && wkCh?.chat?.capacity ? wkCh?.chat?.capacity : 0;
+
+    let capacity = tasksAndCapacity?.capacity?.sms ? tasksAndCapacity?.capacity?.sms : 0;
+    tasksAndCapacity.capacity.sms = capacity + wkMaxSms;
+    capacity = tasksAndCapacity?.capacity?.chat ? tasksAndCapacity?.capacity.chat : 0;
+    tasksAndCapacity.capacity.chat = capacity + wkMaxChat;
+  });
+  return tasksAndCapacity;
 }

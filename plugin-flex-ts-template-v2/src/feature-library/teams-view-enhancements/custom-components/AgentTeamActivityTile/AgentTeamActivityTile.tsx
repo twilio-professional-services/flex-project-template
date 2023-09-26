@@ -1,9 +1,9 @@
-import { Icon, useFlexSelector } from '@twilio/flex-ui';
+import { Icon, Template, templates, useFlexSelector } from '@twilio/flex-ui';
 import * as React from 'react';
-import { Box, Table, THead, TBody, Th, Tr, Td } from '@twilio-paste/core';
+import { Box, Table, THead, TBody, Th, Tr, Td, Tooltip } from '@twilio-paste/core';
 import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definition';
 import AppState from 'types/manager/AppState';
-import Tooltip from '@material-ui/core/Tooltip';
+import { EmojiIcon } from '@twilio-paste/icons/esm/EmojiIcon';
 
 import { getIdleStatusConfig, getBusyStatusConfig } from '../../config';
 import { TileWrapper, AgentActivity, Label, Heading } from './AgentTeamActivityTile.Components';
@@ -11,6 +11,7 @@ import { getAgentStatusCounts } from '../../utils/WorkerDataUtil';
 import { ActivityCounts } from '../../types';
 import { getAgentActivityConfig } from '../../../queues-view-data-tiles/config';
 import { getTeamOptions } from '../../../teams-view-filters/config';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 const AgentTeamActivityTile = () => {
   const teams = getTeamOptions();
@@ -30,10 +31,12 @@ const AgentTeamActivityTile = () => {
           <THead stickyHeader top={0}>
             <Tr key="headerRow">
               <Th element="COMPACT_TABLE">
-                <Heading> Team </Heading>
+                <Heading>
+                  <Template source={templates[StringTemplates.TeamsViewColumnTeamName]} />
+                </Heading>
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center">
-                <Tooltip title="Total Agents" placement="top" arrow={true}>
+                <Tooltip text={templates[StringTemplates.TeamsViewSummaryTotalAgents]()} placement="top">
                   <Heading>
                     <Icon icon="Agents" />
                   </Heading>
@@ -41,18 +44,18 @@ const AgentTeamActivityTile = () => {
               </Th>
               <Th element="COMPACT_TABLE">
                 <AgentActivity bgColor={statusIdle.color}>
-                  <Tooltip title={statusIdle.label} placement="top" arrow={true}>
+                  <Tooltip text={templates[StringTemplates.StatusIdleTooltip]()} placement="top">
                     <Heading>
-                      <Icon icon={statusIdle.icon} />
+                      <EmojiIcon decorative={true} />
                     </Heading>
                   </Tooltip>
                 </AgentActivity>
               </Th>
               <Th element="COMPACT_TABLE">
                 <AgentActivity bgColor={statusBusy.color}>
-                  <Tooltip title={statusBusy.label} placement="top" arrow={true}>
+                  <Tooltip text={templates[StringTemplates.StatusBusyTooltip]()} placement="top">
                     <Heading>
-                      <Icon icon={statusBusy.icon} />
+                      <Icon icon="GenericTask" />
                     </Heading>
                   </Tooltip>
                 </AgentActivity>
@@ -61,7 +64,7 @@ const AgentTeamActivityTile = () => {
                 return (
                   <Th element="COMPACT_TABLE" key={activity}>
                     <AgentActivity bgColor={activityConfig.activities[activity].color}>
-                      <Tooltip title={activity} placement="top" arrow={true}>
+                      <Tooltip text={activity} placement="top">
                         <Heading>
                           <Icon icon={activityConfig.activities[activity]?.icon} />
                         </Heading>
@@ -75,21 +78,23 @@ const AgentTeamActivityTile = () => {
           <TBody>
             <Tr key="All">
               <Td element="COMPACT_TABLE">
-                <Heading> Total (All) </Heading>
+                <Heading>
+                  <Template source={templates[StringTemplates.TeamsViewSummaryAll]} />
+                </Heading>
               </Td>
               <Td element="COMPACT_TABLE" textAlign="center">
-                <Label>{workerActivityCounts.All.totalAgentCount} </Label>
+                <Heading>{workerActivityCounts.All.totalAgentCount} </Heading>
               </Td>
               <Td element="COMPACT_TABLE_BG30" textAlign="center">
-                <Label>{workerActivityCounts.All.activities.Idle} </Label>
+                <Heading>{workerActivityCounts.All.activities.Idle} </Heading>
               </Td>
               <Td element="COMPACT_TABLE_BG20" textAlign="center">
-                <Label>{workerActivityCounts.All.activities.Busy} </Label>
+                <Heading>{workerActivityCounts.All.activities.Busy} </Heading>
               </Td>
               {activityNames.map((activity) => {
                 return (
                   <Td element="COMPACT_TABLE" textAlign="center" key={activity}>
-                    <Label> {workerActivityCounts.All.activities[activity] || 0} </Label>
+                    <Heading> {workerActivityCounts.All.activities[activity] || 0} </Heading>
                   </Td>
                 );
               })}
@@ -122,7 +127,6 @@ const AgentTeamActivityTile = () => {
             })}
           </TBody>
         </Table>
-        <Label>Note: Available = Busy + Idle. Busy = Available with 1+ Tasks. Idle = Available with No Tasks.</Label>
       </Box>
     </TileWrapper>
   );

@@ -54,6 +54,9 @@ export const AgentActivity = styled('div')<ThemeOnlyProps>`
   justify-content: center;
   border-width: 0px;
   border-radius: 12px;
+  height: 24px;
+  min-width: 24px;
+  align-items: center;
 `;
 
 export const Label = styled('div')<ThemeOnlyProps>`
