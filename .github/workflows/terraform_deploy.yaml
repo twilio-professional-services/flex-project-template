@@ -70,25 +70,25 @@ jobs:
         run: |
           for service_folder in */; do \
             if [ -d "$service_folder" ]; then
-              echo "### $service_folder" >> $GITHUB_STEP_SUMMARY; \
+              echo "### :open_file_folder: $service_folder" >> $GITHUB_STEP_SUMMARY; \
               cd $service_folder; \
               yarn; \
               yarn build || echo "- :warning: No build script detected for $service_folder" >> $GITHUB_STEP_SUMMARY; \
             fi; \
           done
       - name: Pull Terraform State
-        id: pull-state
         working-directory: ./infra-as-code/state
+        id: pull-state
         run: |
           ./pull_state.sh
       - name: Import Internal State
+        working-directory: ./infra-as-code/state
         run: |
           ./import_internal_state.sh
-        if: steps.pull-state.outputs.JOB_FAILED == 'true'
-        working-directory: ./infra-as-code/state
+#        if: steps.pull-state.outputs.JOB_FAILED == 'true'
         id: import_internal_state
       - name: Export State
+        working-directory: ./infra-as-code/state
         run: |
           ./push_state.sh
-        working-directory: ./infra-as-code/state
-        if: steps.import_internal_state.outputs.JOB_FAILED == 'false'
+#        if: steps.import_internal_state.outputs.JOB_FAILED == 'false'
