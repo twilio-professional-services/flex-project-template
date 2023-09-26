@@ -47,10 +47,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+
       - name: install Twilio CLI
         run: |
           npm install -g twilio-cli
           twilio plugins:install @twilio-labs/plugin-serverless
+
       - name: Detect serverless projects
         working-directory: ./infra-as-code/util
         run: |
@@ -63,6 +65,7 @@ jobs:
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "### :warning: Missing env vars" >> $GITHUB_STEP_SUMMARY
           grep missing ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
+
       - name: Build serverless projects
         env:
           CI: false
@@ -76,17 +79,25 @@ jobs:
               yarn build || echo "- :warning: No build script detected for $service_folder" >> $GITHUB_STEP_SUMMARY; \
             fi; \
           done
+
       - name: Pull Terraform State
         working-directory: ./infra-as-code/state
         id: pull-state
         run: |
           ./pull_state.sh
+
       - name: Import Internal State
         working-directory: ./infra-as-code/state
         run: |
           ./import_internal_state.sh
-#        if: steps.pull-state.outputs.JOB_FAILED == 'true'
+        if: env.tfstate_bucket == ''
         id: import_internal_state
+
+      - name: Terraform plan
+        working-directory: ./infra-as-code/terraform/environments/default
+        run: |
+          terraform plan
+
       - name: Export State
         working-directory: ./infra-as-code/state
         run: |
