@@ -86,6 +86,11 @@ jobs:
         run: |
           ./pull_state.sh
 
+      - name: Load script variables
+        working-directory: ./infra-as-code/state
+        run: |
+          ./load_tf_vars.sh
+
       - name: Import Internal State
         working-directory: ./infra-as-code/state
         run: |
