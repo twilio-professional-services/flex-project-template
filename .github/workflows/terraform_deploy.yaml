@@ -91,7 +91,7 @@ jobs:
       - name: Import Internal State
         working-directory: ./infra-as-code/state
         run: |
-          terraform init
+          terraform -chdir="../terraform/environments/default" init -input=false
           echo "SKIP_TF_INIT=true" >> $GITHUB_ENV
           ./import_internal_state.sh
         if: env.TFSTATE_BUCKET == ''
@@ -101,7 +101,7 @@ jobs:
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
           if [ $SKIP_TF_INIT -ne true ]; then
-            terraform init
+            terraform -chdir="../terraform/environments/default" init -input=false
           fi
           echo '### Terraform plan' >> $GITHUB_STEP_SUMMARY
           terraform plan -out tf.plan
