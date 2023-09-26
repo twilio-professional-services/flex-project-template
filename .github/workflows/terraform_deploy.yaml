@@ -105,12 +105,13 @@ jobs:
           echo '### Terraform plan' >> $GITHUB_STEP_SUMMARY
           terraform plan -out tf.plan
           echo '```' >> $GITHUB_STEP_SUMMARY 
-          terraform show -no-color tf.plan >> $GITHUB_STEP_SUMMARY 
+          terraform show tf.plan >> $GITHUB_STEP_SUMMARY 
           echo '```' >> $GITHUB_STEP_SUMMARY
           terraform apply -input=false -auto-approve tf.plan
 
       - name: Export State
         working-directory: ./infra-as-code/state
+        if: always()
         run: |
           ./push_state.sh
 #        if: steps.import_internal_state.outputs.JOB_FAILED == 'false'
