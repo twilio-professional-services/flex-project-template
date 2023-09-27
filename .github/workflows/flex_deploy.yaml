@@ -37,6 +37,11 @@ on:
         type: boolean
         default: false
         description: Deploy Terraform?
+      experimental_serverless_deploy:
+        required: false
+        type: boolean
+        default: false
+        description: Deploy serverless projects from services folder?
       initial_release:
         required: true
         type: boolean
@@ -47,11 +52,7 @@ on:
         type: boolean
         default: false
         description: Overwrite config set by Admin UI Panel?
-      experimental_serverless_deploy:
-        required: false
-        type: boolean
-        default: false
-        description: Deploy serverless projects from services/?
+
 
 concurrency:
   group: flex-deploy-${{ inputs.environment || github.event.inputs.environment }}
