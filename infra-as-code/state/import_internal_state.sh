@@ -3,6 +3,7 @@
 set -e
 
 #terraform -chdir="../terraform/environments/default" init -input=false
+workspaces=$(twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
 TF_WORKSPACE_SID=$(get_value_from_json "$workspaces" "friendlyName" "Flex Task Assignment" "sid")
 export TF_WORKSPACE_SID
 
@@ -37,7 +38,6 @@ import_resource() {
 
 importInternalState() {
 	echo " - Discovering and importing existing state for known definitions" >>$GITHUB_STEP_SUMMARY
-	workspaces=$(twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
 	import_resource "$workspaces" "Flex Task Assignment" "module.taskrouter.twilio_taskrouter_workspaces_v1.flex" "friendlyName" false
 	echo "   - :white_check_mark: Task Router - Workspaces" >>$GITHUB_STEP_SUMMARY
 
