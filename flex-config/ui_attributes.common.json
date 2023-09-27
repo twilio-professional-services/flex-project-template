@@ -263,7 +263,7 @@
           },
           "sms": {
             "color": "#59cef8",
-            "capacityDataTile": false,
+            "capacityDataTile": false
           }
         },
         "task_summary": true,
