@@ -252,6 +252,20 @@
       },
       "teams_view_enhancements": {
         "enabled": true,
+        "channels": {
+          "voice": {
+            "color": "#ADD8E6",
+            "capacityDataTile": false
+          },
+          "chat": {
+            "color": "#87CEFA",
+            "capacityDataTile": false
+          },
+          "sms": {
+            "color": "#59cef8",
+            "capacityDataTile": false,
+          }
+        },
         "task_summary": true,
         "team_activity": true,
         "idle_status": { "color": "limegreen", "icon": "AcceptLarge" },

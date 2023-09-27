@@ -1,5 +1,6 @@
 export default interface TeamsViewEnhancementsConfig {
   enabled: boolean;
+  channels: Channels;
   task_summary: boolean;
   team_activity: boolean;
   idle_status: StatusConfig;
@@ -14,6 +15,15 @@ export default interface TeamsViewEnhancementsConfig {
     location: boolean;
     agent_skills: boolean;
   };
+}
+
+export interface Channels {
+  [key: string]: ChannelConfig;
+}
+
+export interface ChannelConfig {
+  color: string;
+  capacityDataTile: boolean;
 }
 
 interface StatusConfig {

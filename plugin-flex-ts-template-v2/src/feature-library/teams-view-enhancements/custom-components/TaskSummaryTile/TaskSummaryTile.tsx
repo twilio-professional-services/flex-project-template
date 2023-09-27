@@ -10,11 +10,7 @@ import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 import { TileWrapper, Channel, Label, Heading } from './TaskSummaryTile.Components';
 import { getTasksByTeamCounts } from '../../utils/WorkerDataUtil';
 import { TaskCounts } from '../../types';
-import {
-  getChannelVoice_Color,
-  getChannelChat_Color,
-  getChannelSMS_Color,
-} from '../../../queues-view-data-tiles/config';
+import { getChannelVoice_Color, getChannelChat_Color, getChannelSMS_Color } from '../../config';
 import { getTeamOptions } from '../../../teams-view-filters/config';
 import { StringTemplates } from '../../flex-hooks/strings';
 
@@ -37,7 +33,7 @@ const TaskSummaryTile = () => {
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center">
                 <Channel bgColor={getChannelVoice_Color()}>
-                  <Tooltip text="Inbound Calls" placement="top">
+                  <Tooltip text={templates[StringTemplates.TeamsViewSummaryInbound]()} placement="top">
                     <Heading>
                       <CallIncomingIcon decorative={true} />
                     </Heading>
@@ -46,7 +42,7 @@ const TaskSummaryTile = () => {
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center">
                 <Channel bgColor={getChannelVoice_Color()}>
-                  <Tooltip text="Outbound Calls" placement="top">
+                  <Tooltip text={templates[StringTemplates.TeamsViewSummaryOutbound]()} placement="top">
                     <Heading>
                       <CallOutgoingIcon decorative={true} />
                     </Heading>

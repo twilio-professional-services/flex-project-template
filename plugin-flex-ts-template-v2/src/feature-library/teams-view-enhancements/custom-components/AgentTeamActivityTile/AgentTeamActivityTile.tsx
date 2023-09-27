@@ -5,11 +5,10 @@ import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definitio
 import AppState from 'types/manager/AppState';
 import { EmojiIcon } from '@twilio-paste/icons/esm/EmojiIcon';
 
-import { getIdleStatusConfig, getBusyStatusConfig } from '../../config';
+import { getAgentActivityConfig, getIdleStatusConfig, getBusyStatusConfig } from '../../config';
 import { TileWrapper, AgentActivity, Label, Heading } from './AgentTeamActivityTile.Components';
 import { getAgentStatusCounts } from '../../utils/WorkerDataUtil';
 import { ActivityCounts } from '../../types';
-import { getAgentActivityConfig } from '../../../queues-view-data-tiles/config';
 import { getTeamOptions } from '../../../teams-view-filters/config';
 import { StringTemplates } from '../../flex-hooks/strings';
 
