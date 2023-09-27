@@ -121,10 +121,10 @@ importInternalState() {
 #export TF_VAR_SERVERLESS_SID TF_VAR_SCHEDULE_MANAGER_SID TF_VAR_SERVERLESS_DOMAIN TF_VAR_SERVERLESS_ENV_SID TF_VAR_SCHEDULE_MANAGER_DOMAIN TF_VAR_SCHEDULE_MANAGER_ENV_SID TF_VAR_FUNCTION_CREATE_CALLBACK TF_VAR_FUNCTION_CHECK_SCHEDULE_SID
 #
 
-twilio api:taskrouter:v1:workspaces:task-queues:create --workspace-sid $TF_WORKSPACE_SID --friendly-name="Everyone"
-twilio api:taskrouter:v1:workspaces:task-queues:create --workspace-sid $TF_WORKSPACE_SID --friendly-name="Template Example Sales"
-twilio api:taskrouter:v1:workspaces:task-queues:create --workspace-sid $TF_WORKSPACE_SID --friendly-name="Template Example Support"
-twilio api:taskrouter:v1:workspaces:task-queues:create --workspace-sid $TF_WORKSPACE_SID --friendly-name="Internal Calls"
+twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Everyone" --workspace-sid $TF_WORKSPACE_SID
+twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Template Example Sales" --workspace-sid $TF_WORKSPACE_SID
+twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Template Example Support" --workspace-sid $TF_WORKSPACE_SID
+twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Internal Calls" --workspace-sid $TF_WORKSPACE_SID
 
 importInternalState
 
