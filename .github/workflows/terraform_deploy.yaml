@@ -101,9 +101,7 @@ jobs:
       - name: Terraform plan & apply
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
-#          if [ $SKIP_TF_INIT != "true" ]; then
           terraform init -input=false
-#          fi
           echo '### Terraform plan' >> $GITHUB_STEP_SUMMARY
           terraform plan -out tf.plan
           echo '```' >> $GITHUB_STEP_SUMMARY 
