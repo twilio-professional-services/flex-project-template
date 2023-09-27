@@ -48,7 +48,7 @@ class ServerlessProject {
     detectFiles(folder, extension = null, serverlessPath = null) {
         const filesList = globSync(path.join(folder, `/**/*${extension ? `.${extension}` : '.*'}`))
             .map((f) => {
-                const filename = f.split('/').at(-1);
+                const filename = f.split(`${folder}/`).at(-1);
                 const functionPath = serverlessPath ? `${serverlessPath}/${filename}` : filename;
                 const content_type = mime.lookup(f.split('.').slice(-1)[0]) || 'text/plain';
 
