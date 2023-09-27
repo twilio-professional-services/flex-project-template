@@ -3,9 +3,7 @@
 set -e
 
 #terraform -chdir="../terraform/environments/default" init -input=false
-workspaces=$(twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
-TF_WORKSPACE_SID=$(get_value_from_json "$workspaces" "friendlyName" "Flex Task Assignment" "sid")
-export TF_WORKSPACE_SID
+
 
 get_value_from_json() {
 	input_json="$1"
@@ -121,6 +119,10 @@ importInternalState() {
 #
 #export TF_VAR_SERVERLESS_SID TF_VAR_SCHEDULE_MANAGER_SID TF_VAR_SERVERLESS_DOMAIN TF_VAR_SERVERLESS_ENV_SID TF_VAR_SCHEDULE_MANAGER_DOMAIN TF_VAR_SCHEDULE_MANAGER_ENV_SID TF_VAR_FUNCTION_CREATE_CALLBACK TF_VAR_FUNCTION_CHECK_SCHEDULE_SID
 #
+workspaces=$(twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
+export workspaces
+TF_WORKSPACE_SID=$(get_value_from_json "$workspaces" "friendlyName" "Flex Task Assignment" "sid")
+export TF_WORKSPACE_SID
 
 twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Everyone" --workspace-sid $TF_WORKSPACE_SID
 twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Template Example Sales" --workspace-sid $TF_WORKSPACE_SID
