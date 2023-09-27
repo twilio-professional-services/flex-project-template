@@ -43,7 +43,6 @@ class ServerlessProject {
     constructor({projectRoot}) {
         this.projectRoot = projectRoot;
         this.functionsFolder = 'functions';
-        this.assetsFolder = 'build';
     }
 
     detectFiles(folder, extension = null, serverlessPath = null) {
@@ -66,6 +65,19 @@ class ServerlessProject {
 
     get functions() {
         return this.detectFiles(path.join(this.projectRoot, this.functionsFolder), 'js');
+    }
+
+    get assetsFolder() {
+        const regex = /(?:\n\t)(?:\s*)(?:\/\/){0,0}("assetsFolder"):(.*)(\/\* .*)/g;
+        try {
+            const serverlessrc = fs.readFileSync(path.join(this.projectRoot, '.twilioserverlessrc')).toString();
+            const [ [_, __, assetsFolder] ] = [...serverlessrc.matchAll(regex)];
+
+            const parsedAssetsFolder = JSON.parse(assetsFolder.replace(',', '').replace('\t', '').replace('\n', '').replaceAll(' ', ''));
+            return parsedAssetsFolder || 'assets';
+        } catch (err) {
+            return 'assets';
+        }
     }
 
     get assets() {
