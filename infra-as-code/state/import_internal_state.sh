@@ -120,6 +120,12 @@ importInternalState() {
 #
 #export TF_VAR_SERVERLESS_SID TF_VAR_SCHEDULE_MANAGER_SID TF_VAR_SERVERLESS_DOMAIN TF_VAR_SERVERLESS_ENV_SID TF_VAR_SCHEDULE_MANAGER_DOMAIN TF_VAR_SCHEDULE_MANAGER_ENV_SID TF_VAR_FUNCTION_CREATE_CALLBACK TF_VAR_FUNCTION_CHECK_SCHEDULE_SID
 #
+
+twilio api:taskrouter:v1:workspaces:task-queues:create --workspace-sid $TF_WORKSPACE_SID --friendlyName "Everyone"
+twilio api:taskrouter:v1:workspaces:task-queues:create --workspace-sid $TF_WORKSPACE_SID --friendlyName "Template Example Sales"
+twilio api:taskrouter:v1:workspaces:task-queues:create --workspace-sid $TF_WORKSPACE_SID --friendlyName "Template Example Support"
+twilio api:taskrouter:v1:workspaces:task-queues:create --workspace-sid $TF_WORKSPACE_SID --friendlyName "Internal Calls"
+
 importInternalState
 
 #terraform -chdir="../terraform/environments/default" apply -input=false -auto-approve
