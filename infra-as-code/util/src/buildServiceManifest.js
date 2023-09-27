@@ -81,7 +81,7 @@ class ServerlessProject {
     }
 
     get assets() {
-        return this.detectFiles(path.join(this.projectRoot, this.assetsFolder), null, 'static');
+        return this.detectFiles(path.join(this.projectRoot, this.assetsFolder));
     }
 
     get env() {
