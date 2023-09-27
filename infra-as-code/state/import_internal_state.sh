@@ -47,12 +47,12 @@ importInternalState() {
 	import_resource "$workflows" "Internal Call" "module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.internal_call" "friendlyName"
 	echo "   - :white_check_mark: Task Router - Workflows" >>$GITHUB_STEP_SUMMARY
 
-#	queues=$(twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
-#	import_resource "$queues" "Everyone" "module.taskrouter.twilio_taskrouter_task_queue.everyone" "friendlyName"
-#	import_resource "$queues" "Template Example Sales" "module.taskrouter.twilio_taskrouter_task_queue.template_example_sales" "friendlyName"
-#	import_resource "$queues" "Template Example Support" "module.taskrouter.twilio_taskrouter_task_queue.template_example_support" "friendlyName"
-#	import_resource "$queues" "Internal Calls" "module.taskrouter.twilio_taskrouter_task_queue.internal_calls" "friendlyName"
-#	echo "   - :white_check_mark: Task Router - Queues" >>$GITHUB_STEP_SUMMARY
+	queues=$(twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
+	import_resource "$queues" "Everyone" "module.taskrouter.twilio_taskrouter_task_queue.everyone" "friendlyName"
+	import_resource "$queues" "Template Example Sales" "module.taskrouter.twilio_taskrouter_task_queue.template_example_sales" "friendlyName"
+	import_resource "$queues" "Template Example Support" "module.taskrouter.twilio_taskrouter_task_queue.template_example_support" "friendlyName"
+	import_resource "$queues" "Internal Calls" "module.taskrouter.twilio_taskrouter_task_queue.internal_calls" "friendlyName"
+	echo "   - :white_check_mark: Task Router - Queues" >>$GITHUB_STEP_SUMMARY
 
 	channels=$(twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 	import_resource "$channels" "voice" "module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.voice" "uniqueName"
