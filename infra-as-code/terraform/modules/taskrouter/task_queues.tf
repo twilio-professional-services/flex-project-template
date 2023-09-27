@@ -4,8 +4,8 @@ resource "twilio_taskrouter_workspaces_task_queues_v1" "everyone" {
   target_workers = "1==1"
   max_reserved_workers = 1
   task_order = "FIFO"
-  reservation_activity_sid = twilio_taskrouter_workspaces_activities_v1.available
-  assignment_activity_sid = twilio_taskrouter_workspaces_activities_v1.on_a_task
+  reservation_activity_sid = twilio_taskrouter_workspaces_activities_v1.available.sid
+  assignment_activity_sid = twilio_taskrouter_workspaces_activities_v1.on_a_task.sid
 }
 
 resource "twilio_taskrouter_workspaces_task_queues_v1" "template_example_sales" {
@@ -14,8 +14,8 @@ resource "twilio_taskrouter_workspaces_task_queues_v1" "template_example_sales" 
   target_workers = "routing.skills HAS 'template_example_sales'"
   max_reserved_workers = 1
   task_order = "FIFO"
-  reservation_activity_sid = twilio_taskrouter_workspaces_activities_v1.available
-  assignment_activity_sid = twilio_taskrouter_workspaces_activities_v1.on_a_task
+  reservation_activity_sid = twilio_taskrouter_workspaces_activities_v1.available.sid
+  assignment_activity_sid = twilio_taskrouter_workspaces_activities_v1.on_a_task.sid
 }
 
 resource "twilio_taskrouter_workspaces_task_queues_v1" "template_example_support" {
@@ -24,8 +24,8 @@ resource "twilio_taskrouter_workspaces_task_queues_v1" "template_example_support
   target_workers = "routing.skills HAS 'template_example_support'"
   max_reserved_workers = 1
   task_order = "FIFO"
-  reservation_activity_sid = twilio_taskrouter_workspaces_activities_v1.available
-  assignment_activity_sid = twilio_taskrouter_workspaces_activities_v1.on_a_task
+  reservation_activity_sid = twilio_taskrouter_workspaces_activities_v1.available.sid
+  assignment_activity_sid = twilio_taskrouter_workspaces_activities_v1.on_a_task.sid
 }
 
 resource "twilio_taskrouter_workspaces_task_queues_v1" "internal_calls" {
@@ -34,6 +34,6 @@ resource "twilio_taskrouter_workspaces_task_queues_v1" "internal_calls" {
   target_workers = "1==1"
   max_reserved_workers = 1
   task_order = "FIFO"
-  reservation_activity_sid = twilio_taskrouter_workspaces_activities_v1.available
-  assignment_activity_sid = twilio_taskrouter_workspaces_activities_v1.on_a_task
+  reservation_activity_sid = twilio_taskrouter_workspaces_activities_v1.available.sid
+  assignment_activity_sid = twilio_taskrouter_workspaces_activities_v1.on_a_task.sid
 }
