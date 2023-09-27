@@ -124,11 +124,11 @@ export workspaces
 TF_WORKSPACE_SID=$(get_value_from_json "$workspaces" "friendlyName" "Flex Task Assignment" "sid")
 export TF_WORKSPACE_SID
 
-twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Everyone" --workspace-sid $TF_WORKSPACE_SID
-twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Template Example Sales" --workspace-sid $TF_WORKSPACE_SID
-twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Template Example Support" --workspace-sid $TF_WORKSPACE_SID
-twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Internal Calls" --workspace-sid $TF_WORKSPACE_SID
-
+#twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Everyone" --workspace-sid $TF_WORKSPACE_SID
+#twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Template Example Sales" --workspace-sid $TF_WORKSPACE_SID
+#twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Template Example Support" --workspace-sid $TF_WORKSPACE_SID
+#twilio api:taskrouter:v1:workspaces:task-queues:create --friendly-name "Internal Calls" --workspace-sid $TF_WORKSPACE_SID
+#
 importInternalState
 
 #terraform -chdir="../terraform/environments/default" apply -input=false -auto-approve
