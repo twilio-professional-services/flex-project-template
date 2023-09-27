@@ -37,6 +37,7 @@ jobs:
       TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       ENVIRONMENT: ${{ inputs.environment }}
+      TF_VAR_SERVERLESS_DEPLOY: ${{ inputs.experimental_serverless_deploy }}
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2

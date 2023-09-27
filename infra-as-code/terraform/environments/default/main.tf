@@ -46,6 +46,6 @@ locals {
 module "serverless_services" {
   source = "../../modules/serverless-services"
 
-  count = length(local.services_manifest)
+  count = var.SERVERLESS_DEPLOY ? length(local.services_manifest) : 0
   service_manifest = local.services_manifest[count.index]
 }

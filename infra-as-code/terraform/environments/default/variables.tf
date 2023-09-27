@@ -102,3 +102,8 @@ variable "SERVERLESS_MANIFEST" {
   description = "Path for Twilio Serverless services manifest"
 }
 
+variable "SERVERLESS_DEPLOY" {
+  type = bool
+  default = false
+}
+
