@@ -32,7 +32,7 @@ async function main(args = argv) {
 
         fs.writeFileSync(
             path.join(outDir || process.cwd(), 'services-manifest.yaml'),
-            YAML.stringify(manifests)
+            manifests.length ? YAML.stringify(manifests) : ''
         );
     } catch (err) {
         console.error(err);
