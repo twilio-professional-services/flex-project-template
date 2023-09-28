@@ -56,9 +56,9 @@
       },
       "enhanced_crm_container": {
         "enabled": true,
-        "url": "https://www.bing.com/search?q={{task.from}}",
+        "url": "{{serverless.url}}/features/enhanced-crm-container/index.html?line1={{task.from}}&line2={{task.direction}}",
         "should_display_url_when_no_tasks": false,
-        "display_url_when_no_tasks": "https://www.bing.com"
+        "display_url_when_no_tasks": "{{serverless.url}}/features/enhanced-crm-container/index.html"
       },
       "internal_call": {
         "enabled": true

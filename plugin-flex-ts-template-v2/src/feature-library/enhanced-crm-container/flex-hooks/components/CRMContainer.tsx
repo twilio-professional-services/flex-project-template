@@ -4,6 +4,7 @@ import { displayUrlWhenNoTasks, shouldDisplayUrlWhenNoTasks } from '../../config
 import IFrameCRMContainer from '../../custom-components/IFrameCRMContainer';
 import { FlexComponent } from '../../../../types/feature-loader';
 import { frameStyle } from '../../custom-components/IFrameCRMContainer/IFrameWrapper/IFrameWrapperStyles';
+import { replaceStringAttributes } from '../../utils/helpers';
 
 export const componentName = FlexComponent.CRMContainer;
 export const componentHook = function replaceAndSetCustomCRMContainer(flex: typeof Flex, _manager: Flex.Manager) {
@@ -15,7 +16,11 @@ export const componentHook = function replaceAndSetCustomCRMContainer(flex: type
   });
 
   flex.CRMContainer.Content.replace(
-    <iframe key="custom-crm-container" src={displayUrlWhenNoTasks()} style={frameStyle} />,
+    <iframe
+      key="custom-crm-container"
+      src={replaceStringAttributes(displayUrlWhenNoTasks(), undefined)}
+      style={frameStyle}
+    />,
     {
       sortOrder: 1,
       if: (props) => {
