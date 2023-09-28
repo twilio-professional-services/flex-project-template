@@ -186,3 +186,8 @@ terraform.rc
 .env.*
 !.env.example
 /services/services-manifest.yaml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/.gitignore
+/.idea/lvaladares-flex-project-template.iml
+/.idea/modules.xml
+/.idea/vcs.xml
