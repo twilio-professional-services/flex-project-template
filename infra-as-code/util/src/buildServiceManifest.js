@@ -68,6 +68,8 @@ class ServerlessProject {
     }
 
     get assetsFolder() {
+        // getting the assetsFolder field from .twilioserverlessrc the stupid way because the json has comments
+        // and other special chars that break deserialization.
         const regex = /(?:\n\t)(?:\s*)(?:\/\/){0,0}("assetsFolder"):(.*)(\/\* .*)/g;
         try {
             const serverlessrc = fs.readFileSync(path.join(this.projectRoot, '.twilioserverlessrc')).toString();

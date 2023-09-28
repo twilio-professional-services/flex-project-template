@@ -62,6 +62,7 @@ jobs:
           CI: false
         working-directory: ./services
         run: |
+          echo "## Services" >> $GITHUB_STEP_SUMMARY
           SERVICE_FOLDERS=`ls -d */ | xargs -I{} echo $(pwd)/{}`
           for service_folder in $SERVICE_FOLDERS; do \
             if [ -d "$service_folder" ]; then
@@ -77,7 +78,6 @@ jobs:
         run: |
           npm i
           npm run buildServiceManifest -- --servicesRoot=../../services
-          echo "## Services" >> $GITHUB_STEP_SUMMARY
           echo "### Services Manifest" >> $GITHUB_STEP_SUMMARY 
           echo '```yaml' >> $GITHUB_STEP_SUMMARY
           cat ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
