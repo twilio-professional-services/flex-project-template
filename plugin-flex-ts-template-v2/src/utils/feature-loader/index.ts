@@ -16,10 +16,13 @@ import * as Strings from './strings';
 import * as TeamsFilters from './teams-filters';
 import * as SyncClientTokenUpdated from '../sdk-clients/sync/tokenUpdated';
 import * as TaskRouterReplaceCompleteTask from '../serverless/TaskRouter/CompleteTask';
+import * as Logger from './logger';
 // @ts-ignore
 import features from '../../feature-library/*';
 
 export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
+  Logger.init();
+
   if (typeof features === 'undefined') {
     // no features discovered; abort
     return;
@@ -42,6 +45,8 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
       console.error('Error loading feature:', error);
     }
   }
+
+  Logger.processHooks();
 
   // Register built-in hooks
   Actions.addHook(flex, manager, 'built-in TaskRouterService', TaskRouterReplaceCompleteTask);
@@ -92,6 +97,10 @@ export const loadFeature = (flex: typeof Flex, manager: Flex.Manager, feature: F
 
     if (hook.jsClientHook) {
       JsClientEvents.addHook(flex, manager, name, hook);
+    }
+
+    if (hook.loggerHook) {
+      Logger.addHook(name, hook);
     }
 
     if (hook.notificationHook) {
