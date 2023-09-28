@@ -103,7 +103,7 @@ jobs:
       - name: Terraform plan & apply
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
-          if [ $SKIP_TF_INIT != "true" ]; then
+          if [ $SKIP_TF_INIT == true ]; then
             terraform init -input=false
           fi
           terraform plan -out tf.plan
