@@ -1,13 +1,14 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Twilio Flex CRM Container Demo</title>
     <link rel="stylesheet" href="https://assets.twilio.com/public_assets/paste-fonts/1.5.1/fonts.css" />
-    <style>
+    <style type="text/css">
       body {
         background-color: #f4f4f6;
         color: #121c2d;
-        font-family: 'TwilioSansText';
-        height: 100%;
+        font-family: 'TwilioSansText', -apple-system, BlinkMacSystemFont, segoe ui, sans-serif;
+        height: 100vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -28,17 +29,17 @@
         margin: 10px;
       }
     </style>
-  </head>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const params = new URLSearchParams(window.location.search);
-      const line1 = params.get('line1');
-      const line2 = params.get('line2');
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const line1 = params.get('line1');
+        const line2 = params.get('line2');
 
-      document.querySelector('#line1').innerText = decodeURI(line1 ?? 'No task selected');
-      document.querySelector('#line2').innerText = decodeURI(line2 ?? '');
-    });
-  </script>
+        document.querySelector('#line1').innerText = decodeURI(line1 ?? 'No task selected');
+        document.querySelector('#line2').innerText = decodeURI(line2 ?? '');
+      });
+    </script>
+  </head>
   <body>
     <div id="text-container">
       <h1 id="line1"></h1>

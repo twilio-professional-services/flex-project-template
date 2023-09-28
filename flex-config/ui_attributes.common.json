@@ -57,7 +57,7 @@
       "enhanced_crm_container": {
         "enabled": true,
         "url": "{{serverless.url}}/features/enhanced-crm-container/index.html?line1={{task.from}}&line2={{task.direction}}",
-        "should_display_url_when_no_tasks": false,
+        "should_display_url_when_no_tasks": true,
         "display_url_when_no_tasks": "{{serverless.url}}/features/enhanced-crm-container/index.html"
       },
       "internal_call": {
