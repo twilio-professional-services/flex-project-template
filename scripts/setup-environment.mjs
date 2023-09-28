@@ -70,11 +70,14 @@ const execute = async () => {
     allReplacements = { ...allReplacements, ...environmentData };
   }
   
-  if (environment && packages.includes(constants.flexConfigDir)) {
-    // When running for a specific environment, we need to populate flex-config
-    const configFile = `./${constants.flexConfigDir}/ui_attributes.${environment}.json`;
+  if (packages.includes(constants.flexConfigDir)) {
+    // We also need to populate flex-config
+    let configEnv = environment;
+    if (!environment) configEnv = 'local';
+    
+    const configFile = `./${constants.flexConfigDir}/ui_attributes.${configEnv}.json`;
     const exampleFile = `./${constants.flexConfigDir}/ui_attributes.example.json`;
-    let configData = await fillReplacements(configFile, exampleFile, account, environment);
+    let configData = await fillReplacements(configFile, exampleFile, account, configEnv);
     allReplacements = { ...allReplacements, ...configData };
   } else if (!environment) {
     // When running locally, we need to generate appConfig.js

@@ -60,7 +60,7 @@ const fillUnknownEnvVars = (envVars, environment) => {
       continue;
     }
     
-    if (!environment && varNameMapping[key].localValue) {
+    if ((!environment || environment === 'local') && varNameMapping[key].localValue) {
       // Running locally, use the local value if specified
       envVars[key] = varNameMapping[key].localValue;
       continue;
