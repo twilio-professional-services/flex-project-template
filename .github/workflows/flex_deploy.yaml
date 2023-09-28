@@ -9,6 +9,9 @@ on:
       environment:
         required: true
         type: string
+      auto_serverless_deploy:
+        required: false
+        type: boolean
       deploy_terraform:
         required: true
         type: boolean
@@ -37,7 +40,7 @@ on:
         type: boolean
         default: false
         description: Deploy Terraform?
-      experimental_serverless_deploy:
+      auto_serverless_deploy:
         required: false
         type: boolean
         default: false

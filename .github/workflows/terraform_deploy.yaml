@@ -37,7 +37,7 @@ jobs:
       TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       ENVIRONMENT: ${{ inputs.environment }}
-      TF_VAR_SERVERLESS_DEPLOY: ${{ inputs.experimental_serverless_deploy }}
+      TF_VAR_SERVERLESS_DEPLOY: ${{ inputs.auto_serverless_deploy }}
       SKIP_TF_INIT: false
     steps:
       - uses: actions/checkout@v3
@@ -92,9 +92,8 @@ jobs:
           [ -s ../../services/services-manifest.yaml ]  || \
             export TF_VAR_SERVERLESS_DEPLOY=false && \
             echo "TF_VAR_SERVERLESS_DEPLOY=$TF_VAR_SERVERLESS_DEPLOY" >> "$GITHUB_ENV" && \
-            echo "- Skipping serverless deploy: No services detected" >> $GITHUB_STEP_SUMMARY 
+            echo "- :warning: Skipping auto serverless deploy: No services detected" >> $GITHUB_STEP_SUMMARY 
           ./load_tf_vars.sh
-          export 
 
       - name: Import Internal State
         working-directory: ./infra-as-code/state
