@@ -70,7 +70,8 @@ The Chat & SMS Channel Capacity data tiles should only be enabled if the worker 
         "team": true,
         "department": false,
         "location": false,
-        "agent_skills": true
+        "agent_skills": true,
+        "capacity": false
       }
     }
 ```

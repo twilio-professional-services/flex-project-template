@@ -278,7 +278,8 @@
           "team": true,
           "department": false,
           "location": false,
-          "agent_skills": true
+          "agent_skills": true,
+          "capacity": false
         }
       },
       "send_audio_rec_file": {

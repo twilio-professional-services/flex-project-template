@@ -32,6 +32,7 @@ const {
   department = false,
   location = false,
   agent_skills = true,
+  capacity = false,
 } = getFeatureFlags().features?.teams_view_enhancements?.columns || {};
 
 const defaultActivities = {
@@ -89,6 +90,9 @@ export const isLocationColumnEnabled = () => {
 };
 export const isAgentSkillsColumnEnabled = () => {
   return enabled && agent_skills;
+};
+export const isAgentCapacityColumnEnabled = () => {
+  return enabled && capacity;
 };
 export const isHTHighlightEnabled = () => {
   return enabled && highlight_handle_time;
