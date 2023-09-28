@@ -82,8 +82,8 @@ jobs:
           echo '```yaml' >> $GITHUB_STEP_SUMMARY
           cat ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
-#          echo "### :warning: Missing env vars" >> $GITHUB_STEP_SUMMARY
-#          grep missing ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
+          echo "### :warning: Missing env vars" >> $GITHUB_STEP_SUMMARY
+          grep missing ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
 
       - name: Load script variables
         working-directory: ./infra-as-code/state
@@ -103,7 +103,6 @@ jobs:
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
           terraform init -input=false
-#          echo '### Terraform plan' >> $GITHUB_STEP_SUMMARY
           terraform plan -out tf.plan
           terraform apply -input=false -auto-approve tf.plan
 
@@ -112,4 +111,3 @@ jobs:
         if: always()
         run: |
           ./push_state.sh
-#        if: steps.import_internal_state.outputs.JOB_FAILED == 'false'
