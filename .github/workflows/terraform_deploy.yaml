@@ -80,9 +80,11 @@ jobs:
           npm run buildServiceManifest -- --servicesRoot=../../services
           echo "### Services Manifest" >> $GITHUB_STEP_SUMMARY
           echo '```yaml' >> $GITHUB_STEP_SUMMARY
-          cat ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY || echo "error" >> $GITHUB_STEP_SUMMARY
+          cat ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "### :warning: Missing env vars" >> $GITHUB_STEP_SUMMARY
+          cat ../../services/services-manifest.yaml | grep missing >> $GITHUB_STEP_SUMMARY || echo "error" >> $GITHUB_STEP_SUMMARY
+          
 
       - name: Load script variables
         working-directory: ./infra-as-code/state
