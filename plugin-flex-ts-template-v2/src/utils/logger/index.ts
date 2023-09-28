@@ -8,33 +8,37 @@ class Logger {
   meta: any = {};
 
   async log(message: string, context = {}): Promise<void> {
-    this.logMessage('log', message, context);
+    return this.logMessage('log', message, context);
   }
 
   async debug(message: string, context = {}): Promise<void> {
-    this.logMessage('debug', message, context);
+    return this.logMessage('debug', message, context);
   }
 
   async warn(message: string, context = {}): Promise<void> {
-    this.logMessage('warn', message, context);
+    return this.logMessage('warn', message, context);
   }
 
   async info(message: string, context = {}): Promise<void> {
-    this.logMessage('info', message, context);
+    return this.logMessage('info', message, context);
   }
 
   async error(message: string, context = {}): Promise<void> {
-    this.logMessage('error', message, context);
+    return this.logMessage('error', message, context);
   }
 
   async logMessage(level: LogLevel, message: string, context = {}): Promise<void> {
-    if (!this.destinations.length) {
-      console.warn('logger.logMessage called - but no destinations are yet configured', { level, message, context });
-      return;
-    }
+    return new Promise(async (resolve) => {
+      if (!this.destinations.length) {
+        console.warn('logger.logMessage called - but no destinations are yet configured', { level, message, context });
+        return resolve();
+      }
 
-    this.destinations.forEach((dest) => {
-      dest.log(level, message, context, this.meta);
+      for (const dest of this.destinations) {
+        await dest.log(level, message, context, this.meta);
+      }
+
+      return resolve();
     });
   }
 

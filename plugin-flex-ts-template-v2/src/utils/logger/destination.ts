@@ -20,14 +20,19 @@ export default abstract class Destination {
   }
 
   async log(level: LogLevel, message: string, context: any, meta: any): Promise<void> {
-    // numeric level of current log passing through
-    const levelOfCurrentLog = logLevelMap[level];
-    // minimum configured log level
-    const minimum = logLevelMap[this.minLogLevel];
+    return new Promise(async (resolve) => {
+      // numeric level of current log passing through
+      const levelOfCurrentLog = logLevelMap[level];
+      // minimum configured log level
+      const minimum = logLevelMap[this.minLogLevel];
 
-    if (levelOfCurrentLog >= minimum) {
-      this.handle(level, message, context, meta);
-    }
+      if (levelOfCurrentLog >= minimum) {
+        await this.handle(level, message, context, meta);
+        return resolve();
+      }
+
+      return resolve();
+    });
   }
 
   abstract handle(level: LogLevel, message: string, context: any, meta: any): Promise<void>;
