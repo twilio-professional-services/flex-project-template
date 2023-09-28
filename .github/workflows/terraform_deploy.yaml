@@ -83,12 +83,12 @@ jobs:
           cat ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
           echo '```' >> $GITHUB_STEP_SUMMARY
           echo "### :warning: Missing env vars" >> $GITHUB_STEP_SUMMARY
-          cat ../../services/services-manifest.yaml | grep missing >> $GITHUB_STEP_SUMMARY || echo "error" >> $GITHUB_STEP_SUMMARY
-          
+          cat ../../services/services-manifest.yaml | grep missing >> $GITHUB_STEP_SUMMARY || echo "- No vars detected" >> $GITHUB_STEP_SUMMARY
 
       - name: Load script variables
         working-directory: ./infra-as-code/state
         run: |
+          [ -s ../../services/services-manifest.yaml ] || echo "TF_VAR_SERVERLESS_DEPLOY=false" >> "$GITHUB_ENV" && echo "- Skipping serverless deploy: No services detected" >> $GITHUB_STEP_SUMMARY 
           ./load_tf_vars.sh
 
       - name: Import Internal State
@@ -103,7 +103,9 @@ jobs:
       - name: Terraform plan & apply
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
-          terraform init -input=false
+          if [ $SKIP_TF_INIT != "true" ]; then
+            terraform init -input=false
+          fi
           terraform plan -out tf.plan
           terraform apply -input=false -auto-approve tf.plan
 
