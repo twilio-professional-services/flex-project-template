@@ -38,6 +38,7 @@ jobs:
       TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       ENVIRONMENT: ${{ inputs.environment }}
       TF_VAR_SERVERLESS_DEPLOY: ${{ inputs.experimental_serverless_deploy }}
+      SKIP_TF_INIT: false
     steps:
       - uses: actions/checkout@v3
       - uses: hashicorp/setup-terraform@v2
@@ -90,16 +91,17 @@ jobs:
         run: |
           [ -s ../../services/services-manifest.yaml ]  || \
             export TF_VAR_SERVERLESS_DEPLOY=false && \
-            echo "TF_VAR_SERVERLESS_DEPLOY=${TF_VAR_SERVERLESS_DEPLOY}" >> "$GITHUB_ENV" && \
+            echo "TF_VAR_SERVERLESS_DEPLOY=$TF_VAR_SERVERLESS_DEPLOY" >> "$GITHUB_ENV" && \
             echo "- Skipping serverless deploy: No services detected" >> $GITHUB_STEP_SUMMARY 
           ./load_tf_vars.sh
+          export 
 
       - name: Import Internal State
         working-directory: ./infra-as-code/state
         run: |
           terraform -chdir="../terraform/environments/default" init -input=false
           export SKIP_TF_INIT=true
-          echo "SKIP_TF_INIT=${SKIP_TF_INIT}" >> $GITHUB_ENV
+          echo "SKIP_TF_INIT=$SKIP_TF_INIT" >> $GITHUB_ENV
           echo $SKIP_TF_INIT
           ./import_internal_state.sh
         if: env.TFSTATE_BUCKET == ''
@@ -109,7 +111,7 @@ jobs:
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
           echo $SKIP_TF_INIT
-          if [ $SKIP_TF_INIT != true ]; then
+          if [ $SKIP_TF_INIT ]; then
             terraform init -input=false
           fi
           terraform plan -out tf.plan
