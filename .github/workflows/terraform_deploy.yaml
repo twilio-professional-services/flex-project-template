@@ -103,11 +103,8 @@ jobs:
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
           terraform init -input=false
-          echo '### Terraform plan' >> $GITHUB_STEP_SUMMARY
+#          echo '### Terraform plan' >> $GITHUB_STEP_SUMMARY
           terraform plan -out tf.plan
-          echo '```' >> $GITHUB_STEP_SUMMARY 
-          terraform show -no-color tf.plan >> $GITHUB_STEP_SUMMARY 
-          echo '```' >> $GITHUB_STEP_SUMMARY
           terraform apply -input=false -auto-approve tf.plan
 
       - name: Export State
