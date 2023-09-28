@@ -4,10 +4,6 @@ terraform {
       source  = "twilio/twilio"
       version = ">=0.4.0"
     }
-    twilio2 = {
-      source  = "RJPearson94/twilio"
-      version = "0.23.0"
-    }
   }
 }
 
