@@ -78,9 +78,9 @@ jobs:
         run: |
           npm i
           npm run buildServiceManifest -- --servicesRoot=../../services
-#          echo "### Services Manifest" >> $GITHUB_STEP_SUMMARY
-#          echo '```yaml' >> $GITHUB_STEP_SUMMARY
-#          cat ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
+          echo "### Services Manifest" >> $GITHUB_STEP_SUMMARY
+          echo '```yaml' >> $GITHUB_STEP_SUMMARY
+          cat ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
 #          echo '```' >> $GITHUB_STEP_SUMMARY
 #          echo "### :warning: Missing env vars" >> $GITHUB_STEP_SUMMARY
 #          grep missing ../../services/services-manifest.yaml >> $GITHUB_STEP_SUMMARY
