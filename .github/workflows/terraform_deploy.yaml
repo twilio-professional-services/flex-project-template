@@ -88,14 +88,17 @@ jobs:
       - name: Load script variables
         working-directory: ./infra-as-code/state
         run: |
-          [ -s ../../services/services-manifest.yaml ] || echo "TF_VAR_SERVERLESS_DEPLOY=false" >> "$GITHUB_ENV" && echo "- Skipping serverless deploy: No services detected" >> $GITHUB_STEP_SUMMARY 
+          [ -s ../../services/services-manifest.yaml ]  || \
+            export TF_VAR_SERVERLESS_DEPLOY=false && \
+            echo "TF_VAR_SERVERLESS_DEPLOY=${TF_VAR_SERVERLESS_DEPLOY}" >> "$GITHUB_ENV" && \
+            echo "- Skipping serverless deploy: No services detected" >> $GITHUB_STEP_SUMMARY 
           ./load_tf_vars.sh
 
       - name: Import Internal State
         working-directory: ./infra-as-code/state
         run: |
           terraform -chdir="../terraform/environments/default" init -input=false
-          SKIP_TF_INIT=true
+          export SKIP_TF_INIT=true
           echo "SKIP_TF_INIT=${SKIP_TF_INIT}" >> $GITHUB_ENV
           echo $SKIP_TF_INIT
           ./import_internal_state.sh
@@ -105,7 +108,7 @@ jobs:
       - name: Terraform plan & apply
         working-directory: ./infra-as-code/terraform/environments/default
         run: |
-          SKIP_TF_INIT
+          echo $SKIP_TF_INIT
           if [ $SKIP_TF_INIT != true ]; then
             terraform init -input=false
           fi
