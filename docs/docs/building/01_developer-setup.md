@@ -23,22 +23,32 @@ You may also see ESLint errors and warnings from the command line, rather than f
 
 ## Serverless debugging
 
-When running the plugin locally, this template has been set up to pair the plugin with the serverless functions also running locally on localhost:3001. The serverless functions can be debugged by attaching your debugger to the node instance. The following is a sample entry for `.vscode/launch.json` to connect vscode for debugging:
+When running the plugin locally, this template has been set up to pair the plugin with the serverless functions also running locally on localhost:3001. The serverless functions can be debugged by attaching your debugger to the node instance.
 
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
+### Debugging with VSCode
+
+Follow these steps to set up VSCode for serverless debugging:
+
+1. In the root directory of the repository, create a `.vscode/launch.json` file with the following contents:
+    ```json title=".vscode/launch.json"
     {
-      "address": "localhost",
-      "localRoot": "${workspaceFolder}/serverless-functions",
-      "name": "Attach To Serverless Remote",
-      "port": 9229,
-      "remoteRoot": "${workspaceFolder}/serverless-functions",
-      "request": "attach",
-      "skipFiles": ["<node_internals>/**"],
-      "type": "node"
+      "version": "0.2.0",
+      "configurations": [
+        {
+          "address": "localhost",
+          "localRoot": "${workspaceFolder}/serverless-functions",
+          "name": "Attach to Serverless Remote",
+          "port": 9229,
+          "remoteRoot": "${workspaceFolder}/serverless-functions",
+          "request": "attach",
+          "skipFiles": ["<node_internals>/**"],
+          "type": "node"
+        }
+      ]
     }
-  ]
-}
-```
+    ```
+1. At the bottom of the VSCode interface, ensure "Auto Attach" is set to "With Flag"
+1. Set your breakpoint(s)
+1. Start the template using `npm start`
+1. Once the template is running, open the "Run and Debug" sidebar in VSCode and click the "play" button for "Attach to Serverless Remote"
+1. That's all, you may now trigger your breakpoints!
