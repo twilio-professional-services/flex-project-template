@@ -19,12 +19,7 @@ export default interface TeamsViewEnhancementsConfig {
 }
 
 export interface Channels {
-  [key: string]: ChannelConfig;
-}
-
-export interface ChannelConfig {
-  color: string;
-  capacityDataTile: boolean;
+  [key: string]: { color: string };
 }
 
 interface StatusConfig {

@@ -6,15 +6,12 @@ const {
   channels = {
     voice: {
       color: '#ADD8E6',
-      capacityDataTile: false,
     },
     chat: {
       color: '#87CEFA',
-      capacityDataTile: false,
     },
     sms: {
       color: '#59cef8',
-      capacityDataTile: false,
     },
   },
   task_summary = true,
@@ -32,7 +29,6 @@ const {
   department = false,
   location = false,
   agent_skills = true,
-  capacity = false,
 } = getFeatureFlags().features?.teams_view_enhancements?.columns || {};
 
 const defaultActivities = {
@@ -61,11 +57,16 @@ export const getChannelChat_Color = () => {
 export const getChannelSMS_Color = () => {
   return channels.sms.color;
 };
-export const isChannelChat_CapacityEnabled = () => {
-  return channels.chat.capacityDataTile;
+export const getChannelColors = () => {
+  const channelNames = Object.keys(channels);
+  const colors: { [key: string]: string } = {};
+  channelNames.forEach((ch) => {
+    colors[ch] = channels[ch].color;
+  });
+  return colors;
 };
-export const isChannelSMS_CapacityEnabled = () => {
-  return channels.sms.capacityDataTile;
+export const getChannelNames = () => {
+  return Object.keys(channels);
 };
 export const isTaskSummaryEnabled = () => {
   return task_summary;
@@ -90,9 +91,6 @@ export const isLocationColumnEnabled = () => {
 };
 export const isAgentSkillsColumnEnabled = () => {
   return enabled && agent_skills;
-};
-export const isAgentCapacityColumnEnabled = () => {
-  return enabled && capacity;
 };
 export const isHTHighlightEnabled = () => {
   return enabled && highlight_handle_time;

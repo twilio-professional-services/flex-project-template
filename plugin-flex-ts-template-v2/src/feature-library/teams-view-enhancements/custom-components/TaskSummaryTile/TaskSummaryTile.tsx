@@ -32,7 +32,9 @@ const TaskSummaryTile = () => {
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center">
                 <Tooltip text={templates[StringTemplates.TeamsViewSummaryTotalTasks]()} placement="top">
-                  <Heading>&sum;</Heading>
+                  <Heading>
+                    <Icon icon="GenericTask" />
+                  </Heading>
                 </Tooltip>
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center">

@@ -254,16 +254,13 @@
         "enabled": true,
         "channels": {
           "voice": {
-            "color": "#ADD8E6",
-            "capacityDataTile": false
+            "color": "#ADD8E6"
           },
           "chat": {
-            "color": "#87CEFA",
-            "capacityDataTile": false
+            "color": "#87CEFA"
           },
           "sms": {
-            "color": "#59cef8",
-            "capacityDataTile": false
+            "color": "#59cef8"
           }
         },
         "task_summary": true,
@@ -278,8 +275,7 @@
           "team": true,
           "department": false,
           "location": false,
-          "agent_skills": true,
-          "capacity": false
+          "agent_skills": true
         }
       },
       "send_audio_rec_file": {

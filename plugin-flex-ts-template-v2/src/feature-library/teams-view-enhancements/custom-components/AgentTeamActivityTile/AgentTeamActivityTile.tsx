@@ -117,7 +117,7 @@ const AgentTeamActivityTile = () => {
                   {activityNames.map((activity) => {
                     return (
                       <Td element="COMPACT_TABLE" textAlign="center" key={activity}>
-                        <Label>{workerActivityCounts[team].activities[activity]}</Label>
+                        <Label>{workerActivityCounts[team].activities[activity] || 0}</Label>
                       </Td>
                     );
                   })}

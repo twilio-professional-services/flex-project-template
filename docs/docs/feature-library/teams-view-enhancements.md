@@ -39,23 +39,18 @@ To display the Task's Queue Name instead of the customer's phone number (or name
 
 You can also enable the Task Summary tile and/or the Team Activity data tile.
 
-The Chat & SMS Channel Capacity data tiles should only be enabled if the worker attributes contain a copy of the Worker Channels configuration (Implementation of this backend functionality is forthcoming...). 
-
 ```json
   "teams_view_enhancements": {
       "enabled": true,
       "channels": {
           "voice": {
             "color": "#ADD8E6",
-            "capacityDataTile": false
           },
           "chat": {
             "color": "#87CEFA",
-            "capacityDataTile": false
           },
           "sms": {
             "color": "#59cef8",
-            "capacityDataTile": false,
           }
       },
       "task_summary": true,
@@ -71,7 +66,6 @@ The Chat & SMS Channel Capacity data tiles should only be enabled if the worker 
         "department": false,
         "location": false,
         "agent_skills": true,
-        "capacity": false
       }
     }
 ```

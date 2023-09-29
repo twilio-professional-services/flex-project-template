@@ -11,7 +11,7 @@ export const TeamsViewTilesContainer = styled('div')<ThemeOnlyProps>`
   margin-top: ${({ theme }) => theme.tokens.spacings.space40};
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: ${({ theme }) => theme.tokens.spacings.space40};
+  margin-bottom: ${({ theme }) => theme.tokens.spacings.space0};
   height: auto;
   box-sizing: border-box;
   flex: 0 0 auto;
