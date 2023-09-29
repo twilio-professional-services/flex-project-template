@@ -24,7 +24,7 @@ const TaskSummaryTile = () => {
     <TileWrapper className="Twilio-AggregatedDataTile">
       <Box overflowY="auto" maxHeight="240px">
         <Table variant="borderless">
-          <THead stickyHeader top={0}>
+          <THead stickyHeader top={0} element="STICKY_HEADER">
             <Tr>
               <Th element="COMPACT_TABLE">
                 <Heading>

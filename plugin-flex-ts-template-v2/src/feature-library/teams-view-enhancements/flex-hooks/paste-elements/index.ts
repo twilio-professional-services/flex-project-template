@@ -1,6 +1,7 @@
-import { PasteCustomCSS } from '@twilio-paste/customization';
-
 export const pasteElementHook = {
+  STICKY_HEADER: {
+    zIndex: 2,
+  },
   COMPACT_TABLE: {
     padding: 'space20',
   },
@@ -12,4 +13,4 @@ export const pasteElementHook = {
     padding: 'space20',
     backgroundColor: 'colorBackgroundDecorative30Weakest',
   },
-} as { [key: string]: PasteCustomCSS };
+} as { [key: string]: any };
