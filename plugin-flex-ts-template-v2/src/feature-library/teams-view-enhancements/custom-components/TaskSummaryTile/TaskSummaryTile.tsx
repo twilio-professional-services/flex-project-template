@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Box, Table, THead, TBody, Th, Tr, Td, Tooltip } from '@twilio-paste/core';
 import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definition';
 import AppState from 'types/manager/AppState';
-// import Tooltip from '@material-ui/core/Tooltip';
 import { CallIncomingIcon } from '@twilio-paste/icons/esm/CallIncomingIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 
@@ -30,6 +29,11 @@ const TaskSummaryTile = () => {
                 <Heading>
                   <Template source={templates[StringTemplates.TeamsViewColumnTeamName]} />
                 </Heading>
+              </Th>
+              <Th element="COMPACT_TABLE" textAlign="center">
+                <Tooltip text={templates[StringTemplates.TeamsViewSummaryTotalTasks]()} placement="top">
+                  <Heading>&sum;</Heading>
+                </Tooltip>
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center">
                 <Channel bgColor={getChannelVoice_Color()}>
@@ -73,8 +77,11 @@ const TaskSummaryTile = () => {
             <Tr key="Total">
               <Td element="COMPACT_TABLE">
                 <Heading>
-                  <Template source={templates[StringTemplates.TeamsViewSummaryAll]} />
+                  <Template source={templates[StringTemplates.TeamsViewSummaryAllTeams]} />
                 </Heading>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Heading> {taskCounts.All.totalTaskCount} </Heading>
               </Td>
               <Td element="COMPACT_TABLE" textAlign="center">
                 <Heading> {taskCounts.All.tasks.voice_inbound} </Heading>
@@ -96,6 +103,9 @@ const TaskSummaryTile = () => {
                     <Label> {team} </Label>
                   </Td>
                   <Td element="COMPACT_TABLE" textAlign="center">
+                    <Label> {taskCounts[team].totalTaskCount} </Label>
+                  </Td>
+                  <Td element="COMPACT_TABLE" textAlign="center">
                     <Label> {taskCounts[team].tasks.voice_inbound} </Label>
                   </Td>
                   <Td element="COMPACT_TABLE" textAlign="center">
@@ -110,6 +120,28 @@ const TaskSummaryTile = () => {
                 </Tr>
               );
             })}
+            <Tr key="Other">
+              <Td element="COMPACT_TABLE">
+                <Label>
+                  <Template source={templates[StringTemplates.TeamsViewSummaryOther]} />
+                </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label> {taskCounts.Other.totalTaskCount} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label> {taskCounts.Other.tasks.voice_inbound} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label> {taskCounts.Other.tasks.voice_outbound} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label> {taskCounts.Other.tasks.chat} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label> {taskCounts.Other.tasks.sms} </Label>
+              </Td>
+            </Tr>
           </TBody>
         </Table>
       </Box>

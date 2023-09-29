@@ -78,7 +78,7 @@ const AgentTeamActivityTile = () => {
             <Tr key="All">
               <Td element="COMPACT_TABLE">
                 <Heading>
-                  <Template source={templates[StringTemplates.TeamsViewSummaryAll]} />
+                  <Template source={templates[StringTemplates.TeamsViewSummaryAllTeams]} />
                 </Heading>
               </Td>
               <Td element="COMPACT_TABLE" textAlign="center">
@@ -124,6 +124,29 @@ const AgentTeamActivityTile = () => {
                 </Tr>
               );
             })}
+            <Tr key="Other">
+              <Td element="COMPACT_TABLE">
+                <Label>
+                  <Template source={templates[StringTemplates.TeamsViewSummaryOther]} />
+                </Label>
+              </Td>
+              <Td element="COMPACT_TABLE" textAlign="center">
+                <Label>{workerActivityCounts.Other.totalAgentCount} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE_BG30" textAlign="center">
+                <Label>{workerActivityCounts.Other.activities.Idle} </Label>
+              </Td>
+              <Td element="COMPACT_TABLE_BG20" textAlign="center">
+                <Label>{workerActivityCounts.Other.activities.Busy} </Label>
+              </Td>
+              {activityNames.map((activity) => {
+                return (
+                  <Td element="COMPACT_TABLE" textAlign="center" key={activity}>
+                    <Label> {workerActivityCounts.Other.activities[activity] || 0} </Label>
+                  </Td>
+                );
+              })}
+            </Tr>
           </TBody>
         </Table>
       </Box>
