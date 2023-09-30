@@ -16,11 +16,12 @@ export const init = () => {
 
 export const processHooks = () => {
   destinations.forEach((dest) => logger.addDestination(dest));
+  logger.processBuffer();
 };
 
 export const addHook = (feature: string, hook: any) => {
   if (!hook.loggerHook) {
-    console.warn(`Feature ${feature} declared logger hook, but is missing loggerHook to hook`);
+    logger.warn(`Feature ${feature} declared logger hook, but is missing loggerHook to hook`);
     return;
   }
   destinations.push(hook.loggerHook());
