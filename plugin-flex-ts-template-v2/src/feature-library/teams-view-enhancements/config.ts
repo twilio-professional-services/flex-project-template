@@ -6,18 +6,25 @@ const {
   channels = {
     voice: {
       color: '#ADD8E6',
+      taskCount: true,
     },
     chat: {
       color: '#87CEFA',
+      taskCount: true,
     },
     sms: {
       color: '#59cef8',
+      taskCount: true,
+    },
+    video: {
+      color: '#00CED1',
+      taskCount: true,
     },
   },
-  task_summary = true,
-  team_activity = true,
-  idle_status = { color: 'limegreen', icon: 'AcceptLarge' },
-  busy_status = { color: 'royalblue', icon: 'GenericTask' },
+  task_summary = false,
+  team_activity = false,
+  idle_status = { color: 'limegreen' },
+  busy_status = { color: 'royalblue' },
   highlight_handle_time = true,
   handle_time_warning_threshold = 180,
   handle_time_exceeded_threshold = 300,
@@ -48,6 +55,9 @@ const { agentActivityConfiguration = defaultActivities } = getFeatureFlags()?.fe
 export const isFeatureEnabled = () => {
   return enabled;
 };
+export const getChannelsConfig = () => {
+  return channels;
+};
 export const getChannelVoice_Color = () => {
   return channels.voice.color;
 };
@@ -57,16 +67,8 @@ export const getChannelChat_Color = () => {
 export const getChannelSMS_Color = () => {
   return channels.sms.color;
 };
-export const getChannelColors = () => {
-  const channelNames = Object.keys(channels);
-  const colors: { [key: string]: string } = {};
-  channelNames.forEach((ch) => {
-    colors[ch] = channels[ch].color;
-  });
-  return colors;
-};
-export const getChannelNames = () => {
-  return Object.keys(channels);
+export const getChannelVideo_Color = () => {
+  return channels.video.color;
 };
 export const isTaskSummaryEnabled = () => {
   return task_summary;

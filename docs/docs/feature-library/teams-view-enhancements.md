@@ -37,26 +37,35 @@ To enable TaskCard highlighting based on the task age, set `highlight_handle_tim
 
 To display the Task's Queue Name instead of the customer's phone number (or name), set the `display_task_queue_name: true`.
 
-You can also enable the Task Summary tile and/or the Team Activity data tile.
+You can also enable the Task Summary tile to show a breakdown of the active tasks counts by Channel and Team. Select which channels to display by setting `taskCount: true`.  When enabling the Team Activity data tile, also configure the activity names to match the TaskRouter Activities in your workspace.
+
+Note: The Teams View can only display up to 200 agents, so the worker data available for aggregation is limited to this data set.
 
 ```json
   "teams_view_enhancements": {
       "enabled": true,
       "channels": {
-          "voice": {
-            "color": "#ADD8E6",
-          },
-          "chat": {
-            "color": "#87CEFA",
-          },
-          "sms": {
-            "color": "#59cef8",
-          }
+        "voice": {
+          "color": "#ADD8E6",
+          "taskCount": true
+        },
+        "chat": {
+          "color": "#87CEFA",
+          "taskCount": true
+        },
+        "sms": {
+          "color": "#59cef8",
+          "taskCount": true
+        },
+        "video": {
+          "color": "#00CED1",
+          "taskCount": true
+        }
       },
       "task_summary": true,
       "team_activity": true,
-      "idle_status": { "color": "limegreen", "icon": "AcceptLarge" },
-      "busy_status": { "color": "royalblue", "icon": "GenericTask" },
+      "idle_status": { "color": "limegreen" },
+      "busy_status": { "color": "royalblue" },
       "highlight_handle_time": true,
       "handle_time_warning_threshold": 180,
       "handle_time_exceeded_threshold": 300,

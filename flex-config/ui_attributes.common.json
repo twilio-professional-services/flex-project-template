@@ -254,19 +254,26 @@
         "enabled": true,
         "channels": {
           "voice": {
-            "color": "#ADD8E6"
+            "color": "#ADD8E6",
+            "taskCount": true
           },
           "chat": {
-            "color": "#87CEFA"
+            "color": "#87CEFA",
+            "taskCount": true
           },
           "sms": {
-            "color": "#59cef8"
+            "color": "#59cef8",
+            "taskCount": true
+          },
+          "video": {
+            "color": "#00CED1",
+            "taskCount": true
           }
         },
         "task_summary": true,
         "team_activity": true,
-        "idle_status": { "color": "limegreen", "icon": "AcceptLarge" },
-        "busy_status": { "color": "royalblue", "icon": "GenericTask" },
+        "idle_status": { "color": "limegreen" },
+        "busy_status": { "color": "royalblue" },
         "highlight_handle_time": true,
         "handle_time_warning_threshold": 180,
         "handle_time_exceeded_threshold": 300,

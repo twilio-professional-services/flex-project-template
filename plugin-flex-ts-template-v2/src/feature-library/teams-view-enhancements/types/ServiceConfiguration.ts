@@ -3,8 +3,8 @@ export default interface TeamsViewEnhancementsConfig {
   channels: Channels;
   task_summary: boolean;
   team_activity: boolean;
-  idle_status: StatusConfig;
-  busy_status: StatusConfig;
+  idle_status: { color: string };
+  busy_status: { color: string };
   highlight_handle_time: boolean;
   handle_time_warning_threshold: number;
   handle_time_exceeded_threshold: number;
@@ -19,10 +19,5 @@ export default interface TeamsViewEnhancementsConfig {
 }
 
 export interface Channels {
-  [key: string]: { color: string };
-}
-
-interface StatusConfig {
-  color: string;
-  icon: string;
+  [key: string]: { color: string; taskCount: boolean };
 }

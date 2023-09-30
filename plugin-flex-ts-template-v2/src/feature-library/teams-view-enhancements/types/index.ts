@@ -17,12 +17,3 @@ export interface TaskCounts {
     };
   };
 }
-
-export interface TasksAndCapacity {
-  tasks: {
-    [key: string]: number;
-  };
-  capacity: {
-    [key: string]: number;
-  };
-}
