@@ -2,9 +2,18 @@ import { LogLevel } from '../../../utils/logger';
 import Destination from '../../../utils/logger/destination';
 
 export default class Console extends Destination {
-  async handle(level: LogLevel, message: string, context: any, meta: any): Promise<void> {
+  async handle(level: LogLevel, message: string, context?: object, meta?: object): Promise<void> {
     return new Promise((resolve) => {
-      console[level](message, Object.assign(context, meta));
+      let additonalContext: object = {};
+      additonalContext = Object.assign(additonalContext, meta, context);
+
+      // if there is additional context, use it
+      if (Object.keys(additonalContext).length) {
+        console[level](message, additonalContext);
+      } else {
+        console[level](message);
+      }
+
       return resolve();
     });
   }

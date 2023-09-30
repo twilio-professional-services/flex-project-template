@@ -5,7 +5,7 @@ export type LogLevel = 'log' | 'debug' | 'warn' | 'info' | 'error';
 type BufferedLogMessage = {
   level: LogLevel;
   message: string;
-  context: any;
+  context?: any;
 };
 
 class Logger {
@@ -23,23 +23,23 @@ class Logger {
     this.meta[key] = value;
   }
 
-  async log(message: string, context = {}): Promise<void> {
+  async log(message: string, context?: object): Promise<void> {
     return this.#logMessage('log', message, context);
   }
 
-  async debug(message: string, context = {}): Promise<void> {
+  async debug(message: string, context?: object): Promise<void> {
     return this.#logMessage('debug', message, context);
   }
 
-  async warn(message: string, context = {}): Promise<void> {
+  async warn(message: string, context?: object): Promise<void> {
     return this.#logMessage('warn', message, context);
   }
 
-  async info(message: string, context = {}): Promise<void> {
+  async info(message: string, context?: object): Promise<void> {
     return this.#logMessage('info', message, context);
   }
 
-  async error(message: string, context = {}): Promise<void> {
+  async error(message: string, context?: object): Promise<void> {
     return this.#logMessage('error', message, context);
   }
 
@@ -59,7 +59,7 @@ class Logger {
     });
   }
 
-  async #logMessage(level: LogLevel, message: string, context = {}): Promise<void> {
+  async #logMessage(level: LogLevel, message: string, context?: object): Promise<void> {
     return new Promise(async (resolve) => {
       if (!this.destinations.length) {
         this.buffer.push({ level, message, context });
@@ -72,7 +72,7 @@ class Logger {
     });
   }
 
-  async #fanOutMessageToAllDestinations(level: LogLevel, message: string, context = {}): Promise<void> {
+  async #fanOutMessageToAllDestinations(level: LogLevel, message: string, context?: object): Promise<void> {
     return new Promise(async (resolve) => {
       for (const dest of this.destinations) {
         await dest.log(level, message, context, this.meta);
