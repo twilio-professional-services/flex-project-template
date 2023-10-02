@@ -81,6 +81,8 @@ jobs:
               
               for (const secret in inputs) {
                 console.log(secret)
+                console.log(inputs[secret])
+            
                 github.rest.actions.createOrUpdateEnvironmentSecret({
                   repository_id: "${{ github.repository_id }}",
                   environment_name: "${{ github.event.repository.name }}",
