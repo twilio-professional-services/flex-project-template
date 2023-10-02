@@ -73,8 +73,8 @@ jobs:
               return output;
             }
             
-            sodium.ready.then(() => {
-              const { key, key_id } = github.rest.actions.getEnvironmentPublicKey({
+            sodium.ready.then(async () => {
+              const key = await github.rest.actions.getEnvironmentPublicKey({
                 repository_id: "${{ github.repository_id }}",
                 environment_name: "${{ inputs.environment }}"
               }); 
