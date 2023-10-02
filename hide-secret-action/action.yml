@@ -1,0 +1,6 @@
+name: 'Hide Secret Action'
+description: 'This Action hide secrets in logs using ::add-mask::'
+
+runs:
+  using: 'node16'
+  main: './built/index.js'
