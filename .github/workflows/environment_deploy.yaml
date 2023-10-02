@@ -62,7 +62,7 @@ jobs:
             const sodium = require('libsodium-wrappers');
             const inputs = ${{ toJSON(inputs) }}
             
-            function encrypt(key: string, secret: string) {
+            function encrypt(key, secret) {
               const binkey = sodium.from_base64(key, sodium.base64_variants.ORIGINAL);
               const binsec = sodium.from_string(secret);
               const encBytes = sodium.crypto_box_seal(binsec, binkey);
