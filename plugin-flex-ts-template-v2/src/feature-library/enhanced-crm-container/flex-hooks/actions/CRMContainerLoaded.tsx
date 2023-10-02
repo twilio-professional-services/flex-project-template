@@ -5,7 +5,7 @@ import { FlexActionEvent } from '../../../../types/feature-loader';
 import { shouldDisplayUrlWhenNoTasks, getUrlTabTitle, isUrlTabEnabled } from '../../config';
 
 export const actionEvent = FlexActionEvent.before;
-export const actionName = 'CRMContainerLoaded';
+export const actionName = 'LoadCRMContainerTabs';
 export const actionHook = function addURLTabToEnhancedCRM(flex: typeof Flex) {
   if (!isUrlTabEnabled()) {
     return;

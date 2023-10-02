@@ -7,7 +7,7 @@ This feature replaces the OOTB [CRMContainer](https://assets.flex.twilio.com/doc
 
 This feature provides the following functionality:
 - Extensible tabbed interface
-  - Other features can register tabs via the `beforeCRMContainerLoaded` action
+  - Other features can register tabs via the `beforeLoadCRMContainerTabs` action
   - Tabs can receive task context, including if there is no task
 - Configurable IFrame allowing you to specify a URL to display, including task and worker attribute interpolation
   - Can optionally display an alternate URL when there are no tasks
@@ -51,7 +51,7 @@ import MyCRMTab from '../../custom-components/MyCRMTab';
 import { FlexActionEvent } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
-export const actionName = 'CRMContainerLoaded';
+export const actionName = 'LoadCRMContainerTabs';
 export const actionHook = function addToEnhancedCRM(flex: typeof Flex, manager: Flex.Manager) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
     // Remove this condition if you'd like to render even without a task selected
@@ -73,4 +73,4 @@ export const actionHook = function addToEnhancedCRM(flex: typeof Flex, manager: 
 };
 ```
 
-When the enhanced CRM component mounts, it adds a listener for `afterCRMContainerLoaded`, then invokes the `CRMContainerLoaded` action with the task in its payload. The `afterCRMContainerLoaded` action receives the components array in the payload, and renders those components. It immediately unregisters the listener to prevent receiving payloads for other tasks.
+When the enhanced CRM component mounts, it adds a listener for `afterLoadCRMContainerTabs`, then invokes the `LoadCRMContainerTabs` action with the task in its payload. The `afterLoadCRMContainerTabs` action receives the components array in the payload, and renders those components. It immediately unregisters the listener to prevent receiving payloads for other tasks.

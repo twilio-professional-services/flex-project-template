@@ -6,7 +6,7 @@ import { getUILocation } from '../../config';
 import { StringTemplates } from '../strings';
 
 export const actionEvent = FlexActionEvent.before;
-export const actionName = 'CRMContainerLoaded';
+export const actionName = 'LoadCRMContainerTabs';
 export const actionHook = function addCannedResponsesToEnhancedCRM(flex: typeof Flex, manager: Flex.Manager) {
   if (getUILocation() !== 'CRM') {
     return;

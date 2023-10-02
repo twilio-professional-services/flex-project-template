@@ -7,7 +7,7 @@ export interface Props {
   task?: ITask; // task in Context
 }
 
-interface CRMContainerLoadedPayload {
+interface LoadCRMContainerTabsPayload {
   task?: ITask;
   components: CRMComponent[];
 }
@@ -30,14 +30,14 @@ export const TabbedCRMTask = ({ thisTask, task }: Props) => {
       ? 'flex'
       : ('none' as any);
 
-  const handleCustomComponent = (payload: CRMContainerLoadedPayload) => {
+  const handleCustomComponent = (payload: LoadCRMContainerTabsPayload) => {
     // The action can be invoked multiple times at once. Ensure we handle the correct invocation.
     if (payload.task !== thisTask) {
       return;
     }
 
     // Remove listener so that this function is not executed again for this instance
-    Actions.removeListener('afterCRMContainerLoaded', handleCustomComponent);
+    Actions.removeListener('afterLoadCRMContainerTabs', handleCustomComponent);
 
     if (payload.components) {
       setCustomComponents(payload.components.sort((a, b) => (a.order ?? 999) - (b.order ?? 999)));
@@ -45,8 +45,8 @@ export const TabbedCRMTask = ({ thisTask, task }: Props) => {
   };
 
   useEffect(() => {
-    Actions.addListener('afterCRMContainerLoaded', handleCustomComponent);
-    Actions.invokeAction('CRMContainerLoaded', {
+    Actions.addListener('afterLoadCRMContainerTabs', handleCustomComponent);
+    Actions.invokeAction('LoadCRMContainerTabs', {
       task: thisTask,
       components: [],
     });
