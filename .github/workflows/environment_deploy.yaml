@@ -19,6 +19,10 @@ on:
         required: true
         type: string
         description: "New environment api token"
+      tf_encryption_key:
+        required: true
+        type: string
+        description: "Password to encrypt cloud state"
 
 jobs:
   deploy-new-environment:
@@ -94,12 +98,24 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - uses: ./.github/workflows/flex_deploy.yaml
-        with:
-          environment: ${{ inputs.environment }}
-          deploy_terraform: true
-          auto_serverless_deploy: true
-          initial_release: true
-          overwrite_config: true
+  deploy-flex-project-template:
+    needs: [deploy-new-environment]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') &&
+      inputs.deploy_terraform == true
+    uses: ./.github/workflows/flex-deploy.yaml
+    with:
+      environment: ${{ inputs.environment }}
+      deploy_terraform: true
+      auto_serverless_deploy: true
+      initial_release: true
+      overwrite_config: true
+    secrets:
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TF_ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
 
 #     call webhook to log flex deployment completion step
