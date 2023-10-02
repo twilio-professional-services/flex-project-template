@@ -79,10 +79,6 @@ jobs:
               const { key, key_id } = data;
               
               for (const secret in inputs) {
-                console.log(secret)
-                console.log(inputs[secret])
-                console.log(key)
-            
                 await github.rest.actions.createOrUpdateEnvironmentSecret({
                   repository_id: "${{ github.repository_id }}",
                   environment_name: "${{ github.event.repository.name }}",
