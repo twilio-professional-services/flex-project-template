@@ -18,13 +18,13 @@ const {
     },
     Video: {
       color: '#00CED1',
-      taskCount: true,
+      taskCount: false,
     },
   },
   task_summary = false,
   team_activity = false,
-  idle_status = { color: 'limegreen' },
-  busy_status = { color: 'royalblue' },
+  idle_status_color = 'limegreen',
+  busy_status_color = 'royalblue',
   highlight_handle_time = true,
   handle_time_warning_threshold = 180,
   handle_time_exceeded_threshold = 300,
@@ -84,11 +84,11 @@ export const isTaskSummaryEnabled = () => {
 export const isTeamActivityEnabled = () => {
   return team_activity;
 };
-export const getIdleStatusConfig = () => {
-  return idle_status;
+export const getIdleStatusColor = () => {
+  return idle_status_color;
 };
-export const getBusyStatusConfig = () => {
-  return busy_status;
+export const getBusyStatusColor = () => {
+  return busy_status_color;
 };
 export const isTeamColumnEnabled = () => {
   return enabled && team;

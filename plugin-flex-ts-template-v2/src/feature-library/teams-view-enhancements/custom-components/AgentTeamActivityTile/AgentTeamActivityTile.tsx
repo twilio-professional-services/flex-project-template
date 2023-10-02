@@ -5,7 +5,7 @@ import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definitio
 import AppState from 'types/manager/AppState';
 import { EmojiIcon } from '@twilio-paste/icons/esm/EmojiIcon';
 
-import { getAgentActivityConfig, getIdleStatusConfig, getBusyStatusConfig } from '../../config';
+import { getAgentActivityConfig, getIdleStatusColor, getBusyStatusColor } from '../../config';
 import { TileWrapper, AgentActivity, Label, Heading } from './AgentTeamActivityTile.Components';
 import { getAgentStatusCounts } from '../../utils/WorkerDataUtil';
 import { ActivityCounts } from '../../types';
@@ -19,8 +19,8 @@ const AgentTeamActivityTile = () => {
     return getAgentStatusCounts(workers, teams);
   });
   const activityConfig = getAgentActivityConfig();
-  const statusIdle = getIdleStatusConfig();
-  const statusBusy = getBusyStatusConfig();
+  const statusIdleColor = getIdleStatusColor();
+  const statusBusyColor = getBusyStatusColor();
   const activityNames = Object.keys(activityConfig.activities);
 
   return (
@@ -42,7 +42,7 @@ const AgentTeamActivityTile = () => {
                 </Tooltip>
               </Th>
               <Th element="COMPACT_TABLE">
-                <AgentActivity bgColor={statusIdle.color}>
+                <AgentActivity bgColor={statusIdleColor}>
                   <Tooltip text={templates[StringTemplates.StatusIdleTooltip]()} placement="top">
                     <Heading>
                       <EmojiIcon decorative={true} />
@@ -51,7 +51,7 @@ const AgentTeamActivityTile = () => {
                 </AgentActivity>
               </Th>
               <Th element="COMPACT_TABLE">
-                <AgentActivity bgColor={statusBusy.color}>
+                <AgentActivity bgColor={statusBusyColor}>
                   <Tooltip text={templates[StringTemplates.StatusBusyTooltip]()} placement="top">
                     <Heading>
                       <Icon icon="GenericTask" />
