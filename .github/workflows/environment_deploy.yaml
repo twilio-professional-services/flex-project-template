@@ -1,0 +1,39 @@
+name: "Deploy new environment"
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: "New environment name"
+
+jobs:
+  deploy-new-environment:
+    name: Deploy new environment
+    environment: ${{ github.event.inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
+      TF_STATE_FILES: ".terraform.lock.hcl|terraform.tfstate"
+      TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/github-script@v6
+        id: create-environment
+        name: Create github environment
+        with:
+          result-encoding: string
+          retries: 3
+          script: |
+            github.rest.repos.createOrUpdateEnvironment({
+              owner: "${{ github.actor }}",
+              repo: "${{ github.repository }},
+              environment_name: "${{ inputs.environment }}"
+            })
