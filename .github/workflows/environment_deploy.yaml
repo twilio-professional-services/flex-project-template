@@ -94,7 +94,7 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - uses: .github/workflows/flex_deploy.yaml
+      - uses: ./.github/workflows/flex_deploy.yaml
         with:
           environment: ${{ inputs.environment }}
           deploy_terraform: true
