@@ -34,6 +34,6 @@ jobs:
           script: |
             github.rest.repos.createOrUpdateEnvironment({
               owner: "${{ github.actor }}",
-              repo: "${{ github.repository }}",
+              repo: "${{ github.event.repository.name }}",
               environment_name: "${{ inputs.environment }}"
             })
