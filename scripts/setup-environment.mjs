@@ -79,7 +79,9 @@ const execute = async () => {
     const exampleFile = `./${constants.flexConfigDir}/ui_attributes.example.json`;
     let configData = await fillReplacements(configFile, exampleFile, account, configEnv);
     allReplacements = { ...allReplacements, ...configData };
-  } else if (!environment) {
+  }
+  
+  if (!environment) {
     // When running locally, we need to generate appConfig.js
     saveAppConfig();
   }
