@@ -86,7 +86,7 @@ const TaskSummaryTile = () => {
               {channels?.video?.taskCount && (
                 <Th element="COMPACT_TABLE" textAlign="center">
                   <Channel bgColor={channels.video.color}>
-                    <Tooltip text="SMS" placement="top">
+                    <Tooltip text="Video" placement="top">
                       <Heading>
                         <Icon icon="Video" />
                       </Heading>
