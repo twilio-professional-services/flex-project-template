@@ -29,12 +29,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: set github environment variables
-        env:
-          SECRETS_CONTEXT: ${{ toJson(secrets) }}
-          VARS_CONTEXT: ${{ toJson(vars) }}
-        run: scripts/github-set-env.sh
-
       - uses: actions/github-script@v6
         id: create-environment
         name: Create github environment
