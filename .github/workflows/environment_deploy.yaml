@@ -24,10 +24,6 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-      - name: Get repository name
-        id: repo-name
-        uses: MariachiBear/get-repo-name-action@v1.1.0
-
       - uses: actions/github-script@v6
         id: create-environment
         name: Create github environment
@@ -37,6 +33,6 @@ jobs:
           script: |
             github.rest.repos.createOrUpdateEnvironment({
               owner: "${{ github.actor }}",
-              repo: "${{ steps.repo-name.outputs.repository-name }}",
+              repo: "${{ github.event.repository.name }}".replace("${{github.actor}}/", ""),
               environment_name: "${{ inputs.environment }}"
             })
