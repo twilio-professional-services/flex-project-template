@@ -35,5 +35,6 @@ jobs:
             github.rest.repos.createOrUpdateEnvironment({
               owner: "${{ github.actor }}",
               repo: "${{ github.event.repository.name }}".replace("${{github.actor}}/", ""),
-              environment_name: "${{ inputs.environment }}"
+              environment_name: "${{ inputs.environment }}",
+              deployment_branch_policy: null
             })
