@@ -14,6 +14,7 @@ If you wish to modify the template in any way, you will need to set up your deve
 - twilio serverless plugin 3.0.4 or above is [installed](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit) (`twilio plugins` `twilio plugins:install @twilio-labs/plugin-serverless@latest`)
 - `twilio profiles:list` has an active account set.
 - have the twilio auth token for your account ready (you can find this in the [Twilio Console](https://console.twilio.com/))
+- If you are running Windows, ensure you are using Git Bash to execute the commands when working with the template, rather than Command Prompt or PowerShell.
 
 :::caution Feature Functionality
  some features may not be functional without a deployment of the TaskRouter configuration and studio flows. It is recommended to do at least one initial deploy to your environment using the [Deploy Flex GitHub workflow](install-template)
