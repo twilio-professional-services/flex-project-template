@@ -29,6 +29,7 @@ jobs:
         id: create-environment
         name: Create github environment
         with:
+          github-token: ${{ secrets.GH_API_PAT }}
           result-encoding: string
           retries: 3
           script: |
