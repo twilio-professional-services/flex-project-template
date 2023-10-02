@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: 16
       - run: npm init -y
-      - run: npm install --save tweetsodium
+      - run: npm install --save libsodium-wrappers
 
       - uses: actions/github-script@v6
         id: create-environment
@@ -59,28 +59,33 @@ jobs:
           result-encoding: string
           retries: 3
           script: |
-            const sodium = require('tweetsodium');
+            const sodium = require('libsodium-wrappers');
             const inputs = ${{ toJSON(inputs) }}
             
-            const { key, keyId } = github.rest.actions.getEnvironmentPublicKey({
-              repository_id: "${{ github.repository_id }}",
-              environment_name: "${{ inputs.environment }}"
-            }); 
+            function encrypt(key: string, secret: string) {
+              const binkey = sodium.from_base64(key, sodium.base64_variants.ORIGINAL);
+              const binsec = sodium.from_string(secret);
+              const encBytes = sodium.crypto_box_seal(binsec, binkey);
+              const output = sodium.to_base64(encBytes, sodium.base64_variants.ORIGINAL);
+          
+              return output;
+            }
             
-            for (const secret in inputs) {
-              const value = inputs[secret]
-              const messageBytes = Buffer.from(value);
-              const keyBytes = Buffer.from(key, 'base64');
-              const encryptedBytes = sodium.seal(messageBytes, keyBytes);
-              const encrypted = Buffer.from(encryptedBytes).toString('base64');
-            
-              github.rest.actions.createOrUpdateEnvironmentSecret({
+            sodium.ready.then(() => {
+              const { key, key_id } = github.rest.actions.getEnvironmentPublicKey({
                 repository_id: "${{ github.repository_id }}",
-                environment_name: "${{ github.event.repository.name }}",
-                secret_name: secret,
-                encrypted_value: encrypted,
-                key_id: keyId
-              });
+                environment_name: "${{ inputs.environment }}"
+              }); 
+              
+              for (const secret in inputs) {
+                github.rest.actions.createOrUpdateEnvironmentSecret({
+                  repository_id: "${{ github.repository_id }}",
+                  environment_name: "${{ github.event.repository.name }}",
+                  secret_name: secret,
+                  encrypted_value: encrypt(key, inputs[secret]),
+                  key_id,
+                });
+              }
             }
             
             console.log(encrypted);
