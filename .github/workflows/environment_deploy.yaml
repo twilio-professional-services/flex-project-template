@@ -81,7 +81,7 @@ jobs:
               for (const secret in inputs) {
                 await github.rest.actions.createOrUpdateEnvironmentSecret({
                   repository_id: "${{ github.repository_id }}",
-                  environment_name: "${{ github.event.repository.name }}",
+                  environment_name: "${{ inputs.environment }}",
                   secret_name: secret,
                   encrypted_value: encrypt(key, inputs[secret]),
                   key_id,
