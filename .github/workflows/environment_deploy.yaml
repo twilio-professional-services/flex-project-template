@@ -14,11 +14,11 @@ on:
       twilio_api_key:
         required: true
         type: string
-        description: "New environment account sid"
+        description: "New environment api key"
       twilio_api_secret:
         required: true
         type: string
-        description: "New environment account sid"
+        description: "New environment api token"
 
 jobs:
   deploy-new-environment:
@@ -49,7 +49,8 @@ jobs:
               environment_name: "${{ inputs.environment }}",
               deployment_branch_policy: null
             });
-            
+
+#     call webhook to log environment creation step
 
       - uses: actions/github-script@v6
         id: push-environment-secrets
@@ -88,3 +89,15 @@ jobs:
                 });
               }
             });
+
+#     call webhook to log variable creation step
+
+      - uses: ./.github/workflows/flex_deploy.yaml
+        with:
+          environment: ${{ inputs.environment }}
+          deploy_terraform: true
+          auto_serverless_deploy: true
+          initial_release: true
+          overwrite_config: true
+
+#     call webhook to log flex deployment completion step
