@@ -21,8 +21,6 @@ import * as Logger from './logger';
 import features from '../../feature-library/*';
 
 export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
-  Logger.init();
-
   if (typeof features === 'undefined') {
     // no features discovered; abort
     return;
@@ -46,13 +44,12 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
     }
   }
 
-  Logger.processHooks();
-
   // Register built-in hooks
   Actions.addHook(flex, manager, 'built-in TaskRouterService', TaskRouterReplaceCompleteTask);
   Events.addHook(flex, manager, 'built-in Sync client', SyncClientTokenUpdated);
 
   // After all features have initialized, execute deferred hooks
+  Logger.init();
   CssOverrides.init(manager);
   PasteElements.init(flex);
   Reducers.init(manager);
