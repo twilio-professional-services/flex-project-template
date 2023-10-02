@@ -32,7 +32,8 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm install tweetsodium
+      - run: npm init -y
+      - run: npm install --save tweetsodium
 
       - uses: actions/github-script@v6
         id: create-environment
