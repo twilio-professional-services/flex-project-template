@@ -62,8 +62,6 @@ jobs:
             const sodium = require('libsodium-wrappers');
             const inputs = ${{ toJSON(inputs) }}
             
-            console.log(inputs)
-            
             function encrypt(key, secret) {
               const binkey = sodium.from_base64(key, sodium.base64_variants.ORIGINAL);
               const binsec = sodium.from_string(secret);
@@ -74,17 +72,18 @@ jobs:
             }
             
             sodium.ready.then(async () => {
-              const key = await github.rest.actions.getEnvironmentPublicKey({
+              const { data } = await github.rest.actions.getEnvironmentPublicKey({
                 repository_id: "${{ github.repository_id }}",
                 environment_name: "${{ inputs.environment }}"
-              }); 
+              });
+              const { key, key_id } = data;
               
               for (const secret in inputs) {
                 console.log(secret)
                 console.log(inputs[secret])
                 console.log(key)
             
-                github.rest.actions.createOrUpdateEnvironmentSecret({
+                await github.rest.actions.createOrUpdateEnvironmentSecret({
                   repository_id: "${{ github.repository_id }}",
                   environment_name: "${{ github.event.repository.name }}",
                   secret_name: secret,
