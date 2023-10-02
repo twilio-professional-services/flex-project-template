@@ -68,7 +68,7 @@ cp .env.example .env
 cp ui_attributes.example.json ui_attributes.local.json
 ```
 
-7. Run `npm run deploy:local` to update the Flex configuration.
+7. Run `npm run deploy` to update the Flex configuration.
 
 ### To use with release pipeline
 
