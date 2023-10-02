@@ -10,6 +10,7 @@ on:
 
 jobs:
   deploy-new-environment:
+    permissions: write-all
     name: Deploy new environment
     environment: ${{ github.event.inputs.environment }}
     env:
