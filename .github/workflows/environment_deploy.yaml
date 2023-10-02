@@ -7,24 +7,34 @@ on:
         required: true
         type: string
         description: "New environment name"
+      twilio_account_sid:
+        required: true
+        type: string
+        description: "New environment account sid"
+      twilio_api_key:
+        required: true
+        type: string
+        description: "New environment account sid"
+      twilio_api_secret:
+        required: true
+        type: string
+        description: "New environment account sid"
 
 jobs:
   deploy-new-environment:
     permissions: write-all
     name: Deploy new environment
     environment: ${{ github.event.inputs.environment }}
-    env:
-      ENVIRONMENT: ${{ inputs.environment }}
-      TF_STATE_FILES: ".terraform.lock.hcl|terraform.tfstate"
-      TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
 
     runs-on: ubuntu-latest
+
     steps:
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
+
       - uses: actions/github-script@v6
         id: create-environment
         name: Create github environment
@@ -38,4 +48,39 @@ jobs:
               repo: "${{ github.event.repository.name }}".replace("${{github.actor}}/", ""),
               environment_name: "${{ inputs.environment }}",
               deployment_branch_policy: null
-            })
+            });
+            
+
+      - uses: actions/github-script@v6
+        id: push-environment-secrets
+        name: Push environment secrets
+        with:
+          github-token: ${{ secrets.GH_API_PAT }}
+          result-encoding: string
+          retries: 3
+          script: |
+            const sodium = require('tweetsodium');
+            const inputs = ${{ toJSON(inputs) }}
+            
+            const { key, keyId } = github.rest.actions.getEnvironmentPublicKey({
+              repository_id: "${{ github.repository_id }}",
+              environment_name: "${{ inputs.environment }}"
+            }); 
+            
+            for (const secret in inputs) {
+              const value = inputs[secret]
+              const messageBytes = Buffer.from(value);
+              const keyBytes = Buffer.from(key, 'base64');
+              const encryptedBytes = sodium.seal(messageBytes, keyBytes);
+              const encrypted = Buffer.from(encryptedBytes).toString('base64');
+            
+              github.rest.actions.createOrUpdateEnvironmentSecret({
+                repository_id: "${{ github.repository_id }}",
+                environment_name: "${{ github.event.repository.name }}",
+                secret_name: secret,
+                encrypted_value: encrypted,
+                key_id: keyId
+              });
+            }
+            
+            console.log(encrypted);
