@@ -9,10 +9,11 @@ import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 import { TileWrapper, Channel, Label, Heading } from './TaskSummaryTile.Components';
 import { getTasksByTeamCounts } from '../../utils/WorkerDataUtil';
 import { TaskCounts } from '../../types';
-import { getChannelsConfig } from '../../config';
+import { getEnabledChannels, getChannelsConfig } from '../../config';
 import { getTeamOptions } from '../../../teams-view-filters/config';
 import { StringTemplates } from '../../flex-hooks/strings';
 import { Channels } from '../../types/ServiceConfiguration';
+import { getChannelIcon } from '../../utils/helpers';
 
 const TaskSummaryTile = () => {
   const teams = getTeamOptions();
@@ -21,6 +22,8 @@ const TaskSummaryTile = () => {
     return getTasksByTeamCounts(workers, teams);
   });
   const channels: Channels = getChannelsConfig();
+  const channelNames = getEnabledChannels();
+
   return (
     <TileWrapper className="Twilio-AggregatedDataTile">
       <Box overflowY="auto" maxHeight="240px">
@@ -39,61 +42,42 @@ const TaskSummaryTile = () => {
                   </Heading>
                 </Tooltip>
               </Th>
-              {channels?.voice?.taskCount && (
-                <Th element="COMPACT_TABLE" textAlign="center">
-                  <Channel bgColor={channels.voice.color}>
-                    <Tooltip text={templates[StringTemplates.TeamsViewSummaryInbound]()} placement="top">
-                      <Heading>
-                        <CallIncomingIcon decorative={true} />
-                      </Heading>
-                    </Tooltip>
-                  </Channel>
-                </Th>
-              )}
-              {channels?.voice?.taskCount && (
-                <Th element="COMPACT_TABLE" textAlign="center">
-                  <Channel bgColor={channels.voice.color}>
-                    <Tooltip text={templates[StringTemplates.TeamsViewSummaryOutbound]()} placement="top">
-                      <Heading>
-                        <CallOutgoingIcon decorative={true} />
-                      </Heading>
-                    </Tooltip>
-                  </Channel>
-                </Th>
-              )}
-              {channels?.chat?.taskCount && (
-                <Th element="COMPACT_TABLE" textAlign="center">
-                  <Channel bgColor={channels.chat.color}>
-                    <Tooltip text="Chat" placement="top">
-                      <Heading>
-                        <Icon icon="Message" />
-                      </Heading>
-                    </Tooltip>
-                  </Channel>
-                </Th>
-              )}
-              {channels?.sms?.taskCount && (
-                <Th element="COMPACT_TABLE" textAlign="center">
-                  <Channel bgColor={channels.sms.color}>
-                    <Tooltip text="SMS" placement="top">
-                      <Heading>
-                        <Icon icon="Sms" />
-                      </Heading>
-                    </Tooltip>
-                  </Channel>
-                </Th>
-              )}
-              {channels?.video?.taskCount && (
-                <Th element="COMPACT_TABLE" textAlign="center">
-                  <Channel bgColor={channels.video.color}>
-                    <Tooltip text="Video" placement="top">
-                      <Heading>
-                        <Icon icon="Video" />
-                      </Heading>
-                    </Tooltip>
-                  </Channel>
-                </Th>
-              )}
+              {channelNames.map((ch) => {
+                if (ch === 'Voice')
+                  return (
+                    <>
+                      <Th element="COMPACT_TABLE" textAlign="center">
+                        <Channel bgColor={channels.Voice.color}>
+                          <Tooltip text={templates[StringTemplates.TeamsViewSummaryInbound]()} placement="top">
+                            <Heading>
+                              <CallIncomingIcon decorative={true} />
+                            </Heading>
+                          </Tooltip>
+                        </Channel>
+                      </Th>
+                      <Th element="COMPACT_TABLE" textAlign="center">
+                        <Channel bgColor={channels.Voice.color}>
+                          <Tooltip text={templates[StringTemplates.TeamsViewSummaryOutbound]()} placement="top">
+                            <Heading>
+                              <CallOutgoingIcon decorative={true} />
+                            </Heading>
+                          </Tooltip>
+                        </Channel>
+                      </Th>
+                    </>
+                  );
+                return (
+                  <Th element="COMPACT_TABLE" textAlign="center">
+                    <Channel bgColor={channels[ch].color}>
+                      <Tooltip text={ch} placement="top">
+                        <Heading>
+                          <Icon icon={getChannelIcon(ch)} />
+                        </Heading>
+                      </Tooltip>
+                    </Channel>
+                  </Th>
+                );
+              })}
             </Tr>
           </THead>
           <TBody>
@@ -106,31 +90,24 @@ const TaskSummaryTile = () => {
               <Td element="COMPACT_TABLE" textAlign="center">
                 <Heading> {taskCounts.All.totalTaskCount} </Heading>
               </Td>
-              {channels?.voice?.taskCount && (
-                <Td element="COMPACT_TABLE" textAlign="center">
-                  <Heading> {taskCounts.All.tasks.voice_inbound} </Heading>
-                </Td>
-              )}
-              {channels?.voice?.taskCount && (
-                <Td element="COMPACT_TABLE" textAlign="center">
-                  <Heading> {taskCounts.All.tasks.voice_outbound} </Heading>
-                </Td>
-              )}
-              {channels?.chat?.taskCount && (
-                <Td element="COMPACT_TABLE" textAlign="center">
-                  <Heading> {taskCounts.All.tasks.chat} </Heading>
-                </Td>
-              )}
-              {channels?.sms?.taskCount && (
-                <Td element="COMPACT_TABLE" textAlign="center">
-                  <Heading> {taskCounts.All.tasks.sms} </Heading>
-                </Td>
-              )}
-              {channels?.video?.taskCount && (
-                <Td element="COMPACT_TABLE" textAlign="center">
-                  <Heading> {taskCounts.All.tasks.video} </Heading>
-                </Td>
-              )}
+              {channelNames.map((ch) => {
+                if (ch === 'Voice')
+                  return (
+                    <>
+                      <Td element="COMPACT_TABLE" textAlign="center">
+                        <Heading> {taskCounts.All.tasks.voice_inbound} </Heading>
+                      </Td>
+                      <Td element="COMPACT_TABLE" textAlign="center">
+                        <Heading> {taskCounts.All.tasks.voice_outbound} </Heading>
+                      </Td>
+                    </>
+                  );
+                return (
+                  <Td element="COMPACT_TABLE" textAlign="center">
+                    <Heading> {taskCounts.All.tasks[ch.toLowerCase()] || 0} </Heading>
+                  </Td>
+                );
+              })}
             </Tr>
             {teams.map((team) => {
               return (
@@ -141,31 +118,24 @@ const TaskSummaryTile = () => {
                   <Td element="COMPACT_TABLE" textAlign="center">
                     <Label> {taskCounts[team].totalTaskCount} </Label>
                   </Td>
-                  {channels?.voice?.taskCount && (
-                    <Td element="COMPACT_TABLE" textAlign="center">
-                      <Label> {taskCounts[team].tasks.voice_inbound} </Label>
-                    </Td>
-                  )}
-                  {channels?.voice?.taskCount && (
-                    <Td element="COMPACT_TABLE" textAlign="center">
-                      <Label> {taskCounts[team].tasks.voice_outbound} </Label>
-                    </Td>
-                  )}
-                  {channels?.chat?.taskCount && (
-                    <Td element="COMPACT_TABLE" textAlign="center">
-                      <Label> {taskCounts[team].tasks.chat} </Label>
-                    </Td>
-                  )}
-                  {channels?.sms?.taskCount && (
-                    <Td element="COMPACT_TABLE" textAlign="center">
-                      <Label> {taskCounts[team].tasks.sms} </Label>
-                    </Td>
-                  )}
-                  {channels?.video?.taskCount && (
-                    <Td element="COMPACT_TABLE" textAlign="center">
-                      <Label> {taskCounts[team].tasks.video} </Label>
-                    </Td>
-                  )}
+                  {channelNames.map((ch) => {
+                    if (ch === 'Voice')
+                      return (
+                        <>
+                          <Td element="COMPACT_TABLE" textAlign="center">
+                            <Label> {taskCounts[team].tasks.voice_inbound} </Label>
+                          </Td>
+                          <Td element="COMPACT_TABLE" textAlign="center">
+                            <Label> {taskCounts[team].tasks.voice_outbound} </Label>
+                          </Td>
+                        </>
+                      );
+                    return (
+                      <Td element="COMPACT_TABLE" textAlign="center">
+                        <Label> {taskCounts[team].tasks[ch.toLowerCase()] || 0} </Label>
+                      </Td>
+                    );
+                  })}
                 </Tr>
               );
             })}
@@ -178,31 +148,24 @@ const TaskSummaryTile = () => {
               <Td element="COMPACT_TABLE" textAlign="center">
                 <Label> {taskCounts.Other.totalTaskCount} </Label>
               </Td>
-              {channels?.voice?.taskCount && (
-                <Td element="COMPACT_TABLE" textAlign="center">
-                  <Label> {taskCounts.Other.tasks.voice_inbound} </Label>
-                </Td>
-              )}
-              {channels?.voice?.taskCount && (
-                <Td element="COMPACT_TABLE" textAlign="center">
-                  <Label> {taskCounts.Other.tasks.voice_outbound} </Label>
-                </Td>
-              )}
-              {channels?.chat?.taskCount && (
-                <Td element="COMPACT_TABLE" textAlign="center">
-                  <Label> {taskCounts.Other.tasks.chat} </Label>
-                </Td>
-              )}
-              {channels?.sms?.taskCount && (
-                <Td element="COMPACT_TABLE" textAlign="center">
-                  <Label> {taskCounts.Other.tasks.sms} </Label>
-                </Td>
-              )}
-              {channels?.video?.taskCount && (
-                <Td element="COMPACT_TABLE" textAlign="center">
-                  <Label> {taskCounts.Other.tasks.video} </Label>
-                </Td>
-              )}
+              {channelNames.map((ch) => {
+                if (ch === 'Voice')
+                  return (
+                    <>
+                      <Td element="COMPACT_TABLE" textAlign="center">
+                        <Label> {taskCounts.Other.tasks.voice_inbound} </Label>
+                      </Td>
+                      <Td element="COMPACT_TABLE" textAlign="center">
+                        <Label> {taskCounts.Other.tasks.voice_outbound} </Label>
+                      </Td>
+                    </>
+                  );
+                return (
+                  <Td element="COMPACT_TABLE" textAlign="center">
+                    <Label> {taskCounts.Other.tasks[ch.toLowerCase()] || 0} </Label>
+                  </Td>
+                );
+              })}
             </Tr>
           </TBody>
         </Table>

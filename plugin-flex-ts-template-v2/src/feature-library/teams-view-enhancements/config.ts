@@ -4,19 +4,19 @@ import TeamsViewEnhancementsConfig from './types/ServiceConfiguration';
 const {
   enabled = false,
   channels = {
-    voice: {
+    Voice: {
       color: '#ADD8E6',
       taskCount: true,
     },
-    chat: {
+    Chat: {
       color: '#87CEFA',
       taskCount: true,
     },
-    sms: {
+    SMS: {
       color: '#59cef8',
       taskCount: true,
     },
-    video: {
+    Video: {
       color: '#00CED1',
       taskCount: true,
     },
@@ -57,6 +57,14 @@ export const isFeatureEnabled = () => {
 };
 export const getChannelsConfig = () => {
   return channels;
+};
+export const getEnabledChannels = () => {
+  const enabledChannels: string[] = [];
+  const channelsNames = Object.keys(channels);
+  channelsNames.forEach((ch) => {
+    if (channels[ch].taskCount) enabledChannels.push(ch);
+  });
+  return enabledChannels;
 };
 export const getChannelVoice_Color = () => {
   return channels.voice.color;

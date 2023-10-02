@@ -45,19 +45,19 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
   "teams_view_enhancements": {
       "enabled": true,
       "channels": {
-        "voice": {
+        "Voice": {
           "color": "#ADD8E6",
           "taskCount": true
         },
-        "chat": {
+        "Chat": {
           "color": "#87CEFA",
           "taskCount": true
         },
-        "sms": {
+        "SMS": {
           "color": "#59cef8",
           "taskCount": true
         },
-        "video": {
+        "Video": {
           "color": "#00CED1",
           "taskCount": true
         }
