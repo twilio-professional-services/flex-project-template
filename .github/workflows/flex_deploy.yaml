@@ -117,6 +117,7 @@ jobs:
     uses: ./.github/workflows/terraform_deploy.yaml
     with:
       environment: ${{ inputs.environment }}
+      auto_serverless_deploy: ${{ inputs.auto_serverless_deploy }}
     secrets:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}

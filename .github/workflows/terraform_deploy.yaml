@@ -4,6 +4,9 @@ on:
       environment:
         required: true
         type: string
+      auto_serverless_deploy:
+        required: true
+        type: boolean
     secrets:
       TWILIO_ACCOUNT_SID:
         required: true
@@ -20,7 +23,10 @@ on:
         required: true
         type: environment
         description: "Environment to use for deployment"
-
+      auto_serverless_deploy:
+        required: true
+        type: boolean
+        description: Deploy serverless services?
 jobs:
   terraform_deploy:
     environment: ${{ inputs.environment }}
@@ -30,7 +36,6 @@ jobs:
       ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
       TF_STATE_FILES: ".terraform.lock.hcl|terraform.tfstate"
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
