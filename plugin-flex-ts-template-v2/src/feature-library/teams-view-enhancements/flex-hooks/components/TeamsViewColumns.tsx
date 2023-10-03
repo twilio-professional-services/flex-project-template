@@ -18,6 +18,7 @@ interface WorkerItem {
 const getSkills = (item: WorkerItem) => {
   return item.worker.attributes.routing ? item.worker?.attributes?.routing?.skills?.join(', ') : '-';
 };
+
 export const componentName = FlexComponent.TaskCanvasHeader;
 export const componentHook = function addWorkersDataTableColumns(flex: typeof Flex, manager: Flex.Manager) {
   flex.WorkersDataTable.Content.add(
