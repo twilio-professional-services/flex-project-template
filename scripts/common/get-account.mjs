@@ -11,7 +11,7 @@ const printProfileWarning = () => {
 }
 
 // Gets and returns the account SID of the active Twilio CLI profile if present
-const getActiveCliProfile = () => {
+export const getActiveCliProfile = () => {
   try {
     const profiles = shell.exec("twilio profiles:list -o json", {silent: true});
     
