@@ -14,7 +14,7 @@ import {
 import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { ProductFlexIcon } from '@twilio-paste/icons/esm/ProductFlexIcon';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import { AdminViewWrapper, FeatureCardWrapper } from './AdminView.Styles';

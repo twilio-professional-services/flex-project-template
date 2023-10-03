@@ -12,7 +12,7 @@ import {
   templates,
 } from '@twilio/flex-ui';
 import { useEffect, useState, useRef } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import { SyncMap } from 'twilio-sync';
 
 import { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';

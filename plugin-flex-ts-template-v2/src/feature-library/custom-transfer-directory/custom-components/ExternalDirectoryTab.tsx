@@ -1,7 +1,7 @@
 import { Flex, Alert } from '@twilio-paste/core';
 import { withTaskContext, ITask, Actions, Manager, useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import { useState, useRef, useEffect } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 
 import { SearchBox } from './CommonDirectoryComponents';
 import { getExternalDirectory } from '../config';
