@@ -18,6 +18,9 @@ on:
       overwrite_config:
         required: true
         type: boolean
+      initial_release:
+        required: true
+        type: boolean
     secrets:
       TWILIO_ACCOUNT_SID:
         required: true
