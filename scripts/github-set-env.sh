@@ -11,7 +11,10 @@ EOF=_PS_TEMPLATE_VAR_EOF_
 # Outputs the name/value pairs in the required format for multiline strings
 # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
 to_envs() { jq -r "to_entries[] | \"\(.key)<<$EOF\n\(.value)\n$EOF\n\""; }
+to_tf_envs() { jq -r "to_entries[] | \"TF_VAR_\(.key)<<$EOF\n\(.value)\n$EOF\n\""; }
 
 # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
 echo "$VARS_CONTEXT" | to_envs >> $GITHUB_ENV
+echo "$VARS_CONTEXT" | to_tf_envs >> $GITHUB_ENV
 echo "$SECRETS_CONTEXT" | to_envs >> $GITHUB_ENV
+echo "$SECRETS_CONTEXT" | to_tf_envs >> $GITHUB_ENV
