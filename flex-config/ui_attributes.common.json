@@ -252,6 +252,28 @@
       },
       "teams_view_enhancements": {
         "enabled": true,
+        "channels": {
+          "Voice": {
+            "color": "#ADD8E6",
+            "taskCount": true
+          },
+          "Chat": {
+            "color": "#87CEFA",
+            "taskCount": true
+          },
+          "SMS": {
+            "color": "#59cef8",
+            "taskCount": true
+          },
+          "Video": {
+            "color": "#00CED1",
+            "taskCount": false
+          }
+        },
+        "task_summary": false,
+        "team_activity": false,
+        "idle_status_color": "limegreen",
+        "busy_status_color": "royalblue",
         "highlight_handle_time": true,
         "handle_time_warning_threshold": 180,
         "handle_time_exceeded_threshold": 300,
