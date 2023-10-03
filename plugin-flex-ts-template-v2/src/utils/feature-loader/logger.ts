@@ -21,8 +21,6 @@ export const addHook = (feature: string, hook: any) => {
     return;
   }
 
-  const destinationName = hook.destinationName || 'Destination Name Not Specified';
-
-  console.info(`Feature ${feature} registered logger hook to send logs to: %c${destinationName}`, 'font-weight:bold');
+  console.info(`Feature ${feature} registered logger hook: %c${hook.loggerHook.name}`, 'font-weight:bold');
   destinations.push(hook.loggerHook());
 };
