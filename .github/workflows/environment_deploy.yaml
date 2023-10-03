@@ -105,7 +105,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') &&
       inputs.deploy_terraform == true
-    uses: ./.github/workflows/flex-deploy.yaml
+    uses: ./.github/workflows/flex_deploy.yaml
     with:
       environment: ${{ inputs.environment }}
       deploy_terraform: true
