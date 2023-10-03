@@ -20,6 +20,9 @@ export const addHook = (feature: string, hook: any) => {
     logger.warn(`Feature ${feature} declared logger hook, but is missing loggerHook to hook`);
     return;
   }
-  console.info(`Feature ${feature} registered logger hook: %c${typeof hook.loggerHook}`, 'font-weight:bold');
+
+  const destinationName = hook.destinationName || 'Destination Name Not Specified';
+
+  console.info(`Feature ${feature} registered logger hook to send logs to: %c${destinationName}`, 'font-weight:bold');
   destinations.push(hook.loggerHook());
 };
