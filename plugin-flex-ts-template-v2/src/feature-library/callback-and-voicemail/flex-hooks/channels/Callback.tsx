@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import React from 'react';
-import PhoneCallbackIcon from '@material-ui/icons/PhoneCallback';
+import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 
 import { TaskAttributes } from '../../../../types/task-router/Task';
 import { StringTemplates } from '../strings/Callback';
@@ -58,9 +58,9 @@ export const channelHook = function createCallbackChannel(flex: typeof Flex, man
       },
     },
     icons: {
-      active: <PhoneCallbackIcon key="active-callback-icon" />,
-      list: <PhoneCallbackIcon key="list-callback-icon" />,
-      main: <PhoneCallbackIcon key="main-callback-icon" />,
+      active: <CallOutgoingIcon element="C_AND_V_ICON" decorative={true} key="active-callback-icon" />,
+      list: <CallOutgoingIcon element="C_AND_V_ICON" decorative={true} key="list-callback-icon" />,
+      main: <CallOutgoingIcon element="C_AND_V_ICON" decorative={true} key="main-callback-icon" />,
     },
   };
 
