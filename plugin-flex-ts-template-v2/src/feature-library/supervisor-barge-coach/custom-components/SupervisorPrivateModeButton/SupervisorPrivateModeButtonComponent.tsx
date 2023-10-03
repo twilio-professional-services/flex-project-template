@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { TaskHelper, useFlexSelector, ITask, IconButton, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { Flex, Stack } from '@twilio-paste/core';
+import { Flex } from '@twilio-paste/core/flex';
+import { Stack } from '@twilio-paste/core/stack';
 
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';

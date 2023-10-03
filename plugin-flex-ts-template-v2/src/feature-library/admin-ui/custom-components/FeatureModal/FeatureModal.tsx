@@ -1,6 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Actions, Template, templates } from '@twilio/flex-ui';
-import { Alert, Box, TextArea, Anchor, Label, Switch, Button, Input, HelpText } from '@twilio-paste/core';
+import { Alert } from '@twilio-paste/core/alert';
+import { Box } from '@twilio-paste/core/box';
+import { TextArea } from '@twilio-paste/core/textarea';
+import { Anchor } from '@twilio-paste/core/anchor';
+import { Label } from '@twilio-paste/core/label';
+import { Switch } from '@twilio-paste/core/switch';
+import { Button } from '@twilio-paste/core/button';
+import { Input } from '@twilio-paste/core/input';
+import { HelpText } from '@twilio-paste/core/help-text';
 import { Form, FormControl } from '@twilio-paste/core/form';
 import { useUID, useUIDSeed } from '@twilio-paste/core/uid-library';
 import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading } from '@twilio-paste/core/modal';

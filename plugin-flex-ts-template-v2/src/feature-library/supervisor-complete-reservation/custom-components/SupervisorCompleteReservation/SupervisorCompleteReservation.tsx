@@ -1,5 +1,7 @@
 import { ITask, Template, templates } from '@twilio/flex-ui';
-import { AlertDialog, Button, Box } from '@twilio-paste/core';
+import { AlertDialog } from '@twilio-paste/core/alert-dialog';
+import { Button } from '@twilio-paste/core/button';
+import { Box } from '@twilio-paste/core/box';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 

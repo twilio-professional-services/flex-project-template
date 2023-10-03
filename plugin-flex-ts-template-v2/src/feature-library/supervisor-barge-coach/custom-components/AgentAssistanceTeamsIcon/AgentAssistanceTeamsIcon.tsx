@@ -1,4 +1,4 @@
-import { Tooltip } from '@twilio-paste/core';
+import { Tooltip } from '@twilio-paste/core/tooltip';
 import { ErrorIcon } from '@twilio-paste/icons/esm/ErrorIcon';
 import { useSelector } from 'react-redux';
 import { templates } from '@twilio/flex-ui';

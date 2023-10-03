@@ -1,6 +1,6 @@
 import React from 'react';
 import { Actions } from '@twilio/flex-ui';
-import { Button } from '@twilio-paste/core';
+import { Button } from '@twilio-paste/core/button';
 
 interface OwnProps {
   feature: string;

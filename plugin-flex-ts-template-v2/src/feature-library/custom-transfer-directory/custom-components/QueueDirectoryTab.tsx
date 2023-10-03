@@ -1,4 +1,5 @@
-import { Flex, Alert } from '@twilio-paste/core';
+import { Alert } from '@twilio-paste/core/alert';
+import { Flex } from '@twilio-paste/core/flex';
 import {
   withTaskContext,
   Manager,

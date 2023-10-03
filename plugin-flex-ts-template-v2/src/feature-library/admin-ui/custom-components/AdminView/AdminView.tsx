@@ -1,16 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Manager, Notifications, Template, templates } from '@twilio/flex-ui';
-import {
-  Heading,
-  Flex,
-  Label,
-  Box,
-  RadioButtonGroup,
-  RadioButton,
-  Input,
-  Spinner,
-  AlertDialog,
-} from '@twilio-paste/core';
+import { AlertDialog } from '@twilio-paste/core/alert-dialog';
+import { Box } from '@twilio-paste/core/box';
+import { Flex } from '@twilio-paste/core/flex';
+import { Heading } from '@twilio-paste/core/heading';
+import { Input } from '@twilio-paste/core/input';
+import { Label } from '@twilio-paste/core/label';
+import { RadioButton, RadioButtonGroup } from '@twilio-paste/core/radio-button-group';
+import { Spinner } from '@twilio-paste/core/spinner';
 import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { ProductFlexIcon } from '@twilio-paste/icons/esm/ProductFlexIcon';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
