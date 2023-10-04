@@ -1,9 +1,5 @@
 Use a loggerHook to add your own log destinations.
 
-Here is the loggerHook from the [`console-log-integration`](/flex-project-template/feature-library/console-log-integration) feature.
-
-Location: `plugin-flex-ts-template-v2/src/feature-library/console-log-integration/flex-hooks/logger/index.ts`
-
 ```ts
 import Console from '../../destination/Console';
 import { getLogLevel } from '../../config';

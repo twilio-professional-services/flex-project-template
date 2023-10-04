@@ -68,13 +68,13 @@ If for some reason this logging utility does not meet your needs - you are free 
 
 Destinations are an important concept for this logging utility. A destination is where the logs should go. It can be something simple, like the browser console, or something more complex like an external logging aggregator like Datadog.
 
-This logging utility can support any number of destinations - by default we've added the Browser Console as a destination and automatically enabled it in the `console-log-integration` feature.
+This logging utility can support any number of destinations - by default the template sends all logs to the browser console.
 
 ### Writing Custom Destinations
 
-If you wish to provide a custom destination for the logger, you only need to add a logger directory under your `flex-hooks` folder of your feature. See `feature-library/console-log-integration/flex-hooks/logger/index.ts` for an example implementation.
+If you wish to provide a custom destination for the logger, you only need to add a logger directory under your `flex-hooks` folder of your feature.
 
-Each logging hook must provide an instantiated class that extends `utils/logger/destination.ts`. For a real-world example, see `feature-library/console-log-integration/destination/Console.ts`.
+Each logging hook must provide an instantiated class that extends `utils/logger/destination.ts`.
 
 ```ts
 import { LogLevel } from '../../../utils/logger';
@@ -107,7 +107,7 @@ This logging utility will invoke your destination's handle method each time the 
 
 The abstract Destination class in `utils/logger/destination.ts` has a constructor method that is expecting to receive some configuration, such as the minimum log level that this destination is interested in, and whether or not to honor global meta data, or to even add meta data specific only to this destination.
 
-When you instantiate your custom destination class as part of your logger hook in your feature, you will need to provide it with this configuration in its constructor. Here is an example from the `console-log-integration` feature.
+When you instantiate your custom destination class as part of your logger hook in your feature, you will need to provide it with this configuration in its constructor.
 
 ```ts
 import Console from '../../destination/Console';

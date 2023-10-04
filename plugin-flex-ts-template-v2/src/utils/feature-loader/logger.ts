@@ -1,3 +1,5 @@
+import * as Flex from '@twilio/flex-ui';
+
 import FlexHelperSingleton from '../flex-helper';
 import logger from '../logger';
 import Destination from '../logger/destination';
@@ -15,7 +17,7 @@ export const init = () => {
   logger.processBuffer();
 };
 
-export const addHook = (feature: string, hook: any) => {
+export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
   if (!hook.loggerHook) {
     logger.warn(`Feature ${feature} declared logger hook, but is missing loggerHook to hook`);
     return;
