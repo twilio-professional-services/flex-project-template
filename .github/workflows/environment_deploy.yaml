@@ -18,7 +18,7 @@ on:
       twilio_api_secret:
         required: true
         type: string
-        description: "New environment api token"
+        description: "New environment api secret"
       tf_encryption_key:
         required: true
         type: string
@@ -95,8 +95,6 @@ jobs:
             });
 
 #     call webhook to log variable creation step
-
-      - uses: actions/checkout@v3
 
   deploy-flex-project-template:
     name: Deploy Flex Project Template
