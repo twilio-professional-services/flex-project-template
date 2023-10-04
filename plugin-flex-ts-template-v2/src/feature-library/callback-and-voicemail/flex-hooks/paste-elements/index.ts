@@ -12,4 +12,10 @@ export const pasteElementHook = {
   C_AND_V_CONTENT_HEADING: {
     marginBottom: 'space0',
   },
+  C_AND_V_ICON: {
+    width: '100%',
+    height: '100%',
+    minWidth: 'sizeSquare90',
+    padding: 'space20',
+  },
 } as { [key: string]: PasteCustomCSS };

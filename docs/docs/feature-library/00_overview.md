@@ -12,48 +12,49 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 <Tabs queryString="type">
 <TabItem value="default" label="Enabled by default" default>
 
-| Feature                         | Description                                                                 | Feature Docs Page                                                                           |
-| ------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| Admin UI                        | _adds a feature settings view to Flex for customizing the template_ <br/><br/> **note by default this is disabled locally as this feature is only intended for hosted flex.*       | [admin-ui](/feature-library/admin-ui)                                               |
-| Agent Automation                | _adds auto accept and auto wrapup behaviors to agent desktop_               | [agent-automation](/feature-library/agent-automation)                               |
-| Attribute Viewer                | _easily view task and worker attributes within Flex_                        | [attribute-viewer](/feature-library/attribute-viewer)                               |
-| Canned Responses               | _provide agents with pre-canned chat responses_                                                     | [canned-responses](/feature-library/canned-responses)                                 |
-| Callbacks and Voicemail         | _introduce support for callback and voicemail tasks_                        | [callback-and-voicemail](/feature-library/callback-and-voicemail)                   |
-| Caller ID                       | _provide agents with means to select their caller id when dialing out_      | [caller-id](/feature-library/caller-id)                                             |
-| Conference (external)           | _provide agents the ability to conference in external numbers_              | [conference](/feature-library/conference)                                           |
-| Conversation Transfer          | _introduce conversation-based messaging transfer functionality for agents_                          | [conversation-transfer](/feature-library/conversation-transfer)                       |
-| Custom Transfer Directory       | _customize the agent and queue transfer directories_                        | [custom-transfer-directory](/feature-library/custom-transfer-directory)             |
-| Device Manager                  | _provide agents the ability to select the audio output device_              | [device-manager](/feature-library/device-manager)                                   |
-| Dispositions                   | _provide agents the ability to select a disposition/wrap-up code and enter notes_                   | [dispositions](/feature-library/dispositions)                                         | ✅                |
-| Emoji Picker                    | _adds an emoji picker for messaging tasks_                                  | [emoji-picker](/feature-library/emoji-picker)                                       |
-| Enhanced CRM Container         | _optimize the CRM container experience_                                                             | [enhanced-crm-container](/feature-library/enhanced-crm-container)                     | ✅                |
-| Hang Up By Reporting           | _populates the Hang Up By and Destination attributes in Flex Insights_                              |     [hang-up-by](/feature-library/hang-up-by)                                             |
-| Internal Call (Agent to Agent) | _provide agents the ability to dial each other_                                                     | [internal-call](/feature-library/internal-call)                                       |
-| Park interaction               | _provide agents the ability to park interactions, preserving conversation history_                  | [park-interaction](/feature-library/park-interaction)                                 |
-| Pause Recording                 | _provide agents the ability to temporarily pause and resume call recording_ | [pause-recording](/feature-library/pause-recording)                                 |
-| Queues View Data Tiles          | _add Custom Data Tiles with real-time channel metrics (Task Counts, SLA%)_ | [queues-view-data-tiles](/feature-library/queues-view-data-tiles)           |
-| Schedule Manager               | _a flexible, robust, and scalable way to manage open and closed hours for Twilio Flex applications_ | [schedule-manager](/feature-library/schedule-manager)                                 |✅                    |
-| Scrollable Activities           | _allow the scrolling of the activities list_                                | [scrollable-activities](/feature-library/scrollable-activities)                     |
-| Supervisor Barge Coach          | _introduce advanced supervisor barge and coach features_                    | [supervisor-barge-coach](/feature-library/supervisor-barge-coach)                   |
-| Supervisor Capacity             | _allow supervisors to update worker capacity configuration within Flex_     | [supervisor-capacity](/feature-library/supervisor-capacity)                         |
-| Supervisor Complete Reservation | _allows supervisor to remotely complete agent tasks_                        | [supervisor-complete-reservation](/feature-library/supervisor-complete-reservation) |
-| Teams View Filters              | _adds additional filtering options to the supervisor teams view_            | [teams-view-filters](/feature-library/teams-view-filters)                           |
-| Teams View Enhancements         | _adds optional columns (Team, Dept, Location, Skills) to the Workers Table. <br/> enable task highlighting based on task age_             | [teams-view-enhancements](/feature-library/teams-view-enhancements)                           |
+| Feature                         | Description                                                                 |
+| ------------------------------- | --------------------------------------------------------------------------- |
+| [Admin UI](admin-ui)                        | _adds a feature settings view to Flex for customizing the template_ <br/> **note by default this is disabled locally as this feature is only intended for hosted Flex.*       |
+| [Agent Automation](agent-automation)                | _adds auto accept and auto wrapup behaviors to agent desktop_               |
+| [Attribute Viewer](attribute-viewer)                | _easily view task and worker attributes within Flex_                        |
+| [Canned Responses](canned-responses)               | _provide agents with pre-canned chat responses_                                                     |
+| [Callbacks and Voicemail](callback-and-voicemail)         | _introduce support for callback and voicemail tasks_                        |
+| [Caller ID](caller-id)                       | _provide agents with means to select their caller id when dialing out_      |
+| [Conference (external)](conference)           | _provide agents the ability to conference in external numbers_              |
+| [Conversation Transfer](conversation-transfer)          | _introduce conversation-based messaging transfer functionality for agents_                          |
+| [Custom Transfer Directory](custom-transfer-directory)       | _customize the agent and queue transfer directories_                        |
+| [Device Manager](device-manager)                  | _provide agents the ability to select the audio output device_              |
+| [Dispositions](dispositions)                   | _provide agents the ability to select a disposition/wrap-up code and enter notes_                   |
+| [Emoji Picker](emoji-picker)                    | _adds an emoji picker for messaging tasks_                                  |
+| [Enhanced CRM Container](enhanced-crm-container)         | _optimize the CRM container experience_                                                             |
+| [Hang Up By Reporting](hang-up-by)           | _populates the Hang Up By and Destination attributes in Flex Insights_                              |
+| [Internal Call (Agent to Agent)](internal-call) | _provide agents the ability to dial each other_                                                     |
+| [Park interaction](park-interaction)               | _provide agents the ability to park interactions, preserving conversation history_                  |
+| [Pause Recording](pause-recording)                 | _provide agents the ability to temporarily pause and resume call recording_ |
+| [Queues View Data Tiles](queues-view-data-tiles)          | _add Custom Data Tiles with real-time channel metrics (Task Counts, SLA%)_ |
+| [Schedule Manager](schedule-manager)               | _a flexible, robust, and scalable way to manage open and closed hours for Twilio Flex applications_ |
+| [Scrollable Activities](scrollable-activities)           | _allow the scrolling of the activities list_                                |
+| [Supervisor Barge & Coach](supervisor-barge-coach)          | _introduce advanced supervisor barge and coach features_                    |
+| [Supervisor Capacity](supervisor-capacity)             | _allow supervisors to update worker capacity configuration within Flex_     |
+| [Supervisor Complete Reservation](supervisor-complete-reservation) | _allows supervisor to remotely complete agent tasks_                        |
+| [Teams View Enhancements](teams-view-enhancements)         | _adds optional columns (Team, Dept, Location, Skills) to the Workers Table. <br/> enable task highlighting based on task age_             |
+| [Teams View Filters](teams-view-filters)              | _adds additional filtering options to the supervisor teams view_            |
 
 ---
 
 </TabItem>
 <TabItem value="additional" label="Additional features">
 
-| Feature                        | Description                                                                                         | Feature Docs Page                                                                             |
-| ------------------------------ | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Activity Reservation Handler   | _synchronize agent activities to reservation states_                                                | [activity-reservation-handler](/feature-library/activity-reservation-handler)         |
-| Activity Skill Filter          | _manage visibility for activities based on agent skills_                                            | [activity-skill-filter](/feature-library/activity-skill-filter)                       |
-| Chat Transfer                  | _introduce programmable chat transfer functionality for agents_                                     | [chat-transfer](/feature-library/chat-transfer)                                       |
-| Custom Hold Music              | _customize the experience when an agent places a call on hold_                                      | [custom-hold-music](/feature-library/custom-hold-music)                               |
-| Dual Channel Recording         | _automatically record both inbound and outbound calls in dual channel_                              | [dual-channel-recording](/feature-library/dual-channel-recording)                     |
-| Localization                   | _adds the ability to view Flex in a different language_                                             | [localization](/feature-library/localization)                                       |
-| Omni Channel Management        | _method for mixing chat and voice channels_                                                         | [omni-channel-capacity-management](/feature-library/omni-channel-capacity-management) |
+| Feature                        | Description                                                                                         |
+| ------------------------------ | --------------------------------------------------------------------------------------------------- |
+| [Activity Reservation Handler](activity-reservation-handler)   | _synchronize agent activities to reservation states_                                                |
+| [Activity Skill Filter](activity-skill-filter)          | _manage visibility for activities based on agent skills_                                            |
+| [Chat Transfer](chat-transfer)                  | _introduce programmable chat transfer functionality for agents_                                     |
+| [Custom Hold Music](custom-hold-music)              | _customize the experience when an agent places a call on hold_                                      |
+| [Dual Channel Recording](dual-channel-recording)         | _automatically record both inbound and outbound calls in dual channel_                              |
+| [Localization](localization)                   | _adds the ability to view Flex in a different language_                                             |
+| [Omni Channel Management](omni-channel-capacity-management)        | _method for mixing chat and voice channels_                                                         |
+| [SIP Support](sip-support)                    | _adds call control functionality when using a non-WebRTC phone_                                     |
 
 </TabItem>
 <TabItem value="experimental" label="Experimental features">
@@ -64,10 +65,10 @@ These features will require modification for usage in a production setting. They
 
 ::: 
 
-| Feature                        | Description                                                                                         | Feature Docs Page                                                                             |
-| ------------------------------ | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| Chat to Video Escalation       | _provide agents ability to elevate a chat conversation to a video conversation with screen sharing_ | [chat-to-video-escalation](/feature-library/chat-to-video-escalation)                 |
-| Multi-call                     | _allow agents to receive a transferred call while already on a call_                                | [multi-call](/feature-library/multi-call)                                             |
+| Feature                        | Description                                                                                         |
+| ------------------------------ | --------------------------------------------------------------------------------------------------- |
+| [Chat-to-Video Escalation](chat-to-video-escalation)       | _provide agents ability to elevate a chat conversation to a video conversation with screen sharing_ |
+| [Multi-call](multi-call)                     | _allow agents to receive a transferred call while already on a call_                                |
 
 </TabItem>
 </Tabs>
