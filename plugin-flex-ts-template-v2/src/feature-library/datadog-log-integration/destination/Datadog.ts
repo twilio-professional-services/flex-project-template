@@ -54,7 +54,6 @@ export default class DatadogDestination extends Destination {
 
   async flush(): Promise<void> {
     if (!this.hasUnsentLogs()) {
-      console.debug('Datadog: no logs to flush!');
       return;
     }
 

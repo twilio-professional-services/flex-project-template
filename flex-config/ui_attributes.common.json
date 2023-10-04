@@ -351,6 +351,13 @@
       },
       "sip_support": {
         "enabled": false
+      },
+      "datadog_log_integration": {
+        "enabled": false,
+        "log_level": "info",
+        "api_key": "",
+        "intake_region": "",
+        "flush_timeout": 5000
       }
     }
   }
