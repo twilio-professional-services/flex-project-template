@@ -23,8 +23,6 @@ const flexConfigRemovals = [
 ];
 
 let keepFeatures = [];
-// systemFeatures are features that should not be removed by this script
-const systemFeatures = ['console-log-integration'];
 
 const performGitHubWorkflowRemovals = async () => {
   shell.echo("Removing features from GitHub Actions workflows...");
@@ -138,15 +136,11 @@ const parseArgs = (args) => {
   // node scripts/remove-features.js except feat1 feat2 featX
   if (args.length < 4 || (args.length > 3 && args[2] !== "except")) {
     // no features specified to remove or incorrect args format
-    // merge in systemFeatures - these should be kept
-    keepFeatures = keepFeatures.concat(systemFeatures);
     shell.echo("Removing all features...");
     return;
   }
   
   keepFeatures = args.slice(3);
-  // merge in systemFeatures - these should be kept
-  keepFeatures = keepFeatures.concat(systemFeatures);
   
   shell.echo(`Removing all features except ${keepFeatures.join(", ")}...`);
 }
