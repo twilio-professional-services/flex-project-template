@@ -99,6 +99,7 @@ jobs:
       - uses: actions/checkout@v3
 
   deploy-flex-project-template:
+    name: Deploy Flex Project Template
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
