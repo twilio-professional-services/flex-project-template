@@ -34,6 +34,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
+
       - name: install Twilio CLI
         run: |
           npm install -g twilio-cli
