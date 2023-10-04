@@ -48,7 +48,7 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   // Register built-in hooks
   Actions.addHook(flex, manager, 'built-in TaskRouterService', TaskRouterReplaceCompleteTask);
   Events.addHook(flex, manager, 'built-in Sync client', SyncClientTokenUpdated);
-  Logger.addHook(flex, manager, 'built-in Browser Logs to Console', sendLogsToBrowserConsole);
+  Logger.addHook(flex, manager, 'built-in logger to browser console', sendLogsToBrowserConsole);
 
   // After all features have initialized, execute deferred hooks
   Logger.init();
@@ -99,7 +99,7 @@ export const loadFeature = (flex: typeof Flex, manager: Flex.Manager, feature: F
     }
 
     if (hook.loggerHook) {
-      Logger.addHook(name, hook);
+      Logger.addHook(flex, manager, name, hook);
     }
 
     if (hook.notificationHook) {
