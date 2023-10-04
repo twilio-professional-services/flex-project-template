@@ -16,22 +16,8 @@
         ]
       },
       {
-        "filter_friendly_name": "Retry attempt 2",
-        "expression": "callBackData.attempts == 2",
-        "targets": [
-          {
-            "queue": "${QUEUE_SID_EVERYONE}",
-            "expression": "1 == 0",
-            "timeout": 1800
-          },
-          {
-            "queue": "${QUEUE_SID_EVERYONE}"
-          }
-        ]
-      },
-      {
         "filter_friendly_name": "Additional retry attempts",
-        "expression": "callBackData.attempts > 2",
+        "expression": "callBackData.attempts > 1",
         "targets": [
           {
             "queue": "${QUEUE_SID_EVERYONE}",
