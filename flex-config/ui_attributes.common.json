@@ -351,10 +351,6 @@
       },
       "sip_support": {
         "enabled": false
-      },
-      "console_log_integration": {
-        "enabled": true,
-        "log_level": "info"
       }
     }
   }
