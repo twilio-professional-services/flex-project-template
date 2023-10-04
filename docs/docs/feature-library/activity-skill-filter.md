@@ -55,7 +55,7 @@ The following example images show the behavior of the Activity skill filter migh
 }
 ```
 
-This feature depends on a configured set of rules for the different Agent Activities. After [enabling](/setup-guides/configure_the_template#the-data-model) the feature the following configuration is required
+This feature depends on a configured set of rules for the different Agent Activities. After [enabling](/building/template-utilities/configuration#configuration-management) the feature the following configuration is required
 
 The following are the descriptions of the configuration objects and what they represent 
 
