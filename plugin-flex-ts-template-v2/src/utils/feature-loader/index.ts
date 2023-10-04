@@ -17,7 +17,7 @@ import * as TeamsFilters from './teams-filters';
 import * as SyncClientTokenUpdated from '../sdk-clients/sync/tokenUpdated';
 import * as TaskRouterReplaceCompleteTask from '../serverless/TaskRouter/CompleteTask';
 import * as Logger from './logger';
-import { sendLogsToBrowserConsole } from '../logger';
+import * as SendLogsToBrowserConsole from '../logger/sendLogsToBrowserConsole';
 // @ts-ignore
 import features from '../../feature-library/*';
 
@@ -48,7 +48,7 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   // Register built-in hooks
   Actions.addHook(flex, manager, 'built-in TaskRouterService', TaskRouterReplaceCompleteTask);
   Events.addHook(flex, manager, 'built-in Sync client', SyncClientTokenUpdated);
-  Logger.addHook(flex, manager, 'built-in logger to browser console', sendLogsToBrowserConsole);
+  Logger.addHook(flex, manager, 'built-in logger to browser console', SendLogsToBrowserConsole);
 
   // After all features have initialized, execute deferred hooks
   Logger.init();

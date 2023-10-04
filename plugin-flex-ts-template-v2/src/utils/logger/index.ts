@@ -1,4 +1,3 @@
-import Console from './Console';
 import Destination from './destination';
 
 export type LogLevel = 'log' | 'debug' | 'warn' | 'info' | 'error';
@@ -84,8 +83,3 @@ class Logger {
 }
 
 export default new Logger();
-
-export function sendLogsToBrowserConsole() {
-  // by default the Console logger should ignore meta data
-  return new Console({ minLogLevel: 'debug', metaData: null });
-}
