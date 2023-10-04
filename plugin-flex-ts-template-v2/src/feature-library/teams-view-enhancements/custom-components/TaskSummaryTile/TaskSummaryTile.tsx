@@ -108,7 +108,7 @@ const TaskSummaryTile = () => {
                 );
               })}
             </Tr>
-            {teams.map((team) => {
+            {teams.map((team: string) => {
               return (
                 <Tr key={team}>
                   <Td element="COMPACT_TABLE">

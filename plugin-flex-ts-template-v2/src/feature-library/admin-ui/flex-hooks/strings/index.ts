@@ -24,6 +24,7 @@ export enum StringTemplates {
   UPDATED_MODAL_DESC = 'PSAdminUpdatedModalDesc',
   UPDATED_MODAL_RELOAD = 'PSAdminUpdatedModalReload',
   SAVE_DISABLED = 'PSAdminSaveDisabled',
+  EDIT_COMMON_SETTINGS = 'PSAdminEditCommonSettings',
 }
 
 export const stringHook = () => ({
@@ -48,6 +49,7 @@ export const stringHook = () => ({
       'Another user has updated global settings. Click "Reload" to refresh the view with the updated settings. Saving global settings will be unavailable until the view is reloaded.',
     [StringTemplates.UPDATED_MODAL_RELOAD]: 'Reload',
     [StringTemplates.SAVE_DISABLED]: 'Saving global settings is unavailable until the view is reloaded.',
+    [StringTemplates.EDIT_COMMON_SETTINGS]: 'Edit common settings',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,

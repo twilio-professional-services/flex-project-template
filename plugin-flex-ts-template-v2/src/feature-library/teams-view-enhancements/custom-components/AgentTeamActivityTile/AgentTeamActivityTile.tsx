@@ -97,7 +97,7 @@ const AgentTeamActivityTile = () => {
                 );
               })}
             </Tr>
-            {teams.map((team) => {
+            {teams.map((team: string) => {
               const agentCount = workerActivityCounts[team].totalAgentCount;
               return (
                 <Tr key={team}>

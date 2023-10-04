@@ -33,7 +33,8 @@ export default async () => {
     // disable admin panel for local
     flexConfigJsonData.custom_data.features.admin_ui.enabled = false
     
-    appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
+    appConfigFileData = appConfigFileData.replace("common: {}", `common: ${JSON5.stringify(flexConfigJsonData.custom_data.common, null, 2)}`);
+    appConfigFileData = appConfigFileData.replace("features: {}", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
     
     await fs.writeFile(pluginAppConfig, appConfigFileData, 'utf8');
   } catch (error) {
