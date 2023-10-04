@@ -133,17 +133,6 @@
           "Purchasing",
           "Customer Service",
           "Recruiting"
-        ],
-        "team_options": [
-          "Blue Team",
-          "Red Team",
-          "Gold Team",
-          "VIP Team",
-          "Orange Team",
-          "Yellow Team",
-          "Green Team",
-          "Purple Team",
-          "Gray Team"
         ]
       },
       "supervisor_capacity": {

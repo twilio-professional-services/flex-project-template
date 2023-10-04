@@ -11,5 +11,4 @@ export default interface TeamViewFiltersConfig {
     agent_skills: boolean;
   };
   department_options: Array<string>;
-  team_options: Array<string>;
 }
