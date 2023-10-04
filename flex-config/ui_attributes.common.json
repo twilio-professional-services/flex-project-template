@@ -5,6 +5,15 @@
     }
   },
   "custom_data": {
+    "common": {
+      "log_level": "info",
+      "teams": [
+        "Blue Team",
+        "Red Team",
+        "Gold Team",
+        "VIP Team"
+      ]
+    },
     "features": {
       "activity_skill_filter": {
         "enabled": true,

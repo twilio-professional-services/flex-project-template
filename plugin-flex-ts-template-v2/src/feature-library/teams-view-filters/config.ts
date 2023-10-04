@@ -5,7 +5,6 @@ const {
   enabled = false,
   log_filters = false,
   department_options = [],
-  team_options = [],
 } = (getFeatureFlags().features?.teams_view_filters as TeamViewFiltersConfig) || {};
 const {
   activities = true,
@@ -16,6 +15,7 @@ const {
   team = false,
   agent_skills = false,
 } = getFeatureFlags().features?.teams_view_filters?.applied_filters || {};
+const { teams = [] } = getFeatureFlags().common || {};
 
 export const isFeatureEnabled = () => {
   return enabled;
@@ -58,5 +58,5 @@ export const getDepartmentOptions = () => {
 };
 
 export const getTeamOptions = () => {
-  return team_options;
+  return teams;
 };

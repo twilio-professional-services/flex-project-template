@@ -9,14 +9,13 @@ import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 import { TileWrapper, Channel, Label, Heading } from './TaskSummaryTile.Components';
 import { getTasksByTeamCounts } from '../../utils/WorkerDataUtil';
 import { TaskCounts } from '../../types';
-import { getEnabledChannels, getChannelsConfig } from '../../config';
-import { getTeamOptions } from '../../../teams-view-filters/config';
+import { getEnabledChannels, getChannelsConfig, getTeams } from '../../config';
 import { StringTemplates } from '../../flex-hooks/strings';
 import { Channels } from '../../types/ServiceConfiguration';
 import { getChannelIcon } from '../../utils/helpers';
 
 const TaskSummaryTile = () => {
-  const teams = getTeamOptions();
+  const teams = getTeams();
   const taskCounts: TaskCounts = useFlexSelector((state: AppState) => {
     const workers: SupervisorWorkerState[] = state.flex.supervisor.workers;
     return getTasksByTeamCounts(workers, teams);
