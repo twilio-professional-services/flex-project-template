@@ -23,6 +23,8 @@ const flexConfigRemovals = [
 ];
 
 let keepFeatures = [];
+// systemFeatures are features that should not be removed by this script
+const systemFeatures = ['console-log-integration'];
 
 const performGitHubWorkflowRemovals = async () => {
   shell.echo("Removing features from GitHub Actions workflows...");
@@ -141,6 +143,7 @@ const parseArgs = (args) => {
   }
   
   keepFeatures = args.slice(3);
+  keepFeatures = keepFeatures.concat(systemFeatures);
   
   shell.echo(`Removing all features except ${keepFeatures.join(", ")}...`);
 }
