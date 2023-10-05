@@ -39,6 +39,9 @@ The custom_data model that lives in ui_attributes follows this schema:
 ```json
 {
 "custom_data": {
+    "common": {
+      // template-wide config options are here
+    },
     "features": {
       "<feature-name>": {
         "enabled": true,
@@ -54,9 +57,22 @@ The custom_data model that lives in ui_attributes follows this schema:
 
 Ultimately, enablement of each feature is managed by this object as it appears in the [hosted Flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) (or `appConfig.js` if running [locally](#local-environment))
 
+#### Common configuration
+
+Some configuration is not specific to a feature, and is included in the `common` section. This section is intended to be used for items that could be used by several features.
+
+:::tip Food for thought
+If you have two features which need to share a piece of configuration, consider that it likely makes more sense to combine the features rather than using common configuration.
+:::
+
+The following common configuration properties are included by default:
+
+- **`log_level`** - The minimum log level to output to the browser console. `info` by default; may be set to `debug`, `log`, `warn`, `info`, or `error`
+- **`teams`** - Array of team names used by various features to populate team lists, matching the values used in worker attributes.
+
 #### Per-worker configuration overrides
 
-When performing testing, or for managing a diverse contact center, you may wish different workers to have a different feature configuration. This could be variations of feature settings or enabling a different feature set altogether. You may add a `config_overrides` object to a worker's attributes to override any feature configuration, taking priority over both the hosted Flex configration and the local `appConfig.js` (if applicable).
+When performing testing, or for managing a diverse contact center, you may wish different workers to have a different feature configuration. This could be variations of feature settings or enabling a different feature set altogether. You may add a `config_overrides` object to a worker's attributes to override any feature configuration, taking priority over both the hosted Flex configuration and the local `appConfig.js` (if applicable).
 
 For example, if the `activity-reservation-handler` feature is globally enabled but you wish to disable it for a specific worker, you can add the following to the worker's attributes to disable it:
 

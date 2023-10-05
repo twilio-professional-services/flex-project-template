@@ -7,6 +7,7 @@ import AdminUiService from './AdminUiService';
 
 const acronyms = ['id', 'ui', 'sip', 'pstn', 'sms', 'crm', 'sla', 'cbm', 'url'];
 const hiddenFeatures = ['admin_ui'];
+const docsBaseUrl = 'https://twilio-professional-services.github.io/flex-project-template';
 
 // String to identify the 'common' feature
 // Explicitly a value that is invalid per the 'add-feature' script
@@ -44,10 +45,11 @@ export const formatName = (name: string): string => {
 };
 
 export const formatDocsUrl = (name: string): string => {
-  return `https://twilio-professional-services.github.io/flex-project-template/feature-library/${name.replaceAll(
-    '_',
-    '-',
-  )}`;
+  if (name === featureCommon) {
+    return `${docsBaseUrl}/building/template-utilities/configuration#common-configuration`;
+  } else {
+    return `${docsBaseUrl}/feature-library/${name.replaceAll('_', '-')}`;
+  }
 };
 
 const updateWorkerSetting = async (feature: string, config: any) => {

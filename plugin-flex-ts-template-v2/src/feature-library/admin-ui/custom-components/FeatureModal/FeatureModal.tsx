@@ -265,11 +265,9 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
               <Template source={templates[StringTemplates.REVERT_WORKER_TO_GLOBAL]} />
             </Button>
           )}
-          {feature !== featureCommon && (
-            <Anchor href={formatDocsUrl(feature)} showExternal>
-              <Template source={templates[StringTemplates.DOCS]} />
-            </Anchor>
-          )}
+          <Anchor href={formatDocsUrl(feature)} showExternal>
+            <Template source={templates[StringTemplates.DOCS]} />
+          </Anchor>
         </ModalFooterActions>
         <ModalFooterActions>
           <Button variant="secondary" onClick={handleClose}>
