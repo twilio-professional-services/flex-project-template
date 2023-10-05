@@ -84,8 +84,16 @@ export const getChannelColors = () => {
   });
   return colors;
 };
-export const getChannelNames = () => {
-  return Object.keys(channels);
+export const getChannelsConfig = () => {
+  return channels;
+};
+export const getTaskSummaryChannels = () => {
+  const enabledChannels: string[] = [];
+  const channelsNames = Object.keys(channels);
+  channelsNames.forEach((ch) => {
+    if (channels[ch].teamsTaskSummaryColumn) enabledChannels.push(ch);
+  });
+  return enabledChannels;
 };
 export const isChannelVoice_CountsEnabled = () => {
   return channels?.voice?.taskCountsDataTile;

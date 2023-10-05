@@ -11,7 +11,7 @@ import {
   isWaitingTasksEnabled,
   isLongestWaitTimeEnabled,
   isAgentsByActivityEnabled,
-  getChannelNames,
+  getChannelsConfig,
   getChannelColors,
   isChannelVoice_CountsEnabled,
   isChannelChat_CountsEnabled,
@@ -25,46 +25,37 @@ import {
 } from '../../config';
 
 const colors = getChannelColors();
+const channelList = Object.keys(getChannelsConfig());
 export const componentName = FlexComponent.QueueStats;
 export const componentHook = function addDataTiles(flex: typeof Flex) {
   if (isChannelVoice_CountsEnabled()) {
     const options: Flex.ContentFragmentProps = { sortOrder: -6 };
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <ChannelTaskCountTile
-        key="voice-tasks"
-        channelName="Voice"
-        bgColor={colors.voice}
-        channelList={getChannelNames()}
-      />,
+      <ChannelTaskCountTile key="voice-tasks" channelName="Voice" bgColor={colors.voice} channelList={channelList} />,
       options,
     );
   }
   if (isChannelChat_CountsEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <ChannelTaskCountTile
-        key="chat-tasks"
-        channelName="Chat"
-        bgColor={colors.chat}
-        channelList={getChannelNames()}
-      />,
+      <ChannelTaskCountTile key="chat-tasks" channelName="Chat" bgColor={colors.chat} channelList={channelList} />,
       { sortOrder: -5 },
     );
   }
   if (isChannelSMS_CountsEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <ChannelTaskCountTile key="sms-tasks" channelName="SMS" bgColor={colors.sms} channelList={getChannelNames()} />,
+      <ChannelTaskCountTile key="sms-tasks" channelName="SMS" bgColor={colors.sms} channelList={channelList} />,
       { sortOrder: -4 },
     );
   }
   if (isChannelVoice_SLAEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <ChannelSLATile key="voice-sla-tile" channelName="Voice" channelList={getChannelNames()} />,
+      <ChannelSLATile key="voice-sla-tile" channelName="Voice" channelList={channelList} />,
       { sortOrder: -3 },
     );
   }
   if (isChannelChat_SLAEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <ChannelSLATile key="chat-sla-tile" channelName="Chat" channelList={getChannelNames()} />,
+      <ChannelSLATile key="chat-sla-tile" channelName="Chat" channelList={channelList} />,
       {
         sortOrder: -2,
       },
@@ -72,7 +63,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
   }
   if (isChannelSMS_SLAEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <ChannelSLATile key="sms-sla-tile" channelName="SMS" channelList={getChannelNames()} />,
+      <ChannelSLATile key="sms-sla-tile" channelName="SMS" channelList={channelList} />,
       {
         sortOrder: -1,
       },
@@ -80,7 +71,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
   }
   if (isAllChannels_SLAEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <AllChannelsSLATile key="combo-data-tile" colors={colors} channelList={getChannelNames()} />,
+      <AllChannelsSLATile key="combo-data-tile" colors={colors} channelList={channelList} />,
       { sortOrder: 0 },
     );
   }
