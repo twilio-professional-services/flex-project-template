@@ -25,6 +25,7 @@ export enum StringTemplates {
   UPDATED_MODAL_RELOAD = 'PSAdminUpdatedModalReload',
   SAVE_DISABLED = 'PSAdminSaveDisabled',
   EDIT_COMMON_SETTINGS = 'PSAdminEditCommonSettings',
+  MISSING_SETTINGS = 'PSAdminMissingSettings',
 }
 
 export const stringHook = () => ({
@@ -50,6 +51,8 @@ export const stringHook = () => ({
     [StringTemplates.UPDATED_MODAL_RELOAD]: 'Reload',
     [StringTemplates.SAVE_DISABLED]: 'Saving global settings is unavailable until the view is reloaded.',
     [StringTemplates.EDIT_COMMON_SETTINGS]: 'Edit common settings',
+    [StringTemplates.MISSING_SETTINGS]:
+      'No settings were found. This could be due to them being removed or not yet deployed.',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,

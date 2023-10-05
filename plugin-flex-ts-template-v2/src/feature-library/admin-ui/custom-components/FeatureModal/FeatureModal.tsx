@@ -143,6 +143,11 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
             </Alert>
           </Box>
         )}
+        {!Object.keys(config).length && (
+          <Alert variant="neutral">
+            <Template source={templates[StringTemplates.MISSING_SETTINGS]} />
+          </Alert>
+        )}
         <Form>
           {!hideComponents &&
             Object.entries(config)
