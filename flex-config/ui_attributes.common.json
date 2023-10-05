@@ -284,34 +284,46 @@
       },
       "queues_view_data_tiles": {
         "enabled": false,
-        "activeTasksDataTile": false,
-        "waitingTasksDataTile": false,
-        "longestWaitTimeDataTile": false,
-        "agentsByActivityBarChart": true,
+        "queuesViewTiles": {
+          "allChannelsDataTile": false,
+          "enhancedAgentByActivityPieChart": false,
+          "activeTasksDataTile": false,
+          "waitingTasksDataTile": false,
+          "longestWaitTimeDataTile": false,
+          "agentsByActivityBarChart": true
+        },
+        "teamsViewTiles": {
+          "taskSummaryTile": false,
+          "teamActivityTile": false,
+          "statusIdleColor": "limegreen",
+          "statusBusyColor": "royalblue"
+        },
         "channels": {
           "voice": {
             "color": "#ADD8E6",
             "SLADataTile": true,
-            "taskCountsDataTile": true
+            "taskCountsDataTile": true,
+            "teamsTaskSummaryColumn": true
           },
           "chat": {
             "color": "#87CEFA",
             "SLADataTile": false,
-            "taskCountsDataTile": false
+            "taskCountsDataTile": false,
+            "teamsTaskSummaryColumn": true
           },
           "sms": {
             "color": "#59cef8",
             "SLADataTile": true,
-            "taskCountsDataTile": true
+            "taskCountsDataTile": true,
+            "teamsTaskSummaryColumn": true
           },
           "video": {
             "color": "#00CED1",
             "SLADataTile": false,
-            "taskCountsDataTile": false
+            "taskCountsDataTile": false,
+            "teamsTaskSummaryColumn": true
           }
         },
-        "allChannelsDataTile": false,
-        "enhancedAgentByActivityPieChart": false,
         "agentActivityConfiguration": {
           "activities": {
             "Available": {

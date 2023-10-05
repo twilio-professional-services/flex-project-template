@@ -1,11 +1,19 @@
-export default interface QueuesViewDataTilesConfig {
+export default interface DataTilesConfig {
   enabled: boolean;
-  activeTasksDataTile: boolean;
-  waitingTasksDataTile: boolean;
-  longestWaitTimeDataTile: boolean;
-  agentsByActivityBarChart: boolean;
-  allChannelsDataTile: boolean;
-  enhancedAgentByActivityPieChart: boolean;
+  queuesViewTiles: {
+    activeTasksDataTile: boolean;
+    waitingTasksDataTile: boolean;
+    longestWaitTimeDataTile: boolean;
+    agentsByActivityBarChart: boolean;
+    allChannelsDataTile: boolean;
+    enhancedAgentByActivityPieChart: boolean;
+  };
+  teamsViewTiles: {
+    taskSummaryTile: boolean;
+    teamActivityTile: boolean;
+    statusIdleColor: string;
+    statusBusyColor: string;
+  };
   channels: Channels;
   agentActivityConfiguration: {
     activities: {
@@ -27,6 +35,7 @@ export interface ChannelConfig {
   color: string;
   SLADataTile: boolean;
   taskCountsDataTile: boolean;
+  teamsTaskSummaryColumn: boolean;
 }
 
 interface ActivityConfig {

@@ -13,9 +13,6 @@ import {
   isAgentsByActivityEnabled,
   getChannelNames,
   getChannelColors,
-  getChannelVoice_Color,
-  getChannelChat_Color,
-  getChannelSMS_Color,
   isChannelVoice_CountsEnabled,
   isChannelChat_CountsEnabled,
   isChannelSMS_CountsEnabled,
@@ -27,6 +24,7 @@ import {
   getAgentActivityConfig,
 } from '../../config';
 
+const colors = getChannelColors();
 export const componentName = FlexComponent.QueueStats;
 export const componentHook = function addDataTiles(flex: typeof Flex) {
   if (isChannelVoice_CountsEnabled()) {
@@ -35,7 +33,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
       <ChannelTaskCountTile
         key="voice-tasks"
         channelName="Voice"
-        bgColor={getChannelVoice_Color()}
+        bgColor={colors.voice}
         channelList={getChannelNames()}
       />,
       options,
@@ -46,7 +44,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
       <ChannelTaskCountTile
         key="chat-tasks"
         channelName="Chat"
-        bgColor={getChannelChat_Color()}
+        bgColor={colors.chat}
         channelList={getChannelNames()}
       />,
       { sortOrder: -5 },
@@ -54,12 +52,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
   }
   if (isChannelSMS_CountsEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <ChannelTaskCountTile
-        key="sms-tasks"
-        channelName="SMS"
-        bgColor={getChannelSMS_Color()}
-        channelList={getChannelNames()}
-      />,
+      <ChannelTaskCountTile key="sms-tasks" channelName="SMS" bgColor={colors.sms} channelList={getChannelNames()} />,
       { sortOrder: -4 },
     );
   }
@@ -87,7 +80,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
   }
   if (isAllChannels_SLAEnabled()) {
     flex.QueuesStats.AggregatedQueuesDataTiles.Content.add(
-      <AllChannelsSLATile key="combo-data-tile" colors={getChannelColors()} channelList={getChannelNames()} />,
+      <AllChannelsSLATile key="combo-data-tile" colors={colors} channelList={getChannelNames()} />,
       { sortOrder: 0 },
     );
   }

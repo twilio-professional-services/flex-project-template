@@ -1,36 +1,49 @@
 import { getFeatureFlags } from '../../utils/configuration';
-import QueuesViewDataTilesConfig from './types/ServiceConfiguration';
+import DataTilesConfig from './types/ServiceConfiguration';
 
 const {
   enabled = false,
-  activeTasksDataTile = false,
-  waitingTasksDataTile = false,
-  longestWaitTimeDataTile = false,
-  agentsByActivityBarChart = false,
+  queuesViewTiles = {
+    activeTasksDataTile: false,
+    waitingTasksDataTile: false,
+    longestWaitTimeDataTile: false,
+    agentsByActivityBarChart: false,
+    allChannelsDataTile: false,
+    enhancedAgentByActivityPieChart: true,
+  },
+  teamsViewTiles = {
+    taskSummaryTile: false,
+    teamActivityTile: false,
+    statusIdleColor: 'limegreen',
+    statusBusyColor: 'royalblue',
+  },
   channels = {
     voice: {
       color: '#ADD8E6',
       SLADataTile: true,
       taskCountsDataTile: true,
+      teamsTaskSummaryColumn: true,
     },
     chat: {
       color: '#87CEFA',
       SLADataTile: true,
       taskCountsDataTile: true,
+      teamsTaskSummaryColumn: true,
     },
     sms: {
       color: '#59cef8',
       SLADataTile: false,
       taskCountsDataTile: false,
+      teamsTaskSummaryColumn: true,
     },
     video: {
       color: '#00CED1',
       SLADataTile: false,
       taskCountsDataTile: false,
+      teamsTaskSummaryColumn: true,
     },
   },
-  allChannelsDataTile = false,
-  enhancedAgentByActivityPieChart = true,
+
   agentActivityConfiguration = {
     activities: {
       Available: { color: 'green', icon: 'Accept' },
@@ -42,7 +55,7 @@ const {
     },
     other: { color: 'darkred', icon: 'More' },
   },
-} = (getFeatureFlags()?.features?.queues_view_data_tiles as QueuesViewDataTilesConfig) || {};
+} = (getFeatureFlags()?.features?.queues_view_data_tiles as DataTilesConfig) || {};
 
 const { assignedTasksColumn = true, wrappingTasksColumn = true } =
   getFeatureFlags()?.features?.queues_view_data_tiles?.queuesStatsColumns || {};
@@ -52,16 +65,16 @@ export const isFeatureEnabled = () => {
 };
 
 export const isActiveTasksEnabled = () => {
-  return activeTasksDataTile;
+  return queuesViewTiles.activeTasksDataTile;
 };
 export const isWaitingTasksEnabled = () => {
-  return waitingTasksDataTile;
+  return queuesViewTiles.waitingTasksDataTile;
 };
 export const isLongestWaitTimeEnabled = () => {
-  return longestWaitTimeDataTile;
+  return queuesViewTiles.longestWaitTimeDataTile;
 };
 export const isAgentsByActivityEnabled = () => {
-  return agentsByActivityBarChart;
+  return queuesViewTiles.agentsByActivityBarChart;
 };
 export const getChannelColors = () => {
   const channelNames = Object.keys(channels);
@@ -73,15 +86,6 @@ export const getChannelColors = () => {
 };
 export const getChannelNames = () => {
   return Object.keys(channels);
-};
-export const getChannelVoice_Color = () => {
-  return channels?.voice?.color;
-};
-export const getChannelChat_Color = () => {
-  return channels?.chat?.color;
-};
-export const getChannelSMS_Color = () => {
-  return channels?.sms?.color;
 };
 export const isChannelVoice_CountsEnabled = () => {
   return channels?.voice?.taskCountsDataTile;
@@ -102,10 +106,10 @@ export const isChannelSMS_SLAEnabled = () => {
   return channels?.sms?.SLADataTile;
 };
 export const isAllChannels_SLAEnabled = () => {
-  return allChannelsDataTile;
+  return queuesViewTiles.allChannelsDataTile;
 };
 export const isEnhancedAgentsByActivityPieChartEnabled = () => {
-  return enhancedAgentByActivityPieChart;
+  return queuesViewTiles.enhancedAgentByActivityPieChart;
 };
 export const getAgentActivityConfig = () => {
   return agentActivityConfiguration;
@@ -115,4 +119,17 @@ export const isAssignedTasksColumnEnabled = () => {
 };
 export const isWrappingTasksColumnEnabled = () => {
   return wrappingTasksColumn;
+};
+
+export const isTaskSummaryEnabled = () => {
+  return teamsViewTiles.taskSummaryTile;
+};
+export const isTeamActivityEnabled = () => {
+  return teamsViewTiles.teamActivityTile;
+};
+export const getIdleStatusColor = () => {
+  return teamsViewTiles.statusIdleColor;
+};
+export const getBusyStatusColor = () => {
+  return teamsViewTiles.statusBusyColor;
 };
