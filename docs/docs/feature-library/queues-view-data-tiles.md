@@ -23,10 +23,10 @@ Additionally, the [Queues Data Table](https://www.twilio.com/docs/flex/developer
 # How does it work?
 As outlined in this [blog post](https://www.twilio.com/blog/enhance-flex-queues-view-with-custom-data-tiles), the Real Time queues data in the Flex Redux store can be aggregated into channel specific metrics, which can subsequently be rendered in a custom data tile.  These Data Tiles are added to the [AggregatedDataTiles component](https://assets.flex.twilio.com/docs/releases/flex-ui/2.2.0/programmable-components/components/QueuesStats%E2%80%A4AggregatedQueuesDataTiles/) of the [Queues Stats View](https://assets.flex.twilio.com/docs/releases/flex-ui/2.2.0/programmable-components/components/QueuesStatsView/).
 
-This feature includes 4 different data tiles:
+This feature includes 4 different data tiles for the Queues View:
 
 ### Channel Task Counts Data Tiles
-The Channel Task Counts Data Tile displays the Active and Waiting Tasks for a specific Task Channel (e.g voice, chat, sms, video). The Active task count is the sum of Assigned Tasks and Wrapping Tasks which are displayed separately as well.  For Voice Tasks, the number of Assigned Tasks should be equivalent to the number of agents talking.
+The Channel Task Counts Data Tile displays the _Active_ and _Waiting_ Tasks for a specific Task Channel (e.g voice, chat, sms, video). The Active task count is the sum of _Assigned_ Tasks and _Wrapping_ Tasks which are displayed separately as well.  For Voice Tasks, the number of Assigned Tasks should be equivalent to the number of agents talking.
 
 ### Channel SLA Data Tiles
 The Channel SLA Data tile displays the Service Level % for all tasks associated with a specific Task Channel.  
@@ -46,7 +46,7 @@ The native Agent Activity Bar Chart adds up all Unavailable activities into 1 ca
 This feature also includes the option to show two additional columns in the Queues Stats View: Assigned Tasks and Wrapping Tasks. Again, the Active task count column is the sum of Assigned Tasks and Wrapping Tasks. Displaying these metrics separately may give Supervisors additional insight into how their agents are performing.
 
 ### Teams View Data Tiles
-Also included in this feature are custom Data Tiles for the **Teams View**_** since these share the configuration settings for channels and activities with the **Queues View** Data Tiles.
+Also included in this feature are custom Data Tiles for the **Teams View** since these share the configuration settings for `channels` and `activities` with the **Queues View** Data Tiles.
 
 The Worker and Task data available in Redux for the Teams View can be aggregated by `team_name` attribute (if populated for all workers) and summarized in "Data Tiles" at the top of the page, similar to the Queues View.
 
@@ -68,7 +68,7 @@ This feature can be enabled via the `flex-config` attributes. Just set the `queu
  that are used to enhance the display of the individual activities.
 * In the `queuesStatsColumns`, enable the additional queue metrics (assigned & wrapping tasks) to display.
 
-* You can also enable the Task Summary tile (on the Teams View) to show a breakdown of the active tasks counts by Channel and Team. Select which channels to display by setting `taskCount: true`.  
+* You can also enable the Task Summary tile (on the Teams View) to show a breakdown of the active tasks counts by Channel and Team. Select which channels to display by setting `teamsTaskSummary: true`.  
 * When enabling the Team Activity data tile, also configure the activity names to match the TaskRouter Activities in your workspace.
 
 Note: The Teams View can only display up to 200 agents, so the worker data available for aggregation is limited to this data set.
@@ -95,25 +95,25 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
             "color": "#ADD8E6",
             "SLADataTile": true,
             "taskCountsDataTile": true,
-            "teamsTaskSummaryColumn": true
+            "teamsTaskSummary": true
           },
           "chat": {
             "color": "#87CEFA",
             "SLADataTile": true,
             "taskCountsDataTile": true,
-            "teamsTaskSummaryColumn": true
+            "teamsTaskSummary": true
           },
           "sms": {
             "color": "#59cef8",
             "SLADataTile": false,
             "taskCountsDataTile": false,
-            "teamsTaskSummaryColumn": false
+            "teamsTaskSummary": false
           },
           "video": {
             "color": "#00CED1",
             "SLADataTile": false,
             "taskCountsDataTile": false,
-            "teamsTaskSummaryColumn": false
+            "teamsTaskSummary": false
           }
         },
         "agentActivityConfiguration": {

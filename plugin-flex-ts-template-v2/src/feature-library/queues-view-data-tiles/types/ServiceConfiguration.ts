@@ -35,7 +35,7 @@ export interface ChannelConfig {
   color: string;
   SLADataTile: boolean;
   taskCountsDataTile: boolean;
-  teamsTaskSummaryColumn: boolean;
+  teamsTaskSummary: boolean;
 }
 
 interface ActivityConfig {

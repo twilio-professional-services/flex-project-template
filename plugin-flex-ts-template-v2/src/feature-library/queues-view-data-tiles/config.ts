@@ -22,25 +22,25 @@ const {
       color: '#ADD8E6',
       SLADataTile: true,
       taskCountsDataTile: true,
-      teamsTaskSummaryColumn: true,
+      teamsTaskSummary: true,
     },
     chat: {
       color: '#87CEFA',
       SLADataTile: true,
       taskCountsDataTile: true,
-      teamsTaskSummaryColumn: true,
+      teamsTaskSummary: true,
     },
     sms: {
       color: '#59cef8',
       SLADataTile: false,
       taskCountsDataTile: false,
-      teamsTaskSummaryColumn: true,
+      teamsTaskSummary: true,
     },
     video: {
       color: '#00CED1',
       SLADataTile: false,
       taskCountsDataTile: false,
-      teamsTaskSummaryColumn: true,
+      teamsTaskSummary: true,
     },
   },
 
@@ -91,7 +91,7 @@ export const getTaskSummaryChannels = () => {
   const enabledChannels: string[] = [];
   const channelsNames = Object.keys(channels);
   channelsNames.forEach((ch) => {
-    if (channels[ch].teamsTaskSummaryColumn) enabledChannels.push(ch);
+    if (channels[ch].teamsTaskSummary) enabledChannels.push(ch);
   });
   return enabledChannels;
 };

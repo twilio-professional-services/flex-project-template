@@ -31,7 +31,6 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Internal Call (Agent to Agent)](internal-call) | _provide agents the ability to dial each other_                                                     |
 | [Park interaction](park-interaction)               | _provide agents the ability to park interactions, preserving conversation history_                  |
 | [Pause Recording](pause-recording)                 | _provide agents the ability to temporarily pause and resume call recording_ |
-| [Queues View Data Tiles](queues-view-data-tiles)          | _add Custom Data Tiles with real-time channel metrics (Task Counts, SLA%)_ |
 | [Schedule Manager](schedule-manager)               | _a flexible, robust, and scalable way to manage open and closed hours for Twilio Flex applications_ |
 | [Scrollable Activities](scrollable-activities)           | _allow the scrolling of the activities list_                                |
 | [Supervisor Barge & Coach](supervisor-barge-coach)          | _introduce advanced supervisor barge and coach features_                    |
@@ -53,6 +52,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Custom Hold Music](custom-hold-music)              | _customize the experience when an agent places a call on hold_                                      |
 | [Dual Channel Recording](dual-channel-recording)         | _automatically record both inbound and outbound calls in dual channel_                              |
 | [Localization](localization)                   | _adds the ability to view Flex in a different language_                                             |
+| [Queues & Teams View Data Tiles](queues-view-data-tiles)          | _add custom Data Tiles with real-time channel metrics (Task Counts, SLA%) to the Queues View.  <br/> add custom Task and Activity Summary by team tiles to the Teams View_ |
 | [Omni Channel Management](omni-channel-capacity-management)        | _method for mixing chat and voice channels_                                                         |
 | [SIP Support](sip-support)                    | _adds call control functionality when using a non-WebRTC phone_                                     |
 
