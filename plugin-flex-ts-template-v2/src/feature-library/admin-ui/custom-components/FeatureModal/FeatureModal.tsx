@@ -7,7 +7,7 @@ import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHe
 import { SkipBackIcon } from '@twilio-paste/icons/esm/SkipBackIcon';
 
 import { StringTemplates } from '../../flex-hooks/strings';
-import { formatName, formatDocsUrl } from '../../utils/helpers';
+import { formatName, formatDocsUrl, featureCommon } from '../../utils/helpers';
 
 interface Props {
   feature: string;
@@ -69,13 +69,15 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
   useEffect(() => {
     if (isOpen) {
       setModifiedConfig(config);
-      Actions.addListener('afterOpenFeatureSettings', handleCustomComponent);
-      Actions.invokeAction('OpenFeatureSettings', {
-        feature,
-        initialConfig: config,
-        setModifiedConfig: handleCustomComponentUpdate,
-        setAllowSave: handleCustomComponentAllowSave,
-      });
+      if (feature !== featureCommon) {
+        Actions.addListener('afterOpenFeatureSettings', handleCustomComponent);
+        Actions.invokeAction('OpenFeatureSettings', {
+          feature,
+          initialConfig: config,
+          setModifiedConfig: handleCustomComponentUpdate,
+          setAllowSave: handleCustomComponentAllowSave,
+        });
+      }
     } else {
       setCustomComponent(null);
       setHideComponents(false);
@@ -126,7 +128,11 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
     <Modal ariaLabelledby={modalHeadingID} isOpen={isOpen} onDismiss={handleClose} size="default">
       <ModalHeader>
         <ModalHeading as="h3" id={modalHeadingID}>
-          <Template source={templates[StringTemplates.MODAL_SETTINGS_TITLE]} feature={formatName(feature)} />
+          {feature === featureCommon ? (
+            <Template source={templates[StringTemplates.EDIT_COMMON_SETTINGS]} />
+          ) : (
+            <Template source={templates[StringTemplates.MODAL_SETTINGS_TITLE]} feature={formatName(feature)} />
+          )}
         </ModalHeading>
       </ModalHeader>
       <ModalBody>
@@ -136,6 +142,11 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
               <Template source={templates[StringTemplates.SAVE_ERROR]} />
             </Alert>
           </Box>
+        )}
+        {!Object.keys(config).length && (
+          <Alert variant="neutral">
+            <Template source={templates[StringTemplates.MISSING_SETTINGS]} />
+          </Alert>
         )}
         <Form>
           {!hideComponents &&
