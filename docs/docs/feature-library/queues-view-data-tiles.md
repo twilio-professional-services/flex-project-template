@@ -45,43 +45,77 @@ The native Agent Activity Bar Chart adds up all Unavailable activities into 1 ca
 ### Queues View Columns
 This feature also includes the option to show two additional columns in the Queues Stats View: Assigned Tasks and Wrapping Tasks. Again, the Active task count column is the sum of Assigned Tasks and Wrapping Tasks. Displaying these metrics separately may give Supervisors additional insight into how their agents are performing.
 
+### Teams View Data Tiles
+Also included in this feature are custom Data Tiles for the **Teams View**_** since these share the configuration settings for channels and activities with the **Queues View** Data Tiles.
+
+The Worker and Task data available in Redux for the Teams View can be aggregated by `team_name` attribute (if populated for all workers) and summarized in "Data Tiles" at the top of the page, similar to the Queues View.
+
+The Task Summary table provides a breakdown of all active tasks by Channel (Voice, Chat, SMS) and agent team. For the Voice channel the active call count is split into Inbound and Outbound calls.
+
+The Agent Activity Summary table shows the count of agents in each of the pre-configured activities by agent team.  Two additional columns are provided for Active Agents.  The "Idle" column shows the number of Available agents with No Tasks.  The "Busy" column shows the number of Available agents with at least one Task.
+
+This feature uses the list of Team names as configured in the common configuration settings.
+
+
 # Setup
 
 This feature can be enabled via the `flex-config` attributes. Just set the `queues_view_data_tiles` `enabled` flag to `true` and set up the desired configuration.
 
-* To enable specific data tiles set `_DataTile = true`
+* To enable specific data tiles on the Real-time Queues View set `_DataTile = true`
 * You can change the Channel colors are needed. 
 * The Enhanced Agent Activity tile replaces the native Bar Chart so if you enable it you can disable the Bar Chart.
 * Configure activities to match the names of the Activities as defined in TaskRouter. The Flex UI includes a [set of icons](https://www.twilio.com/docs/flex/developer/ui/v1/icons#default-icons)
  that are used to enhance the display of the individual activities.
 * In the `queuesStatsColumns`, enable the additional queue metrics (assigned & wrapping tasks) to display.
 
+* You can also enable the Task Summary tile (on the Teams View) to show a breakdown of the active tasks counts by Channel and Team. Select which channels to display by setting `taskCount: true`.  
+* When enabling the Team Activity data tile, also configure the activity names to match the TaskRouter Activities in your workspace.
+
+Note: The Teams View can only display up to 200 agents, so the worker data available for aggregation is limited to this data set.
+
 ```json
    "queues_view_data_tiles": {
         "enabled": true,
-        "activeTasksDataTile": false,
-        "waitingTasksDataTile": false,
-        "longestWaitTimeDataTile": false,
-        "agentsByActivityBarChart": false,
+        "queuesViewTiles": {
+          "activeTasksDataTile": false,
+          "waitingTasksDataTile": false,
+          "longestWaitTimeDataTile": false,
+          "agentsByActivityBarChart": false,
+          "allChannelsDataTile": true,
+          "enhancedAgentByActivityPieChart": true,
+        },
+        "teamsViewTiles": {
+          "taskSummaryTile": false,
+          "teamActivityTile": false,
+          "statusIdleColor": "limegreen",
+          "statusBusyColor": "royalblue"
+        },
         "channels": {
           "voice": {
             "color": "#ADD8E6",
             "SLADataTile": true,
-            "taskCountsDataTile": true
+            "taskCountsDataTile": true,
+            "teamsTaskSummaryColumn": true
           },
           "chat": {
             "color": "#87CEFA",
-            "SLADataTile": false,
-            "taskCountsDataTile": false
+            "SLADataTile": true,
+            "taskCountsDataTile": true,
+            "teamsTaskSummaryColumn": true
           },
           "sms": {
             "color": "#59cef8",
-            "SLADataTile": true,
-            "taskCountsDataTile": true
+            "SLADataTile": false,
+            "taskCountsDataTile": false,
+            "teamsTaskSummaryColumn": false
+          },
+          "video": {
+            "color": "#00CED1",
+            "SLADataTile": false,
+            "taskCountsDataTile": false,
+            "teamsTaskSummaryColumn": false
           }
         },
-        "allChannelsDataTile": true,
-        "enhancedAgentByActivityPieChart": true,
         "agentActivityConfiguration": {
           "activities": {
             "Available": {
@@ -124,3 +158,7 @@ This feature can be enabled via the `flex-config` attributes. Just set the `queu
 # Flex User Experience
 
 ![QueuesViewDataTiles](/img/features/queues-view-data-tiles/QueuesViewDataTiles2.png)
+
+When enabled, the Task Summary and Team Activity Tiles are added to the top of the Teams View.
+
+![TaskSummaryActivityByTeam](/img/features/teams-view-enhancements/TeamsViewTaskAndActivitySummary.png)

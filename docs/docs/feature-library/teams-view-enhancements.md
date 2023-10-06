@@ -42,30 +42,8 @@ You can also enable the Task Summary tile to show a breakdown of the active task
 Note: The Teams View can only display up to 200 agents, so the worker data available for aggregation is limited to this data set.
 
 ```json
-  "teams_view_enhancements": {
+    "teams_view_enhancements": {
       "enabled": true,
-      "channels": {
-        "Voice": {
-          "color": "#ADD8E6",
-          "taskCount": true
-        },
-        "Chat": {
-          "color": "#87CEFA",
-          "taskCount": true
-        },
-        "SMS": {
-          "color": "#59cef8",
-          "taskCount": true
-        },
-        "Video": {
-          "color": "#00CED1",
-          "taskCount": true
-        }
-      },
-      "task_summary": true,
-      "team_activity": true,
-      "idle_status_color": "limegreen",
-      "busy_status_color": "royalblue",
       "highlight_handle_time": true,
       "handle_time_warning_threshold": 180,
       "handle_time_exceeded_threshold": 300,
@@ -85,6 +63,3 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
 
 ![TeamsViewTaskHighlight](/img/features/teams-view-enhancements/TeamsViewTaskHighlight.png)
 
-When enabled, the Task Summary and Team Activity Tiles are added to the top of the Teams View.
-
-![TaskSummaryActivityByTeam](/img/features/teams-view-enhancements/TeamsViewTaskAndActivitySummary.png)
