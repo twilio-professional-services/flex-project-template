@@ -69,10 +69,11 @@ The following common configuration properties are included by default:
 
 - **`log_level`** - The minimum log level to output to the browser console. `info` by default; may be set to `debug`, `log`, `warn`, `info`, or `error`
 - **`teams`** - Array of team names used by various features to populate team lists, matching the values used in worker attributes.
+- **`departments`** - Array of department names used by various features to populate department lists, matching the values used in worker attributes.
 
 #### Per-worker configuration overrides
 
-When performing testing, or for managing a diverse contact center, you may wish different workers to have a different feature configuration. This could be variations of feature settings or enabling a different feature set altogether. You may add a `config_overrides` object to a worker's attributes to override any feature configuration, taking priority over both the hosted Flex configuration and the local `appConfig.js` (if applicable).
+When performing testing, or for managing a diverse contact center, you may wish different workers to have a different feature configuration. This could be variations of common settings, feature settings, or enabling a different feature set altogether. You may add a `config_overrides` object to a worker's attributes to override any feature configuration, taking priority over both the hosted Flex configuration and the local `appConfig.js` (if applicable).
 
 For example, if the `activity-reservation-handler` feature is globally enabled but you wish to disable it for a specific worker, you can add the following to the worker's attributes to disable it:
 

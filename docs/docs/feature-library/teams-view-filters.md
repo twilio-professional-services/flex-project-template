@@ -55,18 +55,7 @@ To use the sample features, most of the filters can simply be toggled on in the 
           "queue_worker_data": true,
           "team": true,
           "agent_skills": true
-        },
-        "department_options": [
-          "General Management",
-          "Marketing",
-          "Operations",
-          "Finance",
-          "Sales",
-          "Human Resources",
-          "Purchasing",
-          "Customer Service",
-          "Recruiting"
-        ]
+        }
       }
 ```
 
@@ -109,6 +98,8 @@ This filter is based on the model of the worker attributes adopted from flex ins
 The worker attribute `department_name` may be pushed into the worker object through SSO or it may be managed directly in flex using some worker customization tool. In either case a predefined list of departments needs to be configured so that it can be selected from to search the workers with that applied department
 
 Ideally we would be able to get a unique lit of department_names from a lookup but there is no consistent way to do this without a backend solution. If building tooling in the solution to allow supervisors the ability to edit and apply department name, synchronizing these options should be a consideration.
+
+However, as a starting point, the department filter uses the departments defined within the [common configuration](/building/template-utilities/configuration#common-configuration), which can be modified to consist of your unique department names.
 
 the filter matches against the worker attribute `department_name`. In Flex this is a required field to setup. The filter looks like the following
 

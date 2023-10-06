@@ -12,6 +12,17 @@
         "Red Team",
         "Gold Team",
         "VIP Team"
+      ],
+      "departments": [
+        "General Management",
+        "Marketing",
+        "Operations",
+        "Finance",
+        "Sales",
+        "Human Resources",
+        "Purchasing",
+        "Customer Service",
+        "Recruiting"
       ]
     },
     "features": {
@@ -122,18 +133,7 @@
           "queue_worker_data": false,
           "team": true,
           "agent_skills": true
-        },
-        "department_options": [
-          "General Management",
-          "Marketing",
-          "Operations",
-          "Finance",
-          "Sales",
-          "Human Resources",
-          "Purchasing",
-          "Customer Service",
-          "Recruiting"
-        ]
+        }
       },
       "supervisor_capacity": {
         "enabled": true
