@@ -83,7 +83,7 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
           "waitingTasksDataTile": false,
           "longestWaitTimeDataTile": false,
           "agentsByActivityBarChart": false,
-          "allChannelsDataTile": true,
+          "allChannelsDataTile": false,
           "enhancedAgentByActivityPieChart": true,
         },
         "teamsViewTiles": {
@@ -93,25 +93,25 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
           "statusBusyColor": "royalblue"
         },
         "channels": {
-          "voice": {
+          "Voice": {
             "color": "#ADD8E6",
             "SLADataTile": true,
             "taskCountsDataTile": true,
             "teamsTaskSummary": true
           },
-          "chat": {
+          "Chat": {
             "color": "#87CEFA",
             "SLADataTile": true,
             "taskCountsDataTile": true,
             "teamsTaskSummary": true
           },
-          "sms": {
+          "SMS": {
             "color": "#59cef8",
             "SLADataTile": false,
             "taskCountsDataTile": false,
             "teamsTaskSummary": false
           },
-          "video": {
+          "Video": {
             "color": "#00CED1",
             "SLADataTile": false,
             "taskCountsDataTile": false,

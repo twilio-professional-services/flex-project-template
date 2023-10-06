@@ -2,18 +2,18 @@ import { getFeatureFlags } from '../../utils/configuration';
 import DataTilesConfig from './types/ServiceConfiguration';
 
 const {
-  enabled = true,
+  enabled = false,
   queuesViewTiles = {
     activeTasksDataTile: false,
     waitingTasksDataTile: false,
     longestWaitTimeDataTile: false,
     agentsByActivityBarChart: false,
-    allChannelsDataTile: true,
+    allChannelsDataTile: false,
     enhancedAgentByActivityPieChart: true,
   },
   teamsViewTiles = {
-    taskSummaryTile: true,
-    teamActivityTile: true,
+    taskSummaryTile: false,
+    teamActivityTile: false,
     statusIdleColor: 'limegreen',
     statusBusyColor: 'royalblue',
   },
@@ -40,7 +40,7 @@ const {
       color: '#00CED1',
       SLADataTile: false,
       taskCountsDataTile: false,
-      teamsTaskSummary: true,
+      teamsTaskSummary: false,
     },
   },
 
