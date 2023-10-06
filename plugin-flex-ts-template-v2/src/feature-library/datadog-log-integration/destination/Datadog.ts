@@ -62,7 +62,6 @@ export default class DatadogDestination extends Destination {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
-          // 'Content-Encoding': 'gzip',
         },
         body: JSON.stringify(this.buffer),
       });
