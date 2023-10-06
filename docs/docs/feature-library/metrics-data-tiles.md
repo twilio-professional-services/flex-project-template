@@ -1,6 +1,6 @@
 ---
-sidebar_label: queues-view-data-tiles
-title: queues-view-data-tiles
+sidebar_label: metrics-data-tiles
+title: metrics-data-tiles
 ---
 
 # Overview
@@ -19,6 +19,8 @@ Having additional Data Tiles available with useful aggregated metrics or KPIs (b
 You can connect a custom Data Tile to the Flex Redux application store using [connect](https://react-redux.js.org/api/connect) from React-Redux. You need to provide the equivalent of a [mapStateToProps](https://react-redux.js.org/using-react-redux/connect-mapstate) function and return an object with props. Alternatively, in Flex v2 you can now leverage the [useFlexSelector](https://www.twilio.com/docs/flex/developer/ui/overview-of-flex-ui-programmability-options#useflexselector) wrapper method to extract the real time queues data from the Flex Redux store for use in a React component.
 
 Additionally, the [Queues Data Table](https://www.twilio.com/docs/flex/developer/ui/queues-view-programmability#modify-the-queuesdatatable) can be modifed by adding columns with other queue metrics.
+
+The Flex Teams View does not natively support Data Tiles or any kind of worker (or task) metrics and aggregations, but you can customize the Teams View and add a Tiles section at the top of the page for this purpose.  
 
 # How does it work?
 As outlined in this [blog post](https://www.twilio.com/blog/enhance-flex-queues-view-with-custom-data-tiles), the Real Time queues data in the Flex Redux store can be aggregated into channel specific metrics, which can subsequently be rendered in a custom data tile.  These Data Tiles are added to the [AggregatedDataTiles component](https://assets.flex.twilio.com/docs/releases/flex-ui/2.2.0/programmable-components/components/QueuesStats%E2%80%A4AggregatedQueuesDataTiles/) of the [Queues Stats View](https://assets.flex.twilio.com/docs/releases/flex-ui/2.2.0/programmable-components/components/QueuesStatsView/).

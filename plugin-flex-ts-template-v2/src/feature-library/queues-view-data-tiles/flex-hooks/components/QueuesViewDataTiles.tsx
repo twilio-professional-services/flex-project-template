@@ -25,7 +25,7 @@ import {
 } from '../../config';
 
 const colors = getChannelColors();
-const channelList = Object.keys(getChannelsConfig());
+const channelList = Object.keys(getChannelsConfig()).map((ch) => ch.toLowerCase());
 export const componentName = FlexComponent.QueueStats;
 export const componentHook = function addDataTiles(flex: typeof Flex) {
   if (isChannelVoice_CountsEnabled()) {

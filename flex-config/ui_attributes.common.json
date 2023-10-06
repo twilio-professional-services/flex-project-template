@@ -277,29 +277,29 @@
           "statusBusyColor": "royalblue"
         },
         "channels": {
-          "voice": {
+          "Voice": {
             "color": "#ADD8E6",
             "SLADataTile": true,
             "taskCountsDataTile": true,
             "teamsTaskSummary": true
           },
-          "chat": {
+          "Chat": {
             "color": "#87CEFA",
-            "SLADataTile": false,
-            "taskCountsDataTile": false,
-            "teamsTaskSummary": true
-          },
-          "sms": {
-            "color": "#59cef8",
             "SLADataTile": true,
             "taskCountsDataTile": true,
             "teamsTaskSummary": true
           },
-          "video": {
-            "color": "#00CED1",
+          "SMS": {
+            "color": "#59cef8",
             "SLADataTile": false,
             "taskCountsDataTile": false,
             "teamsTaskSummary": true
+          },
+          "Video": {
+            "color": "#00CED1",
+            "SLADataTile": false,
+            "taskCountsDataTile": false,
+            "teamsTaskSummary": false
           }
         },
         "agentActivityConfiguration": {

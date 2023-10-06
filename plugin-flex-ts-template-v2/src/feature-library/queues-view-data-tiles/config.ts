@@ -2,41 +2,41 @@ import { getFeatureFlags } from '../../utils/configuration';
 import DataTilesConfig from './types/ServiceConfiguration';
 
 const {
-  enabled = false,
+  enabled = true,
   queuesViewTiles = {
     activeTasksDataTile: false,
     waitingTasksDataTile: false,
     longestWaitTimeDataTile: false,
     agentsByActivityBarChart: false,
-    allChannelsDataTile: false,
+    allChannelsDataTile: true,
     enhancedAgentByActivityPieChart: true,
   },
   teamsViewTiles = {
-    taskSummaryTile: false,
-    teamActivityTile: false,
+    taskSummaryTile: true,
+    teamActivityTile: true,
     statusIdleColor: 'limegreen',
     statusBusyColor: 'royalblue',
   },
   channels = {
-    voice: {
+    Voice: {
       color: '#ADD8E6',
       SLADataTile: true,
       taskCountsDataTile: true,
       teamsTaskSummary: true,
     },
-    chat: {
+    Chat: {
       color: '#87CEFA',
       SLADataTile: true,
       taskCountsDataTile: true,
       teamsTaskSummary: true,
     },
-    sms: {
+    SMS: {
       color: '#59cef8',
       SLADataTile: false,
       taskCountsDataTile: false,
       teamsTaskSummary: true,
     },
-    video: {
+    Video: {
       color: '#00CED1',
       SLADataTile: false,
       taskCountsDataTile: false,
@@ -80,7 +80,7 @@ export const getChannelColors = () => {
   const channelNames = Object.keys(channels);
   const colors: { [key: string]: string } = {};
   channelNames.forEach((ch) => {
-    colors[ch] = channels[ch].color;
+    colors[ch.toLowerCase()] = channels[ch].color;
   });
   return colors;
 };
@@ -96,22 +96,22 @@ export const getTaskSummaryChannels = () => {
   return enabledChannels;
 };
 export const isChannelVoice_CountsEnabled = () => {
-  return channels?.voice?.taskCountsDataTile;
+  return channels?.Voice?.taskCountsDataTile;
 };
 export const isChannelChat_CountsEnabled = () => {
-  return channels?.chat?.taskCountsDataTile;
+  return channels?.Chat?.taskCountsDataTile;
 };
 export const isChannelSMS_CountsEnabled = () => {
-  return channels?.sms?.taskCountsDataTile;
+  return channels?.SMS?.taskCountsDataTile;
 };
 export const isChannelVoice_SLAEnabled = () => {
-  return channels?.voice?.SLADataTile;
+  return channels?.Voice?.SLADataTile;
 };
 export const isChannelChat_SLAEnabled = () => {
-  return channels?.chat?.SLADataTile;
+  return channels?.Chat?.SLADataTile;
 };
 export const isChannelSMS_SLAEnabled = () => {
-  return channels?.sms?.SLADataTile;
+  return channels?.SMS?.SLADataTile;
 };
 export const isAllChannels_SLAEnabled = () => {
   return queuesViewTiles.allChannelsDataTile;
