@@ -5,15 +5,14 @@ import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definitio
 import AppState from 'types/manager/AppState';
 import { EmojiIcon } from '@twilio-paste/icons/esm/EmojiIcon';
 
-import { getAgentActivityConfig, getIdleStatusColor, getBusyStatusColor } from '../../config';
+import { getAgentActivityConfig, getIdleStatusColor, getBusyStatusColor, getTeams } from '../../config';
 import { TileWrapper, AgentActivity, Label, Heading } from './AgentTeamActivityTile.Components';
 import { getAgentStatusCounts } from '../../utils/WorkerDataUtil';
 import { TeamActivityCounts } from '../../types';
-import { getTeamOptions } from '../../../teams-view-filters/config';
 import { StringTemplates } from '../../flex-hooks/strings';
 
 const AgentTeamActivityTile = () => {
-  const teams = getTeamOptions();
+  const teams = getTeams();
   const workerActivityCounts: TeamActivityCounts = useFlexSelector((state: AppState) => {
     const workers: SupervisorWorkerState[] = state.flex.supervisor.workers;
     return getAgentStatusCounts(workers, teams);
@@ -98,7 +97,7 @@ const AgentTeamActivityTile = () => {
                 );
               })}
             </Tr>
-            {teams.map((team) => {
+            {teams.map((team: string) => {
               const agentCount = workerActivityCounts[team].totalAgentCount;
               return (
                 <Tr key={team}>

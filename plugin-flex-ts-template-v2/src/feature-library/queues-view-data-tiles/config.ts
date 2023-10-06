@@ -60,6 +60,8 @@ const {
 const { assignedTasksColumn = true, wrappingTasksColumn = true } =
   getFeatureFlags()?.features?.queues_view_data_tiles?.queuesStatsColumns || {};
 
+const { teams = [] } = getFeatureFlags().common || {};
+
 export const isFeatureEnabled = () => {
   return enabled;
 };
@@ -140,4 +142,7 @@ export const getIdleStatusColor = () => {
 };
 export const getBusyStatusColor = () => {
   return teamsViewTiles.statusBusyColor;
+};
+export const getTeams = () => {
+  return teams;
 };
