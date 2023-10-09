@@ -63,21 +63,25 @@ const performGitHubWorkflowRemovals = async () => {
 const performFlexConfigRemovals = async () => {
   shell.echo("Removing features from flex-config...");
   try {
-    for (configFile of flexConfigRemovals) {
-      const originalData = await fs.readFile(configFile, "utf8");
-      let jsonData = JSON.parse(originalData);
-      for (key of Object.keys(jsonData?.custom_data?.features)) {
-        // The config name for a feature uses underscores instead of hyphens
-        const featureDirName = key.replace(/_/g, '-');
-        if (!keepFeatures.includes(featureDirName)) {
-          delete jsonData.custom_data.features[key];
+    for (const configFile of flexConfigRemovals) {
+      try {
+        const originalData = await fs.readFile(configFile, "utf8");
+        let jsonData = JSON.parse(originalData);
+        for (const key of Object.keys(jsonData?.custom_data?.features)) {
+          // The config name for a feature uses underscores instead of hyphens
+          const featureDirName = key.replace(/_/g, '-');
+          if (!keepFeatures.includes(featureDirName)) {
+            delete jsonData.custom_data.features[key];
+          }
         }
-      }
-      await fs.writeFile(configFile, JSON.stringify(jsonData, null, 2), 'utf8');
-      shell.echo(`Updated ${configFile}`);
+        await fs.writeFile(configFile, JSON.stringify(jsonData, null, 2), 'utf8');
+        shell.echo(`Updated ${configFile}`);
+     } catch (error) {
+      shell.echo(`Failed to update ${configFile}: ${error}`);
+     }
     }
   } catch (error) {
-    shell.echo(`Failed to update ${configFile}: ${error}`);
+    shell.echo(`Failed to update config files: ${error}`);
   }
 }
 
@@ -85,7 +89,7 @@ const performDirectoryRemovals = (baseDir) => {
   try {
     const featureDirs = shell.ls(baseDir);
     
-    for (feature of featureDirs) {
+    for (const feature of featureDirs) {
       if (!keepFeatures.includes(feature)) {
         shell.rm('-rf', `${baseDir}/${feature}`);
         shell.echo(`Removed ${baseDir}/${feature}`);
