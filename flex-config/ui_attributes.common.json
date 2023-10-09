@@ -218,11 +218,20 @@
         "enabled": true,
         "enable_notes": true,
         "require_disposition": false,
-        "global_dispositions": ["Resolved", "Not Resolved", "Follow-up Required", "Escalation", "Wrong Department"],
+        "global_dispositions": [
+          "Resolved",
+          "Not Resolved",
+          "Follow-up Required",
+          "Escalation",
+          "Wrong Department"
+        ],
         "per_queue": {
           "exampleQueueSid": {
             "require_disposition": true,
-            "dispositions": ["Promotional Sale", "Renewal"]
+            "dispositions": [
+              "Promotional Sale",
+              "Renewal"
+            ]
           }
         }
       },
@@ -350,6 +359,9 @@
         }
       },
       "sip_support": {
+        "enabled": false
+      },
+      "worker_canvas_tabs": {
         "enabled": false
       }
     }

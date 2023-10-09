@@ -5,7 +5,7 @@ import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.WorkerCanvas;
 export const componentHook = function addAttributesToWorkerCanvas(flex: typeof Flex, _manager: Flex.Manager) {
-  flex.WorkerCanvas.Content.add(<WorkerAttributes key="worker-attributes" />, {
-    sortOrder: 1000,
-  });
+  // flex.WorkerCanvas.Content.add(<WorkerAttributes key="worker-attributes" />, {
+  //   sortOrder: 1000,
+  // });
 };
