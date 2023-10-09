@@ -69,6 +69,10 @@ exports.updateUiAttributes = async function updateUiAttributes(parameters) {
       }
     }
 
+    if (mergeFeature === 'false' && parsedUpdate?.custom_data?.common) {
+      existingData.custom_data.common = {};
+    }
+
     // merge the objects
     const updatedAttributes = omitBy(
       merge({ account_sid: process.env.ACCOUNT_SID }, { ui_attributes: existingData }, { ui_attributes: parsedUpdate }),
