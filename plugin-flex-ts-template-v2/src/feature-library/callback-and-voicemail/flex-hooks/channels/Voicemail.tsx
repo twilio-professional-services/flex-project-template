@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import React from 'react';
-import VoicemailIcon from '@material-ui/icons/Voicemail';
+import { VoicemailIcon } from '@twilio-paste/icons/esm/VoicemailIcon';
 
 import { TaskAttributes } from '../../../../types/task-router/Task';
 import { StringTemplates } from '../strings/Callback';
@@ -58,9 +58,9 @@ export const channelHook = function createVoicemailChannel(flex: typeof Flex, ma
       },
     },
     icons: {
-      active: <VoicemailIcon key="active-voicemail-icon" />,
-      list: <VoicemailIcon key="list-voicemail-icon" />,
-      main: <VoicemailIcon key="main-voicemail-icon" />,
+      active: <VoicemailIcon element="C_AND_V_ICON" decorative={true} key="active-voicemail-icon" />,
+      list: <VoicemailIcon element="C_AND_V_ICON" decorative={true} key="list-voicemail-icon" />,
+      main: <VoicemailIcon element="C_AND_V_ICON" decorative={true} key="main-voicemail-icon" />,
     },
   };
 
