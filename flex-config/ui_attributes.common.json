@@ -5,6 +5,26 @@
     }
   },
   "custom_data": {
+    "common": {
+      "log_level": "info",
+      "teams": [
+        "Blue Team",
+        "Red Team",
+        "Gold Team",
+        "VIP Team"
+      ],
+      "departments": [
+        "General Management",
+        "Marketing",
+        "Operations",
+        "Finance",
+        "Sales",
+        "Human Resources",
+        "Purchasing",
+        "Customer Service",
+        "Recruiting"
+      ]
+    },
     "features": {
       "activity_skill_filter": {
         "enabled": true,
@@ -115,29 +135,7 @@
           "queue_worker_data": false,
           "team": true,
           "agent_skills": true
-        },
-        "department_options": [
-          "General Management",
-          "Marketing",
-          "Operations",
-          "Finance",
-          "Sales",
-          "Human Resources",
-          "Purchasing",
-          "Customer Service",
-          "Recruiting"
-        ],
-        "team_options": [
-          "Blue Team",
-          "Red Team",
-          "Gold Team",
-          "VIP Team",
-          "Orange Team",
-          "Yellow Team",
-          "Green Team",
-          "Purple Team",
-          "Gray Team"
-        ]
+        }
       },
       "supervisor_capacity": {
         "enabled": true
@@ -220,13 +218,7 @@
         "enabled": true,
         "enable_notes": true,
         "require_disposition": false,
-        "global_dispositions": [
-          "Resolved",
-          "Not Resolved",
-          "Follow-up Required",
-          "Escalation",
-          "Wrong Department"
-        ],
+        "global_dispositions": ["Resolved", "Not Resolved", "Follow-up Required", "Escalation", "Wrong Department"],
         "per_queue": {
           "exampleQueueSid": {
             "require_disposition": true,

@@ -34,7 +34,7 @@ export const teamFilter = () =>
     fieldName: 'teams',
     options: getTeamOptions()
       .sort()
-      .map((value) => ({
+      .map((value: string) => ({
         value,
         label: value,
       })),
