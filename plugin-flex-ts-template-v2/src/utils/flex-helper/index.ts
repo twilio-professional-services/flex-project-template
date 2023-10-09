@@ -85,6 +85,10 @@ class FlexHelper {
     return worker;
   };
 
+  getCurrentWorker = (): Flex.IWorker | undefined => {
+    return getFlexState().worker.worker;
+  };
+
   doesWorkerHaveReservationsInState = async (status: RESERVATION_STATUS, workersid?: string): Promise<boolean> => {
     const reservations = await this.getWorkerReservations(workersid);
     if (reservations.size < 1) return false;
