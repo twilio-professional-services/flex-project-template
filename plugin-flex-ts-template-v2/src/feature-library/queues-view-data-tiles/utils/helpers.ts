@@ -5,6 +5,7 @@ export const getChannelIcon = (channelName: string) => {
     sms: 'Sms',
     video: 'Video',
     default: 'GenericTask',
+    email: 'SendLarge',
   };
   return channelIcons[channelName.toLowerCase()];
 };
