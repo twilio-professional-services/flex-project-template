@@ -61,9 +61,13 @@ This serverless function can be used from anywhere, not just the studio flow, to
 
 ### Specifying the Workflow to Use
 
-The creation of a task requires a workflow. You may create a custom workflow, that uses some collected data to organize the tasks into different queues or maybe something more complex. You may also just want to use the default "Assign To Anyone" workflow that is spawned on a vanilla flex instance.
+The creation of a task requires a workflow. You may create a custom workflow, that uses some collected data to organize the tasks into different queues or maybe something more complex. You may also just want to use the default "Assign To Anyone" workflow that is spawned on a vanilla Flex instance.
 
-Once you have decided which workflow you are using, you can either reference it in the environment file for your serverless-functions (`TWILIO_FLEX_CALLBACK_WORKFLOW_SID`), or you can explicitly provide a `workflowSid` in the call to the function. NOTE: The setup scripts will automatically set `TWILIO_FLEX_CALLBACK_WORKFLOW_SID` if it finds a workflow that has "Callback" in the name.
+Once you have decided which workflow you are using, you can either reference it in the environment file for your serverless-functions (`TWILIO_FLEX_CALLBACK_WORKFLOW_SID`), or you can explicitly provide a `workflowSid` in the call to the function. 
+
+:::tip Tip
+The setup scripts will automatically set `TWILIO_FLEX_CALLBACK_WORKFLOW_SID` if it finds a workflow called "Callback". If Terraform was used to deploy the template, [this callback workflow](https://github.com/twilio-professional-services/flex-project-template/blob/main/infra-as-code/terraform/taskrouter/callback.json) has already been created for you.
+:::
 
 ## Voicemail Additional Parameters
 
