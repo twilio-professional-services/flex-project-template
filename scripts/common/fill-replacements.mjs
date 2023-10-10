@@ -60,7 +60,7 @@ const fillUnknownEnvVars = (envVars, environment) => {
       continue;
     }
     
-    if (!environment && varNameMapping[key].localValue) {
+    if ((!environment || environment === 'local') && varNameMapping[key].localValue) {
       // Running locally, use the local value if specified
       envVars[key] = varNameMapping[key].localValue;
       continue;
@@ -113,6 +113,10 @@ const fillAccountVars = (envVars, account) => {
       envVars[key] = account.accountSid;
     } else if (key == 'AUTH_TOKEN' && account.authToken) {
       envVars[key] = account.authToken;
+    } else if (key == 'TWILIO_API_KEY' && account.apiKey) {
+      envVars[key] = account.apiKey;
+    } else if (key == 'TWILIO_API_SECRET' && account.apiSecret) {
+      envVars[key] = account.apiSecret;
     }
   }
   
