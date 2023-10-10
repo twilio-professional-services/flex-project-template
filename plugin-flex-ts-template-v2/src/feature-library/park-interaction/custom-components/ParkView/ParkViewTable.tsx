@@ -1,4 +1,5 @@
-import { TBody, THead, Table, Td, Th, Tr, Button } from '@twilio-paste/core';
+import { Button } from '@twilio-paste/core/button';
+import { TBody, THead, Table, Td, Th, Tr } from '@twilio-paste/core/table';
 import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 import { Actions, Manager, templates } from '@twilio/flex-ui';
 import { useState } from 'react';

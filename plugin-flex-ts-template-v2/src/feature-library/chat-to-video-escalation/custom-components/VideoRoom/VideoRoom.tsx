@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ITask, Manager, Template, templates } from '@twilio/flex-ui';
-import { Flex } from '@twilio-paste/core';
+import { Flex } from '@twilio-paste/core/flex';
 
 import { iframeStyle } from './styles';
 import { StringTemplates } from '../../flex-hooks/strings/ChatToVideo';

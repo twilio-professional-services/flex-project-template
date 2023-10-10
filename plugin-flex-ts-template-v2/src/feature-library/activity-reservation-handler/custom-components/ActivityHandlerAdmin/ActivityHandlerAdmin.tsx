@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useFlexSelector } from '@twilio/flex-ui';
-import { FormControl, Label, Select, Option, Paragraph } from '@twilio-paste/core';
+import { FormControl } from '@twilio-paste/core/form';
+import { Label } from '@twilio-paste/core/label';
+import { Select, Option } from '@twilio-paste/core/select';
+import { Paragraph } from '@twilio-paste/core/paragraph';
 
 import AppState from '../../../../types/manager/AppState';
 

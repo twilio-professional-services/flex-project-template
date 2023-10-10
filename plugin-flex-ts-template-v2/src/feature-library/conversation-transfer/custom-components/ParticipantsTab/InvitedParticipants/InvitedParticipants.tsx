@@ -1,4 +1,6 @@
-import { Stack, Card, Heading } from '@twilio-paste/core';
+import { Stack } from '@twilio-paste/core/stack';
+import { Card } from '@twilio-paste/core/card';
+import { Heading } from '@twilio-paste/core/heading';
 import { Template, templates } from '@twilio/flex-ui';
 
 import { InvitedParticipant } from './InvitedParticipant/InvitedParticipant';

@@ -1,5 +1,5 @@
 import { FilterDefinition, Manager } from '@twilio/flex-ui';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 
 import SelectFilter from '../custom-components/SelectFilter';
 import SelectFilterLabel from '../custom-components/SelectFilterLabel';
