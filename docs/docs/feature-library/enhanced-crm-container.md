@@ -27,14 +27,16 @@ Within your `ui_attributes` file, you must set two settings for this feature:
 - `url_tab_title` - set the tab title that will be displayed for the configured URL
 - `url` - set this to the URL to embed within the CRM container
 
-:::tip URL Special Powers
-Within the `url`, you may include task and/or worker attributes via template variable substitution. To do so, use the format `{{task.attribute_name_goes_here}}` or `{{worker.attribute_name_goes_here}}` within the URL. If the attribute exists, the template variable is replaced with the contents of the attribute. Otherwise, the variable is replaced with an empty string.
-:::
-
 There are additional settings you may also wish to configure:
 
 - `should_display_url_when_no_tasks` - set this to true if a URL should be loaded when no task is selected
 - `display_url_when_no_tasks` - set this to the URL to embed when no task is selected and the above setting is `true`
+
+:::tip URL Special Powers
+Within the `url` or the `display_url_when_no_tasks`, you may include task and/or worker attributes via template variable substitution. To do so, use the format `{{task.attribute_name_goes_here}}` or `{{worker.attribute_name_goes_here}}` within the URL. If the attribute exists, the template variable is replaced with the contents of the attribute. Otherwise, the variable is replaced with an empty string.
+
+You may also reference the serverless base URL using the format `{{serverless.url}}`.
+:::
 
 Once your updated flex-config is deployed, the feature is enabled and ready to use.
 
