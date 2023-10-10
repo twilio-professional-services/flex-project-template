@@ -1,29 +1,25 @@
 export default interface DataTilesConfig {
   enabled: boolean;
-  queuesViewTiles: {
-    activeTasksDataTile: boolean;
-    waitingTasksDataTile: boolean;
-    longestWaitTimeDataTile: boolean;
-    agentsByActivityBarChart: boolean;
-    allChannelsDataTile: boolean;
-    enhancedAgentByActivityPieChart: boolean;
+  queues_view_tiles: {
+    active_tasks_data_tile: boolean;
+    waiting_tasks_data_tile: boolean;
+    longest_wait_time_data_tile: boolean;
+    agents_by_activity_bar_chart: boolean;
+    all_channels_data_tile: boolean;
+    enhanced_agent_by_activity_pie_chart: boolean;
   };
-  teamsViewTiles: {
-    taskSummaryTile: boolean;
-    teamActivityTile: boolean;
-    statusIdleColor: string;
-    statusBusyColor: string;
+  teams_view_tiles: {
+    task_summary_tile: boolean;
+    team_activity_tile: boolean;
+    status_idle_color: string;
+    status_busy_color: string;
   };
   channels: Channels;
-  agentActivityConfiguration: {
+  agent_activity_configuration: {
     activities: {
       [key: string]: ActivityConfig;
     };
     other: ActivityConfig;
-  };
-  queuesStatsColumns: {
-    assignedTasksColumn: boolean;
-    wrappingTasksColumn: boolean;
   };
 }
 
@@ -33,9 +29,9 @@ export interface Channels {
 
 export interface ChannelConfig {
   color: string;
-  SLADataTile: boolean;
-  taskCountsDataTile: boolean;
-  teamsTaskSummary: boolean;
+  SLA_data_tile: boolean;
+  task_counts_data_tile: boolean;
+  teams_task_summary: boolean;
 }
 
 interface ActivityConfig {

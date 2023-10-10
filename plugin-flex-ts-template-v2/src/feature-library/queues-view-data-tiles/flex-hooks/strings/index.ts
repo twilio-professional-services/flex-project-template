@@ -4,8 +4,6 @@ import esMX from './es-mx.json';
 export enum StringTemplates {
   WithinSL = 'PSWithinSL',
   Other = 'PSOther',
-  AssignedTasksMetric = 'PSAssignedTasksMetric',
-  WrappingTasksMetric = 'PSWrappingTasksMetric',
   TeamsViewTeamName = 'PSTeamName',
   TeamsViewSummaryAllTeams = 'PSTaskSummaryAllTeams',
   TeamsViewSummaryOther = 'PSTeamsViewSummaryOther',
@@ -23,8 +21,6 @@ export const stringHook = () => ({
   'en-US': {
     [StringTemplates.WithinSL]: 'Within SL',
     [StringTemplates.Other]: 'Other',
-    [StringTemplates.AssignedTasksMetric]: 'The number of assigned tasks.',
-    [StringTemplates.WrappingTasksMetric]: 'The number of wrapping tasks.',
     [StringTemplates.TeamsViewTeamName]: 'Team Name',
     [StringTemplates.TeamsViewSummaryAllTeams]: 'All Teams',
     [StringTemplates.TeamsViewSummaryOther]: 'Other',
