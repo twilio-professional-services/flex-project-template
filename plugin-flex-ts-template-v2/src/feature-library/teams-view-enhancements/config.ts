@@ -38,6 +38,8 @@ const {
   agent_skills = true,
 } = getFeatureFlags().features?.teams_view_enhancements?.columns || {};
 
+const { teams = [] } = getFeatureFlags().common || {};
+
 const defaultActivities = {
   activities: {
     Available: { color: 'green', icon: 'Accept' },
@@ -65,18 +67,6 @@ export const getEnabledChannels = () => {
     if (channels[ch].taskCount) enabledChannels.push(ch);
   });
   return enabledChannels;
-};
-export const getChannelVoice_Color = () => {
-  return channels.voice.color;
-};
-export const getChannelChat_Color = () => {
-  return channels.chat.color;
-};
-export const getChannelSMS_Color = () => {
-  return channels.sms.color;
-};
-export const getChannelVideo_Color = () => {
-  return channels.video.color;
 };
 export const isTaskSummaryEnabled = () => {
   return task_summary;
@@ -116,4 +106,7 @@ export const isDisplayTaskQueueNameEnabled = () => {
 };
 export const getAgentActivityConfig = () => {
   return agentActivityConfiguration;
+};
+export const getTeams = () => {
+  return teams;
 };
