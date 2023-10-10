@@ -79,6 +79,8 @@
         "url": "{{serverless.url}}/features/enhanced-crm-container/index.html?line1={{task.from}}&line2={{task.direction}}",
         "should_display_url_when_no_tasks": true,
         "display_url_when_no_tasks": "{{serverless.url}}/features/enhanced-crm-container/index.html"
+        "enable_url_tab": true,
+        "url_tab_title": "Web Page"
       },
       "internal_call": {
         "enabled": true
