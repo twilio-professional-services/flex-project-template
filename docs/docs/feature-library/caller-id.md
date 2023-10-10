@@ -15,7 +15,16 @@ the vanilla feature without any further customizations will look like this
 
 ## Enabling the feature
 
-There are no settings for caller-id, only enabling the feature in the flex-config asset for your environment.
+There are no additional dependencies for setup beyond ensuring the flag is enabled within the `flex-config` attributes.
+
+There is an optional configuration property (`include_outgoing_only_numbers`) controlling whether or not outgoing-only caller IDs (i.e. verified non-Twilio phone numbers) are displayed in the dropdown. This is enabled by default, but can be disabled to hide these numbers.
+
+```json
+"caller_id": {
+    "enabled": true,
+    "include_outgoing_only_numbers": false
+}
+```
 
 ## Outbound Call Configuration
 
@@ -42,4 +51,4 @@ Content-Type: application/json
 
 # how does it work?
 
-When enabled, this feature loads the phone numbers on the account using a serverless function, caches them locally, preserve the selected value against the worker attributes. When the [StartOutboundCall](https://assets.flex.twilio.com/docs/releases/flex-ui/2.0.0-beta.1/ui-actions/Actions#StartOutboundCall) action is invoked, we intercept the event before its processed and update the From number to use the selected value stored on the worker attributes.
+When enabled, this feature loads the phone numbers on the account using a serverless function, caches them locally, preserve the selected value against the worker attributes. When the [StartOutboundCall](https://assets.flex.twilio.com/docs/releases/flex-ui/latest/ui-actions/Actions#StartOutboundCall) action is invoked, we intercept the event before its processed and update the From number to use the selected value stored on the worker attributes.

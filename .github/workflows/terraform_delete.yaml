@@ -1,4 +1,4 @@
-name: 'Terraform DELETE State'
+name: "Terraform DELETE State"
 
 on:
   workflow_dispatch:
@@ -6,61 +6,34 @@ on:
       environment:
         required: true
         type: environment
-        description: 'Environment to use for deployment'
+        description: "Environment to use for deployment"
 
 # Note your actions must have read and write workflow permissions enabled
 # this script is intended for development and troubleshooting purposes
 #
-# terraform is only concered with resources in the definition and in its 
+# terraform is only concered with resources in the definition and in its
 # state.
 #
 # if the resource definition defines something that already exists
 # then it is expected to exist in the state.
-#
-# if the state exists we can use terraform import statements to update
-# the state (see .github/actions/terraform_state_artifact)
 
 jobs:
   delete-terraform-state:
+    name: Delete Terraform
     environment: ${{ github.event.inputs.environment }}
     env:
-      ENVIRONMENT: ${{ github.event.inputs.environment }}
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      ENVIRONMENT: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - id: delete_terraform_state
+      - uses: actions/checkout@v3
+      - name: install Twilio CLI
         run: |
-          echo "running delete_terraform_state"
-          echo "### Job summary" >> $env:GITHUB_STEP_SUMMARY
-          echo " - Repo: ${{ github.repository }}"  >> $env:GITHUB_STEP_SUMMARY
-          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
-          echo " - Artifact Name: terraformstatefile-${{ env.ENVIRONMENT }}"  >> $env:GITHUB_STEP_SUMMARY
-          echo " --- "  >> $env:GITHUB_STEP_SUMMARY
-          echo "### Job Results "  >> $env:GITHUB_STEP_SUMMARY
-
-          $Repo = "${{ github.repository }}"
-          $BaseUri = "https://api.github.com"
-          $ArtifactUri = "$BaseUri/repos/$Repo/actions/artifacts"
-          $Token = "${{ github.token }}" | ConvertTo-SecureString -AsPlainText
-          $RestResponse = Invoke-RestMethod -Authentication Bearer -Uri $ArtifactUri -Token $Token | Select-Object -ExpandProperty artifacts
-          if ($RestResponse){
-            $StateHistory = $RestResponse | Sort-Object -Property created_at -Descending | where name -eq "terraformstatefile-${{ env.ENVIRONMENT }}"
-
-
-            if($StateHistory) {
-              echo "Terraform State Files Found: "
-              echo $StateHistory
-
-              $size = $($StateHistory | Measure-Object).Count;
-              echo " - Historic State Files Found For Deletion: $size"  >> $env:GITHUB_STEP_SUMMARY
-            
-              $StateHistory.ForEach({ Invoke-RestMethod -uri $_.url -Token $Token -Authentication bearer -Method DELETE})
-            } else {
-              echo " - :warning:  Historic State Files Found For Deletion: 0"  >> $env:GITHUB_STEP_SUMMARY
-            }
-
-          } else {
-            echo " - :warning:  Historic State Files Found For Deletion: 0"  >> $env:GITHUB_STEP_SUMMARY
-          }
-        shell: pwsh
-
-
+          npm install -g twilio-cli
+          twilio plugins:install @twilio-labs/plugin-serverless
+      - id: delete_terraform_state
+        working-directory: ./infra-as-code/state
+        run: |
+          ./delete.sh

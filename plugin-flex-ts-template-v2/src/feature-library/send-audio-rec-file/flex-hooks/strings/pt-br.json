@@ -1,0 +1,8 @@
+{
+    "PSAudioRecorder": "Gravador de Áudio",
+    "PSRecordingMessage": "Gravação em andamento ",
+    "StartRecButton": "Iniciar Gravação",
+    "StopRecButton": "Parar Gravação",
+    "RemoveRecButton": "Descartar Gravação",
+    "MicBlockedMessage": "Permita que esta página acesse o seu microfone antes de usar este recurso."
+}

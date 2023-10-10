@@ -21,20 +21,11 @@ After selecting an audio device, a `Toast notification` is shown to indicate the
 
 There are no additional dependencies for setup beyond ensuring the flag is enabled within the `flex-config` attributes.
 
-To enable the `Device Manager` feature, under the `flex-config` attributes set the `device_manager` `enabled` flag to `true`:
+To enable the `Device Manager` feature, under the `flex-config` attributes set the `device_manager` `enabled` flag to `true`. You may also separate the output and input device selection by setting `input_select` to `true`.
 
 ```json
 "device_manager": {
-    "enabled": true
+    "enabled": true,
+    "input_select": true
 }
 ```
-
----
-
-## Changelog
-
-### 1.0
-
-**October 5, 2022**
-
-- Upgraded [original plugin code](https://github.com/jhunter-twilio/plugin-select-audio-device) to template structure & Flex 2.0 with Twilio Paste.

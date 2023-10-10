@@ -7,6 +7,11 @@ import AdminUiService from './AdminUiService';
 
 const acronyms = ['id', 'ui', 'sip', 'pstn', 'sms', 'crm', 'sla', 'cbm', 'url'];
 const hiddenFeatures = ['admin_ui'];
+const docsBaseUrl = 'https://twilio-professional-services.github.io/flex-project-template';
+
+// String to identify the 'common' feature
+// Explicitly a value that is invalid per the 'add-feature' script
+export const featureCommon = '_common_';
 
 export const canShowAdminUi = (manager: Manager) => {
   const { roles } = manager.user;
@@ -40,21 +45,32 @@ export const formatName = (name: string): string => {
 };
 
 export const formatDocsUrl = (name: string): string => {
-  return `https://twilio-professional-services.github.io/flex-project-template/feature-library/${name.replaceAll(
-    '_',
-    '-',
-  )}`;
+  if (name === featureCommon) {
+    return `${docsBaseUrl}/building/template-utilities/configuration#common-configuration`;
+  }
+
+  return `${docsBaseUrl}/feature-library/${name.replaceAll('_', '-')}`;
 };
 
 const updateWorkerSetting = async (feature: string, config: any) => {
+  let updatePayload = {};
+
+  if (feature === featureCommon) {
+    updatePayload = {
+      common: config,
+    };
+  } else {
+    updatePayload = {
+      features: {
+        [feature]: config,
+      },
+    };
+  }
+
   await Actions.invokeAction('SetWorkerAttributes', {
     mergeExisting: true,
     attributes: {
-      config_overrides: {
-        features: {
-          [feature]: config,
-        },
-      },
+      config_overrides: updatePayload,
     },
   });
 };
@@ -68,7 +84,11 @@ const resetWorkerSetting = async (feature: string) => {
 
   const attributes = workerClient.attributes as CustomWorkerAttributes;
 
-  if (attributes?.config_overrides?.features && attributes.config_overrides.features[feature]) {
+  if (feature === featureCommon) {
+    if (attributes?.config_overrides?.common) {
+      delete attributes.config_overrides.common;
+    }
+  } else if (attributes?.config_overrides?.features && attributes.config_overrides.features[feature]) {
     delete attributes.config_overrides.features[feature];
   }
 
@@ -96,20 +116,30 @@ export const saveUserConfig = async (feature: string, config: any): Promise<bool
   return true;
 };
 
-export const saveGlobalConfig = async (feature: string, config: any): Promise<any> => {
+export const saveGlobalConfig = async (feature: string, config: any, mergeFeature: boolean): Promise<any> => {
   let returnVal = false;
   try {
-    const updateResponse = await AdminUiService.updateUiAttributes(
-      JSON.stringify({
+    let updatePayload = {};
+
+    if (feature === featureCommon) {
+      updatePayload = {
+        custom_data: {
+          common: config,
+        },
+      };
+    } else {
+      updatePayload = {
         custom_data: {
           features: {
             [feature]: config,
           },
         },
-      }),
-    );
-    if (updateResponse?.configuration?.custom_data?.features) {
-      returnVal = updateResponse.configuration.custom_data.features;
+      };
+    }
+
+    const updateResponse = await AdminUiService.updateUiAttributes(JSON.stringify(updatePayload), mergeFeature);
+    if (updateResponse?.configuration?.custom_data) {
+      returnVal = updateResponse.configuration.custom_data;
     } else {
       console.error('admin-ui: Unexpected response upon updating global config', updateResponse);
     }

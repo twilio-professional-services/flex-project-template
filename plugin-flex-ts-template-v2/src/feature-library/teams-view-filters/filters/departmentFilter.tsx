@@ -34,7 +34,7 @@ export const departmentFilter = () =>
     fieldName: 'department_name',
     options: getDepartmentOptions()
       .sort()
-      .map((value) => ({
+      .map((value: string) => ({
         value,
         label: value,
       })),
