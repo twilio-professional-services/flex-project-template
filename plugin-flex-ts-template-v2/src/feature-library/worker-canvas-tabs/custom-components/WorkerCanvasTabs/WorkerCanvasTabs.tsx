@@ -1,10 +1,11 @@
 import { Actions, IWorker, Template, templates, WorkerSkills } from '@twilio/flex-ui';
 import { useUID } from '@twilio-paste/core/uid-library';
-import { useTabState, Box, Heading, Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
+import { useTabState, Box, Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
 
 import CapacityContainer from '../../../supervisor-capacity/custom-components/CapacityContainer';
 import WorkerAttributes from '../../../attribute-viewer/custom-components/WorkerAttributes';
-import { isSupervisorCapacityEnabled, isAttributeViewerEnabled } from '../../config';
+import UpdateWorkerContainer from '../../../update-worker-attributes/custom-components/UpdateWorkerContainer/UpdateWorkerContainer';
+import { isSupervisorCapacityEnabled, isAttributeViewerEnabled, isUpdateWorkerEnabled } from '../../config';
 import { StringTemplates } from '../../flex-hooks/strings';
 
 const handleClose = () => {
@@ -37,9 +38,11 @@ const WorkerCanvasTabs = ({ worker }: Props) => {
               <Template source={templates[StringTemplates.WorkerCanvasTabAttributes]} />
             </Tab>
           )}
-          <Tab element="WORKER_CANVAS_TAB">
-            <Template source={templates[StringTemplates.WorkerCanvasTabTeamName]} />
-          </Tab>
+          {isUpdateWorkerEnabled() && (
+            <Tab element="WORKER_CANVAS_TAB">
+              <Template source={templates[StringTemplates.WorkerCanvasTabTeamName]} />
+            </Tab>
+          )}
         </TabList>
         <TabPanels>
           <TabPanel>{worker && <WorkerSkills key="skills" worker={worker} onClose={handleClose} />}</TabPanel>
@@ -53,12 +56,9 @@ const WorkerCanvasTabs = ({ worker }: Props) => {
               <WorkerAttributes key="worker-attributes" worker={worker} />
             </TabPanel>
           )}
-          <TabPanel>
-            <Heading as="h3" variant="heading30">
-              Update Team Name
-            </Heading>
-            Coming soon!
-          </TabPanel>
+          {isUpdateWorkerEnabled() && (
+            <TabPanel>{worker && <UpdateWorkerContainer key="update-worker" worker={worker} />}</TabPanel>
+          )}
         </TabPanels>
       </Tabs>
     </Box>
