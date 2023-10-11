@@ -190,7 +190,7 @@ const AdminView = () => {
                   <FeatureCard
                     feature={feature}
                     configureFor={configureFor}
-                    isUserModified={configureFor === 'user' && userConfig?.features[feature] !== undefined}
+                    isUserModified={configureFor === 'user' && userConfig?.features && userConfig?.features[feature] !== undefined}
                     config={config?.features[feature]}
                     handleSave={handleSave}
                     key={feature}
