@@ -36,7 +36,7 @@ if [ -n "$tfstate_bucket" ]; then
 		echo "JOB_FAILED=true" >>"$GITHUB_OUTPUT"
 		echo "$full_link not found" >>"$GITHUB_STEP_SUMMARY"
 		echo "   - :x: Existing Terrform state identified - but unable to retrieve it - if this is in error try removing the tfstate service on your twilio account" >>$GITHUB_STEP_SUMMARY
-		exit 0
+		exit 1
 	fi
 else
 	echo "   - :white_check_mark: Unable to identify an existing terraform state - proceeding without" >>$GITHUB_STEP_SUMMARY
