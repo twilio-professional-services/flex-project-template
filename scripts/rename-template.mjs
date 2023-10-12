@@ -137,6 +137,12 @@ const performRename = async () => {
   var oldPluginNamdRegex = RegExp(`${pluginDir}`); 
   shell.sed('-i', oldPluginNamdRegex, fullPluginName, `./.github/*/flex_deploy.yaml`);
   shell.sed('-i', oldPluginNamdRegex, fullPluginName, `./.github/*/checks.yaml`);
+
+  // update references to the domain name in the infra-as-code package
+  shell.sed('-i', /custom-flex-extensions-serverless/g, `serverless-${packageSuffix}`, `./infra-as-code/state/import_internal_state.sh`);
+  shell.sed('-i', /custom-flex-extensions-serverless/g, `serverless-${packageSuffix}`, `./infra-as-code/terraform/environments/default/variables.tf`);
+  shell.sed('-i', /custom-flex-extensions-serverless/g, `serverless-${packageSuffix}`, `./infra-as-code/terraform/modules/studio/variables.tf`);
+
   
   
   console.log(`Re-evaluating npm package-lock for ${fullPluginName}...`);
