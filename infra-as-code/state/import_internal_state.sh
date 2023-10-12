@@ -120,7 +120,12 @@ fi
 
 export TF_VAR_SERVERLESS_SID TF_VAR_SCHEDULE_MANAGER_SID TF_VAR_SERVERLESS_DOMAIN TF_VAR_SERVERLESS_ENV_SID TF_VAR_SCHEDULE_MANAGER_DOMAIN TF_VAR_SCHEDULE_MANAGER_ENV_SID TF_VAR_FUNCTION_CREATE_CALLBACK TF_VAR_FUNCTION_CHECK_SCHEDULE_SID
 
-importInternalState
+
+### only if existing state file does not exist
+### do we want to import the internal state
+if ! [ -f ./terraform.tfstate.enc ]; then
+  importInternalState
+fi
 
 terraform -chdir="../terraform/environments/default" apply -input=false -auto-approve
 echo "JOB_FAILED=false" >>"$GITHUB_OUTPUT"
