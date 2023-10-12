@@ -2,6 +2,7 @@ import shell from "shelljs";
 // https://github.com/shelljs/shelljs#shellstringstr
 import { flexConfigDir, serverlessDir } from "./common/constants.mjs";
 import getPluginDirs from "./common/get-plugin.mjs";
+import { promises as fs } from 'fs';
 
 function capitalizeFirstLetter(string) {
   return string[0].toUpperCase() + string.slice(1);
@@ -13,7 +14,7 @@ function onlyValidCharacters(str) {
 
 const { pluginDir, pluginSrc } = getPluginDirs();
 
-const performRename = () => {
+const performRename = async () => {
   shell.echo(`renaming plugin: `, pluginDir);
   shell.echo("");
   
@@ -81,11 +82,17 @@ const performRename = () => {
 
   //rename redux namespace
   shell.ls(`${pluginSrc}/utils/state/index.ts`).forEach(function (file) {
-    shell.echo("JARED");
     shell.sed ('-i', /export const reduxNamespace.*/, `export const reduxNamespace = '${fullPluginName}';`, file);
-    shell.echo("JARED");
   });
-  
+
+  //update the config mappings
+  const mappingsFile = './scripts/config/mappings.json'
+  const originalMappings = await fs.readFile(mappingsFile, "utf8");
+  let mappings = await JSON.parse(originalMappings);
+  mappings.SERVERLESS_DOMAIN.name = `serverless_functions_domain_${packageSuffixUndercore}`
+  mappings.VIDEO_SERVERLESS_DOMAIN.name = `serverless_functions_domain_${packageSuffixUndercore}`
+  await fs.writeFile(mappingsFile, JSON.stringify(mappings, null, 2), 'utf8');
+
    // rename the plugin directory
   shell.mv([pluginDir], `./${fullPluginName}`)
   
