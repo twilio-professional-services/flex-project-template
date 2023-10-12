@@ -34,7 +34,7 @@ import_resource() {
 }
 
 importInternalState() {
-	echo " - Discovering and importing existing state for known definitions" >>$GITHUB_STEP_SUMMARY
+	echo " - Discovering and importing existing Twilio state for known definitions into a new terraform state file" >>$GITHUB_STEP_SUMMARY
 	workspaces=$(twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
 	TF_WORKSPACE_SID=$(get_value_from_json "$workspaces" "friendlyName" "Flex Task Assignment" "sid")
 	import_resource "$workspaces" "Flex Task Assignment" "module.taskrouter.twilio_taskrouter_workspaces_v1.flex" "friendlyName" false
@@ -123,8 +123,7 @@ export TF_VAR_SERVERLESS_SID TF_VAR_SCHEDULE_MANAGER_SID TF_VAR_SERVERLESS_DOMAI
 
 ### only if existing state file does not exist
 ### do we want to import the internal state
-if ! [ -f ./terraform.tfstate.enc ]; then
-  echo "   - Importing existing Twilio state to a new terraform state file" >>$GITHUB_STEP_SUMMARY
+if ! [ -f ./terraform.tfstate ]; then
   importInternalState
 fi
 
