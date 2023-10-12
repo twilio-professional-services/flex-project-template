@@ -25,7 +25,7 @@ jobs:
   terraform_deploy:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
-    name: Deploy Terraform
+    name: Terraform
     env:
       ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
       TF_STATE_FILES: ".terraform.lock.hcl|terraform.tfstate"
@@ -51,7 +51,7 @@ jobs:
       - name: Import Internal State
         run: |
           ./import_internal_state.sh
-        if: steps.pull-state.outputs.JOB_FAILED == 'true'
+        if: steps.pull-state.outputs.JOB_FAILED == 'false'
         working-directory: ./infra-as-code/state
         id: import_internal_state
       - name: Export State

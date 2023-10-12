@@ -34,7 +34,7 @@ import_resource() {
 }
 
 importInternalState() {
-	echo " - Discovering and importing existing state for known definitions" >>$GITHUB_STEP_SUMMARY
+	echo " - Discovering and importing existing Twilio state for known definitions into a new terraform state file" >>$GITHUB_STEP_SUMMARY
 	workspaces=$(twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
 	TF_WORKSPACE_SID=$(get_value_from_json "$workspaces" "friendlyName" "Flex Task Assignment" "sid")
 	import_resource "$workspaces" "Flex Task Assignment" "module.taskrouter.twilio_taskrouter_workspaces_v1.flex" "friendlyName" false
@@ -75,7 +75,6 @@ importInternalState() {
 	import_resource "$flows" "Voice IVR" "module.studio.twilio_studio_flows_v2.voice" "friendlyName" false
 	import_resource "$flows" "Messaging Flow" "module.studio.twilio_studio_flows_v2.messaging" "friendlyName" false
 	import_resource "$flows" "Chat Flow" "module.studio.twilio_studio_flows_v2.chat" "friendlyName" false
-	echo "   - :white_check_mark: Studio - Flows" >>$GITHUB_STEP_SUMMARY
 	echo "   - :white_check_mark: Studio - Flows" >>$GITHUB_STEP_SUMMARY
 
 }
@@ -120,7 +119,13 @@ fi
 
 export TF_VAR_SERVERLESS_SID TF_VAR_SCHEDULE_MANAGER_SID TF_VAR_SERVERLESS_DOMAIN TF_VAR_SERVERLESS_ENV_SID TF_VAR_SCHEDULE_MANAGER_DOMAIN TF_VAR_SCHEDULE_MANAGER_ENV_SID TF_VAR_FUNCTION_CREATE_CALLBACK TF_VAR_FUNCTION_CHECK_SCHEDULE_SID
 
-importInternalState
+
+### only if existing state file does not exist
+### do we want to import the internal state
+if ! [ -f ../terraform/environments/default/terraform.tfstate ]; then
+  importInternalState
+fi
 
 terraform -chdir="../terraform/environments/default" apply -input=false -auto-approve
+echo " - Applying terraform configuration complete" >>$GITHUB_STEP_SUMMARY
 echo "JOB_FAILED=false" >>"$GITHUB_OUTPUT"

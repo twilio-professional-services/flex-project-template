@@ -2,7 +2,13 @@ import { ITask, useFlexSelector, Manager, Template, templates } from '@twilio/fl
 import React, { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 import { TaskAttributes } from 'types/task-router/Task';
-import { Button, Box, Heading, Text, Flex, Stack, HelpText } from '@twilio-paste/core';
+import { Button } from '@twilio-paste/core/button';
+import { Box } from '@twilio-paste/core/box';
+import { Heading } from '@twilio-paste/core/heading';
+import { Text } from '@twilio-paste/core/text';
+import { Flex } from '@twilio-paste/core/flex';
+import { Stack } from '@twilio-paste/core/stack';
+import { HelpText } from '@twilio-paste/core/help-text';
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';
 import { useDispatch, useSelector } from 'react-redux';
 

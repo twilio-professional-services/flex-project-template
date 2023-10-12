@@ -1,5 +1,5 @@
 import { TaskAssignmentStatus } from 'types/task-router/Task';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import { TaskHelper } from '@twilio/flex-ui';
 
 import ApiService from '../ApiService';

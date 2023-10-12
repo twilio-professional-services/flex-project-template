@@ -5,11 +5,11 @@ import { varNameMapping } from "./constants.mjs";
 import * as fetchCli from "./fetch-cli.mjs";
 
 // Initialize env file if necessary, then parse its contents
-const readEnv = async (envFile, exampleFile) => {
+const readEnv = async (envFile, exampleFile, overwrite) => {
   if (!shell.test('-e', exampleFile) && !shell.test('-e', envFile)) {
     // nothing exists!
     return null;
-  } else if (!shell.test('-e', envFile)) {
+  } else if (overwrite || !shell.test('-e', envFile)) {
     // create env file based on example
     shell.cp(exampleFile, envFile);
     
@@ -60,7 +60,7 @@ const fillUnknownEnvVars = (envVars, environment) => {
       continue;
     }
     
-    if (!environment && varNameMapping[key].localValue) {
+    if ((!environment || environment === 'local') && varNameMapping[key].localValue) {
       // Running locally, use the local value if specified
       envVars[key] = varNameMapping[key].localValue;
       continue;
@@ -113,6 +113,10 @@ const fillAccountVars = (envVars, account) => {
       envVars[key] = account.accountSid;
     } else if (key == 'AUTH_TOKEN' && account.authToken) {
       envVars[key] = account.authToken;
+    } else if (key == 'TWILIO_API_KEY' && account.apiKey) {
+      envVars[key] = account.apiKey;
+    } else if (key == 'TWILIO_API_SECRET' && account.apiSecret) {
+      envVars[key] = account.apiSecret;
     }
   }
   
@@ -129,11 +133,11 @@ const saveReplacements = async (data, path) => {
   }
 }
 
-export default async (path, examplePath, account, environment) => {
+export default async (path, examplePath, account, environment, overwrite) => {
   console.log(`Setting up ${path}...`);
   
   // Initialize the env vars
-  let envVars = await readEnv(path, examplePath);
+  let envVars = await readEnv(path, examplePath, overwrite);
   
   if (!envVars) {
     console.error(`Unable to create the file ${path}.`);

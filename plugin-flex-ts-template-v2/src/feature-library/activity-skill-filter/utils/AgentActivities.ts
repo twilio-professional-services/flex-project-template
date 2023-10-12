@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 import AppState from 'types/manager/AppState';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import { Activity } from 'types/task-router';
 
 import { ActivitySkillFilterRules } from '../types/ServiceConfiguration';
