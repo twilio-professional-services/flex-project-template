@@ -76,7 +76,6 @@ importInternalState() {
 	import_resource "$flows" "Messaging Flow" "module.studio.twilio_studio_flows_v2.messaging" "friendlyName" false
 	import_resource "$flows" "Chat Flow" "module.studio.twilio_studio_flows_v2.chat" "friendlyName" false
 	echo "   - :white_check_mark: Studio - Flows" >>$GITHUB_STEP_SUMMARY
-	echo "   - :white_check_mark: Studio - Flows" >>$GITHUB_STEP_SUMMARY
 
 }
 
