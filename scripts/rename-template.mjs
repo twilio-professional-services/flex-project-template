@@ -78,6 +78,13 @@ const performRename = () => {
      shell.sed ('-i', /import .*Plugin from '.\/.*Plugin';/, `import ${pluginName} from './${pluginName}Plugin';`, `${pluginSrc}/index.ts`);
    }
   });
+
+  //rename redux namespace
+  shell.ls(`${pluginSrc}/utils/state/index.ts`).forEach(function (file) {
+    shell.echo("JARED");
+    shell.sed ('-i', /export const reduxNamespace.*/, `export const reduxNamespace = '${fullPluginName}';`, file);
+    shell.echo("JARED");
+  });
   
    // rename the plugin directory
   shell.mv([pluginDir], `./${fullPluginName}`)
