@@ -30,6 +30,7 @@ if [ -n "$tfstate_bucket" ]; then
 			openssl enc -d -in "$item.enc" -aes-256-cbc -pbkdf2 -k "$ENCRYPTION_KEY" -out "../terraform/environments/default/$item"
 			rm -f "$full_item_name"
 			rm -f "$item.enc"
+			echo "   - :white_check_mark: Existing terraform state file retrieved" >>$GITHUB_STEP_SUMMARY
 		done
 	else
 		echo "JOB_FAILED=true" >>"$GITHUB_OUTPUT"
@@ -41,4 +42,4 @@ else
 	echo "   - :white_check_mark: Unable to identify an existing terraform state - proceeding without" >>$GITHUB_STEP_SUMMARY
 fi
 echo "JOB_FAILED=false" >>"$GITHUB_OUTPUT"
-echo "   - :white_check_mark: Existing terraform state file retrieved" >>$GITHUB_STEP_SUMMARY
+
