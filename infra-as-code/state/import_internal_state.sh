@@ -128,4 +128,5 @@ if ! [ -f ../terraform/environments/default/terraform.tfstate ]; then
 fi
 
 terraform -chdir="../terraform/environments/default" apply -input=false -auto-approve
+echo " - Applying terraform configuration complete" >>$GITHUB_STEP_SUMMARY
 echo "JOB_FAILED=false" >>"$GITHUB_OUTPUT"
