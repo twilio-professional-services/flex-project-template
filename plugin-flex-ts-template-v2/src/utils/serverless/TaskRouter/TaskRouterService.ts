@@ -46,6 +46,10 @@ interface UpdateWorkerChannelResponse {
   workerChannelCapacity: WorkerChannelCapacityResponse;
 }
 
+interface UpdateWorkerAttributesResponse {
+  success: boolean;
+}
+
 let queues = null as null | Array<Queue>;
 
 class TaskRouterService extends ApiService {
@@ -173,6 +177,11 @@ class TaskRouterService extends ApiService {
     return result.success;
   }
 
+  async updateWorkerAttributes(workerSid: string, attributesUpdate: string): Promise<boolean> {
+    const result = await this.#updateWorkerAttributes(workerSid, attributesUpdate);
+    return result.success;
+  }
+
   #updateTaskAssignmentStatus = async (
     taskSid: string,
     assignmentStatus: TaskAssignmentStatus,
@@ -275,6 +284,28 @@ class TaskRouterService extends ApiService {
         body: this.buildBody(encodedParams),
       },
     ).then((response): UpdateWorkerChannelResponse => {
+      return response;
+    });
+  };
+
+  #updateWorkerAttributes = async (
+    workerSid: string,
+    attributesUpdate: string,
+  ): Promise<UpdateWorkerAttributesResponse> => {
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(this.manager.user.token),
+      workerSid: encodeURIComponent(workerSid),
+      attributesUpdate: encodeURIComponent(attributesUpdate),
+    };
+
+    return this.fetchJsonWithReject<UpdateWorkerAttributesResponse>(
+      `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/taskrouter/update-worker-attributes`,
+      {
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      },
+    ).then((response): UpdateWorkerAttributesResponse => {
       return response;
     });
   };

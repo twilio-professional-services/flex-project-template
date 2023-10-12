@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Flex, Stack, Table, THead, TBody, Th, Tr, Td } from '@twilio-paste/core';
 import { IWorker } from '@twilio/flex-ui';
 
+import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import { getTeams, getDepartments } from '../../config';
 import FormRowText from './FormRowText';
 import FormRowSelect from './FormRowSelect';
@@ -58,8 +59,8 @@ const UpdateWorkerContainer = ({ worker }: OwnProps) => {
         department_name: departmentName,
         location,
       };
-      // Use TaskRouter service to update worker
-      // Need new serverless function
+      await TaskRouterService.updateWorkerAttributes(workerSid, JSON.stringify(updatedAttr));
+      setChanged(false);
     }
   };
 
@@ -86,7 +87,7 @@ const UpdateWorkerContainer = ({ worker }: OwnProps) => {
           />
           <FormRowSelect
             id="department_name"
-            label="Dept."
+            label="Department"
             value={departmentName}
             options={getDepartments()}
             onChangeHandler={handleDeptChange}
