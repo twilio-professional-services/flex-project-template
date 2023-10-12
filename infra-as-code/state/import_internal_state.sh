@@ -124,6 +124,7 @@ export TF_VAR_SERVERLESS_SID TF_VAR_SCHEDULE_MANAGER_SID TF_VAR_SERVERLESS_DOMAI
 ### only if existing state file does not exist
 ### do we want to import the internal state
 if ! [ -f ./terraform.tfstate.enc ]; then
+  echo "   - Importing existing Twilio state to a new terraform state file" >>$GITHUB_STEP_SUMMARY
   importInternalState
 fi
 

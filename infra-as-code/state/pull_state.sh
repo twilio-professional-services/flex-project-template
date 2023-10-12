@@ -41,4 +41,4 @@ else
 	echo "   - :white_check_mark: Unable to identify an existing terraform state - proceeding without" >>$GITHUB_STEP_SUMMARY
 fi
 echo "JOB_FAILED=false" >>"$GITHUB_OUTPUT"
-echo "   - :white_check_mark: Terraform imported" >>$GITHUB_STEP_SUMMARY
+echo "   - :white_check_mark: Existing terraform state file retrieved" >>$GITHUB_STEP_SUMMARY
