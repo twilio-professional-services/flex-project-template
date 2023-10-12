@@ -1,4 +1,7 @@
-import { Input, Label, Tr, Td } from '@twilio-paste/core';
+import { Template, templates } from '@twilio/flex-ui';
+import { Input } from '@twilio-paste/core/input';
+import { Label } from '@twilio-paste/core/label';
+import { Tr, Td } from '@twilio-paste/core/table';
 
 interface OwnProps {
   id: string;
@@ -16,7 +19,9 @@ const FormRowText = ({ id, label, value, onChangeHandler }: OwnProps) => {
   return (
     <Tr key={id}>
       <Td>
-        <Label htmlFor={id}> {label} </Label>
+        <Label htmlFor={id}>
+          <Template source={templates[`PSUpdateWorker${label}`]} />
+        </Label>
       </Td>
       <Td>
         <Input type="text" id={id} value={value} onChange={handleChange} />

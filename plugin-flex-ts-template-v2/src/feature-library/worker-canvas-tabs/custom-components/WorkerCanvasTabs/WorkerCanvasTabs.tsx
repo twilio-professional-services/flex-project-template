@@ -1,11 +1,12 @@
-import { Actions, IWorker, Template, templates, WorkerSkills } from '@twilio/flex-ui';
+import { Box } from '@twilio-paste/core/Box';
+import { Tabs, Tab, TabList, TabPanel, TabPanels, useTabState } from '@twilio-paste/core/tabs';
 import { useUID } from '@twilio-paste/core/uid-library';
-import { useTabState, Box, Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
+import { Actions, IWorker, Template, templates, WorkerSkills } from '@twilio/flex-ui';
 
-import CapacityContainer from '../../../supervisor-capacity/custom-components/CapacityContainer';
 import WorkerAttributes from '../../../attribute-viewer/custom-components/WorkerAttributes';
+import CapacityContainer from '../../../supervisor-capacity/custom-components/CapacityContainer';
 import UpdateWorkerContainer from '../../../update-worker-attributes/custom-components/UpdateWorkerContainer/UpdateWorkerContainer';
-import { isSupervisorCapacityEnabled, isAttributeViewerEnabled, isUpdateWorkerEnabled } from '../../config';
+import { isAttributeViewerEnabled, isSupervisorCapacityEnabled, isUpdateWorkerEnabled } from '../../config';
 import { StringTemplates } from '../../flex-hooks/strings';
 
 const handleClose = () => {

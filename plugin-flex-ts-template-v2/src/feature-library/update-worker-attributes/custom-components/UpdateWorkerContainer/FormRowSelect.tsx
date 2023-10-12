@@ -1,4 +1,7 @@
-import { Label, Tr, Th, Td, Select, Option } from '@twilio-paste/core';
+import { Template, templates } from '@twilio/flex-ui';
+import { Select, Option } from '@twilio-paste/core/select';
+import { Label } from '@twilio-paste/core/label';
+import { Tr, Th, Td } from '@twilio-paste/core/table';
 
 interface OwnProps {
   id: string;
@@ -17,7 +20,9 @@ const FormRowSelect = ({ id, label, value, options, onChangeHandler }: OwnProps)
   return (
     <Tr key={id}>
       <Th scope="row">
-        <Label htmlFor={id}> {label} </Label>
+        <Label htmlFor={id}>
+          <Template source={templates[`PSUpdateWorker${label}`]} />
+        </Label>
       </Th>
       <Td>
         <Select value={value} onChange={handleChange} id={id}>

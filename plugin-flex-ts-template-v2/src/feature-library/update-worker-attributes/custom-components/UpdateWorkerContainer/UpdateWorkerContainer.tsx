@@ -1,6 +1,10 @@
+import { IWorker, Template, templates } from '@twilio/flex-ui';
 import React, { useState, useEffect } from 'react';
-import { Button, Flex, Stack, Table, TBody, Tr, Td, Th } from '@twilio-paste/core';
-import { IWorker } from '@twilio/flex-ui';
+import { Button } from '@twilio-paste/core/button';
+import { Label } from '@twilio-paste/core/label';
+import { Flex } from '@twilio-paste/core/flex';
+import { Stack } from '@twilio-paste/core/stack';
+import { Table, TBody, Tr, Td } from '@twilio-paste/core/table';
 
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import { getTeams, getDepartments, editTeam, editDepartment, editLocation, editManager } from '../../config';
@@ -78,7 +82,11 @@ const UpdateWorkerContainer = ({ worker }: OwnProps) => {
       <Table variant="borderless">
         <TBody>
           <Tr key="agent_name">
-            <Th>Name</Th>
+            <Td>
+              <Label htmlFor="name">
+                <Template source={templates.PSUpdateWorkerName} />
+              </Label>
+            </Td>
             <Td>{worker?.fullName || 'Agent'}</Td>
           </Tr>
           {editTeam() ? (
@@ -118,7 +126,7 @@ const UpdateWorkerContainer = ({ worker }: OwnProps) => {
       <Flex hAlignContent="right" margin="space50">
         <Stack orientation="horizontal" spacing="space30">
           <Button variant="primary" id="saveButton" onClick={saveWorkerAttributes} disabled={!changed}>
-            Save
+            <Template source={templates.Save} />
           </Button>
         </Stack>
       </Flex>
