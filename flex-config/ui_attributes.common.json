@@ -363,7 +363,11 @@
         "enabled": false
       },
       "update_worker_attributes": {
-        "enabled": false
+        "enabled": false,
+        "edit_team": true,
+        "edit_department": true,
+        "edit_location": true,
+        "edit_manager": false
       }
     }
   }

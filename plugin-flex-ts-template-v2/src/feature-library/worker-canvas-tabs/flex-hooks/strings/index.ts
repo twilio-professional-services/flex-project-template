@@ -6,6 +6,7 @@ export enum StringTemplates {
   WorkerCanvasTabCapacity = 'PSWorkerCanvasTabCapacity',
   WorkerCanvasTabAttributes = 'PSWorkerCanvasTabAttributes',
   WorkerCanvasTabTeamName = 'PSWorkerCanvasTabTeamName',
+  WorkerCanvasTabDetails = 'PSWorkerCanvasTabDetails',
 }
 
 export const stringHook = () => ({
@@ -14,6 +15,7 @@ export const stringHook = () => ({
     [StringTemplates.WorkerCanvasTabCapacity]: 'Capacity',
     [StringTemplates.WorkerCanvasTabAttributes]: 'Attributes',
     [StringTemplates.WorkerCanvasTabTeamName]: 'Team',
+    [StringTemplates.WorkerCanvasTabDetails]: 'Details',
   },
   'es-MX': esMX,
 });

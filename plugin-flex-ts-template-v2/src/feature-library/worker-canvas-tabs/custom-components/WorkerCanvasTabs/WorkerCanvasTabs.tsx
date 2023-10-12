@@ -40,7 +40,7 @@ const WorkerCanvasTabs = ({ worker }: Props) => {
           )}
           {isUpdateWorkerEnabled() && (
             <Tab element="WORKER_CANVAS_TAB">
-              <Template source={templates[StringTemplates.WorkerCanvasTabTeamName]} />
+              <Template source={templates[StringTemplates.WorkerCanvasTabDetails]} />
             </Tab>
           )}
         </TabList>
