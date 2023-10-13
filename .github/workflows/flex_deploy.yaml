@@ -111,6 +111,38 @@ jobs:
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       TF_ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
 
+  deploy-packages:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
+    needs: [deploy-terraform]
+    steps:
+      - uses: actions/checkout@v3
+      - name: setup node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
+      - name: install top-level packages
+        id: initial-env
+        run: |
+          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
+          npm install --ignore-scripts
+      - name: deploy packages
+        run: |
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm run deploy-packages >> $GITHUB_STEP_SUMMARY
+
   deploy-serverless:
     if: |
       always() &&

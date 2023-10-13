@@ -1,4 +1,5 @@
 import getTwilioAccount from "./common/get-account.mjs";
+import getPackageDirs from "./common/get-packages.mjs";
 import getPluginDirs from "./common/get-plugin.mjs";
 import installNpmPackage from "./common/install-packages.mjs";
 import fillReplacements from "./common/fill-replacements.mjs";
@@ -56,6 +57,7 @@ const execute = async () => {
     constants.scheduleManagerServerlessDir,
     constants.flexConfigDir,
     constants.videoAppDir,
+    ...getPackageDirs(),
   ];
   let packages = [];
   

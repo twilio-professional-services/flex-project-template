@@ -10,6 +10,7 @@ export const flexConfigDir = 'flex-config';
 export const videoAppDir = 'web-app-examples/twilio-video-demo-app';
 export const gitHubWorkflowDir = '.github/workflows';
 export const defaultPluginDir = 'plugin-flex-ts-template-v2';
+export const packagesDir = 'services';
 export const cliConfigPath = path.resolve(os.homedir(), '.twilio-cli/config.json');
 
 const mappingDefinitionPath = '../config/mappings.json';
