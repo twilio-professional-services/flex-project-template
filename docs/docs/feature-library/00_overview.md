@@ -23,6 +23,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Conference (external)](conference)           | _provide agents the ability to conference in external numbers_              |
 | [Conversation Transfer](conversation-transfer)          | _introduce conversation-based messaging transfer functionality for agents_                          |
 | [Custom Transfer Directory](custom-transfer-directory)       | _customize the agent and queue transfer directories_                        |
+| [Datadog Log Integration](datadog-log-integration) | _forward logs emitted by the template to datadog_
 | [Device Manager](device-manager)                  | _provide agents the ability to select the audio output device_              |
 | [Dispositions](dispositions)                   | _provide agents the ability to select a disposition/wrap-up code and enter notes_                   |
 | [Emoji Picker](emoji-picker)                    | _adds an emoji picker for messaging tasks_                                  |
