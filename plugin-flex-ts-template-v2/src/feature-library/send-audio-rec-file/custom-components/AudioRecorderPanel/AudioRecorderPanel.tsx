@@ -4,7 +4,9 @@ import React from 'react';
 import * as Flex from '@twilio/flex-ui';
 import { Actions, IconButton, templates } from '@twilio/flex-ui';
 import MicRecorder from 'mic-recorder-to-mp3';
-import { Grid, Card, Text } from '@twilio-paste/core';
+import { Grid } from '@twilio-paste/core/grid';
+import { Card } from '@twilio-paste/core/card';
+import { Text } from '@twilio-paste/core/text';
 import { Spinner } from '@twilio-paste/core/spinner';
 
 import { AudioRecorderWrapper, AudioRecorderPopover } from './AudioRecorderPanel.Styles';

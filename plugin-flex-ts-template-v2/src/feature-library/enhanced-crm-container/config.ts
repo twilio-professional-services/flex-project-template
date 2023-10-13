@@ -3,6 +3,8 @@ import EnhancedCRMContainerConfig from './types/ServiceConfiguration';
 
 const {
   enabled = false,
+  enable_url_tab = false,
+  url_tab_title = '',
   url = '',
   should_display_url_when_no_tasks = false,
   display_url_when_no_tasks = '',
@@ -22,4 +24,12 @@ export const displayUrlWhenNoTasks = () => {
 
 export const getUrl = () => {
   return url;
+};
+
+export const isUrlTabEnabled = () => {
+  return enable_url_tab;
+};
+
+export const getUrlTabTitle = () => {
+  return url_tab_title;
 };

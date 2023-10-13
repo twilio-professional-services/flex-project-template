@@ -1,4 +1,5 @@
-import { SkeletonLoader, TBody, Td, Tr } from '@twilio-paste/core';
+import { SkeletonLoader } from '@twilio-paste/core/skeleton-loader';
+import { TBody, Td, Tr } from '@twilio-paste/core/table';
 import { templates } from '@twilio/flex-ui';
 
 import { StringTemplates } from '../../flex-hooks/strings';

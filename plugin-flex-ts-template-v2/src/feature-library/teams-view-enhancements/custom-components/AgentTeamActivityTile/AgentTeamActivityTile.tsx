@@ -1,6 +1,8 @@
 import { Icon, Template, templates, useFlexSelector } from '@twilio/flex-ui';
 import * as React from 'react';
-import { Box, Table, THead, TBody, Th, Tr, Td, Tooltip } from '@twilio-paste/core';
+import { Box } from '@twilio-paste/core/box';
+import { Table, THead, TBody, Th, Tr, Td } from '@twilio-paste/core/table';
+import { Tooltip } from '@twilio-paste/core/tooltip';
 import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definition';
 import AppState from 'types/manager/AppState';
 import { EmojiIcon } from '@twilio-paste/icons/esm/EmojiIcon';

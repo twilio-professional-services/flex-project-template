@@ -30,14 +30,16 @@ if [ -n "$tfstate_bucket" ]; then
 			openssl enc -d -in "$item.enc" -aes-256-cbc -pbkdf2 -k "$ENCRYPTION_KEY" -out "../terraform/environments/default/$item"
 			rm -f "$full_item_name"
 			rm -f "$item.enc"
+			echo "   - :white_check_mark: Existing terraform state file retrieved" >>$GITHUB_STEP_SUMMARY
 		done
 	else
 		echo "JOB_FAILED=true" >>"$GITHUB_OUTPUT"
 		echo "$full_link not found" >>"$GITHUB_STEP_SUMMARY"
-		exit 0
+		echo "   - :x: Existing Terrform state identified - but unable to retrieve it - if this is in error try removing the tfstate service on your twilio account" >>$GITHUB_STEP_SUMMARY
+		exit 1
 	fi
 else
-	echo "JOB_FAILED=true" >>"$GITHUB_OUTPUT"
-	exit 0
+	echo "   - :white_check_mark: Unable to identify an existing terraform state - proceeding without" >>$GITHUB_STEP_SUMMARY
 fi
-echo "   - :white_check_mark: Terraform imported" >>$GITHUB_STEP_SUMMARY
+echo "JOB_FAILED=false" >>"$GITHUB_OUTPUT"
+

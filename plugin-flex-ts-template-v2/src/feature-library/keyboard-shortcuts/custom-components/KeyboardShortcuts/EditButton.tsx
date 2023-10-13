@@ -1,4 +1,4 @@
-import { Button } from '@twilio-paste/core';
+import { Button } from '@twilio-paste/core/button';
 import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
 
 interface EditButtonProps {

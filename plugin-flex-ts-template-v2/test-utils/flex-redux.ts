@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
-import { mergeWith, unset } from 'lodash';
+import mergeWith from 'lodash/mergeWith';
+import unset from 'lodash/unset';
 
 import { AppState } from '../src/types/manager';
 import { reduxNamespace } from '../src/utils/state';

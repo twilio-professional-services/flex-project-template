@@ -1,5 +1,6 @@
 import { Manager, styled, templates } from '@twilio/flex-ui';
-import { Box, Input } from '@twilio-paste/core';
+import { Box } from '@twilio-paste/core/box';
+import { Input } from '@twilio-paste/core/input';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
 import { Ref } from 'react';
 

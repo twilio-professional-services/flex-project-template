@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { ITask, templates } from '@twilio/flex-ui';
-import { ButtonGroup, Button, Flex, Tooltip, Text } from '@twilio-paste/core';
+import { ButtonGroup } from '@twilio-paste/core/button-group';
+import { Button } from '@twilio-paste/core/button';
+import { Flex } from '@twilio-paste/core/flex';
+import { Tooltip } from '@twilio-paste/core/tooltip';
+import { Text } from '@twilio-paste/core/text';
 import { ProductPhoneNumbersIcon } from '@twilio-paste/icons/esm/ProductPhoneNumbersIcon';
 import { CallTransferIcon } from '@twilio-paste/icons/esm/CallTransferIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';

@@ -1,4 +1,5 @@
-import { Flex, Alert } from '@twilio-paste/core';
+import { Alert } from '@twilio-paste/core/alert';
+import { Flex } from '@twilio-paste/core/flex';
 import {
   withTaskContext,
   Manager,
@@ -12,7 +13,7 @@ import {
   templates,
 } from '@twilio/flex-ui';
 import { useEffect, useState, useRef } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import { SyncMap } from 'twilio-sync';
 
 import { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';

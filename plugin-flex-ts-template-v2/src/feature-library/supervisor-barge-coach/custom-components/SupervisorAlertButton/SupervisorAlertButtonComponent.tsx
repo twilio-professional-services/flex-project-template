@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { IconButton, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { Flex, Tooltip } from '@twilio-paste/core';
+import { Flex } from '@twilio-paste/core/flex';
+import { Tooltip } from '@twilio-paste/core/tooltip';
 
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';

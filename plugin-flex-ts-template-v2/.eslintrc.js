@@ -20,6 +20,23 @@ module.exports = {
     'no-console': 'off',
     'no-duplicate-imports': 'off',
     'no-nested-ternary': 'off',
+    'no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          {
+            name: '@twilio-paste/core',
+            message:
+              'Importing Paste this way bloats plugin size. Instead, use specific imports such as `@twilio-paste/core/button`.',
+          },
+          {
+            name: 'lodash',
+            message:
+              'Importing lodash this way bloats plugin size. Instead, use specific imports such as `lodash/sortBy`.',
+          },
+        ],
+      },
+    ],
     'prefer-destructuring': 'off',
     'prefer-named-capture-group': 'off',
     'prefer-promise-reject-errors': 'off',
