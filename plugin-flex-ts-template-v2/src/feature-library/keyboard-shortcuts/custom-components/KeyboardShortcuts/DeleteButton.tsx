@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { Button } from '@twilio-paste/core';
+import { Button } from '@twilio-paste/core/button';
 import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon';
 
 import { ShortcutsObject } from '../../types/types';

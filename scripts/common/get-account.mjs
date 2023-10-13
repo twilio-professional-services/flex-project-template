@@ -1,5 +1,8 @@
 import prompt from "prompt";
 import shell from "shelljs";
+import { promises as fs } from 'fs';
+
+import { cliConfigPath } from "./constants.mjs";
 
 const printProfileWarning = () => {
   console.log("*****     WARNING       *****");
@@ -8,7 +11,7 @@ const printProfileWarning = () => {
 }
 
 // Gets and returns the account SID of the active Twilio CLI profile if present
-const getActiveCliProfile = () => {
+export const getActiveCliProfile = () => {
   try {
     const profiles = shell.exec("twilio profiles:list -o json", {silent: true});
     
@@ -33,6 +36,26 @@ const getActiveCliProfile = () => {
     printProfileWarning();
     return;
   }
+}
+
+const getCliProfileConfig = async (id) => {
+  try {
+    const profileConfigData = await fs.readFile(cliConfigPath, "utf8");
+    const profileConfig = JSON.parse(profileConfigData);
+    
+    for (const profile of Object.values(profileConfig?.profiles)) {
+      if (profile.id === id) {
+        return {
+          apiKey: profile.apiKey,
+          apiSecret: profile.apiSecret,
+        };
+      }
+    }
+  } catch (error) {
+    console.warn("Unable to locate the API key and secret for the Twilio CLI profile.", error);
+  }
+  
+  return {};
 }
 
 // Request the auth token from the user for the provided Twilio CLI profile
@@ -104,8 +127,12 @@ export default async () => {
     return;
   }
   
+  // Get API key and secret from the CLI profile config
+  const cliProfileConfig = await getCliProfileConfig(activeProfile.id);
+  
   return {
     accountSid: activeProfile.accountSid,
     authToken: promptResult.authToken,
+    ...cliProfileConfig,
   };
 }

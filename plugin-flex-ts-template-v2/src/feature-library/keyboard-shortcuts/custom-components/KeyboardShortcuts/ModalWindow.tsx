@@ -1,28 +1,15 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useUID } from '@twilio-paste/core/uid-library';
-import {
-  Grid,
-  Column,
-  HelpText,
-  ModalHeading,
-  ModalFooterActions,
-  Box,
-  Button,
-  Label,
-  Input,
-  Separator,
-  Table,
-  THead,
-  Tr,
-  Th,
-  Td,
-  TBody,
-  Stack,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalHeader,
-} from '@twilio-paste/core';
+import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core/table';
+import { Box } from '@twilio-paste/core/box';
+import { ModalHeading, ModalFooterActions, Modal, ModalBody, ModalFooter, ModalHeader } from '@twilio-paste/core/modal';
+import { Grid, Column } from '@twilio-paste/core/grid';
+import { HelpText } from '@twilio-paste/core/help-text';
+import { Stack } from '@twilio-paste/core/stack';
+import { Button } from '@twilio-paste/core/button';
+import { Label } from '@twilio-paste/core/label';
+import { Input } from '@twilio-paste/core/input';
+import { Separator } from '@twilio-paste/core/separator';
 import { Template, templates } from '@twilio/flex-ui';
 
 import { StringTemplates } from '../../flex-hooks/strings';

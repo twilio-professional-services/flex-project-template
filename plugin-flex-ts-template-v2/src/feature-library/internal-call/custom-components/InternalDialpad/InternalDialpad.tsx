@@ -5,7 +5,7 @@ import { Combobox } from '@twilio-paste/core/combobox';
 import { Flex } from '@twilio-paste/core/flex';
 import { Stack } from '@twilio-paste/core/stack';
 import { Text } from '@twilio-paste/core/text';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 import { Worker as InstantQueryWorker } from 'types/sync/InstantQuery';
 
 import { makeInternalCall } from '../../helpers/internalCall';

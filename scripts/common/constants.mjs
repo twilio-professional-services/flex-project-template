@@ -1,4 +1,5 @@
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -9,6 +10,7 @@ export const flexConfigDir = 'flex-config';
 export const videoAppDir = 'web-app-examples/twilio-video-demo-app';
 export const gitHubWorkflowDir = '.github/workflows';
 export const defaultPluginDir = 'plugin-flex-ts-template-v2';
+export const cliConfigPath = path.resolve(os.homedir(), '.twilio-cli/config.json');
 
 const mappingDefinitionPath = '../config/mappings.json';
 export const varNameMapping = JSON.parse(fs.readFileSync(path.resolve(path.dirname(fileURLToPath(import.meta.url)), mappingDefinitionPath)));

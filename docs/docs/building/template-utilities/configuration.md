@@ -36,7 +36,7 @@ If you wish to provide alternate feature configurations per environment, such as
 
 The custom_data model that lives in ui_attributes follows this schema:
 
-```json
+```json title=ui_attributes.<env-name>.json
 {
 "custom_data": {
     "common": {
@@ -88,9 +88,42 @@ For example, if the `activity-reservation-handler` feature is globally enabled b
 }
 ```
 
-### Updating the config
+### Configuring skills
 
-There are two strategies for managing the configuration set which are mutually exclusive
+The `taskrouter_skills.json` file under the flex-config directory defines skills that should be automatically deployed. The skills in the file will be merged with any skills existing in the environment. By default this contains two sample skills, `template_example_sales` and `template_example_support`.
+
+:::tip Important note
+Be sure to use skill names without spaces!
+:::
+
+Here is an example of how you can populate this file:
+
+```json title=taskrouter_skills.json
+[
+  {
+    "minimum": null,
+    "multivalue": false,
+    "name": "billing",
+    "maximum": null
+  },
+  {
+    "minimum": null,
+    "multivalue": false,
+    "name": "support",
+    "maximum": null
+  },
+  {
+    "minimum": null,
+    "multivalue": false,
+    "name": "offline_work",
+    "maximum": null
+  }
+]
+```
+
+### Updating the front-end config
+
+There are two strategies for managing the configuration, which are mutually exclusive:
 
 #### Admin UI
 
@@ -101,6 +134,8 @@ You can use the [admin-ui feature](/feature-library/admin-ui), which is the defa
 When running [locally](#local-environment), the admin-ui feature directly ignores what is in `appConfig.js` and shows only what is in [hosted Flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) or what has been overridden using the [per-worker feature overrides](/feature-library/admin-ui#how-does-it-work).  This can cause confusion, and for that reason, admin-ui is disabled by default via `appConfig.js` when running the template locally.
 
 ::: 
+
+When using this strategy, configuration can still be updated from outside the Admin UI via deployment scripts. However, only _new_ configuration will be added and no existing values will be overwritten.
 
 #### Infrastructure-as-code (version control)
 
@@ -130,7 +165,7 @@ When the setup script runs, it finds strings matching the pattern `<YOUR_VARIABL
 
 If the value is not found in the environment variables, the `scripts/config/mappings.json` file is consulted to map that variable to a value (such as a SID or serverless domain) using name-matched results from the Twilio CLI. The format of this file is as follows:
 
-```json
+```json title=mappings.json
 {
   "VARIABLE_NAME_HERE": {
     "type": "tr-workflow", // Type of Twilio resource to fetch the value of: serverless-domain, tr-workspace, tr-workflow, chat-service, or sync-service

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Flex, Text } from '@twilio-paste/core';
+import { Flex } from '@twilio-paste/core/flex';
+import { Text } from '@twilio-paste/core/text';
 import { Template, templates, useFlexSelector } from '@twilio/flex-ui';
 import { useSelector } from 'react-redux';
 

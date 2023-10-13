@@ -15,7 +15,7 @@ export const actionHook = function changeWorkerActivityBeforeOutboundCall(flex: 
     // manually prior to starting the call
 
     // the ideal solution would be to handle all state management in
-    // AcitivtyManager.#evaluateNewState however as this is a blocking
+    // ActivityManager.#evaluateNewState however as this is a blocking
     // operation it causes the outbound call to fail
     const { onATask, onATaskNoAcd } = getSystemActivityNames();
     const workerActivity = await FlexHelper.getWorkerActivity();

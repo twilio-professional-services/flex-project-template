@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Template, templates } from '@twilio/flex-ui';
 import { useUID } from '@twilio-paste/core/uid-library';
-import { useTabState, Box, Heading, Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core';
+import { useTabState, Tab, Tabs, TabList, TabPanel, TabPanels } from '@twilio-paste/core/tabs';
+import { Box } from '@twilio-paste/core/box';
+import { Heading } from '@twilio-paste/core/heading';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 
 import { StringTemplates } from '../../flex-hooks/strings';
