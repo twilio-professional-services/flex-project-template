@@ -6,16 +6,16 @@ import AppState from 'types/manager/AppState';
 import { getChannelIcon } from '../../utils/helpers';
 import QueueDataUtil from '../../utils/QueueDataUtil';
 import {
-  TileWrapper,
   Title,
+  Content,
   Channel,
   ChannelIcon,
-  Content,
   Label,
   Metric,
-  Handled,
+  MetricMiniTile,
   MetricsContainer,
-} from './ChannelSLATile.Components';
+} from '../DataTiles.Components';
+import { TileWrapper } from './ChannelSLATile.Components';
 import { ChannelSLMetrics, SLMetrics } from '../../types';
 import { StringTemplates } from '../../flex-hooks/strings';
 
@@ -43,7 +43,7 @@ const ChannelSLATileV2 = (props: ComponentProps) => {
         <ChannelIcon>
           <Icon icon={getChannelIcon(channelName)} />
         </ChannelIcon>
-        <Title className="Twilio-AggregatedDataTile-Title">
+        <Title className="Twilio-AggregatedDataTile-Title" mode="light">
           {`${channelName}`}
           &nbsp;
           <Template source={templates.QueuesStatsHeaderSLA} />
@@ -54,18 +54,18 @@ const ChannelSLATileV2 = (props: ComponentProps) => {
         <Template source={templates.QueuesStatsSubHeaderToday} />
       </Label>
       <MetricsContainer>
-        <Handled>
+        <MetricMiniTile>
           <Label>
             <Template source={templates.QueuesStatsHeaderHandled} />
           </Label>
           <Metric>{sla?.handledTasks || 0}</Metric>
-        </Handled>
-        <Handled>
+        </MetricMiniTile>
+        <MetricMiniTile>
           <Label>
             <Template source={templates[StringTemplates.WithinSL]} />
           </Label>
           <Metric>{sla?.handledTasksWithinSL || 0}</Metric>
-        </Handled>
+        </MetricMiniTile>
       </MetricsContainer>
     </TileWrapper>
   );

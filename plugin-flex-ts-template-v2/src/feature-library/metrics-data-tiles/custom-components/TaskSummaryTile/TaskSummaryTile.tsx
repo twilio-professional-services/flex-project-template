@@ -8,7 +8,8 @@ import AppState from 'types/manager/AppState';
 import { CallIncomingIcon } from '@twilio-paste/icons/esm/CallIncomingIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 
-import { TileWrapper, Channel, Label, Heading } from './TaskSummaryTile.Components';
+import { TeamTileWrapper, TmLabel, TmHeading } from '../DataTiles.Components';
+import { Channel } from './TaskSummaryTile.Components';
 import { getTasksByTeamCounts } from '../../utils/WorkerDataUtil';
 import { TeamTaskCounts } from '../../types';
 import { getTaskSummaryChannels, getChannelsConfig, getTeams } from '../../config';
@@ -25,21 +26,21 @@ const TaskSummaryTile = () => {
   const channels: Channels = getChannelsConfig();
   const channelNames = getTaskSummaryChannels();
   return (
-    <TileWrapper className="Twilio-AggregatedDataTile">
+    <TeamTileWrapper className="Twilio-AggregatedDataTile">
       <Box overflowY="auto" maxHeight="240px">
         <Table variant="borderless">
           <THead stickyHeader top={0} element="STICKY_HEADER">
             <Tr key="header">
               <Th element="COMPACT_TABLE" key="header-name">
-                <Heading>
+                <TmHeading>
                   <Template source={templates[StringTemplates.TeamsViewTeamName]} />
-                </Heading>
+                </TmHeading>
               </Th>
               <Th element="COMPACT_TABLE" textAlign="center" key="header-total">
                 <Tooltip text={templates[StringTemplates.TeamsViewSummaryTotalTasks]()} placement="top">
-                  <Heading>
+                  <TmHeading>
                     <Icon icon="GenericTask" />
-                  </Heading>
+                  </TmHeading>
                 </Tooltip>
               </Th>
               {channelNames.map((ch) => {
@@ -49,18 +50,18 @@ const TaskSummaryTile = () => {
                       <Th element="COMPACT_TABLE" textAlign="center" key="header-inbound">
                         <Channel bgColor={channels.Voice.color}>
                           <Tooltip text={templates[StringTemplates.TeamsViewSummaryInbound]()} placement="top">
-                            <Heading>
+                            <TmHeading>
                               <CallIncomingIcon decorative={true} />
-                            </Heading>
+                            </TmHeading>
                           </Tooltip>
                         </Channel>
                       </Th>
                       <Th element="COMPACT_TABLE" textAlign="center" key="header-outbound">
                         <Channel bgColor={channels.Voice.color}>
                           <Tooltip text={templates[StringTemplates.TeamsViewSummaryOutbound]()} placement="top">
-                            <Heading>
+                            <TmHeading>
                               <CallOutgoingIcon decorative={true} />
-                            </Heading>
+                            </TmHeading>
                           </Tooltip>
                         </Channel>
                       </Th>
@@ -70,9 +71,9 @@ const TaskSummaryTile = () => {
                   <Th element="COMPACT_TABLE" textAlign="center" key={`header-${ch}`}>
                     <Channel bgColor={channels[ch].color}>
                       <Tooltip text={ch} placement="top">
-                        <Heading>
+                        <TmHeading>
                           <Icon icon={getChannelIcon(ch)} />
-                        </Heading>
+                        </TmHeading>
                       </Tooltip>
                     </Channel>
                   </Th>
@@ -83,28 +84,28 @@ const TaskSummaryTile = () => {
           <TBody>
             <Tr key="allteams">
               <Td element="COMPACT_TABLE" key="allteams-name">
-                <Heading>
+                <TmHeading>
                   <Template source={templates[StringTemplates.TeamsViewSummaryAllTeams]} />
-                </Heading>
+                </TmHeading>
               </Td>
               <Td element="COMPACT_TABLE" textAlign="center" key="allteams-total">
-                <Heading> {taskCounts.All.totalTaskCount} </Heading>
+                <TmHeading> {taskCounts.All.totalTaskCount} </TmHeading>
               </Td>
               {channelNames.map((ch) => {
                 if (ch === 'Voice')
                   return (
                     <>
                       <Td element="COMPACT_TABLE" textAlign="center" key="allteams-inbound">
-                        <Heading> {taskCounts.All.tasks.voice_inbound} </Heading>
+                        <TmHeading> {taskCounts.All.tasks.voice_inbound} </TmHeading>
                       </Td>
                       <Td element="COMPACT_TABLE" textAlign="center" key="allteams-outbound">
-                        <Heading> {taskCounts.All.tasks.voice_outbound} </Heading>
+                        <TmHeading> {taskCounts.All.tasks.voice_outbound} </TmHeading>
                       </Td>
                     </>
                   );
                 return (
                   <Td element="COMPACT_TABLE" textAlign="center" key={`allteams-${ch}`}>
-                    <Heading> {taskCounts.All.tasks[ch.toLowerCase()] || 0} </Heading>
+                    <TmHeading> {taskCounts.All.tasks[ch.toLowerCase()] || 0} </TmHeading>
                   </Td>
                 );
               })}
@@ -113,26 +114,26 @@ const TaskSummaryTile = () => {
               return (
                 <Tr key={team}>
                   <Td element="COMPACT_TABLE" key={`${team}-name`}>
-                    <Label> {team} </Label>
+                    <TmLabel> {team} </TmLabel>
                   </Td>
                   <Td element="COMPACT_TABLE" textAlign="center" key={`${team}-total`}>
-                    <Label> {taskCounts[team].totalTaskCount} </Label>
+                    <TmLabel> {taskCounts[team].totalTaskCount} </TmLabel>
                   </Td>
                   {channelNames.map((ch) => {
                     if (ch === 'Voice')
                       return (
                         <>
                           <Td element="COMPACT_TABLE" textAlign="center" key={`${team}-inbound`}>
-                            <Label> {taskCounts[team].tasks.voice_inbound} </Label>
+                            <TmLabel> {taskCounts[team].tasks.voice_inbound} </TmLabel>
                           </Td>
                           <Td element="COMPACT_TABLE" textAlign="center" key={`${team}-outbound`}>
-                            <Label> {taskCounts[team].tasks.voice_outbound} </Label>
+                            <TmLabel> {taskCounts[team].tasks.voice_outbound} </TmLabel>
                           </Td>
                         </>
                       );
                     return (
                       <Td element="COMPACT_TABLE" textAlign="center" key={`${team}-${ch}`}>
-                        <Label> {taskCounts[team].tasks[ch.toLowerCase()] || 0} </Label>
+                        <TmLabel> {taskCounts[team].tasks[ch.toLowerCase()] || 0} </TmLabel>
                       </Td>
                     );
                   })}
@@ -141,28 +142,28 @@ const TaskSummaryTile = () => {
             })}
             <Tr key="Other">
               <Td element="COMPACT_TABLE" key="other-name">
-                <Label>
+                <TmLabel>
                   <Template source={templates[StringTemplates.TeamsViewSummaryOther]} />
-                </Label>
+                </TmLabel>
               </Td>
               <Td element="COMPACT_TABLE" textAlign="center" key="other-total">
-                <Label> {taskCounts.Other.totalTaskCount} </Label>
+                <TmLabel> {taskCounts.Other.totalTaskCount} </TmLabel>
               </Td>
               {channelNames.map((ch) => {
                 if (ch === 'Voice')
                   return (
                     <>
                       <Td element="COMPACT_TABLE" textAlign="center" key="other-inbound">
-                        <Label> {taskCounts.Other.tasks.voice_inbound} </Label>
+                        <TmLabel> {taskCounts.Other.tasks.voice_inbound} </TmLabel>
                       </Td>
                       <Td element="COMPACT_TABLE" textAlign="center" key="other-outbound">
-                        <Label> {taskCounts.Other.tasks.voice_outbound} </Label>
+                        <TmLabel> {taskCounts.Other.tasks.voice_outbound} </TmLabel>
                       </Td>
                     </>
                   );
                 return (
                   <Td element="COMPACT_TABLE" textAlign="center" key={`other-${ch}`}>
-                    <Label> {taskCounts.Other.tasks[ch.toLowerCase()] || 0} </Label>
+                    <TmLabel> {taskCounts.Other.tasks[ch.toLowerCase()] || 0} </TmLabel>
                   </Td>
                 );
               })}
@@ -170,7 +171,7 @@ const TaskSummaryTile = () => {
           </TBody>
         </Table>
       </Box>
-    </TileWrapper>
+    </TeamTileWrapper>
   );
 };
 

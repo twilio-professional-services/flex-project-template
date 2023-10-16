@@ -5,7 +5,8 @@ import { Icon, useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import AppState from 'types/manager/AppState';
 import { ActivityStatistic } from '@twilio/flex-ui/src/state/QueuesState';
 
-import { TileWrapper, Summary, Chart, Title, AgentActivity, Label, Metric } from './AgentActivityTile.Components';
+import { WideTileWrapper, Title, Summary, Chart } from '../DataTiles.Components';
+import { AgentActivity, Label, Metric } from './AgentActivityTile.Components';
 import { StringTemplates } from '../../flex-hooks/strings';
 
 interface ActivityCounts {
@@ -54,7 +55,7 @@ const AgentActivityTile = (props: ComponentProps) => {
   const activityNames = Object.keys(activityConfig.activities);
 
   return (
-    <TileWrapper className="Twilio-AggregatedDataTile">
+    <WideTileWrapper className="Twilio-AggregatedDataTile">
       <Summary>
         {activityNames.map((activity) => {
           const count = activityCounts[activity] || 0;
@@ -87,7 +88,7 @@ const AgentActivityTile = (props: ComponentProps) => {
           label={({ dataEntry }) => dataEntry.value}
         />
       </Chart>
-    </TileWrapper>
+    </WideTileWrapper>
   );
 };
 

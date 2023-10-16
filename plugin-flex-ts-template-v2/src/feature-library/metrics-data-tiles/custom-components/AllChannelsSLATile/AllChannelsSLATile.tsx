@@ -6,7 +6,8 @@ import AppState from 'types/manager/AppState';
 import { WorkerQueue } from '@twilio/flex-ui/src/state/QueuesState';
 
 import { getChannelIcon } from '../../utils/helpers';
-import { TileWrapper, Title, Summary, Chart, Channel, Label, Metric, SLPct } from './AllChannelsSLATile.Components';
+import { WideTileWrapper, Title, Summary, Chart } from '../DataTiles.Components';
+import { Channel, Label, Metric, SLPct } from './AllChannelsSLATile.Components';
 import QueueDataUtil from '../../utils/QueueDataUtil';
 import { SLMetrics } from '../../types';
 
@@ -29,7 +30,7 @@ const AllChannelsSLATile = (props: ComponentProps) => {
     if (handled) data.push({ title: ch, value: handled, color: colors[ch] });
   });
   return (
-    <TileWrapper className="Twilio-AggregatedDataTile">
+    <WideTileWrapper className="Twilio-AggregatedDataTile">
       <Summary>
         <Title>
           <Template source={templates.QueuesStatsHeaderSLA} />
@@ -63,7 +64,7 @@ const AllChannelsSLATile = (props: ComponentProps) => {
           label={({ dataEntry }) => dataEntry.value}
         />
       </Chart>
-    </TileWrapper>
+    </WideTileWrapper>
   );
 };
 

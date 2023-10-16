@@ -8,13 +8,14 @@ import {
   TileWrapper,
   Title,
   Content,
+  Channel,
+  ChannelIcon,
   Label,
   Metric,
-  TaskCount,
+  MetricMiniTile,
   MetricsContainer,
-} from './ChannelTaskCountTile.Components';
+} from '../DataTiles.Components';
 import { ChannelTaskCounts, TaskCounts } from '../../types';
-import { Channel, ChannelIcon } from '../ChannelSLATile/ChannelSLATile.Components';
 
 interface ComponentProps {
   channelName: string;
@@ -31,38 +32,38 @@ const ChannelTaskCountTile = (props: ComponentProps) => {
   });
 
   return (
-    <TileWrapper className="Twilio-AggregatedDataTile" bgColor={bgColor}>
+    <TileWrapper className="Twilio-AggregatedDataTile" bgColor={bgColor} mode="light">
       <Channel>
         <ChannelIcon>
           <Icon icon={getChannelIcon(channelName)} />
         </ChannelIcon>
-        <Title className="Twilio-AggregatedDataTile-Title">
+        <Title className="Twilio-AggregatedDataTile-Title" mode="light">
           {`${channelName}`}&nbsp;
           <Template source={templates.QueuesStatsHeaderActiveTasks} />
         </Title>
       </Channel>
       <Content className="Twilio-AggregatedDataTile-Content">{taskCounts?.activeTasks || 0}</Content>
       <MetricsContainer>
-        <TaskCount>
+        <MetricMiniTile>
           <Label>
             <Template source={templates.TaskAssigned} />
           </Label>
           <Metric>{taskCounts?.assignedTasks || 0}</Metric>
-        </TaskCount>
-        <TaskCount>
+        </MetricMiniTile>
+        <MetricMiniTile>
           <Label>
             <Template source={templates.TaskWrapup} />
           </Label>
           <Metric>{taskCounts?.wrappingTasks || 0}</Metric>
-        </TaskCount>
+        </MetricMiniTile>
       </MetricsContainer>
       <MetricsContainer>
-        <TaskCount>
+        <MetricMiniTile>
           <Label>
             <Template source={templates.QueuesStatsHeaderWaitingTasks} />
           </Label>
           <Metric>{taskCounts?.waitingTasks || 0}</Metric>
-        </TaskCount>
+        </MetricMiniTile>
       </MetricsContainer>
     </TileWrapper>
   );
