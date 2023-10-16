@@ -19,7 +19,8 @@ import * as TaskRouterReplaceCompleteTask from '../serverless/TaskRouter/Complet
 import * as Logger from './logger';
 import * as SendLogsToBrowserConsole from '../logger/sendLogsToBrowserConsole';
 // @ts-ignore
-import features from '../../feature-library/*';
+// eslint-disable-next-line import/no-useless-path-segments
+import features from '../../feature-library/*/index.ts';
 
 export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   if (typeof features === 'undefined') {
