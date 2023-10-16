@@ -19,13 +19,9 @@ We can highlight tasks that have a long handle time by adding a colored border a
 By default, the [SupervisorTaskCardHeader template string](https://www.twilio.com/docs/flex/developer/ui/v1/localization-and-templating#list-of-available-content-strings) displays the `{{task.defaultFrom}}` value which can be either the caller's phone number or the chat customer's name (identity).  This specific task detail may not be useful for Supervisors so we could change that template string to `{{task.queueName}}` to be able to see which queues the agent is working in. 
 
 ### Teams View Data Tiles
-The Worker and Task data available in Redux for the Teams View can be aggregated by Team name attribute (if populated for all workers) and summarized in "Data Tiles" at the top of the page, similar to the Queues View.
+The Worker and Task data available in Redux for the Teams View can be aggregated by `team_name` attribute (if populated for all workers) and summarized in "Data Tiles" at the top of the page, similar to the Queues View.
 
-The Task Summary table provides a breakdown of all active tasks by Channel (Voice, Chat, SMS) and agent team. For the Voice channel the active call count is split into Inbound and Outbound calls.
-
-The Agent Activity Summary table shows the count of agents in each of the pre-configured activities (from the Enhanced Activity Tile in the Queues View configuration) by agent team.  Two additional columns are provided for Active Agents.  The "Idle" column shows the number of Available agents with No Tasks.  The "Busy" column shows the number of Available agents with at least one Task.
-
-This feature uses the list of team names as configured within the [common configuration](/building/template-utilities/configuration#common-configuration), and the Activity configuration (colors and icons) from the Queues View Data Tiles.
+These custom Teams View data tiles are part of the combined [Metrics Data Tiles feature](metrics-data-tiles.md) since many of the configuration settings are shared with the Queues View Data Tiles.
 
 # Setup
 
@@ -42,30 +38,8 @@ You can also enable the Task Summary tile to show a breakdown of the active task
 Note: The Teams View can only display up to 200 agents, so the worker data available for aggregation is limited to this data set.
 
 ```json
-  "teams_view_enhancements": {
+    "teams_view_enhancements": {
       "enabled": true,
-      "channels": {
-        "Voice": {
-          "color": "#ADD8E6",
-          "taskCount": true
-        },
-        "Chat": {
-          "color": "#87CEFA",
-          "taskCount": true
-        },
-        "SMS": {
-          "color": "#59cef8",
-          "taskCount": true
-        },
-        "Video": {
-          "color": "#00CED1",
-          "taskCount": true
-        }
-      },
-      "task_summary": true,
-      "team_activity": true,
-      "idle_status_color": "limegreen",
-      "busy_status_color": "royalblue",
       "highlight_handle_time": true,
       "handle_time_warning_threshold": 180,
       "handle_time_exceeded_threshold": 300,
@@ -85,6 +59,3 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
 
 ![TeamsViewTaskHighlight](/img/features/teams-view-enhancements/TeamsViewTaskHighlight.png)
 
-When enabled, the Task Summary and Team Activity Tiles are added to the top of the Teams View.
-
-![TaskSummaryActivityByTeam](/img/features/teams-view-enhancements/TeamsViewTaskAndActivitySummary.png)

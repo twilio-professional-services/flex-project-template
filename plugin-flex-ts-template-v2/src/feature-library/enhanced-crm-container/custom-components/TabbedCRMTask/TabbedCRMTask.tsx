@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Actions, ITask } from '@twilio/flex-ui';
-import { Flex, Tabs, TabList, Tab, TabPanels, TabPanel } from '@twilio-paste/core';
+import { Flex } from '@twilio-paste/core/flex';
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@twilio-paste/core/tabs';
 
 export interface Props {
   thisTask?: ITask; // task assigned to component
