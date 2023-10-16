@@ -1,5 +1,5 @@
 import { getFeatureFlags } from '../../utils/configuration';
-import UpdateWorkerAttributesConfig from './types/ServiceConfiguration';
+import WorkerDetailsConfig from './types/ServiceConfiguration';
 
 const {
   enabled = false,
@@ -7,7 +7,7 @@ const {
   edit_department = true,
   edit_location = true,
   edit_manager = false,
-} = (getFeatureFlags()?.features?.update_worker_attributes as UpdateWorkerAttributesConfig) || {};
+} = (getFeatureFlags()?.features?.worker_details as WorkerDetailsConfig) || {};
 
 const { teams = [], departments = [] } = getFeatureFlags().common || {};
 

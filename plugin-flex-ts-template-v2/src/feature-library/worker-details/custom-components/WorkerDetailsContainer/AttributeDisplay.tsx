@@ -2,18 +2,20 @@ import { Template, templates } from '@twilio/flex-ui';
 import { Label } from '@twilio-paste/core/label';
 import { Tr, Td } from '@twilio-paste/core/table';
 
+import { stringPrefix } from '../../flex-hooks/strings';
+
 interface OwnProps {
   id: string;
   label: string;
   value: string;
 }
 
-const FormRowDisplay = ({ id, label, value }: OwnProps) => {
+const AttributeDisplay = ({ id, label, value }: OwnProps) => {
   return (
     <Tr key={id}>
       <Td>
         <Label htmlFor={id}>
-          <Template source={templates[`PSUpdateWorker${label}`]} />
+          <Template source={templates[`${stringPrefix}${label}`]} />
         </Label>
       </Td>
       <Td>{value}</Td>
@@ -21,4 +23,4 @@ const FormRowDisplay = ({ id, label, value }: OwnProps) => {
   );
 };
 
-export default FormRowDisplay;
+export default AttributeDisplay;

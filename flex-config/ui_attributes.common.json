@@ -355,7 +355,7 @@
       "worker_canvas_tabs": {
         "enabled": false
       },
-      "update_worker_attributes": {
+      "worker_details": {
         "enabled": false,
         "edit_team": true,
         "edit_department": true,

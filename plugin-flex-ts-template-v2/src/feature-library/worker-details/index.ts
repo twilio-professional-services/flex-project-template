@@ -5,5 +5,5 @@ import hooks from './flex-hooks/**/*.*';
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: 'update-worker-attributes', hooks: typeof hooks === 'undefined' ? [] : hooks };
+  return { name: 'worker-details', hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

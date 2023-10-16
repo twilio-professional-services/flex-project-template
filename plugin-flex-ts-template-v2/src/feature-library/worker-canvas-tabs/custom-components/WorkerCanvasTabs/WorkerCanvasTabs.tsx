@@ -5,8 +5,8 @@ import { Actions, IWorker, Template, templates, WorkerSkills } from '@twilio/fle
 
 import WorkerAttributes from '../../../attribute-viewer/custom-components/WorkerAttributes';
 import CapacityContainer from '../../../supervisor-capacity/custom-components/CapacityContainer';
-import UpdateWorkerContainer from '../../../update-worker-attributes/custom-components/UpdateWorkerContainer/UpdateWorkerContainer';
-import { isAttributeViewerEnabled, isSupervisorCapacityEnabled, isUpdateWorkerEnabled } from '../../config';
+import WorkerDetailsContainer from '../../../worker-details/custom-components/WorkerDetailsContainer/WorkerDetailsContainer';
+import { isAttributeViewerEnabled, isSupervisorCapacityEnabled, isWorkerDetailsEnabled } from '../../config';
 import { StringTemplates } from '../../flex-hooks/strings';
 
 const handleClose = () => {
@@ -39,7 +39,7 @@ const WorkerCanvasTabs = ({ worker }: Props) => {
               <Template source={templates[StringTemplates.WorkerCanvasTabAttributes]} />
             </Tab>
           )}
-          {isUpdateWorkerEnabled() && (
+          {isWorkerDetailsEnabled() && (
             <Tab element="WORKER_CANVAS_TAB">
               <Template source={templates[StringTemplates.WorkerCanvasTabDetails]} />
             </Tab>
@@ -57,8 +57,8 @@ const WorkerCanvasTabs = ({ worker }: Props) => {
               <WorkerAttributes key="worker-attributes" worker={worker} />
             </TabPanel>
           )}
-          {isUpdateWorkerEnabled() && (
-            <TabPanel>{worker && <UpdateWorkerContainer key="update-worker" worker={worker} />}</TabPanel>
+          {isWorkerDetailsEnabled() && (
+            <TabPanel>{worker && <WorkerDetailsContainer key="update-worker" worker={worker} />}</TabPanel>
           )}
         </TabPanels>
       </Tabs>

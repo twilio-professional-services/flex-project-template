@@ -3,6 +3,8 @@ import { Input } from '@twilio-paste/core/input';
 import { Label } from '@twilio-paste/core/label';
 import { Tr, Td } from '@twilio-paste/core/table';
 
+import { stringPrefix } from '../../flex-hooks/strings';
+
 interface OwnProps {
   id: string;
   label: string;
@@ -10,7 +12,7 @@ interface OwnProps {
   onChangeHandler: (value: string) => void;
 }
 
-const FormRowText = ({ id, label, value, onChangeHandler }: OwnProps) => {
+const AttributeText = ({ id, label, value, onChangeHandler }: OwnProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     onChangeHandler(value);
@@ -20,7 +22,7 @@ const FormRowText = ({ id, label, value, onChangeHandler }: OwnProps) => {
     <Tr key={id}>
       <Td>
         <Label htmlFor={id}>
-          <Template source={templates[`PSUpdateWorker${label}`]} />
+          <Template source={templates[`${stringPrefix}${label}`]} />
         </Label>
       </Td>
       <Td>
@@ -30,4 +32,4 @@ const FormRowText = ({ id, label, value, onChangeHandler }: OwnProps) => {
   );
 };
 
-export default FormRowText;
+export default AttributeText;

@@ -3,6 +3,8 @@ import { Select, Option } from '@twilio-paste/core/select';
 import { Label } from '@twilio-paste/core/label';
 import { Tr, Th, Td } from '@twilio-paste/core/table';
 
+import { stringPrefix } from '../../flex-hooks/strings';
+
 interface OwnProps {
   id: string;
   label: string;
@@ -11,7 +13,7 @@ interface OwnProps {
   onChangeHandler: (value: string) => void;
 }
 
-const FormRowSelect = ({ id, label, value, options, onChangeHandler }: OwnProps) => {
+const AttributeSelect = ({ id, label, value, options, onChangeHandler }: OwnProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     if (value !== 'none') onChangeHandler(value);
@@ -21,7 +23,7 @@ const FormRowSelect = ({ id, label, value, options, onChangeHandler }: OwnProps)
     <Tr key={id}>
       <Th scope="row">
         <Label htmlFor={id}>
-          <Template source={templates[`PSUpdateWorker${label}`]} />
+          <Template source={templates[`${stringPrefix}${label}`]} />
         </Label>
       </Th>
       <Td>
@@ -42,4 +44,4 @@ const FormRowSelect = ({ id, label, value, options, onChangeHandler }: OwnProps)
   );
 };
 
-export default FormRowSelect;
+export default AttributeSelect;

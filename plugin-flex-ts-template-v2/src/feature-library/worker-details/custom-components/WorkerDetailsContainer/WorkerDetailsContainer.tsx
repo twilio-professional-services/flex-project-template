@@ -8,15 +8,15 @@ import { Table, TBody, Tr, Td } from '@twilio-paste/core/table';
 
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import { getTeams, getDepartments, editTeam, editDepartment, editLocation, editManager } from '../../config';
-import FormRowText from './FormRowText';
-import FormRowSelect from './FormRowSelect';
-import FormRowDisplay from './FormRowDisplay';
+import AttributeText from './AttributeText';
+import AttributeSelect from './AttributeSelect';
+import AttributeDisplay from './AttributeDisplay';
 
 interface OwnProps {
   worker: IWorker;
 }
 
-const UpdateWorkerContainer = ({ worker }: OwnProps) => {
+const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   const [changed, setChanged] = useState(false);
   const [teamName, setTeamName] = useState('');
   const [departmentName, setDepartmentName] = useState('');
@@ -84,13 +84,13 @@ const UpdateWorkerContainer = ({ worker }: OwnProps) => {
           <Tr key="agent_name">
             <Td>
               <Label htmlFor="name">
-                <Template source={templates.PSUpdateWorkerName} />
+                <Template source={templates.PSWorkerDetailsName} />
               </Label>
             </Td>
             <Td>{worker?.fullName || 'Agent'}</Td>
           </Tr>
           {editTeam() ? (
-            <FormRowSelect
+            <AttributeSelect
               id="team_name"
               label="Team"
               value={teamName}
@@ -98,10 +98,10 @@ const UpdateWorkerContainer = ({ worker }: OwnProps) => {
               onChangeHandler={handleTeamChange}
             />
           ) : (
-            <FormRowDisplay id="team_name" label="Team" value={teamName} />
+            <AttributeDisplay id="team_name" label="Team" value={teamName} />
           )}
           {editDepartment() ? (
-            <FormRowSelect
+            <AttributeSelect
               id="department_name"
               label="Department"
               value={departmentName}
@@ -109,17 +109,17 @@ const UpdateWorkerContainer = ({ worker }: OwnProps) => {
               onChangeHandler={handleDeptChange}
             />
           ) : (
-            <FormRowDisplay id="department_name" label="Department" value={departmentName} />
+            <AttributeDisplay id="department_name" label="Department" value={departmentName} />
           )}
           {editLocation() ? (
-            <FormRowText id="location" label="Location" value={location} onChangeHandler={handleLocationChange} />
+            <AttributeText id="location" label="Location" value={location} onChangeHandler={handleLocationChange} />
           ) : (
-            <FormRowDisplay id="location" label="Location" value={location} />
+            <AttributeDisplay id="location" label="Location" value={location} />
           )}
           {editManager() ? (
-            <FormRowText id="manager" label="Manager" value={manager} onChangeHandler={handleManagerChange} />
+            <AttributeText id="manager" label="Manager" value={manager} onChangeHandler={handleManagerChange} />
           ) : (
-            <FormRowDisplay id="manager" label="Manager" value={manager} />
+            <AttributeDisplay id="manager" label="Manager" value={manager} />
           )}
         </TBody>
       </Table>
@@ -134,4 +134,4 @@ const UpdateWorkerContainer = ({ worker }: OwnProps) => {
   );
 };
 
-export default UpdateWorkerContainer;
+export default WorkerDetailsContainer;
