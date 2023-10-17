@@ -4,6 +4,7 @@ export default interface WorkerDetailsConfig {
   edit_department: boolean;
   edit_location: boolean;
   edit_manager: boolean;
+  edit_schedule: boolean;
   edit_unit_leader: boolean;
   edit_coach: boolean;
 }

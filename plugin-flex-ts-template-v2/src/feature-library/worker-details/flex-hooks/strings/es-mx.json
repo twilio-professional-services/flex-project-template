@@ -3,5 +3,6 @@
   "PSWorkerDetailsTeam": "Equipo",
   "PSWorkerDetailsDepartment": "Departamento",
   "PSWorkerDetailsLocation": "Lugar",
-  "PSWorkerDetailsManager": "Gerente"
+  "PSWorkerDetailsManager": "Gerente",
+  "PSWorkerDetailsSchedule": "Horario"
 }

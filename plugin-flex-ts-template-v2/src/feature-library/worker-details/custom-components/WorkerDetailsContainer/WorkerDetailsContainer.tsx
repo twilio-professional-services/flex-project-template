@@ -16,11 +16,14 @@ import {
   editManager,
   editUnitLeader,
   editCoach,
+  editSchedule,
 } from '../../config';
 import AttributeText from './AttributeText';
 import AttributeSelect from './AttributeSelect';
 import AttributeDisplay from './AttributeDisplay';
 import AttributeBoolean from './AttributeBoolean';
+
+const shiftOptions = ['Early', 'Regular', 'Late', 'Night'];
 
 interface OwnProps {
   worker: IWorker;
@@ -34,6 +37,7 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   const [manager, setManager] = useState('');
   const [unitLeader, setUnitLeader] = useState(false);
   const [coach, setCoach] = useState(false);
+  const [schedule, setSchedule] = useState('');
 
   useEffect(() => {
     if (worker) {
@@ -43,6 +47,7 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
       setManager(worker.attributes.manager || '');
       setUnitLeader(worker.attributes.unit_leader || false);
       setCoach(worker.attributes.coach || false);
+      setSchedule(worker.attributes.schedule || '');
     }
   }, [worker]);
 
@@ -64,6 +69,11 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   const handleDeptChange = (dept: string) => {
     setChanged(true);
     setDepartmentName(dept);
+  };
+
+  const handleScheduleChange = (value: string) => {
+    setChanged(true);
+    setSchedule(value);
   };
 
   const handleUnitLeaderChange = (value: boolean) => {
@@ -96,6 +106,7 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
         manager,
         unit_leader: unitLeader,
         coach,
+        schedule,
       };
       await TaskRouterService.updateWorkerAttributes(workerSid, JSON.stringify(updatedAttr));
       setChanged(false);
@@ -107,12 +118,12 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
       <Table variant="borderless">
         <TBody>
           <Tr key="agent_name">
-            <Td>
+            <Td element="WORKER_DETAILS">
               <Label htmlFor="name">
                 <Template source={templates.PSWorkerDetailsName} />
               </Label>
             </Td>
-            <Td>{worker?.fullName || 'Agent'}</Td>
+            <Td element="WORKER_DETAILS">{worker?.fullName || 'Agent'}</Td>
           </Tr>
           {editTeam() ? (
             <AttributeSelect
@@ -146,9 +157,21 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
           ) : (
             <AttributeDisplay id="manager" label="Manager" value={manager} />
           )}
+          {editSchedule() ? (
+            <AttributeSelect
+              id="schedule"
+              label="Schedule"
+              value={schedule}
+              options={shiftOptions}
+              onChangeHandler={handleScheduleChange}
+            />
+          ) : (
+            <AttributeDisplay id="schedule" label="Schedule" value={schedule} />
+          )}
           <AttributeBoolean
             id="lead"
             label="Unit Leader"
+            description=""
             value={unitLeader}
             onChangeHandler={handleUnitLeaderChange}
             enabled={editUnitLeader()}
@@ -156,6 +179,7 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
           <AttributeBoolean
             id="coach"
             label="Coach"
+            description=""
             value={coach}
             onChangeHandler={handleCoachChange}
             enabled={editCoach()}

@@ -20,12 +20,12 @@ const AttributeText = ({ id, label, value, onChangeHandler }: OwnProps) => {
 
   return (
     <Tr key={id}>
-      <Td>
+      <Td element="WORKER_DETAILS">
         <Label htmlFor={id}>
           <Template source={templates[`${stringPrefix}${label}`]} />
         </Label>
       </Td>
-      <Td>
+      <Td element="WORKER_DETAILS">
         <Input type="text" id={id} value={value} onChange={handleChange} />
       </Td>
     </Tr>

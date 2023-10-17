@@ -13,12 +13,12 @@ interface OwnProps {
 const AttributeDisplay = ({ id, label, value }: OwnProps) => {
   return (
     <Tr key={id}>
-      <Td>
+      <Td element="WORKER_DETAILS">
         <Label htmlFor={id}>
           <Template source={templates[`${stringPrefix}${label}`]} />
         </Label>
       </Td>
-      <Td>{value}</Td>
+      <Td element="WORKER_DETAILS">{value}</Td>
     </Tr>
   );
 };

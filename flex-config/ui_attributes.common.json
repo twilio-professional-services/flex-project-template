@@ -361,6 +361,7 @@
         "edit_department": true,
         "edit_location": true,
         "edit_manager": false,
+        "edit_schedule": true,
         "edit_unit_leader": true,
         "edit_coach": true
       },

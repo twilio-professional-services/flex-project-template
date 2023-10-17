@@ -7,6 +7,7 @@ const {
   edit_department = true,
   edit_location = true,
   edit_manager = false,
+  edit_schedule = true,
   edit_unit_leader = true,
   edit_coach = true,
 } = (getFeatureFlags()?.features?.worker_details as WorkerDetailsConfig) || {};
@@ -27,6 +28,9 @@ export const editLocation = () => {
 };
 export const editManager = () => {
   return edit_manager;
+};
+export const editSchedule = () => {
+  return edit_schedule;
 };
 export const editUnitLeader = () => {
   return edit_unit_leader;

@@ -21,12 +21,12 @@ const AttributeSelect = ({ id, label, value, options, onChangeHandler }: OwnProp
 
   return (
     <Tr key={id}>
-      <Th scope="row">
+      <Th scope="row" element="WORKER_DETAILS">
         <Label htmlFor={id}>
           <Template source={templates[`${stringPrefix}${label}`]} />
         </Label>
       </Th>
-      <Td>
+      <Td element="WORKER_DETAILS">
         <Select value={value} onChange={handleChange} id={id}>
           <Option key="none" value="none">
             Select {label}
