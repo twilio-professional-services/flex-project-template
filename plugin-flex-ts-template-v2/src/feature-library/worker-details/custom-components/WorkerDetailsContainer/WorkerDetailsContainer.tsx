@@ -7,10 +7,20 @@ import { Stack } from '@twilio-paste/core/stack';
 import { Table, TBody, Tr, Td } from '@twilio-paste/core/table';
 
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
-import { getTeams, getDepartments, editTeam, editDepartment, editLocation, editManager } from '../../config';
+import {
+  getTeams,
+  getDepartments,
+  editTeam,
+  editDepartment,
+  editLocation,
+  editManager,
+  editUnitLeader,
+  editCoach,
+} from '../../config';
 import AttributeText from './AttributeText';
 import AttributeSelect from './AttributeSelect';
 import AttributeDisplay from './AttributeDisplay';
+import AttributeBoolean from './AttributeBoolean';
 
 interface OwnProps {
   worker: IWorker;
@@ -22,6 +32,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   const [departmentName, setDepartmentName] = useState('');
   const [location, setLocation] = useState('');
   const [manager, setManager] = useState('');
+  const [unitLeader, setUnitLeader] = useState(false);
+  const [coach, setCoach] = useState(false);
 
   useEffect(() => {
     if (worker) {
@@ -29,6 +41,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
       setDepartmentName(worker.attributes.department_name || '');
       setLocation(worker.attributes.location || '');
       setManager(worker.attributes.manager || '');
+      setUnitLeader(worker.attributes.unit_leader || false);
+      setCoach(worker.attributes.coach || false);
     }
   }, [worker]);
 
@@ -52,6 +66,15 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
     setDepartmentName(dept);
   };
 
+  const handleUnitLeaderChange = (value: boolean) => {
+    setChanged(true);
+    setUnitLeader(value);
+  };
+
+  const handleCoachChange = (value: boolean) => {
+    setChanged(true);
+    setCoach(value);
+  };
   // See the notes in our Flex insights docs
   // https://www.twilio.com/docs/flex/developer/insights/enhance-integration
   //    The team_id attribute is required to display team_name.
@@ -71,6 +94,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
         department_name: departmentName,
         location,
         manager,
+        unit_leader: unitLeader,
+        coach,
       };
       await TaskRouterService.updateWorkerAttributes(workerSid, JSON.stringify(updatedAttr));
       setChanged(false);
@@ -121,6 +146,20 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
           ) : (
             <AttributeDisplay id="manager" label="Manager" value={manager} />
           )}
+          <AttributeBoolean
+            id="lead"
+            label="Unit Leader"
+            value={unitLeader}
+            onChangeHandler={handleUnitLeaderChange}
+            enabled={editUnitLeader()}
+          />
+          <AttributeBoolean
+            id="coach"
+            label="Coach"
+            value={coach}
+            onChangeHandler={handleCoachChange}
+            enabled={editCoach()}
+          />
         </TBody>
       </Table>
       <Flex hAlignContent="right" margin="space50">

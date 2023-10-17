@@ -7,6 +7,8 @@ const {
   edit_department = true,
   edit_location = true,
   edit_manager = false,
+  edit_unit_leader = true,
+  edit_coach = true,
 } = (getFeatureFlags()?.features?.worker_details as WorkerDetailsConfig) || {};
 
 const { teams = [], departments = [] } = getFeatureFlags().common || {};
@@ -26,6 +28,13 @@ export const editLocation = () => {
 export const editManager = () => {
   return edit_manager;
 };
+export const editUnitLeader = () => {
+  return edit_unit_leader;
+};
+export const editCoach = () => {
+  return edit_coach;
+};
+
 export const getTeams = () => {
   return teams;
 };

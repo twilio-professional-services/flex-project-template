@@ -5,6 +5,8 @@ import WorkerCanvasTabs from '../../custom-components/WorkerCanvasTabs/WorkerCan
 
 export const componentName = FlexComponent.WorkerCanvas;
 export const componentHook = function addWorkerCanvasTabs(flex: typeof Flex, _manager: Flex.Manager) {
+  // Remove Agent Details header
+  flex.WorkerCanvas.Content.remove('profile-title');
   // Remove Skills Caption and Workerskills
   flex.WorkerCanvas.Content.remove('skills-title');
   flex.WorkerCanvas.Content.remove('skills');
