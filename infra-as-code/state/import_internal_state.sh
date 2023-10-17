@@ -73,13 +73,13 @@ importInternalState() {
 
 	flows=$(twilio api:studio:v2:flows:list --no-limit -o json)
 # FEATURE: remove-all
-	import_resource "$flows" "Voice IVR" "module.studio.twilio_studio_flows_v2.voice" "friendlyName" false
-	import_resource "$flows" "Messaging Flow" "module.studio.twilio_studio_flows_v2.messaging" "friendlyName" false
 # FEATURE: callback-and-voicemail	
 # FEATURE: schedule-manager
-	import_resource "$flows" "Chat Flow" "module.studio.twilio_studio_flows_v2.chat" "friendlyName" false
+	import_resource "$flows" "Voice IVR" "module.studio.twilio_studio_flows_v2.voice" "friendlyName" false
 # END FEATURE: schedule-manager
 # END FEATURE: callback-and-voicemail
+	import_resource "$flows" "Messaging Flow" "module.studio.twilio_studio_flows_v2.messaging" "friendlyName" false
+	import_resource "$flows" "Chat Flow" "module.studio.twilio_studio_flows_v2.chat" "friendlyName" false
 # END FEATURE: remove-all
 	echo "   - :white_check_mark: Studio - Flows" >>$GITHUB_STEP_SUMMARY
 
