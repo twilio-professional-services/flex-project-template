@@ -1,12 +1,12 @@
 import shell from "shelljs";
 import { promises as fs } from 'fs';
 
-import { serverlessSrc, flexConfigDir, gitHubWorkflowDir, scheduleManagerServerlessDir } from './common/constants.mjs';
+import { serverlessSrc, flexConfigDir, gitHubWorkflowDir, scheduleManagerServerlessDir, infraAsCodeDir, terraformDir } from './common/constants.mjs';
 import getPluginDirs from "./common/get-plugin.mjs";
 
 const { featureDirectory } = getPluginDirs();
 
-const gitHubWorkflowRemovals = [
+const featureRegionReferences = [
   {
     filename: `${gitHubWorkflowDir}/checks.yaml`,
     features: [ "schedule-manager" ],
@@ -15,6 +15,50 @@ const gitHubWorkflowRemovals = [
     filename: `${gitHubWorkflowDir}/flex_deploy.yaml`,
     features: [ "chat-to-video-escalation", "schedule-manager" ],
   },
+  {
+    filename: `${infraAsCodeDir}/state/import_internal_state.sh`,
+    features: ["remove-all", "callback-and-voicemail", "schedule-manager"]
+  },
+  {
+    filename: `${terraformDir}/environments/default/main.tf`,
+    features: [ "callback-and-voicemail", "schedule-manager"],
+  },
+  {
+    filename: `${terraformDir}/environments/default/outputs.tf`,
+    features: [ "remove-all", "callback-and-voicemail", "schedule-manager"],
+  },
+  {
+    filename: `${terraformDir}/environments/default/variables.tf`,
+    features: [ "callback-and-voicemail", "schedule-manager"],
+  },
+  {
+    filename: `${terraformDir}/modules/studio/main.tf`,
+    features: [ "remove-all", "callback-and-voicemail", "schedule-manager"],
+  },
+  {
+    filename: `${terraformDir}/modules/studio/outputs.tf`,
+    features: [ "remove-all", "callback-and-voicemail", "schedule-manager"],
+  },
+  {
+    filename: `${terraformDir}/modules/studio/variables.tf`,
+    features: [ "callback-and-voicemail", "schedule-manager"],
+  },
+  {
+    filename: `${terraformDir}/modules/taskrouter/activities.tf`,
+    features: [ "activity-reservation-handler"],
+  },
+  {
+    filename: `${terraformDir}/modules/taskrouter/outputs.tf`,
+    features: [ "conversation-transfer", "chat-transfer", "callback-and-voicemail", "internal-call"],
+  },
+  {
+    filename: `${terraformDir}/modules/taskrouter/task_queues.tf`,
+    features: [ "remove-all", "internal-call"],
+  },
+  {
+    filename: `${terraformDir}/modules/taskrouter/workflows.tf`,
+    features: [ "internal-call", "conversation-transfer", "chat-transfer", "callback-and-voicemail", "remove-all" ],
+  }
 ];
 
 const flexConfigRemovals = [
@@ -24,15 +68,19 @@ const flexConfigRemovals = [
 
 let keepFeatures = [];
 
-const performGitHubWorkflowRemovals = async () => {
+const performFeatureRegionRemoval = async () => {
   shell.echo("Removing features from GitHub Actions workflows...");
+
+  if(keepFeatures.length > 0){
+    keepFeatures.push("remove-all")
+  }
   
-  await Promise.all(gitHubWorkflowRemovals.map(async (workflow) => {
+  await Promise.all(featureRegionReferences.map(async (reference) => {
     try {
-      const originalData = await fs.readFile(workflow.filename, "utf8");
+      const originalData = await fs.readFile(reference.filename, "utf8");
       let newData = originalData;
       
-      for (const feature of workflow.features) {
+      for (const feature of reference.features) {
         if (keepFeatures.includes(feature)) {
           continue;
         }
@@ -52,10 +100,10 @@ const performGitHubWorkflowRemovals = async () => {
         }
       }
       
-      await fs.writeFile(workflow.filename, newData, 'utf8');
-      shell.echo(`Updated ${workflow.filename}`);
+      await fs.writeFile(reference.filename, newData, 'utf8');
+      shell.echo(`Updated ${reference.filename}`);
     } catch (error) {
-      shell.echo(`Failed to update ${workflow.filename}: ${error}`);
+      shell.echo(`Failed to update ${reference.filename}: ${error}`);
     }
   }));
 }
@@ -101,7 +149,7 @@ const performDirectoryRemovals = (baseDir) => {
 }
 
 const performRemovals = async () => {
-  await performGitHubWorkflowRemovals();
+  await performFeatureRegionRemoval();
   
   await performFlexConfigRemovals();
   

@@ -8,20 +8,30 @@ output "workflow_sid_assign_to_anyone" {
   description = "Assign To Anyone workflow SID"
 }
 
+# FEATURE: conversation-transfer
+# FEATURE: chat-transfer
 output "workflow_sid_chat_transfer" {
   value = twilio_taskrouter_workspaces_workflows_v1.chat_transfer.sid
   description = "conversation-transfer feature workflow SID"
 }
+# END FEATURE: chat-transfer
+# END FEATURE: conversation-transfer
 
+
+# FEATURE: callback-and-voicemail
 output "workflow_sid_callback" {
   value = twilio_taskrouter_workspaces_workflows_v1.callback.sid
   description = "callback-and-voicemail feature workflow SID"
 }
+# END FEATURE: callback-and-voicemail
 
+
+# FEATURE: internal-call
 output "workflow_sid_internal_call" {
   value = twilio_taskrouter_workspaces_workflows_v1.internal_call.sid
   description = "internal call feature workflow SID"
 }
+# END FEATURE: internal-call
 
 output "chat_channel_sid" {
   value = twilio_taskrouter_workspaces_task_channels_v1.chat.sid

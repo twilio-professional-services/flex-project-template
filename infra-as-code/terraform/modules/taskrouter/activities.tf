@@ -22,8 +22,7 @@ resource "twilio_taskrouter_workspaces_activities_v1" "break" {
   available     = false
 }
 
-# these activities are for the activity-reservation-handler 
-
+# FEATURE: activity-reservation-handler
 
 resource "twilio_taskrouter_workspaces_activities_v1" "on_a_task" {
   workspace_sid = twilio_taskrouter_workspaces_v1.flex.sid
@@ -48,6 +47,8 @@ resource "twilio_taskrouter_workspaces_activities_v1" "wrap_up_no_acd" {
   friendly_name = "Wrap Up, No ACD"
   available     = false
 } 
+
+# END FEATURE: activity-reservation-handler
 
 
 

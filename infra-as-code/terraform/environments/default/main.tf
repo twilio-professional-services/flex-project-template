@@ -28,11 +28,18 @@ module "studio" {
   serverless_domain = var.SERVERLESS_DOMAIN
   serverless_sid = var.SERVERLESS_SID
   serverless_env_sid = var.SERVERLESS_ENV_SID
+
+# FEATURE: schedule-manager
   schedule_manager_domain = var.SCHEDULE_MANAGER_DOMAIN
   schedule_manager_sid = var.SCHEDULE_MANAGER_SID
   schedule_manager_env_sid = var.SCHEDULE_MANAGER_ENV_SID
-  function_create_callback = var.FUNCTION_CREATE_CALLBACK
   function_check_schedule_sid = var.FUNCTION_CHECK_SCHEDULE_SID
+# END FEATURE: schedule-manager
+
+# FEATURE: callback-and-voicemail
+  function_create_callback = var.FUNCTION_CREATE_CALLBACK
+# END FEATURE: callback-and-voicemail 
+
 }
 
 module "taskrouter" {

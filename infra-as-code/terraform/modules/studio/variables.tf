@@ -79,6 +79,7 @@ variable "serverless_env_sid" {
   }
 }
 
+# FEATURE: schedule-manager
 variable "schedule_manager_domain" {
   type        = string
   description = "serverless domain schedule manager for flex plugin"
@@ -106,6 +107,19 @@ variable "schedule_manager_env_sid" {
   }
 }
 
+variable "function_check_schedule_sid" {
+  type        = string
+  description = "get customer by phone function sid"
+  validation {
+    condition     = length(var.function_check_schedule_sid) > 2 && substr(var.function_check_schedule_sid, 0, 2) == "ZH"
+    error_message = "function_check_schedule_sid expected to start with \"ZH\"."
+  }
+}
+
+# END FEATURE: schedule-manager
+
+# FEATURE: callback-and-voicemail
+
 variable "function_create_callback" {
   type        = string
   description = "create callback function sid"
@@ -115,11 +129,5 @@ variable "function_create_callback" {
   }
 }
 
-variable "function_check_schedule_sid" {
-  type        = string
-  description = "get customer by phone function sid"
-  validation {
-    condition     = length(var.function_check_schedule_sid) > 2 && substr(var.function_check_schedule_sid, 0, 2) == "ZH"
-    error_message = "function_check_schedule_sid expected to start with \"ZH\"."
-  }
-}
+# END FEATURE: callback-and-voicemail
+
