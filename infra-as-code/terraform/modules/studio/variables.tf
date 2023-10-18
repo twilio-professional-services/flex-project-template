@@ -1,3 +1,4 @@
+# FEATURE: remove-all
 variable "workflow_sid_assign_to_anyone" {
   type        = string
   description = "SID of the Assign To Anyone workflow"
@@ -6,6 +7,7 @@ variable "workflow_sid_assign_to_anyone" {
     error_message = "workflow_sid_assign_to_anyone expected to start with \"WW\"."
   }
 }
+# END FEATURE: remove-all
 
 # FEATURE: conversation-transfer
 # FEATURE: chat-transfer

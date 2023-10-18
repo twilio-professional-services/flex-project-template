@@ -34,7 +34,11 @@ resource "twilio_studio_flows_v2" "voice" {
 
 locals{
   params = {
+    
+# FEATURE: remove-all
     "WORKFLOW_SID_ASSIGN_TO_ANYONE" = var.workflow_sid_assign_to_anyone
+# END FEATURE: remove-all
+
     "SERVERLESS_DOMAIN" = var.serverless_domain
     "SERVERLESS_SID" = var.serverless_sid
     "SERVERLESS_ENV_SID" = var.serverless_env_sid
