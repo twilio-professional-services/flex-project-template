@@ -362,6 +362,8 @@
         "edit_location": true,
         "edit_manager": false,
         "edit_schedule": true,
+        "edit_auto_accept": true,
+        "edit_auto_wrapup": true,
         "edit_unit_leader": true,
         "edit_coach": true
       },

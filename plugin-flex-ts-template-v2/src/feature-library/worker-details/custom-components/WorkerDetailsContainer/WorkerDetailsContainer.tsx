@@ -1,10 +1,13 @@
 import { IWorker, Template, templates } from '@twilio/flex-ui';
 import React, { useState, useEffect } from 'react';
+import { Flex as FlexBox } from '@twilio-paste/core/flex';
+import { Box } from '@twilio-paste/core/box';
 import { Button } from '@twilio-paste/core/button';
 import { Label } from '@twilio-paste/core/label';
-import { Flex } from '@twilio-paste/core/flex';
 import { Stack } from '@twilio-paste/core/stack';
 import { Table, TBody, Tr, Td } from '@twilio-paste/core/table';
+import { Switch, SwitchGroup } from '@twilio-paste/core/switch';
+import { Text } from '@twilio-paste/core/text';
 
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import {
@@ -17,11 +20,12 @@ import {
   editUnitLeader,
   editCoach,
   editSchedule,
+  editAutoAccept,
+  editAutoWrapup,
 } from '../../config';
 import AttributeText from './AttributeText';
 import AttributeSelect from './AttributeSelect';
 import AttributeDisplay from './AttributeDisplay';
-import AttributeBoolean from './AttributeBoolean';
 
 const shiftOptions = ['Early', 'Regular', 'Late', 'Night'];
 
@@ -38,6 +42,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   const [unitLeader, setUnitLeader] = useState(false);
   const [coach, setCoach] = useState(false);
   const [schedule, setSchedule] = useState('');
+  const [autoAccept, setAutoAccept] = useState(false);
+  const [autoWrapup, setAutoWrapup] = useState(false);
 
   useEffect(() => {
     if (worker) {
@@ -48,6 +54,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
       setUnitLeader(worker.attributes.unit_leader || false);
       setCoach(worker.attributes.coach || false);
       setSchedule(worker.attributes.schedule || '');
+      setAutoAccept(worker.attributes.auto_accept || false);
+      setAutoWrapup(worker.attributes.auto_Wrapup || false);
     }
   }, [worker]);
 
@@ -76,15 +84,6 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
     setSchedule(value);
   };
 
-  const handleUnitLeaderChange = (value: boolean) => {
-    setChanged(true);
-    setUnitLeader(value);
-  };
-
-  const handleCoachChange = (value: boolean) => {
-    setChanged(true);
-    setCoach(value);
-  };
   // See the notes in our Flex insights docs
   // https://www.twilio.com/docs/flex/developer/insights/enhance-integration
   //    The team_id attribute is required to display team_name.
@@ -107,6 +106,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
         unit_leader: unitLeader,
         coach,
         schedule,
+        auto_accept: autoAccept,
+        auto_wrapup: autoWrapup,
       };
       await TaskRouterService.updateWorkerAttributes(workerSid, JSON.stringify(updatedAttr));
       setChanged(false);
@@ -168,31 +169,84 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
           ) : (
             <AttributeDisplay id="schedule" label="Schedule" value={schedule} />
           )}
-          <AttributeBoolean
-            id="lead"
-            label="Unit Leader"
-            description=""
-            value={unitLeader}
-            onChangeHandler={handleUnitLeaderChange}
-            enabled={editUnitLeader()}
-          />
-          <AttributeBoolean
-            id="coach"
-            label="Coach"
-            description=""
-            value={coach}
-            onChangeHandler={handleCoachChange}
-            enabled={editCoach()}
-          />
         </TBody>
       </Table>
-      <Flex hAlignContent="right" margin="space50">
+      <hr />
+      <FlexBox>
+        <Box width="100%" backgroundColor="colorBackground" padding="space30" margin="space10">
+          <SwitchGroup
+            name="automation"
+            legend={
+              <Text as="span" color="currentColor">
+                Agent Automation
+              </Text>
+            }
+          >
+            <Switch
+              value="auto-accept"
+              checked={autoAccept}
+              disabled={!editAutoAccept()}
+              onChange={() => {
+                setAutoAccept(!autoAccept);
+                setChanged(true);
+              }}
+            >
+              Auto Accept
+            </Switch>
+            <Switch
+              value="auto-wrapup"
+              checked={autoWrapup}
+              disabled={!editAutoWrapup()}
+              onChange={() => {
+                setAutoWrapup(!autoWrapup);
+                setChanged(true);
+              }}
+            >
+              Auto Accept
+            </Switch>
+          </SwitchGroup>
+        </Box>
+        <Box width="100%" backgroundColor="colorBackground" padding="space30" margin="space10">
+          <SwitchGroup
+            name="permissions"
+            legend={
+              <Text as="span" color="currentColor">
+                Agent permissions
+              </Text>
+            }
+          >
+            <Switch
+              value="unit-leader"
+              checked={unitLeader}
+              disabled={!editUnitLeader()}
+              onChange={() => {
+                setUnitLeader(!unitLeader);
+                setChanged(true);
+              }}
+            >
+              Unit Leader
+            </Switch>
+            <Switch
+              value="coac"
+              checked={coach}
+              disabled={!editCoach()}
+              onChange={() => {
+                setCoach(!coach);
+                setChanged(true);
+              }}
+            >
+              Coach
+            </Switch>
+          </SwitchGroup>
+        </Box>
+      </FlexBox>
+      <FlexBox hAlignContent="right" margin="space50">
         <Stack orientation="horizontal" spacing="space30">
           <Button variant="primary" id="saveButton" onClick={saveWorkerAttributes} disabled={!changed}>
             <Template source={templates.Save} />
           </Button>
         </Stack>
-      </Flex>
+      </FlexBox>
     </Stack>
   );
 };

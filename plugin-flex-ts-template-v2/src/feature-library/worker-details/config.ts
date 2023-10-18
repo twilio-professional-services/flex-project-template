@@ -8,6 +8,8 @@ const {
   edit_location = true,
   edit_manager = false,
   edit_schedule = true,
+  edit_auto_accept = true,
+  edit_auto_wrapup = true,
   edit_unit_leader = true,
   edit_coach = true,
 } = (getFeatureFlags()?.features?.worker_details as WorkerDetailsConfig) || {};
@@ -31,6 +33,12 @@ export const editManager = () => {
 };
 export const editSchedule = () => {
   return edit_schedule;
+};
+export const editAutoAccept = () => {
+  return edit_auto_accept;
+};
+export const editAutoWrapup = () => {
+  return edit_auto_wrapup;
 };
 export const editUnitLeader = () => {
   return edit_unit_leader;
