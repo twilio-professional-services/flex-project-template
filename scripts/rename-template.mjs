@@ -148,8 +148,6 @@ const performRename = async () => {
 
   // rename the state service that is in use
   if(shell.test('-e', `./${infraAsCodeDir}/state/config.sh`)){
-    shell.echo(`Renaming tfstate service`);
-    shell.echo("");
     shell.sed('-i', /tfstate_service_name=.*/, `tfstate_service_name=tfstate-${packageSuffix}`, `./${infraAsCodeDir}/state/config.sh`);
   }
   
@@ -157,7 +155,7 @@ const performRename = async () => {
   shell.exec(`npm --prefix ./${fullPluginName} install ./${fullPluginName}`, {silent:true});
   
   shell.echo("");
-  shell.echo(`Renaming assets complete, dont forget to re-run: npm install`);
+  shell.echo(`Renaming assets complete, don't forget to re-run: npm install to use locally and to check 'perform initial release' when deploying with github actions`);
   shell.echo("");
 }
 

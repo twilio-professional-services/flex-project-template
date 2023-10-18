@@ -6,6 +6,8 @@ echo "### Job Results "
 
 source ./config.sh
 
+echo "terraform state service name: $tfstate_service_name" >>$GITHUB_STEP_SUMMARY
+
 IFS="|" read -ra tf_state_files <<<"$TF_STATE_FILES"
 
 tfstate_bucket=$(twilio api:serverless:v1:services:fetch --sid $tfstate_service_name -o json | jq -c '.[].domainBase // empty' | sed 's/"//g')
@@ -32,8 +34,8 @@ if [ -n "$tfstate_bucket" ]; then
 			openssl enc -d -in "$item.enc" -aes-256-cbc -pbkdf2 -k "$ENCRYPTION_KEY" -out "../terraform/environments/default/$item"
 			rm -f "$full_item_name"
 			rm -f "$item.enc"
-			echo "   - :white_check_mark: Existing terraform state file retrieved" >>$GITHUB_STEP_SUMMARY
 		done
+		echo "   - :white_check_mark: Existing terraform state file retrieved" >>$GITHUB_STEP_SUMMARY
 	else
 		echo "JOB_FAILED=true" >>"$GITHUB_OUTPUT"
 		echo "$full_link not found" >>"$GITHUB_STEP_SUMMARY"
