@@ -175,6 +175,17 @@ const performRemovals = async () => {
     );
     shell.rm("-rf", `web-app-examples`);
   }
+
+  // if we are removing everything we need want to
+  // remove the terraform assets
+  if(keepFeatures.length === 0){
+    shell.echo(
+      `Deleting managed terraform assets for studio and taskrouter`
+    );
+    shell.rm("-rf", `${terraformDir}/studio/*`)
+    shell.rm("-rf", `${terraformDir}/taskrouter/*`)
+  }
+
   
   shell.echo("Done!");
 }

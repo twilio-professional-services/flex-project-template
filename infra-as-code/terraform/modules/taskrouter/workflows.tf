@@ -1,8 +1,11 @@
+
+# FEATURE: remove-all
 resource "twilio_taskrouter_workspaces_workflows_v1" "assign_to_anyone" {
   workspace_sid = twilio_taskrouter_workspaces_v1.flex.sid
   friendly_name = "Assign to Anyone"
   configuration = templatefile("../../taskrouter/assign_to_anyone.json", local.params)
 }
+# END FEATURE: remove-all
 
 # FEATURE: callback-and-voicemail
 resource "twilio_taskrouter_workspaces_workflows_v1" "callback" {
