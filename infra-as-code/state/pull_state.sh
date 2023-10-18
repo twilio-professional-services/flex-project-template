@@ -4,9 +4,11 @@ set -e
 echo "Trying to import Terraform State for $ENVIRONMENT"
 echo "### Job Results "
 
+source ./config.sh
+
 IFS="|" read -ra tf_state_files <<<"$TF_STATE_FILES"
 
-tfstate_bucket=$(twilio api:serverless:v1:services:fetch --sid tfstate -o json | jq -c '.[].domainBase // empty' | sed 's/"//g')
+tfstate_bucket=$(twilio api:serverless:v1:services:fetch --sid $tfstate_service_name -o json | jq -c '.[].domainBase // empty' | sed 's/"//g')
 
 if [ -n "$tfstate_bucket" ]; then
 	tfstate_bucket_url="$tfstate_bucket.twil.io"

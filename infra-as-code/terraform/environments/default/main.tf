@@ -25,10 +25,8 @@ module "studio" {
 # END FEATURE: remove-all
 
 # FEATURE: conversation-transfer
-# FEATURE: chat-transfer
   workflow_sid_chat_transfer = module.taskrouter.workflow_sid_chat_transfer
 # END FEATURE: conversation-transfer
-# END FEATURE: chat-transfer
 
 # FEATURE: callback-and-voicemail
   workflow_sid_callback = module.taskrouter.workflow_sid_callback

@@ -17,7 +17,7 @@ const featureRegionReferences = [
   },
   {
     filename: `${infraAsCodeDir}/state/import_internal_state.sh`,
-    features: ["remove-all", "callback-and-voicemail", "schedule-manager"]
+    features: ["remove-all", "callback-and-voicemail", "schedule-manager", "activity-reservation-handler", "conversation-transfer", "internal-call"]
   },
   {
     filename: `${terraformDir}/environments/default/main.tf`,
@@ -41,7 +41,7 @@ const featureRegionReferences = [
   },
   {
     filename: `${terraformDir}/modules/studio/variables.tf`,
-    features: [ "callback-and-voicemail", "schedule-manager", "internal-call", "chat-transfer", "conversation-transfer", "remove-all"],
+    features: [ "callback-and-voicemail", "schedule-manager", "internal-call", "conversation-transfer", "remove-all"],
   },
   {
     filename: `${terraformDir}/modules/taskrouter/activities.tf`,
@@ -49,7 +49,7 @@ const featureRegionReferences = [
   },
   {
     filename: `${terraformDir}/modules/taskrouter/outputs.tf`,
-    features: [ "conversation-transfer", "chat-transfer", "callback-and-voicemail", "internal-call", "remove-all"],
+    features: [ "conversation-transfer", "callback-and-voicemail", "internal-call", "remove-all"],
   },
   {
     filename: `${terraformDir}/modules/taskrouter/task_queues.tf`,
@@ -57,7 +57,7 @@ const featureRegionReferences = [
   },
   {
     filename: `${terraformDir}/modules/taskrouter/workflows.tf`,
-    features: [ "internal-call", "conversation-transfer", "chat-transfer", "callback-and-voicemail", "remove-all" ],
+    features: [ "internal-call", "conversation-transfer", "callback-and-voicemail", "remove-all" ],
   }
 ];
 

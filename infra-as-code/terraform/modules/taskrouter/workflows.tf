@@ -16,13 +16,11 @@ resource "twilio_taskrouter_workspaces_workflows_v1" "callback" {
 # END FEATURE: callback-and-voicemail
 
 # FEATURE: conversation-transfer
-# FEATURE: chat-transfer
 resource "twilio_taskrouter_workspaces_workflows_v1" "chat_transfer" {
   workspace_sid = twilio_taskrouter_workspaces_v1.flex.sid
   friendly_name = "Chat Transfer"
   configuration = templatefile("../../taskrouter/chat_transfer.json", local.params)
 }
-# END FEATURE: chat-transfer
 # END FEATURE: conversation-transfer
 
 # FEATURE: internal-call
@@ -35,9 +33,9 @@ resource "twilio_taskrouter_workspaces_workflows_v1" "internal_call" {
 
 locals{
   params = {
-    "QUEUE_SID_EVERYONE" = twilio_taskrouter_workspaces_task_queues_v1.everyone.sid
 
 # FEATURE: remove-all
+    "QUEUE_SID_EVERYONE" = twilio_taskrouter_workspaces_task_queues_v1.everyone.sid
     "QUEUE_SID_TEMPLATE_EXAMPLE_SALES" = twilio_taskrouter_workspaces_task_queues_v1.template_example_sales.sid
     "QUEUE_SID_TEMPLATE_EXAMPLE_SUPPORT" = twilio_taskrouter_workspaces_task_queues_v1.template_example_support.sid
 # END FEATURE: remove-all

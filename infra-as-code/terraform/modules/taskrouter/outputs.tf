@@ -11,12 +11,10 @@ output "workflow_sid_assign_to_anyone" {
 # END FEATURE: remove-all
 
 # FEATURE: conversation-transfer
-# FEATURE: chat-transfer
 output "workflow_sid_chat_transfer" {
   value = twilio_taskrouter_workspaces_workflows_v1.chat_transfer.sid
   description = "conversation-transfer feature workflow SID"
 }
-# END FEATURE: chat-transfer
 # END FEATURE: conversation-transfer
 
 
