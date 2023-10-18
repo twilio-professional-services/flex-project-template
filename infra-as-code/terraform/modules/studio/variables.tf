@@ -1,3 +1,4 @@
+# FEATURE: remove-all
 variable "workflow_sid_assign_to_anyone" {
   type        = string
   description = "SID of the Assign To Anyone workflow"
@@ -6,7 +7,9 @@ variable "workflow_sid_assign_to_anyone" {
     error_message = "workflow_sid_assign_to_anyone expected to start with \"WW\"."
   }
 }
+# END FEATURE: remove-all
 
+# FEATURE: conversation-transfer
 variable "workflow_sid_chat_transfer" {
   type        = string
   description = "SID of the Chat Transfer workflow"
@@ -15,7 +18,9 @@ variable "workflow_sid_chat_transfer" {
     error_message = "workflow_sid_chat_transfer expected to start with \"WW\"."
   }
 }
+# END FEATURE: conversation-transfer
 
+# FEATURE: callback-and-voicemail
 variable "workflow_sid_callback" {
   type        = string
   description = "SID of the Callback workflow"
@@ -24,7 +29,9 @@ variable "workflow_sid_callback" {
     error_message = "workflow_sid_callback expected to start with \"WW\"."
   }
 }
+# END FEATURE: callback-and-voicemail
 
+# FEATURE: internal-call
 variable "workflow_sid_internal_call" {
   type        = string
   description = "SID of the internal_call workflow"
@@ -33,6 +40,7 @@ variable "workflow_sid_internal_call" {
     error_message = "workflow_sid_internal_call expected to start with \"WW\"."
   }
 }
+# END FEATURE: internal-call
 
 variable "chat_channel_sid" {
   type        = string
@@ -79,6 +87,7 @@ variable "serverless_env_sid" {
   }
 }
 
+# FEATURE: schedule-manager
 variable "schedule_manager_domain" {
   type        = string
   description = "serverless domain schedule manager for flex plugin"
@@ -106,6 +115,19 @@ variable "schedule_manager_env_sid" {
   }
 }
 
+variable "function_check_schedule_sid" {
+  type        = string
+  description = "get customer by phone function sid"
+  validation {
+    condition     = length(var.function_check_schedule_sid) > 2 && substr(var.function_check_schedule_sid, 0, 2) == "ZH"
+    error_message = "function_check_schedule_sid expected to start with \"ZH\"."
+  }
+}
+
+# END FEATURE: schedule-manager
+
+# FEATURE: callback-and-voicemail
+
 variable "function_create_callback" {
   type        = string
   description = "create callback function sid"
@@ -115,11 +137,5 @@ variable "function_create_callback" {
   }
 }
 
-variable "function_check_schedule_sid" {
-  type        = string
-  description = "get customer by phone function sid"
-  validation {
-    condition     = length(var.function_check_schedule_sid) > 2 && substr(var.function_check_schedule_sid, 0, 2) == "ZH"
-    error_message = "function_check_schedule_sid expected to start with \"ZH\"."
-  }
-}
+# END FEATURE: callback-and-voicemail
+
