@@ -19,7 +19,10 @@ terraform {
 
 module "studio" {
   source           = "../../modules/studio"
+
+# FEATURE: remove-all
   workflow_sid_assign_to_anyone = module.taskrouter.workflow_sid_assign_to_anyone
+# END FEATURE: remove-all
 
 # FEATURE: conversation-transfer
 # FEATURE: chat-transfer

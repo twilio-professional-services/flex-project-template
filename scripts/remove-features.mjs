@@ -21,7 +21,7 @@ const featureRegionReferences = [
   },
   {
     filename: `${terraformDir}/environments/default/main.tf`,
-    features: [ "callback-and-voicemail", "schedule-manager"],
+    features: [ "callback-and-voicemail", "schedule-manager", "remove-all"],
   },
   {
     filename: `${terraformDir}/environments/default/outputs.tf`,
