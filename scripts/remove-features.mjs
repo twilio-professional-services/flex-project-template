@@ -49,7 +49,7 @@ const featureRegionReferences = [
   },
   {
     filename: `${terraformDir}/modules/taskrouter/outputs.tf`,
-    features: [ "conversation-transfer", "chat-transfer", "callback-and-voicemail", "internal-call"],
+    features: [ "conversation-transfer", "chat-transfer", "callback-and-voicemail", "internal-call", "remove-all"],
   },
   {
     filename: `${terraformDir}/modules/taskrouter/task_queues.tf`,
