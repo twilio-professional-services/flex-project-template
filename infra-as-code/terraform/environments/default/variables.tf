@@ -51,6 +51,8 @@ variable "SERVERLESS_ENV_SID" {
   }
 }
 
+# FEATURE: schedule-manager
+
 variable "SCHEDULE_MANAGER_DOMAIN" {
   type        = string
   description = "schedule manager domain"
@@ -59,8 +61,6 @@ variable "SCHEDULE_MANAGER_DOMAIN" {
     error_message = "SCHEDULE_MANAGER_DOMAIN expected to start with \"schedule-manager-\"."
   }
 }
-
-# FEATURE: schedule-manager
 
 variable "SCHEDULE_MANAGER_SID" {
   type        = string
