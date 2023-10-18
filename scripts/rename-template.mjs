@@ -1,6 +1,6 @@
 import shell from "shelljs";
 // https://github.com/shelljs/shelljs#shellstringstr
-import { flexConfigDir, serverlessDir } from "./common/constants.mjs";
+import { flexConfigDir, serverlessDir, infraAsCodeDir } from "./common/constants.mjs";
 import getPluginDirs from "./common/get-plugin.mjs";
 import { promises as fs } from 'fs';
 
@@ -146,7 +146,12 @@ const performRename = async () => {
   shell.sed('-i', /custom-flex-extensions-serverless/g, `${name}`, `./infra-as-code/terraform/modules/studio/variables.tf`);
   shell.sed('-i', /length\(var.serverless_domain\) > [0-9][0-9] && substr\(var.serverless_domain, 0, [0-9][0-9]\)/g, `length(var.serverless_domain) > ${name.length+1} && substr(var.serverless_domain, 0, ${name.length+1})`, `./infra-as-code/terraform/modules/studio/variables.tf`);
 
-  
+  // rename the state service that is in use
+  if(shell.test('-e', `./${infraAsCodeDir}/state/config.sh`)){
+    shell.echo(`Renaming tfstate service`);
+    shell.echo("");
+    shell.sed('-i', /tfstate_service_name=.*/, `tfstate_service_name=tfstate-${packageSuffix}`, `./${infraAsCodeDir}/state/config.sh`);
+  }
   
   console.log(`Re-evaluating npm package-lock for ${fullPluginName}...`);
   shell.exec(`npm --prefix ./${fullPluginName} install ./${fullPluginName}`, {silent:true});
