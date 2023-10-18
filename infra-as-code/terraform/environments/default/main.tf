@@ -20,9 +20,21 @@ terraform {
 module "studio" {
   source           = "../../modules/studio"
   workflow_sid_assign_to_anyone = module.taskrouter.workflow_sid_assign_to_anyone
+
+# FEATURE: conversation-transfer
+# FEATURE: chat-transfer
   workflow_sid_chat_transfer = module.taskrouter.workflow_sid_chat_transfer
+# END FEATURE: conversation-transfer
+# END FEATURE: chat-transfer
+
+# FEATURE: callback-and-voicemail
   workflow_sid_callback = module.taskrouter.workflow_sid_callback
+# END FEATURE: callback-and-voicemail
+
+# FEATURE: internal-call
   workflow_sid_internal_call = module.taskrouter.workflow_sid_internal_call
+# END FEATURE: internal-call
+
   chat_channel_sid = module.taskrouter.chat_channel_sid
   voice_channel_sid = module.taskrouter.voice_channel_sid
   serverless_domain = var.SERVERLESS_DOMAIN

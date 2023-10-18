@@ -41,7 +41,7 @@ const featureRegionReferences = [
   },
   {
     filename: `${terraformDir}/modules/studio/variables.tf`,
-    features: [ "callback-and-voicemail", "schedule-manager"],
+    features: [ "callback-and-voicemail", "schedule-manager", "internal-call", "chat-transfer", "conversation-transfer"],
   },
   {
     filename: `${terraformDir}/modules/taskrouter/activities.tf`,

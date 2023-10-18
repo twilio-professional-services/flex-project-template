@@ -7,6 +7,8 @@ variable "workflow_sid_assign_to_anyone" {
   }
 }
 
+# FEATURE: conversation-transfer
+# FEATURE: chat-transfer
 variable "workflow_sid_chat_transfer" {
   type        = string
   description = "SID of the Chat Transfer workflow"
@@ -15,7 +17,10 @@ variable "workflow_sid_chat_transfer" {
     error_message = "workflow_sid_chat_transfer expected to start with \"WW\"."
   }
 }
+# END FEATURE: chat-transfer
+# END FEATURE: conversation-transfer
 
+# FEATURE: callback-and-voicemail
 variable "workflow_sid_callback" {
   type        = string
   description = "SID of the Callback workflow"
@@ -24,7 +29,9 @@ variable "workflow_sid_callback" {
     error_message = "workflow_sid_callback expected to start with \"WW\"."
   }
 }
+# END FEATURE: callback-and-voicemail
 
+# FEATURE: internal-call
 variable "workflow_sid_internal_call" {
   type        = string
   description = "SID of the internal_call workflow"
@@ -33,6 +40,7 @@ variable "workflow_sid_internal_call" {
     error_message = "workflow_sid_internal_call expected to start with \"WW\"."
   }
 }
+# END FEATURE: internal-call
 
 variable "chat_channel_sid" {
   type        = string
