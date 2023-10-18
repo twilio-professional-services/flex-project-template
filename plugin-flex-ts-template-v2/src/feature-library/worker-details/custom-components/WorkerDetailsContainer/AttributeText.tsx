@@ -2,6 +2,7 @@ import { Template, templates } from '@twilio/flex-ui';
 import { Input } from '@twilio-paste/core/input';
 import { Label } from '@twilio-paste/core/label';
 import { Tr, Td } from '@twilio-paste/core/table';
+import { Text } from '@twilio-paste/core/text';
 
 import { stringPrefix } from '../../flex-hooks/strings';
 
@@ -10,9 +11,10 @@ interface OwnProps {
   label: string;
   value: string;
   onChangeHandler: (value: string) => void;
+  disabled: boolean;
 }
 
-const AttributeText = ({ id, label, value, onChangeHandler }: OwnProps) => {
+const AttributeText = ({ id, label, value, onChangeHandler, disabled }: OwnProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     onChangeHandler(value);
@@ -26,7 +28,7 @@ const AttributeText = ({ id, label, value, onChangeHandler }: OwnProps) => {
         </Label>
       </Td>
       <Td element="WORKER_DETAILS">
-        <Input type="text" id={id} value={value} onChange={handleChange} />
+        {disabled ? <Text as="p">{value}</Text> : <Input type="text" id={id} value={value} onChange={handleChange} />}
       </Td>
     </Tr>
   );

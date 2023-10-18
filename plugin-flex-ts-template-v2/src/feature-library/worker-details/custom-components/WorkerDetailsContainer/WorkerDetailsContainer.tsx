@@ -25,7 +25,6 @@ import {
 } from '../../config';
 import AttributeText from './AttributeText';
 import AttributeSelect from './AttributeSelect';
-import AttributeDisplay from './AttributeDisplay';
 
 const shiftOptions = ['Early', 'Regular', 'Late', 'Night'];
 
@@ -126,49 +125,47 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
             </Td>
             <Td element="WORKER_DETAILS">{worker?.fullName || 'Agent'}</Td>
           </Tr>
-          {editTeam() ? (
-            <AttributeSelect
-              id="team_name"
-              label="Team"
-              value={teamName}
-              options={getTeams()}
-              onChangeHandler={handleTeamChange}
-            />
-          ) : (
-            <AttributeDisplay id="team_name" label="Team" value={teamName} />
-          )}
-          {editDepartment() ? (
-            <AttributeSelect
-              id="department_name"
-              label="Department"
-              value={departmentName}
-              options={getDepartments()}
-              onChangeHandler={handleDeptChange}
-            />
-          ) : (
-            <AttributeDisplay id="department_name" label="Department" value={departmentName} />
-          )}
-          {editLocation() ? (
-            <AttributeText id="location" label="Location" value={location} onChangeHandler={handleLocationChange} />
-          ) : (
-            <AttributeDisplay id="location" label="Location" value={location} />
-          )}
-          {editManager() ? (
-            <AttributeText id="manager" label="Manager" value={manager} onChangeHandler={handleManagerChange} />
-          ) : (
-            <AttributeDisplay id="manager" label="Manager" value={manager} />
-          )}
-          {editSchedule() ? (
-            <AttributeSelect
-              id="schedule"
-              label="Schedule"
-              value={schedule}
-              options={shiftOptions}
-              onChangeHandler={handleScheduleChange}
-            />
-          ) : (
-            <AttributeDisplay id="schedule" label="Schedule" value={schedule} />
-          )}
+
+          <AttributeSelect
+            id="team_name"
+            label="Team"
+            value={teamName}
+            options={getTeams()}
+            onChangeHandler={handleTeamChange}
+            disabled={!editTeam()}
+          />
+
+          <AttributeSelect
+            id="department_name"
+            label="Department"
+            value={departmentName}
+            options={getDepartments()}
+            onChangeHandler={handleDeptChange}
+            disabled={!editDepartment()}
+          />
+
+          <AttributeText
+            id="location"
+            label="Location"
+            value={location}
+            onChangeHandler={handleLocationChange}
+            disabled={!editLocation()}
+          />
+          <AttributeText
+            id="manager"
+            label="Manager"
+            value={manager}
+            onChangeHandler={handleManagerChange}
+            disabled={!editManager()}
+          />
+          <AttributeSelect
+            id="schedule"
+            label="Schedule"
+            value={schedule}
+            options={shiftOptions}
+            onChangeHandler={handleScheduleChange}
+            disabled={!editSchedule()}
+          />
         </TBody>
       </Table>
       <hr />
