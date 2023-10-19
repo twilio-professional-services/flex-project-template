@@ -119,7 +119,7 @@ export const fetchServerlessServices = () => {
     return;
   }
   
-  // for each of the services we found, if it is one we are interested in, get its service sid, environments, and add to the cache
+  // if the service was requested, save it in the cache
   for (const service of serverlessServices) {
     for (const wanted in wantedServices) {
       if (isMatch(wantedServices[wanted].name, service.uniqueName, false)) {
