@@ -7,7 +7,6 @@ import { Text } from '@twilio-paste/core/text';
 import { stringPrefix } from '../../flex-hooks/strings';
 
 interface OwnProps {
-  id: string;
   label: string;
   value: string;
   options: string[];
@@ -15,12 +14,12 @@ interface OwnProps {
   disabled: boolean;
 }
 
-const AttributeSelect = ({ id, label, value, options, onChangeHandler, disabled }: OwnProps) => {
+const AttributeSelect = ({ label, value, options, onChangeHandler, disabled }: OwnProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     if (value !== 'none') onChangeHandler(value);
   };
-
+  const id = label.replace(' ', '-');
   return (
     <Tr key={id}>
       <Th scope="row" element="WORKER_DETAILS">

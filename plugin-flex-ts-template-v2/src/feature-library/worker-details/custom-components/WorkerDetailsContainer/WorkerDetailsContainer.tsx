@@ -125,41 +125,33 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
             </Td>
             <Td element="WORKER_DETAILS">{worker?.fullName || 'Agent'}</Td>
           </Tr>
-
           <AttributeSelect
-            id="team_name"
             label="Team"
             value={teamName}
             options={getTeams()}
             onChangeHandler={handleTeamChange}
             disabled={!editTeam()}
           />
-
           <AttributeSelect
-            id="department_name"
             label="Department"
             value={departmentName}
             options={getDepartments()}
             onChangeHandler={handleDeptChange}
             disabled={!editDepartment()}
           />
-
           <AttributeText
-            id="location"
             label="Location"
             value={location}
             onChangeHandler={handleLocationChange}
             disabled={!editLocation()}
           />
           <AttributeText
-            id="manager"
             label="Manager"
             value={manager}
             onChangeHandler={handleManagerChange}
             disabled={!editManager()}
           />
           <AttributeSelect
-            id="schedule"
             label="Schedule"
             value={schedule}
             options={shiftOptions}
@@ -171,14 +163,7 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
       <hr />
       <FlexBox>
         <Box width="100%" backgroundColor="colorBackground" padding="space30" margin="space10">
-          <SwitchGroup
-            name="automation"
-            legend={
-              <Text as="span" color="currentColor">
-                Agent Automation
-              </Text>
-            }
-          >
+          <SwitchGroup name="automation" legend={<Template source={templates.PSWorkerDetailsAutomation} />}>
             <Switch
               value="auto-accept"
               checked={autoAccept}
@@ -204,14 +189,7 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
           </SwitchGroup>
         </Box>
         <Box width="100%" backgroundColor="colorBackground" padding="space30" margin="space10">
-          <SwitchGroup
-            name="permissions"
-            legend={
-              <Text as="span" color="currentColor">
-                Agent permissions
-              </Text>
-            }
-          >
+          <SwitchGroup name="permissions" legend={<Template source={templates.PSWorkerDetailsPermissions} />}>
             <Switch
               value="unit-leader"
               checked={unitLeader}

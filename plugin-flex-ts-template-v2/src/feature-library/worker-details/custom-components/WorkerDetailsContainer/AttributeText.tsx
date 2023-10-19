@@ -7,19 +7,18 @@ import { Text } from '@twilio-paste/core/text';
 import { stringPrefix } from '../../flex-hooks/strings';
 
 interface OwnProps {
-  id: string;
   label: string;
   value: string;
   onChangeHandler: (value: string) => void;
   disabled: boolean;
 }
 
-const AttributeText = ({ id, label, value, onChangeHandler, disabled }: OwnProps) => {
+const AttributeText = ({ label, value, onChangeHandler, disabled }: OwnProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     onChangeHandler(value);
   };
-
+  const id = label.replace(' ', '-');
   return (
     <Tr key={id}>
       <Td element="WORKER_DETAILS">
