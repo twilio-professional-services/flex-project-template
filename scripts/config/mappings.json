@@ -26,15 +26,18 @@
   },
   "TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID": {
     "type": "tr-workflow",
-    "name": "Chat Transfer"
+    "name": "Chat Transfer",
+    "parent": "TWILIO_FLEX_WORKSPACE_SID"
   },
   "TWILIO_FLEX_CALLBACK_WORKFLOW_SID": {
     "type": "tr-workflow",
     "name": "Callback",
-    "fallback": "/(Assign.*Anyone)/"
+    "fallback": "/(Assign.*Anyone)/",
+    "parent": "TWILIO_FLEX_WORKSPACE_SID"
   },
   "TWILIO_FLEX_INTERNAL_CALL_WORKFLOW_SID": {
     "type": "tr-workflow",
-    "name": "Internal Call"
+    "name": "Internal Call",
+    "parent": "TWILIO_FLEX_WORKSPACE_SID"
   }
 }
