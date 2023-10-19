@@ -7,7 +7,6 @@ import { Label } from '@twilio-paste/core/label';
 import { Stack } from '@twilio-paste/core/stack';
 import { Table, TBody, Tr, Td } from '@twilio-paste/core/table';
 import { Switch, SwitchGroup } from '@twilio-paste/core/switch';
-import { Text } from '@twilio-paste/core/text';
 
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import {
@@ -16,17 +15,13 @@ import {
   editTeam,
   editDepartment,
   editLocation,
-  editManager,
+  editManagerName,
   editUnitLeader,
-  editCoach,
-  editSchedule,
   editAutoAccept,
   editAutoWrapup,
 } from '../../config';
 import AttributeText from './AttributeText';
 import AttributeSelect from './AttributeSelect';
-
-const shiftOptions = ['Early', 'Regular', 'Late', 'Night'];
 
 interface OwnProps {
   worker: IWorker;
@@ -37,10 +32,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   const [teamName, setTeamName] = useState('');
   const [departmentName, setDepartmentName] = useState('');
   const [location, setLocation] = useState('');
-  const [manager, setManager] = useState('');
+  const [managerName, setManagerName] = useState('');
   const [unitLeader, setUnitLeader] = useState(false);
-  const [coach, setCoach] = useState(false);
-  const [schedule, setSchedule] = useState('');
   const [autoAccept, setAutoAccept] = useState(false);
   const [autoWrapup, setAutoWrapup] = useState(false);
 
@@ -49,10 +42,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
       setTeamName(worker.attributes.team_name || '');
       setDepartmentName(worker.attributes.department_name || '');
       setLocation(worker.attributes.location || '');
-      setManager(worker.attributes.manager || '');
+      setManagerName(worker.attributes.manager_name || '');
       setUnitLeader(worker.attributes.unit_leader || false);
-      setCoach(worker.attributes.coach || false);
-      setSchedule(worker.attributes.schedule || '');
       setAutoAccept(worker.attributes.auto_accept || false);
       setAutoWrapup(worker.attributes.auto_Wrapup || false);
     }
@@ -64,8 +55,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   };
 
   const handleManagerChange = (value: string) => {
-    if (manager !== value) setChanged(true);
-    setManager(value);
+    if (managerName !== value) setChanged(true);
+    setManagerName(value);
   };
 
   const handleTeamChange = (team: string) => {
@@ -76,11 +67,6 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   const handleDeptChange = (dept: string) => {
     setChanged(true);
     setDepartmentName(dept);
-  };
-
-  const handleScheduleChange = (value: string) => {
-    setChanged(true);
-    setSchedule(value);
   };
 
   // See the notes in our Flex insights docs
@@ -101,10 +87,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
         department_id: departmentName,
         department_name: departmentName,
         location,
-        manager,
+        manager_name: managerName,
         unit_leader: unitLeader,
-        coach,
-        schedule,
         auto_accept: autoAccept,
         auto_wrapup: autoWrapup,
       };
@@ -147,16 +131,9 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
           />
           <AttributeText
             label="Manager"
-            value={manager}
+            value={managerName}
             onChangeHandler={handleManagerChange}
-            disabled={!editManager()}
-          />
-          <AttributeSelect
-            label="Schedule"
-            value={schedule}
-            options={shiftOptions}
-            onChangeHandler={handleScheduleChange}
-            disabled={!editSchedule()}
+            disabled={!editManagerName()}
           />
         </TBody>
       </Table>
@@ -200,17 +177,6 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
               }}
             >
               Unit Leader
-            </Switch>
-            <Switch
-              value="coac"
-              checked={coach}
-              disabled={!editCoach()}
-              onChange={() => {
-                setCoach(!coach);
-                setChanged(true);
-              }}
-            >
-              Coach
             </Switch>
           </SwitchGroup>
         </Box>

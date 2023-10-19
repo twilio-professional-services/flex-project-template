@@ -6,12 +6,10 @@ const {
   edit_team = true,
   edit_department = true,
   edit_location = true,
-  edit_manager = false,
-  edit_schedule = true,
+  edit_manager_name = false,
   edit_auto_accept = true,
   edit_auto_wrapup = true,
   edit_unit_leader = true,
-  edit_coach = true,
 } = (getFeatureFlags()?.features?.worker_details as WorkerDetailsConfig) || {};
 
 const { teams = [], departments = [] } = getFeatureFlags().common || {};
@@ -28,11 +26,8 @@ export const editDepartment = () => {
 export const editLocation = () => {
   return edit_location;
 };
-export const editManager = () => {
-  return edit_manager;
-};
-export const editSchedule = () => {
-  return edit_schedule;
+export const editManagerName = () => {
+  return edit_manager_name;
 };
 export const editAutoAccept = () => {
   return edit_auto_accept;
@@ -43,10 +38,6 @@ export const editAutoWrapup = () => {
 export const editUnitLeader = () => {
   return edit_unit_leader;
 };
-export const editCoach = () => {
-  return edit_coach;
-};
-
 export const getTeams = () => {
   return teams;
 };
