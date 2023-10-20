@@ -1,0 +1,6 @@
+name: 'Hide Secret Action'
+description: 'This Action hide secrets in logs using ::add-mask:: This works just with the workflow_dispatch event'
+
+runs:
+  using: 'node16'
+  main: './built/index.js'
