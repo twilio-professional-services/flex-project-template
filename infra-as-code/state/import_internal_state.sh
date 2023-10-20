@@ -107,7 +107,7 @@ importInternalState() {
 }
 
 # populate tfvars
-node ../../scripts/setup-environment.mjs --skip-packages --files=../terraform/environments/default/example.tfvars
+(cd ../.. && npm run postinstall -- --skip-packages --files=infra-as-code/terraform/environments/default/example.tfvars)
 
 ### only if existing state file does not exist
 ### do we want to import the internal state
