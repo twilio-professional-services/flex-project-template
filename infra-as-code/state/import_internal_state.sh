@@ -25,9 +25,9 @@ import_resource() {
 	result=$(get_value_from_json "$input_json" "$key" "$name" "sid")
 	if [ -n "$result" ]; then
 		if $has_sid; then
-			terraform -chdir="../terraform/environments/default" import -input=false "$resource" "$TF_WORKSPACE_SID"/"$result" || exit
+			terraform -chdir="../terraform/environments/default" import -input=false -var-file="${ENVIRONMENT:-local}.tfvars" "$resource" "$TF_WORKSPACE_SID"/"$result" || exit
 		else
-			terraform -chdir="../terraform/environments/default" import -input=false "$resource" "$result" || exit
+			terraform -chdir="../terraform/environments/default" import -input=false -var-file="${ENVIRONMENT:-local}.tfvars" "$resource" "$result" || exit
 		fi
 	fi
 
