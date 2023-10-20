@@ -32,9 +32,6 @@ jobs:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-      TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       ENVIRONMENT: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3

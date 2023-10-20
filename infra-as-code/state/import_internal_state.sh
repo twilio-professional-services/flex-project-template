@@ -106,63 +106,8 @@ importInternalState() {
 
 }
 
-services=$(twilio api:serverless:v1:services:list --no-limit -o json)
-
-TF_VAR_SERVERLESS_SID=$(get_value_from_json "$services" "uniqueName" "custom-flex-extensions-serverless" "sid")
-serverless=$(twilio api:serverless:v1:services:environments:list --service-sid "$TF_VAR_SERVERLESS_SID" --no-limit -o json)
-TF_VAR_SERVERLESS_DOMAIN=$(get_value_from_json "$serverless" "uniqueName" "dev-environment" "domainName")
-TF_VAR_SERVERLESS_ENV_SID=$(get_value_from_json "$serverless" "uniqueName" "dev-environment" "sid")
-### Functions list
-serverless_functions=$(twilio api:serverless:v1:services:functions:list --service-sid "$TF_VAR_SERVERLESS_SID" --no-limit -o json)
-### SERVERLESS FUNCTIONS REFERENCE
-# FEATURE: callback-and-voicemail
-TF_VAR_FUNCTION_CREATE_CALLBACK=$(get_value_from_json "$serverless_functions" "friendlyName" "/features/callback-and-voicemail/studio/create-callback" "sid")
-# END FEATURE: callback-and-voicemail
-
-# FEATURE: schedule-manager
-TF_VAR_SCHEDULE_MANAGER_SID=$(get_value_from_json "$services" "uniqueName" "schedule-manager" "sid")
-schedule_manager=$(twilio api:serverless:v1:services:environments:list --service-sid "$TF_VAR_SCHEDULE_MANAGER_SID" --no-limit -o json)
-TF_VAR_SCHEDULE_MANAGER_DOMAIN=$(get_value_from_json "$schedule_manager" "uniqueName" "dev-environment" "domainName")
-TF_VAR_SCHEDULE_MANAGER_ENV_SID=$(get_value_from_json "$schedule_manager" "uniqueName" "dev-environment" "sid")
-### Functions
-schedule_manager_functions=$(twilio api:serverless:v1:services:functions:list --service-sid "$TF_VAR_SCHEDULE_MANAGER_SID" --no-limit -o json)
-### SCHEDULE MANAGER FUNCTIONS REFERENCE
-TF_VAR_FUNCTION_CHECK_SCHEDULE_SID=$(get_value_from_json "$schedule_manager_functions" "friendlyName" "/check-schedule" "sid")
-# END FEATURE: schedule-manager
-
-
-echo " - *Discovering Serverless Backends* " >>$GITHUB_STEP_SUMMARY
-
-if [ -n "$TF_VAR_SERVERLESS_DOMAIN" ]; then
-	echo "   - :white_check_mark: serverless backend: $TF_VAR_SERVERLESS_DOMAIN" >>$GITHUB_STEP_SUMMARY
-else
-	echo "   - :x: serverless backend not found" >>$GITHUB_STEP_SUMMARY
-fi
-
-# FEATURE: schedule-manager
-if [ -n "$TF_VAR_SCHEDULE_MANAGER_DOMAIN" ]; then
-	echo "   - :white_check_mark: schedule manager backend: $TF_VAR_SCHEDULE_MANAGER_DOMAIN" >>$GITHUB_STEP_SUMMARY
-else
-	echo "   - :x: schedule manager backend not found" >>$GITHUB_STEP_SUMMARY
-fi
-# END FEATURE: schedule-manager
-
-export TF_VAR_SERVERLESS_SID 
-export TF_VAR_SERVERLESS_DOMAIN 
-export TF_VAR_SERVERLESS_ENV_SID 
-
-# FEATURE: schedule-manager
-export TF_VAR_SCHEDULE_MANAGER_SID 
-export TF_VAR_SCHEDULE_MANAGER_DOMAIN 
-export TF_VAR_SCHEDULE_MANAGER_ENV_SID 
-export TF_VAR_FUNCTION_CHECK_SCHEDULE_SID
-# END FEATURE: schedule-manager
-
-# FEATURE: callback-and-voicemail
-export TF_VAR_FUNCTION_CREATE_CALLBACK 
-# END FEATURE: callback-and-voicemail
-
-
+# populate tfvars
+node ../../scripts/setup-environment.mjs --skip-packages --files=../terraform/environments/default/example.tfvars
 
 ### only if existing state file does not exist
 ### do we want to import the internal state
@@ -170,6 +115,6 @@ if ! [ -f ../terraform/environments/default/terraform.tfstate ]; then
   importInternalState
 fi
 
-terraform -chdir="../terraform/environments/default" apply -input=false -auto-approve
+terraform -chdir="../terraform/environments/default" apply -input=false -auto-approve -var-file="${ENVIRONMENT:-local}.tfvars"
 echo " - Applying terraform configuration complete" >>$GITHUB_STEP_SUMMARY
 echo "JOB_FAILED=false" >>"$GITHUB_OUTPUT"
