@@ -1,27 +1,16 @@
+/* eslint-disable sonarjs/no-unused-collection */
 import { IWorker, Template, templates } from '@twilio/flex-ui';
 import React, { useState, useEffect } from 'react';
 import { Flex as FlexBox } from '@twilio-paste/core/flex';
-import { Box } from '@twilio-paste/core/box';
 import { Button } from '@twilio-paste/core/button';
 import { Label } from '@twilio-paste/core/label';
 import { Stack } from '@twilio-paste/core/stack';
 import { Table, TBody, Tr, Td } from '@twilio-paste/core/table';
-import { Switch, SwitchGroup } from '@twilio-paste/core/switch';
 
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
-import {
-  getTeams,
-  getDepartments,
-  editTeam,
-  editDepartment,
-  editLocation,
-  editManagerName,
-  editUnitLeader,
-  editAutoAccept,
-  editAutoWrapup,
-} from '../../config';
-import AttributeText from './AttributeText';
+import { getTeams, getDepartments, editTeam, editDepartment, getCustomAttributes } from '../../config';
 import AttributeSelect from './AttributeSelect';
+import AttributeCustom from './AttributeCustom';
 
 interface OwnProps {
   worker: IWorker;
@@ -31,33 +20,23 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   const [changed, setChanged] = useState(false);
   const [teamName, setTeamName] = useState('');
   const [departmentName, setDepartmentName] = useState('');
-  const [location, setLocation] = useState('');
-  const [managerName, setManagerName] = useState('');
-  const [unitLeader, setUnitLeader] = useState(false);
-  const [autoAccept, setAutoAccept] = useState(false);
-  const [autoWrapup, setAutoWrapup] = useState(false);
+  const [otherAttributes, setOtherAttributes] = useState({} as any);
 
+  const attributeNames = getCustomAttributes();
   useEffect(() => {
     if (worker) {
       setTeamName(worker.attributes.team_name || '');
       setDepartmentName(worker.attributes.department_name || '');
-      setLocation(worker.attributes.location || '');
-      setManagerName(worker.attributes.manager_name || '');
-      setUnitLeader(worker.attributes.unit_leader || false);
-      setAutoAccept(worker.attributes.auto_accept || false);
-      setAutoWrapup(worker.attributes.auto_Wrapup || false);
+      const other = {} as any;
+      Object.keys(worker.attributes).forEach((key: string) => {
+        if (attributeNames.includes(key)) {
+          other[key] = worker.attributes[key];
+        }
+      });
+
+      setOtherAttributes(other);
     }
   }, [worker]);
-
-  const handleLocationChange = (value: string) => {
-    if (location !== value) setChanged(true);
-    setLocation(value);
-  };
-
-  const handleManagerChange = (value: string) => {
-    if (managerName !== value) setChanged(true);
-    setManagerName(value);
-  };
 
   const handleTeamChange = (team: string) => {
     setChanged(true);
@@ -67,6 +46,12 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   const handleDeptChange = (dept: string) => {
     setChanged(true);
     setDepartmentName(dept);
+  };
+
+  const handleOtherChange = (key: string, value: string) => {
+    setChanged(true);
+    const attributes = { ...otherAttributes, [key]: value };
+    setOtherAttributes(attributes);
   };
 
   // See the notes in our Flex insights docs
@@ -86,12 +71,8 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
         team_name: teamName,
         department_id: departmentName,
         department_name: departmentName,
-        location,
-        manager_name: managerName,
-        unit_leader: unitLeader,
-        auto_accept: autoAccept,
-        auto_wrapup: autoWrapup,
-      };
+        ...otherAttributes,
+      } as any;
       await TaskRouterService.updateWorkerAttributes(workerSid, JSON.stringify(updatedAttr));
       setChanged(false);
     }
@@ -123,64 +104,16 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
             onChangeHandler={handleDeptChange}
             disabled={!editDepartment()}
           />
-          <AttributeText
-            label="Location"
-            value={location}
-            onChangeHandler={handleLocationChange}
-            disabled={!editLocation()}
-          />
-          <AttributeText
-            label="Manager"
-            value={managerName}
-            onChangeHandler={handleManagerChange}
-            disabled={!editManagerName()}
-          />
+          {attributeNames.map((attr) => (
+            <AttributeCustom
+              key={attr}
+              label={attr}
+              value={otherAttributes[attr] || ''}
+              onChangeHandler={handleOtherChange}
+            />
+          ))}
         </TBody>
       </Table>
-      <hr />
-      <FlexBox>
-        <Box width="100%" backgroundColor="colorBackground" padding="space30" margin="space10">
-          <SwitchGroup name="automation" legend={<Template source={templates.PSWorkerDetailsAutomation} />}>
-            <Switch
-              value="auto-accept"
-              checked={autoAccept}
-              disabled={!editAutoAccept()}
-              onChange={() => {
-                setAutoAccept(!autoAccept);
-                setChanged(true);
-              }}
-            >
-              Auto Accept
-            </Switch>
-            <Switch
-              value="auto-wrapup"
-              checked={autoWrapup}
-              disabled={!editAutoWrapup()}
-              onChange={() => {
-                setAutoWrapup(!autoWrapup);
-                setChanged(true);
-              }}
-            >
-              Auto Accept
-            </Switch>
-          </SwitchGroup>
-        </Box>
-        <Box width="100%" backgroundColor="colorBackground" padding="space30" margin="space10">
-          <SwitchGroup name="permissions" legend={<Template source={templates.PSWorkerDetailsPermissions} />}>
-            <Switch
-              value="unit-leader"
-              checked={unitLeader}
-              disabled={!editUnitLeader()}
-              onChange={() => {
-                setUnitLeader(!unitLeader);
-                setChanged(true);
-              }}
-            >
-              Unit Leader
-            </Switch>
-          </SwitchGroup>
-        </Box>
-      </FlexBox>
       <FlexBox hAlignContent="right" margin="space50">
         <Stack orientation="horizontal" spacing="space30">
           <Button variant="primary" id="saveButton" onClick={saveWorkerAttributes} disabled={!changed}>
