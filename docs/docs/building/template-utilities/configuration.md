@@ -237,6 +237,13 @@ npm run postinstall -- --uninstall
 
 This will remove `node_modules` and `package-lock.json` within each package before dependencies are installed (unless `--skip-install` is also specified, in which case dependencies would be removed but not reinstalled).
 
+### skip-packages
+This will cause the script to not process any packages (the default set or any provided via `--packages=`). This means that no environment files or installations will be performed. This is convenient to use in conjunction with the `--files=` parameter when you are using the script to process files outside or independent of a package.
+
+```bash
+npm run postinstall -- --skip-packages
+```
+
 ### env
 By default, the script will assume you are running locally and not deploying to a specific environment. When running in CI, the `ENVIRONMENT` env var is set, which the script uses to determine the environment being deployed. However, you can override this behavior by specifying an environment manually as follows:
 
@@ -256,4 +263,15 @@ However, you can specify the relative path to any npm package(s) for the script 
 
 ```bash
 npm run postinstall -- --packages=flex-config,serverless-schedule-manager
+```
+
+This is ignored if the `--skip-packages` parameter is also specified.
+
+### files
+In most cases, the setup script is used for processing packages. However, you may wish to populate variables within individual files outside or independent of a package. To do so, provide the path of the "example" file containing placeholders. The script will create a copy of the file with the placeholders filled, and the `example` in the filename replaced with the current environment (if none is specified, `local` is used).
+
+You can provide a comma-separated list of files as follows:
+
+```bash
+npm run postinstall -- --files=test/config.example.json,terraform/example.tfvars
 ```
