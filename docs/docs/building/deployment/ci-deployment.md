@@ -19,6 +19,24 @@ This workflow encapsulates the logic for deploying the entire template. It can b
    - If this is the first time the template has been deployed, there is a chicken-egg problem with the serverless and Terraform deployments (Terraform wants the serverless service to exist, but the serverless service wants the dependencies deployed by Terraform to exist). To solve this, when the initial release option is selected, the serverless services are deployed twice: Once before Terraform (in a state where some dependencies are missing), then again after Terraform (once the dependencies have been deployed).
 1. Deploys and releases the Flex plugin using the Twilio CLI
 
+### Options
+
+#### environment (Environment to use for deployment)
+
+Selects the configured GitHub environment to deploy. The environment defines the account to deploy to, along with credentials and (optionally) some settings.
+
+#### deploy_terraform (Deploy Terraform?)
+
+Whether or not the Terraform configuration within the template should be deployed. The template includes supporting objects for features, such as TaskRouter workflows and Studio flows, that can be automatically deployed and managed via Terraform. However, any existing resources with the same name will be overwritten when the deployment occurs.
+
+#### initial_release (Is this the first release to the environment?)
+
+If the template has never been deployed to the target account, and "Deploy Terraform" is selected, you must also select this option. If this is the first time the template has been deployed, there is a chicken-egg problem with the serverless and Terraform deployments (Terraform wants the serverless service to exist, but the serverless service wants the dependencies deployed by Terraform to exist). To solve this, when the initial release option is selected, the serverless services are deployed twice: Once before Terraform (in a state where some dependencies are missing), then again after Terraform (once the dependencies have been deployed).
+
+#### overwrite_config (Overwrite config set by Admin UI Panel?)
+
+Determines whether the source of truth for configuration is the repository or the configuration made via the template's included admin UI. If the repository is the source of truth, select this option, so that any updates made via the repository are deployed. If the admin UI is the source of truth, deselect this option so that only net-new configuration options are added, and existing settings are not overwritten.
+
 ## Merge deploy example
 
 Location: `.github/examples/merge_deploy.yaml`

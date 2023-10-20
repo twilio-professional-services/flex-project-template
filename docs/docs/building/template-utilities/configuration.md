@@ -228,6 +228,15 @@ Normally the script will run `npm install` for each package. However, if you onl
 npm run postinstall -- --skip-install
 ```
 
+### uninstall
+If you would like to completely remove the installed npm dependencies:
+
+```bash
+npm run postinstall -- --uninstall
+```
+
+This will remove `node_modules` and `package-lock.json` within each package before dependencies are installed (unless `--skip-install` is also specified, in which case dependencies would be removed but not reinstalled).
+
 ### env
 By default, the script will assume you are running locally and not deploying to a specific environment. When running in CI, the `ENVIRONMENT` env var is set, which the script uses to determine the environment being deployed. However, you can override this behavior by specifying an environment manually as follows:
 
