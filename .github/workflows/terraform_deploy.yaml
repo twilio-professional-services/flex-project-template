@@ -40,7 +40,7 @@ jobs:
       - uses: hashicorp/setup-terraform@v2
       - name: install Twilio CLI
         run: |
-          npm install -g twilio-cli
+          npm install --ignore-scripts
           twilio plugins:install @twilio-labs/plugin-serverless
       - name: Pull Terraform State
         id: pull-state
