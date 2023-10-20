@@ -35,5 +35,5 @@ verify_function=$(cat ./verify-signature.js)
 echo "$package_json" >./$project_name/package.json
 echo "$verify_function" >./$project_name/functions/verify-function.js
 
-twilio serverless:deploy --assets --production --override-existing-project --cwd="./$project_name"
+npx twilio serverless:deploy --assets --production --override-existing-project --cwd="./$project_name"
 rm -rf $project_name
