@@ -79,19 +79,18 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           npm install --ignore-scripts
+          npm run install-serverless-plugin
           npm run generate-env
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
           npm install
-          npm run install-serverless-plugin
           npm run deploy-env
 # FEATURE: schedule-manager
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
           npm install
-          npm run install-serverless-plugin
           npm run deploy-env
 # END FEATURE: schedule-manager
 
@@ -139,6 +138,7 @@ jobs:
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
           npm install --ignore-scripts
+          npm run install-serverless-plugin
           npm run postinstall -- --packages=serverless-functions >> $GITHUB_STEP_SUMMARY
 # FEATURE: chat-to-video-escalation
       - name: install npm and build video-app-assets
@@ -149,7 +149,6 @@ jobs:
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
-          npm run install-serverless-plugin
           npm run deploy-env
 
 # FEATURE: schedule-manager
@@ -179,11 +178,11 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           npm install --ignore-scripts
+          npm run install-serverless-plugin
           npm run postinstall -- --packages=serverless-schedule-manager,flex-config
       - name: deploy serverless-schedule-manager
         working-directory: serverless-schedule-manager
         run: |
-          npm run install-serverless-plugin
           npm run deploy-env
 # END FEATURE: schedule-manager
 

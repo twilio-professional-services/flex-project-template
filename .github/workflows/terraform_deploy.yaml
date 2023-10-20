@@ -41,7 +41,7 @@ jobs:
       - name: install Twilio CLI
         run: |
           npm install --ignore-scripts
-          twilio plugins:install @twilio-labs/plugin-serverless
+          npm run install-serverless-plugin
       - name: Pull Terraform State
         id: pull-state
         working-directory: ./infra-as-code/state
