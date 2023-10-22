@@ -5,7 +5,8 @@ const {
   enabled = false,
   edit_team = true,
   edit_department = true,
-  custom_attributes = ['location', 'manager_name'],
+  text_attributes = ['location', 'manager'],
+  boolean_attributes = ['auto_accept', 'auto_wrapup'],
 } = (getFeatureFlags()?.features?.worker_details as WorkerDetailsConfig) || {};
 
 const { teams = [], departments = [] } = getFeatureFlags().common || {};
@@ -19,8 +20,11 @@ export const editTeam = () => {
 export const editDepartment = () => {
   return edit_department;
 };
-export const getCustomAttributes = () => {
-  return custom_attributes;
+export const getTextAttributes = () => {
+  return text_attributes;
+};
+export const getBooleanAttributes = () => {
+  return boolean_attributes;
 };
 export const getTeams = () => {
   return teams;

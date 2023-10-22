@@ -2,13 +2,22 @@
 import { IWorker, Template, templates } from '@twilio/flex-ui';
 import React, { useState, useEffect } from 'react';
 import { Flex as FlexBox } from '@twilio-paste/core/flex';
+import { Box } from '@twilio-paste/core/box';
 import { Button } from '@twilio-paste/core/button';
 import { Label } from '@twilio-paste/core/label';
 import { Stack } from '@twilio-paste/core/stack';
 import { Table, TBody, Tr, Td } from '@twilio-paste/core/table';
+import { Switch, SwitchGroup } from '@twilio-paste/core/switch';
 
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
-import { getTeams, getDepartments, editTeam, editDepartment, getCustomAttributes } from '../../config';
+import {
+  getTeams,
+  getDepartments,
+  editTeam,
+  editDepartment,
+  getTextAttributes,
+  getBooleanAttributes,
+} from '../../config';
 import AttributeSelect from './AttributeSelect';
 import AttributeCustom from './AttributeCustom';
 
@@ -22,18 +31,22 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   const [departmentName, setDepartmentName] = useState('');
   const [otherAttributes, setOtherAttributes] = useState({} as any);
 
-  const attributeNames = getCustomAttributes();
+  const textAttributes = getTextAttributes();
+  const booleanAttributes = getBooleanAttributes();
+
   useEffect(() => {
     if (worker) {
       setTeamName(worker.attributes.team_name || '');
       setDepartmentName(worker.attributes.department_name || '');
       const other = {} as any;
       Object.keys(worker.attributes).forEach((key: string) => {
-        if (attributeNames.includes(key)) {
+        if (textAttributes.includes(key)) {
           other[key] = worker.attributes[key];
         }
+        if (booleanAttributes.includes(key)) {
+          other[key] = worker.attributes[key] || false;
+        }
       });
-
       setOtherAttributes(other);
     }
   }, [worker]);
@@ -104,7 +117,7 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
             onChangeHandler={handleDeptChange}
             disabled={!editDepartment()}
           />
-          {attributeNames.map((attr) => (
+          {textAttributes.map((attr) => (
             <AttributeCustom
               key={attr}
               label={attr}
@@ -114,6 +127,29 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
           ))}
         </TBody>
       </Table>
+      {booleanAttributes.length > 0 && (
+        <FlexBox>
+          <Box width="100%" backgroundColor="colorBackground" padding="space30" margin="space10">
+            <SwitchGroup name="settings" legend={<Template source={templates.PSWorkerDetailsPermissions} />}>
+              {booleanAttributes.map((attr) => (
+                <Switch
+                  key={attr}
+                  value={attr}
+                  checked={otherAttributes[attr] || false}
+                  onChange={() => {
+                    setChanged(true);
+                    const attributes = { ...otherAttributes, [attr]: !otherAttributes[attr] };
+                    console.log('Updated attributes:', attributes);
+                    setOtherAttributes(attributes);
+                  }}
+                >
+                  {attr}
+                </Switch>
+              ))}
+            </SwitchGroup>
+          </Box>
+        </FlexBox>
+      )}
       <FlexBox hAlignContent="right" margin="space50">
         <Stack orientation="horizontal" spacing="space30">
           <Button variant="primary" id="saveButton" onClick={saveWorkerAttributes} disabled={!changed}>
