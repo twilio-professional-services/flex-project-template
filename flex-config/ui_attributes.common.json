@@ -359,11 +359,8 @@
         "enabled": false,
         "edit_team": true,
         "edit_department": true,
-        "edit_location": true,
-        "edit_manager_name": false,
-        "edit_auto_accept": true,
-        "edit_auto_wrapup": true,
-        "edit_unit_leader": true
+        "text_attributes": [],
+        "boolean_attributes": []
       },
       "datadog_log_integration": {
         "enabled": false,

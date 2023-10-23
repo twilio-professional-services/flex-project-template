@@ -4,7 +4,5 @@
   "PSWorkerDetailsDepartment": "Departamento",
   "PSWorkerDetailsLocation": "Lugar",
   "PSWorkerDetailsManager": "Gerente",
-  "PSWorkerDetailsSchedule": "Horario",
-  "PSWorkerDetailsAutomation": "Automatización",
-  "PSWorkerDetailsPermissions": "Permisos"
+  "PSWorkerDetailsSettings": "Ajustes de Configuración"
 }

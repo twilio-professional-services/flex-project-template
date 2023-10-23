@@ -130,7 +130,7 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
       {booleanAttributes.length > 0 && (
         <FlexBox>
           <Box width="100%" backgroundColor="colorBackground" padding="space30" margin="space10">
-            <SwitchGroup name="settings" legend={<Template source={templates.PSWorkerDetailsPermissions} />}>
+            <SwitchGroup name="settings" legend={<Template source={templates.PSWorkerDetailsSettings} />}>
               {booleanAttributes.map((attr) => (
                 <Switch
                   key={attr}
