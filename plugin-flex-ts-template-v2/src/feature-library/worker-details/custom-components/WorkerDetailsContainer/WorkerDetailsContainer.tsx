@@ -67,14 +67,6 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
     setOtherAttributes(attributes);
   };
 
-  // See the notes in our Flex insights docs
-  // https://www.twilio.com/docs/flex/developer/insights/enhance-integration
-  //    The team_id attribute is required to display team_name.
-  //    The department_id attribute is required to display department_name.
-  //
-  // Because of the above it's easier to simply set team_id/name to the same values
-  // and similarly to set department_id/name to the same values
-
   const saveWorkerAttributes = async () => {
     const workerSid = worker && worker.sid;
     // Only save if worker was selected
@@ -139,7 +131,6 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
                   onChange={() => {
                     setChanged(true);
                     const attributes = { ...otherAttributes, [attr]: !otherAttributes[attr] };
-                    console.log('Updated attributes:', attributes);
                     setOtherAttributes(attributes);
                   }}
                 >
