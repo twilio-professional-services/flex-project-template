@@ -1,5 +1,5 @@
 {
-  "description": "IVR for creating a Flex voice task",
+  "description": "Example flow that checks open hours",
   "states": [
     {
       "name": "Trigger",
@@ -30,32 +30,6 @@
       }
     },
     {
-      "name": "SendCallToAgent",
-      "type": "send-to-flex",
-      "transitions": [
-        {
-          "event": "callComplete"
-        },
-        {
-          "event": "failedToEnqueue"
-        },
-        {
-          "event": "callFailure"
-        }
-      ],
-      "properties": {
-        "waitUrl": "https://${SERVERLESS_DOMAIN}/features/callback-and-voicemail/studio/wait-experience?mode=initialize",
-        "offset": {
-          "x": 570,
-          "y": 600
-        },
-        "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
-        "channel": "${VOICE_CHANNEL_SID}",
-        "attributes": "{ \"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\", \"conversations\": {\"hang_up_by\": \"Customer\"} }",
-        "waitUrlMethod": "POST"
-      }
-    },
-    {
       "name": "check_schedule",
       "type": "run-function",
       "transitions": [
@@ -64,7 +38,7 @@
           "event": "success"
         },
         {
-          "next": "SendCallToAgent",
+          "next": "say_open",
           "event": "fail"
         }
       ],
@@ -94,7 +68,7 @@
           "event": "noMatch"
         },
         {
-          "next": "SendCallToAgent",
+          "next": "say_open",
           "event": "match",
           "conditions": [
             {
@@ -131,6 +105,23 @@
         },
         "loop": 1,
         "say": "{% case widgets.check_schedule.parsed.closedReason  %}\n\n{% when 'manual' %}\n\nWe are currently closed due to unforseen circumstances. Please call back later.\n\n{% when 'holiday' %}\n\nWe are currently closed due to the holiday. Please call back during our normal business hours.\n\n{% else %}\n\nWe are currently closed. Please call back during our normal business hours.\n\n{% endcase %}\n\nThank you for calling and have a great day."
+      }
+    },
+    {
+      "name": "say_open",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 400,
+          "y": 710
+        },
+        "loop": 1,
+        "say": "Ahoy! This is an example open message."
       }
     }
   ],
