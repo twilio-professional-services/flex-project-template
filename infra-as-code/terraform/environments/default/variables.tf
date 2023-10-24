@@ -51,6 +51,8 @@ variable "SERVERLESS_ENV_SID" {
   }
 }
 
+# FEATURE: schedule-manager
+
 variable "SCHEDULE_MANAGER_DOMAIN" {
   type        = string
   description = "schedule manager domain"
@@ -78,15 +80,6 @@ variable "SCHEDULE_MANAGER_ENV_SID" {
   }
 }
 
-variable "FUNCTION_CREATE_CALLBACK" {
-  type        = string
-  description = "create callback function sid"
-  validation {
-    condition     = length(var.FUNCTION_CREATE_CALLBACK) > 2 && substr(var.FUNCTION_CREATE_CALLBACK, 0, 2) == "ZH"
-    error_message = "FUNCTION_CREATE_CALLBACK expected to start with \"ZH\"."
-  }
-}
-
 variable "FUNCTION_CHECK_SCHEDULE_SID" {
   type        = string
   description = "check schedule function sid"
@@ -95,4 +88,19 @@ variable "FUNCTION_CHECK_SCHEDULE_SID" {
     error_message = "FUNCTION_CHECK_SCHEDULE_SID expected to start with \"ZH\"."
   }
 }
+
+# END FEATURE: schedule-manager
+
+# FEATURE: callback-and-voicemail	
+variable "FUNCTION_CREATE_CALLBACK" {
+  type        = string
+  description = "create callback function sid"
+  validation {
+    condition     = length(var.FUNCTION_CREATE_CALLBACK) > 2 && substr(var.FUNCTION_CREATE_CALLBACK, 0, 2) == "ZH"
+    error_message = "FUNCTION_CREATE_CALLBACK expected to start with \"ZH\"."
+  }
+}
+# END FEATURE: callback-and-voicemail	
+
+
 

@@ -1,0 +1,15 @@
+{
+  "PSWithinSL": "Dentro del NS",
+  "PSOther": "Otra",
+  "PSTeamName": "Equipo",
+  "PSTaskSummaryAllTeams": "Todos Equipos",
+  "PSTeamsViewSummaryOther": "Otros",
+  "PSTeamsViewSummaryTotalTasks": "Todas Tareas",
+  "PSTeamsViewSummaryInbound": "Llamadas entrantes",
+  "PSTeamsViewSummaryOutbound": "Llamadas salientes",
+  "PSTeamsViewSummaryTotalAgents": "Agentes totales",
+  "PSStatusIdleLabel": "Inactiva",
+  "PSStatusIdleTooltip": "Inactiva: Disponible sin tareas",
+  "PSStatusBusyLabel": "Ocupada",
+  "PSStatusBusyTooltip": "Ocupada: Disponible con tarea(s)"
+}

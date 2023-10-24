@@ -4,9 +4,13 @@ set -e
 echo "Trying to import Terraform State for $ENVIRONMENT"
 echo "### Job Results "
 
+source ./config.sh
+
+echo "terraform state service name: $tfstate_service_name" >>$GITHUB_STEP_SUMMARY
+
 IFS="|" read -ra tf_state_files <<<"$TF_STATE_FILES"
 
-tfstate_bucket=$(twilio api:serverless:v1:services:fetch --sid tfstate -o json | jq -c '.[].domainBase // empty' | sed 's/"//g')
+tfstate_bucket=$(twilio api:serverless:v1:services:fetch --sid $tfstate_service_name -o json | jq -c '.[].domainBase // empty' | sed 's/"//g')
 
 if [ -n "$tfstate_bucket" ]; then
 	tfstate_bucket_url="$tfstate_bucket.twil.io"
@@ -31,13 +35,15 @@ if [ -n "$tfstate_bucket" ]; then
 			rm -f "$full_item_name"
 			rm -f "$item.enc"
 		done
+		echo "   - :white_check_mark: Existing terraform state file retrieved" >>$GITHUB_STEP_SUMMARY
 	else
 		echo "JOB_FAILED=true" >>"$GITHUB_OUTPUT"
 		echo "$full_link not found" >>"$GITHUB_STEP_SUMMARY"
-		exit 0
+		echo "   - :x: Existing Terrform state identified - but unable to retrieve it - if this is in error try removing the tfstate service on your twilio account" >>$GITHUB_STEP_SUMMARY
+		exit 1
 	fi
 else
-	echo "JOB_FAILED=true" >>"$GITHUB_OUTPUT"
-	exit 0
+	echo "   - :white_check_mark: Unable to identify an existing terraform state - proceeding without" >>$GITHUB_STEP_SUMMARY
 fi
-echo "   - :white_check_mark: Terraform imported" >>$GITHUB_STEP_SUMMARY
+echo "JOB_FAILED=false" >>"$GITHUB_OUTPUT"
+

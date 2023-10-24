@@ -12,6 +12,7 @@ import * as constants from "./common/constants.mjs";
 
 let skipInstallStep = false;
 let overwrite = false;
+let uninstall = false;
 let environment = process.env.ENVIRONMENT;
 let overridePackages = [];
 
@@ -25,6 +26,8 @@ for (let i = 2; i < process.argv.length; i++) {
     overridePackages = process.argv[i].slice(11).split(',');
   } else if (process.argv[i].startsWith('--overwrite')) {
     overwrite = true;
+  } else if (process.argv[i].startsWith('--uninstall')) {
+    uninstall = true;
   }
 }
 
@@ -91,12 +94,12 @@ const execute = async () => {
     saveAppConfig(overwrite);
   }
   
-  if (!skipInstallStep) {
+  if (!skipInstallStep || uninstall) {
     if (!overridePackages.length) {
-      installNpmPackage(getPluginDirs().pluginDir);
+      installNpmPackage(getPluginDirs().pluginDir, skipInstallStep, uninstall);
     }
     for (const path of packages) {
-      installNpmPackage(path);
+      installNpmPackage(path, skipInstallStep, uninstall);
     }
   }
   
