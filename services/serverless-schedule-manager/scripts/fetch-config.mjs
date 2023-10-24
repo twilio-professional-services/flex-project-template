@@ -3,7 +3,7 @@ import { homedir } from 'os';
 
 import axios from 'axios';
 
-import { fetchServerlessDomains, getFetchedVars } from '../../scripts/common/fetch-cli.mjs';
+import { fetchServerlessDomains, getFetchedVars } from '../../../scripts/common/fetch-cli.mjs';
 
 if (!process.argv[2]) {
   throw new Error('Please provide an output path');

@@ -13,7 +13,7 @@ This workflow encapsulates the logic for deploying the entire template. It can b
 1. Sets the `ENVIRONMENT` variable based on the selected environment
 1. Deploys all serverless services
    - As part of this process, the setup script executes in order to generate the environment file used by the deployment. See [serverless configuration](/building/template-utilities/configuration#serverless-configuration) for details on how this works.
-   - Within the serverless package(s), the `npm run deploy-env` command is executed to perform the deployment.
+   - Within the serverless package(s), the `npm run deploy` command is executed to perform the deployment.
 1. Deploys Terraform
    - If the option to deploy Terraform was selected, the [Terraform deploy](#terraform-deploy) workflow is executed to deploy resources using Terraform.
    - If this is the first time the template has been deployed, there is a chicken-egg problem with the serverless and Terraform deployments (Terraform wants the serverless service to exist, but the serverless service wants the dependencies deployed by Terraform to exist). To solve this, when the initial release option is selected, the serverless services are deployed twice: Once before Terraform (in a state where some dependencies are missing), then again after Terraform (once the dependencies have been deployed).

@@ -1,4 +1,5 @@
 import shell from "shelljs";
+import { execFileSync } from "child_process";
 
 import getPackageDirs from "./common/get-packages.mjs";
 
@@ -6,7 +7,7 @@ import getPackageDirs from "./common/get-packages.mjs";
 const packages = getPackageDirs();
 
 // install packages (generate env, install deps, run postinstall)
-shell.exec(`npm run postinstall -- --packages=${packages.join(',')}`);
+execFileSync('npm', [ 'run', 'postinstall', '--', `--packages=${packages.join(',')}` ], { stdio: 'inherit' });
 
 // deploy packages
 for (const pkg of packages) {
