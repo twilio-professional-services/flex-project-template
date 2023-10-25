@@ -39,7 +39,7 @@ const environment = process.argv[3];
 if (environment) {
   // First, attempt to get domain via flex-config
   try {
-    const flexConfig = JSON.parse(await fs.readFile(`../flex-config/ui_attributes.${environment}.json`, 'utf8'));
+    const flexConfig = JSON.parse(await fs.readFile(`../../flex-config/ui_attributes.${environment}.json`, 'utf8'));
     const configDomain = flexConfig?.custom_data?.features?.schedule_manager?.serverless_domain;
 
     if (configDomain && configDomain.includes('twil.io')) {
