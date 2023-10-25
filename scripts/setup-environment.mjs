@@ -10,7 +10,7 @@ import * as constants from "./common/constants.mjs";
 // example usage of all possible options:
 // node scripts/setup-environment.mjs --skip-install --env=dev --packages=serverless-functions,serverless-schedule-manager
 
-let skipAuthStep = false;
+let skipEnvSetup = false;
 let skipInstallStep = false;
 let overwrite = false;
 let uninstall = false;
@@ -29,8 +29,8 @@ for (let i = 2; i < process.argv.length; i++) {
     overwrite = true;
   } else if (process.argv[i].startsWith('--uninstall')) {
     uninstall = true;
-  } else if (process.argv[i].startsWith('--skip-auth')) {
-    skipAuthStep = true;
+  } else if (process.argv[i].startsWith('--skip-env')) {
+    skipEnvSetup = true;
   }
 }
 
@@ -48,9 +48,9 @@ const execute = async () => {
     console.log("");
   }
   
-  const account = skipAuthStep ? {} : await getTwilioAccount();
+  const account = skipEnvSetup ? {} : await getTwilioAccount();
   
-  if (!account && !skipAuthStep) {
+  if (!account && !skipEnvSetup) {
     // No account provided
     outputEnd();
     return;
@@ -73,28 +73,30 @@ const execute = async () => {
     packages = defaultPackages;
   }
   
-  // Fetch and save env files for each package
-  for (const path of packages) {
-    const envFile = `./${path}/.env${environment ? `.${environment}` : ''}`;
-    const exampleFile = `./${path}/.env.example`;
-    let environmentData = await fillReplacements(envFile, exampleFile, account, environment, overwrite);
-    allReplacements = { ...allReplacements, ...environmentData };
-  }
-  
-  if (packages.includes(constants.flexConfigDir)) {
-    // We also need to populate flex-config
-    let configEnv = environment;
-    if (!environment) configEnv = 'local';
+  if (!skipEnvSetup) {
+    // Fetch and save env files for each package
+    for (const path of packages) {
+      const envFile = `./${path}/.env${environment ? `.${environment}` : ''}`;
+      const exampleFile = `./${path}/.env.example`;
+      let environmentData = await fillReplacements(envFile, exampleFile, account, environment, overwrite);
+      allReplacements = { ...allReplacements, ...environmentData };
+    }
     
-    const configFile = `./${constants.flexConfigDir}/ui_attributes.${configEnv}.json`;
-    const exampleFile = `./${constants.flexConfigDir}/ui_attributes.example.json`;
-    let configData = await fillReplacements(configFile, exampleFile, account, configEnv, overwrite);
-    allReplacements = { ...allReplacements, ...configData };
-  }
-  
-  if (!environment) {
-    // When running locally, we need to generate appConfig.js
-    saveAppConfig(overwrite);
+    if (packages.includes(constants.flexConfigDir)) {
+      // We also need to populate flex-config
+      let configEnv = environment;
+      if (!environment) configEnv = 'local';
+      
+      const configFile = `./${constants.flexConfigDir}/ui_attributes.${configEnv}.json`;
+      const exampleFile = `./${constants.flexConfigDir}/ui_attributes.example.json`;
+      let configData = await fillReplacements(configFile, exampleFile, account, configEnv, overwrite);
+      allReplacements = { ...allReplacements, ...configData };
+    }
+    
+    if (!environment) {
+      // When running locally, we need to generate appConfig.js
+      saveAppConfig(overwrite);
+    }
   }
   
   if (!skipInstallStep || uninstall) {
