@@ -7,7 +7,7 @@ import getPackageDirs from "./common/get-packages.mjs";
 const packages = getPackageDirs();
 
 // install packages (generate env, install deps, run postinstall)
-execFileSync('npm', [ 'run', 'postinstall', '--', `--packages=${packages.join(',')}` ], { stdio: 'inherit' });
+execFileSync('npm', [ 'run', 'postinstall', '--', `--packages=${packages.join(',')}` ], { stdio: 'inherit', timeout: 21600000 });
 
 // deploy packages
 for (const pkg of packages) {

@@ -79,8 +79,9 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           npm install --ignore-scripts
+          npm run install-serverless-plugin
           npm run generate-env
-      - name: deploy packages
+      - name: install and deploy packages
         run: |
           echo "### Packages configuration output"  >> $GITHUB_STEP_SUMMARY
           npm run deploy-packages >> $GITHUB_STEP_SUMMARY
@@ -88,7 +89,6 @@ jobs:
         working-directory: serverless-functions
         run: |
           npm install
-          npm run install-serverless-plugin
           npm run deploy
 
   deploy-terraform:
