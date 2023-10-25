@@ -81,6 +81,8 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
     console.log("Merging current configuraton with new configuration...");
     let uiAttributesMerged;
     if (overwrite && overwrite.toLowerCase() === "true") {
+      // when overwriting, clear out the existing custom_data object to remove obsolete values
+      delete uiAttributesCurrent.custom_data;
       uiAttributesMerged = _.merge(uiAttributesCurrent, uiAttributesCommon, uiAttributesOverrides);
     } else {
       uiAttributesMerged = _.merge({}, uiAttributesCommon, uiAttributesOverrides, uiAttributesCurrent);
