@@ -60,9 +60,7 @@ const execute = async () => {
   
   const defaultPackages = [
     constants.serverlessDir,
-    constants.scheduleManagerServerlessDir,
     constants.flexConfigDir,
-    constants.videoAppDir,
     ...getPackageDirs(),
   ];
   let packages = [];

@@ -1,7 +1,7 @@
 import shell from "shelljs";
 import { promises as fs } from 'fs';
 
-import { serverlessSrc, flexConfigDir, gitHubWorkflowDir, scheduleManagerServerlessDir, infraAsCodeDir, terraformDir } from './common/constants.mjs';
+import { serverlessSrc, flexConfigDir, gitHubWorkflowDir, infraAsCodeDir, terraformDir } from './common/constants.mjs';
 import getPluginDirs from "./common/get-plugin.mjs";
 
 const { featureDirectory } = getPluginDirs();
@@ -164,16 +164,16 @@ const performRemovals = async () => {
   
   if (!keepFeatures.includes("schedule-manager")) {
     shell.echo(
-      `Deleting schedule-manager serverless package ${scheduleManagerServerlessDir}...`
+      `Deleting schedule-manager serverless package services/serverless-schedule-manager...`
     );
-    shell.rm("-rf", `${scheduleManagerServerlessDir}`);
+    shell.rm("-rf", `services/serverless-schedule-manager`);
   }
   
   if (!keepFeatures.includes("chat-to-video-escalation")) {
     shell.echo(
-      `Deleting web-app-examples...`
+      `Deleting services/twilio-video-demo-app...`
     );
-    shell.rm("-rf", `web-app-examples`);
+    shell.rm("-rf", `services/twilio-video-demo-app`);
   }
 
   // if we are removing everything we need want to

@@ -135,7 +135,8 @@ jobs:
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo "### Serverless configuration output"  >> $GITHUB_STEP_SUMMARY
           npm install --ignore-scripts
-          npm run postinstall -- --packages=serverless-functions >> $GITHUB_STEP_SUMMARY
+          npm run install-serverless-plugin
+          npm run postinstall -- --packages=flex-config,serverless-functions >> $GITHUB_STEP_SUMMARY
       - name: deploy packages
         run: |
           echo "### Packages configuration output"  >> $GITHUB_STEP_SUMMARY
@@ -143,7 +144,6 @@ jobs:
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
-          npm run install-serverless-plugin
           npm run deploy
 
   deploy-flex-config:
