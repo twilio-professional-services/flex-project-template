@@ -10,7 +10,7 @@ const CallbackOperations = require(Runtime.getFunctions()['features/callback-and
 
 const options = {
   sayOptions: { voice: 'Polly.Joanna' },
-  holdMusicUrl: '/features/callback-and-voicemail/wait-experience-music-30s.mp3',
+  holdMusicUrl: 'http://com.twilio.music.soft-rock.s3.amazonaws.com/_ghost_-_promo_2_sample_pack.mp3',
   messages: {
     initialGreeting: 'Please wait while we direct your call to the next available representative.',
     repeatingPrompt:

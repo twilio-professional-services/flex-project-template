@@ -48,11 +48,11 @@ exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
       'content-type': 'application/x-www-form-urlencoded',
     };
 
-    data = new URLSearchParams({
+    const postData = new URLSearchParams({
       Attributes: JSON.stringify(updatedTaskAttributes),
     });
 
-    task = (await axios.post(taskContextURL, data, config)).data;
+    task = (await axios.post(taskContextURL, postData, config)).data;
 
     return {
       success: true,
