@@ -12,6 +12,7 @@ import * as constants from "./common/constants.mjs";
 
 let skipEnvSetup = false;
 let skipInstallStep = false;
+let skipPluginSetup = false;
 let overwrite = false;
 let uninstall = false;
 let environment = process.env.ENVIRONMENT;
@@ -31,6 +32,8 @@ for (let i = 2; i < process.argv.length; i++) {
     uninstall = true;
   } else if (process.argv[i].startsWith('--skip-env')) {
     skipEnvSetup = true;
+  } else if (process.argv[i].startsWith('--skip-plugin')) {
+    skipPluginSetup = true;
   }
 }
 
@@ -91,14 +94,14 @@ const execute = async () => {
       allReplacements = { ...allReplacements, ...configData };
     }
     
-    if (!environment) {
+    if (!environment && !skipPluginSetup) {
       // When running locally, we need to generate appConfig.js
       saveAppConfig(overwrite);
     }
   }
   
   if (!skipInstallStep || uninstall) {
-    if (!overridePackages.length) {
+    if (!overridePackages.length && !skipPluginSetup) {
       installNpmPackage(getPluginDirs().pluginDir, skipInstallStep, uninstall);
     }
     for (const path of packages) {

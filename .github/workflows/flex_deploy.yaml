@@ -136,7 +136,7 @@ jobs:
           echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
           npm install --ignore-scripts
           npm run install-serverless-plugin
-          npm run postinstall >> $GITHUB_STEP_SUMMARY
+          npm run postinstall -- --skip-plugin >> $GITHUB_STEP_SUMMARY
       - name: deploy packages
         run: |
           npm run deploy-packages
