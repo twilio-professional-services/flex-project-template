@@ -352,9 +352,6 @@
       "sip_support": {
         "enabled": false
       },
-      "worker_canvas_tabs": {
-        "enabled": false
-      },
       "worker_details": {
         "enabled": false,
         "edit_team": true,
