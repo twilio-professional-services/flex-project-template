@@ -10,6 +10,7 @@ import * as constants from "./common/constants.mjs";
 // example usage of all possible options:
 // node scripts/setup-environment.mjs --skip-install --env=dev --packages=serverless-functions,serverless-schedule-manager
 
+let skipAuthStep = false;
 let skipInstallStep = false;
 let overwrite = false;
 let uninstall = false;
@@ -28,6 +29,8 @@ for (let i = 2; i < process.argv.length; i++) {
     overwrite = true;
   } else if (process.argv[i].startsWith('--uninstall')) {
     uninstall = true;
+  } else if (process.argv[i].startsWith('--skip-auth')) {
+    skipAuthStep = true;
   }
 }
 
@@ -45,9 +48,9 @@ const execute = async () => {
     console.log("");
   }
   
-  const account = await getTwilioAccount();
+  const account = skipAuthStep ? {} : await getTwilioAccount();
   
-  if (!account) {
+  if (!account && !skipAuthStep) {
     // No account provided
     outputEnd();
     return;
