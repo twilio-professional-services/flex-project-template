@@ -30,6 +30,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: Install packages
         run: |
           npm install
