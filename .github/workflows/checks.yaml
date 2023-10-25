@@ -33,7 +33,7 @@ jobs:
       - name: Install packages
         run: |
           npm install --ignore-scripts
-          npm run postinstall -- --skip-auth
+          npm run postinstall -- --skip-env
       - name: Run eslint
         run: npm run lint:report
         continue-on-error: true
