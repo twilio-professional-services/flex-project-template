@@ -5,6 +5,26 @@
     }
   },
   "custom_data": {
+    "common": {
+      "log_level": "info",
+      "teams": [
+        "Blue Team",
+        "Red Team",
+        "Gold Team",
+        "VIP Team"
+      ],
+      "departments": [
+        "General Management",
+        "Marketing",
+        "Operations",
+        "Finance",
+        "Sales",
+        "Human Resources",
+        "Purchasing",
+        "Customer Service",
+        "Recruiting"
+      ]
+    },
     "features": {
       "activity_skill_filter": {
         "enabled": true,
@@ -56,9 +76,11 @@
       },
       "enhanced_crm_container": {
         "enabled": true,
-        "url": "https://www.bing.com/search?q={{task.from}}",
-        "should_display_url_when_no_tasks": false,
-        "display_url_when_no_tasks": "https://www.bing.com"
+        "url": "{{serverless.url}}/features/enhanced-crm-container/index.html?line1={{task.from}}&line2={{task.direction}}",
+        "should_display_url_when_no_tasks": true,
+        "display_url_when_no_tasks": "{{serverless.url}}/features/enhanced-crm-container/index.html",
+        "enable_url_tab": true,
+        "url_tab_title": "Web Page"
       },
       "internal_call": {
         "enabled": true
@@ -113,29 +135,7 @@
           "queue_worker_data": false,
           "team": true,
           "agent_skills": true
-        },
-        "department_options": [
-          "General Management",
-          "Marketing",
-          "Operations",
-          "Finance",
-          "Sales",
-          "Human Resources",
-          "Purchasing",
-          "Customer Service",
-          "Recruiting"
-        ],
-        "team_options": [
-          "Blue Team",
-          "Red Team",
-          "Gold Team",
-          "VIP Team",
-          "Orange Team",
-          "Yellow Team",
-          "Green Team",
-          "Purple Team",
-          "Gray Team"
-        ]
+        }
       },
       "supervisor_capacity": {
         "enabled": true
@@ -218,20 +218,11 @@
         "enabled": true,
         "enable_notes": true,
         "require_disposition": false,
-        "global_dispositions": [
-          "Resolved",
-          "Not Resolved",
-          "Follow-up Required",
-          "Escalation",
-          "Wrong Department"
-        ],
+        "global_dispositions": ["Resolved", "Not Resolved", "Follow-up Required", "Escalation", "Wrong Department"],
         "per_queue": {
           "exampleQueueSid": {
             "require_disposition": true,
-            "dispositions": [
-              "Promotional Sale",
-              "Renewal"
-            ]
+            "dispositions": ["Promotional Sale", "Renewal"]
           }
         }
       },
@@ -266,37 +257,52 @@
           "agent_skills": true
         }
       },
-      "queues_view_data_tiles": {
+      "send_audio_rec_file": {
+        "enabled": true
+      },
+      "metrics_data_tiles": {
         "enabled": false,
-        "activeTasksDataTile": false,
-        "waitingTasksDataTile": false,
-        "longestWaitTimeDataTile": false,
-        "agentsByActivityBarChart": true,
+        "queues_view_tiles": {
+          "active_tasks_data_tile": false,
+          "waiting_tasks_data_tile": false,
+          "longest_wait_time_data_tile": false,
+          "agents_by_activity_bar_chart": true,
+          "all_channels_data_tile": false,
+          "enhanced_agent_by_activity_pie_chart": false
+        },
+        "teams_view_tiles": {
+          "task_summary_tile": false,
+          "team_activity_tile": false,
+          "status_idle_color": "limegreen",
+          "status_busy_color": "royalblue"
+        },
         "channels": {
-          "voice": {
+          "Voice": {
             "color": "#ADD8E6",
-            "SLADataTile": true,
-            "taskCountsDataTile": true
+            "SLA_data_tile": true,
+            "task_counts_data_tile": true,
+            "teams_task_summary": true
           },
-          "chat": {
+          "Chat": {
             "color": "#87CEFA",
-            "SLADataTile": false,
-            "taskCountsDataTile": false
+            "SLA_data_tile": true,
+            "task_counts_data_tile": true,
+            "teams_task_summary": true
           },
-          "sms": {
+          "SMS": {
             "color": "#59cef8",
-            "SLADataTile": true,
-            "taskCountsDataTile": true
+            "SLA_data_tile": false,
+            "task_counts_data_tile": false,
+            "teams_task_summary": true
           },
-          "video": {
+          "Video": {
             "color": "#00CED1",
-            "SLADataTile": false,
-            "taskCountsDataTile": false
+            "SLA_data_tile": false,
+            "task_counts_data_tile": false,
+            "teams_task_summary": false
           }
         },
-        "allChannelsDataTile": false,
-        "enhancedAgentByActivityPieChart": false,
-        "agentActivityConfiguration": {
+        "agent_activity_configuration": {
           "activities": {
             "Available": {
               "color": "green",
@@ -327,11 +333,22 @@
             "color": "darkred",
             "icon": "More"
           }
-        },
-        "queuesStatsColumns": {
-          "assignedTasksColumn": true,
-          "wrappingTasksColumn": true
         }
+      },
+      "queues_stats_metrics": {
+        "enabled": false,
+        "assigned_tasks_column": true,
+        "wrapping_tasks_column": true
+      },
+      "sip_support": {
+        "enabled": false
+      },
+      "datadog_log_integration": {
+        "enabled": false,
+        "log_level": "info",
+        "api_key": "",
+        "intake_region": "",
+        "flush_timeout": 5000
       }
     }
   }

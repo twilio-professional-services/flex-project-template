@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Actions, Template, templates } from '@twilio/flex-ui';
-import { Flex, MenuButton, MenuGroup, useMenuState, Menu, MenuItem, AlertDialog } from '@twilio-paste/core';
+import { MenuButton, MenuGroup, useMenuState, Menu, MenuItem } from '@twilio-paste/core/menu';
+import { AlertDialog } from '@twilio-paste/core/alert-dialog';
+import { Flex } from '@twilio-paste/core/flex';
 import { TranslationIcon } from '@twilio-paste/icons/esm/TranslationIcon';
 
 import languages from '../../languages';

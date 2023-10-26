@@ -10,6 +10,8 @@ import * as constants from "./common/constants.mjs";
 // node scripts/setup-environment.mjs --skip-install --env=dev --packages=serverless-functions,serverless-schedule-manager
 
 let skipInstallStep = false;
+let overwrite = false;
+let uninstall = false;
 let environment = process.env.ENVIRONMENT;
 let overridePackages = [];
 
@@ -21,6 +23,10 @@ for (let i = 2; i < process.argv.length; i++) {
     environment = process.argv[i].slice(6);
   } else if (process.argv[i].startsWith('--packages=')) {
     overridePackages = process.argv[i].slice(11).split(',');
+  } else if (process.argv[i].startsWith('--overwrite')) {
+    overwrite = true;
+  } else if (process.argv[i].startsWith('--uninstall')) {
+    uninstall = true;
   }
 }
 
@@ -66,27 +72,32 @@ const execute = async () => {
   for (const path of packages) {
     const envFile = `./${path}/.env${environment ? `.${environment}` : ''}`;
     const exampleFile = `./${path}/.env.example`;
-    let environmentData = await fillReplacements(envFile, exampleFile, account, environment);
+    let environmentData = await fillReplacements(envFile, exampleFile, account, environment, overwrite);
     allReplacements = { ...allReplacements, ...environmentData };
   }
   
-  if (environment && packages.includes(constants.flexConfigDir)) {
-    // When running for a specific environment, we need to populate flex-config
-    const configFile = `./${constants.flexConfigDir}/ui_attributes.${environment}.json`;
+  if (packages.includes(constants.flexConfigDir)) {
+    // We also need to populate flex-config
+    let configEnv = environment;
+    if (!environment) configEnv = 'local';
+    
+    const configFile = `./${constants.flexConfigDir}/ui_attributes.${configEnv}.json`;
     const exampleFile = `./${constants.flexConfigDir}/ui_attributes.example.json`;
-    let configData = await fillReplacements(configFile, exampleFile, account, environment);
+    let configData = await fillReplacements(configFile, exampleFile, account, configEnv, overwrite);
     allReplacements = { ...allReplacements, ...configData };
-  } else if (!environment) {
-    // When running locally, we need to generate appConfig.js
-    saveAppConfig();
   }
   
-  if (!skipInstallStep) {
+  if (!environment) {
+    // When running locally, we need to generate appConfig.js
+    saveAppConfig(overwrite);
+  }
+  
+  if (!skipInstallStep || uninstall) {
     if (!overridePackages.length) {
-      installNpmPackage(getPluginDirs().pluginDir);
+      installNpmPackage(getPluginDirs().pluginDir, skipInstallStep, uninstall);
     }
     for (const path of packages) {
-      installNpmPackage(path);
+      installNpmPackage(path, skipInstallStep, uninstall);
     }
   }
   

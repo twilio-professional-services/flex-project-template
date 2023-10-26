@@ -16,7 +16,7 @@
     "@twilio/runtime-handler": "1.3.0",
     "axios": "^1.4.0",
     "lodash": "^4.17.21",
-    "randomstring": "^1.2.2",
+    "randomstring": "^1.3.0",
     "twilio": "^4.11.0",
     "twilio-flex-token-validator": "^1.5.6"
   },

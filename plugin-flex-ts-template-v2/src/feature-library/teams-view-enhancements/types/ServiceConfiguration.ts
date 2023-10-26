@@ -9,5 +9,6 @@ export default interface TeamsViewEnhancementsConfig {
     department: boolean;
     location: boolean;
     agent_skills: boolean;
+    capacity: boolean;
   };
 }

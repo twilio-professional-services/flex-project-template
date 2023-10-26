@@ -5,7 +5,7 @@ import shell from 'shelljs';
 import getPluginDirs from "./get-plugin.mjs";
 import { flexConfigDir } from "./constants.mjs";
 
-export default async () => {
+export default async (overwrite) => {
   var { pluginDir } = getPluginDirs();
 
   var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`;
@@ -17,7 +17,7 @@ export default async () => {
   }
 
   try {
-    if (shell.test('-e', pluginAppConfig)) {
+    if (!overwrite && shell.test('-e', pluginAppConfig)) {
       return;
     }
     
@@ -33,7 +33,8 @@ export default async () => {
     // disable admin panel for local
     flexConfigJsonData.custom_data.features.admin_ui.enabled = false
     
-    appConfigFileData = appConfigFileData.replace("features: { }", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
+    appConfigFileData = appConfigFileData.replace("common: {}", `common: ${JSON5.stringify(flexConfigJsonData.custom_data.common, null, 2)}`);
+    appConfigFileData = appConfigFileData.replace("features: {}", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
     
     await fs.writeFile(pluginAppConfig, appConfigFileData, 'utf8');
   } catch (error) {

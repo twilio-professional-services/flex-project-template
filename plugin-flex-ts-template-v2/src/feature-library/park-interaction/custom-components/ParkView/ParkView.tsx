@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box } from '@twilio-paste/core';
+import { Box } from '@twilio-paste/core/box';
 import { Manager, templates } from '@twilio/flex-ui';
 import { Heading } from '@twilio-paste/core/heading';
 
@@ -59,9 +59,16 @@ const ParkView = () => {
           parkingDate = mapItem.item.dateUpdated;
         }
 
+        // Use TaskRouter channel name as the main descriptor (e.g. "Chat"), and if channelType is set too - append that for
+        // better identify types of interaction (e.g. "Chat (Messenger)")
+        let channelDisplayText = `${data.taskChannelUniqueName[0].toUpperCase()}${data.taskChannelUniqueName.slice(1)}`;
+        if (data.channelType && data.channelType !== data.taskChannelUniqueName) {
+          channelDisplayText += ` (${data.channelType[0].toUpperCase()}${data.channelType.slice(1)})`;
+        }
+
         return {
           key: mapItem.item.descriptor.key,
-          channel: `${data.taskChannelUniqueName[0].toUpperCase()}${data.taskChannelUniqueName.slice(1)}`,
+          channel: channelDisplayText,
           address: data.taskAttributes.customers?.phone || data.taskAttributes.customers?.email,
           customerName: data.taskAttributes?.from,
           parkingDate,

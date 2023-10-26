@@ -1,6 +1,12 @@
 import { Dispatch, SetStateAction, useState, useEffect, useCallback } from 'react';
 import { Template, templates } from '@twilio/flex-ui';
-import { Button, Heading, Stack, Card, Paragraph, Switch, TabPrimitiveInitialState } from '@twilio-paste/core';
+import { Button } from '@twilio-paste/core/button';
+import { Card } from '@twilio-paste/core/card';
+import { Heading } from '@twilio-paste/core/heading';
+import { Paragraph } from '@twilio-paste/core/paragraph';
+import { Stack } from '@twilio-paste/core/stack';
+import { Switch } from '@twilio-paste/core/switch';
+import { TabPrimitiveInitialState } from '@twilio-paste/core/tabs-primitive';
 import { useToaster, Toaster } from '@twilio-paste/core/toast';
 
 import { StringTemplates } from '../../../flex-hooks/strings';

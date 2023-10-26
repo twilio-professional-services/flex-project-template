@@ -10,44 +10,42 @@ const {
 } = (getFeatureFlags()?.features?.teams_view_enhancements as TeamsViewEnhancementsConfig) || {};
 
 const {
-  team = false,
+  team = true,
   department = false,
   location = false,
   agent_skills = true,
 } = getFeatureFlags().features?.teams_view_enhancements?.columns || {};
 
+const { teams = [] } = getFeatureFlags().common || {};
+
 export const isFeatureEnabled = () => {
   return enabled;
 };
-
 export const isTeamColumnEnabled = () => {
   return enabled && team;
 };
-
 export const isDepartmentColumnEnabled = () => {
   return enabled && department;
 };
-
 export const isLocationColumnEnabled = () => {
   return enabled && location;
 };
-
 export const isAgentSkillsColumnEnabled = () => {
   return enabled && agent_skills;
 };
-
 export const isHTHighlightEnabled = () => {
   return enabled && highlight_handle_time;
 };
-
 export const getHTWarningThreshold = () => {
   return handle_time_warning_threshold;
 };
-
 export const getHTExceededThreshold = () => {
   return handle_time_exceeded_threshold;
 };
-
 export const isDisplayTaskQueueNameEnabled = () => {
   return enabled && display_task_queue_name;
+};
+
+export const getTeams = () => {
+  return teams;
 };

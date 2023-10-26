@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 
 import CannedResponsesCRM from '../../custom-components/CannedResponsesCRM';
 import { FlexComponent } from '../../../../types/feature-loader';
-import { getUILocation } from '../../config';
+import { getUILocation, isEnhancedCRMEnabled } from '../../config';
 
 export const componentName = FlexComponent.CRMContainer;
 export const componentHook = function addCannedResponsesCRMContainer(flex: typeof Flex, _manager: Flex.Manager) {
@@ -22,7 +22,7 @@ export const componentHook = function addCannedResponsesCRMContainer(flex: typeo
     },
     sortOrder: -1,
   };
-  if (getUILocation() === 'CRM') {
+  if (getUILocation() === 'CRM' && !isEnhancedCRMEnabled()) {
     flex.CRMContainer.Content.replace(<CannedResponsesCRM key="canned-responses-crm-container" />, options);
   }
 };

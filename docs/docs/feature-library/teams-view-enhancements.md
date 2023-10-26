@@ -10,11 +10,18 @@ The Teams View can be modified by adding and removing columns in the [WorkersDat
 
 # How does it work?
 
+### Add Columns with Worker Attributes
 The workers skills array can be re-formatted and shown in an additional column in the WorksDataTable of the Teams View.  This gives Supervisors a quicker way to review worker skills. Additionally, extra columns can be added to display worker attributes such as `team_name`, `department_name`, `location` or other custom attributes. It is highly recommended to configure these worker attributes via [Flex SSO](https://www.twilio.com/docs/flex/admin-guide/setup/sso-configuration#flex-insights)
 
+### Highlight Tasks
 We can highlight tasks that have a long handle time by adding a colored border around the Task Card based on the task age. For example, if the task is older than 3 minutes (180 seconds) we can show a yellow border. And if the task age exceeds 5 minutes (300 seconds) we can show red border. This task highlighting may assist supervisors with observing how agents are performing, or if they are having challenges completing tasks within expected handling time ranges.  
 
 By default, the [SupervisorTaskCardHeader template string](https://www.twilio.com/docs/flex/developer/ui/v1/localization-and-templating#list-of-available-content-strings) displays the `{{task.defaultFrom}}` value which can be either the caller's phone number or the chat customer's name (identity).  This specific task detail may not be useful for Supervisors so we could change that template string to `{{task.queueName}}` to be able to see which queues the agent is working in. 
+
+### Teams View Data Tiles
+The Worker and Task data available in Redux for the Teams View can be aggregated by `team_name` attribute (if populated for all workers) and summarized in "Data Tiles" at the top of the page, similar to the Queues View.
+
+These custom Teams View data tiles are part of the combined [Metrics Data Tiles feature](metrics-data-tiles.md) since many of the configuration settings are shared with the Queues View Data Tiles.
 
 # Setup
 
@@ -26,8 +33,12 @@ To enable TaskCard highlighting based on the task age, set `highlight_handle_tim
 
 To display the Task's Queue Name instead of the customer's phone number (or name), set the `display_task_queue_name: true`.
 
+You can also enable the Task Summary tile to show a breakdown of the active tasks counts by Channel and Team. Select which channels to display by setting `taskCount: true`.  When enabling the Team Activity data tile, also configure the activity names to match the TaskRouter Activities in your workspace.
+
+Note: The Teams View can only display up to 200 agents, so the worker data available for aggregation is limited to this data set.
+
 ```json
-  "teams_view_enhancements": {
+    "teams_view_enhancements": {
       "enabled": true,
       "highlight_handle_time": true,
       "handle_time_warning_threshold": 180,
@@ -37,7 +48,7 @@ To display the Task's Queue Name instead of the customer's phone number (or name
         "team": true,
         "department": false,
         "location": false,
-        "agent_skills": true
+        "agent_skills": true,
       }
     }
 ```
@@ -47,3 +58,4 @@ To display the Task's Queue Name instead of the customer's phone number (or name
 ![TeamsViewColumns](/img/features/teams-view-enhancements/teams-view-columns.png)
 
 ![TeamsViewTaskHighlight](/img/features/teams-view-enhancements/TeamsViewTaskHighlight.png)
+

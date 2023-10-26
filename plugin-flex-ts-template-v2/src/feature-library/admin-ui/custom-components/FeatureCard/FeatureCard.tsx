@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { Manager, Template, templates } from '@twilio/flex-ui';
-import { Heading, Flex, Box, Stack, Card, Switch, Button, Anchor } from '@twilio-paste/core';
+import { Heading } from '@twilio-paste/core/heading';
+import { Box } from '@twilio-paste/core/box';
+import { Flex } from '@twilio-paste/core/flex';
+import { Anchor } from '@twilio-paste/core/anchor';
+import { Stack } from '@twilio-paste/core/stack';
+import { Switch } from '@twilio-paste/core/switch';
+import { Button } from '@twilio-paste/core/button';
+import { Card } from '@twilio-paste/core/card';
 import { SkipBackIcon } from '@twilio-paste/icons/esm/SkipBackIcon';
 import { ProductSettingsIcon } from '@twilio-paste/icons/esm/ProductSettingsIcon';
 

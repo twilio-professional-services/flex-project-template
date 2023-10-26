@@ -1,3 +1,5 @@
+# FEATURE: remove-all
+
 resource "twilio_taskrouter_workspaces_task_queues_v1" "everyone" {
   workspace_sid  = twilio_taskrouter_workspaces_v1.flex.sid
   friendly_name  = "Everyone"
@@ -22,6 +24,9 @@ resource "twilio_taskrouter_workspaces_task_queues_v1" "template_example_support
   task_order = "FIFO"
 }
 
+# END FEATURE: remove-all
+
+# FEATURE: internal-call
 resource "twilio_taskrouter_workspaces_task_queues_v1" "internal_calls" {
   workspace_sid  = twilio_taskrouter_workspaces_v1.flex.sid
   friendly_name  = "Internal Calls"
@@ -29,3 +34,4 @@ resource "twilio_taskrouter_workspaces_task_queues_v1" "internal_calls" {
   max_reserved_workers = 1
   task_order = "FIFO"
 }
+# END FEATURE: internal-call
