@@ -6,10 +6,7 @@ import * as fetchCli from "./fetch-cli.mjs";
 
 // Initialize env file if necessary, then parse its contents
 const readEnv = async (envFile, exampleFile, overwrite) => {
-  if (!shell.test('-e', exampleFile) && !shell.test('-e', envFile)) {
-    // nothing exists!
-    return null;
-  } else if (overwrite || !shell.test('-e', envFile)) {
+  if (overwrite || !shell.test('-e', envFile)) {
     // create env file based on example
     shell.cp(exampleFile, envFile);
     
@@ -135,6 +132,12 @@ const saveReplacements = async (data, path) => {
 
 export default async (path, examplePath, account, environment, overwrite) => {
   console.log(`Setting up ${path}...`);
+  
+  // Check if this package uses environment files
+  if (!shell.test('-e', examplePath) && !shell.test('-e', path)) {
+    // No environment files, no need to continue
+    return null;
+  }
   
   // Initialize the env vars
   let envVars = await readEnv(path, examplePath, overwrite);

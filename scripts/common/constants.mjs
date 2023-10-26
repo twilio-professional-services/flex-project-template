@@ -6,7 +6,6 @@ import { fileURLToPath } from 'url';
 export const serverlessDir = 'serverless-functions';
 export const serverlessSrc = `${serverlessDir}/src`;
 export const flexConfigDir = 'flex-config';
-export const gitHubWorkflowDir = '.github/workflows';
 export const defaultPluginDir = 'plugin-flex-ts-template-v2';
 export const packagesDir = 'services';
 export const cliConfigPath = path.resolve(os.homedir(), '.twilio-cli/config.json');

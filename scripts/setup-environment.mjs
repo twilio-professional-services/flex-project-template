@@ -7,12 +7,12 @@ import printReplacements from "./common/print-replacements.mjs";
 import saveAppConfig from "./common/save-appconfig.mjs";
 import * as constants from "./common/constants.mjs";
 
-// example usage of all possible options:
+// example usage of options:
 // node scripts/setup-environment.mjs --skip-install --env=dev --packages=serverless-functions,serverless-schedule-manager
 
 let skipEnvSetup = false;
 let skipInstallStep = false;
-let skipPluginSetup = false;
+let skipPlugin = false;
 let overwrite = false;
 let uninstall = false;
 let environment = process.env.ENVIRONMENT;
@@ -33,7 +33,7 @@ for (let i = 2; i < process.argv.length; i++) {
   } else if (process.argv[i].startsWith('--skip-env')) {
     skipEnvSetup = true;
   } else if (process.argv[i].startsWith('--skip-plugin')) {
-    skipPluginSetup = true;
+    skipPlugin = true;
   }
 }
 
@@ -71,6 +71,9 @@ const execute = async () => {
   if (overridePackages.length) {
     packages = overridePackages;
   } else {
+    if (!skipPlugin) {
+      defaultPackages.push(getPluginDirs().pluginDir);
+    }
     packages = defaultPackages;
   }
   
@@ -94,16 +97,13 @@ const execute = async () => {
       allReplacements = { ...allReplacements, ...configData };
     }
     
-    if (!environment && !skipPluginSetup) {
-      // When running locally, we need to generate appConfig.js
+    if (!environment && !skipPlugin) {
+      // When running locally, we need to generate appConfig.js for the plugin
       saveAppConfig(overwrite);
     }
   }
   
   if (!skipInstallStep || uninstall) {
-    if (!overridePackages.length && !skipPluginSetup) {
-      installNpmPackage(getPluginDirs().pluginDir, skipInstallStep, uninstall);
-    }
     for (const path of packages) {
       installNpmPackage(path, skipInstallStep, uninstall);
     }
