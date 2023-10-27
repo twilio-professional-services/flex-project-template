@@ -221,7 +221,8 @@ export const fetchTrWorkflows = (workspaceSid) => {
   // if the workflow was requested, save it in the cache
   for (const workflow of workflows) {
     for (const wanted in wantedWorkflows) {
-      if (isMatch(wantedWorkflows[wanted].name, workflow.friendlyName, true) || isMatch(wantedWorkflows[wanted].fallback, workflow.friendlyName, true)) {
+      // only match the fallback if the specified name is not already found
+      if (isMatch(wantedWorkflows[wanted].name, workflow.friendlyName, true) || (!resultCache[wanted] && isMatch(wantedWorkflows[wanted].fallback, workflow.friendlyName, true))) {
         resultCache[wanted] = workflow.sid;
       }
     }
