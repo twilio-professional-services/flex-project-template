@@ -8,7 +8,7 @@
     "add-feature": "node scripts/add-feature.mjs",
     "remove-features": "node scripts/remove-features.mjs",
     "rename-template": "node scripts/rename-template.mjs",
-    "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v2",
+    "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v3",
     "start:serverless": "cd serverless-functions && twilio serverless:start --inspect=localhost --port=3001 --env .env",
     "start:plugin": "cd plugin-flex-ts-template-v2 && twilio flex:plugins:start --port=3000",
     "start": "npm-run-all --parallel start:serverless start:plugin",
