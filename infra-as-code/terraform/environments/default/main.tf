@@ -46,11 +46,11 @@ module "studio" {
   schedule_manager_domain = var.SCHEDULE_MANAGER_DOMAIN
   schedule_manager_sid = var.SCHEDULE_MANAGER_SID
   schedule_manager_env_sid = var.SCHEDULE_MANAGER_ENV_SID
-  function_check_schedule_sid = var.FUNCTION_CHECK_SCHEDULE_SID
+  function_check_schedule_sid = var.SCHEDULE_MANAGER_CHECK_FUNCTION_SID
 # END FEATURE: schedule-manager
 
 # FEATURE: callback-and-voicemail
-  function_create_callback = var.FUNCTION_CREATE_CALLBACK
+  function_create_callback = var.SERVERLESS_CALLBACK_FUNCTION_SID
 # END FEATURE: callback-and-voicemail 
 
 }

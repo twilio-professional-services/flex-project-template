@@ -7,7 +7,6 @@
     "start": "twilio serverless:start",
     "deploy": "twilio serverless:deploy --override-existing-project",
     "deploy-env": "npm run deploy -- --env \".env.$ENVIRONMENT\"",
-    "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v3",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "lint:report": "npm run lint -- --output-file eslint_report.json --format json"

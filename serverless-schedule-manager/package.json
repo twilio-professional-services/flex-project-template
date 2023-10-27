@@ -7,7 +7,6 @@
     "start": "twilio serverless:start",
     "deploy": "npm run fetch-config && twilio serverless:deploy --override-existing-project",
     "deploy-env": "npm run deploy -- --env \".env.$ENVIRONMENT\"",
-    "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v3",
     "fetch-config": "node scripts/fetch-config.mjs assets/config.private.json $ENVIRONMENT",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",

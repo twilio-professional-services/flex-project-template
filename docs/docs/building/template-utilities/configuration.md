@@ -168,10 +168,11 @@ If the value is not found in the environment variables, the `scripts/config/mapp
 ```json title=mappings.json
 {
   "VARIABLE_NAME_HERE": {
-    "type": "tr-workflow", // Type of Twilio resource to fetch the value of: serverless-domain, tr-workspace, tr-workflow, chat-service, or sync-service
+    "type": "tr-workflow", // Type of Twilio resource to fetch the value of: serverless-domain, serverless-service, serverless-environment, serverless-function, tr-workspace, tr-workflow, chat-service, or sync-service
     "name": "My Workflow", // Name of resource to find
     "localValue": "My Other Workflow", // Optionally override the name property with a different one when running locally
-    "fallback": "/(Assign.*Anyone)/" // Optionally define a fallback in case the defined name is not found. Note that this regex format is allowed in any of these properties except 'type'.
+    "fallback": "/(Assign.*Anyone)/", // Optionally define a fallback in case the defined name is not found. Note that this regex format is allowed in any of these properties except 'type'.
+    "parent": "PARENT_VARIABLE_NAME_HERE" // Required for serverless-environment, serverless-function, and tr-workflow types. Indicates the variable representing this item's parent object (of type serverless-service or tr-workspace, depending on this item's type).
   }
 }
 ```
@@ -236,6 +237,13 @@ npm run postinstall -- --uninstall
 
 This will remove `node_modules` and `package-lock.json` within each package before dependencies are installed (unless `--skip-install` is also specified, in which case dependencies would be removed but not reinstalled).
 
+### skip-packages
+This will cause the script to not process any packages (the default set or any provided via `--packages=`). This means that no environment files or installations will be performed. This is convenient to use in conjunction with the `--files=` parameter when you are using the script to process files outside or independent of a package.
+
+```bash
+npm run postinstall -- --skip-packages
+```
+
 ### env
 By default, the script will assume you are running locally and not deploying to a specific environment. When running in CI, the `ENVIRONMENT` env var is set, which the script uses to determine the environment being deployed. However, you can override this behavior by specifying an environment manually as follows:
 
@@ -255,4 +263,15 @@ However, you can specify the relative path to any npm package(s) for the script 
 
 ```bash
 npm run postinstall -- --packages=flex-config,serverless-schedule-manager
+```
+
+This is ignored if the `--skip-packages` parameter is also specified.
+
+### files
+In most cases, the setup script is used for processing packages. However, you may wish to populate variables within individual files outside or independent of a package. To do so, provide the path of the "example" file containing placeholders. The script will create a copy of the file with the placeholders filled, and the `example` in the filename replaced with the current environment (if none is specified, `local` is used).
+
+You can provide a comma-separated list of files as follows:
+
+```bash
+npm run postinstall -- --files=test/config.example.json,terraform/example.tfvars
 ```

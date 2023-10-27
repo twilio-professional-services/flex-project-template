@@ -98,6 +98,25 @@ export default (allReplacements) => {
   }
   printHeader = true;
   for (const key in allReplacements) {
+    if (!varNameMapping[key] || !(
+      varNameMapping[key].type == "serverless-service" ||
+      varNameMapping[key].type == "serverless-environment" ||
+      varNameMapping[key].type == "serverless-function"
+    )) {
+      continue;
+    }
+    
+    if (printHeader) {
+      console.log("");
+      console.log("---- SERVERLESS SIDS ---------------------------------------");
+      printHeader = false;
+    }
+    
+    printLine(key, allReplacements[key]);
+    alreadyOutput.push(key);
+  }
+  printHeader = true;
+  for (const key in allReplacements) {
     if (alreadyOutput.includes(key) || ignoreKeys.includes(key)) {
       continue;
     }
