@@ -10,7 +10,7 @@ terraform {
 resource "twilio_taskrouter_workspaces_activities_v1" "on_a_task" {
   workspace_sid = var.workspace_sid
   friendly_name = "On a Task"
-  available     = false
+  available     = true
 }
 
 resource "twilio_taskrouter_workspaces_activities_v1" "on_a_task_no_acd" {
@@ -22,7 +22,7 @@ resource "twilio_taskrouter_workspaces_activities_v1" "on_a_task_no_acd" {
 resource "twilio_taskrouter_workspaces_activities_v1" "wrap_up" {
   workspace_sid = var.workspace_sid
   friendly_name = "Wrap Up"
-  available     = false
+  available     = true
 }
 
 resource "twilio_taskrouter_workspaces_activities_v1" "wrap_up_no_acd" {

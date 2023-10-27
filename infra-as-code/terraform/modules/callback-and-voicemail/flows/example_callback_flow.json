@@ -49,7 +49,7 @@
           "x": 40,
           "y": 170
         },
-        "workflow": "${WORKFLOW_SID_ASSIGN_TO_ANYONE}",
+        "workflow": "${WORKFLOW_SID}",
         "channel": "${VOICE_CHANNEL_SID}",
         "attributes": "{ \"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\", \"conversations\": {\"hang_up_by\": \"Customer\"} }",
         "waitUrlMethod": "POST"

@@ -6,9 +6,9 @@ output "workspace_sid" {
 }
 
 # FEATURE: remove-all
-output "assign_to_anyone_workflow_sid" {
-  value = twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone.sid
-  description = "Assign to anyone workflow SID"
+output "template_example_workflow_sid" {
+  value = twilio_taskrouter_workspaces_workflows_v1.template_example.sid
+  description = "Template example workflow SID"
 }
 # END FEATURE: remove-all
 

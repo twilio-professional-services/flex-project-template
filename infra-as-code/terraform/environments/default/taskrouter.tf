@@ -33,11 +33,10 @@ resource "twilio_taskrouter_workspaces_task_queues_v1" "template_example_support
   task_order = "FIFO"
 }
 
-# Should we rename this so we have our own separate workflow?
-resource "twilio_taskrouter_workspaces_workflows_v1" "assign_to_anyone" {
+resource "twilio_taskrouter_workspaces_workflows_v1" "template_example" {
   workspace_sid = twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
-  friendly_name = "Assign to Anyone"
-  configuration = templatefile("workflows/assign_to_anyone.json", {
+  friendly_name = "Template Example"
+  configuration = templatefile("workflows/template_example.json", {
     "QUEUE_SID_EVERYONE" = twilio_taskrouter_workspaces_task_queues_v1.everyone.sid
     "QUEUE_SID_TEMPLATE_EXAMPLE_SALES" = twilio_taskrouter_workspaces_task_queues_v1.template_example_sales.sid
     "QUEUE_SID_TEMPLATE_EXAMPLE_SUPPORT" = twilio_taskrouter_workspaces_task_queues_v1.template_example_support.sid

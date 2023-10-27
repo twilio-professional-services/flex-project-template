@@ -37,13 +37,13 @@ importInternalState() {
 	echo " - Discovering and importing existing Twilio state for known definitions into a new terraform state file" >>$GITHUB_STEP_SUMMARY
 	workspaces=$(npx twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
 	TF_WORKSPACE_SID=$(get_value_from_json "$workspaces" "friendlyName" "Flex Task Assignment" "sid")
-	import_resource "$workspaces" "Flex Task Assignment" "module.taskrouter.twilio_taskrouter_workspaces_v1.flex" "friendlyName" false
+	import_resource "$workspaces" "Flex Task Assignment" "module.taskrouter.twilio_taskrouter_workspaces_v1.flex_task_assignment" "friendlyName" false
 	echo "   - :white_check_mark: Task Router - Workspaces" >>$GITHUB_STEP_SUMMARY
 
 	workflows=$(npx twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json | jq 'map(del(.configuration))')
 
 # FEATURE: remove-all
-	import_resource "$workflows" "Assign to Anyone" "module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone" "friendlyName"
+	import_resource "$workflows" "Template Example" "module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.template_example" "friendlyName"
 # END FEATURE: remove-all
 
 # FEATURE: conversation-transfer
@@ -75,15 +75,9 @@ importInternalState() {
 
 	channels=$(npx twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 	import_resource "$channels" "voice" "module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.voice" "uniqueName"
-	import_resource "$channels" "chat" "module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.chat" "uniqueName"
 	echo "   - :white_check_mark: Task Router - Channels" >>$GITHUB_STEP_SUMMARY
 
 	activities=$(npx twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
-	import_resource "$activities" "Offline" "module.taskrouter.twilio_taskrouter_workspaces_activities_v1.offline" "friendlyName"
-	import_resource "$activities" "Available" "module.taskrouter.twilio_taskrouter_workspaces_activities_v1.available" "friendlyName"
-	import_resource "$activities" "Unavailable" "module.taskrouter.twilio_taskrouter_workspaces_activities_v1.unavailable" "friendlyName"
-	import_resource "$activities" "Break" "module.taskrouter.twilio_taskrouter_workspaces_activities_v1.break" "friendlyName"
-
 # FEATURE: activity-reservation-handler
 	import_resource "$activities" "On a Task" "module.taskrouter.twilio_taskrouter_workspaces_activities_v1.on_a_task" "friendlyName"
 	import_resource "$activities" "On a Task, No ACD" "module.taskrouter.twilio_taskrouter_workspaces_activities_v1.on_a_task_no_acd" "friendlyName"
@@ -93,15 +87,12 @@ importInternalState() {
 	echo "   - :white_check_mark: Task Router - Activities" >>$GITHUB_STEP_SUMMARY
 
 	flows=$(npx twilio api:studio:v2:flows:list --no-limit -o json)
-# FEATURE: remove-all
-# FEATURE: callback-and-voicemail	
-# FEATURE: schedule-manager
-	import_resource "$flows" "Voice IVR" "module.studio.twilio_studio_flows_v2.voice" "friendlyName" false
-# END FEATURE: schedule-manager
+# FEATURE: callback-and-voicemail
+import_resource "$flows" "Example Callback Flow" "module.studio.twilio_studio_flows_v2.example_callback_flow" "friendlyName" false
 # END FEATURE: callback-and-voicemail
-	import_resource "$flows" "Messaging Flow" "module.studio.twilio_studio_flows_v2.messaging" "friendlyName" false
-	import_resource "$flows" "Chat Flow" "module.studio.twilio_studio_flows_v2.chat" "friendlyName" false
-# END FEATURE: remove-all
+# FEATURE: schedule-manager
+	import_resource "$flows" "Example Schedule Flow" "module.studio.twilio_studio_flows_v2.example_schedule_flow" "friendlyName" false
+# END FEATURE: schedule-manager
 	echo "   - :white_check_mark: Studio - Flows" >>$GITHUB_STEP_SUMMARY
 
 }

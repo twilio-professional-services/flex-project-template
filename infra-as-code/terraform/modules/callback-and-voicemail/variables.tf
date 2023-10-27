@@ -16,12 +16,12 @@ variable "voice_channel_sid" {
   }
 }
 
-variable "workflow_sid_assign_to_anyone" {
+variable "workflow_sid" {
   type        = string
-  description = "SID of assign to anyone workflow"
+  description = "SID of workflow"
   validation {
-    condition     = length(var.workflow_sid_assign_to_anyone) > 2 && substr(var.workflow_sid_assign_to_anyone, 0, 2) == "WW"
-    error_message = "workflow_sid_assign_to_anyone expected to start with \"WW\"."
+    condition     = length(var.workflow_sid) > 2 && substr(var.workflow_sid, 0, 2) == "WW"
+    error_message = "workflow_sid expected to start with \"WW\"."
   }
 }
 
