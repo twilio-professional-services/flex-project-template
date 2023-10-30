@@ -64,7 +64,7 @@ jobs:
     env:
       ENVIRONMENT: ${{ inputs.environment }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node.js
         uses: actions/setup-node@v4
         with:
@@ -117,7 +117,7 @@ jobs:
       ENVIRONMENT: ${{ inputs.environment }}
     needs: [deploy-terraform]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node.js
         uses: actions/setup-node@v4
         with:
@@ -157,7 +157,7 @@ jobs:
     needs:
       - deploy-services
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node.js
         uses: actions/setup-node@v4
         with:
@@ -190,7 +190,7 @@ jobs:
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       PLUGIN_FOLDER: plugin-flex-ts-template-v2
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node.js
         uses: actions/setup-node@v4
         with:
