@@ -10,7 +10,7 @@ echo "terraform state service name: $tfstate_service_name" >>$GITHUB_STEP_SUMMAR
 
 IFS="|" read -ra tf_state_files <<<"$TF_STATE_FILES"
 
-tfstate_bucket=$(twilio api:serverless:v1:services:fetch --sid $tfstate_service_name -o json | jq -c '.[].domainBase // empty' | sed 's/"//g')
+tfstate_bucket=$(npx twilio api:serverless:v1:services:fetch --sid $tfstate_service_name -o json | jq -c '.[].domainBase // empty' | sed 's/"//g')
 
 if [ -n "$tfstate_bucket" ]; then
 	tfstate_bucket_url="$tfstate_bucket.twil.io"
