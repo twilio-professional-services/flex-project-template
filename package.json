@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "node scripts/setup-environment.mjs",
     "generate-env": "node scripts/setup-environment.mjs --skip-install",
-    "deploy-packages": "node scripts/deploy-packages.mjs",
+    "deploy-addons": "node scripts/deploy-addons.mjs",
     "add-feature": "node scripts/add-feature.mjs",
     "remove-features": "node scripts/remove-features.mjs",
     "rename-template": "node scripts/rename-template.mjs",

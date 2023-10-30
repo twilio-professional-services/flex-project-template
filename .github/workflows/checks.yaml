@@ -13,7 +13,7 @@ on:
     paths:
       - 'plugin-flex-ts-template-v2/**'
       - 'serverless-functions/**'
-      - 'services/**'
+      - 'addons/**'
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
 

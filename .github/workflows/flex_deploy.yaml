@@ -82,9 +82,9 @@ jobs:
           npm run install-serverless-plugin
           echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
           npm run postinstall -- --skip-plugin >> $GITHUB_STEP_SUMMARY
-      - name: deploy packages
+      - name: deploy addons
         run: |
-          npm run deploy-packages
+          npm run deploy-addons
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
@@ -106,7 +106,7 @@ jobs:
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       TF_ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
 
-  deploy-services:
+  deploy-packages:
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -136,9 +136,9 @@ jobs:
           npm install --ignore-scripts
           npm run install-serverless-plugin
           npm run postinstall -- --skip-plugin >> $GITHUB_STEP_SUMMARY
-      - name: deploy packages
+      - name: deploy addons
         run: |
-          npm run deploy-packages
+          npm run deploy-addons
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
@@ -155,7 +155,7 @@ jobs:
       ENVIRONMENT: ${{ inputs.environment }}
       OVERWRITE_CONFIG: ${{ inputs.initial_release == true || inputs.overwrite_config == true }}
     needs:
-      - deploy-services
+      - deploy-packages
     steps:
       - uses: actions/checkout@v4
       - name: setup node.js

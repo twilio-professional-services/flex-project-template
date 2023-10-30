@@ -1,5 +1,5 @@
 import getTwilioAccount from "./common/get-account.mjs";
-import getPackageDirs from "./common/get-packages.mjs";
+import getAddonsDirs from "./common/get-addons.mjs";
 import getPluginDirs from "./common/get-plugin.mjs";
 import installNpmPackage from "./common/install-packages.mjs";
 import fillReplacements from "./common/fill-replacements.mjs";
@@ -71,7 +71,7 @@ const execute = async () => {
   const defaultPackages = [
     constants.serverlessDir,
     constants.flexConfigDir,
-    ...getPackageDirs(),
+    ...getAddonsDirs(),
   ];
   let packages = [];
   

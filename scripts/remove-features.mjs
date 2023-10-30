@@ -160,16 +160,16 @@ const performRemovals = async () => {
   
   if (!keepFeatures.includes("schedule-manager")) {
     shell.echo(
-      `Deleting schedule-manager serverless package services/serverless-schedule-manager...`
+      `Deleting schedule-manager serverless package addons/serverless-schedule-manager...`
     );
-    shell.rm("-rf", `services/serverless-schedule-manager`);
+    shell.rm("-rf", `addons/serverless-schedule-manager`);
   }
   
   if (!keepFeatures.includes("chat-to-video-escalation")) {
     shell.echo(
-      `Deleting services/twilio-video-demo-app...`
+      `Deleting addons/twilio-video-demo-app...`
     );
-    shell.rm("-rf", `services/twilio-video-demo-app`);
+    shell.rm("-rf", `addons/twilio-video-demo-app`);
   }
 
   // if we are removing everything we need want to

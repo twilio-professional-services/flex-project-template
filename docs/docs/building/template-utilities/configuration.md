@@ -207,7 +207,7 @@ We can commit a `.env.<environment name here>` file, for example, `.env.dev`, to
 
 The setup script when run via `npm install` performs the following operations:
 1. Establish the Twilio account to use
-2. Automatically populate the `.env.<environment name here>` file for serverless package(s)
+2. Automatically populate the `.env.<environment name here>` file for each package
 3. Automatically populate the `ui_attributes.<environment name here>.json` file for flex-config deployment if not running locally
 4. Create and populate the `plugin-flex-ts-template-v2/public/appConfig.js` file if running locally
 5. Run `npm install` for each package, so that it is ready to use.
@@ -242,6 +242,20 @@ This will cause the script to not process any packages (the default set or any p
 
 ```bash
 npm run postinstall -- --skip-packages
+```
+
+### skip-env
+This will cause the script to not perform any environment variable population; only installation (and/or uninstallation) will be performed.
+
+```bash
+npm run postinstall -- --skip-env
+```
+
+### skip-plugin
+When the `packages` or `skip-packages` parameters are not specified, the Flex plugin package will be installed as part of the default packages. This option prevents the Flex plugin package from being installed.
+
+```bash
+npm run postinstall -- --skip-plugin
 ```
 
 ### env
