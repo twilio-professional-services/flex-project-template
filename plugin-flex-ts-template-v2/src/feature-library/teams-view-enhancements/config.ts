@@ -14,7 +14,10 @@ const {
   department = false,
   location = false,
   agent_skills = true,
+  activity_icon = true,
 } = getFeatureFlags().features?.teams_view_enhancements?.columns || {};
+
+const { agent_activity_configuration } = (getFeatureFlags()?.features?.metrics_data_tiles as any) || {};
 
 const { teams = [] } = getFeatureFlags().common || {};
 
@@ -33,6 +36,9 @@ export const isLocationColumnEnabled = () => {
 export const isAgentSkillsColumnEnabled = () => {
   return enabled && agent_skills;
 };
+export const isActivityIconEnabled = () => {
+  return enabled && activity_icon;
+};
 export const isHTHighlightEnabled = () => {
   return enabled && highlight_handle_time;
 };
@@ -48,4 +54,7 @@ export const isDisplayTaskQueueNameEnabled = () => {
 
 export const getTeams = () => {
   return teams;
+};
+export const getAgentActivityConfig = () => {
+  return agent_activity_configuration;
 };

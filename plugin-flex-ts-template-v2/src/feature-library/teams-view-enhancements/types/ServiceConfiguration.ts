@@ -10,5 +10,6 @@ export default interface TeamsViewEnhancementsConfig {
     location: boolean;
     agent_skills: boolean;
     capacity: boolean;
+    activity_icon: boolean;
   };
 }

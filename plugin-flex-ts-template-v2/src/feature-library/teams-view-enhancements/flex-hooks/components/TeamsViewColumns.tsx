@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Flex from '@twilio/flex-ui';
 
-import { Worker } from '../../../../types/task-router';
+import { CustomWorkerAttributes } from '../../../../types/task-router/Worker';
 import { FlexComponent } from '../../../../types/feature-loader';
 import { StringTemplates } from '../strings';
 import {
@@ -9,18 +9,35 @@ import {
   isDepartmentColumnEnabled,
   isLocationColumnEnabled,
   isAgentSkillsColumnEnabled,
+  isActivityIconEnabled,
+  getAgentActivityConfig,
 } from '../../config';
+import AgentActivityIcon from './AgentActivityIcon/AgentActivityIcon';
 
 interface WorkerItem {
-  worker: Worker;
+  worker: {
+    attributes: CustomWorkerAttributes;
+    activityName: string;
+  };
 }
-
+const activityConfig = getAgentActivityConfig();
 const getSkills = (item: WorkerItem) => {
   return item.worker.attributes.routing ? item.worker?.attributes?.routing?.skills?.join(', ') : '-';
 };
 
 export const componentName = FlexComponent.TaskCanvasHeader;
 export const componentHook = function addWorkersDataTableColumns(flex: typeof Flex, manager: Flex.Manager) {
+  flex.WorkersDataTable.Content.add(
+    <flex.ColumnDefinition
+      style={{ width: 70 }}
+      key="Activity"
+      header={(manager.strings as any)[StringTemplates.TeamsViewColumnActivity]}
+      content={(item: WorkerItem) => (
+        <AgentActivityIcon activityName={item.worker.activityName} activityConfig={activityConfig} />
+      )}
+    />,
+    { sortOrder: 0, if: () => isActivityIconEnabled() },
+  );
   flex.WorkersDataTable.Content.add(
     <flex.ColumnDefinition
       key="team"

@@ -49,6 +49,7 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
         "department": false,
         "location": false,
         "agent_skills": true,
+        "activity_icon": true
       }
     }
 ```
