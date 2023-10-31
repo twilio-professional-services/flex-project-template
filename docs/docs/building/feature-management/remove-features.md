@@ -30,7 +30,7 @@ If you have already deployed to the environment before removing features, the co
 
 The `remove-features` script performs the following operations:
 
-1. Remove feature references from GitHub Actions workflows
+1. Remove feature references from the infra-as-code package
 2. Remove feature references from flex-config JSON files
 3. Remove feature directories from the Flex plugin
 4. Remove feature directories from the serverless functions and assets

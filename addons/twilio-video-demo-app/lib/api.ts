@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import axios from "axios";
 
-const BACKEND_URL = `http${process.env.NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN?.startsWith('localhost') ? '' : 's'}://${process.env.NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN}`;
+const BACKEND_URL = (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.hostname === "")) ? `http://${process.env.NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN_LOCAL}` : `https://${process.env.NEXT_PUBLIC_SERVERLESS_FUNCTIONS_DOMAIN}`;
 
 export const getAccessToken = async (
   roomName: string | undefined,
