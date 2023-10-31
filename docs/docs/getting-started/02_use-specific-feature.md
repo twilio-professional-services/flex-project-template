@@ -1,6 +1,5 @@
 ---
 sidebar_label: Use for a specific feature
-sidebar_position: 2
 title: Use the template for a specific feature
 ---
 

@@ -7,6 +7,7 @@
     "postinstall": "npm run build",
     "dev": "next dev -p 3010",
     "build": "env-cmd -f \".env.$ENVIRONMENT\" --fallback next build && next export && npm run transfer-assets",
+    "deploy": "echo 'Deploy via serverless'",
     "transfer-assets": "rm -rfv ../../serverless-functions/src/assets/features/chat-to-video-escalation/ && mkdir ../../serverless-functions/src/assets/features/chat-to-video-escalation/ && cp -R ./out/* ../../serverless-functions/src/assets/features/chat-to-video-escalation/",
     "start": "next start",
     "lint": "next lint",

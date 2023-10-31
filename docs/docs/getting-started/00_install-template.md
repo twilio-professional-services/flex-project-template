@@ -1,6 +1,5 @@
 ---
 sidebar_label: Install the template
-sidebar_position: 0
 title: Install the template on hosted Flex
 ---
 import Tabs from "@theme/Tabs";

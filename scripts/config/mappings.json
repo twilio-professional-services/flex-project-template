@@ -35,11 +35,6 @@
     "name": "/check-schedule",
     "parent": "SCHEDULE_MANAGER_SID"
   },
-  "VIDEO_SERVERLESS_DOMAIN": {
-    "type": "serverless-domain",
-    "name": "custom-flex-extensions-serverless",
-    "localValue": "localhost:3001"
-  },
   "TWILIO_FLEX_WORKSPACE_SID": {
     "type": "tr-workspace",
     "name": "Flex Task Assignment"

@@ -1,20 +1,12 @@
 import shell from "shelljs";
 import { promises as fs } from 'fs';
 
-import { serverlessSrc, flexConfigDir, gitHubWorkflowDir, scheduleManagerServerlessDir, infraAsCodeDir, terraformDir } from './common/constants.mjs';
+import { serverlessSrc, flexConfigDir, infraAsCodeDir, terraformDir } from './common/constants.mjs';
 import getPluginDirs from "./common/get-plugin.mjs";
 
 const { featureDirectory } = getPluginDirs();
 
 const featureRegionReferences = [
-  {
-    filename: `${gitHubWorkflowDir}/checks.yaml`,
-    features: [ "schedule-manager" ],
-  },
-  {
-    filename: `${gitHubWorkflowDir}/flex_deploy.yaml`,
-    features: [ "chat-to-video-escalation", "schedule-manager" ],
-  },
   {
     filename: `${infraAsCodeDir}/state/import_internal_state.sh`,
     features: ["remove-all", "callback-and-voicemail", "schedule-manager", "activity-reservation-handler", "conversation-transfer", "internal-call"]
@@ -168,16 +160,16 @@ const performRemovals = async () => {
   
   if (!keepFeatures.includes("schedule-manager")) {
     shell.echo(
-      `Deleting schedule-manager serverless package ${scheduleManagerServerlessDir}...`
+      `Deleting schedule-manager serverless package addons/serverless-schedule-manager...`
     );
-    shell.rm("-rf", `${scheduleManagerServerlessDir}`);
+    shell.rm("-rf", `addons/serverless-schedule-manager`);
   }
   
   if (!keepFeatures.includes("chat-to-video-escalation")) {
     shell.echo(
-      `Deleting web-app-examples...`
+      `Deleting addons/twilio-video-demo-app...`
     );
-    shell.rm("-rf", `web-app-examples`);
+    shell.rm("-rf", `addons/twilio-video-demo-app`);
   }
 
   // if we are removing everything we need want to
