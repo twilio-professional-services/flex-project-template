@@ -136,7 +136,7 @@ const performRename = async () => {
   shell.sed('-i', /custom-flex-extensions-serverless/g, `${name}`, `./infra-as-code/terraform/environments/default/variables.tf`);
   shell.sed('-i', /length\(var.SERVERLESS_DOMAIN\) > [0-9][0-9] && substr\(var.SERVERLESS_DOMAIN, 0, [0-9][0-9]\)/g, `length(var.SERVERLESS_DOMAIN) > ${name.length+1} && substr(var.SERVERLESS_DOMAIN, 0, ${name.length+1})`, `./infra-as-code/terraform/environments/default/variables.tf`);
   shell.sed('-i', /custom-flex-extensions-serverless/g, `${name}`, `./infra-as-code/terraform/modules/studio/variables.tf`);
-  shell.sed('-i', /length\(var.serverless_domain\) > [0-9][0-9] && substr\(var.serverless_domain, 0, [0-9][0-9]\)/g, `length(var.serverless_domain) > ${name.length+1} && substr(var.serverless_domain, 0, ${name.length+1})`, `./infra-as-code/terraform/modules/studio/variables.tf`);
+  shell.sed('-i', /length\(var.serverless_domain\) > [0-9][0-9] && substr\(var.serverless_domain, 0, [0-9][0-9]\)/g, `length(var.serverless_domain) > ${name.length+1} && substr(var.serverless_domain, 0, ${name.length+1})`, `./infra-as-code/terraform/modules/callback-and-voicemail/variables.tf`);
 
   // rename the state service that is in use
   if(shell.test('-e', `./${infraAsCodeDir}/state/config.sh`)){
