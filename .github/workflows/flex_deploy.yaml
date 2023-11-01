@@ -68,7 +68,7 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
       - name: set github environment variables
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
@@ -161,7 +161,7 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
       - name: set github environment variables
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
@@ -194,7 +194,7 @@ jobs:
       - name: setup node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: install twilio cli
         run: npm install --ignore-scripts
