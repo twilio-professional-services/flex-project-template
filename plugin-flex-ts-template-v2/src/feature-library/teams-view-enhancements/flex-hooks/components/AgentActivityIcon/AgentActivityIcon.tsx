@@ -26,7 +26,7 @@ const AgentActivityIcon = (props: ComponentProps) => {
     <AgentActivity bgColor={activityConfig.activities[activityName]?.color}>
       <Tooltip text={activityName} placement="top">
         <Heading>
-          <Icon icon={activityConfig.activities[activityName]?.icon} />
+          <Icon icon={activityConfig.activities[activityName]?.icon} sizeMultiplier={1.3} />
         </Heading>
       </Tooltip>
     </AgentActivity>
