@@ -14,7 +14,7 @@ for item in "${tf_state_files[@]}"; do
 	directory="../terraform/environments/default/$item"
 	if [ -f "./$directory" ]; then
 		echo "$item present, uploading"
-		openssl enc -in "$directory" -aes-256-cbc -pbkdf2 -k "$ENCRYPTION_KEY" -out "./$item.enc"
+		openssl enc -in "$directory" -aes-256-cbc -pbkdf2 -k "$ENCRYPTION_KEY$tfstate_version" -out "./$item.enc"
 		tar -czvf "./$item.tar.private.gz" "./$item.enc"
 		mv "./$item.tar.private.gz" "./$project_name/assets/"
 		rm -f "./$item.enc"

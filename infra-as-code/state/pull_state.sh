@@ -31,11 +31,19 @@ if [ -n "$tfstate_bucket" ]; then
 							"assetKey": "'"$full_item_name"'"
 			}'
 			tar -xzvf "$full_item_name"
-			openssl enc -d -in "$item.enc" -aes-256-cbc -pbkdf2 -k "$ENCRYPTION_KEY" -out "../terraform/environments/default/$item"
+			set +e
+			openssl enc -d -in "$item.enc" -aes-256-cbc -pbkdf2 -k "$ENCRYPTION_KEY$tfstate_version" -out "../terraform/environments/default/$item"
+			openssl_result=$?
+			set -e
+			if [[ "$openssl_result" != 0 ]]; then
+				echo "   - :x: Unable to decrypt existing terraform state file $item. If you just updated from the upstream template, this may be intentional!" >>$GITHUB_STEP_SUMMARY
+				rm -f "../terraform/environments/default/$item"
+			else
+				echo "$openssl_output   - :white_check_mark: Existing terraform state file $item retrieved" >>$GITHUB_STEP_SUMMARY
+			fi
 			rm -f "$full_item_name"
 			rm -f "$item.enc"
 		done
-		echo "   - :white_check_mark: Existing terraform state file retrieved" >>$GITHUB_STEP_SUMMARY
 	else
 		echo "JOB_FAILED=true" >>"$GITHUB_OUTPUT"
 		echo "$full_link not found" >>"$GITHUB_STEP_SUMMARY"
