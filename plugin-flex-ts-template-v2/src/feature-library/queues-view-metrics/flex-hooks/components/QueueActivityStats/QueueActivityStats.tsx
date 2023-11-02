@@ -27,9 +27,6 @@ const QueueActivityStats = (props: ComponentProps) => {
         <Heading as="h3" variant="heading30">
           {queueName}
         </Heading>
-        <Heading as="h4" variant="heading40">
-          Agent Activity Summary
-        </Heading>
         <Separator orientation="horizontal" verticalSpacing="space50" />
         {activityStats.map((ac: ActivityStatistic) => {
           if (ac.workers > 0) return <Text as="p">{`${ac.friendly_name}: ${ac.workers}`}</Text>;
