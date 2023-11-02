@@ -5,6 +5,8 @@ import { CustomWorkerAttributes } from '../../../../types/task-router/Worker';
 import { FlexComponent } from '../../../../types/feature-loader';
 import { StringTemplates } from '../strings';
 import {
+  isCallsColumnEnabled,
+  isOtherTasksColumnEnabled,
   isTeamColumnEnabled,
   isDepartmentColumnEnabled,
   isLocationColumnEnabled,
@@ -27,6 +29,9 @@ const getSkills = (item: WorkerItem) => {
 
 export const componentName = FlexComponent.TaskCanvasHeader;
 export const componentHook = function addWorkersDataTableColumns(flex: typeof Flex, manager: Flex.Manager) {
+  if (!isCallsColumnEnabled()) flex.WorkersDataTable.Content.remove('calls');
+  if (!isOtherTasksColumnEnabled()) flex.WorkersDataTable.Content.remove('tasks');
+
   flex.WorkersDataTable.Content.add(
     <flex.ColumnDefinition
       style={{ width: 70 }}

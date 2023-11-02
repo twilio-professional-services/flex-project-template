@@ -10,6 +10,8 @@ const {
 } = (getFeatureFlags()?.features?.teams_view_enhancements as TeamsViewEnhancementsConfig) || {};
 
 const {
+  calls = true,
+  other_tasks = true,
   team = true,
   department = false,
   location = false,
@@ -23,6 +25,12 @@ const { teams = [] } = getFeatureFlags().common || {};
 
 export const isFeatureEnabled = () => {
   return enabled;
+};
+export const isCallsColumnEnabled = () => {
+  return enabled && calls;
+};
+export const isOtherTasksColumnEnabled = () => {
+  return enabled && other_tasks;
 };
 export const isTeamColumnEnabled = () => {
   return enabled && team;

@@ -251,6 +251,8 @@
         "handle_time_exceeded_threshold": 300,
         "display_task_queue_name": true,
         "columns": {
+          "calls": true,
+          "other_tasks": true,
           "team": true,
           "department": false,
           "location": false,
