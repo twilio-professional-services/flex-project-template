@@ -63,7 +63,7 @@ export const componentHook = function addQueuesDataTableColumns(flex: typeof Fle
         header={(manager.strings as any)[StringTemplates.AgentActivityHeader]}
         subHeader={manager.strings.QueuesStatsSubHeaderNow}
         content={(queue: WorkerQueue) => {
-          return <QueueActivityStats activityStats={queue.activity_statistics} />;
+          return <QueueActivityStats queueName={queue.friendly_name} activityStats={queue.activity_statistics} />;
         }}
         {...props}
       />,
