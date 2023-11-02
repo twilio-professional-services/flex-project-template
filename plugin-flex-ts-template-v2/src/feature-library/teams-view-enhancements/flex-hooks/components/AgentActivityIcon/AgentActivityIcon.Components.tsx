@@ -11,16 +11,15 @@ export const AgentActivity = styled('div')<ThemeOnlyProps>`
   display: flex;
   flex: 1 1 auto;
   flex-direction: row;
-  font-size: 11px;
   justify-content: center;
   border-width: 0px;
-  border-radius: 20px;
-  height: 40px;
-  width: 40px;
+  border-radius: 22px;
+  height: 44px;
+  width: 44px;
   align-items: center;
 `;
 
-export const Heading = styled('div')<ThemeOnlyProps>`
+export const Heading = styled('div')`
   font-size: 12px;
   font-weight: bold;
 `;

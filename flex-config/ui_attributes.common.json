@@ -339,7 +339,8 @@
       "queues_stats_metrics": {
         "enabled": false,
         "assigned_tasks_column": true,
-        "wrapping_tasks_column": true
+        "wrapping_tasks_column": true,
+        "agent_activity_stats_column": true
       },
       "sip_support": {
         "enabled": false

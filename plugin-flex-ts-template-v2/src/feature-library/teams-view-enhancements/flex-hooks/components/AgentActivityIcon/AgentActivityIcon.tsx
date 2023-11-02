@@ -8,25 +8,30 @@ interface ActivityConfig {
   color: string;
   icon: string;
 }
-interface AgentActivityConfiguration {
-  activities: {
-    [key: string]: ActivityConfig;
-  };
-  other: ActivityConfig;
-}
+
 interface ComponentProps {
   activityName: string;
-  activityConfig: AgentActivityConfiguration;
+  activityConfig: {
+    activities: {
+      [key: string]: ActivityConfig;
+    };
+    other: ActivityConfig;
+  };
 }
 
 const AgentActivityIcon = (props: ComponentProps) => {
   const { activityName, activityConfig } = props;
-
+  let bgColor = activityConfig.other.color;
+  let icon = activityConfig.other.icon;
+  if (activityConfig.activities[activityName]) {
+    bgColor = activityConfig.activities[activityName]?.color;
+    icon = activityConfig.activities[activityName]?.icon;
+  }
   return (
-    <AgentActivity bgColor={activityConfig.activities[activityName]?.color}>
+    <AgentActivity bgColor={bgColor}>
       <Tooltip text={activityName} placement="top">
         <Heading>
-          <Icon icon={activityConfig.activities[activityName]?.icon} sizeMultiplier={1.3} />
+          <Icon icon={icon} sizeMultiplier={1.4} />
         </Heading>
       </Tooltip>
     </AgentActivity>
