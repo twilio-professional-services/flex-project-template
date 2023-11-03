@@ -31,7 +31,7 @@ In the list of `columns`, select which worker attributes (team, department, loca
 
 By default the Teams View shows both the Calls and other Tasks for each worker.  For a voice-only Flex implementation, you can remove the Tasks column by setting `other_tasks = false`. Likewise for chat/messaging only Flex implementations, you could remove the Calls column.
 
-The `activity_icon` column display an large activity indicator for each agent using the same activity configuration (icons & colors) from the [Metrics Data Tiles](metrics-data-tiles.md).
+The `activity_icon` column display an activity indicator for each agent using the same activity configuration (icons & colors) from the [Metrics Data Tiles](metrics-data-tiles.md).
 
 To enable TaskCard highlighting based on the task age, set `highlight_handle_time: true` and specify the warning threshold (default 180 seconds) and "handle time exceeded" threshold (default 300 seconds).
 
@@ -66,3 +66,4 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
 
 ![TeamsViewTaskHighlight](/img/features/teams-view-enhancements/TeamsViewTaskHighlight.png)
 
+![AgentActivityIndicator](/img/features/teams-view-enhancements/AgentActivityIndicator.png)
