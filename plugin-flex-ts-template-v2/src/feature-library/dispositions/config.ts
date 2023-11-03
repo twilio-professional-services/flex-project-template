@@ -7,6 +7,8 @@ const {
   require_disposition = false,
   global_dispositions = [],
   per_queue = {},
+  text_attributes = [],
+  boolean_attributes = [],
 } = (getFeatureFlags()?.features?.dispositions as DispositionsConfig) || {};
 
 export const isFeatureEnabled = () => {
@@ -43,4 +45,11 @@ export const getDispositionsForQueue = (queueSid: string): string[] => {
   }
 
   return dispositions;
+};
+
+export const getTextAttributes = () => {
+  return text_attributes;
+};
+export const getBooleanAttributes = () => {
+  return boolean_attributes;
 };

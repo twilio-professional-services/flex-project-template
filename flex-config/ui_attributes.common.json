@@ -224,7 +224,13 @@
             "require_disposition": true,
             "dispositions": ["Promotional Sale", "Renewal"]
           }
-        }
+        },
+        "text_attributes": [
+          {
+            "form_label": "Case Number",
+            "conversations_attribute": "case"
+          }
+        ]
       },
       "emoji_picker": {
         "enabled": true

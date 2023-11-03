@@ -4,12 +4,19 @@ import { Actions, ITask, Template, templates, withTaskContext } from '@twilio/fl
 import { Radio, RadioGroup } from '@twilio-paste/core/radio-group';
 import { Stack } from '@twilio-paste/core/stack';
 import { TextArea } from '@twilio-paste/core/textarea';
+import { Input } from '@twilio-paste/core/input';
 import { Label } from '@twilio-paste/core/label';
 import { HelpText } from '@twilio-paste/core/help-text';
 import { Box } from '@twilio-paste/core/box';
 import debounce from 'lodash/debounce';
 
-import { getDispositionsForQueue, isNotesEnabled, isRequireDispositionEnabledForQueue } from '../../config';
+import {
+  getDispositionsForQueue,
+  isNotesEnabled,
+  isRequireDispositionEnabledForQueue,
+  getTextAttributes,
+  getBooleanAttributes,
+} from '../../config';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { updateDisposition, DispositionsState } from '../../flex-hooks/states';
@@ -23,6 +30,10 @@ const DispositionTab = (props: OwnProps) => {
   const NOTES_MAX_LENGTH = 100;
   const [disposition, setDisposition] = useState('');
   const [notes, setNotes] = useState('');
+  const [customAttributes, setCustomAttributes] = useState({} as any);
+
+  const textAttributes = getTextAttributes();
+  const booleanAttributes = getBooleanAttributes();
 
   const dispatch = useDispatch();
   const { tasks } = useSelector((state: AppState) => state[reduxNamespace].dispositions as DispositionsState);
@@ -34,6 +45,7 @@ const DispositionTab = (props: OwnProps) => {
       taskSid: props.task.taskSid,
       disposition: '',
       notes: '',
+      custom_attributes: {},
     };
 
     if (tasks[props.task.taskSid]) {
@@ -50,7 +62,7 @@ const DispositionTab = (props: OwnProps) => {
     if (isNotesEnabled() && notes) {
       payload.notes = notes;
     }
-
+    payload.custom_attributes = { ...customAttributes };
     dispatch(updateDisposition(payload));
   };
 
@@ -65,6 +77,8 @@ const DispositionTab = (props: OwnProps) => {
       if (isNotesEnabled() && tasks[props.task.taskSid].notes) {
         setNotes(tasks[props.task.taskSid].notes);
       }
+      // set custom attributes from Redux state
+      setCustomAttributes(tasks[props.task.taskSid].custom_attributes);
     }
   }, []);
 
@@ -79,6 +93,10 @@ const DispositionTab = (props: OwnProps) => {
   }, [notes]);
 
   useEffect(() => {
+    updateStoreDebounced();
+  }, [customAttributes]);
+
+  useEffect(() => {
     // Pop the disposition tab when the task enters wrapping status.
     // We do this here because WrapupTask does not handle a customer-ended task,
     // and doing this in the taskWrapup event seems to not work.
@@ -89,6 +107,11 @@ const DispositionTab = (props: OwnProps) => {
       });
     }
   }, [props.task?.status]);
+
+  const handleChange = (key: string, value: string) => {
+    const attributes = { ...customAttributes, [key]: value };
+    setCustomAttributes(attributes);
+  };
 
   return (
     <Box padding="space80" overflowY="scroll">
@@ -114,6 +137,19 @@ const DispositionTab = (props: OwnProps) => {
             ))}
           </RadioGroup>
         )}
+        {textAttributes.map((attr) => {
+          const id = attr.conversations_attribute;
+          return (
+            <>
+              <Label htmlFor={id}>{attr.form_label}</Label>
+              <Input
+                type="text"
+                id={id}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(id, e.target.value)}
+              />
+            </>
+          );
+        })}
         {isNotesEnabled() && (
           <>
             <Label htmlFor="notes">

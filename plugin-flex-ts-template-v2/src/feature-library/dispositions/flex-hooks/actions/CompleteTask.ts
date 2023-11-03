@@ -74,6 +74,10 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
         content: taskDisposition.notes,
       };
     }
+    newConvAttributes = {
+      ...newConvAttributes,
+      ...taskDisposition.custom_attributes,
+    };
 
     try {
       await TaskRouterService.updateTaskAttributes(
