@@ -5,12 +5,16 @@ export default interface DispositionsConfig {
   global_dispositions: string[];
   per_queue: { [key: string]: DispositionsPerQueueConfig };
   text_attributes: Array<CustomAttribute>;
-  boolean_attributes: Array<CustomAttribute>;
+  select_attributes: Array<SelectAttribute>;
 }
 
 interface CustomAttribute {
   form_label: string;
-  conversations_attribute: string;
+  conversation_attribute: string;
+}
+
+interface SelectAttribute extends CustomAttribute {
+  options: string[];
 }
 
 export interface DispositionsPerQueueConfig {

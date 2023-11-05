@@ -22,6 +22,23 @@ Within your `ui_attributes` file, there are several settings for the `dispositio
 - `per_queue` - allows you to set different configurations for tasks from the provided queue SID(s)
   - `require_disposition` - require the agent to select a disposition to complete tasks from this queue SID
   - `dispositions` - dispositions that are only listed for tasks from this queue SID
+- `text_attributes` an array of additional Text fields that can be added to the wrap up form. Each entry should looks like this with a `form_label` and [`conversation_attribute`](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) to use for storing the data.
+
+```       {
+            "form_label": "Case Number",
+            "conversation_attribute": "case"
+          }
+```
+
+ - `select_attributes` an array of additional wrap-up form elements that are rendered as a [Select dropdown](https://paste.twilio.design/components/select) with Options to allow the user to pick a value from a list.
+ Entries in this array should have this format:
+ ```
+          {
+            "form_label": "Topic",
+            "conversation_attribute": "conversation_attribute_3",
+            "options": ["New Order", "Cancel", "Update Order", "Warranty", "Inquiry"]
+          }
+```
 
 > **Note**
 > If both global and per-queue dispositions are configured, the agent will be see a combined list.
@@ -31,7 +48,7 @@ Once your updated flex-config is deployed, the feature is enabled and ready to u
 
 # how does it work?
 
-This feature adds a disposition tab to `TaskCanvasTabs`. When the task enters the wrapping state, the disposition tab is automatically selected. The user's selected disposition and/or notes are stored in state. When the Complete Task button is pressed, the selected values are read from state and written to task attributes. The disposition is stored in the `conversations.outcome` attribute, and notes are stored in the `conversations.content` attribute.
+This feature adds a disposition tab to `TaskCanvasTabs`. When the task enters the wrapping state, the disposition tab is automatically selected. The user's selected disposition and/or notes are stored in state. When the Complete Task button is pressed, the selected values are read from state and written to task attributes. The disposition is stored in the `conversations.outcome` attribute, and notes are stored in the `conversations.content` attribute.  Additional custom attributes are stored based on the configured [conversations attribute](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) for each one.  You can use a Select Attribute with options Yes and No to implement a boolean type field.
 
 If `require_disposition` is enabled, and there are dispositions configured, the agent will not be allowed to complete the task until one is selected. When used in combination with the `agent-automation` feature's auto-wrap-up feature, the disposition requirement takes precedence and prevents auto-wrap-up.
 

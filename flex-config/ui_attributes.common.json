@@ -228,7 +228,14 @@
         "text_attributes": [
           {
             "form_label": "Case Number",
-            "conversations_attribute": "case"
+            "conversation_attribute": "case"
+          }
+        ],
+        "select_attributes": [
+          {
+            "form_label": "Topic",
+            "conversation_attribute": "conversations_attribute_3",
+            "options": ["New Order", "Cancel", "Update Order", "Warranty", "Inquiry"]
           }
         ]
       },

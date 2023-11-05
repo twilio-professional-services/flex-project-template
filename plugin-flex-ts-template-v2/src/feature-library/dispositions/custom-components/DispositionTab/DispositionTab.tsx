@@ -6,6 +6,7 @@ import { Stack } from '@twilio-paste/core/stack';
 import { TextArea } from '@twilio-paste/core/textarea';
 import { Input } from '@twilio-paste/core/input';
 import { Label } from '@twilio-paste/core/label';
+import { Select, Option } from '@twilio-paste/core/select';
 import { HelpText } from '@twilio-paste/core/help-text';
 import { Box } from '@twilio-paste/core/box';
 import debounce from 'lodash/debounce';
@@ -15,7 +16,7 @@ import {
   isNotesEnabled,
   isRequireDispositionEnabledForQueue,
   getTextAttributes,
-  getBooleanAttributes,
+  getSelectAttributes,
 } from '../../config';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
@@ -33,7 +34,7 @@ const DispositionTab = (props: OwnProps) => {
   const [customAttributes, setCustomAttributes] = useState({} as any);
 
   const textAttributes = getTextAttributes();
-  const booleanAttributes = getBooleanAttributes();
+  const selectAttributes = getSelectAttributes();
 
   const dispatch = useDispatch();
   const { tasks } = useSelector((state: AppState) => state[reduxNamespace].dispositions as DispositionsState);
@@ -138,15 +139,43 @@ const DispositionTab = (props: OwnProps) => {
           </RadioGroup>
         )}
         {textAttributes.map((attr) => {
-          const id = attr.conversations_attribute;
+          const id = attr.conversation_attribute;
           return (
             <>
               <Label htmlFor={id}>{attr.form_label}</Label>
               <Input
                 type="text"
                 id={id}
+                value={customAttributes[id]}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(id, e.target.value)}
               />
+            </>
+          );
+        })}
+        {selectAttributes.map((attr) => {
+          const id = attr.conversation_attribute;
+          return (
+            <>
+              <Label htmlFor={id}>{attr.form_label}</Label>
+              <Select
+                id={id}
+                value={customAttributes[id]}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  const value = e.target.value;
+                  if (value !== 'none') handleChange(id, value);
+                }}
+              >
+                <Option key="none" value="none">
+                  Select {attr.form_label}
+                </Option>
+                {attr.options.map((option) => {
+                  return (
+                    <Option key={option} value={option}>
+                      {option}
+                    </Option>
+                  );
+                })}
+              </Select>
             </>
           );
         })}
