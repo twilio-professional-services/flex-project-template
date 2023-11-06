@@ -37,6 +37,11 @@ Within your `ui_attributes` file, there are several settings for the `dispositio
             "form_label": "Topic",
             "conversation_attribute": "conversation_attribute_3",
             "options": ["New Order", "Cancel", "Update Order", "Warranty", "Inquiry"]
+          },
+          {
+            "form_label": "New Customer",
+            "conversation_attribute": "conversation_attribute_4",
+            "options": ["Yes", "No"]
           }
 ```
 

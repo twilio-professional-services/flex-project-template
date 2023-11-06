@@ -156,7 +156,9 @@ const DispositionTab = (props: OwnProps) => {
           const id = attr.conversation_attribute;
           return (
             <>
-              <Label htmlFor={id}>{attr.form_label}</Label>
+              <Label htmlFor={id} required>
+                {attr.form_label}
+              </Label>
               <Select
                 id={id}
                 value={customAttributes[id]}
