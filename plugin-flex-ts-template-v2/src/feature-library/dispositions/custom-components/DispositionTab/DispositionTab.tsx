@@ -138,20 +138,6 @@ const DispositionTab = (props: OwnProps) => {
             ))}
           </RadioGroup>
         )}
-        {textAttributes.map((attr) => {
-          const id = attr.conversation_attribute;
-          return (
-            <>
-              <Label htmlFor={id}>{attr.form_label}</Label>
-              <Input
-                type="text"
-                id={id}
-                value={customAttributes[id]}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(id, e.target.value)}
-              />
-            </>
-          );
-        })}
         {selectAttributes.map((attr) => {
           const id = attr.conversation_attribute;
           return (
@@ -168,7 +154,7 @@ const DispositionTab = (props: OwnProps) => {
                 }}
               >
                 <Option key="none" value="none">
-                  Select {attr.form_label}
+                  Select Option
                 </Option>
                 {attr.options.map((option) => {
                   return (
@@ -178,6 +164,20 @@ const DispositionTab = (props: OwnProps) => {
                   );
                 })}
               </Select>
+            </>
+          );
+        })}
+        {textAttributes.map((attr) => {
+          const id = attr.conversation_attribute;
+          return (
+            <>
+              <Label htmlFor={id}>{attr.form_label}</Label>
+              <Input
+                type="text"
+                id={id}
+                value={customAttributes[id]}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(id, e.target.value)}
+              />
             </>
           );
         })}
