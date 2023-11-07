@@ -23,12 +23,13 @@ To allow for greater scalability than provided by Twilio Sync and some other sol
 
 ## Installation
 
-It is recommended to [deploy via a release pipeline](https://github.com/twilio-professional-services/flex-project-template/tree/main#setup-a-project-with-release-pipeline-recommended), however manual instructions are available below.
+If you have performed [the recommended steps to deploy the template](/getting-started/install-template), or followed the steps to [deploy from your local machine](/building/deployment/local-deployment), the schedule manager has already been deployed for you.
 
-First, switch to the `serverless-schedule-manager` directory and install:
+<details><summary>Manual instructions for reference</summary>
+First, switch to the `addons/serverless-schedule-manager` directory and install:
 
 ```bash
-cd serverless-schedule-manager
+cd addons/serverless-schedule-manager
 npm install
 ```
 
@@ -51,7 +52,7 @@ npm run deploy
 
 Note the domain name that is output when the deploy completes--this will be referenced throughout the rest of the readme.
 
-**Note: If you need to re-deploy via CLI in the future, be sure to first update your local `serverless-schedule-manager/assets/config.private.json` file with any configuration changes. This is done automatically by `npm run deploy` if the service already exists, but it is recommended to first run `npm run fetch-config` before attempting a re-deploy to ensure the latest file is present.**
+**Note: If you need to re-deploy via CLI in the future, be sure to first verify your local `serverless-schedule-manager/assets/config.private.json` file contains any configuration changes made from the UI. This is done automatically by `npm run deploy` if the service already exists, but it is recommended to first run `npm run fetch-config` before attempting a re-deploy to ensure the latest file is present.**
 
 Then, update your flex-config ui_attributes file(s) with the serverless function domain from above:
 
@@ -67,6 +68,7 @@ Then, update your flex-config ui_attributes file(s) with the serverless function
   }
 }
 ```
+</details>
 
 ## Example configurations
 
@@ -145,6 +147,8 @@ const scheduleData = await loadScheduleData();
 This calls the `admin/list` function, which requires the Flex user token. `scheduleData` will include a `data` object with a `schedules` array, containing each schedule. Each schedule will have a `status` object, which contains the same object you would get from calling the `check-schedules` function.
 
 ## Using within Studio
+
+If you deployed the template with the `Deploy Terraform?` option selected, a Studio flow called `Example Schedule Flow` has already been created for you, which you can hook up to a phone number in the Twilio Console. Otherwise, you can create your own:
 
 ![Studio example](/img/features/schedule-manager/studio.png)
 

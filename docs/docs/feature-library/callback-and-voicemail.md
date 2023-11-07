@@ -47,7 +47,7 @@ Once you've set the flag for the feature in flex-config, and all of that is depl
 
 ## Creating a Callback Task Using _create-callback_ Function
 
-Creating a callback involves creating a task with at a minimum a number to callback and a number to call from. A sample setup of that is shown here in a Studio flow where a number has been wired up to immediately create a callback and hang up.
+Creating a callback involves creating a task with at a minimum a number to callback and a number to call from. If you deployed the template with the `Deploy Terraform?` option selected, a Studio flow called `Example Callback Flow` has already been created for you, which you can hook up to a phone number in the Twilio Console. Otherwise, a sample setup is shown here in a Studio flow where a number has been wired up to immediately create a callback and hang up.
 
 ![alt text](/img/features/callback-and-voicemail/sample-triggering-callback.png)
 

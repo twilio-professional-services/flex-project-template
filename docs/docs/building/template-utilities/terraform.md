@@ -14,7 +14,7 @@ The main ambition with this setup is to lower the barrier for entry and get deve
 
 When running the release pipeline it will import and generate the state based on what is on the account but only with relation to resources declared in the configuration. Any resources not in the configuration will be ignored.
 
-This solution pushes the configuration and will overwrite anything in your environment so please use with care.
+This solution pushes the configuration and will overwrite anything in your environment with the same name, so please use with care.
 
 ## Adding resources
 
