@@ -38,7 +38,7 @@ importInternalState() {
 	workspaces=$(npx twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
 	TF_WORKSPACE_SID=$(get_value_from_json "$workspaces" "friendlyName" "Flex Task Assignment" "sid")
 	import_resource "$workspaces" "Flex Task Assignment" "twilio_taskrouter_workspaces_v1.flex_task_assignment" "friendlyName" false
-	echo "   - :white_check_mark: Task Router - Workspace" >>$GITHUB_STEP_SUMMARY
+	echo "   - :white_check_mark: TaskRouter workspace" >>$GITHUB_STEP_SUMMARY
 
 	workflows=$(npx twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json | jq 'map(del(.configuration))')
 	queues=$(npx twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
