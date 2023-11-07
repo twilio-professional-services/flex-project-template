@@ -89,8 +89,7 @@ const performRename = async () => {
   const mappingsFile = './scripts/config/mappings.json'
   const originalMappings = await fs.readFile(mappingsFile, "utf8");
   let mappings = await JSON.parse(originalMappings);
-  mappings.SERVERLESS_DOMAIN.name = `serverless_functions_domain_${packageSuffixUndercore}`
-  mappings.VIDEO_SERVERLESS_DOMAIN.name = `serverless_functions_domain_${packageSuffixUndercore}`
+  mappings.SERVERLESS_DOMAIN.name = `serverless_functions_domain_${packageSuffixUndercore}`;
   await fs.writeFile(mappingsFile, JSON.stringify(mappings, null, 2), 'utf8');
 
    // rename the plugin directory
@@ -135,7 +134,7 @@ const performRename = async () => {
   shell.sed('-i', /custom-flex-extensions-serverless/g, `${name}`, `./infra-as-code/state/import_internal_state.sh`);
   shell.sed('-i', /custom-flex-extensions-serverless/g, `${name}`, `./infra-as-code/terraform/environments/default/variables.tf`);
   shell.sed('-i', /length\(var.SERVERLESS_DOMAIN\) > [0-9][0-9] && substr\(var.SERVERLESS_DOMAIN, 0, [0-9][0-9]\)/g, `length(var.SERVERLESS_DOMAIN) > ${name.length+1} && substr(var.SERVERLESS_DOMAIN, 0, ${name.length+1})`, `./infra-as-code/terraform/environments/default/variables.tf`);
-  shell.sed('-i', /custom-flex-extensions-serverless/g, `${name}`, `./infra-as-code/terraform/modules/studio/variables.tf`);
+  shell.sed('-i', /custom-flex-extensions-serverless/g, `${name}`, `./infra-as-code/terraform/modules/callback-and-voicemail/variables.tf`);
   shell.sed('-i', /length\(var.serverless_domain\) > [0-9][0-9] && substr\(var.serverless_domain, 0, [0-9][0-9]\)/g, `length(var.serverless_domain) > ${name.length+1} && substr(var.serverless_domain, 0, ${name.length+1})`, `./infra-as-code/terraform/modules/callback-and-voicemail/variables.tf`);
 
   // rename the state service that is in use
