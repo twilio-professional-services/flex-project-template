@@ -37,7 +37,7 @@ jobs:
       ENVIRONMENT: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v2
+      - uses: hashicorp/setup-terraform@v3
       - name: install Twilio CLI
         run: |
           npm install --ignore-scripts
