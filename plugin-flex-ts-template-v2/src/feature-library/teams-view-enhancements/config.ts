@@ -16,10 +16,22 @@ const {
   department = false,
   location = false,
   agent_skills = true,
-  activity_icon = true,
+  activity_icon = false,
 } = getFeatureFlags().features?.teams_view_enhancements?.columns || {};
 
-const { agent_activity_configuration } = (getFeatureFlags()?.features?.metrics_data_tiles as any) || {};
+const {
+  agent_activity_configuration = {
+    activities: {
+      Available: { color: 'green', icon: 'Accept' },
+      Outbound: { color: 'darkgreen', icon: 'Call' },
+      Break: { color: 'goldenrod', icon: 'Hold' },
+      Lunch: { color: 'darkorange', icon: 'Hamburger' },
+      Training: { color: 'red', icon: 'Bulb' },
+      Offline: { color: 'grey', icon: 'Minus' },
+    },
+    other: { color: 'darkred', icon: 'More' },
+  },
+} = (getFeatureFlags()?.features?.metrics_data_tiles as any) || {};
 
 const { teams = [] } = getFeatureFlags().common || {};
 

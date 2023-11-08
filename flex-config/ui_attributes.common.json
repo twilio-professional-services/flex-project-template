@@ -257,7 +257,7 @@
           "department": false,
           "location": false,
           "agent_skills": true,
-          "activity_icon": true
+          "activity_icon": false
         }
       },
       "send_audio_rec_file": {

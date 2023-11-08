@@ -58,7 +58,7 @@ const AgentActivityTile = (props: ComponentProps) => {
   return (
     <WideTileWrapper className="Twilio-AggregatedDataTile">
       <Summary>
-        <Box overflowY="auto" maxHeight="180px">
+        <Box overflowY="auto" maxHeight="190px">
           {activityNames.map((activity) => {
             const count = activityCounts[activity] || 0;
             return (
