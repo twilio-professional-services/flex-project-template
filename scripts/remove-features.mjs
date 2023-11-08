@@ -198,14 +198,14 @@ const performRemovals = async () => {
 
 const parseArgs = (args) => {
   // node scripts/remove-features.js
-  if (args.length < 4) {
+  if (args.length < 3) {
     // no features specified to remove or incorrect args format
     shell.echo("Removing all features...");
     return;
   }
   
   // node scripts/remove-features.js feat1 feat2 featX
-  if (args.length > 3 && args[2] !== "except") {
+  if (args.length > 2 && args[2] !== "except") {
     // removing specific feature(s)
     removeFeatures = args.slice(2);
     keepMode = false;
