@@ -38,7 +38,8 @@ These steps require Flex UI version 2.x to be configured on your Flex account.
 :::danger Important!
 These deploy steps will set up TaskRouter and Studio configuration to allow more complex features to work out-of-the-box. The following resources will be completely replaced and overwritten when selecting the `Deploy Terraform?` option:
 
-<details><summary>TaskRouter resources affected</summary>
+<details>
+<summary>TaskRouter resources affected</summary>
 
 <Tabs>
 
@@ -91,7 +92,8 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 </Tabs>
 </details>
 
-<details><summary>Studio resources affected</summary>
+<details>
+<summary>Studio resources affected</summary>
 
 | Name | Existing or New  | Description |
 | -----| --------------------| ------------|
