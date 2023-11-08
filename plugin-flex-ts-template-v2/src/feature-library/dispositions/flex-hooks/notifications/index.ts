@@ -17,9 +17,9 @@ export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => 
     timeout: 3500,
   },
   {
-    id: DispositionsNotification.DispositionRequired,
+    id: DispositionsNotification.AttributeRequired,
     type: Flex.NotificationType.error,
-    content: StringTemplates.DispositionRequired,
+    content: StringTemplates.AttributeRequired,
     timeout: 3500,
   },
 ];
