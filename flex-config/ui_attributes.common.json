@@ -225,24 +225,8 @@
             "dispositions": ["Promotional Sale", "Renewal"]
           }
         },
-        "text_attributes": [
-          {
-            "form_label": "Case Number",
-            "conversation_attribute": "case"
-          }
-        ],
-        "select_attributes": [
-          {
-            "form_label": "Topic",
-            "conversation_attribute": "conversation_attribute_3",
-            "options": ["New Order", "Cancel", "Update Order", "Warranty", "Inquiry"]
-          },
-          {
-            "form_label": "New Customer",
-            "conversation_attribute": "conversation_attribute_4",
-            "options": ["Yes", "No"]
-          }
-        ]
+        "text_attributes": [],
+        "select_attributes": []
       },
       "emoji_picker": {
         "enabled": true

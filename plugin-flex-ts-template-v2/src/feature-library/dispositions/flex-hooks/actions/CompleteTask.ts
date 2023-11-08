@@ -1,6 +1,12 @@
 import * as Flex from '@twilio/flex-ui';
 
-import { getDispositionsForQueue, isNotesEnabled, isRequireDispositionEnabledForQueue } from '../../config';
+import {
+  getDispositionsForQueue,
+  isNotesEnabled,
+  isRequireDispositionEnabledForQueue,
+  getTextAttributes,
+  getSelectAttributes,
+} from '../../config';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { DispositionsState } from '../states';
@@ -8,8 +14,11 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 import { DispositionsNotification } from '../notifications';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 
-const handleAbort = (flex: typeof Flex, abortFunction: any) => {
-  flex.Notifications.showNotification(DispositionsNotification.DispositionRequired);
+const handleAbort = (flex: typeof Flex, abortFunction: any, disposition: boolean = true) => {
+  if (disposition) flex.Notifications.showNotification(DispositionsNotification.DispositionRequired);
+  else {
+    flex.Notifications.showNotification(DispositionsNotification.AttributeRequired);
+  }
 
   flex.Actions.invokeAction('SetComponentState', {
     name: 'AgentTaskCanvasTabs',
@@ -28,9 +37,11 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     }
 
     const numDispositions = getDispositionsForQueue(payload.task?.queueSid ?? '').length;
+    const textAttributes = getTextAttributes();
+    const selectAttributes = getSelectAttributes();
 
     // If notes disabled, and no dispositions are configured, return.
-    if (numDispositions < 1 && !isNotesEnabled()) {
+    if (numDispositions < 1 && !isNotesEnabled() && textAttributes.length < 1 && selectAttributes.length < 1) {
       return;
     }
 
@@ -55,6 +66,17 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
       handleAbort(flex, abortFunction);
       return;
     }
+
+    textAttributes.forEach((attr) => {
+      if (attr.required && !taskDisposition?.custom_attributes[attr.conversation_attribute]) {
+        handleAbort(flex, abortFunction, false);
+      }
+    });
+    selectAttributes.forEach((attr) => {
+      if (attr.required && !taskDisposition?.custom_attributes[attr.conversation_attribute]) {
+        handleAbort(flex, abortFunction, false);
+      }
+    });
 
     if (!taskDisposition.disposition && (!isNotesEnabled() || !taskDisposition.notes)) {
       // Nothing for us to do, and it's okay!

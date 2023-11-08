@@ -12,6 +12,8 @@ export enum StringTemplates {
   SelectDispositionHelpText = 'PSSelectDispositionHelpText',
   NotesTitle = 'PSNotesTitle',
   NotesCharactersRemaining = 'PSNotesCharactersRemaining',
+  ChooseAnOption = 'PSChooseAnOption',
+  AttributeRequired = 'PSAttributeRequired',
 }
 
 export const stringHook = () => ({
@@ -22,6 +24,8 @@ export const stringHook = () => ({
     [StringTemplates.SelectDispositionHelpText]: 'The selected disposition will be saved when you complete this task.',
     [StringTemplates.NotesTitle]: 'Notes',
     [StringTemplates.NotesCharactersRemaining]: '{{characters}} characters remaining',
+    [StringTemplates.ChooseAnOption]: 'Choose An Option',
+    [StringTemplates.AttributeRequired]: 'A required value should be provided before you may complete this task.',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,

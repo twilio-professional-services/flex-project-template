@@ -113,10 +113,10 @@ const DispositionTab = (props: OwnProps) => {
     const attributes = { ...customAttributes, [key]: value };
     setCustomAttributes(attributes);
   };
-
+  const NO_OPTION_SELECTED = 'NoOptionSelected';
   return (
     <Box padding="space80" overflowY="scroll">
-      <Stack orientation="vertical" spacing="space80">
+      <Stack orientation="vertical" spacing="space50">
         {getDispositionsForQueue(props.task?.queueSid ?? '').length > 0 && (
           <RadioGroup
             name={`${props.task?.sid}-disposition`}
@@ -142,19 +142,19 @@ const DispositionTab = (props: OwnProps) => {
           const id = attr.conversation_attribute;
           return (
             <>
-              <Label htmlFor={id} required>
+              <Label htmlFor={id} required={attr.required || false}>
                 {attr.form_label}
               </Label>
               <Select
                 id={id}
-                value={customAttributes[id]}
+                value={customAttributes[id] || NO_OPTION_SELECTED}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                   const value = e.target.value;
-                  if (value !== 'none') handleChange(id, value);
+                  if (value !== NO_OPTION_SELECTED) handleChange(id, value);
                 }}
               >
-                <Option key="none" value="none">
-                  Select Option
+                <Option key={NO_OPTION_SELECTED} value={NO_OPTION_SELECTED} disabled>
+                  {templates[StringTemplates.ChooseAnOption]()}
                 </Option>
                 {attr.options.map((option) => {
                   return (
@@ -171,7 +171,9 @@ const DispositionTab = (props: OwnProps) => {
           const id = attr.conversation_attribute;
           return (
             <>
-              <Label htmlFor={id}>{attr.form_label}</Label>
+              <Label htmlFor={id} required={attr.required || false}>
+                {attr.form_label}
+              </Label>
               <Input
                 type="text"
                 id={id}

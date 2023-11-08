@@ -22,11 +22,12 @@ Within your `ui_attributes` file, there are several settings for the `dispositio
 - `per_queue` - allows you to set different configurations for tasks from the provided queue SID(s)
   - `require_disposition` - require the agent to select a disposition to complete tasks from this queue SID
   - `dispositions` - dispositions that are only listed for tasks from this queue SID
-- `text_attributes` an array of additional Text fields that can be added to the wrap up form. Each entry should looks like this with a `form_label` and [`conversation_attribute`](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) to use for storing the data.
+- `text_attributes` an array of additional Text fields that can be added to the wrap up form. Each entry should looks like this with a `form_label` and [`conversation_attribute`](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) to use for storing the data. The `required` property is optional. When provided with `required: true`, the Disposition form will enforce that the user enters a value.
 
 ```       {
             "form_label": "Case Number",
-            "conversation_attribute": "case"
+            "conversation_attribute": "case",
+            "required": true
           }
 ```
 
@@ -41,14 +42,15 @@ Within your `ui_attributes` file, there are several settings for the `dispositio
           {
             "form_label": "New Customer",
             "conversation_attribute": "conversation_attribute_4",
-            "options": ["Yes", "No"]
+            "options": ["Yes", "No"],
+            "required": true
           }
 ```
 
 > **Note**
 > If both global and per-queue dispositions are configured, the agent will be see a combined list.
 > If present, the per-queue `require_disposition` setting will override the higher-level `require_dispositions` setting.
-
+> The `required` property is optional for the Text and Select attributes. When provided with `required: true`, the Disposition form will enforce that the user enters or selects a value.
 Once your updated flex-config is deployed, the feature is enabled and ready to use.
 
 # how does it work?

@@ -11,6 +11,7 @@ export default interface DispositionsConfig {
 interface CustomAttribute {
   form_label: string;
   conversation_attribute: string;
+  required?: boolean;
 }
 
 interface SelectAttribute extends CustomAttribute {

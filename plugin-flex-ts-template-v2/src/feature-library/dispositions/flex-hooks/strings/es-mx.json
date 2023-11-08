@@ -4,5 +4,6 @@
   "PSSelectDispositionTitle": "Seleccione una disposición",
   "PSSelectDispositionHelpText": "La disposición seleccionada se guardará cuando complete esta tarea.",
   "PSNotesTitle": "Notas",
-  "PSNotesCharactersRemaining": "{{characters}} caracteres restantes"
+  "PSNotesCharactersRemaining": "{{characters}} caracteres restantes",
+  "PSChooseAnOption": "Elige una opcion"
 }
