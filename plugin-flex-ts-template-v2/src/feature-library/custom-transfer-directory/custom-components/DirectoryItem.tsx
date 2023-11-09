@@ -5,6 +5,7 @@ import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
 import { Tooltip } from '@twilio-paste/core/tooltip';
 import { Text } from '@twilio-paste/core/text';
+import { AgentIcon } from '@twilio-paste/icons/esm/AgentIcon';
 import { ProductContactCenterTeamsIcon } from '@twilio-paste/icons/esm/ProductContactCenterTeamsIcon';
 import { ProductPhoneNumbersIcon } from '@twilio-paste/icons/esm/ProductPhoneNumbersIcon';
 import { CallTransferIcon } from '@twilio-paste/icons/esm/CallTransferIcon';
@@ -48,6 +49,13 @@ const DirectoryItem = (props: DirectoryItemProps) => {
       )}
       {entry.type === 'queue' && (
         <ProductContactCenterTeamsIcon
+          key={`directory-item-${entry.type}-${entry.address}`}
+          element="TRANSFER_DIR_COMMON_ROW_ICON"
+          decorative={true}
+        />
+      )}
+      {entry.type === 'worker' && (
+        <AgentIcon
           key={`directory-item-${entry.type}-${entry.address}`}
           element="TRANSFER_DIR_COMMON_ROW_ICON"
           decorative={true}
