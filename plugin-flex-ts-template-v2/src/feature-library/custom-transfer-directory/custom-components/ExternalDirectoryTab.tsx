@@ -1,19 +1,10 @@
-import { Alert } from '@twilio-paste/core/alert';
-import { Flex } from '@twilio-paste/core/flex';
-import { withTaskContext, ITask, Actions, Manager, useFlexSelector, Template, templates } from '@twilio/flex-ui';
-import { useState, useRef, useEffect } from 'react';
-import debounce from 'lodash/debounce';
+import { withTaskContext, ITask, Actions, Manager, useFlexSelector } from '@twilio/flex-ui';
+import { useState, useEffect } from 'react';
 
-import { SearchBox } from './CommonDirectoryComponents';
 import { getExternalDirectory, isVoiceXWTEnabled } from '../config';
 import { DirectoryEntry, ExternalDirectoryEntry } from '../types/DirectoryEntry';
-import { DirectoryItem } from './DirectoryItem';
 import AppState from '../../../types/manager/AppState';
-import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
-
-export interface TransferClickPayload {
-  mode: 'WARM' | 'COLD';
-}
+import DirectoryTab, { TransferClickPayload } from './DirectoryTab';
 
 export interface OwnProps {
   task: ITask;
@@ -21,28 +12,12 @@ export interface OwnProps {
 
 const ExternalDirectoryTab = (props: OwnProps) => {
   const [directory] = useState(getExternalDirectory() as Array<ExternalDirectoryEntry>);
-  const [filteredDirectory, setFilteredDirectory] = useState([] as Array<DirectoryEntry>);
 
   const workerAttrs = useFlexSelector((state: AppState) => state.flex.worker.attributes);
 
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
-  // takes the input in the search box and applies it to the queue result
-  // this will trigger the useEffect for a queueFilter update
-  const onQueueSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // eslint-disable-next-line no-eq-null, eqeqeq
-    if (event.target != null) {
-      filterDirectoryDebounce();
-    }
-  };
-
-  // function to filter the generatedQueueList and trigger a rerender
-  const filterExternalDirectory = () => {
-    const tempDir = directory
-      .filter((entry) => {
-        const searchString = searchInputRef.current?.value.toLocaleLowerCase() || '';
-        return entry.label.toLocaleLowerCase().includes(searchString);
-      })
+  // sort the directory and map to a DirectoryEntry array
+  const generateDirectoryEntries = (): Array<DirectoryEntry> => {
+    return directory
       .sort((a: ExternalDirectoryEntry, b: ExternalDirectoryEntry) => (a.label > b.label ? 1 : -1))
       .map(
         (entry) =>
@@ -54,13 +29,9 @@ const ExternalDirectoryTab = (props: OwnProps) => {
             type: 'number',
           } as DirectoryEntry),
       );
-
-    setFilteredDirectory(tempDir);
   };
 
-  const filterDirectoryDebounce = debounce(filterExternalDirectory, 500, { maxWait: 1000 });
-
-  const onTransferEntryClick = (entry: DirectoryEntry) => async (transferOptions: TransferClickPayload) => {
+  const onTransferEntryClick = (entry: DirectoryEntry, transferOptions: TransferClickPayload) => {
     const defaultFromNumber = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
     const callerId = workerAttrs.phone
       ? workerAttrs.phone
@@ -91,37 +62,13 @@ const ExternalDirectoryTab = (props: OwnProps) => {
         callerId: from,
       });
     }
-
-    Actions.invokeAction('HideDirectory');
   };
 
   useEffect(() => {
-    filterExternalDirectory();
+    generateDirectoryEntries();
   }, [directory]);
 
-  return (
-    <Flex key="external-directory-tab-list" vertical wrap={false} grow={1} shrink={1}>
-      <SearchBox key="key-tab-search-box" onInputChange={onQueueSearchInputChange} inputRef={searchInputRef} />
-      <Flex key="external-tab-results" vertical element="TRANSFER_DIR_COMMON_ROWS_CONTAINER">
-        {filteredDirectory.length === 0 ? (
-          <Alert variant="neutral">
-            <Template source={templates[StringTemplates.NoItemsFound]} />
-          </Alert>
-        ) : (
-          Array.from(filteredDirectory).map((entry: DirectoryEntry) => {
-            return (
-              <DirectoryItem
-                task={props.task}
-                entry={entry}
-                key={`ext-dir-item-${entry.type}-${entry.address}`}
-                onTransferClick={onTransferEntryClick(entry)}
-              />
-            );
-          })
-        )}
-      </Flex>
-    </Flex>
-  );
+  return <DirectoryTab entries={generateDirectoryEntries()} onTransferClick={onTransferEntryClick} />;
 };
 
 export default withTaskContext(ExternalDirectoryTab);

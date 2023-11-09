@@ -21,7 +21,7 @@ export interface DirectoryItemProps {
   onTransferClick: (options: any) => void;
 }
 
-export const DirectoryItem = (props: DirectoryItemProps) => {
+const DirectoryItem = (props: DirectoryItemProps) => {
   const { entry, task, onTransferClick } = props;
 
   const onWarmTransferClick = () => {
@@ -140,3 +140,5 @@ export const DirectoryItem = (props: DirectoryItemProps) => {
     </Flex>
   );
 };
+
+export default DirectoryItem;
