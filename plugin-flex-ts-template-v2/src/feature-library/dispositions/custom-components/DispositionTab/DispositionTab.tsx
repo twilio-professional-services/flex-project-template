@@ -9,6 +9,7 @@ import { Label } from '@twilio-paste/core/label';
 import { Select, Option } from '@twilio-paste/core/select';
 import { HelpText } from '@twilio-paste/core/help-text';
 import { Box } from '@twilio-paste/core/box';
+import { CheckboxGroup, Checkbox } from '@twilio-paste/core/checkbox';
 import debounce from 'lodash/debounce';
 
 import {
@@ -17,6 +18,7 @@ import {
   isRequireDispositionEnabledForQueue,
   getTextAttributes,
   getSelectAttributes,
+  getMultiSelectGroup,
 } from '../../config';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
@@ -32,9 +34,11 @@ const DispositionTab = (props: OwnProps) => {
   const [disposition, setDisposition] = useState('');
   const [notes, setNotes] = useState('');
   const [customAttributes, setCustomAttributes] = useState({} as any);
+  const [groupOptions, setGroupOptions] = useState({} as any);
 
   const textAttributes = getTextAttributes();
   const selectAttributes = getSelectAttributes();
+  const group = getMultiSelectGroup();
 
   const dispatch = useDispatch();
   const { tasks } = useSelector((state: AppState) => state[reduxNamespace].dispositions as DispositionsState);
@@ -80,8 +84,14 @@ const DispositionTab = (props: OwnProps) => {
       }
       // set custom attributes from Redux state
       setCustomAttributes(tasks[props.task.taskSid].custom_attributes);
+      const options = {} as any;
+      const optionsString = tasks[props.task.taskSid].custom_attributes[group.conversation_attribute] || '';
+      optionsString.split('|').forEach((opt) => {
+        options[opt] = true;
+      });
+      setGroupOptions(options);
     }
-  }, []);
+  }, [props?.task?.taskSid]);
 
   useEffect(() => {
     if (!disposition) return;
@@ -113,6 +123,19 @@ const DispositionTab = (props: OwnProps) => {
     const attributes = { ...customAttributes, [key]: value };
     setCustomAttributes(attributes);
   };
+
+  const handleCheckboxChange = (option: string, checked: boolean) => {
+    const newOptions = { ...groupOptions, [option]: checked };
+    setGroupOptions(newOptions);
+    // Convert checked options to a pipe | delimited string
+    const checkedOptions: string[] = [];
+    Object.keys(newOptions).forEach((opt) => {
+      if (newOptions[opt]) checkedOptions.push(opt);
+    });
+    const attributes = { ...customAttributes, [group.conversation_attribute]: checkedOptions.join('|') };
+    setCustomAttributes(attributes);
+  };
+
   const NO_OPTION_SELECTED = 'NoOptionSelected';
   return (
     <Box padding="space80" overflowY="scroll">
@@ -137,6 +160,34 @@ const DispositionTab = (props: OwnProps) => {
               </Radio>
             ))}
           </RadioGroup>
+        )}
+        {group.options && (
+          <div key={group.conversation_attribute}>
+            <CheckboxGroup
+              orientation="horizontal"
+              name={group.conversation_attribute}
+              legend={group.form_label}
+              helpText={templates[StringTemplates.ChooseAnOption]()}
+              required={group.required || false}
+            >
+              {group.options.map((option) => {
+                return (
+                  <Checkbox
+                    key={option}
+                    checked={groupOptions[option] || false}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      console.log('Checkbox event:', e);
+                      handleCheckboxChange(option, e.target.checked);
+                    }}
+                    id={option}
+                    name={option}
+                  >
+                    {option}
+                  </Checkbox>
+                );
+              })}
+            </CheckboxGroup>
+          </div>
         )}
         {selectAttributes.map((attr) => {
           const id = attr.conversation_attribute;
@@ -177,7 +228,7 @@ const DispositionTab = (props: OwnProps) => {
               <Input
                 type="text"
                 id={id}
-                value={customAttributes[id]}
+                value={customAttributes[id] || ''}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(id, e.target.value)}
               />
             </div>

@@ -1,5 +1,5 @@
 import { getFeatureFlags } from '../../utils/configuration';
-import DispositionsConfig from './types/ServiceConfiguration';
+import DispositionsConfig, { SelectAttribute } from './types/ServiceConfiguration';
 
 const {
   enabled = false,
@@ -9,6 +9,7 @@ const {
   per_queue = {},
   text_attributes = [],
   select_attributes = [],
+  multi_select_group = {},
 } = (getFeatureFlags()?.features?.dispositions as DispositionsConfig) || {};
 
 export const isFeatureEnabled = () => {
@@ -52,4 +53,7 @@ export const getTextAttributes = () => {
 };
 export const getSelectAttributes = () => {
   return select_attributes;
+};
+export const getMultiSelectGroup = (): SelectAttribute => {
+  return multi_select_group as SelectAttribute;
 };
