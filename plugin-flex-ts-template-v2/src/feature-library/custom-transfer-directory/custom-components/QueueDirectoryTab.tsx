@@ -86,6 +86,14 @@ const QueueDirectoryTab = (props: OwnProps) => {
   const queueMap = useRef(null as SyncMap | null);
 
   const { workspaceClient, insightsClient, workerClient } = Manager.getInstance();
+  const na = templates[StringTemplates.NA]();
+
+  const callWarmTransferEnabled =
+    Manager.getInstance().store.getState().flex.featureFlags.features['flex-warm-transfers']?.enabled;
+
+  const isWarmTransferEnabled =
+    props.task && TaskHelper.isCBMTask(props.task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;
+  const isColdTransferEnabled = props.task && TaskHelper.isCBMTask(props.task) ? isCbmColdTransferEnabled() : true;
 
   // takes the input in the search box and applies it to the queue result
   // this will trigger the useEffect for a queueFilter update
@@ -190,8 +198,6 @@ const QueueDirectoryTab = (props: OwnProps) => {
   };
 
   const queueToEntry = (queue: TransferQueue): DirectoryEntry => {
-    const na = templates[StringTemplates.NA]();
-
     const { total_eligible_workers: eligible, total_available_workers: available, total_tasks: tasks } = queue;
 
     const agentsAvailable = !available || !eligible ? na : `${available}/${eligible}`;
@@ -201,13 +207,6 @@ const QueueDirectoryTab = (props: OwnProps) => {
     const queue_tooltip = showRealTimeQueueData()
       ? templates[StringTemplates.QueueTooltip]({ agentsAvailable, tasksInQueue })
       : `${queue.name}`;
-
-    const callWarmTransferEnabled =
-      Manager.getInstance().store.getState().flex.featureFlags.features['flex-warm-transfers']?.enabled;
-
-    const isWarmTransferEnabled =
-      props.task && TaskHelper.isCBMTask(props.task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;
-    const isColdTransferEnabled = props.task && TaskHelper.isCBMTask(props.task) ? isCbmColdTransferEnabled() : true;
 
     return {
       cold_transfer_enabled: isColdTransferEnabled,
