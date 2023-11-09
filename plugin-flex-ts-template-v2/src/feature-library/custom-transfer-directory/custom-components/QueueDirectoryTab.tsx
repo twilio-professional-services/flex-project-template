@@ -28,7 +28,7 @@ import { CustomTransferDirectoryNotification } from '../flex-hooks/notifications
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 import { DirectoryEntry } from '../types/DirectoryEntry';
-import DirectoryTab from './DirectoryTab';
+import DirectoryTab, { TransferClickPayload } from './DirectoryTab';
 
 export interface IRealTimeQueueData {
   total_tasks: number | null;
@@ -44,10 +44,6 @@ export interface IRealTimeQueueData {
 }
 
 export interface TransferQueue extends IQueue, IRealTimeQueueData {}
-
-export interface TransferClickPayload {
-  mode: 'WARM' | 'COLD';
-}
 
 export interface OwnProps {
   task: ITask;
