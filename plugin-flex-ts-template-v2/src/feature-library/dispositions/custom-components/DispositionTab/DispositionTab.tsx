@@ -79,8 +79,8 @@ const DispositionTab = (props: OwnProps) => {
         setDisposition(tasks[props.task.taskSid].disposition);
       }
 
-      if (isNotesEnabled() && tasks[props.task.taskSid].notes) {
-        setNotes(tasks[props.task.taskSid].notes);
+      if (isNotesEnabled()) {
+        setNotes(tasks[props.task.taskSid].notes || '');
       }
       // set custom attributes from Redux state
       setCustomAttributes(tasks[props.task.taskSid].custom_attributes);
@@ -167,7 +167,7 @@ const DispositionTab = (props: OwnProps) => {
               orientation="horizontal"
               name={group.conversation_attribute}
               legend={group.form_label}
-              helpText={templates[StringTemplates.ChooseAnOption]()}
+              helpText={templates[StringTemplates.ChooseOptions]()}
               required={group.required || false}
             >
               {group.options.map((option) => {

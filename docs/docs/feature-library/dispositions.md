@@ -46,6 +46,15 @@ Within your `ui_attributes` file, there are several settings for the `dispositio
             "required": true
           }
 ```
+- `multi_select_group` a single object to render a Group of Checkboxes to allow for multi-select. Checked values are concatenated into a pipe delimited string in the attributes ("AB12|CD34|EF56", for below example).
+```
+         {
+          "form_label": "Account Options",
+          "conversation_attribute": "conversation_attribute_2",
+          "required": true,
+          "options": ["AB12", "CD34", "EF56"],
+        },
+```
 
 > **Note**
 > If both global and per-queue dispositions are configured, the agent will be see a combined list.

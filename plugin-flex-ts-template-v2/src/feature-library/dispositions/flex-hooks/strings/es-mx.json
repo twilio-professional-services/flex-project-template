@@ -6,5 +6,6 @@
   "PSNotesTitle": "Notas",
   "PSNotesCharactersRemaining": "{{characters}} caracteres restantes",
   "PSChooseAnOption": "Elige una opcion",
+  "PSChooseOptions": "Elija una o más opciones",
   "PSAttributeRequired": "Seleccione una opción o ingrese un valor para todos los campos obligatorios."
 }

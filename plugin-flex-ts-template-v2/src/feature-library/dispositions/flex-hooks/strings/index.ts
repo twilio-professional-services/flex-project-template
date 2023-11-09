@@ -13,6 +13,7 @@ export enum StringTemplates {
   NotesTitle = 'PSNotesTitle',
   NotesCharactersRemaining = 'PSNotesCharactersRemaining',
   ChooseAnOption = 'PSChooseAnOption',
+  ChooseOptions = 'PSChooseOption',
   AttributeRequired = 'PSAttributeRequired',
 }
 
@@ -25,6 +26,7 @@ export const stringHook = () => ({
     [StringTemplates.NotesTitle]: 'Notes',
     [StringTemplates.NotesCharactersRemaining]: '{{characters}} characters remaining',
     [StringTemplates.ChooseAnOption]: 'Choose An Option',
+    [StringTemplates.ChooseOptions]: 'Choose One or More Options',
     [StringTemplates.AttributeRequired]: 'Please select an option or enter a value for all required fields.',
   },
   'es-MX': esMX,
