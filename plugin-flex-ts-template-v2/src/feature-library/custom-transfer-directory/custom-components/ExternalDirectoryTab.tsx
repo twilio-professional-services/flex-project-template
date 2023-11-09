@@ -5,9 +5,9 @@ import { useState, useRef, useEffect } from 'react';
 import debounce from 'lodash/debounce';
 
 import { SearchBox } from './CommonDirectoryComponents';
-import { getExternalDirectory } from '../config';
-import { ExternalDirectoryEntry } from '../types/ServiceConfiguration';
-import { ExternalItem } from './ExternalItem';
+import { getExternalDirectory, isVoiceXWTEnabled } from '../config';
+import { DirectoryEntry, ExternalDirectoryEntry } from '../types/DirectoryEntry';
+import { DirectoryItem } from './DirectoryItem';
 import AppState from '../../../types/manager/AppState';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 
@@ -21,7 +21,7 @@ export interface OwnProps {
 
 const ExternalDirectoryTab = (props: OwnProps) => {
   const [directory] = useState(getExternalDirectory() as Array<ExternalDirectoryEntry>);
-  const [filteredDirectory, setFilteredDirectory] = useState([] as Array<ExternalDirectoryEntry>);
+  const [filteredDirectory, setFilteredDirectory] = useState([] as Array<DirectoryEntry>);
 
   const workerAttrs = useFlexSelector((state: AppState) => state.flex.worker.attributes);
 
@@ -43,14 +43,24 @@ const ExternalDirectoryTab = (props: OwnProps) => {
         const searchString = searchInputRef.current?.value.toLocaleLowerCase() || '';
         return entry.label.toLocaleLowerCase().includes(searchString);
       })
-      .sort((a: ExternalDirectoryEntry, b: ExternalDirectoryEntry) => (a.label > b.label ? 1 : -1));
+      .sort((a: ExternalDirectoryEntry, b: ExternalDirectoryEntry) => (a.label > b.label ? 1 : -1))
+      .map(
+        (entry) =>
+          ({
+            ...entry,
+            warm_transfer_enabled: entry.warm_transfer_enabled && isVoiceXWTEnabled(),
+            address: entry.number,
+            tooltip: entry.number,
+            type: 'number',
+          } as DirectoryEntry),
+      );
 
     setFilteredDirectory(tempDir);
   };
 
   const filterDirectoryDebounce = debounce(filterExternalDirectory, 500, { maxWait: 1000 });
 
-  const onTransferEntryClick = (entry: ExternalDirectoryEntry) => async (transferOptions: TransferClickPayload) => {
+  const onTransferEntryClick = (entry: DirectoryEntry) => async (transferOptions: TransferClickPayload) => {
     const defaultFromNumber = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
     const callerId = workerAttrs.phone
       ? workerAttrs.phone
@@ -61,7 +71,7 @@ const ExternalDirectoryTab = (props: OwnProps) => {
     if (transferOptions.mode === 'WARM')
       Actions.invokeAction('StartExternalWarmTransfer', {
         task: props.task,
-        phoneNumber: entry.number,
+        phoneNumber: entry.address,
         callerId,
       });
     else if (transferOptions.mode === 'COLD') {
@@ -77,7 +87,7 @@ const ExternalDirectoryTab = (props: OwnProps) => {
 
       Actions.invokeAction('StartExternalColdTransfer', {
         task: props.task,
-        phoneNumber: entry.number,
+        phoneNumber: entry.address,
         callerId: from,
       });
     }
@@ -98,13 +108,12 @@ const ExternalDirectoryTab = (props: OwnProps) => {
             <Template source={templates[StringTemplates.NoItemsFound]} />
           </Alert>
         ) : (
-          Array.from(filteredDirectory).map((entry: ExternalDirectoryEntry, index: number) => {
+          Array.from(filteredDirectory).map((entry: DirectoryEntry) => {
             return (
-              <ExternalItem
+              <DirectoryItem
                 task={props.task}
-                index={index}
                 entry={entry}
-                key={`ext-dir-item-${index}`}
+                key={`ext-dir-item-${entry.type}-${entry.address}`}
                 onTransferClick={onTransferEntryClick(entry)}
               />
             );

@@ -1,7 +1,7 @@
 import { Manager } from '@twilio/flex-ui';
 
 import { getFeatureFlags } from '../../utils/configuration';
-import { ExternalDirectoryEntry } from './types/ServiceConfiguration';
+import { ExternalDirectoryEntry } from './types/DirectoryEntry';
 
 const { enabled = false, use_paste_search_icon = false } = getFeatureFlags()?.features?.custom_transfer_directory || {};
 
