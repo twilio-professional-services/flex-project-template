@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { TaskHelper, ITask, templates } from '@twilio/flex-ui';
+import { Box } from '@twilio-paste/core/box';
 import { ButtonGroup } from '@twilio-paste/core/button-group';
 import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
@@ -33,6 +34,21 @@ const DirectoryItem = (props: DirectoryItemProps) => {
     onTransferClick({ mode: 'COLD' });
   };
 
+  const renderIcon = (): React.JSX.Element => {
+    if (entry.icon) {
+      return entry.icon;
+    }
+
+    switch (entry.type) {
+      case 'number':
+        return <ProductPhoneNumbersIcon decorative={true} />;
+      case 'queue':
+        return <ProductContactCenterTeamsIcon decorative={true} />;
+      default:
+        return <AgentIcon decorative={true} />;
+    }
+  };
+
   return (
     <Flex
       element="TRANSFER_DIR_COMMON_HORIZONTAL_ROW_CONTAINER"
@@ -40,41 +56,21 @@ const DirectoryItem = (props: DirectoryItemProps) => {
       vAlignContent="center"
       key={`directory-item-container-${entry.type}-${entry.address}`}
     >
-      {entry.type === 'number' && (
-        <ProductPhoneNumbersIcon
-          key={`directory-item-${entry.type}-${entry.address}`}
-          element="TRANSFER_DIR_COMMON_ROW_ICON"
-          decorative={true}
-        />
-      )}
-      {entry.type === 'queue' && (
-        <ProductContactCenterTeamsIcon
-          key={`directory-item-${entry.type}-${entry.address}`}
-          element="TRANSFER_DIR_COMMON_ROW_ICON"
-          decorative={true}
-        />
-      )}
-      {entry.type === 'worker' && (
-        <AgentIcon
-          key={`directory-item-${entry.type}-${entry.address}`}
-          element="TRANSFER_DIR_COMMON_ROW_ICON"
-          decorative={true}
-        />
-      )}
-
+      <Box key={`directory-item-icon-${entry.type}-${entry.address}`} element="TRANSFER_DIR_COMMON_ROW_ICON">
+        {renderIcon()}
+      </Box>
       <Tooltip
         key={`directory-item-label-tooltip-${entry.type}-${entry.address}`}
         element="TRANSFER_DIR_COMMON_TOOLTIP"
         text={entry.tooltip ?? entry.label}
       >
-        <Text
-          key={`directory-item-label-${entry.type}-${entry.address}`}
-          element="TRANSFER_DIR_COMMON_ROW_NAME"
-          as="div"
-          className="Twilio"
-        >
-          {entry.label}
-        </Text>
+        <Box key={`directory-item-label-${entry.type}-${entry.address}`} element="TRANSFER_DIR_COMMON_ROW_NAME">
+          {entry.labelComponent || (
+            <Text as="div" className="Twilio" element="TRANSFER_DIR_COMMON_ROW_NAME">
+              {entry.label}
+            </Text>
+          )}
+        </Box>
       </Tooltip>
 
       <ButtonGroup
