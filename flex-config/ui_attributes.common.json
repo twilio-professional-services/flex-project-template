@@ -226,7 +226,8 @@
           }
         },
         "text_attributes": [],
-        "select_attributes": []
+        "select_attributes": [],
+        "multi_select_group" : {}
       },
       "emoji_picker": {
         "enabled": true
