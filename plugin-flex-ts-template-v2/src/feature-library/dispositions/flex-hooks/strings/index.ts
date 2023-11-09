@@ -25,7 +25,7 @@ export const stringHook = () => ({
     [StringTemplates.NotesTitle]: 'Notes',
     [StringTemplates.NotesCharactersRemaining]: '{{characters}} characters remaining',
     [StringTemplates.ChooseAnOption]: 'Choose An Option',
-    [StringTemplates.AttributeRequired]: 'A required value should be provided before you may complete this task.',
+    [StringTemplates.AttributeRequired]: 'Please select an option or enter a value for all required fields.',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,

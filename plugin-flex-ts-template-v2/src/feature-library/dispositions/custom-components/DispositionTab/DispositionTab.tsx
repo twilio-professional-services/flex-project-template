@@ -141,7 +141,7 @@ const DispositionTab = (props: OwnProps) => {
         {selectAttributes.map((attr) => {
           const id = attr.conversation_attribute;
           return (
-            <>
+            <div key={id}>
               <Label htmlFor={id} required={attr.required || false}>
                 {attr.form_label}
               </Label>
@@ -164,13 +164,13 @@ const DispositionTab = (props: OwnProps) => {
                   );
                 })}
               </Select>
-            </>
+            </div>
           );
         })}
         {textAttributes.map((attr) => {
           const id = attr.conversation_attribute;
           return (
-            <>
+            <div key={id}>
               <Label htmlFor={id} required={attr.required || false}>
                 {attr.form_label}
               </Label>
@@ -180,7 +180,7 @@ const DispositionTab = (props: OwnProps) => {
                 value={customAttributes[id]}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(id, e.target.value)}
               />
-            </>
+            </div>
           );
         })}
         {isNotesEnabled() && (

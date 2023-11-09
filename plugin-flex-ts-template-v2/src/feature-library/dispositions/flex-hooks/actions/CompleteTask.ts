@@ -66,17 +66,14 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
       handleAbort(flex, abortFunction);
       return;
     }
-
+    let missing = 0;
     textAttributes.forEach((attr) => {
-      if (attr.required && !taskDisposition?.custom_attributes[attr.conversation_attribute]) {
-        handleAbort(flex, abortFunction, false);
-      }
+      if (attr.required && !taskDisposition?.custom_attributes[attr.conversation_attribute]) missing += 1;
     });
     selectAttributes.forEach((attr) => {
-      if (attr.required && !taskDisposition?.custom_attributes[attr.conversation_attribute]) {
-        handleAbort(flex, abortFunction, false);
-      }
+      if (attr.required && !taskDisposition?.custom_attributes[attr.conversation_attribute]) missing += 1;
     });
+    if (missing > 0) handleAbort(flex, abortFunction, false);
 
     if (!taskDisposition.disposition && (!isNotesEnabled() || !taskDisposition.notes)) {
       // Nothing for us to do, and it's okay!
