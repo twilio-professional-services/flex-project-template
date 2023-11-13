@@ -71,6 +71,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
   const [fetchedQueues, setFetchedQueues] = useState([] as Array<IQueue>);
   const [insightsQueues, setInsightsQueues] = useState([] as Array<MapItem>);
   const [filteredQueues, setFilteredQueues] = useState([] as Array<DirectoryEntry>);
+  const [isLoading, setIsLoading] = useState(true);
 
   const transferQueues = useRef([] as Array<TransferQueue>);
   const queueMap = useRef(null as SyncMap | null);
@@ -259,7 +260,13 @@ const QueueDirectoryTab = (props: OwnProps) => {
     generateTransferQueueList();
   }, [fetchedQueues, insightsQueues]);
 
-  return <DirectoryTab entries={filteredQueues} onTransferClick={onTransferQueueClick} />;
+  useEffect(() => {
+    if (transferQueues.current.length > 0) {
+      setIsLoading(false);
+    }
+  }, [filteredQueues]);
+
+  return <DirectoryTab entries={filteredQueues} isLoading={isLoading} onTransferClick={onTransferQueueClick} />;
 };
 
 export default withTaskContext(QueueDirectoryTab);

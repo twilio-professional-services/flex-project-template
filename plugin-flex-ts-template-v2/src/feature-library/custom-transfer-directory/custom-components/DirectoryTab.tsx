@@ -1,5 +1,6 @@
 import { Alert } from '@twilio-paste/core/alert';
 import { Flex } from '@twilio-paste/core/flex';
+import { Spinner } from '@twilio-paste/core/spinner';
 import { withTaskContext, ITask, Actions, Template, templates } from '@twilio/flex-ui';
 import { useState, useRef, useEffect } from 'react';
 import debounce from 'lodash/debounce';
@@ -16,6 +17,7 @@ export interface TransferClickPayload {
 export interface OwnProps {
   task: ITask;
   entries: Array<DirectoryEntry>;
+  isLoading: boolean;
   onTransferClick: (entry: DirectoryEntry, transferOptions: TransferClickPayload) => void;
 }
 
@@ -57,7 +59,12 @@ const DirectoryTab = (props: OwnProps) => {
     <Flex key="external-directory-tab-list" vertical wrap={false} grow={1} shrink={1}>
       <SearchBox key="key-tab-search-box" onInputChange={onQueueSearchInputChange} inputRef={searchInputRef} />
       <Flex key="external-tab-results" vertical element="TRANSFER_DIR_COMMON_ROWS_CONTAINER">
-        {filteredDirectory.length === 0 ? (
+        {props.isLoading && (
+          <Flex hAlignContent="center">
+            <Spinner decorative size="sizeIcon90" />
+          </Flex>
+        )}
+        {filteredDirectory.length === 0 && !props.isLoading ? (
           <Alert variant="neutral">
             <Template source={templates[StringTemplates.NoItemsFound]} />
           </Alert>

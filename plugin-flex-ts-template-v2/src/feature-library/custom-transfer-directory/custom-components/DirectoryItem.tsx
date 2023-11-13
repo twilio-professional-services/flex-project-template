@@ -49,6 +49,16 @@ const DirectoryItem = (props: DirectoryItemProps) => {
     }
   };
 
+  const renderLabel = (): React.JSX.Element => (
+    <Box key={`directory-item-label-${entry.type}-${entry.address}`} element="TRANSFER_DIR_COMMON_ROW_LABEL">
+      {entry.labelComponent || (
+        <Text as="div" className="Twilio" element="TRANSFER_DIR_COMMON_ROW_NAME">
+          {entry.label}
+        </Text>
+      )}
+    </Box>
+  );
+
   return (
     <Flex
       element="TRANSFER_DIR_COMMON_HORIZONTAL_ROW_CONTAINER"
@@ -59,19 +69,17 @@ const DirectoryItem = (props: DirectoryItemProps) => {
       <Box key={`directory-item-icon-${entry.type}-${entry.address}`} element="TRANSFER_DIR_COMMON_ROW_ICON">
         {renderIcon()}
       </Box>
-      <Tooltip
-        key={`directory-item-label-tooltip-${entry.type}-${entry.address}`}
-        element="TRANSFER_DIR_COMMON_TOOLTIP"
-        text={entry.tooltip ?? entry.label}
-      >
-        <Box key={`directory-item-label-${entry.type}-${entry.address}`} element="TRANSFER_DIR_COMMON_ROW_NAME">
-          {entry.labelComponent || (
-            <Text as="div" className="Twilio" element="TRANSFER_DIR_COMMON_ROW_NAME">
-              {entry.label}
-            </Text>
-          )}
-        </Box>
-      </Tooltip>
+      {entry.tooltip ? (
+        <Tooltip
+          key={`directory-item-label-tooltip-${entry.type}-${entry.address}`}
+          element="TRANSFER_DIR_COMMON_TOOLTIP"
+          text={entry.tooltip}
+        >
+          {renderLabel()}
+        </Tooltip>
+      ) : (
+        renderLabel()
+      )}
 
       <ButtonGroup
         element="TRANSFER_DIR_COMMON_ROW_BUTTONGROUP"

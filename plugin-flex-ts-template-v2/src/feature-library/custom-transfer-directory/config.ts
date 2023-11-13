@@ -14,6 +14,9 @@ const {
   global_exclude_filter = '',
 } = getFeatureFlags()?.features?.custom_transfer_directory?.queue || {};
 
+const { enabled: workerEnabled = false, show_only_available_workers = false } =
+  getFeatureFlags()?.features?.custom_transfer_directory?.worker || {};
+
 const {
   enabled: externalDirectoryEnabled = false,
   skipPhoneNumberValidation = false,
@@ -89,4 +92,12 @@ export const isVoiceXWTEnabled = () => {
 
 export const shouldSkipPhoneNumberValidation = () => {
   return skipPhoneNumberValidation;
+};
+
+export const isCustomWorkerTransferEnabled = (): boolean => {
+  return isFeatureEnabled() && workerEnabled;
+};
+
+export const showOnlyAvailableWorkers = (): boolean => {
+  return show_only_available_workers;
 };

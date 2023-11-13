@@ -68,7 +68,7 @@ const ExternalDirectoryTab = (props: OwnProps) => {
     generateDirectoryEntries();
   }, [directory]);
 
-  return <DirectoryTab entries={generateDirectoryEntries()} onTransferClick={onTransferEntryClick} />;
+  return <DirectoryTab entries={generateDirectoryEntries()} isLoading={false} onTransferClick={onTransferEntryClick} />;
 };
 
 export default withTaskContext(ExternalDirectoryTab);
