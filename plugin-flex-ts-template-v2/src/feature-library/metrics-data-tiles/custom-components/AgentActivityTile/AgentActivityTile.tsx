@@ -1,5 +1,6 @@
 import React from 'react';
 import { PieChart } from 'react-minimal-pie-chart';
+import { Box } from '@twilio-paste/core/box';
 import { BaseDataEntry, Data } from 'react-minimal-pie-chart/types/commonTypes';
 import { Icon, useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import AppState from 'types/manager/AppState';
@@ -57,23 +58,25 @@ const AgentActivityTile = (props: ComponentProps) => {
   return (
     <WideTileWrapper className="Twilio-AggregatedDataTile">
       <Summary>
-        {activityNames.map((activity) => {
-          const count = activityCounts[activity] || 0;
-          return (
-            <AgentActivity key={activity}>
-              <Icon icon={activityConfig.activities[activity]?.icon} />
-              <Label bgColor={activityConfig.activities[activity]?.color}>{activity}</Label>
-              <Metric> {count} </Metric>
-            </AgentActivity>
-          );
-        })}
-        <AgentActivity key="other">
-          <Icon icon={activityConfig.other?.icon} />
-          <Label bgColor={activityConfig.other?.color}>
-            <Template source={templates[StringTemplates.Other]} />
-          </Label>
-          <Metric> {activityCounts.other} </Metric>
-        </AgentActivity>
+        <Box overflowY="auto" maxHeight="190px">
+          {activityNames.map((activity) => {
+            const count = activityCounts[activity] || 0;
+            return (
+              <AgentActivity key={activity}>
+                <Icon icon={activityConfig.activities[activity]?.icon} />
+                <Label bgColor={activityConfig.activities[activity]?.color}>{activity}</Label>
+                <Metric> {count} </Metric>
+              </AgentActivity>
+            );
+          })}
+          <AgentActivity key="other">
+            <Icon icon={activityConfig.other?.icon} />
+            <Label bgColor={activityConfig.other?.color}>
+              <Template source={templates[StringTemplates.Other]} />
+            </Label>
+            <Metric> {activityCounts.other} </Metric>
+          </AgentActivity>
+        </Box>
       </Summary>
       <Chart>
         <Title>
