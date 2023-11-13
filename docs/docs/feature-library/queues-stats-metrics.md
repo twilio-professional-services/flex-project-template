@@ -11,11 +11,14 @@ Natively Flex displays the Active tasks count per queue. The Active task count i
 # Setup
 This feature can be enabled via the `flex-config` attributes. Just set the `queues_stats_metrics` `enabled` flag to `true` and enable the new columns as needed.
 
+The `agent_activity_stats_column` shows a Data icon that can be clicked to pop-up a small window to display the agent count per activity for that queue.
+
 ```json
       "queues_stats_metrics": {
         "enabled": false,
         "assigned_tasks_column": true,
-        "wrapping_tasks_column": true
+        "wrapping_tasks_column": true,
+        "agent_activity_stats_column": true
       },
 ```
 
