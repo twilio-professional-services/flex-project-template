@@ -151,8 +151,6 @@ eslint_report.json
 
 appConfig.js
 
-package-lock.json
-
 # Local .terraform directories
 **/.terraform/*
 
