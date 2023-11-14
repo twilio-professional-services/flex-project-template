@@ -57,7 +57,7 @@ const ContactHistory = () => {
             <Template source={templates[StringTemplates.ClearHistoryDialog]} />
           </AlertDialog>
         </Box>
-        <Box width="100%" padding="space40">
+        <Box overflowY="auto" width="100%" padding="space40">
           <Table variant="borderless">
             <THead>
               <Tr>

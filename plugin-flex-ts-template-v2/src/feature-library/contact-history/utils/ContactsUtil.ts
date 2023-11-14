@@ -18,7 +18,6 @@ class ContactsUtil {
   }
 
   initContactHistory = () => {
-    // const dispatch = useDispatch();
     const contactList = this.getRecentContactsList();
     if (contactList && contactList.length > 0) {
       manager.store.dispatch(setContactList({ contactList }));
