@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Actions, templates, Template } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
 import { Box } from '@twilio-paste/core/box';
 import { Table, THead, TBody, Tr, Th } from '@twilio-paste/core/table';
+import { AlertDialog } from '@twilio-paste/core/alert-dialog';
 
 import { clearContactList } from '../flex-hooks/state';
 import RecentContacts from '../utils/ContactsUtil';
@@ -15,6 +16,7 @@ import { reduxNamespace } from '../../../utils/state';
 import { StringTemplates } from '../flex-hooks/strings';
 
 const ContactHistory = () => {
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const contactData = useSelector((state: AppState) => {
     return { contactList: state[reduxNamespace]?.contactHistory?.contactList };
   });
@@ -31,17 +33,29 @@ const ContactHistory = () => {
   };
 
   const clearHistory = () => {
+    setConfirmOpen(false);
     dispatch(clearContactList());
     RecentContacts.clearContactList();
   };
 
+  const handleClose = () => setConfirmOpen(false);
   return (
     <Flex width="100%">
       <Flex vertical width="100%" grow shrink>
         <Box padding="space40">
-          <Button variant="primary" onClick={clearHistory}>
+          <Button variant="primary" onClick={async () => setConfirmOpen(true)}>
             <Template source={templates[StringTemplates.ClearHistory]} />
           </Button>
+          <AlertDialog
+            heading={templates[StringTemplates.ClearHistory]()}
+            isOpen={confirmOpen}
+            onConfirm={async () => clearHistory()}
+            onConfirmLabel={templates.ConfirmableDialogConfirmButton()}
+            onDismiss={handleClose}
+            onDismissLabel={templates.ConfirmableDialogCancelButton()}
+          >
+            <Template source={templates[StringTemplates.ClearHistoryDialog]} />
+          </AlertDialog>
         </Box>
         <Box width="100%" padding="space40">
           <Table variant="borderless">

@@ -2,6 +2,7 @@
 export enum StringTemplates {
   ContactHistory = 'PSContactHistory',
   ClearHistory = 'PSClearHistory',
+  ClearHistoryDialog= 'PSClearHistoryDialog',
   ContactChannel = 'PSContactChannel',
   ContactPhoneNumber = 'PSContactPhoneNumber',
   ContactName = 'PSContactName',
@@ -16,6 +17,7 @@ export const stringHook = () => ({
   'en-US': {
     [StringTemplates.ContactHistory]: 'Contact History',
     [StringTemplates.ClearHistory]: 'Clear History',
+    [StringTemplates.ClearHistoryDialog]: 'Please confirm that you want to delete all your contact history.',
     [StringTemplates.ContactChannel]: 'Channel',
     [StringTemplates.ContactPhoneNumber]: 'Phone Number',
     [StringTemplates.ContactName]: 'Name',
@@ -26,8 +28,9 @@ export const stringHook = () => ({
     [StringTemplates.ContactNotes]: 'Notes',
   },
   'es-MX': {
-    [StringTemplates.ContactHistory]: 'Contact History',
+    [StringTemplates.ContactHistory]: 'Historial de contactos',
     [StringTemplates.ClearHistory]: 'Borrar la historia',
+    [StringTemplates.ClearHistoryDialog]: 'Confirme que desea eliminar todo su historial de contactos.',
     [StringTemplates.ContactChannel]: 'Canal',
     [StringTemplates.ContactPhoneNumber]: 'Número de teléfono',
     [StringTemplates.ContactName]: 'Nombre',

@@ -4,9 +4,9 @@ import { Flex } from '@twilio-paste/core/flex';
 import { Box } from '@twilio-paste/core/box';
 import { Tooltip } from '@twilio-paste/core/tooltip';
 import { Tr, Td } from '@twilio-paste/core/table';
-import { ArrowBackIcon } from '@twilio-paste/icons/esm/ArrowBackIcon';
-import { ArrowForwardIcon } from '@twilio-paste/icons/esm/ArrowForwardIcon';
 import { ProductChatIcon } from '@twilio-paste/icons/esm/ProductChatIcon';
+import { CallIncomingIcon } from '@twilio-paste/icons/esm/CallIncomingIcon';
+import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 
 import { Contact } from '../types';
 
@@ -22,19 +22,11 @@ const ContactRecord = (props: OwnProps) => {
       <Td textAlign="center">
         <Flex hAlignContent="center">
           <Box>
-            {contact.channelType === 'voice' && (
-              <Button
-                variant="link"
-                size="small"
-                title="Call"
-                onClick={() => {
-                  startContact(contact);
-                }}
-              >
-                <Icon icon="Call" />
-                {contact.direction === 'inbound' && <ArrowBackIcon decorative={false} title="Incoming" />}
-                {contact.direction === 'outbound' && <ArrowForwardIcon decorative={false} title="Outgoing" />}
-              </Button>
+            {contact.channelType === 'voice' && contact.direction === 'inbound' && (
+              <CallIncomingIcon decorative={true} />
+            )}
+            {contact.channelType === 'voice' && contact.direction === 'outbound' && (
+              <CallOutgoingIcon decorative={true} />
             )}
             {contact.channelType === 'sms' && <Icon icon="Sms" />}
             {contact.channelType === 'web' && <Icon icon="Message" />}
@@ -42,7 +34,18 @@ const ContactRecord = (props: OwnProps) => {
           </Box>
         </Flex>
       </Td>
-      <Td>{contact.phoneNumber}</Td>
+      <Td>
+        <Button
+          variant="link"
+          size="small"
+          title="Click to Call"
+          onClick={() => {
+            startContact(contact);
+          }}
+        >
+          {contact.phoneNumber}
+        </Button>
+      </Td>
       <Td>{contact.name}</Td>
       <Td>{contact.dateTime}</Td>
       <Td textAlign="center">{contact.duration}</Td>

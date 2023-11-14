@@ -1,10 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
-import { useDispatch } from 'react-redux';
+import { Manager } from '@twilio/flex-ui';
 
 import { addContact, setContactList } from '../flex-hooks/state';
 import { Contact } from '../types';
 import { getMaxContacts } from '../config';
 
+const manager = Manager.getInstance();
 const ContactHistoryKey = 'CONTACT_HISTORY';
 
 class ContactsUtil {
@@ -20,7 +21,7 @@ class ContactsUtil {
     // const dispatch = useDispatch();
     const contactList = this.getRecentContactsList();
     if (contactList && contactList.length > 0) {
-      // dispatch(setContactList({ contactList }));
+      manager.store.dispatch(setContactList({ contactList }));
     }
   };
 
@@ -29,7 +30,6 @@ class ContactsUtil {
   };
 
   addContact = (task: Flex.ITask) => {
-    // const dispatch = useDispatch();
     const { taskChannelUniqueName: channel, sid: taskSid, queueName, age: duration } = task;
     const dateTime = task.dateCreated.toLocaleString('en-US');
     // Enable caller name number lookup on phone number to populate name
@@ -81,7 +81,7 @@ class ContactsUtil {
     const newList = [contact].concat(contactList).slice(0, getMaxContacts());
     localStorage.setItem(ContactHistoryKey, JSON.stringify(newList));
     // Using Redux app state
-    // dispatch(addContact({ contact }));
+    manager.store.dispatch(addContact({ contact }));
   };
 
   clearContactList = () => {
