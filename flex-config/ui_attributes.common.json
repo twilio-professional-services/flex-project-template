@@ -218,11 +218,20 @@
         "enabled": true,
         "enable_notes": true,
         "require_disposition": false,
-        "global_dispositions": ["Resolved", "Not Resolved", "Follow-up Required", "Escalation", "Wrong Department"],
+        "global_dispositions": [
+          "Resolved",
+          "Not Resolved",
+          "Follow-up Required",
+          "Escalation",
+          "Wrong Department"
+        ],
         "per_queue": {
           "exampleQueueSid": {
             "require_disposition": true,
-            "dispositions": ["Promotional Sale", "Renewal"]
+            "dispositions": [
+              "Promotional Sale",
+              "Renewal"
+            ]
           }
         }
       },
@@ -353,6 +362,9 @@
         "api_key": "",
         "intake_region": "",
         "flush_timeout": 5000
+      },
+      "contact_history": {
+        "enabled": false
       }
     }
   }
