@@ -364,7 +364,8 @@
         "flush_timeout": 5000
       },
       "contact_history": {
-        "enabled": false
+        "enabled": false,
+        "max_contacts": 25
       }
     }
   }

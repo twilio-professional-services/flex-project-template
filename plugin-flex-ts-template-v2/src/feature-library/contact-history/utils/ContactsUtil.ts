@@ -6,7 +6,6 @@ import { Contact } from '../types';
 import { getMaxContacts } from '../config';
 
 const ContactHistoryKey = 'CONTACT_HISTORY';
-const dispatch = useDispatch();
 
 class ContactsUtil {
   getRecentContactsList(): Contact[] {
@@ -18,9 +17,10 @@ class ContactsUtil {
   }
 
   initContactHistory = () => {
+    // const dispatch = useDispatch();
     const contactList = this.getRecentContactsList();
     if (contactList && contactList.length > 0) {
-      dispatch(setContactList({ contactList }));
+      // dispatch(setContactList({ contactList }));
     }
   };
 
@@ -29,6 +29,7 @@ class ContactsUtil {
   };
 
   addContact = (task: Flex.ITask) => {
+    // const dispatch = useDispatch();
     const { taskChannelUniqueName: channel, sid: taskSid, queueName, age: duration } = task;
     const dateTime = task.dateCreated.toLocaleString('en-US');
     // Enable caller name number lookup on phone number to populate name
@@ -80,7 +81,7 @@ class ContactsUtil {
     const newList = [contact].concat(contactList).slice(0, getMaxContacts());
     localStorage.setItem(ContactHistoryKey, JSON.stringify(newList));
     // Using Redux app state
-    dispatch(addContact({ contact }));
+    // dispatch(addContact({ contact }));
   };
 
   clearContactList = () => {

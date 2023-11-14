@@ -12,6 +12,7 @@ import ContactRecord from './ContactRecord';
 import { Contact } from '../types';
 import AppState from '../../../types/manager/AppState';
 import { reduxNamespace } from '../../../utils/state';
+import { StringTemplates } from '../flex-hooks/strings';
 
 const ContactHistory = () => {
   const contactData = useSelector((state: AppState) => {
@@ -39,36 +40,36 @@ const ContactHistory = () => {
       <Flex vertical width="100%" grow shrink>
         <Box padding="space40">
           <Button variant="primary" onClick={clearHistory}>
-            <Template source={templates.ClearHistory} />
+            <Template source={templates[StringTemplates.ClearHistory]} />
           </Button>
         </Box>
-        <Box width="100%">
-          <Table>
+        <Box width="100%" padding="space40">
+          <Table variant="borderless">
             <THead>
               <Tr>
                 <Th>
-                  <Template source={templates.ContactChannel} />
+                  <Template source={templates[StringTemplates.ContactChannel]} />
                 </Th>
                 <Th>
-                  <Template source={templates.ContactPhoneNumber} />
+                  <Template source={templates[StringTemplates.ContactPhoneNumber]} />
                 </Th>
                 <Th>
-                  <Template source={templates.ContactName} />
+                  <Template source={templates[StringTemplates.ContactName]} />
                 </Th>
                 <Th>
-                  <Template source={templates.ContactDateTime} />
+                  <Template source={templates[StringTemplates.ContactDateTime]} />
                 </Th>
                 <Th align="center">
-                  <Template source={templates.ContactDuration} />
+                  <Template source={templates[StringTemplates.ContactDuration]} />
                 </Th>
                 <Th>
-                  <Template source={templates.ContactQueue} />
+                  <Template source={templates[StringTemplates.ContactQueue]} />
                 </Th>
                 <Th>
-                  <Template source={templates.ContactOutcome} />
+                  <Template source={templates[StringTemplates.ContactOutcome]} />
                 </Th>
                 <Th>
-                  <Template source={templates.ContactNotes} />
+                  <Template source={templates[StringTemplates.ContactNotes]} />
                 </Th>
               </Tr>
             </THead>
