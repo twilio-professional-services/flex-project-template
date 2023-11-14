@@ -1,4 +1,4 @@
-import { Icon } from '@twilio/flex-ui';
+import { Icon, templates } from '@twilio/flex-ui';
 import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
 import { Box } from '@twilio-paste/core/box';
@@ -8,6 +8,7 @@ import { ProductChatIcon } from '@twilio-paste/icons/esm/ProductChatIcon';
 import { CallIncomingIcon } from '@twilio-paste/icons/esm/CallIncomingIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 
+import { StringTemplates } from '../flex-hooks/strings';
 import { Contact } from '../types';
 
 export interface OwnProps {
@@ -23,10 +24,18 @@ const ContactRecord = (props: OwnProps) => {
         <Flex hAlignContent="center">
           <Box>
             {contact.channelType === 'voice' && contact.direction === 'inbound' && (
-              <CallIncomingIcon decorative={true} />
+              <Tooltip text={templates[StringTemplates.ContactInboundCall]()} placement="top">
+                <div>
+                  <CallIncomingIcon decorative={true} />
+                </div>
+              </Tooltip>
             )}
             {contact.channelType === 'voice' && contact.direction === 'outbound' && (
-              <CallOutgoingIcon decorative={true} />
+              <Tooltip text={templates[StringTemplates.ContactOutboundCall]()} placement="top">
+                <div>
+                  <CallOutgoingIcon decorative={true} />
+                </div>
+              </Tooltip>
             )}
             {contact.channelType === 'sms' && <Icon icon="Sms" />}
             {contact.channelType === 'web' && <Icon icon="Message" />}
@@ -54,7 +63,7 @@ const ContactRecord = (props: OwnProps) => {
       <Td>
         {contact.notes && (
           <Tooltip text={contact.notes} placement="bottom">
-            <div>{contact.notes.substring(0, 10).concat('...')} </div>
+            <div>{contact.notes.substring(0, 20).concat('...')} </div>
           </Tooltip>
         )}
       </Td>
