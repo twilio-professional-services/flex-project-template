@@ -80,6 +80,9 @@ const ContactHistory = () => {
                   <Template source={templates[StringTemplates.ContactQueue]} />
                 </Th>
                 <Th>
+                  <Template source={templates[StringTemplates.ContactCallRecording]} />
+                </Th>
+                <Th>
                   <Template source={templates[StringTemplates.ContactOutcome]} />
                 </Th>
                 <Th>

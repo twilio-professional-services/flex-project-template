@@ -12,6 +12,9 @@ export interface Contact {
   conversationSid?: string;
   outcome?: string;
   notes?: string;
+  segmentLink?: string;
+  workerCallSid?: string;
+  customerCallSid?: string;
 }
 
 export interface Message {

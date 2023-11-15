@@ -42,10 +42,20 @@ class ContactsUtil {
       conversationSid,
       conversations,
       customerName,
+      conference,
     } = task.attributes;
 
-    const outcome = task.attributes?.conversations?.outcome || 'Completed';
+    const outcome = conversations?.outcome || 'Completed';
+    const notes = conversations?.content;
+    let segmentLink;
+    if (conversations?.segment_link) segmentLink = conversations?.segment_link.replace(/\\/g, '');
 
+    let workerCallSid;
+    let customerCallSid;
+    if (conference && conference?.participants) {
+      workerCallSid = conference?.participants.worker;
+      customerCallSid = conference?.participants.customer;
+    }
     const contact: Contact = {
       direction,
       channel,
@@ -55,10 +65,13 @@ class ContactsUtil {
       queueName,
       duration,
       outcome,
+      notes,
+      segmentLink,
       channelType,
       conversationSid,
+      workerCallSid,
+      customerCallSid,
     };
-    contact.notes = conversations?.content;
 
     // Default
     contact.name = customerName || 'Customer';

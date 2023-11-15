@@ -4,6 +4,7 @@ import { Flex } from '@twilio-paste/core/flex';
 import { Box } from '@twilio-paste/core/box';
 import { Tooltip } from '@twilio-paste/core/tooltip';
 import { Tr, Td } from '@twilio-paste/core/table';
+import { Anchor } from '@twilio-paste/core/anchor';
 import { ProductChatIcon } from '@twilio-paste/icons/esm/ProductChatIcon';
 import { CallIncomingIcon } from '@twilio-paste/icons/esm/CallIncomingIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
@@ -18,7 +19,19 @@ export interface OwnProps {
 
 const ContactRecord = (props: OwnProps) => {
   const { contact, startContact } = props;
-  const { taskSid, channelType, direction, phoneNumber, name, dateTime, duration, queueName, outcome, notes } = contact;
+  const {
+    taskSid,
+    channelType,
+    direction,
+    phoneNumber,
+    name,
+    dateTime,
+    duration,
+    queueName,
+    segmentLink,
+    outcome,
+    notes,
+  } = contact;
   const taskDuration = duration > 60 ? `${Math.floor(duration / 60)}:${duration % 60}` : `${duration}s`;
 
   let agentNotes = notes;
@@ -65,6 +78,13 @@ const ContactRecord = (props: OwnProps) => {
       <Td>{dateTime}</Td>
       <Td>{taskDuration}</Td>
       <Td>{queueName}</Td>
+      <Td>
+        {segmentLink && (
+          <Anchor href={segmentLink} showExternal>
+            Review
+          </Anchor>
+        )}
+      </Td>
       <Td>{outcome}</Td>
       <Td>
         {agentNotes && (

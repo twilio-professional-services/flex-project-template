@@ -11,6 +11,7 @@ export enum StringTemplates {
   ContactDateTime = 'PSContactDateTime',
   ContactDuration = 'PSContactDuration',
   ContactQueue = 'PSContactQueue',
+  ContactCallRecording = 'PSContactCallRecording',
   ContactOutcome = 'PSContactOutcome',
   ContactNotes = 'PSContactNotes',
 }
@@ -28,6 +29,7 @@ export const stringHook = () => ({
     [StringTemplates.ContactDateTime]: 'Date & Time',
     [StringTemplates.ContactDuration]: 'Task Duration',
     [StringTemplates.ContactQueue]: 'Queue',
+    [StringTemplates.ContactCallRecording]: 'Call Recording',
     [StringTemplates.ContactOutcome]: 'Outcome',
     [StringTemplates.ContactNotes]: 'Notes',
   },
@@ -43,6 +45,7 @@ export const stringHook = () => ({
     [StringTemplates.ContactDateTime]: 'Fecha y Hora',
     [StringTemplates.ContactDuration]: 'Duración de la tarea',
     [StringTemplates.ContactQueue]: 'Cola',
+    [StringTemplates.ContactCallRecording]: 'Grabacion de llamada',
     [StringTemplates.ContactOutcome]: 'Resultado',
     [StringTemplates.ContactNotes]: 'Notas',
   },
