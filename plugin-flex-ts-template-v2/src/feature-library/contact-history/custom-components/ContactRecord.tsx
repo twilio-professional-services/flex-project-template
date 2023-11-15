@@ -18,28 +18,34 @@ export interface OwnProps {
 
 const ContactRecord = (props: OwnProps) => {
   const { contact, startContact } = props;
+  const { taskSid, channelType, direction, phoneNumber, name, dateTime, duration, queueName, outcome, notes } = contact;
+  const taskDuration = duration > 60 ? `${Math.floor(duration / 60)}:${duration % 60}` : `${duration}s`;
+
+  let agentNotes = notes;
+  if (notes && notes?.length > 20) agentNotes = notes.substring(0, 20).concat('...');
+
   return (
-    <Tr key={contact.taskSid}>
+    <Tr key={taskSid}>
       <Td textAlign="center">
         <Flex hAlignContent="center">
           <Box>
-            {contact.channelType === 'voice' && contact.direction === 'inbound' && (
+            {channelType === 'voice' && direction === 'inbound' && (
               <Tooltip text={templates[StringTemplates.ContactInboundCall]()} placement="top">
                 <div>
                   <CallIncomingIcon decorative={true} />
                 </div>
               </Tooltip>
             )}
-            {contact.channelType === 'voice' && contact.direction === 'outbound' && (
+            {channelType === 'voice' && direction === 'outbound' && (
               <Tooltip text={templates[StringTemplates.ContactOutboundCall]()} placement="top">
                 <div>
                   <CallOutgoingIcon decorative={true} />
                 </div>
               </Tooltip>
             )}
-            {contact.channelType === 'sms' && <Icon icon="Sms" />}
-            {contact.channelType === 'web' && <Icon icon="Message" />}
-            {contact.channelType === 'custom' && <ProductChatIcon decorative={false} title="Custom Chat" />}
+            {channelType === 'sms' && <Icon icon="Sms" />}
+            {channelType === 'web' && <Icon icon="Message" />}
+            {channelType === 'custom' && <ProductChatIcon decorative={false} title="Custom Chat" />}
           </Box>
         </Flex>
       </Td>
@@ -52,18 +58,18 @@ const ContactRecord = (props: OwnProps) => {
             startContact(contact);
           }}
         >
-          {contact.phoneNumber}
+          {phoneNumber}
         </Button>
       </Td>
-      <Td>{contact.name}</Td>
-      <Td>{contact.dateTime}</Td>
-      <Td textAlign="center">{contact.duration}</Td>
-      <Td>{contact.queueName}</Td>
-      <Td>{contact.outcome}</Td>
+      <Td>{name}</Td>
+      <Td>{dateTime}</Td>
+      <Td>{taskDuration}</Td>
+      <Td>{queueName}</Td>
+      <Td>{outcome}</Td>
       <Td>
-        {contact.notes && (
-          <Tooltip text={contact.notes} placement="bottom">
-            <div>{contact.notes.substring(0, 20).concat('...')} </div>
+        {agentNotes && (
+          <Tooltip text={notes || ''} placement="left">
+            <div>{agentNotes} </div>
           </Tooltip>
         )}
       </Td>
