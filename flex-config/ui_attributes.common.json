@@ -251,10 +251,13 @@
         "handle_time_exceeded_threshold": 300,
         "display_task_queue_name": true,
         "columns": {
+          "calls": true,
+          "other_tasks": true,
           "team": true,
           "department": false,
           "location": false,
-          "agent_skills": true
+          "agent_skills": true,
+          "activity_icon": false
         }
       },
       "send_audio_rec_file": {
@@ -338,7 +341,8 @@
       "queues_stats_metrics": {
         "enabled": false,
         "assigned_tasks_column": true,
-        "wrapping_tasks_column": true
+        "wrapping_tasks_column": true,
+        "agent_activity_stats_column": true
       },
       "sip_support": {
         "enabled": false
