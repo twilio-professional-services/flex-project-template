@@ -266,7 +266,14 @@ const QueueDirectoryTab = (props: OwnProps) => {
     }
   }, [filteredQueues]);
 
-  return <DirectoryTab entries={filteredQueues} isLoading={isLoading} onTransferClick={onTransferQueueClick} />;
+  return (
+    <DirectoryTab
+      entries={filteredQueues}
+      isLoading={isLoading}
+      onTransferClick={onTransferQueueClick}
+      noEntriesMessage={templates[StringTemplates.NoQueuesAvailable]}
+    />
+  );
 };
 
 export default withTaskContext(QueueDirectoryTab);

@@ -1,4 +1,4 @@
-import { withTaskContext, Manager, Actions, ITask, TaskHelper, Icon } from '@twilio/flex-ui';
+import { withTaskContext, Manager, Actions, ITask, TaskHelper, Icon, templates } from '@twilio/flex-ui';
 import { Worker } from 'twilio-taskrouter';
 import { useEffect, useState } from 'react';
 import { Stack } from '@twilio-paste/core/stack';
@@ -9,6 +9,7 @@ import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { showOnlyAvailableWorkers, isCbmColdTransferEnabled, isCbmWarmTransferEnabled } from '../config';
 import { DirectoryEntry } from '../types/DirectoryEntry';
 import DirectoryTab from './DirectoryTab';
+import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 
 export interface TransferClickPayload {
   mode: 'WARM' | 'COLD';
@@ -117,7 +118,14 @@ const QueueDirectoryTab = (props: OwnProps) => {
     }
   }, [filteredWorkers]);
 
-  return <DirectoryTab entries={filteredWorkers} isLoading={isLoading} onTransferClick={onTransferClick} />;
+  return (
+    <DirectoryTab
+      entries={filteredWorkers}
+      isLoading={isLoading}
+      onTransferClick={onTransferClick}
+      noEntriesMessage={templates[StringTemplates.NoAgentsAvailable]}
+    />
+  );
 };
 
 export default withTaskContext(QueueDirectoryTab);

@@ -18,6 +18,7 @@ export interface OwnProps {
   task: ITask;
   entries: Array<DirectoryEntry>;
   isLoading: boolean;
+  noEntriesMessage?: string;
   onTransferClick: (entry: DirectoryEntry, transferOptions: TransferClickPayload) => void;
 }
 
@@ -66,7 +67,13 @@ const DirectoryTab = (props: OwnProps) => {
         )}
         {filteredDirectory.length === 0 && !props.isLoading ? (
           <Alert variant="neutral">
-            <Template source={templates[StringTemplates.NoItemsFound]} />
+            <Template
+              source={
+                props.noEntriesMessage && !searchInputRef.current?.value
+                  ? props.noEntriesMessage
+                  : templates[StringTemplates.NoItemsFound]
+              }
+            />
           </Alert>
         ) : (
           Array.from(filteredDirectory).map((entry: DirectoryEntry) => {
