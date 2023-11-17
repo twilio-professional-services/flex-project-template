@@ -34,7 +34,7 @@ The Service Level % is calculated as follows:
 ```
 SL Pct = Handled Tasks within Service Level / Handled Tasks
 ```
-The background color of the Channel SLA Tile changes based on the Service Level % value.  Service Level values >= 90 are rendered with a green background, values between 61 and 90 are shown with a yellow background and values <= 60 are displayed with a red background. These levels can be customized as needed.
+The background color of the Channel SLA Tile changes based on the Service Level % value.  Service Level values >= 90 are rendered with a green background, values between 61 and 90 are shown with a yellow background and values \<= 60 are displayed with a red background. These levels can be customized as needed.
 
 ### All Channels SLA Tile
 This data tile combines the Service Level % for all configured channels with a Pie Chart to display a breakdown of all Handled Tasks for Today. When this combination Data Tile is enabled, you may not need to enable the individual Channel SLA tiles. 
