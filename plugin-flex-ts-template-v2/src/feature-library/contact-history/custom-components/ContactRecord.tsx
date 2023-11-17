@@ -4,7 +4,6 @@ import { Flex } from '@twilio-paste/core/flex';
 import { Box } from '@twilio-paste/core/box';
 import { Tooltip } from '@twilio-paste/core/tooltip';
 import { Tr, Td } from '@twilio-paste/core/table';
-import { Anchor } from '@twilio-paste/core/anchor';
 import { ProductChatIcon } from '@twilio-paste/icons/esm/ProductChatIcon';
 import { CallIncomingIcon } from '@twilio-paste/icons/esm/CallIncomingIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
@@ -24,11 +23,11 @@ const ContactRecord = (props: OwnProps) => {
     channelType,
     direction,
     phoneNumber,
+    twilioPhoneNumber,
     name,
     dateTime,
     duration,
     queueName,
-    segmentLink,
     outcome,
     notes,
   } = contact;
@@ -62,6 +61,7 @@ const ContactRecord = (props: OwnProps) => {
           </Box>
         </Flex>
       </Td>
+      <Td>{twilioPhoneNumber}</Td>
       <Td>
         <Button
           variant="link"
@@ -78,13 +78,6 @@ const ContactRecord = (props: OwnProps) => {
       <Td>{dateTime}</Td>
       <Td>{taskDuration}</Td>
       <Td>{queueName}</Td>
-      <Td>
-        {segmentLink && (
-          <Anchor href={segmentLink} showExternal>
-            Review
-          </Anchor>
-        )}
-      </Td>
       <Td>{outcome}</Td>
       <Td>
         {agentNotes && (

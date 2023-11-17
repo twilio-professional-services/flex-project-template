@@ -38,6 +38,7 @@ class ContactsUtil {
       outbound_to,
       call_sid,
       caller,
+      to,
       channelType,
       conversationSid,
       conversations,
@@ -83,8 +84,10 @@ class ContactsUtil {
       }
       if (direction === 'inbound') {
         contact.phoneNumber = from;
+        contact.twilioPhoneNumber = to;
       } else {
         contact.phoneNumber = outbound_to;
+        contact.twilioPhoneNumber = from;
       }
     }
 

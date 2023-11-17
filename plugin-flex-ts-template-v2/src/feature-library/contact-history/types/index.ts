@@ -5,6 +5,7 @@ export interface Contact {
   channel: string;
   channelType?: string;
   phoneNumber?: string;
+  twilioPhoneNumber?: string;
   name?: string;
   dateTime: string;
   duration: number;
