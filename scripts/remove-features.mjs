@@ -39,11 +39,21 @@ const flexConfigRemovals = [
 ];
 
 let keepFeatures = [];
+let removeFeatures = [];
+let keepMode = true;
+
+const shouldRemoveFeature = (featureDirName) => {
+  return keepMode ? !keepFeatures.includes(featureDirName) : removeFeatures.includes(featureDirName);
+}
+
+const shouldKeepFeature = (featureDirName) => {
+  return keepMode ? keepFeatures.includes(featureDirName) : !removeFeatures.includes(featureDirName);
+}
 
 const performFeatureRegionRemoval = async () => {
   shell.echo("Removing features from GitHub Actions workflows...");
 
-  if(keepFeatures.length > 0){
+  if(keepMode && keepFeatures.length > 0){
     keepFeatures.push("remove-all")
   }
   
@@ -53,7 +63,7 @@ const performFeatureRegionRemoval = async () => {
       let newData = originalData;
       
       for (const feature of reference.features) {
-        if (keepFeatures.includes(feature)) {
+        if (shouldKeepFeature(feature)) {
           continue;
         }
         
@@ -90,7 +100,7 @@ const performFlexConfigRemovals = async () => {
         for (const key of Object.keys(jsonData?.custom_data?.features)) {
           // The config name for a feature uses underscores instead of hyphens
           const featureDirName = key.replace(/_/g, '-');
-          if (!keepFeatures.includes(featureDirName)) {
+          if (shouldRemoveFeature(featureDirName)) {
             delete jsonData.custom_data.features[key];
           }
         }
@@ -110,7 +120,7 @@ const performDirectoryRemovals = (baseDir) => {
     const featureDirs = shell.ls(baseDir);
     
     for (const feature of featureDirs) {
-      if (!keepFeatures.includes(feature)) {
+      if (shouldRemoveFeature(feature)) {
         shell.rm('-rf', `${baseDir}/${feature}`);
         shell.echo(`Removed ${baseDir}/${feature}`);
       }
@@ -134,14 +144,14 @@ const performRemovals = async () => {
   performDirectoryRemovals(`${serverlessSrc}/functions/features`);
   performDirectoryRemovals(`${serverlessSrc}/assets/features`);
   
-  if (!keepFeatures.includes("schedule-manager")) {
+  if (shouldRemoveFeature("schedule-manager")) {
     shell.echo(
       `Deleting schedule-manager serverless package addons/serverless-schedule-manager...`
     );
     shell.rm("-rf", `addons/serverless-schedule-manager`);
   }
   
-  if (!keepFeatures.includes("chat-to-video-escalation")) {
+  if (shouldRemoveFeature("chat-to-video-escalation")) {
     shell.echo(
       `Deleting addons/twilio-video-demo-app...`
     );
@@ -158,15 +168,23 @@ const performRemovals = async () => {
 
 const parseArgs = (args) => {
   // node scripts/remove-features.js
-  // node scripts/remove-features.js except feat1 feat2 featX
-  if (args.length < 4 || (args.length > 3 && args[2] !== "except")) {
+  if (args.length < 3) {
     // no features specified to remove or incorrect args format
     shell.echo("Removing all features...");
     return;
   }
   
-  keepFeatures = args.slice(3);
+  // node scripts/remove-features.js feat1 feat2 featX
+  if (args.length > 2 && args[2] !== "except") {
+    // removing specific feature(s)
+    removeFeatures = args.slice(2);
+    keepMode = false;
+    shell.echo(`Removing features ${removeFeatures.join(", ")}...`);
+    return;
+  }
   
+  // node scripts/remove-features.js except feat1 feat2 featX
+  keepFeatures = args.slice(3);
   shell.echo(`Removing all features except ${keepFeatures.join(", ")}...`);
 }
 

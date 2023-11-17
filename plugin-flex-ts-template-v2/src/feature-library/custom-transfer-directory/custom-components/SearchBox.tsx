@@ -1,4 +1,4 @@
-import { Manager, styled, templates } from '@twilio/flex-ui';
+import { Manager, templates } from '@twilio/flex-ui';
 import { Box } from '@twilio-paste/core/box';
 import { Input } from '@twilio-paste/core/input';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
@@ -12,7 +12,7 @@ export interface SearchBoxProps {
   inputRef?: Ref<HTMLInputElement>;
 }
 
-export const LegacySearchIcon = () => {
+const LegacySearchIcon = () => {
   return (
     <div className="Twilio-Icon Twilio-Icon-Search  css-1j3rlv1">
       <svg>
@@ -22,7 +22,7 @@ export const LegacySearchIcon = () => {
   );
 };
 
-export const SearchInput = ({ onInputChange, inputRef }: SearchBoxProps) => {
+const SearchInput = ({ onInputChange, inputRef }: SearchBoxProps) => {
   const { WorkerDirectorySearchPlaceholder } = Manager.getInstance().strings;
 
   return (
@@ -44,7 +44,7 @@ export const SearchInput = ({ onInputChange, inputRef }: SearchBoxProps) => {
   );
 };
 
-export const SearchBox = ({ onInputChange, inputRef }: SearchBoxProps) => {
+const SearchBox = ({ onInputChange, inputRef }: SearchBoxProps) => {
   return (
     <Box width="100%" paddingLeft="space50" paddingRight="space50" paddingTop="space60" paddingBottom="space50">
       <SearchInput onInputChange={onInputChange} inputRef={inputRef} />
@@ -52,6 +52,4 @@ export const SearchBox = ({ onInputChange, inputRef }: SearchBoxProps) => {
   );
 };
 
-export const ButtonContainer = styled('div')`
-  display: none;
-`;
+export default SearchBox;
