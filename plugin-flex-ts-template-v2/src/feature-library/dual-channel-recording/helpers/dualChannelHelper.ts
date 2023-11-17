@@ -213,6 +213,9 @@ const waitForActiveCall = async (task: ITask): Promise<string> =>
   });
 
 export const addMissingCallDataIfNeeded = async (task: ITask) => {
+  if (!task) {
+    return;
+  }
   const { attributes } = task;
   const { conference } = attributes;
 

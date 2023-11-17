@@ -1,6 +1,12 @@
+import { ExternalDirectoryEntry } from './DirectoryEntry';
+
 export default interface CustomTransferDirectoryConfig {
   enabled: boolean;
   use_paste_search_icon: boolean;
+  worker: {
+    enabled: boolean;
+    show_only_available_workers: boolean;
+  };
   queue: {
     enabled: boolean;
     show_only_queues_with_available_workers: boolean;
@@ -14,11 +20,4 @@ export default interface CustomTransferDirectoryConfig {
     skipPhoneNumberValidation: boolean;
     directory: Array<ExternalDirectoryEntry>;
   };
-}
-
-export interface ExternalDirectoryEntry {
-  cold_transfer_enabled: boolean;
-  warm_transfer_enabled: boolean;
-  label: string;
-  number: string;
 }
