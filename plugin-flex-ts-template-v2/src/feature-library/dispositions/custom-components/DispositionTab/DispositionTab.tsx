@@ -36,8 +36,8 @@ const DispositionTab = (props: OwnProps) => {
   const [customAttributes, setCustomAttributes] = useState({} as any);
   const [groupOptions, setGroupOptions] = useState({} as any);
 
-  const textAttributes = getTextAttributes();
-  const selectAttributes = getSelectAttributes();
+  const textAttributes = getTextAttributes(props.task?.queueSid ?? '');
+  const selectAttributes = getSelectAttributes(props.task?.queueSid ?? '');
   const group = getMultiSelectGroup();
 
   const dispatch = useDispatch();

@@ -2,8 +2,12 @@ export default interface DispositionsConfig {
   enabled: boolean;
   enable_notes: boolean;
   require_disposition: boolean;
-  global_dispositions: string[];
+  global: GlobalConfig;
   per_queue: { [key: string]: DispositionsPerQueueConfig };
+}
+
+export interface GlobalConfig {
+  dispositions: string[];
   text_attributes: Array<CustomAttribute>;
   select_attributes: Array<SelectAttribute>;
   multi_select_group: SelectAttribute;
@@ -22,4 +26,6 @@ export interface SelectAttribute extends CustomAttribute {
 export interface DispositionsPerQueueConfig {
   require_disposition: boolean;
   dispositions: string[];
+  text_attributes: Array<CustomAttribute>;
+  select_attributes: Array<SelectAttribute>;
 }

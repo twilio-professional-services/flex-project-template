@@ -218,16 +218,20 @@
         "enabled": true,
         "enable_notes": true,
         "require_disposition": false,
-        "global_dispositions": ["Resolved", "Not Resolved", "Follow-up Required", "Escalation", "Wrong Department"],
+        "global" :{ 
+          "dispositions": ["Resolved", "Not Resolved", "Follow-up Required", "Escalation", "Wrong Department"],
+          "text_attributes": [],
+          "select_attributes": [],
+          "multi_select_group" : {}
+      },
         "per_queue": {
           "exampleQueueSid": {
             "require_disposition": true,
-            "dispositions": ["Promotional Sale", "Renewal"]
+            "dispositions": ["Promotional Sale", "Renewal"],
+            "text_attributes": [],
+            "select_attributes": []
           }
-        },
-        "text_attributes": [],
-        "select_attributes": [],
-        "multi_select_group" : {}
+        }
       },
       "emoji_picker": {
         "enabled": true

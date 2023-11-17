@@ -1,15 +1,12 @@
 import { getFeatureFlags } from '../../utils/configuration';
-import DispositionsConfig, { SelectAttribute } from './types/ServiceConfiguration';
+import DispositionsConfig, { CustomAttribute, GlobalConfig, SelectAttribute } from './types/ServiceConfiguration';
 
 const {
   enabled = false,
   enable_notes = false,
   require_disposition = false,
-  global_dispositions = [],
+  global = {} as GlobalConfig,
   per_queue = {},
-  text_attributes = [],
-  select_attributes = [],
-  multi_select_group = {},
 } = (getFeatureFlags()?.features?.dispositions as DispositionsConfig) || {};
 
 export const isFeatureEnabled = () => {
@@ -39,7 +36,7 @@ export const isRequireDispositionEnabledForQueue = (queueSid: string) => {
 export const getDispositionsForQueue = (queueSid: string): string[] => {
   if (!isFeatureEnabled()) return [];
 
-  let dispositions = [...global_dispositions];
+  let dispositions = [...global.dispositions];
 
   if (queueSid && per_queue[queueSid] && per_queue[queueSid].dispositions) {
     dispositions = [...dispositions, ...per_queue[queueSid].dispositions];
@@ -48,12 +45,22 @@ export const getDispositionsForQueue = (queueSid: string): string[] => {
   return dispositions;
 };
 
-export const getTextAttributes = () => {
+export const getTextAttributes = (queueSid: string): CustomAttribute[] => {
+  let text_attributes = [...global.text_attributes];
+  if (queueSid && per_queue[queueSid] && per_queue[queueSid].text_attributes) {
+    text_attributes = [...text_attributes, ...per_queue[queueSid].text_attributes];
+  }
   return text_attributes;
 };
-export const getSelectAttributes = () => {
+
+export const getSelectAttributes = (queueSid: string): SelectAttribute[] => {
+  let select_attributes = [...global.select_attributes];
+  if (queueSid && per_queue[queueSid] && per_queue[queueSid].select_attributes) {
+    select_attributes = [...select_attributes, ...per_queue[queueSid].select_attributes];
+  }
   return select_attributes;
 };
+
 export const getMultiSelectGroup = (): SelectAttribute => {
-  return multi_select_group as SelectAttribute;
+  return global.multi_select_group as SelectAttribute;
 };
