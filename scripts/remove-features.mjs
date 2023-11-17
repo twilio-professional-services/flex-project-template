@@ -17,14 +17,14 @@ const featureRegionReferences = [
   },
   {
     filename: `${terraformDir}/environments/default/main.tf`,
-    features: [ "activity-reservation-handler", "callback-and-voicemail", "conversation-transfer", "internal-call", "schedule-manager" ],
+    features: [ "remove-all", "activity-reservation-handler", "callback-and-voicemail", "conversation-transfer", "internal-call", "schedule-manager" ],
   },
   {
     filename: `${terraformDir}/environments/default/outputs.tf`,
     features: [ "remove-all", "callback-and-voicemail", "conversation-transfer", "internal-call", "schedule-manager" ],
   },
   {
-    filename: `${terraformDir}/environments/default/taskrouter.tf`,
+    filename: `${terraformDir}/environments/default/template_examples.tf`,
     features: [ "remove-all" ],
   },
   {

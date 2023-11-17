@@ -1,3 +1,15 @@
+resource "twilio_taskrouter_workspaces_v1" "flex_task_assignment" {
+  friendly_name = "Flex Task Assignment"
+}
+
+# FEATURE: remove-all
+resource "twilio_taskrouter_workspaces_task_channels_v1" "voice" {
+  workspace_sid	= twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
+  friendly_name	= "Voice"
+  unique_name = "voice"
+}
+# END FEATURE: remove-all
+
 # FEATURE: activity-reservation-handler
 module "activity-reservation-handler" {
   source = "../../modules/activity-reservation-handler"
@@ -13,7 +25,7 @@ module "callback-and-voicemail" {
   workspace_sid = twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
   voice_channel_sid = twilio_taskrouter_workspaces_task_channels_v1.voice.sid
   workflow_sid = twilio_taskrouter_workspaces_workflows_v1.template_example.sid
-  queue_sid = twilio_taskrouter_workspaces_task_queues_v1.everyone.sid
+  queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_everyone.sid
   
   serverless_domain = var.SERVERLESS_DOMAIN
   serverless_sid = var.SERVERLESS_SID
@@ -27,7 +39,7 @@ module "conversation-transfer" {
   source = "../../modules/conversation-transfer"
   
   workspace_sid = twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
-  everyone_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.everyone.sid
+  everyone_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_everyone.sid
   example_sales_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_sales.sid
   example_support_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_support.sid
 }

@@ -48,7 +48,7 @@ importInternalState() {
 
 # FEATURE: remove-all
 	import_resource "$workflows" "Template Example" "twilio_taskrouter_workspaces_workflows_v1.template_example" "friendlyName"
-	import_resource "$queues" "Everyone" "twilio_taskrouter_workspaces_task_queues_v1.everyone" "friendlyName"
+	import_resource "$queues" "Template Example Everyone" "twilio_taskrouter_workspaces_task_queues_v1.template_example_everyone" "friendlyName"
 	import_resource "$queues" "Template Example Sales" "twilio_taskrouter_workspaces_task_queues_v1.template_example_sales" "friendlyName"
 	import_resource "$queues" "Template Example Support" "twilio_taskrouter_workspaces_task_queues_v1.template_example_support" "friendlyName"
 	import_resource "$channels" "voice" "twilio_taskrouter_workspaces_task_channels_v1.voice" "uniqueName"
@@ -56,19 +56,19 @@ importInternalState() {
 # END FEATURE: remove-all
 
 # FEATURE: conversation-transfer
-	import_resource "$workflows" "Chat Transfer" "module.conversation-transfer.twilio_taskrouter_workspaces_workflows_v1.chat_transfer" "friendlyName"
+	import_resource "$workflows" "Template Example Chat Transfer" "module.conversation-transfer.twilio_taskrouter_workspaces_workflows_v1.template_example_chat_transfer" "friendlyName"
 	echo "   - :white_check_mark: conversation-transfer resources" >>$GITHUB_STEP_SUMMARY
 # END FEATURE: conversation-transfer
 
 # FEATURE: callback-and-voicemail
-	import_resource "$workflows" "Callback" "module.callback-and-voicemail.twilio_taskrouter_workspaces_workflows_v1.callback" "friendlyName"
-	import_resource "$flows" "Example Callback Flow" "module.callback-and-voicemail.twilio_studio_flows_v2.example_callback_flow" "friendlyName" false
+	import_resource "$workflows" "Template Example Callback" "module.callback-and-voicemail.twilio_taskrouter_workspaces_workflows_v1.template_example_callback" "friendlyName"
+	import_resource "$flows" "Template Example Callback Flow" "module.callback-and-voicemail.twilio_studio_flows_v2.template_example_callback_flow" "friendlyName" false
 	echo "   - :white_check_mark: callback-and-voicemail resources" >>$GITHUB_STEP_SUMMARY
 # END FEATURE: callback-and-voicemail
 
 # FEATURE: internal-call
-	import_resource "$workflows" "Internal Call" "module.internal-call.twilio_taskrouter_workspaces_workflows_v1.internal_call" "friendlyName"
-	import_resource "$queues" "Internal Calls" "module.internal-call.twilio_taskrouter_workspaces_task_queues_v1.internal_calls" "friendlyName"
+	import_resource "$workflows" "Template Example Internal Calls" "module.internal-call.twilio_taskrouter_workspaces_workflows_v1.template_example_internal_calls" "friendlyName"
+	import_resource "$queues" "Template Example Internal Calls" "module.internal-call.twilio_taskrouter_workspaces_task_queues_v1.template_example_internal_calls" "friendlyName"
 	echo "   - :white_check_mark: internal-call resources" >>$GITHUB_STEP_SUMMARY
 # END FEATURE: internal-call
 
@@ -81,7 +81,7 @@ importInternalState() {
 # END FEATURE: activity-reservation-handler
 
 # FEATURE: schedule-manager
-	import_resource "$flows" "Example Schedule Flow" "module.schedule-manager.twilio_studio_flows_v2.example_schedule_flow" "friendlyName" false
+	import_resource "$flows" "Template Example Schedule Flow" "module.schedule-manager.twilio_studio_flows_v2.template_example_schedule_flow" "friendlyName" false
 	echo "   - :white_check_mark: schedule-manager resources" >>$GITHUB_STEP_SUMMARY
 # END FEATURE: schedule-manager
 }
