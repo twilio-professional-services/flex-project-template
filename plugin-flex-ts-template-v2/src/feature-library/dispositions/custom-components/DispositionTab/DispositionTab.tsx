@@ -19,6 +19,7 @@ import {
   getTextAttributes,
   getSelectAttributes,
   getMultiSelectGroup,
+  getQueueMultiSelectGroup,
 } from '../../config';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
@@ -35,10 +36,12 @@ const DispositionTab = (props: OwnProps) => {
   const [notes, setNotes] = useState('');
   const [customAttributes, setCustomAttributes] = useState({} as any);
   const [groupOptions, setGroupOptions] = useState({} as any);
+  const [groupOptionsForQueue, setGroupOptionsForQueue] = useState({} as any);
 
   const textAttributes = getTextAttributes(props.task?.queueSid ?? '');
   const selectAttributes = getSelectAttributes(props.task?.queueSid ?? '');
   const group = getMultiSelectGroup();
+  const groupForQueue = getQueueMultiSelectGroup(props.task?.queueSid || '');
 
   const dispatch = useDispatch();
   const { tasks } = useSelector((state: AppState) => state[reduxNamespace].dispositions as DispositionsState);
@@ -90,6 +93,14 @@ const DispositionTab = (props: OwnProps) => {
         options[opt] = true;
       });
       setGroupOptions(options);
+
+      const optionsForQueue = {} as any;
+      const optionsForQueueString =
+        tasks[props.task.taskSid].custom_attributes[groupForQueue.conversation_attribute] || '';
+      optionsForQueueString.split('|').forEach((opt) => {
+        optionsForQueue[opt] = true;
+      });
+      setGroupOptionsForQueue(optionsForQueue);
     }
   }, [props?.task?.taskSid]);
 
@@ -136,6 +147,18 @@ const DispositionTab = (props: OwnProps) => {
     setCustomAttributes(attributes);
   };
 
+  const handleCheckboxChangeForQueue = (option: string, checked: boolean) => {
+    const newOptions = { ...groupOptionsForQueue, [option]: checked };
+    setGroupOptionsForQueue(newOptions);
+    // Convert checked options to a pipe | delimited string
+    const checkedOptions: string[] = [];
+    Object.keys(newOptions).forEach((opt) => {
+      if (newOptions[opt]) checkedOptions.push(opt);
+    });
+    const attributes = { ...customAttributes, [groupForQueue.conversation_attribute]: checkedOptions.join('|') };
+    setCustomAttributes(attributes);
+  };
+
   const NO_OPTION_SELECTED = 'NoOptionSelected';
   return (
     <Box padding="space80" overflowY="scroll">
@@ -178,6 +201,34 @@ const DispositionTab = (props: OwnProps) => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                       console.log('Checkbox event:', e);
                       handleCheckboxChange(option, e.target.checked);
+                    }}
+                    id={option}
+                    name={option}
+                  >
+                    {option}
+                  </Checkbox>
+                );
+              })}
+            </CheckboxGroup>
+          </div>
+        )}
+        {groupForQueue.options && (
+          <div key={groupForQueue.conversation_attribute}>
+            <CheckboxGroup
+              orientation="horizontal"
+              name={groupForQueue.conversation_attribute}
+              legend={groupForQueue.form_label}
+              helpText={templates[StringTemplates.ChooseOptions]()}
+              required={groupForQueue.required || false}
+            >
+              {groupForQueue.options.map((option) => {
+                return (
+                  <Checkbox
+                    key={option}
+                    checked={groupOptionsForQueue[option] || false}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      console.log('Checkbox event:', e);
+                      handleCheckboxChangeForQueue(option, e.target.checked);
                     }}
                     id={option}
                     name={option}

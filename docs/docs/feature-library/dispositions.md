@@ -11,6 +11,8 @@ Dispositions are available in Flex Insights under "Outcome", and notes are avail
 
 ![Dispositions demo](/img/features/dispositions/dispositions.gif)
 
+![WrapUpForm](/img/features/dispositions/WrapUpForm.gif)
+
 # setup and dependencies
 
 Within your `ui_attributes` file, there are several settings for the `dispositions` feature:
@@ -18,11 +20,21 @@ Within your `ui_attributes` file, there are several settings for the `dispositio
 - `enable` - set this to true to enable the feature
 - `enable_notes` - set this to true to enable a free-form notes field in addition to disposition selection
 - `require_disposition` - set this to true to require the agent to select a disposition in order to complete the task
-- `global_dispositions` - provide a string array of dispositions to list for tasks from any queue
+
+- `global` - this section contains the configuration that applies to all types of contacts (all queues)
+  - `dispositions` - a string array of dispositions to list for tasks from any queue
+  - `text_attributes` an array of additional Text fields that can be added to the wrap-up form.
+  - `select_attributes` an array of additional wrap-up form elements that are rendered as a [Select dropdown](https://paste.twilio.design/components/select) with Options to allow the user to pick a value from a list.
+  - `multi_select_group` a single object to render a Group of Checkboxes to allow for multi-select
+
 - `per_queue` - allows you to set different configurations for tasks from the provided queue SID(s)
   - `require_disposition` - require the agent to select a disposition to complete tasks from this queue SID
   - `dispositions` - dispositions that are only listed for tasks from this queue SID
-- `text_attributes` an array of additional Text fields that can be added to the wrap up form. Each entry should looks like this with a `form_label` and [`conversation_attribute`](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) to use for storing the data. The `required` property is optional. When provided with `required: true`, the Disposition form will enforce that the user enters a value.
+  - `text_attributes` - additional Text Attributes only for this queue
+  - `select_attributes` - additional Select Attributes only for this queue
+  - `multi_select_group` an additional Group of Checkboxes to allow for selecting multiple values
+
+Each entry in a `text_attributes` array should looks like this with a `form_label` and [`conversation_attribute`](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) to use for storing the data. The `required` property is optional. When provided with `required: true`, the Disposition form will enforce that the user enters a value.
 
 ```       {
             "form_label": "Case Number",
@@ -31,8 +43,7 @@ Within your `ui_attributes` file, there are several settings for the `dispositio
           }
 ```
 
- - `select_attributes` an array of additional wrap-up form elements that are rendered as a [Select dropdown](https://paste.twilio.design/components/select) with Options to allow the user to pick a value from a list.
- Entries in this array should have this format:
+ Each entry in the `select_attributes` array isrendered as a [Select dropdown](https://paste.twilio.design/components/select) with Options to allow the user to pick a value from a list. Entries in this array should have this format:
  ```
           {
             "form_label": "Topic",
@@ -46,15 +57,17 @@ Within your `ui_attributes` file, there are several settings for the `dispositio
             "required": true
           }
 ```
-- `multi_select_group` a single object to render a Group of Checkboxes to allow for multi-select. Checked values are concatenated into a pipe delimited string in the attributes ("AB12|CD34|EF56", for below example).
+The `multi_select_group` item is a single object to render a Group of Checkboxes to allow for multi-select. Checked values are concatenated into a pipe delimited string in the attributes ("Flex|Voice|Studio", for below example).
 ```
          {
-          "form_label": "Account Options",
+          "form_label": "Twilio Products",
           "conversation_attribute": "conversation_attribute_2",
           "required": true,
-          "options": ["AB12", "CD34", "EF56"],
+          "options": ["Flex", "Studio", "Voice", "Chat", "SMS", "Functions"],
         },
 ```
+
+If you provide both a global `multi_select_group` and a `multi_select_group` per queueSid, both will be rendered on the form.
 
 > **Note**
 > If both global and per-queue dispositions are configured, the agent will be see a combined list.

@@ -1,11 +1,11 @@
 import { getFeatureFlags } from '../../utils/configuration';
-import DispositionsConfig, { CustomAttribute, GlobalConfig, SelectAttribute } from './types/ServiceConfiguration';
+import DispositionsConfig, { CustomAttribute, WrapUpConfig, SelectAttribute } from './types/ServiceConfiguration';
 
 const {
   enabled = false,
   enable_notes = false,
   require_disposition = false,
-  global = {} as GlobalConfig,
+  global = {} as WrapUpConfig,
   per_queue = {},
 } = (getFeatureFlags()?.features?.dispositions as DispositionsConfig) || {};
 
@@ -63,4 +63,12 @@ export const getSelectAttributes = (queueSid: string): SelectAttribute[] => {
 
 export const getMultiSelectGroup = (): SelectAttribute => {
   return global.multi_select_group as SelectAttribute;
+};
+
+export const getQueueMultiSelectGroup = (queueSid: string): SelectAttribute => {
+  let queueMultiSelectGroup = {} as SelectAttribute;
+  if (queueSid && per_queue[queueSid] && per_queue[queueSid].multi_select_group) {
+    queueMultiSelectGroup = per_queue[queueSid].multi_select_group;
+  }
+  return queueMultiSelectGroup;
 };
