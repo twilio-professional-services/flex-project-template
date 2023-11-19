@@ -13,6 +13,7 @@ import { DispositionsState } from '../states';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 import { DispositionsNotification } from '../notifications';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
+import FlexHelper from '../../../../utils/flex-helper';
 
 const handleAbort = (flex: typeof Flex, abortFunction: any, disposition: boolean = true) => {
   if (disposition) flex.Notifications.showNotification(DispositionsNotification.DispositionRequired);
@@ -35,10 +36,12 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     if (!payload.task?.taskSid) {
       return;
     }
-
-    const numDispositions = getDispositionsForQueue(payload.task?.queueSid ?? '').length;
-    const textAttributes = getTextAttributes(payload.task?.queueSid ?? '');
-    const selectAttributes = getSelectAttributes(payload.task?.queueSid ?? '');
+    let queueName = '';
+    const queue = await FlexHelper.getQueue(queueName);
+    if (queue) queueName = queue?.queue_name;
+    const numDispositions = getDispositionsForQueue(queueName ?? '').length;
+    const textAttributes = getTextAttributes(queueName ?? '');
+    const selectAttributes = getSelectAttributes(queueName ?? '');
 
     // If notes disabled, and no dispositions are configured, return.
     if (numDispositions < 1 && !isNotesEnabled() && textAttributes.length < 1 && selectAttributes.length < 1) {
@@ -49,7 +52,7 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     const { tasks } = (manager.store.getState() as AppState)[reduxNamespace].dispositions as DispositionsState;
 
     if (!tasks || !tasks[payload.task.taskSid]) {
-      if (isRequireDispositionEnabledForQueue(payload.task.queueSid) && numDispositions > 0) {
+      if (isRequireDispositionEnabledForQueue(queueName) && numDispositions > 0) {
         handleAbort(flex, abortFunction);
       }
       return;
@@ -58,11 +61,7 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     const taskDisposition = tasks[payload.task.taskSid];
     let newConvAttributes = {};
 
-    if (
-      isRequireDispositionEnabledForQueue(payload.task.queueSid) &&
-      !taskDisposition.disposition &&
-      numDispositions > 0
-    ) {
+    if (isRequireDispositionEnabledForQueue(queueName) && !taskDisposition.disposition && numDispositions > 0) {
       handleAbort(flex, abortFunction);
       return;
     }

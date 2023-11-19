@@ -1,8 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 
 import { Activity } from '../../types/task-router';
-import { WorkerInstantQuery, ReservationInstantQuery } from '../index-query/InstantQueryHelper';
-import { WorkerIndexItem, ReservationIndexItem } from '../index-query/InstantQueryHelper/types';
+import { QueueInstantQuery, WorkerInstantQuery, ReservationInstantQuery } from '../index-query/InstantQueryHelper';
+import { QueueIndexItem, WorkerIndexItem, ReservationIndexItem } from '../index-query/InstantQueryHelper/types';
 
 enum RESERVATION_STATUS {
   ACCEPTED = 'accepted',
@@ -76,6 +76,13 @@ class FlexHelper {
     });
     if (reservationMap) return reservationMap;
     return new Map();
+  };
+
+  getQueue = async (queueSid: string): Promise<QueueIndexItem | undefined> => {
+    const queueResult = await QueueInstantQuery(`data.queue_sid EQ "${queueSid}"`);
+    const queue = queueResult[queueSid];
+    if (!queue) console.warn(`FlexHelper.getQueue(): unable to find queue for queuesid ${queueSid}`);
+    return queue;
   };
 
   getWorker = async (workerSid: string): Promise<WorkerIndexItem | undefined> => {

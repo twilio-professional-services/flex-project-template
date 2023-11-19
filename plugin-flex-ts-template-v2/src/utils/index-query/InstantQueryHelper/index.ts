@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
-import { WorkerIndexItem, ReservationIndexItem, TaskIndexItem } from './types';
+import { QueueIndexItem, WorkerIndexItem, ReservationIndexItem, TaskIndexItem } from './types';
 
 enum SyncIndex {
   Task = 'tr-task',
@@ -8,6 +8,19 @@ enum SyncIndex {
   Reservation = 'tr-reservation',
   Queue = 'tr-queue',
 }
+
+export const QueueInstantQuery = async (queryExpression: string): Promise<{ [queueSid: string]: QueueIndexItem }> => {
+  const { insightsClient } = Flex.Manager.getInstance();
+  const query = await insightsClient.instantQuery(SyncIndex.Queue);
+  return new Promise((resolve, reject) => {
+    try {
+      query.once('searchResult', (result) => resolve(result));
+      query.search(queryExpression);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 
 export const WorkerInstantQuery = async (
   queryExpression: string,

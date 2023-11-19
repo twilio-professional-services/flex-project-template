@@ -25,6 +25,7 @@ import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { updateDisposition, DispositionsState } from '../../flex-hooks/states';
 import { StringTemplates } from '../../flex-hooks/strings';
+import FlexHelper from '../../../../utils/flex-helper';
 
 export interface OwnProps {
   task?: ITask;
@@ -32,16 +33,17 @@ export interface OwnProps {
 
 const DispositionTab = (props: OwnProps) => {
   const NOTES_MAX_LENGTH = 100;
+  const [queueName, setQueueName] = useState('');
   const [disposition, setDisposition] = useState('');
   const [notes, setNotes] = useState('');
   const [customAttributes, setCustomAttributes] = useState({} as any);
   const [groupOptions, setGroupOptions] = useState({} as any);
   const [groupOptionsForQueue, setGroupOptionsForQueue] = useState({} as any);
 
-  const textAttributes = getTextAttributes(props.task?.queueSid ?? '');
-  const selectAttributes = getSelectAttributes(props.task?.queueSid ?? '');
+  const textAttributes = getTextAttributes(queueName);
+  const selectAttributes = getSelectAttributes(queueName);
   const group = getMultiSelectGroup();
-  const groupForQueue = getQueueMultiSelectGroup(props.task?.queueSid || '');
+  const groupForQueue = getQueueMultiSelectGroup(queueName);
 
   const dispatch = useDispatch();
   const { tasks } = useSelector((state: AppState) => state[reduxNamespace].dispositions as DispositionsState);
@@ -77,6 +79,12 @@ const DispositionTab = (props: OwnProps) => {
   const updateStoreDebounced = debounce(updateStore, 250, { maxWait: 1000 });
 
   useEffect(() => {
+    const getQueueFromInstantQuery = async (queueSid: string) => {
+      const queue = await FlexHelper.getQueue(queueSid);
+      setQueueName(queue?.queue_name || '');
+    };
+    getQueueFromInstantQuery(props.task?.queueSid || '');
+
     if (tasks && props.task && tasks[props.task.taskSid]) {
       if (tasks[props.task.taskSid].disposition) {
         setDisposition(tasks[props.task.taskSid].disposition);
@@ -163,16 +171,16 @@ const DispositionTab = (props: OwnProps) => {
   return (
     <Box padding="space80" overflowY="scroll">
       <Stack orientation="vertical" spacing="space50">
-        {getDispositionsForQueue(props.task?.queueSid ?? '').length > 0 && (
+        {getDispositionsForQueue(queueName ?? '').length > 0 && (
           <RadioGroup
             name={`${props.task?.sid}-disposition`}
             value={disposition}
             legend={templates[StringTemplates.SelectDispositionTitle]()}
             helpText={templates[StringTemplates.SelectDispositionHelpText]()}
             onChange={(value) => setDisposition(value)}
-            required={isRequireDispositionEnabledForQueue(props.task?.queueSid ?? '')}
+            required={isRequireDispositionEnabledForQueue(queueName ?? '')}
           >
-            {getDispositionsForQueue(props.task?.queueSid ?? '').map((disp) => (
+            {getDispositionsForQueue(queueName ?? '').map((disp) => (
               <Radio
                 id={`${props.task?.sid}-disposition-${disp}`}
                 value={disp}
