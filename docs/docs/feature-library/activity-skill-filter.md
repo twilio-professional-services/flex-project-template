@@ -65,7 +65,7 @@ The following are the descriptions of the configuration objects and what they re
 
 this object allows the administrator to customize which activities are associated with which skills and what order they should appear in
 
-- **<ACTIVITY_NAME_OR_SID>**:  this element name represents the name of the activity or the SID of the activity for which you want to set a rule
+- **`<ACTIVITY_NAME_OR_SID>`**:  this element name represents the name of the activity or the SID of the activity for which you want to set a rule
 
 #### activity_name_or_sid
 
