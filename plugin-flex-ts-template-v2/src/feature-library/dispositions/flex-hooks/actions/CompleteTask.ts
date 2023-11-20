@@ -35,10 +35,11 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     if (!payload.task?.taskSid) {
       return;
     }
+    const queueSid = payload.task.queueSid;
     const queueName = payload.task.queueName;
-    const numDispositions = getDispositionsForQueue(queueName ?? '').length;
-    const textAttributes = getTextAttributes(queueName ?? '');
-    const selectAttributes = getSelectAttributes(queueName ?? '');
+    const numDispositions = getDispositionsForQueue(queueSid, queueName).length;
+    const textAttributes = getTextAttributes(queueName);
+    const selectAttributes = getSelectAttributes(queueName);
 
     // If notes disabled, and no dispositions are configured, return.
     if (numDispositions < 1 && !isNotesEnabled() && textAttributes.length < 1 && selectAttributes.length < 1) {
@@ -49,7 +50,7 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     const { tasks } = (manager.store.getState() as AppState)[reduxNamespace].dispositions as DispositionsState;
 
     if (!tasks || !tasks[payload.task.taskSid]) {
-      if (isRequireDispositionEnabledForQueue(queueName) && numDispositions > 0) {
+      if (isRequireDispositionEnabledForQueue(queueSid, queueName) && numDispositions > 0) {
         handleAbort(flex, abortFunction);
       }
       return;
@@ -58,7 +59,11 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     const taskDisposition = tasks[payload.task.taskSid];
     let newConvAttributes = {};
 
-    if (isRequireDispositionEnabledForQueue(queueName) && !taskDisposition.disposition && numDispositions > 0) {
+    if (
+      isRequireDispositionEnabledForQueue(queueSid, queueName) &&
+      !taskDisposition.disposition &&
+      numDispositions > 0
+    ) {
       handleAbort(flex, abortFunction);
       return;
     }

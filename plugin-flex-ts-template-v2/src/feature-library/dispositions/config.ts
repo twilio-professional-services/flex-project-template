@@ -17,7 +17,7 @@ export const isNotesEnabled = () => {
   return isFeatureEnabled() && enable_notes;
 };
 
-export const isRequireDispositionEnabledForQueue = (queueName: string) => {
+export const isRequireDispositionEnabledForQueue = (queueSid: string, queueName: string) => {
   if (!isFeatureEnabled()) return false;
 
   let required = require_disposition;
@@ -33,11 +33,14 @@ export const isRequireDispositionEnabledForQueue = (queueName: string) => {
   return required;
 };
 
-export const getDispositionsForQueue = (queueName: string): string[] => {
+export const getDispositionsForQueue = (queueSid: string, queueName: string): string[] => {
   if (!isFeatureEnabled()) return [];
 
   let dispositions = [...global.dispositions];
 
+  if (queueSid && per_queue[queueSid] && per_queue[queueSid].dispositions) {
+    dispositions = [...dispositions, ...per_queue[queueSid].dispositions];
+  }
   if (queueName && per_queue[queueName] && per_queue[queueName].dispositions) {
     dispositions = [...dispositions, ...per_queue[queueName].dispositions];
   }

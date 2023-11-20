@@ -32,13 +32,14 @@ export interface OwnProps {
 
 const DispositionTab = (props: OwnProps) => {
   const NOTES_MAX_LENGTH = 100;
-  const [queueName, setQueueName] = useState('');
   const [disposition, setDisposition] = useState('');
   const [notes, setNotes] = useState('');
   const [customAttributes, setCustomAttributes] = useState({} as any);
   const [groupOptions, setGroupOptions] = useState({} as any);
   const [groupOptionsForQueue, setGroupOptionsForQueue] = useState({} as any);
 
+  const queueSid = props.task?.queueSid || '';
+  const queueName = props.task?.queueName || '';
   const textAttributes = getTextAttributes(queueName);
   const selectAttributes = getSelectAttributes(queueName);
   const group = getMultiSelectGroup();
@@ -79,7 +80,7 @@ const DispositionTab = (props: OwnProps) => {
 
   useEffect(() => {
     if (tasks && props.task && tasks[props.task.taskSid]) {
-      setQueueName(props.task.queueName || '');
+      // setQueueName(props.task.queueName || '');
       if (tasks[props.task.taskSid].disposition) {
         setDisposition(tasks[props.task.taskSid].disposition);
       }
@@ -165,16 +166,16 @@ const DispositionTab = (props: OwnProps) => {
   return (
     <Box padding="space80" overflowY="scroll">
       <Stack orientation="vertical" spacing="space50">
-        {getDispositionsForQueue(queueName ?? '').length > 0 && (
+        {getDispositionsForQueue(queueSid, queueName).length > 0 && (
           <RadioGroup
             name={`${props.task?.sid}-disposition`}
             value={disposition}
             legend={templates[StringTemplates.SelectDispositionTitle]()}
             helpText={templates[StringTemplates.SelectDispositionHelpText]()}
             onChange={(value) => setDisposition(value)}
-            required={isRequireDispositionEnabledForQueue(queueName ?? '')}
+            required={isRequireDispositionEnabledForQueue(queueSid, queueName)}
           >
-            {getDispositionsForQueue(queueName ?? '').map((disp) => (
+            {getDispositionsForQueue(queueSid, queueName).map((disp) => (
               <Radio
                 id={`${props.task?.sid}-disposition-${disp}`}
                 value={disp}

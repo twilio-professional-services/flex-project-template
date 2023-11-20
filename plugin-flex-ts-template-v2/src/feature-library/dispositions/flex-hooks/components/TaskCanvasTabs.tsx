@@ -18,7 +18,7 @@ export const componentHook = function addDispositionTab(flex: typeof Flex, manag
     {
       sortOrder: 1000,
       if: ({ task }) =>
-        (getDispositionsForQueue(task?.queueSid ?? '').length > 0 || isNotesEnabled()) &&
+        (getDispositionsForQueue(task?.queueSid ?? '', task?.queueName ?? '').length > 0 || isNotesEnabled()) &&
         (Flex.TaskHelper.isTaskAccepted(task) || Flex.TaskHelper.isInWrapupMode(task)),
     },
   );
