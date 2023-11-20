@@ -7,12 +7,7 @@
   "custom_data": {
     "common": {
       "log_level": "info",
-      "teams": [
-        "Blue Team",
-        "Red Team",
-        "Gold Team",
-        "VIP Team"
-      ],
+      "teams": ["Blue Team", "Red Team", "Gold Team", "VIP Team"],
       "departments": [
         "General Management",
         "Marketing",
@@ -357,6 +352,9 @@
         "api_key": "",
         "intake_region": "",
         "flush_timeout": 5000
+      },
+      "supervisor_broadcast": {
+        "enabled": true
       }
     }
   }
