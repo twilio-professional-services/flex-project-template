@@ -21,7 +21,13 @@ export const isRequireDispositionEnabledForQueue = (queueSid: string, queueName:
   if (!isFeatureEnabled()) return false;
 
   let required = require_disposition;
-
+  if (
+    queueSid &&
+    per_queue[queueSid] &&
+    (per_queue[queueSid].require_disposition === true || per_queue[queueSid].require_disposition === false)
+  ) {
+    required = per_queue[queueSid].require_disposition;
+  }
   if (
     queueName &&
     per_queue[queueName] &&

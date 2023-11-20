@@ -30,38 +30,47 @@ export interface OwnProps {
   task?: ITask;
 }
 
+interface StringPropsObject {
+  [key: string]: string;
+}
+interface BooleanPropsObject {
+  [key: string]: boolean;
+}
+
 const DispositionTab = (props: OwnProps) => {
+  const { task } = props;
   const NOTES_MAX_LENGTH = 100;
   const [disposition, setDisposition] = useState('');
   const [notes, setNotes] = useState('');
-  const [customAttributes, setCustomAttributes] = useState({} as any);
-  const [groupOptions, setGroupOptions] = useState({} as any);
-  const [groupOptionsForQueue, setGroupOptionsForQueue] = useState({} as any);
+  const [customAttributes, setCustomAttributes] = useState({} as StringPropsObject);
+  const [groupOptions, setGroupOptions] = useState({} as BooleanPropsObject);
+  const [groupOptionsForQueue, setGroupOptionsForQueue] = useState({} as BooleanPropsObject);
 
-  const queueSid = props.task?.queueSid || '';
-  const queueName = props.task?.queueName || '';
+  const queueSid = task?.queueSid || '';
+  const queueName = task?.queueName || '';
   const textAttributes = getTextAttributes(queueName);
   const selectAttributes = getSelectAttributes(queueName);
   const group = getMultiSelectGroup();
   const groupForQueue = getQueueMultiSelectGroup(queueName);
+  const NO_OPTION_SELECTED = 'NoOptionSelected';
 
   const dispatch = useDispatch();
   const { tasks } = useSelector((state: AppState) => state[reduxNamespace].dispositions as DispositionsState);
 
   const updateStore = () => {
-    if (!props.task) return;
+    if (!task) return;
 
     let payload = {
-      taskSid: props.task.taskSid,
+      taskSid: task?.taskSid,
       disposition: '',
       notes: '',
       custom_attributes: {},
     };
 
-    if (tasks[props.task.taskSid]) {
+    if (tasks[task.taskSid]) {
       payload = {
         ...payload,
-        ...tasks[props.task.taskSid],
+        ...tasks[task.taskSid],
       };
     }
 
@@ -79,33 +88,31 @@ const DispositionTab = (props: OwnProps) => {
   const updateStoreDebounced = debounce(updateStore, 250, { maxWait: 1000 });
 
   useEffect(() => {
-    if (tasks && props.task && tasks[props.task.taskSid]) {
-      // setQueueName(props.task.queueName || '');
-      if (tasks[props.task.taskSid].disposition) {
-        setDisposition(tasks[props.task.taskSid].disposition);
+    if (tasks && task && tasks[task.taskSid]) {
+      if (tasks[task.taskSid].disposition) {
+        setDisposition(tasks[task.taskSid].disposition);
       }
 
       if (isNotesEnabled()) {
-        setNotes(tasks[props.task.taskSid].notes || '');
+        setNotes(tasks[task.taskSid].notes || '');
       }
       // set custom attributes from Redux state
-      setCustomAttributes(tasks[props.task.taskSid].custom_attributes);
-      const options = {} as any;
-      const optionsString = tasks[props.task.taskSid].custom_attributes[group.conversation_attribute] || '';
+      setCustomAttributes(tasks[task.taskSid].custom_attributes);
+      const options: BooleanPropsObject = {};
+      const optionsString = tasks[task.taskSid].custom_attributes[group.conversation_attribute] || '';
       optionsString.split('|').forEach((opt) => {
         options[opt] = true;
       });
       setGroupOptions(options);
 
-      const optionsForQueue = {} as any;
-      const optionsForQueueString =
-        tasks[props.task.taskSid].custom_attributes[groupForQueue.conversation_attribute] || '';
+      const optionsForQueue: BooleanPropsObject = {};
+      const optionsForQueueString = tasks[task.taskSid].custom_attributes[groupForQueue.conversation_attribute] || '';
       optionsForQueueString.split('|').forEach((opt) => {
         optionsForQueue[opt] = true;
       });
       setGroupOptionsForQueue(optionsForQueue);
     }
-  }, [props?.task?.taskSid]);
+  }, [task?.taskSid]);
 
   useEffect(() => {
     if (!disposition) return;
@@ -125,13 +132,13 @@ const DispositionTab = (props: OwnProps) => {
     // Pop the disposition tab when the task enters wrapping status.
     // We do this here because WrapupTask does not handle a customer-ended task,
     // and doing this in the taskWrapup event seems to not work.
-    if (props.task?.status === 'wrapping') {
+    if (task?.status === 'wrapping') {
       Actions.invokeAction('SetComponentState', {
         name: 'AgentTaskCanvasTabs',
         state: { selectedTabName: 'disposition' },
       });
     }
-  }, [props.task?.status]);
+  }, [task?.status]);
 
   const handleChange = (key: string, value: string) => {
     const attributes = { ...customAttributes, [key]: value };
@@ -162,13 +169,12 @@ const DispositionTab = (props: OwnProps) => {
     setCustomAttributes(attributes);
   };
 
-  const NO_OPTION_SELECTED = 'NoOptionSelected';
   return (
     <Box padding="space80" overflowY="scroll">
       <Stack orientation="vertical" spacing="space50">
         {getDispositionsForQueue(queueSid, queueName).length > 0 && (
           <RadioGroup
-            name={`${props.task?.sid}-disposition`}
+            name={`${task?.sid}-disposition`}
             value={disposition}
             legend={templates[StringTemplates.SelectDispositionTitle]()}
             helpText={templates[StringTemplates.SelectDispositionHelpText]()}
@@ -177,10 +183,10 @@ const DispositionTab = (props: OwnProps) => {
           >
             {getDispositionsForQueue(queueSid, queueName).map((disp) => (
               <Radio
-                id={`${props.task?.sid}-disposition-${disp}`}
+                id={`${task?.sid}-disposition-${disp}`}
                 value={disp}
-                name={`${props.task?.sid}-disposition`}
-                key={`${props.task?.sid}-disposition-${disp}`}
+                name={`${task?.sid}-disposition`}
+                key={`${task?.sid}-disposition-${disp}`}
               >
                 {disp}
               </Radio>
@@ -196,21 +202,19 @@ const DispositionTab = (props: OwnProps) => {
               helpText={templates[StringTemplates.ChooseOptions]()}
               required={group.required || false}
             >
-              {group.options.map((option) => {
-                return (
-                  <Checkbox
-                    key={option}
-                    checked={groupOptions[option] || false}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      handleCheckboxChange(option, e.target.checked);
-                    }}
-                    id={option}
-                    name={option}
-                  >
-                    {option}
-                  </Checkbox>
-                );
-              })}
+              {group.options.map((option) => (
+                <Checkbox
+                  key={option}
+                  checked={groupOptions[option] || false}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    handleCheckboxChange(option, e.target.checked);
+                  }}
+                  id={option}
+                  name={option}
+                >
+                  {option}
+                </Checkbox>
+              ))}
             </CheckboxGroup>
           </div>
         )}
@@ -223,69 +227,59 @@ const DispositionTab = (props: OwnProps) => {
               helpText={templates[StringTemplates.ChooseOptions]()}
               required={groupForQueue.required || false}
             >
-              {groupForQueue.options.map((option) => {
-                return (
-                  <Checkbox
-                    key={option}
-                    checked={groupOptionsForQueue[option] || false}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      handleCheckboxChangeForQueue(option, e.target.checked);
-                    }}
-                    id={option}
-                    name={option}
-                  >
-                    {option}
-                  </Checkbox>
-                );
-              })}
+              {groupForQueue.options.map((option) => (
+                <Checkbox
+                  key={option}
+                  checked={groupOptionsForQueue[option] || false}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    handleCheckboxChangeForQueue(option, e.target.checked);
+                  }}
+                  id={option}
+                  name={option}
+                >
+                  {option}
+                </Checkbox>
+              ))}
             </CheckboxGroup>
           </div>
         )}
-        {selectAttributes.map((attr) => {
-          const id = attr.conversation_attribute;
-          return (
-            <div key={id}>
-              <Label htmlFor={id} required={attr.required || false}>
-                {attr.form_label}
-              </Label>
-              <Select
-                id={id}
-                value={customAttributes[id] || NO_OPTION_SELECTED}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                  const value = e.target.value;
-                  if (value !== NO_OPTION_SELECTED) handleChange(id, value);
-                }}
-              >
-                <Option key={NO_OPTION_SELECTED} value={NO_OPTION_SELECTED} disabled>
-                  {templates[StringTemplates.ChooseAnOption]()}
+        {selectAttributes.map(({ conversation_attribute: id, form_label, options, required }) => (
+          <div key={id}>
+            <Label htmlFor={id} required={required || false}>
+              {form_label}
+            </Label>
+            <Select
+              id={id}
+              value={customAttributes[id] || NO_OPTION_SELECTED}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                const value = e.target.value;
+                if (value !== NO_OPTION_SELECTED) handleChange(id, value);
+              }}
+            >
+              <Option key={NO_OPTION_SELECTED} value={NO_OPTION_SELECTED} disabled>
+                {templates[StringTemplates.ChooseAnOption]()}
+              </Option>
+              {options.map((option) => (
+                <Option key={option} value={option}>
+                  {option}
                 </Option>
-                {attr.options.map((option) => {
-                  return (
-                    <Option key={option} value={option}>
-                      {option}
-                    </Option>
-                  );
-                })}
-              </Select>
-            </div>
-          );
-        })}
-        {textAttributes.map((attr) => {
-          const id = attr.conversation_attribute;
-          return (
-            <div key={id}>
-              <Label htmlFor={id} required={attr.required || false}>
-                {attr.form_label}
-              </Label>
-              <Input
-                type="text"
-                id={id}
-                value={customAttributes[id] || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(id, e.target.value)}
-              />
-            </div>
-          );
-        })}
+              ))}
+            </Select>
+          </div>
+        ))}
+        {textAttributes.map(({ conversation_attribute: id, form_label, required }) => (
+          <div key={id}>
+            <Label htmlFor={id} required={required || false}>
+              {form_label}
+            </Label>
+            <Input
+              type="text"
+              id={id}
+              value={customAttributes[id] || ''}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(id, e.target.value)}
+            />
+          </div>
+        ))}
         {isNotesEnabled() && (
           <>
             <Label htmlFor="notes">
@@ -294,8 +288,8 @@ const DispositionTab = (props: OwnProps) => {
             <TextArea
               onChange={(e) => setNotes(e.target.value)}
               aria-describedby="notes_help_text"
-              id={`${props.task?.sid}-notes`}
-              name={`${props.task?.sid}-notes`}
+              id={`${task?.sid}-notes`}
+              name={`${task?.sid}-notes`}
               value={notes}
               maxLength={NOTES_MAX_LENGTH}
             />
