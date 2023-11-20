@@ -13,7 +13,6 @@ import { DispositionsState } from '../states';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 import { DispositionsNotification } from '../notifications';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
-import FlexHelper from '../../../../utils/flex-helper';
 
 const handleAbort = (flex: typeof Flex, abortFunction: any, disposition: boolean = true) => {
   if (disposition) flex.Notifications.showNotification(DispositionsNotification.DispositionRequired);
@@ -36,9 +35,7 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     if (!payload.task?.taskSid) {
       return;
     }
-    let queueName = '';
-    const queue = await FlexHelper.getQueue(queueName);
-    if (queue) queueName = queue?.queue_name;
+    const queueName = payload.task.queueName;
     const numDispositions = getDispositionsForQueue(queueName ?? '').length;
     const textAttributes = getTextAttributes(queueName ?? '');
     const selectAttributes = getSelectAttributes(queueName ?? '');

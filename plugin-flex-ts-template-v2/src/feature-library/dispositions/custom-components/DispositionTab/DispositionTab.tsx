@@ -25,7 +25,6 @@ import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { updateDisposition, DispositionsState } from '../../flex-hooks/states';
 import { StringTemplates } from '../../flex-hooks/strings';
-import FlexHelper from '../../../../utils/flex-helper';
 
 export interface OwnProps {
   task?: ITask;
@@ -79,13 +78,8 @@ const DispositionTab = (props: OwnProps) => {
   const updateStoreDebounced = debounce(updateStore, 250, { maxWait: 1000 });
 
   useEffect(() => {
-    const getQueueFromInstantQuery = async (queueSid: string) => {
-      const queue = await FlexHelper.getQueue(queueSid);
-      setQueueName(queue?.queue_name || '');
-    };
-    getQueueFromInstantQuery(props.task?.queueSid || '');
-
     if (tasks && props.task && tasks[props.task.taskSid]) {
+      setQueueName(props.task.queueName || '');
       if (tasks[props.task.taskSid].disposition) {
         setDisposition(tasks[props.task.taskSid].disposition);
       }
@@ -207,7 +201,6 @@ const DispositionTab = (props: OwnProps) => {
                     key={option}
                     checked={groupOptions[option] || false}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      console.log('Checkbox event:', e);
                       handleCheckboxChange(option, e.target.checked);
                     }}
                     id={option}
@@ -235,7 +228,6 @@ const DispositionTab = (props: OwnProps) => {
                     key={option}
                     checked={groupOptionsForQueue[option] || false}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      console.log('Checkbox event:', e);
                       handleCheckboxChangeForQueue(option, e.target.checked);
                     }}
                     id={option}
