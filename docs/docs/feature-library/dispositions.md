@@ -13,7 +13,9 @@ To capture additional data elements on this wrap-up form, you can configure a se
 
 ![Dispositions demo](/img/features/dispositions/dispositions.gif)
 
-![WrapUpForm](/img/features/dispositions/WrapUpForm.gif)
+Extended Wrap-up form with additional fields.
+
+![WrapUpForm](/img/features/dispositions/WrapUpForm.png)
 
 ## Setup and Dependencies
 
