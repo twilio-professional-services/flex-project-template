@@ -3,17 +3,19 @@ sidebar_label: dispositions
 title: Dispositions / wrap-up codes
 ---
 
-Dispositions are useful for tracking the outcomes of various tasks. This feature allows you to provide a custom list of dispositions that agents may select before completing their task. Disposition selection may be optional or required, and dispositions may be global or queue-specific. You may also optionally enable a free-form notes field.
+## Overview
 
-Dispositions are available in Flex Insights under "Outcome", and notes are available under "Content".
+Dispositions are useful for tracking the outcomes of various tasks. This feature allows you to provide a custom list of dispositions that agents may select before completing their task. Disposition selection may be optional or required, and dispositions may be global or queue-specific. You may also optionally enable a free-form notes field. Dispositions are available in Flex Insights under "Outcome", and notes are available under "Content". 
 
-# flex-user-experience
+To capture additional data elements on this wrap-up form, you can configure a set of Text and Select attributes with labels and mappings to conversations attributes for reporting purposes.
+
+## Flex User Experience
 
 ![Dispositions demo](/img/features/dispositions/dispositions.gif)
 
 ![WrapUpForm](/img/features/dispositions/WrapUpForm.gif)
 
-# setup and dependencies
+## Setup and Dependencies
 
 Within your `ui_attributes` file, there are several settings for the `dispositions` feature:
 
@@ -27,14 +29,14 @@ Within your `ui_attributes` file, there are several settings for the `dispositio
   - `select_attributes` an array of additional wrap-up form elements that are rendered as a [Select dropdown](https://paste.twilio.design/components/select) with Options to allow the user to pick a value from a list.
   - `multi_select_group` a single object to render a Group of Checkboxes to allow for multi-select
 
-- `per_queue` - allows you to set different configurations for tasks from the provided queue SID(s)
-  - `require_disposition` - require the agent to select a disposition to complete tasks from this queue SID
-  - `dispositions` - dispositions that are only listed for tasks from this queue SID
-  - `text_attributes` - additional Text Attributes only for this queue
-  - `select_attributes` - additional Select Attributes only for this queue
-  - `multi_select_group` an additional Group of Checkboxes to allow for selecting multiple values
+- `per_queue` - allows you to set different configurations for tasks from the provided queue name(s)
+  - `require_disposition` - require the agent to select a disposition to complete tasks from this queue.
+  - `dispositions` - dispositions that are only listed for tasks from this queue.
+  - `text_attributes` - additional Text Attributes only for this queue.
+  - `select_attributes` - additional Select Attributes only for this queue.
+  - `multi_select_group` an additional Group of [Checkboxes](https://paste.twilio.design/components/checkbox) to allow for selecting multiple values.
 
-Each entry in a `text_attributes` array should looks like this with a `form_label` and [`conversation_attribute`](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) to use for storing the data. The `required` property is optional. When provided with `required: true`, the Disposition form will enforce that the user enters a value.
+Each entry in a `text_attributes` array should have a `form_label` and [`conversation_attribute`](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) to use for storing the data. The `required` property is optional. When provided with `required: true`, the Disposition form will enforce that the user enters a value.
 
 ```       {
             "form_label": "Case Number",
@@ -43,7 +45,7 @@ Each entry in a `text_attributes` array should looks like this with a `form_labe
           }
 ```
 
- Each entry in the `select_attributes` array isrendered as a [Select dropdown](https://paste.twilio.design/components/select) with Options to allow the user to pick a value from a list. Entries in this array should have this format:
+ Each entry in the `select_attributes` array is rendered as a [Select dropdown](https://paste.twilio.design/components/select) with Options to allow the user to pick a value from a list. Entries in this array should have this format:
  ```
           {
             "form_label": "Topic",
@@ -57,7 +59,9 @@ Each entry in a `text_attributes` array should looks like this with a `form_labe
             "required": true
           }
 ```
-The `multi_select_group` item is a single object to render a Group of Checkboxes to allow for multi-select. Checked values are concatenated into a pipe delimited string in the attributes ("Flex|Voice|Studio", for below example).
+When provided with `required: true`, the Disposition form will enforce that the user selects a value.
+
+The `multi_select_group` item is a configuration object that can be used to render a Group of Checkboxes to allow for selecting multiple values. Checked values are concatenated into a pipe delimited string in the attributes ("Flex|Voice|Studio", for below example).
 ```
          {
           "form_label": "Twilio Products",
@@ -67,18 +71,22 @@ The `multi_select_group` item is a single object to render a Group of Checkboxes
         },
 ```
 
-If you provide both a global `multi_select_group` and a `multi_select_group` per queueSid, both will be rendered on the form.
 
-> **Note**
-> If both global and per-queue dispositions are configured, the agent will be see a combined list.
-> If present, the per-queue `require_disposition` setting will override the higher-level `require_dispositions` setting.
-> The `required` property is optional for the Text and Select attributes. When provided with `required: true`, the Disposition form will enforce that the user enters or selects a value.
-Once your updated flex-config is deployed, the feature is enabled and ready to use.
 
-# how does it work?
+### Notes ###
 
-This feature adds a disposition tab to `TaskCanvasTabs`. When the task enters the wrapping state, the disposition tab is automatically selected. The user's selected disposition and/or notes are stored in state. When the Complete Task button is pressed, the selected values are read from state and written to task attributes. The disposition is stored in the `conversations.outcome` attribute, and notes are stored in the `conversations.content` attribute.  Additional custom attributes are stored based on the configured [conversations attribute](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) for each one.  You can use a Select Attribute with options Yes and No to implement a boolean type field.
+* If both global and per-queue `dispositions` are configured, the agent will be see a combined list.
+* If present, the per-queue `require_disposition` setting will override the higher-level `require_dispositions` setting.
+* If no dispositions are configured, and notes are not enabled, the dispositions tab will not be added.
+* The `required` property is optional for the `text_attributes` and `select_attributes`. When provided with `required: true`, the Disposition form will enforce that the user enters or selects a value.
+* You can use a Select Attribute with options Yes and No to implement a boolean type field.
+* If you provide both a global `multi_select_group` and a `multi_select_group` per queue, both will be rendered on the form (if the queue name matches for the task).
+* Once your updated flex-config is deployed, the feature is enabled and ready to use.
+
+## How does it work?
+
+This feature adds a disposition tab to `TaskCanvasTabs`. When the task enters the wrapping state, the disposition tab is automatically selected. The user's selected disposition and/or notes are stored in state. When the Complete Task button is pressed, the selected values are read from state and written to task attributes. The disposition is stored in the `conversations.outcome` attribute, and notes are stored in the `conversations.content` attribute.  Additional custom attributes are stored based on the configured [conversations attribute](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) for each one.  In addition to `conversation_attribute_2` through 10, there are other pre-defined attributes available in the [Insights Data Model](https://www.twilio.com/docs/flex/end-user-guide/insights/data-model) such as `initiative`, `initiated_by` and `campaign` that can be leveraged to capture wrap-up data elements.
+
 
 If `require_disposition` is enabled, and there are dispositions configured, the agent will not be allowed to complete the task until one is selected. When used in combination with the `agent-automation` feature's auto-wrap-up feature, the disposition requirement takes precedence and prevents auto-wrap-up.
 
-If no dispositions are configured, and notes are not enabled, the dispositions tab will not be added.
