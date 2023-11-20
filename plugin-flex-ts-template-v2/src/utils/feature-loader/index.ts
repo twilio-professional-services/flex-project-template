@@ -52,7 +52,7 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   Logger.addHook(flex, manager, 'built-in logger to browser console', SendLogsToBrowserConsole);
 
   // After all features have initialized, execute deferred hooks
-  Logger.init();
+  Logger.init(manager);
   CssOverrides.init(manager);
   PasteElements.init(flex);
   Reducers.init(manager);

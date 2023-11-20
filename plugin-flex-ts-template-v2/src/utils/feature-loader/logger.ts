@@ -6,7 +6,11 @@ import Destination from '../logger/destination';
 
 const destinations: Destination[] = [];
 
-export const init = () => {
+export const init = (manager: Flex.Manager) => {
+  manager.events.addListener('flexError', (error) => {
+    logger.error('Internal FlexError', error);
+  });
+
   const worker = FlexHelperSingleton.getCurrentWorker();
   if (worker) {
     logger.addMetaData('workerSid', worker.sid);
