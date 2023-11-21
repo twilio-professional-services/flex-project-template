@@ -21,7 +21,6 @@ export const pasteElementHook = {
     display: 'block',
   },
   TRANSFER_DIR_COMMON_ROWS_CONTAINER: {
-    fontWeight: '700',
     overflowY: 'auto',
     alignItems: 'initial',
     width: '100%',
@@ -33,13 +32,28 @@ export const pasteElementHook = {
     marginLeft: 'space30',
     marginRight: 'space40',
     minWidth: 'sizeIcon20',
+    display: 'flex',
+    flexShrink: 0,
+  },
+  TRANSFER_DIR_COMMON_ROW_LABEL: {
+    overflowX: 'hidden',
+    width: '100%',
   },
   TRANSFER_DIR_COMMON_ROW_NAME: {
     textOverflow: 'ellipsis',
     overflowX: 'hidden',
     whiteSpace: 'nowrap',
     fontSize: '14px',
-    width: '100%',
+    fontWeight: '700',
+  },
+  TRANSFER_DIR_COMMON_ROW_DESC: {
+    textOverflow: 'ellipsis',
+    overflowX: 'hidden',
+    whiteSpace: 'nowrap',
+    fontSize: '12px',
+    fontWeight: 'normal',
+    color: 'colorTextWeak',
+    marginTop: '-2px',
   },
   TRANSFER_DIR_COMMON_ROW_BUTTON: {
     '&:focus': {
