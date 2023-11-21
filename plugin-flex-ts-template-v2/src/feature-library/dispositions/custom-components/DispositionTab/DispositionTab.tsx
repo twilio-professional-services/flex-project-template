@@ -59,29 +59,12 @@ const DispositionTab = (props: OwnProps) => {
 
   const updateStore = () => {
     if (!task) return;
-
-    let payload = {
+    const payload = {
       taskSid: task?.taskSid,
-      disposition: '',
-      notes: '',
-      custom_attributes: {},
+      disposition: disposition ? disposition : '',
+      notes: notes ? notes : '',
+      custom_attributes: { ...customAttributes },
     };
-
-    if (tasks[task.taskSid]) {
-      payload = {
-        ...payload,
-        ...tasks[task.taskSid],
-      };
-    }
-
-    if (disposition) {
-      payload.disposition = disposition;
-    }
-
-    if (isNotesEnabled() && notes) {
-      payload.notes = notes;
-    }
-    payload.custom_attributes = { ...customAttributes };
     dispatch(updateDisposition(payload));
   };
 
@@ -99,17 +82,21 @@ const DispositionTab = (props: OwnProps) => {
       // set custom attributes from Redux state
       setCustomAttributes(tasks[task.taskSid].custom_attributes);
       const options: BooleanPropsObject = {};
-      const optionsString = tasks[task.taskSid].custom_attributes[group.conversation_attribute] || '';
-      optionsString.split('|').forEach((opt) => {
-        options[opt] = true;
-      });
+      const optionsString = tasks[task.taskSid].custom_attributes[group.conversation_attribute];
+      if (optionsString) {
+        optionsString.split('|').forEach((opt) => {
+          options[opt] = true;
+        });
+      }
       setGroupOptions(options);
 
       const optionsForQueue: BooleanPropsObject = {};
-      const optionsForQueueString = tasks[task.taskSid].custom_attributes[groupForQueue.conversation_attribute] || '';
-      optionsForQueueString.split('|').forEach((opt) => {
-        optionsForQueue[opt] = true;
-      });
+      const optionsForQueueString = tasks[task.taskSid].custom_attributes[groupForQueue.conversation_attribute];
+      if (optionsForQueueString) {
+        optionsForQueueString.split('|').forEach((opt) => {
+          optionsForQueue[opt] = true;
+        });
+      }
       setGroupOptionsForQueue(optionsForQueue);
     }
   }, [task?.taskSid]);
