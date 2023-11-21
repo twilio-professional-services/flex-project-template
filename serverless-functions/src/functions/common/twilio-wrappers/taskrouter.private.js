@@ -487,31 +487,6 @@ exports.getTasks = async function getTasks(parameters) {
   }
 };
 
-exports.updateWorkerAttributes = async function updateWorkerAttributes(parameters) {
-  const { context, workerSid, workerAttributes } = parameters;
-
-  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
-
-  try {
-    const client = context.getTwilioClient();
-    const worker = await client.taskrouter.v1
-      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
-      .workers(workerSid)
-      .update({ attributes: JSON.stringify(workerAttributes) });
-
-    return {
-      success: true,
-      status: 200,
-      worker: {
-        ...worker,
-        attributes: JSON.parse(worker.attributes),
-      },
-    };
-  } catch (error) {
-    return retryHandler(error, parameters, exports.updateWorkerAttributes);
-  }
-};
-
 /**
  * @param {object} parameters the parameters for the function
  * @param {number} parameters.attempts the number of retry attempts performed
