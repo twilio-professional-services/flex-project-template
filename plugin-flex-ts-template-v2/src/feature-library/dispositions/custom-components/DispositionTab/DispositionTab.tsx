@@ -37,8 +37,7 @@ interface BooleanPropsObject {
   [key: string]: boolean;
 }
 
-const DispositionTab = (props: OwnProps) => {
-  const { task } = props;
+const DispositionTab = ({ task }: OwnProps) => {
   const NOTES_MAX_LENGTH = 100;
   const [disposition, setDisposition] = useState('');
   const [notes, setNotes] = useState('');
@@ -55,7 +54,9 @@ const DispositionTab = (props: OwnProps) => {
   const NO_OPTION_SELECTED = 'NoOptionSelected';
 
   const dispatch = useDispatch();
-  const { tasks } = useSelector((state: AppState) => state[reduxNamespace].dispositions as DispositionsState);
+  const { tasks: tasksFromRedux } = useSelector(
+    (state: AppState) => state[reduxNamespace].dispositions as DispositionsState,
+  );
 
   const updateStore = () => {
     if (!task) return;
@@ -71,18 +72,18 @@ const DispositionTab = (props: OwnProps) => {
   const updateStoreDebounced = debounce(updateStore, 250, { maxWait: 1000 });
 
   useEffect(() => {
-    if (tasks && task && tasks[task.taskSid]) {
-      if (tasks[task.taskSid].disposition) {
-        setDisposition(tasks[task.taskSid].disposition);
+    if (tasksFromRedux && task && tasksFromRedux[task.taskSid]) {
+      if (tasksFromRedux[task.taskSid].disposition) {
+        setDisposition(tasksFromRedux[task.taskSid].disposition);
       }
 
       if (isNotesEnabled()) {
-        setNotes(tasks[task.taskSid].notes || '');
+        setNotes(tasksFromRedux[task.taskSid].notes || '');
       }
       // set custom attributes from Redux state
-      setCustomAttributes(tasks[task.taskSid].custom_attributes);
+      setCustomAttributes(tasksFromRedux[task.taskSid].custom_attributes);
       const options: BooleanPropsObject = {};
-      const optionsString = tasks[task.taskSid].custom_attributes[group.conversation_attribute];
+      const optionsString = tasksFromRedux[task.taskSid].custom_attributes[group.conversation_attribute];
       if (optionsString) {
         optionsString.split('|').forEach((opt) => {
           options[opt] = true;
@@ -91,7 +92,8 @@ const DispositionTab = (props: OwnProps) => {
       setGroupOptions(options);
 
       const optionsForQueue: BooleanPropsObject = {};
-      const optionsForQueueString = tasks[task.taskSid].custom_attributes[groupForQueue.conversation_attribute];
+      const optionsForQueueString =
+        tasksFromRedux[task.taskSid].custom_attributes[groupForQueue.conversation_attribute];
       if (optionsForQueueString) {
         optionsForQueueString.split('|').forEach((opt) => {
           optionsForQueue[opt] = true;
@@ -102,18 +104,8 @@ const DispositionTab = (props: OwnProps) => {
   }, [task?.taskSid]);
 
   useEffect(() => {
-    if (!disposition) return;
-    updateStore();
-  }, [disposition]);
-
-  useEffect(() => {
-    if (!isNotesEnabled()) return;
     updateStoreDebounced();
-  }, [notes]);
-
-  useEffect(() => {
-    updateStoreDebounced();
-  }, [customAttributes]);
+  }, [disposition, notes, customAttributes]);
 
   useEffect(() => {
     // Pop the disposition tab when the task enters wrapping status.
