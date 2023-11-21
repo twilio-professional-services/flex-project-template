@@ -47,7 +47,7 @@ importInternalState() {
 	flows=$(npx twilio api:studio:v2:flows:list --no-limit -o json)
 
 # FEATURE: remove-all
-	import_resource "$workflows" "Template Example" "twilio_taskrouter_workspaces_workflows_v1.template_example" "friendlyName"
+	import_resource "$workflows" "Template Example Assign to Anyone" "twilio_taskrouter_workspaces_workflows_v1.template_example_assign_to_anyone" "friendlyName"
 	import_resource "$queues" "Template Example Everyone" "twilio_taskrouter_workspaces_task_queues_v1.template_example_everyone" "friendlyName"
 	import_resource "$queues" "Template Example Sales" "twilio_taskrouter_workspaces_task_queues_v1.template_example_sales" "friendlyName"
 	import_resource "$queues" "Template Example Support" "twilio_taskrouter_workspaces_task_queues_v1.template_example_support" "friendlyName"
@@ -71,6 +71,13 @@ importInternalState() {
 	import_resource "$queues" "Template Example Internal Calls" "module.internal-call.twilio_taskrouter_workspaces_task_queues_v1.template_example_internal_calls" "friendlyName"
 	echo "   - :white_check_mark: internal-call resources" >>$GITHUB_STEP_SUMMARY
 # END FEATURE: internal-call
+
+# FEATURE: park-interaction
+	import_resource "$workflows" "Template Example Park/Resume" "module.park-interaction.twilio_taskrouter_workspaces_workflows_v1.template_example_park_resume" "friendlyName"
+	import_resource "$flows" "Template Example Messaging with Parking Flow" "module.park-interaction.twilio_studio_flows_v2.template_example_messaging_with_parking_flow" "friendlyName" false
+	import_resource "$channels" "chat" "module.park-interaction.twilio_taskrouter_workspaces_task_channels_v1.chat" "uniqueName"
+	echo "   - :white_check_mark: park-interaction resources" >>$GITHUB_STEP_SUMMARY
+# END FEATURE: park-interaction
 
 # FEATURE: activity-reservation-handler
 	import_resource "$activities" "On a Task" "module.activity-reservation-handler.twilio_taskrouter_workspaces_activities_v1.on_a_task" "friendlyName"

@@ -6,9 +6,9 @@ output "workspace_sid" {
 }
 
 # FEATURE: remove-all
-output "template_example_workflow_sid" {
-  value = twilio_taskrouter_workspaces_workflows_v1.template_example.sid
-  description = "Template example workflow SID"
+output "template_example_assign_to_anyone_workflow_sid" {
+  value = twilio_taskrouter_workspaces_workflows_v1.template_example_assign_to_anyone.sid
+  description = "Template example assign to anyone workflow SID"
 }
 # END FEATURE: remove-all
 
@@ -37,6 +37,18 @@ output "internal_call_workflow_sid" {
   description = "Internal call workflow SID"
 }
 # END FEATURE: internal-call
+
+# FEATURE: park-interaction
+output "park_resume_workflow_sid" {
+  value = module.park-interaction.park_resume_workflow_sid
+  description = "Park/resume workflow SID"
+}
+
+output "example_parking_flow_sid" {
+  value = module.park-interaction.example_parking_flow_sid
+  description = "Example messaging with parking flow SID"
+}
+# END FEATURE: park-interaction
 
 # FEATURE: schedule-manager
 output "example_schedule_flow_sid" {

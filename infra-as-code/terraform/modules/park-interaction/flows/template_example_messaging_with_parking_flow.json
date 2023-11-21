@@ -1,0 +1,205 @@
+{
+  "description": "Example messaging flow that supports the park/resume feature",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "event": "incomingCall"
+        },
+        {
+          "next": "send_welcome",
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": 0
+        }
+      }
+    },
+    {
+      "name": "send_welcome",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "select_queue",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "next": "send_welcome",
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 260,
+          "y": 210
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "message_type": "custom",
+        "body": "Ahoy! To better assist you, please tell me whether you need assistance with support or sales.",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "select_queue",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "send_welcome",
+          "event": "noMatch"
+        },
+        {
+          "next": "set_sales",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value contains sales",
+              "arguments": [
+                "{{widgets.send_welcome.inbound.Body}}"
+              ],
+              "type": "contains",
+              "value": "sales"
+            }
+          ]
+        },
+        {
+          "next": "set_support",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value contains support",
+              "arguments": [
+                "{{widgets.send_welcome.inbound.Body}}"
+              ],
+              "type": "contains",
+              "value": "support"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.send_welcome.inbound.Body}}",
+        "offset": {
+          "x": 140,
+          "y": 460
+        }
+      }
+    },
+    {
+      "name": "set_sales",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "send_please_wait",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "sales",
+            "key": "selected_queue"
+          }
+        ],
+        "offset": {
+          "x": 70,
+          "y": 730
+        }
+      }
+    },
+    {
+      "name": "set_support",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "send_please_wait",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "support",
+            "key": "selected_queue"
+          }
+        ],
+        "offset": {
+          "x": 400,
+          "y": 730
+        }
+      }
+    },
+    {
+      "name": "send_to_flex",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 1200
+        },
+        "workflow": "${WORKFLOW_SID}",
+        "channel": "${CHAT_CHANNEL_SID}",
+        "attributes": "{ \"selected_queue\": \"{{flow.variables.selected_queue}}\" }"
+      }
+    },
+    {
+      "name": "send_please_wait",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "send_to_flex",
+          "event": "sent"
+        },
+        {
+          "next": "send_to_flex",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 270,
+          "y": 980
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "message_type": "custom",
+        "to": "{{contact.channel.address}}",
+        "body": "Thanks! Please wait while I locate a {{flow.variables.selected_queue}} representative to assist you. This may take a few minutes."
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}

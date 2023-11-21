@@ -38,7 +38,7 @@
           "event": "success"
         },
         {
-          "next": "say_open",
+          "next": "send_to_flex",
           "event": "fail"
         }
       ],
@@ -68,7 +68,7 @@
           "event": "noMatch"
         },
         {
-          "next": "say_open",
+          "next": "send_to_flex",
           "event": "match",
           "conditions": [
             {
@@ -108,20 +108,26 @@
       }
     },
     {
-      "name": "say_open",
-      "type": "say-play",
+      "name": "send_to_flex",
+      "type": "send-to-flex",
       "transitions": [
         {
-          "event": "audioComplete"
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
         }
       ],
       "properties": {
         "offset": {
-          "x": 400,
+          "x": 420,
           "y": 710
         },
-        "loop": 1,
-        "say": "Ahoy! This is an example open message."
+        "workflow": "${WORKFLOW_SID}",
+        "channel": "${VOICE_CHANNEL_SID}"
       }
     }
   ],

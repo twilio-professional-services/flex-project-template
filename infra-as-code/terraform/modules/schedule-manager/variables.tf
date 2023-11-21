@@ -1,3 +1,21 @@
+variable "voice_channel_sid" {
+  type        = string
+  description = "SID of voice task channel"
+  validation {
+    condition     = length(var.voice_channel_sid) > 2 && substr(var.voice_channel_sid, 0, 2) == "TC"
+    error_message = "voice_channel_sid expected to start with \"TC\"."
+  }
+}
+
+variable "workflow_sid" {
+  type        = string
+  description = "SID of workflow"
+  validation {
+    condition     = length(var.workflow_sid) > 2 && substr(var.workflow_sid, 0, 2) == "WW"
+    error_message = "workflow_sid expected to start with \"WW\"."
+  }
+}
+
 variable "schedule_manager_domain" {
   type        = string
   description = "serverless domain schedule manager for flex plugin"

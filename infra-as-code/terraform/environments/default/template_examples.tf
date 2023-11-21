@@ -23,10 +23,10 @@ resource "twilio_taskrouter_workspaces_task_queues_v1" "template_example_support
   task_order = "FIFO"
 }
 
-resource "twilio_taskrouter_workspaces_workflows_v1" "template_example" {
+resource "twilio_taskrouter_workspaces_workflows_v1" "template_example_assign_to_anyone" {
   workspace_sid = twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
-  friendly_name = "Template Example"
-  configuration = templatefile("workflows/template_example.json", {
+  friendly_name = "Template Example Assign to Anyone"
+  configuration = templatefile("workflows/template_example_assign_to_anyone.json", {
     "QUEUE_SID_EVERYONE" = twilio_taskrouter_workspaces_task_queues_v1.template_example_everyone.sid
     "QUEUE_SID_TEMPLATE_EXAMPLE_SALES" = twilio_taskrouter_workspaces_task_queues_v1.template_example_sales.sid
     "QUEUE_SID_TEMPLATE_EXAMPLE_SUPPORT" = twilio_taskrouter_workspaces_task_queues_v1.template_example_support.sid
