@@ -10,6 +10,26 @@ Time to complete: _~20-30 minutes_
 
 Before following any of these steps, first complete the steps for [local setup and use](/getting-started/run-locally).
 
+## Deploy add-ons
+
+Some features, such as the `chat-to-video-escalation` feature and the `schedule-manager` feature, depend on add-on packages that need to be deployed. To do so:
+
+First, make sure you are using the correct Twilio profile that matches your `schedule-manager` .env:
+
+:::caution Caution
+This is not the same command as above!
+:::
+
+```bash
+export env=`cat addons/serverless-schedule-manager/.env | grep ACCOUNT_SID | cut -d '=' -f 2`; export profile=`node scripts/print-profile-account.mjs`; echo -e 'schedule-manager: \t' ${env}; echo -e 'profile: \t' ${profile}
+```
+
+Once you have confirmed they are the same, run the deployment:
+
+```bash
+npm run deploy-addons
+```
+
 ## Deploy serverless functions
 
 First, make sure you are using the correct Twilio profile that matches your .env:
@@ -24,27 +44,6 @@ If the accounts do not match, perform the following:
 - If the profile account is correct, run `npm run postinstall -- --overwrite` in the template root directory to re-generate your .env files based on the selected profile.
 - If the profile account is not correct, run `twilio profiles:use my_profile_name` to switch profiles.
 :::
-
-Once you have confirmed they are the same, run the deployment:
-
-```bash
-npm run deploy
-```
-
-### Deploy schedule-manager feature
-
-In order to deploy the `schedule-manager` feature, its serverless functions need to be separately deployed as well:
-
-First, make sure you are using the correct Twilio profile that matches your .env:
-
-:::caution Caution
-This is not the same command as above!
-:::
-
-```bash
-cd ../serverless-schedule-manager
-export env=`cat .env | grep ACCOUNT_SID | cut -d '=' -f 2`; export profile=`node ../scripts/print-profile-account.mjs`; echo -e 'schedule-manager: \t' ${env}; echo -e 'profile: \t' ${profile}
-```
 
 Once you have confirmed they are the same, run the deployment:
 

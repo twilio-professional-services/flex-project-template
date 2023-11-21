@@ -1,7 +1,8 @@
 import shell from "shelljs";
+import path from 'path';
 
 export default (packageDir, skipInstall, uninstall) => {
-  if (packageDir && shell.test('-d', packageDir)) {
+  if (packageDir && shell.test('-d', packageDir) && shell.test('-e', path.join(packageDir, 'package.json'))) {
     shell.cd(`./${packageDir}`);
     
     if (uninstall) {

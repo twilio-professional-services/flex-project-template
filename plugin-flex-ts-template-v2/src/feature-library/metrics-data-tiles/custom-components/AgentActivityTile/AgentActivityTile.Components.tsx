@@ -18,7 +18,7 @@ export const Label = styled('div')<ThemeOnlyProps>`
   background-color: ${(props) => props.bgColor || props.theme.tokens.backgroundColors.colorBackgroundBody};
   font-size: 11px;
   font-weight: bold;
-  width: 70px;
+  width: 80px;
   padding: 2px 2px 2px 4px;
   margin: 1px;
   color: #ffffff;

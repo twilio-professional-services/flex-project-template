@@ -1,3 +1,5 @@
+name: Deploy Terraform
+
 on:
   workflow_call:
     inputs:
@@ -32,17 +34,14 @@ jobs:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-      TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       ENVIRONMENT: ${{ inputs.environment }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: hashicorp/setup-terraform@v2
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
       - name: install Twilio CLI
         run: |
-          npm install -g twilio-cli
-          twilio plugins:install @twilio-labs/plugin-serverless
+          npm install --ignore-scripts
+          npm run install-serverless-plugin
       - name: Pull Terraform State
         id: pull-state
         working-directory: ./infra-as-code/state

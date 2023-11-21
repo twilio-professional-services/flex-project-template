@@ -5,9 +5,7 @@
   "scripts": {
     "test": "echo 'Tests to come'; exit 1",
     "start": "twilio serverless:start",
-    "deploy": "npm run fetch-config && twilio serverless:deploy --override-existing-project --runtime node16",
-    "deploy-env": "npm run deploy -- --env \".env.$ENVIRONMENT\"",
-    "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v2",
+    "deploy": "npm run fetch-config && twilio serverless:deploy --override-existing-project --env \".env${ENVIRONMENT:+.$ENVIRONMENT}\"",
     "fetch-config": "node scripts/fetch-config.mjs assets/config.private.json $ENVIRONMENT",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
@@ -29,6 +27,6 @@
     "twilio-run": "^3.5.3"
   },
   "engines": {
-    "node": "16"
+    "node": ">=16"
   }
 }

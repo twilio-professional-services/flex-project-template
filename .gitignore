@@ -151,8 +151,6 @@ eslint_report.json
 
 appConfig.js
 
-package-lock.json
-
 # Local .terraform directories
 **/.terraform/*
 
@@ -166,6 +164,7 @@ package-lock.json
 # to change depending on the environment.
 *.tfvars
 *.tfvars.json
+!example.tfvars
 
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in

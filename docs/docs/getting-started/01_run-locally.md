@@ -1,6 +1,5 @@
 ---
 sidebar_label: Run the template locally
-sidebar_position: 1
 title: Run the template locally
 ---
 

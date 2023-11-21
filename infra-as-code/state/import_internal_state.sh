@@ -25,9 +25,9 @@ import_resource() {
 	result=$(get_value_from_json "$input_json" "$key" "$name" "sid")
 	if [ -n "$result" ]; then
 		if $has_sid; then
-			terraform -chdir="../terraform/environments/default" import -input=false "$resource" "$TF_WORKSPACE_SID"/"$result" || exit
+			terraform -chdir="../terraform/environments/default" import -input=false -var-file="${ENVIRONMENT:-local}.tfvars" "$resource" "$TF_WORKSPACE_SID"/"$result" || exit
 		else
-			terraform -chdir="../terraform/environments/default" import -input=false "$resource" "$result" || exit
+			terraform -chdir="../terraform/environments/default" import -input=false -var-file="${ENVIRONMENT:-local}.tfvars" "$resource" "$result" || exit
 		fi
 	fi
 
@@ -35,12 +35,12 @@ import_resource() {
 
 importInternalState() {
 	echo " - Discovering and importing existing Twilio state for known definitions into a new terraform state file" >>$GITHUB_STEP_SUMMARY
-	workspaces=$(twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
+	workspaces=$(npx twilio api:taskrouter:v1:workspaces:list --no-limit -o json)
 	TF_WORKSPACE_SID=$(get_value_from_json "$workspaces" "friendlyName" "Flex Task Assignment" "sid")
 	import_resource "$workspaces" "Flex Task Assignment" "module.taskrouter.twilio_taskrouter_workspaces_v1.flex" "friendlyName" false
 	echo "   - :white_check_mark: Task Router - Workspaces" >>$GITHUB_STEP_SUMMARY
 
-	workflows=$(twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json | jq 'map(del(.configuration))')
+	workflows=$(npx twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json | jq 'map(del(.configuration))')
 
 # FEATURE: remove-all
 	import_resource "$workflows" "Assign to Anyone" "module.taskrouter.twilio_taskrouter_workspaces_workflows_v1.assign_to_anyone" "friendlyName"
@@ -60,7 +60,7 @@ importInternalState() {
 
 	echo "   - :white_check_mark: Task Router - Workflows" >>$GITHUB_STEP_SUMMARY
 
-	queues=$(twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
+	queues=$(npx twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 # FEATURE: remove-all
 	import_resource "$queues" "Everyone" "module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.everyone" "friendlyName"
 	import_resource "$queues" "Template Example Sales" "module.taskrouter.twilio_taskrouter_workspaces_task_queues_v1.template_example_sales" "friendlyName"
@@ -73,12 +73,12 @@ importInternalState() {
 
 	echo "   - :white_check_mark: Task Router - Queues" >>$GITHUB_STEP_SUMMARY
 
-	channels=$(twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
+	channels=$(npx twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 	import_resource "$channels" "voice" "module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.voice" "uniqueName"
 	import_resource "$channels" "chat" "module.taskrouter.twilio_taskrouter_workspaces_task_channels_v1.chat" "uniqueName"
 	echo "   - :white_check_mark: Task Router - Channels" >>$GITHUB_STEP_SUMMARY
 
-	activities=$(twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
+	activities=$(npx twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 	import_resource "$activities" "Offline" "module.taskrouter.twilio_taskrouter_workspaces_activities_v1.offline" "friendlyName"
 	import_resource "$activities" "Available" "module.taskrouter.twilio_taskrouter_workspaces_activities_v1.available" "friendlyName"
 	import_resource "$activities" "Unavailable" "module.taskrouter.twilio_taskrouter_workspaces_activities_v1.unavailable" "friendlyName"
@@ -92,7 +92,7 @@ importInternalState() {
 # END FEATURE: activity-reservation-handler
 	echo "   - :white_check_mark: Task Router - Activities" >>$GITHUB_STEP_SUMMARY
 
-	flows=$(twilio api:studio:v2:flows:list --no-limit -o json)
+	flows=$(npx twilio api:studio:v2:flows:list --no-limit -o json)
 # FEATURE: remove-all
 # FEATURE: callback-and-voicemail	
 # FEATURE: schedule-manager
@@ -106,63 +106,8 @@ importInternalState() {
 
 }
 
-services=$(twilio api:serverless:v1:services:list --no-limit -o json)
-
-TF_VAR_SERVERLESS_SID=$(get_value_from_json "$services" "uniqueName" "custom-flex-extensions-serverless" "sid")
-serverless=$(twilio api:serverless:v1:services:environments:list --service-sid "$TF_VAR_SERVERLESS_SID" --no-limit -o json)
-TF_VAR_SERVERLESS_DOMAIN=$(get_value_from_json "$serverless" "uniqueName" "dev-environment" "domainName")
-TF_VAR_SERVERLESS_ENV_SID=$(get_value_from_json "$serverless" "uniqueName" "dev-environment" "sid")
-### Functions list
-serverless_functions=$(twilio api:serverless:v1:services:functions:list --service-sid "$TF_VAR_SERVERLESS_SID" --no-limit -o json)
-### SERVERLESS FUNCTIONS REFERENCE
-# FEATURE: callback-and-voicemail
-TF_VAR_FUNCTION_CREATE_CALLBACK=$(get_value_from_json "$serverless_functions" "friendlyName" "/features/callback-and-voicemail/studio/create-callback" "sid")
-# END FEATURE: callback-and-voicemail
-
-# FEATURE: schedule-manager
-TF_VAR_SCHEDULE_MANAGER_SID=$(get_value_from_json "$services" "uniqueName" "schedule-manager" "sid")
-schedule_manager=$(twilio api:serverless:v1:services:environments:list --service-sid "$TF_VAR_SCHEDULE_MANAGER_SID" --no-limit -o json)
-TF_VAR_SCHEDULE_MANAGER_DOMAIN=$(get_value_from_json "$schedule_manager" "uniqueName" "dev-environment" "domainName")
-TF_VAR_SCHEDULE_MANAGER_ENV_SID=$(get_value_from_json "$schedule_manager" "uniqueName" "dev-environment" "sid")
-### Functions
-schedule_manager_functions=$(twilio api:serverless:v1:services:functions:list --service-sid "$TF_VAR_SCHEDULE_MANAGER_SID" --no-limit -o json)
-### SCHEDULE MANAGER FUNCTIONS REFERENCE
-TF_VAR_FUNCTION_CHECK_SCHEDULE_SID=$(get_value_from_json "$schedule_manager_functions" "friendlyName" "/check-schedule" "sid")
-# END FEATURE: schedule-manager
-
-
-echo " - *Discovering Serverless Backends* " >>$GITHUB_STEP_SUMMARY
-
-if [ -n "$TF_VAR_SERVERLESS_DOMAIN" ]; then
-	echo "   - :white_check_mark: serverless backend: $TF_VAR_SERVERLESS_DOMAIN" >>$GITHUB_STEP_SUMMARY
-else
-	echo "   - :x: serverless backend not found" >>$GITHUB_STEP_SUMMARY
-fi
-
-# FEATURE: schedule-manager
-if [ -n "$TF_VAR_SCHEDULE_MANAGER_DOMAIN" ]; then
-	echo "   - :white_check_mark: schedule manager backend: $TF_VAR_SCHEDULE_MANAGER_DOMAIN" >>$GITHUB_STEP_SUMMARY
-else
-	echo "   - :x: schedule manager backend not found" >>$GITHUB_STEP_SUMMARY
-fi
-# END FEATURE: schedule-manager
-
-export TF_VAR_SERVERLESS_SID 
-export TF_VAR_SERVERLESS_DOMAIN 
-export TF_VAR_SERVERLESS_ENV_SID 
-
-# FEATURE: schedule-manager
-export TF_VAR_SCHEDULE_MANAGER_SID 
-export TF_VAR_SCHEDULE_MANAGER_DOMAIN 
-export TF_VAR_SCHEDULE_MANAGER_ENV_SID 
-export TF_VAR_FUNCTION_CHECK_SCHEDULE_SID
-# END FEATURE: schedule-manager
-
-# FEATURE: callback-and-voicemail
-export TF_VAR_FUNCTION_CREATE_CALLBACK 
-# END FEATURE: callback-and-voicemail
-
-
+# populate tfvars
+(cd ../.. && npm run postinstall -- --skip-packages --files=infra-as-code/terraform/environments/default/example.tfvars)
 
 ### only if existing state file does not exist
 ### do we want to import the internal state
@@ -170,6 +115,6 @@ if ! [ -f ../terraform/environments/default/terraform.tfstate ]; then
   importInternalState
 fi
 
-terraform -chdir="../terraform/environments/default" apply -input=false -auto-approve
+terraform -chdir="../terraform/environments/default" apply -input=false -auto-approve -var-file="${ENVIRONMENT:-local}.tfvars"
 echo " - Applying terraform configuration complete" >>$GITHUB_STEP_SUMMARY
 echo "JOB_FAILED=false" >>"$GITHUB_OUTPUT"
