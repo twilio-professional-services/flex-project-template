@@ -491,7 +491,7 @@ exports.getTasks = async function getTasks(parameters) {
  * @param {object} parameters the parameters for the function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
- * @param {string} parameters.workerSid the worker sid to fetch channels for
+ * @param {string} parameters.workerSid the worker sid to fetch
  * @returns {object} worker channel object
  * @description the following method is used to fetch the configured
  *   worker channel
