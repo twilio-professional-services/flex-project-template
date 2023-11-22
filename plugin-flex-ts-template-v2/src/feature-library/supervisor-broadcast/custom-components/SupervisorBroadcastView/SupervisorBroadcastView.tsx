@@ -18,7 +18,9 @@ const SupervisorBroadcastView = () => {
         <Heading as="h2" variant="heading20">
           <Template source={templates[StringTemplates.BROADCAST_VIEW_TITLE]} />
         </Heading>
-        <BroadcastForm setPreviewTargets={setPreviewTargets} />
+      </Box>
+      <Box margin="space50">
+        <BroadcastForm targets={previewTargets} setPreviewTargets={setPreviewTargets} />
       </Box>
       <Box margin="space50">
         <PreviewBroadcastTargets targets={previewTargets} />
