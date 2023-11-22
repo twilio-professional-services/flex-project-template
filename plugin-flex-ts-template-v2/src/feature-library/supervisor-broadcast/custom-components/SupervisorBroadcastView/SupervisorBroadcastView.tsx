@@ -1,33 +1,29 @@
-import { useEffect, useState } from 'react';
-import { Manager, Notifications, Template, templates } from '@twilio/flex-ui';
-import { AlertDialog } from '@twilio-paste/core/alert-dialog';
+import { useState } from 'react';
+import { Template, templates } from '@twilio/flex-ui';
+import { Worker } from 'twilio-taskrouter';
 import { Box } from '@twilio-paste/core/box';
-import { Flex } from '@twilio-paste/core/flex';
 import { Heading } from '@twilio-paste/core/heading';
-import { Input } from '@twilio-paste/core/input';
-import { Label } from '@twilio-paste/core/label';
-import { RadioButton, RadioButtonGroup } from '@twilio-paste/core/radio-button-group';
-import { Spinner } from '@twilio-paste/core/spinner';
-import { Button } from '@twilio-paste/core/button';
-import { Stack } from '@twilio-paste/core/stack';
-import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
-import { ProductFlexIcon } from '@twilio-paste/icons/esm/ProductFlexIcon';
-import { ProductSettingsIcon } from '@twilio-paste/icons/esm/ProductSettingsIcon';
-import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
+
+import { SupervisorBroadcastViewWrapper } from './SupervisorBroadcastView.Styles';
+import PreviewBroadcastTargets from '../PreviewBroadcastTargets';
+import BroadcastForm from '../BroadcastForm';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 const SupervisorBroadcastView = () => {
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  const initialize = async () => {
-    console.log('initialize');
-  };
+  const [previewTargets, setPreviewTargets] = useState<Map<string, Worker> | undefined>(undefined);
 
   return (
-    <>
-      <p>SupervisorBroadcastView</p>
-    </>
+    <SupervisorBroadcastViewWrapper>
+      <Box margin="space50">
+        <Heading as="h2" variant="heading20">
+          <Template source={templates[StringTemplates.BROADCAST_VIEW_TITLE]} />
+        </Heading>
+        <BroadcastForm setPreviewTargets={setPreviewTargets} />
+      </Box>
+      <Box margin="space50">
+        <PreviewBroadcastTargets targets={previewTargets} />
+      </Box>
+    </SupervisorBroadcastViewWrapper>
   );
 };
 
