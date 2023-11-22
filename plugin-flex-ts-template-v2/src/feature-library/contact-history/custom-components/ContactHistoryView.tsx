@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Actions, templates, Template } from '@twilio/flex-ui';
+import { templates, Template } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
@@ -16,7 +16,8 @@ import { reduxNamespace } from '../../../utils/state';
 import { StringTemplates } from '../flex-hooks/strings';
 
 const ContactHistory = () => {
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmClearHistory, setConfirmClearHistory] = useState(false);
+
   const contactData = useSelector((state: AppState) => {
     return { contactList: state[reduxNamespace]?.contactHistory?.contactList };
   });
@@ -24,34 +25,27 @@ const ContactHistory = () => {
   const contactList = contactData?.contactList || [];
   const dispatch = useDispatch();
 
-  const startContact = async (contact: Contact) => {
-    if (contact.channel === 'voice') {
-      Actions.invokeAction('StartOutboundCall', {
-        destination: contact.phoneNumber,
-      });
-    }
-  };
-
   const clearHistory = () => {
-    setConfirmOpen(false);
+    setConfirmClearHistory(false);
     dispatch(clearContactList());
     RecentContacts.clearContactList();
   };
 
-  const handleClose = () => setConfirmOpen(false);
+  const closeClearHistory = () => setConfirmClearHistory(false);
+
   return (
     <Flex width="100%">
       <Flex vertical width="100%" grow shrink>
         <Box padding="space40">
-          <Button variant="primary" onClick={async () => setConfirmOpen(true)}>
+          <Button variant="primary" onClick={async () => setConfirmClearHistory(true)}>
             <Template source={templates[StringTemplates.ClearHistory]} />
           </Button>
           <AlertDialog
             heading={templates[StringTemplates.ClearHistory]()}
-            isOpen={confirmOpen}
+            isOpen={confirmClearHistory}
             onConfirm={async () => clearHistory()}
             onConfirmLabel={templates.ConfirmableDialogConfirmButton()}
-            onDismiss={handleClose}
+            onDismiss={closeClearHistory}
             onDismissLabel={templates.ConfirmableDialogCancelButton()}
           >
             <Template source={templates[StringTemplates.ClearHistoryDialog]} />
@@ -92,7 +86,7 @@ const ContactHistory = () => {
             </THead>
             <TBody>
               {contactList?.map((contact: Contact) => (
-                <ContactRecord key={contact.taskSid} contact={contact} startContact={startContact} />
+                <ContactRecord key={contact.taskSid} contact={contact} />
               ))}
             </TBody>
           </Table>

@@ -1,5 +1,4 @@
 import { Icon, templates } from '@twilio/flex-ui';
-import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
 import { Box } from '@twilio-paste/core/box';
 import { Tooltip } from '@twilio-paste/core/tooltip';
@@ -10,14 +9,14 @@ import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
 
 import { StringTemplates } from '../flex-hooks/strings';
 import { Contact } from '../types';
+import OutboundCallModal from './OutboundCallModal';
 
 export interface OwnProps {
   contact: Contact;
-  startContact: (contact: Contact) => void;
 }
 
 const ContactRecord = (props: OwnProps) => {
-  const { contact, startContact } = props;
+  const { contact } = props;
   const {
     taskSid,
     channelType,
@@ -62,18 +61,7 @@ const ContactRecord = (props: OwnProps) => {
         </Flex>
       </Td>
       <Td>{twilioPhoneNumber}</Td>
-      <Td>
-        <Button
-          variant="link"
-          size="small"
-          title="Click to Call"
-          onClick={() => {
-            startContact(contact);
-          }}
-        >
-          {phoneNumber}
-        </Button>
-      </Td>
+      <Td>{channelType === 'voice' ? <OutboundCallModal phoneNumber={phoneNumber || ''} /> : { phoneNumber }}</Td>
       <Td>{name}</Td>
       <Td>{dateTime}</Td>
       <Td>{taskDuration}</Td>
