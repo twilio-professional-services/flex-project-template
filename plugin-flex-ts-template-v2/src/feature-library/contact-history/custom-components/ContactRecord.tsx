@@ -30,7 +30,8 @@ const ContactRecord = (props: OwnProps) => {
     outcome,
     notes,
   } = contact;
-  const taskDuration = duration > 60 ? `${Math.floor(duration / 60)}:${duration % 60}` : `${duration}s`;
+
+  const taskDuration = `${Math.floor(duration / 60)}:${(duration % 60).toString().padStart(2, '0')}`;
 
   let agentNotes = notes;
   if (notes && notes?.length > 20) agentNotes = notes.substring(0, 20).concat('...');
