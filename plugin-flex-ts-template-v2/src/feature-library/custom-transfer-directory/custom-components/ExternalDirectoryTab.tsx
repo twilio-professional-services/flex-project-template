@@ -1,19 +1,10 @@
-import { Alert } from '@twilio-paste/core/alert';
-import { Flex } from '@twilio-paste/core/flex';
-import { withTaskContext, ITask, Actions, Manager, useFlexSelector, Template, templates } from '@twilio/flex-ui';
-import { useState, useRef, useEffect } from 'react';
-import debounce from 'lodash/debounce';
+import { withTaskContext, ITask, Actions, Manager, useFlexSelector } from '@twilio/flex-ui';
+import { useState, useEffect } from 'react';
 
-import { SearchBox } from './CommonDirectoryComponents';
-import { getExternalDirectory } from '../config';
-import { ExternalDirectoryEntry } from '../types/ServiceConfiguration';
-import { ExternalItem } from './ExternalItem';
+import { getExternalDirectory, isVoiceXWTEnabled } from '../config';
+import { DirectoryEntry, ExternalDirectoryEntry } from '../types/DirectoryEntry';
 import AppState from '../../../types/manager/AppState';
-import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
-
-export interface TransferClickPayload {
-  mode: 'WARM' | 'COLD';
-}
+import DirectoryTab, { TransferClickPayload } from './DirectoryTab';
 
 export interface OwnProps {
   task: ITask;
@@ -21,36 +12,26 @@ export interface OwnProps {
 
 const ExternalDirectoryTab = (props: OwnProps) => {
   const [directory] = useState(getExternalDirectory() as Array<ExternalDirectoryEntry>);
-  const [filteredDirectory, setFilteredDirectory] = useState([] as Array<ExternalDirectoryEntry>);
 
   const workerAttrs = useFlexSelector((state: AppState) => state.flex.worker.attributes);
 
-  const searchInputRef = useRef<HTMLInputElement>(null);
-
-  // takes the input in the search box and applies it to the queue result
-  // this will trigger the useEffect for a queueFilter update
-  const onQueueSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // eslint-disable-next-line no-eq-null, eqeqeq
-    if (event.target != null) {
-      filterDirectoryDebounce();
-    }
+  // sort the directory and map to a DirectoryEntry array
+  const generateDirectoryEntries = (): Array<DirectoryEntry> => {
+    return directory
+      .sort((a: ExternalDirectoryEntry, b: ExternalDirectoryEntry) => (a.label > b.label ? 1 : -1))
+      .map(
+        (entry) =>
+          ({
+            ...entry,
+            warm_transfer_enabled: entry.warm_transfer_enabled && isVoiceXWTEnabled(),
+            address: entry.number,
+            tooltip: entry.number,
+            type: 'number',
+          } as DirectoryEntry),
+      );
   };
 
-  // function to filter the generatedQueueList and trigger a rerender
-  const filterExternalDirectory = () => {
-    const tempDir = directory
-      .filter((entry) => {
-        const searchString = searchInputRef.current?.value.toLocaleLowerCase() || '';
-        return entry.label.toLocaleLowerCase().includes(searchString);
-      })
-      .sort((a: ExternalDirectoryEntry, b: ExternalDirectoryEntry) => (a.label > b.label ? 1 : -1));
-
-    setFilteredDirectory(tempDir);
-  };
-
-  const filterDirectoryDebounce = debounce(filterExternalDirectory, 500, { maxWait: 1000 });
-
-  const onTransferEntryClick = (entry: ExternalDirectoryEntry) => async (transferOptions: TransferClickPayload) => {
+  const onTransferEntryClick = (entry: DirectoryEntry, transferOptions: TransferClickPayload) => {
     const defaultFromNumber = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
     const callerId = workerAttrs.phone
       ? workerAttrs.phone
@@ -61,7 +42,7 @@ const ExternalDirectoryTab = (props: OwnProps) => {
     if (transferOptions.mode === 'WARM')
       Actions.invokeAction('StartExternalWarmTransfer', {
         task: props.task,
-        phoneNumber: entry.number,
+        phoneNumber: entry.address,
         callerId,
       });
     else if (transferOptions.mode === 'COLD') {
@@ -77,42 +58,17 @@ const ExternalDirectoryTab = (props: OwnProps) => {
 
       Actions.invokeAction('StartExternalColdTransfer', {
         task: props.task,
-        phoneNumber: entry.number,
+        phoneNumber: entry.address,
         callerId: from,
       });
     }
-
-    Actions.invokeAction('HideDirectory');
   };
 
   useEffect(() => {
-    filterExternalDirectory();
+    generateDirectoryEntries();
   }, [directory]);
 
-  return (
-    <Flex key="external-directory-tab-list" vertical wrap={false} grow={1} shrink={1}>
-      <SearchBox key="key-tab-search-box" onInputChange={onQueueSearchInputChange} inputRef={searchInputRef} />
-      <Flex key="external-tab-results" vertical element="TRANSFER_DIR_COMMON_ROWS_CONTAINER">
-        {filteredDirectory.length === 0 ? (
-          <Alert variant="neutral">
-            <Template source={templates[StringTemplates.NoItemsFound]} />
-          </Alert>
-        ) : (
-          Array.from(filteredDirectory).map((entry: ExternalDirectoryEntry, index: number) => {
-            return (
-              <ExternalItem
-                task={props.task}
-                index={index}
-                entry={entry}
-                key={`ext-dir-item-${index}`}
-                onTransferClick={onTransferEntryClick(entry)}
-              />
-            );
-          })
-        )}
-      </Flex>
-    </Flex>
-  );
+  return <DirectoryTab entries={generateDirectoryEntries()} isLoading={false} onTransferClick={onTransferEntryClick} />;
 };
 
 export default withTaskContext(ExternalDirectoryTab);
