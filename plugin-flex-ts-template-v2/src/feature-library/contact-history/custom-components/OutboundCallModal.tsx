@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Manager, Actions, Template, templates } from '@twilio/flex-ui';
 import { Flex } from '@twilio-paste/core/flex';
+import { Box } from '@twilio-paste/core/box';
 import { Heading } from '@twilio-paste/core/heading';
 import { Text } from '@twilio-paste/core/text';
 import { Button } from '@twilio-paste/core/button';
@@ -32,13 +33,14 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
   const modalHeadingID = useUID();
 
   const { selectedCallerId } = Manager.getInstance().workerClient?.attributes as CustomWorkerAttributes;
+  const AllStrings = Manager.getInstance().strings as any;
 
   return (
     <div>
       <Button
         variant="link"
         size="small"
-        title="Click to Call"
+        title={AllStrings[StringTemplates.ClickToCall]}
         onClick={() => {
           setIsOpen(true);
         }}
@@ -49,38 +51,38 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
       <Modal ariaLabelledby={modalHeadingID} isOpen={isOpen} onDismiss={handleClose} size="default">
         <ModalHeader>
           <ModalHeading as="h3" id={modalHeadingID}>
-            <Template source={templates[StringTemplates.ContactOutboundCall]} />
+            <Template source={templates[StringTemplates.PlaceOutboundCall]} />
           </ModalHeading>
         </ModalHeader>
         <ModalBody>
           <Card>
             <Stack orientation="vertical" spacing="space60">
-              <Stack orientation="vertical" spacing="space0">
-                <Heading as="h3" variant="heading30" marginBottom="space0">
-                  <Flex vAlignContent="center" hAlignContent="left">
-                    <CallOutgoingIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
-                    <Text as="p" fontSize="fontSize40" fontWeight="fontWeightExtrabold">
-                      {phoneNumber}
-                    </Text>
-                  </Flex>
-                </Heading>
-                <HelpText marginTop="space0">
-                  <Template source={templates[StringTemplates.ContactCustomerPhoneNumber]} />
-                </HelpText>
+              <Stack orientation="horizontal" spacing="space0">
+                <Box paddingRight="space50">
+                  <CallOutgoingIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
+                </Box>
+                <Flex vertical>
+                  <Heading as="h3" variant="heading30" marginBottom="space0">
+                    {phoneNumber}
+                  </Heading>
+                  <HelpText marginTop="space0">
+                    <Template source={templates[StringTemplates.OutboundNumberToDial]} />
+                  </HelpText>
+                </Flex>
               </Stack>
               <Separator orientation="horizontal" verticalSpacing="space50" />
-              <Stack orientation="vertical" spacing="space0">
-                <Heading as="h3" variant="heading30" marginBottom="space0">
-                  <Flex vAlignContent="center" hAlignContent="left">
-                    <AgentIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
-                    <Text as="p" fontSize="fontSize30">
-                      {selectedCallerId}
-                    </Text>
-                  </Flex>
-                </Heading>
-                <HelpText marginTop="space0">
-                  <Template source={templates[StringTemplates.OutboundCallerId]} />
-                </HelpText>
+              <Stack orientation="horizontal" spacing="space0">
+                <Box paddingRight="space50">
+                  <AgentIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
+                </Box>
+                <Flex vertical>
+                  <Heading as="h5" variant="heading50" marginBottom="space0">
+                    {selectedCallerId}
+                  </Heading>
+                  <HelpText marginTop="space0">
+                    <Template source={templates[StringTemplates.OutboundCallerId]} />
+                  </HelpText>
+                </Flex>
               </Stack>
             </Stack>
           </Card>
@@ -98,7 +100,7 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
               disabled={!phoneNumber}
             >
               <CallOutgoingIcon decorative />
-              <Template source={templates.OutboundCallAriaLabel} />
+              <Template source={templates[StringTemplates.PlaceCall]} />
             </Button>
           </ModalFooterActions>
         </ModalFooter>

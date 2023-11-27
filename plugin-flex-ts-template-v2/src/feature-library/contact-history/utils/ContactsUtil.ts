@@ -4,6 +4,7 @@ import { Manager } from '@twilio/flex-ui';
 import { addContact, setContactList } from '../flex-hooks/state';
 import { Contact } from '../types';
 import { getMaxContacts } from '../config';
+import { getUserLanguage } from '../../../utils/configuration';
 
 const manager = Manager.getInstance();
 const ContactHistoryKey = 'CONTACT_HISTORY';
@@ -30,7 +31,8 @@ class ContactsUtil {
 
   addContact = (task: Flex.ITask) => {
     const { taskChannelUniqueName: channel, sid: taskSid, queueName, age: duration } = task;
-    const dateTime = task.dateCreated.toLocaleString('en-US');
+    const lang = getUserLanguage();
+    const dateTime = task.dateCreated.toLocaleString(lang);
     // Enable caller name number lookup on phone number to populate name
     const {
       direction,
@@ -75,7 +77,7 @@ class ContactsUtil {
     };
 
     // Default
-    contact.name = customerName || 'Customer';
+    contact.name = customerName;
 
     if (channel === 'voice') {
       contact.channelType = channel;

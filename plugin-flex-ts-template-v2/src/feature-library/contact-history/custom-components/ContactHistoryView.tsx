@@ -59,10 +59,10 @@ const ContactHistory = () => {
                   <Template source={templates[StringTemplates.ContactChannel]} />
                 </Th>
                 <Th>
-                  <Template source={templates[StringTemplates.ContactTwilioPhoneNumber]} />
+                  <Template source={templates[StringTemplates.ContactInboundAddress]} />
                 </Th>
                 <Th>
-                  <Template source={templates[StringTemplates.ContactCustomerPhoneNumber]} />
+                  <Template source={templates[StringTemplates.ContactCustomerAddress]} />
                 </Th>
                 <Th>
                   <Template source={templates[StringTemplates.ContactName]} />
