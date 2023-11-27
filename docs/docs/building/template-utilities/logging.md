@@ -64,6 +64,10 @@ The Flex Project Template will automatically append the workerSid and worker nam
 
 If for some reason this logging utility does not meet your needs - you are free to use `console.log/warn/error` directly.
 
+### Flex Error Integration
+
+The logger will automatically listen for and log with `logger.error()` all [Flex Errors Events](https://www.twilio.com/docs/flex/developer/ui/errors-and-debugging#listening-to-the-flexerror-event) automatically.
+
 ## Destinations
 
 Destinations are an important concept for this logging utility. A destination is where the logs should go. It can be something simple, like the browser console, or something more complex like an external logging aggregator like Datadog.
