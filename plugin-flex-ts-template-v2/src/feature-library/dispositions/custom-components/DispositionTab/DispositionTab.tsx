@@ -1,17 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Actions, ITask, Template, templates, withTaskContext } from '@twilio/flex-ui';
+import { Actions, ITask, templates, withTaskContext } from '@twilio/flex-ui';
 import { Radio, RadioGroup } from '@twilio-paste/core/radio-group';
 import { Stack } from '@twilio-paste/core/stack';
-import { TextArea } from '@twilio-paste/core/textarea';
 import { Input } from '@twilio-paste/core/input';
 import { Label } from '@twilio-paste/core/label';
 import { Select, Option } from '@twilio-paste/core/select';
-import { HelpText } from '@twilio-paste/core/help-text';
 import { Box } from '@twilio-paste/core/box';
 import { CheckboxGroup, Checkbox } from '@twilio-paste/core/checkbox';
 import debounce from 'lodash/debounce';
 
+import Notes from '../Notes/Notes';
 import {
   getDispositionsForQueue,
   isNotesEnabled,
@@ -37,8 +36,14 @@ interface BooleanPropsObject {
   [key: string]: boolean;
 }
 
+interface DispositionPayload {
+  taskSid: string;
+  disposition: string;
+  notes: string;
+  custom_attributes: { [key: string]: string };
+}
+
 const DispositionTab = ({ task }: OwnProps) => {
-  const NOTES_MAX_LENGTH = 100;
   const [disposition, setDisposition] = useState('');
   const [notes, setNotes] = useState('');
   const [customAttributes, setCustomAttributes] = useState({} as StringPropsObject);
@@ -58,18 +63,26 @@ const DispositionTab = ({ task }: OwnProps) => {
     (state: AppState) => state[reduxNamespace].dispositions as DispositionsState,
   );
 
-  const updateStore = () => {
-    if (!task) return;
-    const payload = {
-      taskSid: task?.taskSid,
-      disposition: disposition ? disposition : '',
-      notes: notes ? notes : '',
-      custom_attributes: { ...customAttributes },
-    };
+  const payload: DispositionPayload = {
+    taskSid: task?.taskSid || '',
+    disposition: disposition ? disposition : '',
+    notes: notes ? notes : '',
+    custom_attributes: { ...customAttributes },
+  };
+
+  const updateStore = (payload: DispositionPayload) => {
+    // console.log('Updating store with:', payload);
     dispatch(updateDisposition(payload));
   };
 
-  const updateStoreDebounced = debounce(updateStore, 250, { maxWait: 1000 });
+  const updateStoreDebounced = useCallback(
+    debounce((payload) => updateStore(payload), 250, { maxWait: 1000 }),
+    [],
+  );
+
+  useEffect(() => {
+    updateStoreDebounced(payload);
+  }, [disposition, notes, customAttributes]);
 
   useEffect(() => {
     if (tasksFromRedux && task && tasksFromRedux[task.taskSid]) {
@@ -102,10 +115,6 @@ const DispositionTab = ({ task }: OwnProps) => {
       setGroupOptionsForQueue(optionsForQueue);
     }
   }, [task?.taskSid]);
-
-  useEffect(() => {
-    updateStoreDebounced();
-  }, [disposition, notes, customAttributes]);
 
   useEffect(() => {
     // Pop the disposition tab when the task enters wrapping status.
@@ -259,27 +268,7 @@ const DispositionTab = ({ task }: OwnProps) => {
             />
           </div>
         ))}
-        {isNotesEnabled() && (
-          <>
-            <Label htmlFor="notes">
-              <Template source={templates[StringTemplates.NotesTitle]} />
-            </Label>
-            <TextArea
-              onChange={(e) => setNotes(e.target.value)}
-              aria-describedby="notes_help_text"
-              id={`${task?.sid}-notes`}
-              name={`${task?.sid}-notes`}
-              value={notes}
-              maxLength={NOTES_MAX_LENGTH}
-            />
-            <HelpText id="notes_help_text">
-              <Template
-                source={templates[StringTemplates.NotesCharactersRemaining]}
-                characters={NOTES_MAX_LENGTH - notes.length}
-              />
-            </HelpText>
-          </>
-        )}
+        {isNotesEnabled() && <Notes task={task} notes={notes} saveNotes={setNotes} />}
       </Stack>
     </Box>
   );
