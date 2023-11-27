@@ -47,10 +47,11 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 | Name | Existing or New | Description |
 | -----| --------------------| ------------|
-| Template Example | New | Created to support [Park Interaction](/feature-library/park-interaction) and demonstrate filters for Sales and Support queues|
-| Chat Transfer | New | Workflow that supports the [Conversation Transfer](/feature-library/conversation-transfer) feature |
-| Callback | New | Workflow that supports the requeuing of callbacks and voicemails from the [callback and voicemail](/feature-library/callback-and-voicemail) feature |
-| Internal Call | New | Workflow that supports the  [Internal Call](/feature-library/internal-call) feature|
+| Template Example Assign to Anyone | New | Used by example Studio flows and demonstrate filters for example queues|
+| Template Example Chat Transfer | New | Workflow that supports the [conversation transfer](/feature-library/conversation-transfer) feature |
+| Template Example Callback | New | Workflow that supports the requeuing of callbacks and voicemails from the [callback and voicemail](/feature-library/callback-and-voicemail) feature |
+| Template Example Internal Calls | New | Workflow that supports the [internal call](/feature-library/internal-call) feature|
+| Template Example Park/Resume | New | Workflow that supports the [park interaction](/feature-library/park-interaction) feature|
 
 </TabItem>
 
@@ -58,10 +59,10 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 | Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| Everyone | Existing | No modifications from out-of-box Flex version  |
+| Template Example Everyone | New | Same as out-of-box Flex version  |
 | Template Example Sales| New | Sample queue for "Sales" calls |
 | Template Example Support | New | Sample queue for "Support" calls |
-| Internal Calls | New | Queue that supports the [Internal Call](/feature-library/internal-call) feature|
+| Template Example Internal Calls | New | Queue that supports the [internal call](/feature-library/internal-call) feature|
 
 </TabItem>
 
@@ -69,10 +70,10 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 | Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| On A Task | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
-| On A Task, No ACD | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
-| Wrap Up | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
-| Wrap Up, No ACD | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
+| On A Task | New | Activity to support the [activity reservation handler](/feature-library/activity-reservation-handler) feature |
+| On A Task, No ACD | New | Activity to support the [activity reservation handler](/feature-library/activity-reservation-handler) feature |
+| Wrap Up | New | Activity to support the [activity reservation handler](/feature-library/activity-reservation-handler) feature |
+| Wrap Up, No ACD | New | Activity to support the [activity reservation handler](/feature-library/activity-reservation-handler) feature |
 
 </TabItem>
 
@@ -80,7 +81,8 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 | Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| Voice | Existing | No modifications from out-of-box Flex version  |
+| Chat | Existing | No modifications from out-of-box Flex version |
+| Voice | Existing | No modifications from out-of-box Flex version |
 
 </TabItem>
 
@@ -92,8 +94,9 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 | Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| Example Callback Flow | New | Example usage of the [callback and voicemail](/feature-library/callback-and-voicemail) feature, adding a callback or voicemail option while waiting in queue |
-| Example Schedule Flow | New | Example usage of the [schedule manager](/feature-library/schedule-manager) feature, adding a schedule lookup with different responses based on the result |
+| Template Example Callback Flow | New | Example usage of the [callback and voicemail](/feature-library/callback-and-voicemail) feature, adding a callback or voicemail option while waiting in queue |
+| Template Example Messaging with Parking Flow | New | Example for the [park interaction](/feature-library/park-interaction) feature, using a workflow that supports the routing of parked interactions |
+| Template Example Schedule Flow | New | Example usage of the [schedule manager](/feature-library/schedule-manager) feature, adding a schedule lookup with different responses based on the result |
 
 </details>
 

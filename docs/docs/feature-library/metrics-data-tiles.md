@@ -3,7 +3,7 @@ sidebar_label: metrics-data-tiles
 title: metrics-data-tiles
 ---
 
-# Overview
+## Overview
 The Flex Real Time Queues view provides a few standard Data Tiles that aggregate the queue data at the contact center level:
 
 * Active Tasks: The number of tasks that are currently being handled.
@@ -20,7 +20,7 @@ You can connect a custom Data Tile to the Flex Redux application store using [co
 
 The Flex Teams View does not natively support Data Tiles or any kind of worker (or task) metrics and aggregations, but you can customize the Teams View and add a Tiles section at the top of the page for this purpose.  
 
-# How does it work?
+## How does it work?
 As outlined in this [blog post](https://www.twilio.com/blog/enhance-flex-queues-view-with-custom-data-tiles), the Real Time queues data in the Flex Redux store can be aggregated into channel specific metrics, which can subsequently be rendered in a custom data tile.  These Data Tiles are added to the [AggregatedDataTiles component](https://assets.flex.twilio.com/docs/releases/flex-ui/2.2.0/programmable-components/components/QueuesStats%E2%80%A4AggregatedQueuesDataTiles/) of the [Queues Stats View](https://assets.flex.twilio.com/docs/releases/flex-ui/2.2.0/programmable-components/components/QueuesStatsView/).
 
 This feature includes 4 different data tiles for the Queues View:
@@ -54,7 +54,7 @@ The Agent Activity Summary table shows the count of agents in each of the pre-co
 This feature uses the list of Team names as configured in the common configuration settings.
 
 
-# Setup
+## Setup
 
 This feature can be enabled via the `flex-config` attributes. Just set the `metrics_data_tiles` `enabled` flag to `true` and set up the desired configuration.
 
@@ -147,7 +147,7 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
       },
 ```
 
-# Flex User Experience
+## Flex User Experience
 
 ![QueuesViewDataTiles](/img/features/metrics-data-tiles/QueuesViewDataTiles2.png)
 

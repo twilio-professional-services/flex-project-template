@@ -15,7 +15,7 @@ The feature is inspired by the work in the [Queued Callback and Voicemail](https
 - A robust wait experience (aka `waitUrl` endpoint) is provided - which uses a more robust Task API query to find the task associated with the Call SID. This addresses the documented scalability issue of the solution library approach - which uses `EvaluateTaskAttributes` for getting the pending task SID (an API that's strictly rate limited to 3 requests per second).
 - Voicemail retrieval works with recording media HTTP authentication enabled or disabled
 
-# Flex User Experience
+## Flex User Experience
 
 The vanilla feature without any further customizations will look like this for callbacks
 
@@ -29,7 +29,7 @@ And Voicemails created from the Transcription Callback URL will look like this
 
 ![alt text](/img/features/callback-and-voicemail/flex-user-experience-vm-with-trans.gif)
 
-# How Does it Work?
+## How Does it Work?
 
 The feature works by registering custom Flex Channels for callbacks and voicemails. These channels are a presentation only layer, on top of the Taskrouter Task Channel, which remains 'voice'.
 
@@ -41,13 +41,13 @@ The only difference between these functions is one is intended to be called from
 
 When retrieving voicemail, the `fetch-voicemail` function is invoked. This fetches the recording media using HTTP authentication and returns it base64-encoded to Flex UI.
 
-# Setup and Dependencies
+## Setup and Dependencies
 
 Once you've set the flag for the feature in flex-config, and all of that is deployed, you now have a functioning callback and voicemail feature! Now you just need to create some callbacks and/or voicemails via Studio or TwiML.
 
-## Creating a Callback Task Using _create-callback_ Function
+### Creating a Callback Task Using _create-callback_ Function
 
-Creating a callback involves creating a task with at a minimum a number to callback and a number to call from. If you deployed the template with the `Deploy Terraform?` option selected, a Studio flow called `Example Callback Flow` has already been created for you, which you can hook up to a phone number in the Twilio Console. Otherwise, a sample setup is shown here in a Studio flow where a number has been wired up to immediately create a callback and hang up.
+Creating a callback involves creating a task with at a minimum a number to callback and a number to call from. If you deployed the template with the `Deploy Terraform?` option selected, a Studio flow called `Template Example Callback Flow` has already been created for you, which you can hook up to a phone number in the Twilio Console. Otherwise, a sample setup is shown here in a Studio flow where a number has been wired up to immediately create a callback and hang up.
 
 ![alt text](/img/features/callback-and-voicemail/sample-triggering-callback.png)
 
@@ -59,7 +59,7 @@ Here you can see three parameters which are populated from the studio flow
 
 This serverless function can be used from anywhere, not just the studio flow, to create a callback or voicemail task.
 
-### Specifying the Workflow to Use
+#### Specifying the Workflow to Use
 
 The creation of a task requires a workflow. You may create a custom workflow, that uses some collected data to organize the tasks into different queues or maybe something more complex. You may also just want to use the default "Assign To Anyone" workflow that is spawned on a vanilla Flex instance.
 
@@ -69,7 +69,7 @@ Once you have decided which workflow you are using, you can either reference it 
 The setup scripts will automatically set `TWILIO_FLEX_CALLBACK_WORKFLOW_SID` if it finds a workflow called "Callback". If Terraform was used to deploy the template, [this callback workflow](https://github.com/twilio-professional-services/flex-project-template/blob/main/infra-as-code/terraform/taskrouter/callback.json) has already been created for you.
 :::
 
-## Voicemail Additional Parameters
+### Voicemail Additional Parameters
 
 Creating a voicemail involves the same setup as the example above, however the following additional parameters must be passed to the _create-callback_ function from a Record Voicemail widget:
 
@@ -86,7 +86,7 @@ NOTE: `RecordingSid` and `RecordingUrl` are already part of the transcription ca
 
 If you do go with the transcription approach, the plugin will take care of rendering the transcription text below the playback controls for the recording - per the screenshot animation above.
 
-## Requesting a Callback or Leaving a Voicemail While In Queue
+### Requesting a Callback or Leaving a Voicemail While In Queue
 
 The above steps assume there's logic in your IVR to allow a customer to request a callback and/or leave a voicemail.
 

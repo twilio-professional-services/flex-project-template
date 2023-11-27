@@ -7,11 +7,11 @@ Dispositions are useful for tracking the outcomes of various tasks. This feature
 
 Dispositions are available in Flex Insights under "Outcome", and notes are available under "Content".
 
-# flex-user-experience
+## flex-user-experience
 
 ![Dispositions demo](/img/features/dispositions/dispositions.gif)
 
-# setup and dependencies
+## setup and dependencies
 
 Within your `ui_attributes` file, there are several settings for the `dispositions` feature:
 
@@ -29,7 +29,7 @@ Within your `ui_attributes` file, there are several settings for the `dispositio
 
 Once your updated flex-config is deployed, the feature is enabled and ready to use.
 
-# how does it work?
+## how does it work?
 
 This feature adds a disposition tab to `TaskCanvasTabs`. When the task enters the wrapping state, the disposition tab is automatically selected. The user's selected disposition and/or notes are stored in state. When the Complete Task button is pressed, the selected values are read from state and written to task attributes. The disposition is stored in the `conversations.outcome` attribute, and notes are stored in the `conversations.content` attribute.
 

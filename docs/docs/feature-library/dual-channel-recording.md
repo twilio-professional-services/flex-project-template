@@ -31,7 +31,7 @@ There are various ways to enable call recordings with Twilio Flex. Let's outline
      - Custom code is required, both on the front end and the backend (facilitated by this feature)
      - If it's desired to record the IVR messaging, that will not be included
 
-# setup and dependencies
+## setup and dependencies
 
 Enabling the feature in the flex-config asset for your environment. There is also a `channel` configuration property to choose which perspective should be recorded--the customer perspective or the worker perspective. For example, if the customer is on hold and `channel` is set to `customer`, the recording will contain hold music. If `channel` is set to `worker`, the recording will not contain hold music and the worker will be heard instead.
 
@@ -39,6 +39,6 @@ If enabling the dual channel recording feature - you should also **disable** the
 
 Twilio Console > Flex > Manage > Voice
 
-# how it works
+## how it works
 
 Whenever an inbound or outbound call task is accepted, a serverless function is called to start a recording with `recordingChannels` set to `dual`. The customer call SID or the worker call SID will be used for the recording based on the value of the `channel` configuration property.

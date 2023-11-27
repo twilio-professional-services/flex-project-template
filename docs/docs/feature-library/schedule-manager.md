@@ -149,7 +149,7 @@ This calls the `admin/list` function, which requires the Flex user token. `sched
 
 ## Using within Studio
 
-If you deployed the template with the `Deploy Terraform?` option selected, a Studio flow called `Example Schedule Flow` has already been created for you, which you can hook up to a phone number in the Twilio Console. Otherwise, you can create your own:
+If you deployed the template with the `Deploy Terraform?` option selected, a Studio flow called `Template Example Schedule Flow` has already been created for you, which you can hook up to a phone number in the Twilio Console. Otherwise, you can create your own:
 
 ![Studio example](/img/features/schedule-manager/studio.png)
 

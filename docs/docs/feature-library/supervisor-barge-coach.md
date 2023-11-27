@@ -7,7 +7,7 @@ This feature provides the ability for a Supervisor to barge in to a call (i.e. j
 
 There are addtiional features that have been added to allow the Agent to see who is actively coaching them along with giving the Supervisor the ability to go into a "private/incognito" mode if they wish to. The additional features require specific feature flags to be enabled, which we will review in the setup and dependencies section below.
 
-# Flex User Experience
+## Flex User Experience
 
 First select the call/worker you wish to monitor  
 ![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-1.gif)
@@ -41,7 +41,7 @@ From the Teams View, Supervisors will notice an _Error_ icon next to any agent t
 
 ![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-9.gif)
 
-# Setup and Dependencies
+## Setup and Dependencies
 
 There are no dependencies for setup beyond ensuring the flag is enabled within the flex-config attributes.
 
@@ -55,11 +55,11 @@ To enable the Agent Assistance, set the `supervisor_barge_coach` `agent_assistan
 
 To enable the Supervisor Alert Toggle, set the `supervisor_barge_coach` `supervisor_alert_toggle`flag to `true`
 
-# Local Testing
+## Local Testing
 
 To test this functionality locally, it is helpful to setup an [SSO configuration](https://www.twilio.com/docs/flex/admin-guide/setup/sso-configuration) to login as an `agent` role in one Flex session, and a `supervisor` or `admin` role in another tab/browser.
 
-# How does it work?
+## How does it work?
 
 This plugin adds a barge-in and coach button to the Monitor call canvas. You can get to this via the Teams View, click on the agent you wish to monitor and the buttons will be available once you begin to monitor the live calls. The left button is the Barge-In button which allows you to join the conference all with the agent(s) and customer(s). Toggling this button will mute/unmute yourself. The right button is the Coach button which allows you to talk to the agent you are monitoring. The no other member of the call will be able to hear you except for the monitored agent. Toggling this button enables Coach and the left button converts to a Mute/Un-Mute button for the coaching mode.
 
