@@ -19,8 +19,7 @@ export interface OwnProps {
   contact: Contact;
 }
 
-const ContactRecord = (props: OwnProps) => {
-  const { contact } = props;
+const ContactRecord = ({ contact }: OwnProps) => {
   const {
     taskSid,
     channelType,

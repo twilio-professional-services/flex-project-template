@@ -96,7 +96,7 @@ const ContactHistory = () => {
             <AlertDialog
               heading={templates[StringTemplates.ClearHistory]()}
               isOpen={confirmClearHistory}
-              onConfirm={async () => clearHistory()}
+              onConfirm={clearHistory}
               onConfirmLabel={templates.ConfirmableDialogConfirmButton()}
               onDismiss={closeClearHistory}
               onDismissLabel={templates.ConfirmableDialogCancelButton()}

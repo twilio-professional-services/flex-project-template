@@ -17,12 +17,6 @@ import { CallIcon } from '@twilio-paste/icons/esm/CallIcon';
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
 import { StringTemplates } from '../flex-hooks/strings';
 
-const placeOutboundCall = async (destination: string) => {
-  Actions.invokeAction('StartOutboundCall', {
-    destination,
-  });
-};
-
 interface Props {
   phoneNumber: string;
 }
@@ -35,6 +29,12 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
   const { selectedCallerId } = Manager.getInstance().workerClient?.attributes as CustomWorkerAttributes;
   const AllStrings = Manager.getInstance().strings as any;
 
+  const placeOutboundCall = () => {
+    console.log('Calling: ', phoneNumber);
+    Actions.invokeAction('StartOutboundCall', {
+      destination: phoneNumber,
+    });
+  };
   return (
     <div>
       <Button
@@ -98,13 +98,7 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
             <Button variant="secondary" onClick={handleClose}>
               <Template source={templates.Cancel} />
             </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                placeOutboundCall(phoneNumber);
-              }}
-              disabled={!phoneNumber}
-            >
+            <Button variant="primary" onClick={placeOutboundCall} disabled={!phoneNumber}>
               <CallOutgoingIcon decorative />
               <Template source={templates[StringTemplates.PlaceCall]} />
             </Button>

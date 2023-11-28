@@ -26,6 +26,6 @@ You can enable this feature and set the maximum number of recent contacts in the
 
 The Contact History [View](https://www.twilio.com/docs/flex/developer/ui/custom-views-and-routes) is added to the [View Collection](https://assets.flex.twilio.com/docs/releases/flex-ui/2.4.1/programmable-components/components/ViewCollection/) and a new SideLink component is added to the [Navigation Menu](https://assets.flex.twilio.com/docs/releases/flex-ui/2.4.1/programmable-components/components/SideNav/).
 
-For every task that is completed, the task and call data is added to the list of contacts in the Redux store. Every Redux update is also copied into the browser local storage.  If a user logs back into Flex, the contact list in Redux is re-initialized from local storage. Note that because the data is stored in the browser, it does not persist across different computers.
+For every task that is completed, the task and call data is added to the list of contacts in the Redux store. Every Redux update is also copied into the browser local storage.  If a user logs back into Flex, the contact list in Redux is re-initialized from local storage. ***Note that because the data is stored in the browser, it does not persist across different computers.***
 
 Clicking on the Phone Button next to the phone number (customer address) triggers the [StartOutboundCall Action](https://assets.flex.twilio.com/docs/releases/flex-ui/2.4.1/ui-actions/Actions/#StartOutboundCall) to make the outbound call. This button is only visible for completed calls (voice tasks). 
