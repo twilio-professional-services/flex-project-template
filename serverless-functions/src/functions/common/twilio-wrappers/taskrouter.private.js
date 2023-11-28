@@ -184,6 +184,7 @@ exports.updateReservation = async function updateReservation(parameters) {
  * @param {string} parameters.workflowSid the workflow to submit the task
  * @param {string} parameters.taskChannel the task channel to submit the task on
  * @param {object} parameters.attributes the attributes applied to the task
+ * @param {string} parameters.virtualStartTime the start time to use for task ordering
  * @param {number} parameters.priority the priority
  * @param {number} parameters.timeout timeout
  * @returns {object} an object containing the task if successful
@@ -195,6 +196,7 @@ exports.createTask = async function createTask(parameters) {
     workflowSid,
     taskChannel,
     attributes,
+    virtualStartTime,
     priority: overriddenPriority,
     timeout: overriddenTimeout,
   } = parameters;
@@ -210,15 +212,23 @@ exports.createTask = async function createTask(parameters) {
   const timeout = overriddenTimeout || 86400;
   const priority = overriddenPriority || 0;
 
+  const createParams = {
+    attributes: JSON.stringify(attributes),
+    workflowSid,
+    taskChannel,
+    priority,
+    timeout,
+  };
+
+  if (virtualStartTime) {
+    createParams.virtualStartTime = virtualStartTime;
+  }
+
   try {
     const client = context.getTwilioClient();
-    const task = await client.taskrouter.v1.workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID).tasks.create({
-      attributes: JSON.stringify(attributes),
-      workflowSid,
-      taskChannel,
-      priority,
-      timeout,
-    });
+    const task = await client.taskrouter.v1
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .tasks.create(createParams);
 
     return {
       success: true,
