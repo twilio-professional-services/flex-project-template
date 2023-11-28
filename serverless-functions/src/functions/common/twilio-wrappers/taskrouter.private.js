@@ -530,7 +530,7 @@ exports.getWorker = async function getWorker(parameters) {
  * @param {string} parameters.targetWorkersExpression the expression that qualifies which workers to return
  * @param {boolean} parameters.workerSidOnly flag to indicate whether the response should only return an array or workerSids
  * @returns {object} object containing success, status and if successful, an array of workers.
- * @description the following method is used to fetch an a
+ * @description the following method is used to fetch a list of workers that qualify for the targetWorkerExpression.
  */
 exports.getEligibleWorkers = async function getEligibleWorkers(parameters) {
   const { context, targetWorkersExpression, workerSidOnly = false } = parameters;
