@@ -19,6 +19,7 @@ exports.createCallbackTask = async (parameters) => {
     transcriptText,
     isDeleted,
     overriddenTaskChannel,
+    virtualStartTime,
   } = parameters;
 
   // use assigned values or use defaults
@@ -60,5 +61,6 @@ exports.createCallbackTask = async (parameters) => {
     attributes,
     priority,
     timeout,
+    virtualStartTime,
   });
 };

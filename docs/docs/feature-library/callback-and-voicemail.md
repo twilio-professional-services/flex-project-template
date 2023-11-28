@@ -14,6 +14,7 @@ The feature is inspired by the work in the [Queued Callback and Voicemail](https
 - The callback or voicemail task can be automatically selected after the outbound call back to the contact ends, allowing for a smoother call wrapup process.
 - A robust wait experience (aka `waitUrl` endpoint) is provided - which uses a more robust Task API query to find the task associated with the Call SID. This addresses the documented scalability issue of the solution library approach - which uses `EvaluateTaskAttributes` for getting the pending task SID (an API that's strictly rate limited to 3 requests per second).
 - Voicemail retrieval works with recording media HTTP authentication enabled or disabled
+- In-queue callback and voicemail requests keep their place in line by using the original task's start time for the callback request
 
 # Flex User Experience
 
@@ -31,7 +32,7 @@ And Voicemails created from the Transcription Callback URL will look like this
 
 # How Does it Work?
 
-The feature works by registering custom Flex Channels for callbacks and voicemails. These channels are a presentation only layer, on top of the Taskrouter Task Channel, which remains 'voice'.
+The feature works by registering custom Flex Channels for callbacks and voicemails. These channels are a presentation only layer, on top of the TaskRouter Task Channel, which remains 'voice'.
 
 When the channel is registered, it renders custom components based on the task attribute; _taskType: callback_ or _taskType: voicemail_
 
@@ -90,19 +91,19 @@ If you do go with the transcription approach, the plugin will take care of rende
 
 The above steps assume there's logic in your IVR to allow a customer to request a callback and/or leave a voicemail.
 
-If you also want to offer up a post-IVR "wait experience" to your customers - to allow them to request a callback or leave a voicemail while they are waiting in queue (i.e. while waiting for Taskrouter to route their call task to an agent), the template provides a boilerplate implementation of exactly this in the _wait-experience_ Serverless Function.
+If you also want to offer up a post-IVR "wait experience" to your customers - to allow them to request a callback or leave a voicemail while they are waiting in queue (i.e. while waiting for TaskRouter to route their call task to an agent), the template provides a boilerplate implementation of exactly this in the _wait-experience_ Serverless Function.
 
 Simply set this function's URL as **_Hold Music URL_** in the Studio Send to Flex widget, or as the `waitUrl` if using the `<Enqueue>` TwiML verb. e.g.
 
 `https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callback-and-voicemail/studio/wait-experience?mode=initialize`
 
-There is broad scope to customize the logic in here - potentially to pull more task attributes from the existing call task and apply them to the callback or voicemail task. Our default implementation keeps things simple and just retains the To and From numbers. For example, you may consider also retaining the workflow SID of the original call task, and some pertinent attributes from your IVR - to facilitate Taskrouter in routing those callback and voicemail tasks in an identical fashion to voice calls.
+There is broad scope to customize the logic in here - potentially to pull more task attributes from the existing call task and apply them to the callback or voicemail task. Our default implementation keeps things simple and just retains the To and From numbers. For example, you may consider also retaining the workflow SID of the original call task, and some pertinent attributes from your IVR - to facilitate TaskRouter in routing those callback and voicemail tasks in an identical fashion to voice calls.
 
 ### Noteworthy Points Regarding the _wait-experience_ Logic
 
-- **Creating a callback (or voicemail) via the _wait-experience_ logic will not specifically _retain_ your place in queue** - since we are literally creating a brand new task at this point (and that goes to the end of the line per the default first-in-first-out routing strategy).
-- **We are able to set useful reporting attributes by programatically canceling the original call task when a customer chooses to request a callback (or leave a voicemail)** - rather than letting the task auto-cancel via native Taskrouter orchestration when the call ends. This includes a custom cancelation reason, as well as marking the task as `abandoned: "Follow-Up"` in the `conversations` attribute - which prevents Flex Insights from including this call in any Abandoned metrics (see [Track Abandoned Conversations in Flex Insights](https://www.twilio.com/docs/flex/end-user-guide/insights/abandoned-conversations#abandoned)).
-- **Cancelling the ongoing call task programatically also prevents the call task reaching an agent when the customer has already committed to leaving a voicemail (or requesting a callback)**. We leave this task cancellation until the very last possible moment - to maximize the opportunity for an agent to answer.
+- **Creating a callback (or voicemail) via the _wait-experience_ logic will _retain_ your place in queue by default** - when we create a new task representing the callback or voicemail request, by default we set the `virtualStartTime` parameter to the original task's `dateCreated` timestamp. This effectively orders the new task within the queue the same as the original task. This may optionally be disabled within the options under `wait-experience.protected.js`.
+- **We are able to set useful reporting attributes by programmatically canceling the original call task when a customer chooses to request a callback (or leave a voicemail)** - rather than letting the task auto-cancel via native TaskRouter orchestration when the call ends. This includes a custom cancelation reason, as well as marking the task as `abandoned: "Follow-Up"` in the `conversations` attribute - which prevents Flex Insights from including this call in any Abandoned metrics (see [Track Abandoned Conversations in Flex Insights](https://www.twilio.com/docs/flex/end-user-guide/insights/abandoned-conversations#abandoned)).
+- **Cancelling the ongoing call task programmatically also prevents the call task reaching an agent when the customer has already committed to leaving a voicemail (or requesting a callback)**. We leave this task cancellation until the very last possible moment - to maximize the opportunity for an agent to answer.
 - **It is essential to lookup and retain the task SID of the ongoing call task immediately - so that we can cancel it later and make changes to its reporting attributes as mentioned above.** Our implementation (see _getPendingTaskByCallSid()_) immediately retrieves the top 20 most recent `pending` or `reserved` (i.e. not-yet-accepted) tasks on the provided `workflowSid`, and finds the one with the matching `call_sid` attribute. Since this lookup occurs immediately on entering our configured `waitUrl` TwiML application - milliseconds after the associated task is created - this approach works very reliably and has been extensively load tested (100% success over a 1000 call test at a rate of 30 calls per second).
 - **If for some reason the _wait-experience_ logic fails to find the task for the ongoing call's call SID, it will fail gracefully** by informing the customer that the callback and voicemail capability is currently unavailable.
 - The bundled _wait-experience-music-30s.mp3_ file is an arbitrary 30s audio file used to ensure the caller is repeatedly prompted every ~30 seconds with the option to request a callback or leave a voicemail. You would want to customize this to meet your hold music needs.
