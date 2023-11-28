@@ -241,7 +241,7 @@ exports.handler = async (context, event, callback) => {
         numberToCallFrom: event.Called,
       };
 
-      if (options.retainPlaceInQueue) {
+      if (options.retainPlaceInQueue && enqueuedTaskSid) {
         // Get the original task's start time to maintain queue ordering.
         const originalTask = await fetchTask(context, enqueuedTaskSid);
         callbackParams.virtualStartTime = originalTask?.dateCreated;
@@ -279,7 +279,7 @@ exports.handler = async (context, event, callback) => {
       return callback(null, twiml);
 
     case 'submit-voicemail':
-      // Submit the voicemail to Taskrouter (and/or to your backend if you have a voicemail handling solution)
+      // Submit the voicemail to TaskRouter (and/or to your backend if you have a voicemail handling solution)
 
       // Create the Voicemail task
       // Option to pull in a few more things from original task like conversation_id or even the workflowSid
@@ -293,7 +293,7 @@ exports.handler = async (context, event, callback) => {
         transcriptText: event.TranscriptionText,
       };
 
-      if (options.retainPlaceInQueue) {
+      if (options.retainPlaceInQueue && enqueuedTaskSid) {
         // Get the original task's start time to maintain queue ordering.
         const originalTask = await fetchTask(context, enqueuedTaskSid);
         vmParams.virtualStartTime = originalTask?.dateCreated;
