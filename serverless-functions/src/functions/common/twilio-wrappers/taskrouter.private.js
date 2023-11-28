@@ -9,8 +9,8 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  * @param {string} parameters.taskSid the task to update
  * @param {string} parameters.attributesUpdate a JSON object to merge with the task
  * @returns {object} an object containing the task if successful
- * @description this operation safely updates the task attributes with the object
- * given by performing a deep merge with the existing task attributes and ensuring
+ * @description this operation safely updates the task attributes with the attributesUpdate
+ * object given by performing a deep merge with the existing task attributes and ensuring
  * its updating the version it started with using the ETag header
  * more explained here https://www.twilio.com/docs/taskrouter/api/task#task-version
  */
@@ -238,7 +238,7 @@ exports.createTask = async function createTask(parameters) {
  * @param {object} parameters the parameters for the function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
- * @param {object} parameters.filters the filters to apply to the query
+ * @param {object} parameters.filters optional filters to apply to the query
  * @returns {object} An object containing an array of queues for the account
  * @description the following method is used to robustly retrieve
  *   the queues for the account
@@ -493,8 +493,8 @@ exports.getTasks = async function getTasks(parameters) {
  * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.workerSid the worker sid to fetch
  * @returns {object} worker channel object
- * @description the following method is used to fetch the configured
- *   worker channel
+ * @description the following method is used to fetch the worker associated
+ * with the workerSid provided.
  */
 exports.getWorker = async function getWorker(parameters) {
   const { context, workerSid } = parameters;
@@ -523,6 +523,15 @@ exports.getWorker = async function getWorker(parameters) {
   }
 };
 
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.targetWorkersExpression the expression that qualifies which workers to return
+ * @param {boolean} parameters.workerSidOnly flag to indicate whether the response should only return an array or workerSids
+ * @returns {object} object containing success, status and if successful, an array of workers.
+ * @description the following method is used to fetch an a
+ */
 exports.getEligibleWorkers = async function getEligibleWorkers(parameters) {
   const { context, targetWorkersExpression, workerSidOnly = false } = parameters;
 
