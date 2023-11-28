@@ -37,9 +37,6 @@ const ContactRecord = (props: OwnProps) => {
 
   const taskDuration = `${Math.floor(duration / 60)}:${(duration % 60).toString().padStart(2, '0')}`;
 
-  let agentNotes = notes;
-  if (notes && notes?.length > 20) agentNotes = notes.substring(0, 20).concat('...');
-
   return (
     <Tr key={taskSid}>
       <Td textAlign="center">
@@ -67,7 +64,8 @@ const ContactRecord = (props: OwnProps) => {
         </Flex>
       </Td>
       <Td>{twilioPhoneNumber}</Td>
-      <Td>{channelType === 'voice' ? <OutboundCallModal phoneNumber={phoneNumber || ''} /> : { phoneNumber }}</Td>
+      <Td>{phoneNumber}</Td>
+      <Td>{channelType === 'voice' && <OutboundCallModal phoneNumber={phoneNumber || ''} />}</Td>
       <Td>{name ? <span>{name}</span> : <Template source={templates[StringTemplates.ContactDefaultCustomer]} />}</Td>
       <Td>{dateTime}</Td>
       <Td>{taskDuration}</Td>

@@ -3,7 +3,6 @@ import { Manager, Actions, Template, templates } from '@twilio/flex-ui';
 import { Flex } from '@twilio-paste/core/flex';
 import { Box } from '@twilio-paste/core/box';
 import { Heading } from '@twilio-paste/core/heading';
-import { Text } from '@twilio-paste/core/text';
 import { Button } from '@twilio-paste/core/button';
 import { Separator } from '@twilio-paste/core/separator';
 import { useUID } from '@twilio-paste/core/uid-library';
@@ -13,6 +12,7 @@ import { Card } from '@twilio-paste/core/card';
 import { HelpText } from '@twilio-paste/core/help-text';
 import { Stack } from '@twilio-paste/core/stack';
 import { AgentIcon } from '@twilio-paste/icons/esm/AgentIcon';
+import { CallIcon } from '@twilio-paste/icons/esm/CallIcon';
 
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
 import { StringTemplates } from '../flex-hooks/strings';
@@ -38,17 +38,23 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
   return (
     <div>
       <Button
-        variant="link"
-        size="small"
+        variant="primary_icon"
+        size="rounded_small"
         title={AllStrings[StringTemplates.ClickToCall]}
         onClick={() => {
           setIsOpen(true);
         }}
       >
-        {phoneNumber}
+        <CallIcon decorative={true} />
       </Button>
 
-      <Modal ariaLabelledby={modalHeadingID} isOpen={isOpen} onDismiss={handleClose} size="default">
+      <Modal
+        ariaLabelledby={modalHeadingID}
+        isOpen={isOpen}
+        onDismiss={handleClose}
+        size="default"
+        element="COMPACT_MODAL"
+      >
         <ModalHeader>
           <ModalHeading as="h3" id={modalHeadingID}>
             <Template source={templates[StringTemplates.PlaceOutboundCall]} />

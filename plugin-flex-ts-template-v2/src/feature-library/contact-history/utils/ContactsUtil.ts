@@ -39,15 +39,17 @@ class ContactsUtil {
       from,
       outbound_to,
       call_sid,
-      caller,
       to,
+      name,
       channelType,
       conversationSid,
       conversations,
       customerName,
+      customerAddress,
       conference,
     } = task.attributes;
 
+    const twilioAddress = conversations?.external_contact;
     const outcome = conversations?.outcome || 'Completed';
     const notes = conversations?.content;
     let segmentLink;
@@ -60,6 +62,8 @@ class ContactsUtil {
       customerCallSid = conference?.participants.customer;
     }
     const contact: Contact = {
+      from,
+      name,
       direction,
       channel,
       call_sid,
@@ -74,6 +78,9 @@ class ContactsUtil {
       conversationSid,
       workerCallSid,
       customerCallSid,
+      customerName,
+      customerAddress,
+      twilioAddress,
     };
 
     // Default
@@ -81,16 +88,14 @@ class ContactsUtil {
 
     if (channel === 'voice') {
       contact.channelType = channel;
-      if (caller) {
-        contact.name = caller;
-      }
-      if (direction === 'inbound') {
-        contact.phoneNumber = from;
-        contact.twilioPhoneNumber = to;
-      } else {
-        contact.phoneNumber = outbound_to;
-        contact.twilioPhoneNumber = from;
-      }
+    }
+
+    if (direction === 'inbound') {
+      contact.phoneNumber = from;
+      contact.twilioPhoneNumber = to || twilioAddress;
+    } else {
+      contact.phoneNumber = outbound_to;
+      contact.twilioPhoneNumber = from;
     }
 
     // Using localStorage to persist contact list

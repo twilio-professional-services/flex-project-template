@@ -4,6 +4,7 @@ import esMX from './es-mx.json';
 
 export enum StringTemplates {
   ContactHistory = 'PSContactHistory',
+  NoHistory = 'PSNoHistory',
   ClearHistory = 'PSClearHistory',
   ClearHistoryDialog = 'PSClearHistoryDialog',
   ContactChannel = 'PSContactChannel',
@@ -12,6 +13,7 @@ export enum StringTemplates {
   ContactInboundAddress = 'PSContactInboundAddress',
   ContactCustomerAddress = 'PSContactCustomerAddress',
   ClickToCall = 'PSClickToCall',
+  ContactActions = 'PSContactActions',
   PlaceOutboundCall = 'PSPlaceOutboundCall',
   OutboundCallDialog = 'PSOutboundCallDialog',
   OutboundNumberToDial = 'PSOutboundNumberToDial',
@@ -30,6 +32,7 @@ export enum StringTemplates {
 export const stringHook = () => ({
   'en-US': {
     [StringTemplates.ContactHistory]: 'Contact History',
+    [StringTemplates.NoHistory]: 'Calls and Chats will appear here once they are completed.',
     [StringTemplates.ClearHistory]: 'Clear History',
     [StringTemplates.ClearHistoryDialog]: 'Please confirm that you want to delete all your contact history.',
     [StringTemplates.ContactChannel]: 'Channel',
@@ -38,6 +41,7 @@ export const stringHook = () => ({
     [StringTemplates.ContactInboundAddress]: 'Inbound Address',
     [StringTemplates.ContactCustomerAddress]: 'Customer Address',
     [StringTemplates.ClickToCall]: 'Click to make a call',
+    [StringTemplates.ContactActions]: 'Actions',
     [StringTemplates.PlaceOutboundCall]: 'Place Outbound Call',
     [StringTemplates.OutboundCallDialog]: 'Please confirm you want to call',
     [StringTemplates.OutboundNumberToDial]: 'Number to dial',

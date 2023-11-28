@@ -1,5 +1,6 @@
 {
   "PSContactHistory": "Historial de contactos",
+  "PSNoHistory": "Las llamadas y chats aparecerán aquí una vez que se completen.",
   "PSClearHistory": "Borrar la historia",
   "PSClearHistoryDialog": "Confirme que desea eliminar todo su historial de contactos.",
   "PSContactChannel": "Canal",
@@ -8,6 +9,7 @@
   "PSContactInboundAddress": "Número de Twilio",
   "PSContactCustomerAddress": "Número de teléfono del cliente",
   "PSClickToCall": "Haga clic para hacer una llamada",
+  "PSContactActions": "Acciónes",
   "PSPlaceOutboundCall": "Realizar llamada saliente",
   "PSOutboundCallDialog": "Por favor confirma que quieres llamar",
   "PSOutboundNumberToDial": "Número a marcar",

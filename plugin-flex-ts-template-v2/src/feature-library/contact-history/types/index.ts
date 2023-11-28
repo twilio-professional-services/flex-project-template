@@ -1,5 +1,6 @@
 export interface Contact {
   taskSid: string;
+  from?: string;
   direction: string | undefined;
   call_sid?: string;
   channel: string;
@@ -16,6 +17,9 @@ export interface Contact {
   segmentLink?: string;
   workerCallSid?: string;
   customerCallSid?: string;
+  customerName?: string;
+  customerAddress?: string;
+  twilioAddress?: string;
 }
 
 export interface Message {
