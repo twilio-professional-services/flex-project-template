@@ -13,13 +13,13 @@ need to be exhausted before the user would ever qualify for voice work.
 
 To address this, this feature toggles agents between the configured chat capacity and a chat capacity of 1, ensuring taskrouter can route the most important piece of work to the user across both channels.
 
-# flex-user-experience
+## flex-user-experience
 
 Example delivery of callbacks (on voice channel of capacity 1) and chat tasks (max capacity 2) where the task backlog is ordered callback, chat, callback, chat, callback, chat, callback, chat, callback
 
 ![alt text](/img/features/omni-channel-capacity-management/flex-user-experience-omni-channel-capacity-management.gif)
 
-# setup and dependencies
+## setup and dependencies
 
 1. Make sure the feature is enabled in the flex-config, and the affected channel and default max capacity settings are configured as desired.
 
@@ -33,6 +33,6 @@ For example for workflows assinging chat work to queues
 
 If other channels are in use, then modify accordingly
 
-# how does it work?
+## how does it work?
 
 By using the workflow expressions to keep reservations of different channels mutually excluded, the solution works by moving the agents channel capacity to 1 any time they hit their max capacity, while storing the previous max capacity in local storage. Then this allows taskrouter to assign the next relevant piece of work. As soon as that work is accepted, this feature automatically puts their capacity back to the previous setting from local storage.

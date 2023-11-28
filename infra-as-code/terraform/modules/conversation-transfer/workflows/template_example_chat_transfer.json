@@ -13,7 +13,7 @@
       },
       {
         "filter_friendly_name": "Assign to Queue - Everyone",
-        "expression": "transferQueueName == 'Everyone'",
+        "expression": "transferQueueName == 'Template Example Everyone'",
         "targets": [
           {
             "queue": "${QUEUE_SID_EVERYONE}",

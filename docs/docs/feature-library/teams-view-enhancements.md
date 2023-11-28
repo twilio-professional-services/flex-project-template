@@ -3,12 +3,12 @@ sidebar_label: teams-view-enhancements
 title: teams-view-enhancements
 ---
 
-# Overview
+## Overview
  In Flex, Supervisors can monitory agent activity in the [Teams View](https://www.twilio.com/docs/flex/end-user-guide/insights/monitor-agent-activity). The Teams View displays the agent's status and the tasks they are working on. Supervisors can also listen to live calls and view the chat/messaging conversations. 
 
 The Teams View can be modified by adding and removing columns in the [WorkersDataTable](https://www.twilio.com/docs/flex/developer/ui/components#add-columns-to-workersdatatable) to display some of the agent attributes or their skills.  The TaskCard component can be enhanced to show different information for each task or to change it's visual appearance.
 
-# How does it work?
+## How does it work?
 
 ### Add Columns with Worker Attributes
 The workers skills array can be re-formatted and shown in an additional column in the WorksDataTable of the Teams View.  This gives Supervisors a quicker way to review worker skills. Additionally, extra columns can be added to display worker attributes such as `team_name`, `department_name`, `location` or other custom attributes. It is highly recommended to configure these worker attributes via [Flex SSO](https://www.twilio.com/docs/flex/admin-guide/setup/sso-configuration#flex-insights)
@@ -23,7 +23,7 @@ The Worker and Task data available in Redux for the Teams View can be aggregated
 
 These custom Teams View data tiles are part of the combined [Metrics Data Tiles feature](metrics-data-tiles.md) since many of the configuration settings are shared with the Queues View Data Tiles.
 
-# Setup
+## Setup
 
 This feature can be enabled via the `flex-config` attributes. Just set the `teams_view_enhancements` `enabled` flag to `true` and set up the desired configuration.
 
@@ -60,7 +60,7 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
     }
 ```
 
-# Flex User Experience
+## Flex User Experience
 
 ![TeamsViewColumns](/img/features/teams-view-enhancements/teams-view-columns.png)
 
