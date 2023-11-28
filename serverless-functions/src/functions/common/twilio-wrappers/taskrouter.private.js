@@ -222,7 +222,6 @@ exports.createTask = async function createTask(parameters) {
 
   if (virtualStartTime) {
     createParams.virtualStartTime = virtualStartTime;
-    console.log(`Setting virtualStartTime to ${virtualStartTime}`);
   }
 
   try {
