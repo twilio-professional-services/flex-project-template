@@ -359,6 +359,9 @@
         "text_attributes": [],
         "boolean_attributes": []
       },
+      "worker_canvas_tabs": {
+        "enabled": true
+      },
       "datadog_log_integration": {
         "enabled": false,
         "log_level": "info",

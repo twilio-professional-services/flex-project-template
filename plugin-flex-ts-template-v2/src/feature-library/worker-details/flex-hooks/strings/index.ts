@@ -10,6 +10,7 @@ export enum StringTemplates {
   PSWorkerDetailsLocation = 'PSWorkerDetailsLocation',
   PSWorkerDetailsManager = 'PSWorkerDetailsManager',
   PSWorkerDetailsSettings = 'PSWorkerDetailsSettings',
+  PSWorkerDetailsContainerName = 'PSWorkerDetailsContainerName',
 }
 
 export const stringHook = () => ({
@@ -20,6 +21,7 @@ export const stringHook = () => ({
     [StringTemplates.PSWorkerDetailsLocation]: 'Location',
     [StringTemplates.PSWorkerDetailsManager]: 'Manager',
     [StringTemplates.PSWorkerDetailsSettings]: 'Configuration Settings',
+    [StringTemplates.PSWorkerDetailsContainerName]: 'Details',
   },
   'es-MX': esMX,
 });

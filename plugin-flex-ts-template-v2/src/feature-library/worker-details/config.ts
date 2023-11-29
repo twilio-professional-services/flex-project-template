@@ -11,24 +11,36 @@ const {
 
 const { teams = [], departments = [] } = getFeatureFlags().common || {};
 
+const { enabled: workerCanvasTabsEnabled = false } = getFeatureFlags()?.features?.worker_canvas_tabs || {};
+
 export const isFeatureEnabled = () => {
   return enabled;
 };
+
 export const editTeam = () => {
   return edit_team;
 };
+
 export const editDepartment = () => {
   return edit_department;
 };
+
 export const getTextAttributes = () => {
   return text_attributes;
 };
+
 export const getBooleanAttributes = () => {
   return boolean_attributes;
 };
+
 export const getTeams = () => {
   return teams;
 };
+
 export const getDepartments = () => {
   return departments;
+};
+
+export const isWorkerCanvasTabsEnabled = () => {
+  return workerCanvasTabsEnabled;
 };
