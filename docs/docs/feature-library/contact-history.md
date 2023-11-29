@@ -9,7 +9,7 @@ This feature adds a Contact History [View](https://www.twilio.com/docs/flex/deve
 
 ## flex-user-experience
 
-![ContactHistoryView](/img/features/contact-history/ContactHistoryView.png)
+![ContactHistoryView](/img/features/contact-history/contact-history-view.png)
 
 ## setup and dependencies
 
