@@ -29,6 +29,8 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
   const { selectedCallerId } = Manager.getInstance().workerClient?.attributes as CustomWorkerAttributes;
   const AllStrings = Manager.getInstance().strings as any;
 
+  const modalWidth = phoneNumber.toLowerCase().includes('sip') ? 'wide' : 'default';
+
   const placeOutboundCall = () => {
     console.log('Calling: ', phoneNumber);
     Actions.invokeAction('StartOutboundCall', {
@@ -48,13 +50,7 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
         <CallIcon decorative={true} />
       </Button>
 
-      <Modal
-        ariaLabelledby={modalHeadingID}
-        isOpen={isOpen}
-        onDismiss={handleClose}
-        size="default"
-        element="COMPACT_MODAL"
-      >
+      <Modal ariaLabelledby={modalHeadingID} isOpen={isOpen} onDismiss={handleClose} size={modalWidth}>
         <ModalHeader>
           <ModalHeading as="h3" id={modalHeadingID}>
             <Template source={templates[StringTemplates.PlaceOutboundCall]} />
@@ -66,7 +62,7 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
               <Stack orientation="horizontal" spacing="space0">
                 <Flex>
                   <Box paddingRight="space50">
-                    <CallOutgoingIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
+                    <CallIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
                   </Box>
                 </Flex>
                 <Flex vertical>

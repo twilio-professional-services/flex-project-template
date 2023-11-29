@@ -10,7 +10,5 @@ export const componentHook = function addContactHistoryToSideNav(flex: typeof Fl
     return;
   }
 
-  flex.SideNav.Content.add(<ContactHistorySideLink viewName="contact-history" key="contact-history-side-nav" />, {
-    sortOrder: 10,
-  });
+  flex.SideNav.Content.add(<ContactHistorySideLink viewName="contact-history" key="contact-history-side-nav" />);
 };

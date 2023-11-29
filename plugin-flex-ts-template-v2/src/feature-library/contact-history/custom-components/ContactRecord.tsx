@@ -35,7 +35,7 @@ const ContactRecord = ({ contact }: OwnProps) => {
   } = contact;
 
   const hours = Math.floor(duration / 3600);
-  const minutes = Math.floor(duration / 60);
+  const minutes = Math.floor(duration / 60) % 60;
   const ss = (duration % 60).toString().padStart(2, '0');
   let mm = minutes.toString();
   if (hours > 0) mm = minutes.toString().padStart(2, '0');
