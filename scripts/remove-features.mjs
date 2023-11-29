@@ -9,51 +9,27 @@ const { featureDirectory } = getPluginDirs();
 const featureRegionReferences = [
   {
     filename: `${infraAsCodeDir}/state/import_internal_state.sh`,
-    features: ["remove-all", "callback-and-voicemail", "schedule-manager", "activity-reservation-handler", "conversation-transfer", "internal-call"]
+    features: ["remove-all", "activity-reservation-handler", "callback-and-voicemail", "conversation-transfer", "internal-call", "park-interaction", "schedule-manager" ]
   },
   {
     filename: `${terraformDir}/environments/default/example.tfvars`,
-    features: [ "callback-and-voicemail", "schedule-manager"],
+    features: [ "callback-and-voicemail", "schedule-manager" ],
   },
   {
     filename: `${terraformDir}/environments/default/main.tf`,
-    features: [ "callback-and-voicemail", "schedule-manager", "conversation-transfer", "internal-call", "remove-all"],
+    features: [ "remove-all", "activity-reservation-handler", "callback-and-voicemail", "conversation-transfer", "internal-call", "park-interaction", "schedule-manager" ],
   },
   {
     filename: `${terraformDir}/environments/default/outputs.tf`,
-    features: [ "remove-all", "callback-and-voicemail", "schedule-manager"],
+    features: [ "remove-all", "callback-and-voicemail", "conversation-transfer", "internal-call", "park-interaction", "schedule-manager" ],
+  },
+  {
+    filename: `${terraformDir}/environments/default/template_examples.tf`,
+    features: [ "remove-all" ],
   },
   {
     filename: `${terraformDir}/environments/default/variables.tf`,
-    features: [ "callback-and-voicemail", "schedule-manager"],
-  },
-  {
-    filename: `${terraformDir}/modules/studio/main.tf`,
-    features: [ "remove-all", "callback-and-voicemail", "schedule-manager"],
-  },
-  {
-    filename: `${terraformDir}/modules/studio/outputs.tf`,
-    features: [ "remove-all", "callback-and-voicemail", "schedule-manager"],
-  },
-  {
-    filename: `${terraformDir}/modules/studio/variables.tf`,
-    features: [ "callback-and-voicemail", "schedule-manager", "internal-call", "conversation-transfer", "remove-all"],
-  },
-  {
-    filename: `${terraformDir}/modules/taskrouter/activities.tf`,
-    features: [ "activity-reservation-handler"],
-  },
-  {
-    filename: `${terraformDir}/modules/taskrouter/outputs.tf`,
-    features: [ "conversation-transfer", "callback-and-voicemail", "internal-call", "remove-all"],
-  },
-  {
-    filename: `${terraformDir}/modules/taskrouter/task_queues.tf`,
-    features: [ "remove-all", "internal-call"],
-  },
-  {
-    filename: `${terraformDir}/modules/taskrouter/workflows.tf`,
-    features: [ "internal-call", "conversation-transfer", "callback-and-voicemail", "remove-all" ],
+    features: [ "callback-and-voicemail", "schedule-manager" ],
   }
 ];
 
@@ -181,17 +157,11 @@ const performRemovals = async () => {
     );
     shell.rm("-rf", `addons/twilio-video-demo-app`);
   }
-
-  // if we are removing everything we need want to
-  // remove the terraform assets
-  if(keepMode && keepFeatures.length === 0){
-    shell.echo(
-      `Deleting managed terraform assets for studio and taskrouter`
-    );
-    shell.rm("-rf", `${terraformDir}/studio/*`)
-    shell.rm("-rf", `${terraformDir}/taskrouter/*`)
-  }
-
+  
+  shell.echo(
+    `Removing feature-specific Terraform modules`
+  );
+  performDirectoryRemovals(`${terraformDir}/modules`);
   
   shell.echo("Done!");
 }

@@ -11,13 +11,13 @@ This feature enables chat users to perform warm and cold transfers to individual
 
 If using the notification feature it is advised that you copy the custom components over to the customer facing chat react app to be re-used, so the custom messages with message-attributes indicating a notification can be rendered the same as they will be in flex.
 
-# flex-user-experience
+## flex-user-experience
 
 An example using warm transfer
 
 ![alt text](/img/features/chat-transfer/flex-user-experience-warm-transfer-full.gif)
 
-# setup and dependencies
+## setup and dependencies
 
 To use this feature first some setup needs to take place.
 
@@ -33,7 +33,7 @@ With the workflow setup, we need to update the serverless function environment v
 
 with the new workflow sid for the chat transfer. If your workflow name begins with "Chat Transfer", the `npm install` script, `npm run generate-env` script, and the included CI scripts will automatically populate this SID for you.
 
-# how does it work?
+## how does it work?
 
 When enabled, the feature renders a "transfer" button at the top of the TaskCanvas.
 
@@ -43,7 +43,7 @@ When we select a worker or a queue, it invokes the [TransferTask](https://assets
 
 The custom behaviors then handle the orchestration of creating a new task, posting notification messages (normal messages with message attributes that allow the message to be rendered as a notification instead of a conversational message). They also handle the management of the chatOrchestrator and the channel janitor.
 
-# known issues
+## known issues
 
 The channel is ended (marked INACTIVE) only by the last agent that received the transfer. That means if _Agent-A_ does a warm transfer to _Agent-B_ and _Agent-B_ completes the task, then it will end the chat for _Agent-A_ also. However if _Agent-A_ ends the chat first, _Agent-B_ can continue the conversation as normal.
 

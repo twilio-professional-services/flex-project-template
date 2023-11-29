@@ -89,6 +89,5 @@ The `multi_select_group` item is a configuration object that can be used to rend
 
 This feature adds a disposition tab to `TaskCanvasTabs`. When the task enters the wrapping state, the disposition tab is automatically selected. The user's selected disposition and/or notes are stored in state. When the Complete Task button is pressed, the selected values are read from state and written to task attributes. The disposition is stored in the `conversations.outcome` attribute, and notes are stored in the `conversations.content` attribute.  Additional custom attributes are stored based on the configured [conversations attribute](https://www.twilio.com/docs/flex/developer/insights/enhance-integration) for each one.  In addition to `conversation_attribute_2` through 10, there are other pre-defined attributes available in the [Insights Data Model](https://www.twilio.com/docs/flex/end-user-guide/insights/data-model) such as `initiative`, `initiated_by` and `campaign` that can be leveraged to capture wrap-up data elements.
 
-
 If `require_disposition` is enabled, and there are dispositions configured, the agent will not be allowed to complete the task until one is selected. When used in combination with the `agent-automation` feature's auto-wrap-up feature, the disposition requirement takes precedence and prevents auto-wrap-up.
 

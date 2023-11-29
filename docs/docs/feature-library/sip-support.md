@@ -11,13 +11,13 @@ Similarly, the default Hang Up _action_ completes the task but does not tear dow
 
 This feature is based on [Flex 1.0 station selector](https://github.com/jlafer/plugin-station-selector/tree/master/src).
 
-# flex-user-experience
+## flex-user-experience
 
 ![SIP Support demo](/img/features/sip-support/demo.gif)
 
-# setup and dependencies
+## setup and dependencies
 
-## flex-config
+### flex-config
 
 Within your `ui_attributes` file, the `sip-support` feature has a single setting you may modify:
 
@@ -25,5 +25,5 @@ Within your `ui_attributes` file, the `sip-support` feature has a single setting
 - `false` - default flex behaviour
 
 
-# how does it work?
+## how does it work?
 This plugin calls the Conference Participants API via a serverless function (in this project). Passing through the `muted` state to mute the call, or removing the participant to end the worker leg of the conference.

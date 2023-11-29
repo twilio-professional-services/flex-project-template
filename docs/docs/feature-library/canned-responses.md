@@ -7,11 +7,11 @@ The Canned Chat Responses feature helps demonstrate how Agents can select from a
 
 The JSON object of canned responses is broken down into categories, with the various responses nested under each category. To see the raw JSON structure of the payload, please [see the file](https://github.com/twilio-professional-services/flex-project-template/blob/main/serverless-functions/src/assets/features/canned-responses/responses.private.json) located in the `assets` folder.
 
-# flex-user-experience
+## flex-user-experience
 
 There are two options for the placement of the canned responses component within the Flex User Interface (see [Setup & Dependencies](#setup-and-dependencies) for more information).
 
-## CRM Panel
+### CRM Panel
 
 ![alt text](/img/features/canned-responses/CRMPanel-UI.gif)
 
@@ -20,15 +20,15 @@ By default, when this features is enabled within the `flex-config`, the canned r
 - `Insert` - will insert the text response into the `Input Text` component for the active task using the `SetInputText` action
 - `Send` - will send the canned response into the active conversation using the `SendMessage` action
 
-## Message Input Actions
+### Message Input Actions
 
 ![alt text](/img/features/canned-responses/MessageInputAction-UI.gif)
 
 The second option for the canned responses will render them within the `Message Input Actions` below the `Message Input`. The responses are still separated by categories, with the action performing an `insert` which will append the canned response to any pre-existing text in the `Message Input`.
 
-# setup and dependencies
+## setup and dependencies
 
-## Flex Config
+### Flex Config
 
 To enable this feature, you need to enable the feature within the `flex-config` directory for your specific environment and determine the UI placement of the responses (`CRM` or `MessageInputActions`):
 
@@ -41,7 +41,7 @@ To enable this feature, you need to enable the feature within the `flex-config` 
 }
 ```
 
-## Populate Canned Responses
+### Populate Canned Responses
 
 There are default examples of a canned responses payload located in [this file](https://github.com/twilio-professional-services/flex-project-template/blob/main/serverless-functions/src/assets/features/canned-responses/responses.private.json) (also outlined below), however you will need to update these with actual canned responses that fit your use case.
 
@@ -83,7 +83,7 @@ When specifying the text of a response, you may include task and/or worker attri
 
 While this provides an example data structure of how to organize your canned responses, the UI components are implemented with this structure in mind, meaning alterations to the data structure will require minor tweaking within the [CannedResponsesCRM](https://github.com/twilio-professional-services/flex-project-template/tree/main/plugin-flex-ts-template-v2/src/feature-library/canned-responses/custom-components/CannedResponsesCRM) and [CannedResponsesDropdown](https://github.com/twilio-professional-services/flex-project-template/tree/main/plugin-flex-ts-template-v2/src/feature-library/canned-responses/custom-components/CannedResponsesDropdown) components.
 
-# how does it work?
+## how does it work?
 
 When enabled, this feature will call a serverless function to retrieve a JSON object of canned responses hosted within `assets`. The fetched responses are then displayed in the CRM Panel or Task Canvas based on the `configuration.location` property within the `flex-config`.
 
