@@ -64,9 +64,11 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
           <Card>
             <Stack orientation="vertical" spacing="space60">
               <Stack orientation="horizontal" spacing="space0">
-                <Box paddingRight="space50">
-                  <CallOutgoingIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
-                </Box>
+                <Flex>
+                  <Box paddingRight="space50">
+                    <CallOutgoingIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
+                  </Box>
+                </Flex>
                 <Flex vertical>
                   <Heading as="h3" variant="heading30" marginBottom="space0">
                     {phoneNumber}
@@ -78,9 +80,11 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
               </Stack>
               <Separator orientation="horizontal" verticalSpacing="space50" />
               <Stack orientation="horizontal" spacing="space0">
-                <Box paddingRight="space50">
-                  <AgentIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
-                </Box>
+                <Flex>
+                  <Box paddingRight="space50">
+                    <AgentIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
+                  </Box>
+                </Flex>
                 <Flex vertical>
                   <Heading as="h5" variant="heading50" marginBottom="space0">
                     {selectedCallerId}

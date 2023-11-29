@@ -46,7 +46,7 @@ const ContactHistory = () => {
       ) : (
         <Flex vertical width="100%" grow shrink hAlignContent="center">
           <Box overflowY="auto" width="100%" padding="space40">
-            <Table variant="borderless">
+            <Table variant="borderless" striped>
               <THead>
                 <Tr>
                   <Th>
@@ -57,9 +57,6 @@ const ContactHistory = () => {
                   </Th>
                   <Th>
                     <Template source={templates[StringTemplates.ContactCustomerAddress]} />
-                  </Th>
-                  <Th>
-                    <Template source={templates[StringTemplates.ContactActions]} />
                   </Th>
                   <Th>
                     <Template source={templates[StringTemplates.ContactName]} />
@@ -77,7 +74,7 @@ const ContactHistory = () => {
                     <Template source={templates[StringTemplates.ContactOutcome]} />
                   </Th>
                   <Th>
-                    <Template source={templates[StringTemplates.ContactNotes]} />
+                    <Template source={templates[StringTemplates.ContactActions]} />
                   </Th>
                 </Tr>
               </THead>

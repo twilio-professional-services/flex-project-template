@@ -34,7 +34,13 @@ const ContactRecord = ({ contact }: OwnProps) => {
     notes,
   } = contact;
 
-  const taskDuration = `${Math.floor(duration / 60)}:${(duration % 60).toString().padStart(2, '0')}`;
+  const hours = Math.floor(duration / 3600);
+  const minutes = Math.floor(duration / 60);
+  const ss = (duration % 60).toString().padStart(2, '0');
+  let mm = minutes.toString();
+  if (hours > 0) mm = minutes.toString().padStart(2, '0');
+  let taskDuration = hours > 0 ? `${hours}:` : '';
+  taskDuration += `${mm}:${ss}`;
 
   return (
     <Tr key={taskSid}>
@@ -64,24 +70,28 @@ const ContactRecord = ({ contact }: OwnProps) => {
       </Td>
       <Td>{twilioPhoneNumber}</Td>
       <Td>{phoneNumber}</Td>
-      <Td>{channelType === 'voice' && <OutboundCallModal phoneNumber={phoneNumber || ''} />}</Td>
       <Td>{name ? <span>{name}</span> : <Template source={templates[StringTemplates.ContactDefaultCustomer]} />}</Td>
       <Td>{dateTime}</Td>
       <Td>{taskDuration}</Td>
       <Td>{queueName}</Td>
       <Td>{outcome}</Td>
       <Td>
-        <PopoverContainer baseId="notes">
-          <PopoverButton variant="secondary_icon" disabled={!notes}>
-            <NotesIcon decorative={true} />
-          </PopoverButton>
-          <Popover aria-label="Popover">
-            <Heading as="h3" variant="heading30">
-              Notes
-            </Heading>
-            <Text as="p">{notes}</Text>
-          </Popover>
-        </PopoverContainer>
+        <Flex vAlignContent="center">
+          {channelType === 'voice' && <OutboundCallModal phoneNumber={phoneNumber || ''} />}
+          {notes && (
+            <PopoverContainer baseId="notes">
+              <PopoverButton variant="primary_icon" disabled={!notes}>
+                <NotesIcon decorative={false} title={templates[StringTemplates.ContactNotes]()} />
+              </PopoverButton>
+              <Popover aria-label="Popover">
+                <Heading as="h3" variant="heading30">
+                  Notes
+                </Heading>
+                <Text as="p">{notes}</Text>
+              </Popover>
+            </PopoverContainer>
+          )}
+        </Flex>
       </Td>
     </Tr>
   );
