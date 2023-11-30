@@ -353,11 +353,14 @@
         "enabled": false
       },
       "worker_details": {
-        "enabled": false,
+        "enabled": true,
         "edit_team": true,
         "edit_department": true,
         "text_attributes": [],
         "boolean_attributes": []
+      },
+      "worker_canvas_tabs": {
+        "enabled": true
       },
       "datadog_log_integration": {
         "enabled": false,

@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { ContentFragmentProps } from '@twilio/flex-ui';
 
-import CapacityContainer from '../../custom-components/CapacityContainer';
+import WorkerDetailsContainer from '../../custom-components/WorkerDetailsContainer/WorkerDetailsContainer';
 import { FlexComponent } from '../../../../types/feature-loader';
 import { StringTemplates } from '../strings';
 
@@ -10,8 +10,8 @@ interface TabbedContentFragmentProps extends ContentFragmentProps {
 }
 
 export const componentName = FlexComponent.WorkerCanvas;
-export const componentHook = function addCapacityToWorkerCanvas() {
-  Flex.WorkerCanvas.Content.add(<CapacityContainer key="worker-capacity-container" />, {
-    tabTitle: StringTemplates.ChannelCapacity,
+export const componentHook = function addDetailsToWorkerCanvas() {
+  Flex.WorkerCanvas.Content.add(<WorkerDetailsContainer key="worker-details-container" />, {
+    tabTitle: StringTemplates.PSWorkerDetailsContainerName,
   } as TabbedContentFragmentProps);
 };

@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/no-unused-collection */
-import { IWorker, Template, templates } from '@twilio/flex-ui';
+import { IWorker, Template, Theme, styled, templates } from '@twilio/flex-ui';
 import React, { useState, useEffect } from 'react';
 import { Flex as FlexBox } from '@twilio-paste/core/flex';
 import { Box } from '@twilio-paste/core/box';
@@ -9,6 +9,7 @@ import { Stack } from '@twilio-paste/core/stack';
 import { Table, TBody, Tr, Td } from '@twilio-paste/core/table';
 import { Switch, SwitchGroup } from '@twilio-paste/core/switch';
 
+import { StringTemplates } from '../../flex-hooks/strings';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import {
   getTeams,
@@ -17,12 +18,13 @@ import {
   editDepartment,
   getTextAttributes,
   getBooleanAttributes,
+  isWorkerCanvasTabsEnabled,
 } from '../../config';
 import AttributeSelect from './AttributeSelect';
 import AttributeCustom from './AttributeCustom';
 
 interface OwnProps {
-  worker: IWorker;
+  worker?: IWorker;
 }
 
 const WorkerDetailsContainer = ({ worker }: OwnProps) => {
@@ -83,8 +85,24 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
     }
   };
 
+  const SectionHeader = styled('div')`
+    flex: 0 0 auto;
+    font-size: 0.875rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    margin: 1.25rem 1rem 0.5rem;
+    padding: 0.5rem 0px;
+    border-bottom: 1px solid ${(props) => (props.theme as Theme).tokens.borderColors.colorBorderWeak};
+    color: ${(props) => (props.theme as Theme).tokens.textColors.colorText};
+  `;
+
   return (
     <Stack orientation="vertical" spacing="space0">
+      {isWorkerCanvasTabsEnabled() ? null : (
+        <SectionHeader>
+          <Template source={templates[StringTemplates.PSWorkerDetailsContainerName]} />
+        </SectionHeader>
+      )}
       <Table variant="borderless">
         <TBody>
           <Tr key="agent_name">
