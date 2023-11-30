@@ -6,7 +6,7 @@
         "expression": "targetWorker != null",
         "targets": [
           {
-            "queue": "${QUEUE_SID_INTERNAL_CALLS}",
+            "queue": "${QUEUE_SID}",
             "expression": "task.targetWorker == worker.contact_uri",
             "priority": 1000
           }

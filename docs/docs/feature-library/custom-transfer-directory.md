@@ -21,7 +21,7 @@ It also enables the addition of an external directory, enabling the following be
   - each transfer number can independently be configured for warm or cold transfers
   - validation checks performed on transfer numbers with notifications of any validation failures
 
-# flex-user-experience
+## flex-user-experience
 
 Example queue transfer
 
@@ -31,7 +31,7 @@ Example external transfer
 
 ![alt text](/img/features/custom-transfer-directory/flex-user-experience-external-transfer.gif)
 
-# setup and dependencies
+## setup and dependencies
 
 Enable the feature in the flex-config asset for your environment.
 
@@ -72,6 +72,6 @@ worker.attributes : {
 }
 ```
 
-# how does it work?
+## how does it work?
 
 The queue and worker tabs are replaced with custom components using the Flex component framework. When the component is rendered, a list is loaded from the TaskRouter SDK and cached. Then the insights client is used to load the real time stats for all the queues. The real time stats are appended to each queue retrieved in the insights client and then any filters are applied. Various events trigger a re-evaluation of the filtered list including queue updates (update, add or remove) or an entry into the search field.

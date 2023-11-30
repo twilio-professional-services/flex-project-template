@@ -5,15 +5,15 @@ title: caller-id
 
 This feature enables the user to define which number on the Twilio account to use when dialing outbound using the dialpad.
 
-# flex-user-experience
+## flex-user-experience
 
 the vanilla feature without any further customizations will look like this
 
 ![alt text](/img/features/caller-id/flex-user-experience.gif)
 
-# setup and dependencies
+## setup and dependencies
 
-## Enabling the feature
+### Enabling the feature
 
 There are no additional dependencies for setup beyond ensuring the flag is enabled within the `flex-config` attributes.
 
@@ -26,7 +26,7 @@ There is an optional configuration property (`include_outgoing_only_numbers`) co
 }
 ```
 
-## Outbound Call Configuration
+### Outbound Call Configuration
 
 The Flex Dialpad must be enabled in order to be able to place outbound calls from within Flex. If this has not yet been configured, you will not be able to use this feature. This can be enabled in the Twilio Console > Flex > Manage > Voice, or by using the Flex Configuration API:
 
@@ -49,6 +49,6 @@ Content-Type: application/json
 }
 ```
 
-# how does it work?
+## how does it work?
 
 When enabled, this feature loads the phone numbers on the account using a serverless function, caches them locally, preserve the selected value against the worker attributes. When the [StartOutboundCall](https://assets.flex.twilio.com/docs/releases/flex-ui/latest/ui-actions/Actions#StartOutboundCall) action is invoked, we intercept the event before its processed and update the From number to use the selected value stored on the worker attributes.

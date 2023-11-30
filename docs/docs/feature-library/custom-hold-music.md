@@ -5,9 +5,9 @@ title: custom-hold-music
 
 This feature allows customization of the hold music used when an agent places a call or conference participant on hold, including when initiating a transfer.
 
-# setup and dependencies
+## setup and dependencies
 
-## Hold experience TwiML
+### Hold experience TwiML
 
 To use this feature, you will need to provide the URL of [TwiML to execute](https://www.twilio.com/docs/voice/twiml) during hold. This TwiML can be hosted anywhere, such as TwiML Bins, Twilio Functions & Assets, or on your own infrastructure. Here is example TwiML that will loop an audio file continuously:
 
@@ -26,7 +26,7 @@ Here is how you can create and use a TwiML Bin for this functionality:
 4. Save the TwiML Bin
 5. Copy the URL that is provided after saving.
 
-## Configuring the feature
+### Configuring the feature
 
 Within your `ui_attributes` file, you must set two settings for the `custom-hold-music` feature:
 
@@ -41,6 +41,6 @@ Within your `ui_attributes` file, you must set two settings for the `custom-hold
 
 Once your updated flex-config is deployed, the feature is enabled and ready to use.
 
-# how does it work?
+## how does it work?
 
 This feature adds listeners to the `beforeHoldCall`, `beforeHoldParticipant`, and `beforeTransferTask` actions to set the hold music URL. The TwiML at that URL will be played while the call is held.

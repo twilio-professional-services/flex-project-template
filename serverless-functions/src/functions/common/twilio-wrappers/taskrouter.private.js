@@ -9,8 +9,8 @@ const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handle
  * @param {string} parameters.taskSid the task to update
  * @param {string} parameters.attributesUpdate a JSON object to merge with the task
  * @returns {object} an object containing the task if successful
- * @description this operation safely updates the task attributes with the object
- * given by performing a deep merge with the existing task attributes and ensuring
+ * @description this operation safely updates the task attributes with the attributesUpdate
+ * object given by performing a deep merge with the existing task attributes and ensuring
  * its updating the version it started with using the ETag header
  * more explained here https://www.twilio.com/docs/taskrouter/api/task#task-version
  */
@@ -184,6 +184,7 @@ exports.updateReservation = async function updateReservation(parameters) {
  * @param {string} parameters.workflowSid the workflow to submit the task
  * @param {string} parameters.taskChannel the task channel to submit the task on
  * @param {object} parameters.attributes the attributes applied to the task
+ * @param {string} parameters.virtualStartTime the start time to use for task ordering
  * @param {number} parameters.priority the priority
  * @param {number} parameters.timeout timeout
  * @returns {object} an object containing the task if successful
@@ -195,6 +196,7 @@ exports.createTask = async function createTask(parameters) {
     workflowSid,
     taskChannel,
     attributes,
+    virtualStartTime,
     priority: overriddenPriority,
     timeout: overriddenTimeout,
   } = parameters;
@@ -210,15 +212,23 @@ exports.createTask = async function createTask(parameters) {
   const timeout = overriddenTimeout || 86400;
   const priority = overriddenPriority || 0;
 
+  const createParams = {
+    attributes: JSON.stringify(attributes),
+    workflowSid,
+    taskChannel,
+    priority,
+    timeout,
+  };
+
+  if (virtualStartTime) {
+    createParams.virtualStartTime = virtualStartTime;
+  }
+
   try {
     const client = context.getTwilioClient();
-    const task = await client.taskrouter.v1.workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID).tasks.create({
-      attributes: JSON.stringify(attributes),
-      workflowSid,
-      taskChannel,
-      priority,
-      timeout,
-    });
+    const task = await client.taskrouter.v1
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .tasks.create(createParams);
 
     return {
       success: true,
@@ -238,12 +248,21 @@ exports.createTask = async function createTask(parameters) {
  * @param {object} parameters the parameters for the function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
+ * @param {object} parameters.filters optional filters to apply to the query
  * @returns {object} An object containing an array of queues for the account
  * @description the following method is used to robustly retrieve
  *   the queues for the account
  */
 exports.getQueues = async function getQueues(parameters) {
   const { context } = parameters;
+  const {
+    filters = {
+      // example filters
+      // workerSid: 'WK608fc1212a5461111704ec6ed1192dce',
+      // evaluateWorkerAttributes: JSON.stringify({ routing: { skills: [] } }),
+      // friendlyName: 'Everyone'
+    },
+  } = parameters;
 
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
 
@@ -251,7 +270,7 @@ exports.getQueues = async function getQueues(parameters) {
     const client = context.getTwilioClient();
     const queues = await client.taskrouter.v1
       .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
-      .taskQueues.list({ limit: 1000 });
+      .taskQueues.list({ ...filters, limit: 1000 });
 
     return {
       success: true,
@@ -272,7 +291,7 @@ exports.getQueues = async function getQueues(parameters) {
  * @description the following method is used to fetch the configured
  *   worker channel
  */
-exports.getWorkerChannels = async function updateWorkerChannel(parameters) {
+exports.getWorkerChannels = async function getWorkerChannels(parameters) {
   const { context, workerSid } = parameters;
 
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
@@ -475,5 +494,86 @@ exports.getTasks = async function getTasks(parameters) {
     };
   } catch (error) {
     return retryHandler(error, parameters, exports.getTasks);
+  }
+};
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.workerSid the worker sid to fetch
+ * @returns {object} worker channel object
+ * @description the following method is used to fetch the worker associated
+ * with the workerSid provided.
+ */
+exports.getWorker = async function getWorker(parameters) {
+  const { context, workerSid } = parameters;
+
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(workerSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain workerSid string');
+
+  try {
+    const client = context.getTwilioClient();
+    const worker = await client.taskrouter.v1
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .workers(workerSid)
+      .fetch();
+
+    return {
+      success: true,
+      status: 200,
+      worker: {
+        ...worker,
+        attributes: JSON.parse(worker.attributes),
+      },
+    };
+  } catch (error) {
+    return retryHandler(error, parameters, exports.getWorker);
+  }
+};
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.targetWorkersExpression the expression that qualifies which workers to return
+ * @param {boolean} parameters.workerSidOnly flag to indicate whether the response should only return an array or workerSids
+ * @returns {object} object containing success, status and if successful, an array of workers.
+ * @description the following method is used to fetch a list of workers that qualify for the targetWorkerExpression.
+ */
+exports.getEligibleWorkers = async function getEligibleWorkers(parameters) {
+  const { context, targetWorkersExpression, workerSidOnly = false } = parameters;
+
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(targetWorkersExpression))
+    throw new Error('Invalid parameters object passed. Parameters must contain targetWorkerExpression string');
+
+  try {
+    const client = context.getTwilioClient();
+
+    // https://www.twilio.com/docs/usage/twilios-response#response-formats-list-filters
+    let workers = await client.taskrouter.v1.workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID).workers.list({
+      targetWorkersExpression,
+      pageSize: 500,
+      limit: 20000,
+    });
+
+    if (workerSidOnly) {
+      workers = workers.map((worker) => {
+        const { sid } = worker;
+        return {
+          sid,
+        };
+      });
+    }
+
+    return {
+      success: true,
+      status: 200,
+      workers,
+    };
+  } catch (error) {
+    return retryHandler(error, parameters, exports.getEligibleWorkers);
   }
 };

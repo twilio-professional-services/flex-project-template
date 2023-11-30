@@ -6,12 +6,12 @@
         "expression": "callBackData.attempts == 1",
         "targets": [
           {
-            "queue": "${QUEUE_SID_EVERYONE}",
+            "queue": "${QUEUE_SID}",
             "expression": "1==0",
             "timeout": 600
           },
           {
-            "queue": "${QUEUE_SID_EVERYONE}"
+            "queue": "${QUEUE_SID}"
           }
         ]
       },
@@ -20,12 +20,12 @@
         "expression": "callBackData.attempts > 1",
         "targets": [
           {
-            "queue": "${QUEUE_SID_EVERYONE}",
+            "queue": "${QUEUE_SID}",
             "expression": "1 == 0",
             "timeout": 3600
           },
           {
-            "queue": "${QUEUE_SID_EVERYONE}"
+            "queue": "${QUEUE_SID}"
           }
         ]
       },
@@ -34,13 +34,13 @@
         "expression": "1==1",
         "targets": [
           {
-            "queue": "${QUEUE_SID_EVERYONE}"
+            "queue": "${QUEUE_SID}"
           }
         ]
       }
     ],
     "default_filter": {
-      "queue": "${QUEUE_SID_EVERYONE}"
+      "queue": "${QUEUE_SID}"
     }
   }
 }
