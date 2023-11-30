@@ -19,7 +19,7 @@ export const componentHook = function addWorkerCanvasTabs(flex: typeof Flex, _ma
       .concat([])
       .toSorted((a, b) => (a.props.sortOrder || 10000) - (b.props.sortOrder || 9999));
 
-    // remove the fragments from the WorkerCanvas to prevent horizontal rendering
+    // remove the fragments from the WorkerCanvas to prevent vertical rendering
     fragments.forEach((fragment) => {
       if (fragment?.props?.children && (fragment.props.children as React.ReactElement).key) {
         const key = (fragment.props.children as React.ReactElement).key as string;
