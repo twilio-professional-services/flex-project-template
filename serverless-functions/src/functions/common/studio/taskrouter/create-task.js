@@ -11,7 +11,7 @@ const requiredParameters = [
 
 exports.handler = prepareStudioFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    const { workflowSid, taskChannel, attributes, priority: overriddenPriority, timeout: overriddenTimeout } = event;
+    const { workflowSid, taskChannel, attributes, priority, timeout } = event;
 
     console.log('attributes: ', attributes);
     const result = await TaskRouterOperations.createTask({
@@ -19,8 +19,8 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       workflowSid,
       taskChannel,
       attributes: JSON.parse(attributes),
-      priority: overriddenPriority || 0,
-      timeout: overriddenTimeout || 86400,
+      priority,
+      timeout,
     });
 
     const { task, taskSid, status } = result;
