@@ -5,7 +5,11 @@ import { ISurveyDefinition, SurveyItem } from '../types/Survey';
 
 import SyncHelper from './SyncHelper';
 import SyncClient from '../../../utils/sdk-clients/sync/SyncClient';
-import { getRuleDefinitionsMapName, getSurveyDefinitionsMapName } from '../config';
+import {
+  getRuleDefinitionsMapName,
+  getSurveyDefinitionsMapName,
+} from '../config';
+import { EncodedParams } from 'types/serverless';
 
 class SurveyService extends ApiService {
   getQueueNames = async (): Promise<string[]> => {
@@ -24,12 +28,49 @@ class SurveyService extends ApiService {
     return myPromise;
   };
 
+  startSurvey = async (
+    queueName: string,
+    callSid: string,
+    taskSid: string,
+    surveyKey: string
+  ) => {
+    return new Promise((resolve, reject) => {
+      const encodedParams: EncodedParams = {
+        queueName: encodeURIComponent(queueName),
+        callSid: encodeURIComponent(callSid),
+        taskSid: encodeURIComponent(taskSid),
+        surveyKey: encodeURIComponent(surveyKey),
+        Token: encodeURIComponent(this.manager.user.token),
+      };
+
+      this.fetchJsonWithReject<any>(
+        // `https://6e6d12fab128.ngrok.app/features/post-call-survey/flex/start-voice-survey`,
+        `${this.serverlessProtocol}://${this.serverlessDomain}/features/post-call-survey/flex/start-voice-survey`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: this.buildBody(encodedParams),
+        }
+      )
+        .then((resp: any) => {
+          resolve(resp);
+        })
+        .catch((error) => {
+          console.log('Error starting post call survey', error);
+          reject(error);
+        });
+    });
+  };
+
   getSurveys = async (): Promise<SurveyItem[]> => {
     return SyncHelper.getMapItems(getSurveyDefinitionsMapName());
   };
 
   saveSurvey = async (key: string, survey: ISurveyDefinition) => {
-    return (await SyncClient.map(getSurveyDefinitionsMapName())).update(key, survey);
+    return (await SyncClient.map(getSurveyDefinitionsMapName())).update(
+      key,
+      survey
+    );
   };
 
   deleteSurvey = async (key: string) => {
@@ -69,7 +110,10 @@ class SurveyService extends ApiService {
   };
 
   saveRule = async (rule: RuleItem) => {
-    return (await SyncClient.map(getRuleDefinitionsMapName())).update(rule.key, rule.data);
+    return (await SyncClient.map(getRuleDefinitionsMapName())).update(
+      rule.key,
+      rule.data
+    );
   };
 
   deleteRule = async (key: string) => {
