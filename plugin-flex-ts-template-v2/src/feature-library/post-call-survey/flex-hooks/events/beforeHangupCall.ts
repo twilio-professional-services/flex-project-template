@@ -35,7 +35,7 @@ export const actionHook = async (
           await service.startSurvey(
             surveyRequired.data.queue_name,
             task.attributes.call_sid,
-            task.sid,
+            task.taskSid,
             surveyRequired.data.survey_key
           );
         } catch (error) {
