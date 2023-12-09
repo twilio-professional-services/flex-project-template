@@ -1,60 +1,79 @@
-provider "twilio" {
-  account_sid = var.TWILIO_ACCOUNT_SID
-  username     = var.TWILIO_API_KEY
-  password  = var.TWILIO_API_SECRET
+resource "twilio_taskrouter_workspaces_v1" "flex_task_assignment" {
+  friendly_name = "Flex Task Assignment"
 }
-
-terraform {
-  required_providers {
-    twilio = {
-      source  = "twilio/twilio"
-      version = ">=0.4.0"
-    }
-  }
-
-  required_version = ">= 1.1.0"
-
-  backend "local" {}
-}
-
-module "studio" {
-  source           = "../../modules/studio"
 
 # FEATURE: remove-all
-  workflow_sid_assign_to_anyone = module.taskrouter.workflow_sid_assign_to_anyone
+resource "twilio_taskrouter_workspaces_task_channels_v1" "voice" {
+  workspace_sid	= twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
+  friendly_name	= "Voice"
+  unique_name = "voice"
+}
 # END FEATURE: remove-all
 
-# FEATURE: conversation-transfer
-  workflow_sid_chat_transfer = module.taskrouter.workflow_sid_chat_transfer
-# END FEATURE: conversation-transfer
+# FEATURE: activity-reservation-handler
+module "activity-reservation-handler" {
+  source = "../../modules/activity-reservation-handler"
+  
+  workspace_sid = twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
+}
+# END FEATURE: activity-reservation-handler
 
 # FEATURE: callback-and-voicemail
-  workflow_sid_callback = module.taskrouter.workflow_sid_callback
-# END FEATURE: callback-and-voicemail
-
-# FEATURE: internal-call
-  workflow_sid_internal_call = module.taskrouter.workflow_sid_internal_call
-# END FEATURE: internal-call
-
-  chat_channel_sid = module.taskrouter.chat_channel_sid
-  voice_channel_sid = module.taskrouter.voice_channel_sid
+module "callback-and-voicemail" {
+  source = "../../modules/callback-and-voicemail"
+  
+  workspace_sid = twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
+  voice_channel_sid = twilio_taskrouter_workspaces_task_channels_v1.voice.sid
+  workflow_sid = twilio_taskrouter_workspaces_workflows_v1.template_example_assign_to_anyone.sid
+  queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_everyone.sid
+  
   serverless_domain = var.SERVERLESS_DOMAIN
   serverless_sid = var.SERVERLESS_SID
   serverless_env_sid = var.SERVERLESS_ENV_SID
+  function_create_callback = var.SERVERLESS_CALLBACK_FUNCTION_SID
+}
+# END FEATURE: callback-and-voicemail
+
+# FEATURE: conversation-transfer
+module "conversation-transfer" {
+  source = "../../modules/conversation-transfer"
+  
+  workspace_sid = twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
+  everyone_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_everyone.sid
+  example_sales_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_sales.sid
+  example_support_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_support.sid
+}
+# END FEATURE: conversation-transfer
+
+# FEATURE: internal-call
+module "internal-call" {
+  source = "../../modules/internal-call"
+  
+  workspace_sid = twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
+}
+# END FEATURE: internal-call
+
+# FEATURE: park-interaction
+module "park-interaction" {
+  source = "../../modules/park-interaction"
+  
+  workspace_sid = twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
+  everyone_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_everyone.sid
+  example_sales_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_sales.sid
+  example_support_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_support.sid
+}
+# END FEATURE: park-interaction
 
 # FEATURE: schedule-manager
+module "schedule-manager" {
+  source = "../../modules/schedule-manager"
+  
+  voice_channel_sid = twilio_taskrouter_workspaces_task_channels_v1.voice.sid
+  workflow_sid = twilio_taskrouter_workspaces_workflows_v1.template_example_assign_to_anyone.sid
+  
   schedule_manager_domain = var.SCHEDULE_MANAGER_DOMAIN
   schedule_manager_sid = var.SCHEDULE_MANAGER_SID
   schedule_manager_env_sid = var.SCHEDULE_MANAGER_ENV_SID
   function_check_schedule_sid = var.SCHEDULE_MANAGER_CHECK_FUNCTION_SID
+}
 # END FEATURE: schedule-manager
-
-# FEATURE: callback-and-voicemail
-  function_create_callback = var.SERVERLESS_CALLBACK_FUNCTION_SID
-# END FEATURE: callback-and-voicemail 
-
-}
-
-module "taskrouter" {
-  source           = "../../modules/taskrouter"
-}

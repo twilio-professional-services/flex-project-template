@@ -1,0 +1,63 @@
+{
+  "description": "Example flow with in-queue callback requests",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "next": "SendCallToAgent",
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": -10
+        }
+      }
+    },
+    {
+      "name": "SendCallToAgent",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "waitUrl": "https://${SERVERLESS_DOMAIN}/features/callback-and-voicemail/studio/wait-experience?mode=initialize",
+        "offset": {
+          "x": 40,
+          "y": 170
+        },
+        "workflow": "${WORKFLOW_SID}",
+        "channel": "${VOICE_CHANNEL_SID}",
+        "attributes": "{ \"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\", \"conversations\": {\"hang_up_by\": \"Customer\"} }",
+        "waitUrlMethod": "POST"
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}

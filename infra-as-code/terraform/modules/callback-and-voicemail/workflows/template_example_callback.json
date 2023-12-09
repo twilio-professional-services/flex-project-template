@@ -1,0 +1,46 @@
+{
+  "task_routing": {
+    "filters": [
+      {
+        "filter_friendly_name": "Retry attempt 1",
+        "expression": "callBackData.attempts == 1",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID}",
+            "expression": "1==0",
+            "timeout": 600
+          },
+          {
+            "queue": "${QUEUE_SID}"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Additional retry attempts",
+        "expression": "callBackData.attempts > 1",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID}",
+            "expression": "1 == 0",
+            "timeout": 3600
+          },
+          {
+            "queue": "${QUEUE_SID}"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Initial routing attempt",
+        "expression": "1==1",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID}"
+          }
+        ]
+      }
+    ],
+    "default_filter": {
+      "queue": "${QUEUE_SID}"
+    }
+  }
+}

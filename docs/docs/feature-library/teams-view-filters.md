@@ -19,7 +19,7 @@ As well as sample react components to support alternative filter selection optio
 - SelectFilter (configurable to a single drop down or multi select drop down)
 - Free Form Text Filter
 
-# known issues
+## known issues
 
 ### issue 1
 
@@ -35,11 +35,11 @@ This is the same name used by the [agent_skills](#agentskills) filter so it show
 
 For reasons yet unknown, the first time a queue is selected in the [queue_no_worker_data](#queue-no-worker-data), it disappears but when it is used again it persists.
 
-# flex-user-experience
+## flex-user-experience
 
 ![Supervisor View](/img/features/teams-view-filters/flex-user-experience.gif)
 
-# setup and dependencies
+## setup and dependencies
 
 To use the sample features, most of the filters can simply be toggled on in the flex-config with the exception of `queue_worker_data` which is intended for use when a solution uses it own backend to keep worker attributes updated with a list of queues. See more details in [#how does it work](#how-does-it-work)
 
@@ -59,9 +59,9 @@ To use the sample features, most of the filters can simply be toggled on in the 
       }
 ```
 
-# How does it work
+## How does it work
 
-## advanced filters background
+### advanced filters background
 
 The [Team View Filters](https://www.twilio.com/docs/flex/developer/ui/team-view-filters) follow the interface outlined [here.](https://www.twilio.com/docs/flex/developer/ui/team-view-filters#filterdefinition) to create a custom filter definition. Each filter when used, ultimately adds an `AppliedFilter` object to a filters array
 
@@ -79,7 +79,7 @@ where each item in the `values` array is OR'd and each `AppliedFilter` in the fi
 
 The result set shows up as the list of agents in the team view. It is worth remembering that the live query or instance query has a max result size of 200 objects. Another restriction worth remembering is that there is a maximum query size of 50 `AppliedFilters` in the filters array.
 
-## email
+### email
 
 This filter simply matches against the worker attribute `email`. In Flex this is a required field to setup. The filter looks like the following
 
@@ -91,7 +91,7 @@ This filter simply matches against the worker attribute `email`. In Flex this is
 }
 ```
 
-## department
+### department
 
 This filter is based on the model of the worker attributes adopted from flex insights. A definition of that model is [here](https://www.twilio.com/docs/flex/developer/insights/enhance-integration#enhance-agent-data)
 
@@ -111,7 +111,7 @@ the filter matches against the worker attribute `department_name`. In Flex this 
 }
 ```
 
-## queue_no_worker_data
+### queue_no_worker_data
 
 This filter works by injecting a temporary placeholder into the filters that is then later intercepted using the [AppliedTeamViewFilters](https://assets.flex.twilio.com/docs/releases/flex-ui/latest/ui-actions/Actions#ApplyTeamsViewFilters) action hook.
 
@@ -134,7 +134,7 @@ This filter simply matches against the worker attribute `queues`. It is anticipa
 }
 ```
 
-## team
+### team
 
 This filter is based on the model of the worker attributes adopted from Flex Insights. A definition of that model is [here](https://www.twilio.com/docs/flex/developer/insights/enhance-integration#enhance-agent-data).
 
@@ -154,7 +154,7 @@ The filter matches against the worker attribute `team_name`. The filter looks li
 }
 ```
 
-## agent_skills
+### agent_skills
 
 This filter is based on the skills model thats proposed by Flex. Its entirely possible a different skills model could be adopted in which case this filter would need modified appropriately.
 
@@ -170,6 +170,6 @@ The filter looks like the following
 }
 ```
 
-## activities
+### activities
 
 This filter replaces the out-of-box activities filter. The only difference is that this one can be localized.
