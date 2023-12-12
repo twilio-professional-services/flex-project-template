@@ -91,7 +91,7 @@ class ContactsUtil {
     }
 
     if (direction === 'inbound') {
-      contact.phoneNumber = from;
+      contact.phoneNumber = from || customerAddress;
       contact.twilioPhoneNumber = to || twilioAddress;
     } else {
       contact.phoneNumber = outbound_to;

@@ -29,7 +29,7 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
   const { selectedCallerId } = Manager.getInstance().workerClient?.attributes as CustomWorkerAttributes;
   const AllStrings = Manager.getInstance().strings as any;
 
-  const modalWidth = phoneNumber.toLowerCase().includes('sip') ? 'wide' : 'default';
+  const modalWidth = phoneNumber.length > 30 ? 'wide' : 'default';
 
   const placeOutboundCall = () => {
     console.log('Calling: ', phoneNumber);

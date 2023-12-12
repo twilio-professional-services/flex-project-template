@@ -24,7 +24,6 @@ export enum StringTemplates {
   ContactDateTime = 'PSContactDateTime',
   ContactDuration = 'PSContactDuration',
   ContactQueue = 'PSContactQueue',
-  ContactCallRecording = 'PSContactCallRecording',
   ContactOutcome = 'PSContactOutcome',
   ContactNotes = 'PSContactNotes',
 }
@@ -32,7 +31,7 @@ export enum StringTemplates {
 export const stringHook = () => ({
   'en-US': {
     [StringTemplates.ContactHistory]: 'Contact History',
-    [StringTemplates.NoHistory]: 'Calls and Chats will appear here once they are completed.',
+    [StringTemplates.NoHistory]: 'Calls and chats will appear here once they are completed.',
     [StringTemplates.ClearHistory]: 'Clear History',
     [StringTemplates.ClearHistoryDialog]: 'Please confirm that you want to delete all your contact history.',
     [StringTemplates.ContactChannel]: 'Channel',
@@ -52,7 +51,6 @@ export const stringHook = () => ({
     [StringTemplates.ContactDateTime]: 'Date & Time',
     [StringTemplates.ContactDuration]: 'Task Duration',
     [StringTemplates.ContactQueue]: 'Queue',
-    [StringTemplates.ContactCallRecording]: 'Call Recording',
     [StringTemplates.ContactOutcome]: 'Outcome',
     [StringTemplates.ContactNotes]: 'Notes',
   },
