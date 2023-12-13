@@ -1,6 +1,6 @@
 import { Actions, Manager } from '@twilio/flex-ui';
 
-import { getSystemActivityNames } from '../config';
+import { getSystemActivityNames, isFeatureEnabled } from '../config';
 import FlexHelper from '../../../utils/flex-helper';
 import { CallbackPromise, PendingActivity } from '../types/ActivityManager';
 import { updatePendingActivity } from '../flex-hooks/reducers/ActivityReservationHandler';
@@ -40,6 +40,10 @@ class ActivityManager {
     this.currentRequests = [];
     this.runningRequests = 0;
     this.maxConcurrentRequests = maxConcurrentRequests;
+
+    if (!isFeatureEnabled()) {
+      return;
+    }
 
     const pendingActivity = this.#getPendingActivity();
 
