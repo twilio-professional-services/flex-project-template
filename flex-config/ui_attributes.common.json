@@ -370,6 +370,9 @@
       "contact_history": {
         "enabled": false,
         "max_contacts": 25
+      },
+      "inline_media": {
+        "enabled": true
       }
     }
   }

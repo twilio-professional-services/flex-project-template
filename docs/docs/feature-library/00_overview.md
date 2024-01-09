@@ -29,6 +29,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Emoji Picker](emoji-picker)                    | _adds an emoji picker for messaging tasks_                                  |
 | [Enhanced CRM Container](enhanced-crm-container)         | _optimize the CRM container experience_                                                             |
 | [Hang Up By Reporting](hang-up-by)           | _populates the Hang Up By and Destination attributes in Flex Insights_                              |
+| [Inline Media](inline-media) | _render chat message attachments inline_                                                     |
 | [Internal Call (Agent to Agent)](internal-call) | _provide agents the ability to dial each other_                                                     |
 | [Park interaction](park-interaction)               | _provide agents the ability to park interactions, preserving conversation history_                  |
 | [Pause Recording](pause-recording)                 | _provide agents the ability to temporarily pause and resume call recording_ |
