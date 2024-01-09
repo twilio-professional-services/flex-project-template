@@ -42,33 +42,25 @@ const InlineMediaAttachment = ({ media }: OwnProps) => {
     fetchMediaUrl();
   }, [media]);
 
-  const renderImage = () => {
-    return (
-      <a href={mediaUrl} target="_blank">
-        <InlineImage src={mediaUrl} alt={media.state.filename ?? 'Image'} />
-      </a>
-    );
-  };
+  const renderImage = () => (
+    <a href={mediaUrl} target="_blank">
+      <InlineImage src={mediaUrl} alt={media.state.filename ?? 'Image'} />
+    </a>
+  );
 
-  const renderAudio = () => {
-    return (
-      <InlineAudio controls>
-        <source src={mediaUrl} type={media.state.contentType} />
-      </InlineAudio>
-    );
-  };
+  const renderAudio = () => (
+    <InlineAudio controls>
+      <source src={mediaUrl} type={media.state.contentType} />
+    </InlineAudio>
+  );
 
-  const renderPdf = () => {
-    return <InlinePdf title={media.state.filename ?? 'PDF Preview'} src={mediaUrl} />;
-  };
+  const renderPdf = () => <InlinePdf title={media.state.filename ?? 'PDF Preview'} src={mediaUrl} />;
 
-  const renderVideo = () => {
-    return (
-      <InlineVideo controls>
-        <source src={mediaUrl} type={media.state.contentType} />
-      </InlineVideo>
-    );
-  };
+  const renderVideo = () => (
+    <InlineVideo controls>
+      <source src={mediaUrl} type={media.state.contentType} />
+    </InlineVideo>
+  );
 
   if (!mediaUrl) {
     return null;
