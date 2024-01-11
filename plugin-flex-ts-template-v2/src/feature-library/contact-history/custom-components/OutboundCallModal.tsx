@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Manager, Actions, Template, templates } from '@twilio/flex-ui';
+import { Manager, Actions, Template, templates, useFlexSelector } from '@twilio/flex-ui';
 import { Flex } from '@twilio-paste/core/flex';
 import { Box } from '@twilio-paste/core/box';
 import { Heading } from '@twilio-paste/core/heading';
@@ -26,6 +26,7 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
   const handleClose = () => setIsOpen(false);
   const modalHeadingID = useUID();
 
+  const workerActivitySid = useFlexSelector((state) => state.flex.worker?.activity?.sid);
   const { selectedCallerId } = Manager.getInstance().workerClient?.attributes as CustomWorkerAttributes;
   const AllStrings = Manager.getInstance().strings as any;
 
@@ -43,6 +44,7 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
         variant="primary_icon"
         size="rounded_small"
         title={AllStrings[StringTemplates.ClickToCall]}
+        disabled={workerActivitySid === Manager.getInstance().serviceConfiguration.taskrouter_offline_activity_sid}
         onClick={() => {
           setIsOpen(true);
         }}
@@ -74,22 +76,26 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
                   </HelpText>
                 </Flex>
               </Stack>
-              <Separator orientation="horizontal" verticalSpacing="space50" />
-              <Stack orientation="horizontal" spacing="space0">
-                <Flex>
-                  <Box paddingRight="space50">
-                    <AgentIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
-                  </Box>
-                </Flex>
-                <Flex vertical>
-                  <Heading as="h5" variant="heading50" marginBottom="space0">
-                    {selectedCallerId}
-                  </Heading>
-                  <HelpText marginTop="space0">
-                    <Template source={templates[StringTemplates.OutboundCallerId]} />
-                  </HelpText>
-                </Flex>
-              </Stack>
+              {selectedCallerId && (
+                <>
+                  <Separator orientation="horizontal" verticalSpacing="space50" />
+                  <Stack orientation="horizontal" spacing="space0">
+                    <Flex>
+                      <Box paddingRight="space50">
+                        <AgentIcon decorative size="sizeIcon50" color="colorTextIconNeutral" />
+                      </Box>
+                    </Flex>
+                    <Flex vertical>
+                      <Heading as="h5" variant="heading50" marginBottom="space0">
+                        {selectedCallerId}
+                      </Heading>
+                      <HelpText marginTop="space0">
+                        <Template source={templates[StringTemplates.OutboundCallerId]} />
+                      </HelpText>
+                    </Flex>
+                  </Stack>
+                </>
+              )}
             </Stack>
           </Card>
         </ModalBody>
