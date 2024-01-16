@@ -27,8 +27,7 @@ const handleChatTransferAction = async (payload: TransferActionPayload) => {
     return;
   }
 
-  const removeInvitingAgent = payload?.options?.mode === 'COLD';
-  const transferChatAPIPayload = await buildInviteParticipantAPIPayload(task, targetSid, removeInvitingAgent);
+  const transferChatAPIPayload = await buildInviteParticipantAPIPayload(task, targetSid, payload?.options);
 
   if (!transferChatAPIPayload) {
     Notifications.showNotification(NotificationIds.ChatTransferFailedGeneric);
@@ -43,7 +42,7 @@ const handleChatTransferAction = async (payload: TransferActionPayload) => {
   try {
     await ChatTransferService.sendTransferChatAPIRequest(transferChatAPIPayload);
 
-    if (removeInvitingAgent) {
+    if (payload?.options?.mode === 'COLD') {
       Notifications.showNotification(NotificationIds.ChatTransferTaskSuccess);
     } else {
       Notifications.showNotification(NotificationIds.ChatParticipantInvited);

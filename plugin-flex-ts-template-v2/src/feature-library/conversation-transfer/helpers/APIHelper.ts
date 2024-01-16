@@ -1,9 +1,11 @@
 import { ITask, Manager, ConversationState, TaskHelper } from '@twilio/flex-ui';
+import merge from 'lodash/merge';
 
 import TaskService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 import { EncodedParams } from '../../../types/serverless';
 import ApiService from '../../../utils/serverless/ApiService';
 import { getWorkerName } from './inviteTracker';
+import { TransferOptions } from '../types/ActionPayloads';
 
 const manager: any | undefined = Manager.getInstance();
 
@@ -104,12 +106,18 @@ export const buildRemovePartiticipantAPIPayload = (task: ITask, flexInteractionP
 export const buildInviteParticipantAPIPayload = async (
   task: ITask,
   targetSid: string,
-  removeInvitingAgent: boolean,
+  options?: TransferOptions,
 ): Promise<TransferRESTPayload | null> => {
   const { taskSid } = task;
   const conversationId = task.attributes?.conversations?.conversation_id || task.taskSid;
-  const jsonAttributes = JSON.stringify(task.attributes);
   const transferTargetSid = targetSid;
+  const removeInvitingAgent = options?.mode === 'COLD';
+
+  let newAttributes = task.attributes;
+  if (options?.attributes) {
+    newAttributes = merge({}, newAttributes, JSON.parse(options.attributes));
+  }
+  const jsonAttributes = JSON.stringify(newAttributes);
 
   let transferQueueName = '';
   let transferWorkerName = '';
