@@ -178,7 +178,6 @@ jobs:
       - name: deploy flex config
         working-directory: flex-config
         run: |
-          npm install
           npm run deploy
 
   deploy-release-plugin:
