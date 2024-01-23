@@ -4,7 +4,7 @@ title: worker-details
 ---
 
 # Overview
-This feature adds a Tab to the the Worker Canvas (Agent Activity & Skills) in the Teams View to allow Supervisors to edit worker attributes like `team`, `department`, other custom text attributes and boolean (true/false) attributes or worker settings. These boolean attributes can be used to configure settings (or permissions) for the worker which could be leveraged to enable or disable certain custom features in the PS Template.
+This feature adds a section to the the Worker Canvas (Agent Activity & Skills) in the Teams View to allow Supervisors to edit worker attributes like `team`, `department`, other custom text attributes and boolean (true/false) attributes or worker settings. These boolean attributes can be used to configure settings (or permissions) for the worker which could be leveraged to enable or disable certain custom features in the PS Template.
 
 # How does it work?
 

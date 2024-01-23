@@ -133,8 +133,14 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
           </TBody>
         </Table>
         {booleanAttributes.length > 0 && (
-          <FlexBox>
-            <Box width="100%" backgroundColor="colorBackground" padding="space30" margin="space10">
+          <FlexBox padding="space30">
+            <Box
+              width="100%"
+              paddingTop="space50"
+              borderTopColor="colorBorder"
+              borderTopStyle="solid"
+              borderTopWidth="borderWidth10"
+            >
               <SwitchGroup name="settings" legend={<Template source={templates.PSWorkerDetailsSettings} />}>
                 {booleanAttributes.map((attr) => (
                   <Switch
