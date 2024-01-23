@@ -24,7 +24,11 @@ interface WorkerItem {
 }
 const activityConfig = getAgentActivityConfig();
 const getSkills = (item: WorkerItem) => {
-  return item.worker.attributes.routing ? item.worker?.attributes?.routing?.skills?.join(', ') : '-';
+  if (!item.worker?.attributes?.routing?.skills) {
+    return '-';
+  }
+  const skillsStr = item.worker.attributes.routing.skills.join(', ');
+  return skillsStr.length > 100 ? `${skillsStr.substring(0, 100)}...` : skillsStr;
 };
 
 export const componentName = FlexComponent.TaskCanvasHeader;

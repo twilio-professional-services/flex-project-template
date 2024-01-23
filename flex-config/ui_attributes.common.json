@@ -266,7 +266,7 @@
         "columns": {
           "calls": true,
           "other_tasks": true,
-          "team": true,
+          "team": false,
           "department": false,
           "location": false,
           "agent_skills": true,
@@ -359,6 +359,16 @@
       },
       "sip_support": {
         "enabled": false
+      },
+      "worker_details": {
+        "enabled": true,
+        "edit_team": true,
+        "edit_department": true,
+        "text_attributes": [],
+        "boolean_attributes": []
+      },
+      "worker_canvas_tabs": {
+        "enabled": true
       },
       "datadog_log_integration": {
         "enabled": false,
