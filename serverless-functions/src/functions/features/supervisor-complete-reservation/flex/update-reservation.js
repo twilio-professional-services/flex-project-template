@@ -11,14 +11,14 @@ const requiredParameters = [
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    /** on the surface this function only adds a redundant laye
+    /** on the surface this function only adds a redundant layer
      * around updateReservation but it provides a convenient hook
      * point to introduce custom behaviors on completing reservations
      * that may differ across task types.
      *
      * it is also worth noting that recording a reason is only applicable
      * when completing a task and we can't complete the task without knowing
-     * if there are other open resrvations or not.
+     * if there are other open reservations or not.
      *
      * ideally we could record some outcome code in the task attributes but again
      * this gets complex quickly with voice tasks sharing task attributes across

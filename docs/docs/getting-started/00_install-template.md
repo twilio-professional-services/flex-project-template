@@ -1,6 +1,5 @@
 ---
 sidebar_label: Install the template
-sidebar_position: 0
 title: Install the template on hosted Flex
 ---
 import Tabs from "@theme/Tabs";
@@ -37,9 +36,10 @@ These steps require Flex UI version 2.x to be configured on your Flex account.
    - `Deploy Terraform?`  (as *cautioned* below)
 
 :::danger Important!
-These deploy steps will set up TaskRouter and Studio configuration to allow more complex features to work out-of-the-box. The following resources will be completely replaced and overwritten when selecting the `Deploy Terraform?` option:
+These deploy steps will set up TaskRouter and Studio configuration to allow more complex features to work out-of-the-box. The following resources will be affected when selecting the `Deploy Terraform?` option:
 
-<details><summary>TaskRouter resources affected</summary>
+<details>
+<summary>TaskRouter resources affected</summary>
 
 <Tabs>
 
@@ -47,10 +47,11 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 | Name | Existing or New | Description |
 | -----| --------------------| ------------|
-| Assign To Anyone | Existing | Modified to support [Park Interaction](/feature-library/park-interaction) and Demonstrate filters for Sales and Support queues|
-| Chat Transfer | New | Workflow that supports the [Conversation Transfer](/feature-library/conversation-transfer) feature |
-| Callback | New | Workflow that supports the requeuing of callbacks and voicemails from the [callback and voicemails](/feature-library/callback-and-voicemail) feature |
-| Internal Call | New | Workflow that supports the  [Internal Call](/feature-library/internal-call) feature|
+| Template Example Assign to Anyone | New | Used by example Studio flows and demonstrate filters for example queues|
+| Template Example Chat Transfer | New | Workflow that supports the [conversation transfer](/feature-library/conversation-transfer) feature |
+| Template Example Callback | New | Workflow that supports the requeuing of callbacks and voicemails from the [callback and voicemail](/feature-library/callback-and-voicemail) feature |
+| Template Example Internal Calls | New | Workflow that supports the [internal call](/feature-library/internal-call) feature|
+| Template Example Park/Resume | New | Workflow that supports the [park interaction](/feature-library/park-interaction) feature|
 
 </TabItem>
 
@@ -58,10 +59,10 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 | Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| Everyone | Existing | No modifications from out-of-box Flex version  |
+| Template Example Everyone | New | Same as out-of-box Flex version  |
 | Template Example Sales| New | Sample queue for "Sales" calls |
 | Template Example Support | New | Sample queue for "Support" calls |
-| Internal Calls | New | Queue that supports the [Internal Call](/feature-library/internal-call) feature|
+| Template Example Internal Calls | New | Queue that supports the [internal call](/feature-library/internal-call) feature|
 
 </TabItem>
 
@@ -69,14 +70,10 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 | Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| Offline | Existing | No modifications from out-of-box Flex version  |
-| Available | Existing | No modifications from out-of-box Flex version  |
-| Unavailable | Existing | No modifications from out-of-box Flex version  |
-| Break | Existing | No modifications from out-of-box Flex version  |
-| On A Task | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
-| On A Task, No ACD | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
-| Wrap Up | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
-| Wrap Up, No ACD | New | Activity to support the [Activity Reservation Handler](/feature-library/activity-reservation-handler) feature |
+| On A Task | New | Activity to support the [activity reservation handler](/feature-library/activity-reservation-handler) feature |
+| On A Task, No ACD | New | Activity to support the [activity reservation handler](/feature-library/activity-reservation-handler) feature |
+| Wrap Up | New | Activity to support the [activity reservation handler](/feature-library/activity-reservation-handler) feature |
+| Wrap Up, No ACD | New | Activity to support the [activity reservation handler](/feature-library/activity-reservation-handler) feature |
 
 </TabItem>
 
@@ -84,29 +81,30 @@ These deploy steps will set up TaskRouter and Studio configuration to allow more
 
 | Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| Voice | Existing | No modifications from out-of-box Flex version  |
-| Chat | Existing | No modifications from out-of-box Flex version  |
+| Chat | Existing | No modifications from out-of-box Flex version |
+| Voice | Existing | No modifications from out-of-box Flex version |
 
 </TabItem>
 
 </Tabs>
 </details>
 
-<details><summary>Studio resources affected</summary>
+<details>
+<summary>Studio resources affected</summary>
 
 | Name | Existing or New  | Description |
 | -----| --------------------| ------------|
-| Voice IVR | Existing | Modified to include a schedule manager lookup and to add a callback or voicemail option while waiting in queue |
-| Messaging Flow | Existing | Modified to provide a sales or support routing option |
-| Chat Flow | Existing | No modifications from out-of-box Flex version |
+| Template Example Callback Flow | New | Example usage of the [callback and voicemail](/feature-library/callback-and-voicemail) feature, adding a callback or voicemail option while waiting in queue |
+| Template Example Messaging with Parking Flow | New | Example for the [park interaction](/feature-library/park-interaction) feature, using a workflow that supports the routing of parked interactions |
+| Template Example Schedule Flow | New | Example usage of the [schedule manager](/feature-library/schedule-manager) feature, adding a schedule lookup with different responses based on the result |
 
 </details>
 
-If you have customizations within these resources and do not want to overwrite any changes, uncheck the `Deploy Terraform?` input box.
+If you have customizations within the resources listed as 'Existing' (or have created your own resources with the same name as ones listed as 'New') and do not wish to overwrite them, uncheck the `Deploy Terraform?` input box.
 
 ![image](/img/guides/github-trigger.png)
 
-Unchecking this means features mentioned in the resource descriptions above will need manual setup, which can be found in the respective feature's documentation.
+Unchecking this means features mentioned in the resource descriptions above will require manual setup, which can be found in the respective feature's documentation.
 
 :::
 

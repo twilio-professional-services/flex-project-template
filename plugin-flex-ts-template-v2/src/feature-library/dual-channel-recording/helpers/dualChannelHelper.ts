@@ -90,6 +90,14 @@ const isTaskActive = (task: ITask) => {
   return manager.workerClient?.reservations.has(reservationSid);
 };
 
+const getParticipantToRecord = (channel: 'worker' | 'customer', participants: ConferenceParticipant[]) => {
+  if (channel === 'worker') {
+    return participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined');
+  }
+
+  return participants.find((p) => p.participantType === 'customer');
+};
+
 const waitForConferenceParticipants = async (task: ITask): Promise<ConferenceParticipant[]> =>
   new Promise((resolve) => {
     const waitTimeMs = 100;
@@ -114,16 +122,14 @@ const waitForConferenceParticipants = async (task: ITask): Promise<ConferencePar
       if (Array.isArray(participants) && participants.length < 2) {
         return;
       }
-      const worker = participants.find(
-        (p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined',
-      );
-      const customer = participants.find((p) => p.participantType === 'customer');
 
-      if (!worker || !customer) {
+      const participantToRecord = getParticipantToRecord(getChannelToRecord(), participants);
+
+      if (!participantToRecord) {
         return;
       }
 
-      if (!worker?.callSid || !customer?.callSid) {
+      if (!participantToRecord?.callSid) {
         console.debug('Looking for call SID');
         // Flex sometimes does not provide callSid in task conference participants, check if it is in the Redux store instead
         const storeConference = manager.store.getState().flex.conferences.states.get(task.taskSid);
@@ -134,18 +140,15 @@ const waitForConferenceParticipants = async (task: ITask): Promise<ConferencePar
 
         participants = storeConference.source.participants;
 
-        const storeWorker = participants.find(
-          (p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined',
-        );
-        const storeCustomer = participants.find((p) => p.participantType === 'customer');
+        const storeParticipant = getParticipantToRecord(getChannelToRecord(), participants);
 
-        if (!storeWorker?.callSid || !storeCustomer?.callSid) {
-          console.debug('Worker and customer participants joined conference, waiting for call SID');
+        if (!storeParticipant?.callSid) {
+          console.debug(`${getChannelToRecord()} participants joined conference, waiting for call SID`);
           return;
         }
       }
 
-      console.debug('Worker and customer participants joined conference');
+      console.debug(`${getChannelToRecord()} participants joined conference`);
       if (waitForConferenceInterval) {
         clearInterval(waitForConferenceInterval);
         waitForConferenceInterval = null;
@@ -156,7 +159,7 @@ const waitForConferenceParticipants = async (task: ITask): Promise<ConferencePar
 
     setTimeout(() => {
       if (waitForConferenceInterval) {
-        console.debug(`Customer participant didn't show up within ${maxWaitTimeMs / 1000} seconds`);
+        console.debug(`${getChannelToRecord()} participant didn't show up within ${maxWaitTimeMs / 1000} seconds`);
 
         if (waitForConferenceInterval) {
           clearInterval(waitForConferenceInterval);
@@ -213,6 +216,9 @@ const waitForActiveCall = async (task: ITask): Promise<string> =>
   });
 
 export const addMissingCallDataIfNeeded = async (task: ITask) => {
+  if (!task) {
+    return;
+  }
   const { attributes } = task;
   const { conference } = attributes;
 

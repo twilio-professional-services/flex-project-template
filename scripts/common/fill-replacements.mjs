@@ -6,10 +6,7 @@ import * as fetchCli from "./fetch-cli.mjs";
 
 // Initialize env file if necessary, then parse its contents
 const readEnv = async (envFile, exampleFile, overwrite) => {
-  if (!shell.test('-e', exampleFile) && !shell.test('-e', envFile)) {
-    // nothing exists!
-    return null;
-  } else if (overwrite || !shell.test('-e', envFile)) {
+  if (overwrite || !shell.test('-e', envFile)) {
     // create env file based on example
     shell.cp(exampleFile, envFile);
     
@@ -45,58 +42,78 @@ const fillKnownEnvVars = (envVars) => {
   return envVars;
 }
 
+const fillVar = (key, envVars, environment) => {
+  if (envVars[key] !== `<YOUR_${key}>` || !varNameMapping[key]) {
+    // If this isn't a placeholder value, ignore it.
+    // This variable isn't in the constant, so we can't do anything else with it.
+    return;
+  }
+  
+  if (fetchCli.getFetchedVars()[key]) {
+    // This value was cached previously
+    envVars[key] = fetchCli.getFetchedVars()[key];
+    return;
+  }
+  
+  if ((!environment || environment === 'local') && varNameMapping[key].localValue) {
+    // Running locally, use the local value if specified
+    envVars[key] = varNameMapping[key].localValue;
+    return;
+  }
+  
+  // we haven't yet fetched the value!
+  
+  // if the mapping has a parent defined, ensure we have fetched that first
+  const parentKey = varNameMapping[key].parent;
+  if (parentKey) {
+    // if this key is not in the env vars, add it so that it can be referenced
+    if (!envVars[parentKey]) {
+      envVars[parentKey] = `<YOUR_${parentKey}>`;
+    }
+    fillVar(parentKey, envVars, environment);
+  }
+  
+  // fetch the value based on type
+  switch (varNameMapping[key].type) {
+    case "serverless-domain":
+    fetchCli.fetchServerlessDomains();
+    break;
+    case "serverless-service":
+    fetchCli.fetchServerlessServices();
+    break;
+    case "serverless-environment":
+    fetchCli.fetchServerlessEnvironments(envVars[parentKey]);
+    break;
+    case "serverless-function":
+    fetchCli.fetchServerlessFunctions(envVars[parentKey]);
+    break;
+    case "tr-workspace":
+    fetchCli.fetchTrWorkspaces();
+    break;
+    case "tr-workflow":
+    fetchCli.fetchTrWorkflows(envVars[parentKey]);
+    break;
+    case "sync-service":
+    fetchCli.fetchSyncServices();
+    break;
+    case "chat-service":
+    fetchCli.fetchChatServices();
+    break;
+    default:
+    console.warn(`Unknown placeholder variable type: ${varNameMapping[key].type}`);
+    break;
+  }
+  
+  // Get the newly fetched value from cache
+  if (fetchCli.getFetchedVars()[key]) {
+    envVars[key] = fetchCli.getFetchedVars()[key];
+  }
+}
+
 // For vars still unknown, fetches needed vars from the API and fills in as appropriate
 const fillUnknownEnvVars = (envVars, environment) => {
   for (const key in envVars) {
-    if (envVars[key] !== `<YOUR_${key}>` || !varNameMapping[key]) {
-      // If this isn't a placeholder value, ignore it.
-      // This variable isn't in the constant, so we can't do anything else with it.
-      continue;
-    }
-    
-    if (fetchCli.getFetchedVars()[key]) {
-      // This value was cached previously
-      envVars[key] = fetchCli.getFetchedVars()[key];
-      continue;
-    }
-    
-    if ((!environment || environment === 'local') && varNameMapping[key].localValue) {
-      // Running locally, use the local value if specified
-      envVars[key] = varNameMapping[key].localValue;
-      continue;
-    }
-    
-    // we haven't yet fetched the value; do that based on type
-    switch (varNameMapping[key].type) {
-      case "serverless-domain":
-      fetchCli.fetchServerlessDomains();
-      break;
-      case "tr-workspace":
-      fetchCli.fetchTrWorkspaces();
-      break;
-      case "tr-workflow":
-      // Workflows require the TR workspace SID; fetch them if that has not yet happened
-      if (!fetchCli.getFetchedVars().TWILIO_FLEX_WORKSPACE_SID) {
-        fetchCli.fetchTrWorkspaces();
-      }
-      let workspaceSid = fetchCli.getFetchedVars().TWILIO_FLEX_WORKSPACE_SID;
-      fetchCli.fetchTrWorkflows(workspaceSid);
-      break;
-      case "sync-service":
-      fetchCli.fetchSyncServices();
-      break;
-      case "chat-service":
-      fetchCli.fetchChatServices();
-      break;
-      default:
-      console.warn(`Unknown placeholder variable type: ${varNameMapping[key].type}`);
-      break;
-    }
-    
-    // Get the newly fetched value from cache
-    if (fetchCli.getFetchedVars()[key]) {
-      envVars[key] = fetchCli.getFetchedVars()[key];
-    }
+    fillVar(key, envVars, environment);
   }
   
   return envVars;
@@ -135,6 +152,12 @@ const saveReplacements = async (data, path) => {
 
 export default async (path, examplePath, account, environment, overwrite) => {
   console.log(`Setting up ${path}...`);
+  
+  // Check if this package uses environment files
+  if (!shell.test('-e', examplePath) && !shell.test('-e', path)) {
+    // No environment files, no need to continue
+    return null;
+  }
   
   // Initialize the env vars
   let envVars = await readEnv(path, examplePath, overwrite);

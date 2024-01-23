@@ -1,0 +1,32 @@
+{
+  "name": "schedule-manager",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo 'Tests to come'; exit 1",
+    "start": "twilio serverless:start",
+    "deploy": "npm run fetch-config && twilio serverless:deploy --override-existing-project --env \".env${ENVIRONMENT:+.$ENVIRONMENT}\"",
+    "fetch-config": "node scripts/fetch-config.mjs assets/config.private.json $ENVIRONMENT",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
+    "lint:report": "npm run lint -- --output-file eslint_report.json --format json"
+  },
+  "dependencies": {
+    "@twilio/runtime-handler": "1.3.0",
+    "axios": "^1.4.0",
+    "form-data": "^4.0.0",
+    "lodash": "^4.17.21",
+    "luxon": "^3.0.1",
+    "rrule": "^2.7.1",
+    "twilio": "^4.11.0",
+    "twilio-flex-token-validator": "^1.5.6"
+  },
+  "devDependencies": {
+    "eslint": "^8.37.0",
+    "eslint-config-twilio": "^2.0.0",
+    "twilio-run": "^3.5.3"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

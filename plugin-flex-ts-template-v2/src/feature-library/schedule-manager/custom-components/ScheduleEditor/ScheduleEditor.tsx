@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import tzdata from 'tzdata';
 import { ColumnDefinition, DataTable, Manager, SidePanel, templates } from '@twilio/flex-ui';
 import { Alert } from '@twilio-paste/core/alert';
 import { Button } from '@twilio-paste/core/button';
@@ -42,12 +41,7 @@ const ScheduleEditor = (props: OwnProps) => {
   const ScheduleManagerStrings = Manager.getInstance().strings as any;
 
   useEffect(() => {
-    const zones = [];
-    for (const [key] of Object.entries(tzdata.zones)) {
-      zones.push(key);
-    }
-
-    setTimeZones(zones.sort());
+    setTimeZones(Intl.supportedValuesOf('timeZone').sort());
   }, []);
 
   const resetView = () => {

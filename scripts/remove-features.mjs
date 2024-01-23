@@ -1,63 +1,35 @@
 import shell from "shelljs";
 import { promises as fs } from 'fs';
 
-import { serverlessSrc, flexConfigDir, gitHubWorkflowDir, scheduleManagerServerlessDir, infraAsCodeDir, terraformDir } from './common/constants.mjs';
+import { serverlessSrc, flexConfigDir, infraAsCodeDir, terraformDir } from './common/constants.mjs';
 import getPluginDirs from "./common/get-plugin.mjs";
 
 const { featureDirectory } = getPluginDirs();
 
 const featureRegionReferences = [
   {
-    filename: `${gitHubWorkflowDir}/checks.yaml`,
-    features: [ "schedule-manager" ],
-  },
-  {
-    filename: `${gitHubWorkflowDir}/flex_deploy.yaml`,
-    features: [ "chat-to-video-escalation", "schedule-manager" ],
-  },
-  {
     filename: `${infraAsCodeDir}/state/import_internal_state.sh`,
-    features: ["remove-all", "callback-and-voicemail", "schedule-manager", "activity-reservation-handler", "conversation-transfer", "internal-call"]
+    features: ["remove-all", "activity-reservation-handler", "callback-and-voicemail", "conversation-transfer", "internal-call", "park-interaction", "schedule-manager" ]
+  },
+  {
+    filename: `${terraformDir}/environments/default/example.tfvars`,
+    features: [ "callback-and-voicemail", "schedule-manager" ],
   },
   {
     filename: `${terraformDir}/environments/default/main.tf`,
-    features: [ "callback-and-voicemail", "schedule-manager", "conversation-transfer", "internal-call", "remove-all"],
+    features: [ "remove-all", "activity-reservation-handler", "callback-and-voicemail", "conversation-transfer", "internal-call", "park-interaction", "schedule-manager" ],
   },
   {
     filename: `${terraformDir}/environments/default/outputs.tf`,
-    features: [ "remove-all", "callback-and-voicemail", "schedule-manager"],
+    features: [ "remove-all", "callback-and-voicemail", "conversation-transfer", "internal-call", "park-interaction", "schedule-manager" ],
+  },
+  {
+    filename: `${terraformDir}/environments/default/template_examples.tf`,
+    features: [ "remove-all" ],
   },
   {
     filename: `${terraformDir}/environments/default/variables.tf`,
-    features: [ "callback-and-voicemail", "schedule-manager"],
-  },
-  {
-    filename: `${terraformDir}/modules/studio/main.tf`,
-    features: [ "remove-all", "callback-and-voicemail", "schedule-manager"],
-  },
-  {
-    filename: `${terraformDir}/modules/studio/outputs.tf`,
-    features: [ "remove-all", "callback-and-voicemail", "schedule-manager"],
-  },
-  {
-    filename: `${terraformDir}/modules/studio/variables.tf`,
-    features: [ "callback-and-voicemail", "schedule-manager", "internal-call", "conversation-transfer", "remove-all"],
-  },
-  {
-    filename: `${terraformDir}/modules/taskrouter/activities.tf`,
-    features: [ "activity-reservation-handler"],
-  },
-  {
-    filename: `${terraformDir}/modules/taskrouter/outputs.tf`,
-    features: [ "conversation-transfer", "callback-and-voicemail", "internal-call", "remove-all"],
-  },
-  {
-    filename: `${terraformDir}/modules/taskrouter/task_queues.tf`,
-    features: [ "remove-all", "internal-call"],
-  },
-  {
-    filename: `${terraformDir}/modules/taskrouter/workflows.tf`,
-    features: [ "internal-call", "conversation-transfer", "callback-and-voicemail", "remove-all" ],
+    features: [ "callback-and-voicemail", "schedule-manager" ],
   }
 ];
 
@@ -67,11 +39,21 @@ const flexConfigRemovals = [
 ];
 
 let keepFeatures = [];
+let removeFeatures = [];
+let keepMode = true;
+
+const shouldRemoveFeature = (featureDirName) => {
+  return keepMode ? !keepFeatures.includes(featureDirName) : removeFeatures.includes(featureDirName);
+}
+
+const shouldKeepFeature = (featureDirName) => {
+  return keepMode ? keepFeatures.includes(featureDirName) : !removeFeatures.includes(featureDirName);
+}
 
 const performFeatureRegionRemoval = async () => {
   shell.echo("Removing features from GitHub Actions workflows...");
 
-  if(keepFeatures.length > 0){
+  if(keepMode && keepFeatures.length > 0){
     keepFeatures.push("remove-all")
   }
   
@@ -81,7 +63,7 @@ const performFeatureRegionRemoval = async () => {
       let newData = originalData;
       
       for (const feature of reference.features) {
-        if (keepFeatures.includes(feature)) {
+        if (shouldKeepFeature(feature)) {
           continue;
         }
         
@@ -118,7 +100,7 @@ const performFlexConfigRemovals = async () => {
         for (const key of Object.keys(jsonData?.custom_data?.features)) {
           // The config name for a feature uses underscores instead of hyphens
           const featureDirName = key.replace(/_/g, '-');
-          if (!keepFeatures.includes(featureDirName)) {
+          if (shouldRemoveFeature(featureDirName)) {
             delete jsonData.custom_data.features[key];
           }
         }
@@ -138,7 +120,7 @@ const performDirectoryRemovals = (baseDir) => {
     const featureDirs = shell.ls(baseDir);
     
     for (const feature of featureDirs) {
-      if (!keepFeatures.includes(feature)) {
+      if (shouldRemoveFeature(feature)) {
         shell.rm('-rf', `${baseDir}/${feature}`);
         shell.echo(`Removed ${baseDir}/${feature}`);
       }
@@ -162,45 +144,47 @@ const performRemovals = async () => {
   performDirectoryRemovals(`${serverlessSrc}/functions/features`);
   performDirectoryRemovals(`${serverlessSrc}/assets/features`);
   
-  if (!keepFeatures.includes("schedule-manager")) {
+  if (shouldRemoveFeature("schedule-manager")) {
     shell.echo(
-      `Deleting schedule-manager serverless package ${scheduleManagerServerlessDir}...`
+      `Deleting schedule-manager serverless package addons/serverless-schedule-manager...`
     );
-    shell.rm("-rf", `${scheduleManagerServerlessDir}`);
+    shell.rm("-rf", `addons/serverless-schedule-manager`);
   }
   
-  if (!keepFeatures.includes("chat-to-video-escalation")) {
+  if (shouldRemoveFeature("chat-to-video-escalation")) {
     shell.echo(
-      `Deleting web-app-examples...`
+      `Deleting addons/twilio-video-demo-app...`
     );
-    shell.rm("-rf", `web-app-examples`);
+    shell.rm("-rf", `addons/twilio-video-demo-app`);
   }
-
-  // if we are removing everything we need want to
-  // remove the terraform assets
-  if(keepFeatures.length === 0){
-    shell.echo(
-      `Deleting managed terraform assets for studio and taskrouter`
-    );
-    shell.rm("-rf", `${terraformDir}/studio/*`)
-    shell.rm("-rf", `${terraformDir}/taskrouter/*`)
-  }
-
+  
+  shell.echo(
+    `Removing feature-specific Terraform modules`
+  );
+  performDirectoryRemovals(`${terraformDir}/modules`);
   
   shell.echo("Done!");
 }
 
 const parseArgs = (args) => {
   // node scripts/remove-features.js
-  // node scripts/remove-features.js except feat1 feat2 featX
-  if (args.length < 4 || (args.length > 3 && args[2] !== "except")) {
+  if (args.length < 3) {
     // no features specified to remove or incorrect args format
     shell.echo("Removing all features...");
     return;
   }
   
-  keepFeatures = args.slice(3);
+  // node scripts/remove-features.js feat1 feat2 featX
+  if (args.length > 2 && args[2] !== "except") {
+    // removing specific feature(s)
+    removeFeatures = args.slice(2);
+    keepMode = false;
+    shell.echo(`Removing features ${removeFeatures.join(", ")}...`);
+    return;
+  }
   
+  // node scripts/remove-features.js except feat1 feat2 featX
+  keepFeatures = args.slice(3);
   shell.echo(`Removing all features except ${keepFeatures.join(", ")}...`);
 }
 

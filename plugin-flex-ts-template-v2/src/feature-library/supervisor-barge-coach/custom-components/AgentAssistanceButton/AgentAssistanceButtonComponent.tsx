@@ -51,7 +51,7 @@ export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
       // We will use this to clear up the Sync Doc and the Agent Alert
       localStorage.setItem('cacheAgentAssistState', 'true');
 
-      // Updating the Sync Doc to add the agent from the assistance array
+      // Updating the Sync Doc to add the agent to the assistance array
       SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, agentFN, conferenceSID, selectedTaskSID, 'add');
     }
   };

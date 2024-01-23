@@ -4,13 +4,14 @@ import { varNameMapping } from "./constants.mjs";
 
 let fetchedTypes = [];
 let resultCache = {};
+let cliCache = {};
 
 // Reusable function for filtering the desired objects to fetch per type
-const filterWantedVars = (type) => {
+const filterWantedVars = (type, parent) => {
   let wanted = {};
   
   for (const varName in varNameMapping) {
-    if (varNameMapping[varName].type !== type) {
+    if (varNameMapping[varName].type !== type || (parent && resultCache[varNameMapping[varName].parent] !== parent)) {
       continue;
     }
     
@@ -22,6 +23,11 @@ const filterWantedVars = (type) => {
 
 // Reusable function for running and parsing Twilio CLI command output
 const execTwilioCli = (command) => {
+  // first, consult the cache and use it if present
+  if (cliCache[command]) {
+    return cliCache[command];
+  }
+  
   const outputRaw = shell.exec(`${command} --no-limit -o json`, {silent: true});
   
   if (outputRaw.code !== 0) {
@@ -36,6 +42,7 @@ const execTwilioCli = (command) => {
   
   try {
     const outputParsed = JSON.parse(outputRaw.stdout);
+    cliCache[command] = outputParsed;
     return outputParsed;
   } catch (error) {
     console.error("Failed to parse Twilio CLI output", error);
@@ -95,13 +102,107 @@ export const fetchServerlessDomains = () => {
   }
 }
 
-export const fetchTrWorkflows = (workspaceSid) => {
-  const type = "tr-workflow";
+export const fetchServerlessServices = () => {
+  const type = "serverless-service";
   // If we already fetched these, no need to do it again
   if (fetchedTypes.includes(type)) {
     return;
   }
   fetchedTypes.push(type);
+  
+  console.log("Fetching serverless services...");
+  
+  let wantedServices = filterWantedVars(type);
+  const serverlessServices = execTwilioCli("twilio api:serverless:v1:services:list");
+  
+  if (!serverlessServices || serverlessServices.length < 1) {
+    return;
+  }
+  
+  // if the service was requested, save it in the cache
+  for (const service of serverlessServices) {
+    for (const wanted in wantedServices) {
+      if (isMatch(wantedServices[wanted].name, service.uniqueName, false)) {
+        resultCache[wanted] = service.sid;
+      }
+    }
+  }
+}
+
+export const fetchServerlessEnvironments = (serviceSid) => {
+  const type = "serverless-environment";
+  const cacheKey = `${type}-${serviceSid}`;
+  // If we already fetched these, no need to do it again
+  if (fetchedTypes.includes(cacheKey)) {
+    return;
+  }
+  fetchedTypes.push(cacheKey);
+  
+  if (!serviceSid) {
+    console.warn("Serverless service SID missing; unable to fetch its environments");
+    return;
+  }
+  
+  console.log(`Fetching serverless environments for service ${serviceSid}...`);
+  
+  const wantedEnv = filterWantedVars(type, serviceSid);
+  const serviceEnvironments = execTwilioCli(`twilio api:serverless:v1:services:environments:list --service-sid=${serviceSid}`);
+  
+  if (!serviceEnvironments || serviceEnvironments.length < 1) {
+    return;
+  }
+  
+  // if the environment was requested, save it in the cache
+  for (const env of serviceEnvironments) {
+    for (const wanted in wantedEnv) {
+      if (isMatch(wantedEnv[wanted].name, env.uniqueName, true)) {
+        resultCache[wanted] = env.sid;
+      }
+    }
+  }
+}
+
+export const fetchServerlessFunctions = (serviceSid) => {
+  const type = "serverless-function";
+  const cacheKey = `${type}-${serviceSid}`;
+  // If we already fetched these, no need to do it again
+  if (fetchedTypes.includes(cacheKey)) {
+    return;
+  }
+  fetchedTypes.push(cacheKey);
+  
+  if (!serviceSid) {
+    console.warn("Serverless service SID missing; unable to fetch its functions");
+    return;
+  }
+  
+  console.log(`Fetching serverless functions for service ${serviceSid}...`);
+  
+  const wantedFunctions = filterWantedVars(type, serviceSid);
+  const serviceFunctions = execTwilioCli(`twilio api:serverless:v1:services:functions:list --service-sid=${serviceSid}`);
+  
+  if (!serviceFunctions || serviceFunctions.length < 1) {
+    return;
+  }
+  
+  // if the function was requested, save it in the cache
+  for (const func of serviceFunctions) {
+    for (const wanted in wantedFunctions) {
+      if (isMatch(wantedFunctions[wanted].name, func.friendlyName, true)) {
+        resultCache[wanted] = func.sid;
+      }
+    }
+  }
+}
+
+export const fetchTrWorkflows = (workspaceSid) => {
+  const type = "tr-workflow";
+  const cacheKey = `${type}-${workspaceSid}`;
+  // If we already fetched these, no need to do it again
+  if (fetchedTypes.includes(cacheKey)) {
+    return;
+  }
+  fetchedTypes.push(cacheKey);
   
   if (!workspaceSid) {
     console.warn("TaskRouter workspace SID missing; unable to fetch workflows");

@@ -13,9 +13,7 @@ on:
     paths:
       - 'plugin-flex-ts-template-v2/**'
       - 'serverless-functions/**'
-# FEATURE: schedule-manager
-      - 'serverless-schedule-manager/**'
-# END FEATURE: schedule-manager
+      - 'addons/**'
   # Enable running this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -27,23 +25,15 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
       - name: Install packages
         run: |
-          npm install --no-save eslint
-          cd plugin-flex-ts-template-v2
-          npm install
-          cd ../serverless-functions
-          npm install
-# FEATURE: schedule-manager
-      - name: Install schedule manager packages
-        working-directory: serverless-schedule-manager
-        run: npm install
-# END FEATURE: schedule-manager
+          npm install --ignore-scripts
+          npm run postinstall -- --skip-env
       - name: Run eslint
         run: npm run lint:report
         continue-on-error: true
@@ -77,11 +67,11 @@ jobs:
   test-plugin-v2:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
       - name: Install packages
         working-directory: ./plugin-flex-ts-template-v2
         run: npm install
@@ -89,7 +79,7 @@ jobs:
         working-directory: ./plugin-flex-ts-template-v2
         run: npm run test:ci
       - name: Publish test results
-        uses: mikepenz/action-junit-report@v3
+        uses: mikepenz/action-junit-report@v4
         if: always()
         with:
           report_paths: './plugin-flex-ts-template-v2/test-results/junit.xml'

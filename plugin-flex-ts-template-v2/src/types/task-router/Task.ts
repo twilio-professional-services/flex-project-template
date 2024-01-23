@@ -62,6 +62,7 @@ export interface TaskAttributes {
     destination?: string;
     hang_up_by?: string;
     outcome?: string;
+    content?: string;
     conversation_attribute_1?: string;
     conversation_attribute_2?: string;
     conversation_attribute_3?: string;

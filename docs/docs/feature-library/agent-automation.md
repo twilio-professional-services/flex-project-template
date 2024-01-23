@@ -5,19 +5,19 @@ title: agent-automation
 
 This feature provides auto select, auto accept and auto wrap up behavior for agent tasks. Tasks qualify for a configuration set based on their channel and a set of required task attributes. The first configuration set to match is the configuration set used.
 
-# known issues
+## known issues
 
 As this is a front end implementation of operations, if the browser is closed will void the automated behavior. For this reason it is advised to also use the `supervisor-complete-reservation` feature in unison with this one to allow supervisors to force complete any reservations that have fallen into this rouge state.
 
 A preferred solution to auto wrapup would require a backend handler to move the state of the task after the given timeout.
 
-# flex-user-experience
+## flex-user-experience
 
 An auto selected, auto accepted voice task with an auto wrap up after 5 seconds.
 
 ![alt text](/img/features/agent-automation/autto-accept-auto-wrap-5.gif)
 
-# setup and dependencies
+## setup and dependencies
 
 There are no additional dependencies for setup beyond ensuring the flag is enabled within the `flex-config` attributes.
 
@@ -38,7 +38,7 @@ To enable the `Agent Automation` feature, under the `flex-config` attributes set
 },
 ```
 
-# how does it work?
+## how does it work?
 
 When enabled, this feature listens for taskReceived events and evaluates whether the tasks matches any configuration sets and if so executes SelectTask & AcceptTask action as configured. This feature also loads a renderless component on the task canvas at wrapup. When the component mounts, if there is a matching task configuration then a timeout is set per the task configuration that triggers a CompleteTask action.
 

@@ -83,7 +83,7 @@ this object allows the administrator to customize which activity names to use fo
 
 #### terraform
 
-A terraform deploy will deploy the default Activities that are assigned. If you wish to change these you can [modify the terraform definitions](/package-overview#terraform) to create the activities you wish to use and you can modify the feature configuration using your preferred [configuration management](/building/template-utilities/configuration) method.
+A terraform deploy will deploy the default Activities that are assigned. If you wish to change these you can [modify the terraform definitions](/building/template-utilities/terraform) to create the activities you wish to use and you can modify the feature configuration using your preferred [configuration management](/building/template-utilities/configuration) method.
 
 #### manual setup 
 
