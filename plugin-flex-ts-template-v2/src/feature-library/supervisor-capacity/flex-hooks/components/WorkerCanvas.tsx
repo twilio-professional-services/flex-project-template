@@ -12,6 +12,6 @@ interface TabbedContentFragmentProps extends ContentFragmentProps {
 export const componentName = FlexComponent.WorkerCanvas;
 export const componentHook = function addCapacityToWorkerCanvas() {
   Flex.WorkerCanvas.Content.add(<CapacityContainer key="worker-capacity-container" />, {
-    tabTitle: StringTemplates.ChannelCapacity,
+    tabTitle: StringTemplates.Capacity,
   } as TabbedContentFragmentProps);
 };

@@ -357,6 +357,8 @@ exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
  * @param {object} parameters the parameters for the function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.workerSid the worker SID to update
+ * @param {object} parameters.attributesUpdate the object containing new attributes
  * @returns {object} worker attributes object
  * @description the following method is used to robustly update
  *   worker attributes

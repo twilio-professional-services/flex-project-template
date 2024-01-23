@@ -17,7 +17,7 @@ interface OwnProps {
 const AttributeSelect = ({ label, value, options, onChangeHandler, disabled }: OwnProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    if (value !== 'none') onChangeHandler(value);
+    if (value !== 'NO_ITEM_SELECTED') onChangeHandler(e.target.value);
   };
   const id = label.replace(' ', '-');
   return (
@@ -32,7 +32,7 @@ const AttributeSelect = ({ label, value, options, onChangeHandler, disabled }: O
           <Text as="p">{value}</Text>
         ) : (
           <Select value={value} onChange={handleChange} id={id}>
-            <Option key="none" value="none">
+            <Option key="NO_ITEM_SELECTED" value="NO_ITEM_SELECTED" disabled>
               Select {label}
             </Option>
             {options.map((option) => {

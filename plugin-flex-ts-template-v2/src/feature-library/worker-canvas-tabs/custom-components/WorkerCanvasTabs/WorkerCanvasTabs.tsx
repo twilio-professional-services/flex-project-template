@@ -44,7 +44,7 @@ const WorkerCanvasTabs = ({ worker, fragments }: Props) => {
   return (
     <Box height="100%" borderLeftStyle="solid" borderColor="colorBorderWeak" borderWidth="borderWidth10">
       <Tabs selectedId={randomId} baseId="options" state={tabState}>
-        <TabList aria-label="horizontal tabs">
+        <TabList aria-label="Worker tabs" element="WORKER_CANVAS_TAB_LIST">
           <Tab id={randomId} element="WORKER_CANVAS_TAB">
             <Template source={templates[StringTemplates.WorkerCanvasTabSkills]} />
           </Tab>

@@ -1,4 +1,5 @@
 {
+  "PSSupervisorCapacity": "ความจุ",
   "PSSupervisorCapacityChannelCapacity": "ความจุของช่องสื่อสาร",
   "PSSupervisorCapacityMissingConfiguration": "การกำหนดค่าหายไป โปรดแจ้งผู้ดูแลระบบของคุณ",
   "PSSupervisorCapacityNoChannels": "ไม่มีช่องทำงานว่างใช้งานได้",
