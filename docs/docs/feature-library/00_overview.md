@@ -40,6 +40,8 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Supervisor Complete Reservation](supervisor-complete-reservation) | _allows supervisor to remotely complete agent tasks_                        |
 | [Teams View Enhancements](teams-view-enhancements)         | _adds optional columns (Team, Dept, Location, Skills) to the Workers Table. <br/> enable task highlighting based on task age_             |
 | [Teams View Filters](teams-view-filters)              | _adds additional filtering options to the supervisor teams view_            |
+| [Worker Canvas Tabs](worker-canvas-tabs)                    | _consolidates the worker canvas sections into tabs_     |
+| [Worker Details](worker-details)                    | _view or update worker attributes_     |
 
 ---
 
@@ -59,8 +61,6 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Omni Channel Management](omni-channel-capacity-management)        | _method for mixing chat and voice channels_                                                         |
 | [Queues Stats Metrics](queues-stats-metrics)          | _add custom metrics columns to the Queues View_ |
 | [SIP Support](sip-support)                    | _adds call control functionality when using a non-WebRTC phone_                                     |
-| [Worker Canvas Tabs](worker-canvas-tabs)                    | _consolidates the worker canvas sections into tabs_     |
-| [Worker Details](worker-details)                    | _view or update worker attributes_     |
 
 </TabItem>
 <TabItem value="experimental" label="Experimental features">

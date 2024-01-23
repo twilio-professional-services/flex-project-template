@@ -266,7 +266,7 @@
         "columns": {
           "calls": true,
           "other_tasks": true,
-          "team": true,
+          "team": false,
           "department": false,
           "location": false,
           "agent_skills": true,
