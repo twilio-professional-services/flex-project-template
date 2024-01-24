@@ -1,4 +1,4 @@
-import { Box } from '@twilio-paste/core/Box';
+import { Box } from '@twilio-paste/core/box';
 import { Tabs, Tab, TabList, TabPanel, TabPanels, useTabState } from '@twilio-paste/core/tabs';
 import { useUID } from '@twilio-paste/core/uid-library';
 import { IWorker, Template, templates, ContentFragmentProps, WorkerSkills, Actions } from '@twilio/flex-ui';

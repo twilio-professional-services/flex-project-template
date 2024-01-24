@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { Box } from '@twilio-paste/core/Box';
+import { Box } from '@twilio-paste/core/box';
 import React from 'react';
 
 import { FlexComponent } from '../../../../types/feature-loader';
