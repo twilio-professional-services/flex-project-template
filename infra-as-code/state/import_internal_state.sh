@@ -25,7 +25,7 @@ import_resource() {
 	result=$(get_value_from_json "$input_json" "$key" "$name" "sid")
 	if [ -n "$result" ]; then
 		if $has_sid; then
-			terraform -chdir="../terraform/environments/default" import -input=false -var-file="${ENVIRONMENT:-local}.tfvars" "$resource" $TF_WORKSPACE_SID/"$result" || exit
+			terraform -chdir="../terraform/environments/default" import -input=false -var-file="${ENVIRONMENT:-local}.tfvars" "$resource" "$TF_WORKSPACE_SID"/"$result" || exit
 		else
 			terraform -chdir="../terraform/environments/default" import -input=false -var-file="${ENVIRONMENT:-local}.tfvars" "$resource" "$result" || exit
 		fi
@@ -35,12 +35,12 @@ import_resource() {
 
 importInternalState() {
 	echo " - Discovering and importing existing Twilio state for known definitions into a new terraform state file" >>$GITHUB_STEP_SUMMARY
-	TF_WORKSPACE_SID=$(echo "var.TWILIO_FLEX_WORKSPACE_SID" | terraform -chdir="../terraform/environments/default" console -input=false -var-file="${ENVIRONMENT:-local}.tfvars")
+	TF_WORKSPACE_SID=$(echo "var.TWILIO_FLEX_WORKSPACE_SID" | terraform -chdir="../terraform/environments/default" console -input=false -var-file="${ENVIRONMENT:-local}.tfvars" | tr -d '"')
 
-	workflows=$(npx twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $TF_WORKSPACE_SID --no-limit -o json | jq 'map(del(.configuration))')
-	queues=$(npx twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $TF_WORKSPACE_SID --no-limit -o json)
-	channels=$(npx twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid $TF_WORKSPACE_SID --no-limit -o json)
-	activities=$(npx twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid $TF_WORKSPACE_SID --no-limit -o json)
+	workflows=$(npx twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json | jq 'map(del(.configuration))')
+	queues=$(npx twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
+	channels=$(npx twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
+	activities=$(npx twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 	flows=$(npx twilio api:studio:v2:flows:list --no-limit -o json)
 
 # FEATURE: remove-all
