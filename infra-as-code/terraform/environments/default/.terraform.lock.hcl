@@ -6,7 +6,6 @@ provider "registry.terraform.io/twilio/twilio" {
   constraints = ">= 0.4.0"
   hashes = [
     "h1:IVUMcDO/wmImbBnUbmGa6NdYXjFqCkKA+yLej9lbBZQ=",
-    "h1:LJQvrXGxoZb2MN20VCRRqGsR8nGz780BE+TJVFgWC6A=",
     "zh:01795bc32dd2a2caead58386682299462f31a5612ffdfcdbe34a124b2e5d5cf2",
     "zh:0941a22013d4280f754c9cbccf222c51b841f0be89b14cd3b3c22f95713fca54",
     "zh:1568d11fc20dcb73db53ba6d166e49be6c3e7fc6413370ec3b46ffc2c7a19dcb",

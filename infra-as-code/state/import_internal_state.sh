@@ -35,7 +35,7 @@ import_resource() {
 
 importInternalState() {
 	echo " - Discovering and importing existing Twilio state for known definitions into a new terraform state file" >>$GITHUB_STEP_SUMMARY
-	TF_WORKSPACE_SID=$(echo "var.TWILIO_FLEX_WORKSPACE_SID" | terraform console -var-file="${ENVIRONMENT:-local}.tfvars")
+	TF_WORKSPACE_SID=$(echo "var.TWILIO_FLEX_WORKSPACE_SID" | terraform -chdir="../terraform/environments/default" console -var-file="${ENVIRONMENT:-local}.tfvars")
 
 	workflows=$(npx twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid $TF_WORKSPACE_SID --no-limit -o json | jq 'map(del(.configuration))')
 	queues=$(npx twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid $TF_WORKSPACE_SID --no-limit -o json)
