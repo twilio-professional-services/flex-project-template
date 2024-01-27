@@ -34,10 +34,13 @@ import_resource() {
 }
 
 importInternalState() {
+	echo "aa2a"
 	echo " - Discovering and importing existing Twilio state for known definitions into a new terraform state file" >>$GITHUB_STEP_SUMMARY
 	TF_WORKSPACE_SID=$(echo "var.TWILIO_FLEX_WORKSPACE_SID" | terraform -chdir="../terraform/environments/default" console -input=false -var-file="${ENVIRONMENT:-local}.tfvars" | tr -d '"')
+	echo "aa2b"
 
 	workflows=$(npx twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json | jq 'map(del(.configuration))')
+	echo "aa2c"
 	queues=$(npx twilio api:taskrouter:v1:workspaces:task-queues:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 	channels=$(npx twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 	activities=$(npx twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
@@ -92,13 +95,16 @@ importInternalState() {
 
 # populate tfvars
 (cd ../.. && npm run postinstall -- --skip-packages --files=infra-as-code/terraform/environments/default/example.tfvars)
-
+echo "aa1"
 ### only if existing state file does not exist
 ### do we want to import the internal state
 if ! [ -f ../terraform/environments/default/terraform.tfstate ]; then
+	echo "aa2"
   importInternalState
 fi
+echo "aa3"
 
 terraform -chdir="../terraform/environments/default" apply -input=false -auto-approve -var-file="${ENVIRONMENT:-local}.tfvars"
+echo "aa4"
 echo " - Applying terraform configuration complete" >>$GITHUB_STEP_SUMMARY
 echo "JOB_FAILED=false" >>"$GITHUB_OUTPUT"
