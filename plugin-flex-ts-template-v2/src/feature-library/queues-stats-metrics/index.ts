@@ -5,5 +5,5 @@ import hooks from './flex-hooks/**/*.*';
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: 'queues-view-metrics', hooks: typeof hooks === 'undefined' ? [] : hooks };
+  return { name: 'queues-stats-metrics', hooks: typeof hooks === 'undefined' ? [] : hooks };
 };
