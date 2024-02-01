@@ -19,7 +19,7 @@ Currently Flex does not play a ring notification to agents for an incoming task 
 
 This `ring-notification` feature will allow Flex to play a ringtone on the agent's side for incoming tasks until the reservation `accepted`, `canceled`, `rejected`, `rescinded`, or `timeout` events occur.
 
-### configuration options
+### Configuration options
 
 There are no additional dependencies for setup beyond ensuring the flag is enabled within the `flex-config` attributes.
 
