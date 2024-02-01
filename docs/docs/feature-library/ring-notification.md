@@ -2,33 +2,37 @@
 sidebar_label: ring-notification
 title: ring-notification
 ---
-import Tabs from "@theme/Tabs";
-import TabItem from "@theme/TabItem";
 
 ## Overview
 
-Ring notification feature allows application to play ringtone sound on incoming voice and chat task on Agent's flex
+The ring notification feature plays a ringtone sound for incoming tasks.
 
 ---
 
 ## Business Details
 
-### context
-Currenly Flex does not play ring notification to agent on incoming task out of the box. Because of which sometimes agent miss the task if they are focusing on some other screen than Flex agent desktop.
+### Context
 
-### objective
-This `ring-notification` feature will allow application to play a ringtone on agent's side on incoming tasks (voice and chat) until the task is `accepted`, `canceled`, `rejected`, `timeout` 
+Currently Flex does not play a ring notification to agents for an incoming task out of the box. Because of this, sometimes agents miss the task if they are focusing on some other screen than the Flex agent desktop.
+
+### Objective
+
+This `ring-notification` feature will allow Flex to play a ringtone on the agent's side for incoming tasks until the reservation `accepted`, `canceled`, `rejected`, `rescinded`, or `timeout` events occur.
 
 ### configuration options
 
-Within your `ui_attributes` file, there are several settings for the `ring-notification` feature:
+There are no additional dependencies for setup beyond ensuring the flag is enabled within the `flex-config` attributes.
 
-- `enable` - set this to true to enable the feature
+To enable the feature, under the `flex-config` attributes set the `ring_notification` `enabled` flag to `true`.
 
-Ringtone mp3 file with name `phone_ringtone.mp3` is stored as serverless asset at `serverless-functions/assets/features/ring-notification`
+```json
+"ring_notification": {
+  "enabled": true
+}
+```
 
-Once your updated flex-config is deployed, the feature is enabled and ready to use.
+The ringtone mp3 file is stored as a serverless asset at `serverless-functions/assets/features/ring-notification/phone_ringtone.mp3`. You may change the ringtone by overwriting this file.
 
 ## Technical Details
 
-This feature adds a ring notification on `created` event of reservation and it stops playing on reservation `accepted`, `canceled`, `rejected`, `timeout` events.
+This feature plays a ring notification on the reservation `created` event and it stops playing on reservation `accepted`, `canceled`, `rejected`, `rescinded`, or `timeout` events.

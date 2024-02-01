@@ -60,6 +60,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Metrics Data Tiles](metrics-data-tiles)          | _add custom Data Tiles with real-time channel metrics (Task Counts, SLA%) to the Queues View.  <br/> add custom Task and Activity Summary by team tiles to the Teams View_ |
 | [Omni Channel Management](omni-channel-capacity-management)        | _method for mixing chat and voice channels_                                                         |
 | [Queues Stats Metrics](queues-stats-metrics)          | _add custom metrics columns to the Queues View_ |
+| [Ring Notification](ring-notification)                    | _plays a ringtone sound for incoming tasks_                                     |
 | [SIP Support](sip-support)                    | _adds call control functionality when using a non-WebRTC phone_                                     |
 
 </TabItem>
