@@ -273,6 +273,9 @@
           "activity_icon": false
         }
       },
+      "ring_notification": {
+        "enabled": false
+      },
       "send_audio_rec_file": {
         "enabled": true
       },
