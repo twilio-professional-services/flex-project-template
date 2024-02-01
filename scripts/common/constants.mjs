@@ -3,6 +3,7 @@ import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+export const placeholderPrefix = 'YOUR';
 export const serverlessDir = 'serverless-functions';
 export const serverlessSrc = `${serverlessDir}/src`;
 export const flexConfigDir = 'flex-config';

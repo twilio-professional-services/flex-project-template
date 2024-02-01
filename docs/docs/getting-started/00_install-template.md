@@ -10,7 +10,7 @@ Time to complete: _~8 minutes_
 
 :::info INFO
 
-These steps require Flex UI version 2.x to be configured on your Flex account.
+These steps require Flex UI version 2.x to be configured on your Flex account, and the TaskRouter workspace name to be the default "Flex Task Assignment".
 
 :::
 

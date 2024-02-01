@@ -146,6 +146,9 @@ test-results/
 # vscode
 .vscode
 
+# nova
+.nova
+
 # eslint results
 eslint_report.json
 
