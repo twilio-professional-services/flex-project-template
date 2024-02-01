@@ -1,0 +1,6 @@
+{
+  "PSAssignedTasksMetric": "El número de tareas asignadas.",
+  "PSWrappingTasksMetric": "El número de tareas en conclusión.",
+  "PSAgentActivityHeader": "Actividad",
+  "PSAgentActivityDescription": "El número de agentes por actividad."
+}

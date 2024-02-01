@@ -151,7 +151,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       });
     }
 
-    response.setStatusCode(201);
+    response.setStatusCode(200);
     response.setBody({
       success: true,
       message: `Participant invite ${participantInvite.sid}`,

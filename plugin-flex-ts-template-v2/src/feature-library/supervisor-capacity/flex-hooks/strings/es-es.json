@@ -1,4 +1,5 @@
 {
+  "PSSupervisorCapacity": "Capacidad",
   "PSSupervisorCapacityChannelCapacity": "Capacidad del canal",
   "PSSupervisorCapacityMissingConfiguration": "Configuración faltante. Por favor notifique a su administrador del sistema.",
   "PSSupervisorCapacityNoChannels": "No hay canales de trabajadores disponibles.",

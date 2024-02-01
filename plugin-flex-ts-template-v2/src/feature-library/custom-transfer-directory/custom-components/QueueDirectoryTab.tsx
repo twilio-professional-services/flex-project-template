@@ -1,4 +1,3 @@
-import { Flex, Alert } from '@twilio-paste/core';
 import {
   withTaskContext,
   Manager,
@@ -8,26 +7,28 @@ import {
   Actions,
   ITask,
   Notifications,
-  Template,
   templates,
+  TaskHelper,
 } from '@twilio/flex-ui';
 import { useEffect, useState, useRef } from 'react';
-import { debounce } from 'lodash';
 import { SyncMap } from 'twilio-sync';
 
 import { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
-import { SearchBox } from './CommonDirectoryComponents';
-import { QueueItem } from './QueueItem';
 import {
   showOnlyQueuesWithAvailableWorkers,
   shouldFetchInsightsData,
   enforceQueueFilterFromWorker,
   getGlobalFilter,
   shouldEnforceGlobalFilter,
+  isCbmColdTransferEnabled,
+  isCbmWarmTransferEnabled,
+  showRealTimeQueueData,
 } from '../config';
 import { CustomTransferDirectoryNotification } from '../flex-hooks/notifications/CustomTransferDirectory';
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
+import { DirectoryEntry } from '../types/DirectoryEntry';
+import DirectoryTab, { TransferClickPayload } from './DirectoryTab';
 
 export interface IRealTimeQueueData {
   total_tasks: number | null;
@@ -43,10 +44,6 @@ export interface IRealTimeQueueData {
 }
 
 export interface TransferQueue extends IQueue, IRealTimeQueueData {}
-
-export interface TransferClickPayload {
-  mode: 'WARM' | 'COLD';
-}
 
 export interface OwnProps {
   task: ITask;
@@ -73,22 +70,21 @@ const mapRealTimeDataToTransferQueueItem = (
 const QueueDirectoryTab = (props: OwnProps) => {
   const [fetchedQueues, setFetchedQueues] = useState([] as Array<IQueue>);
   const [insightsQueues, setInsightsQueues] = useState([] as Array<MapItem>);
-  const [filteredQueues, setFilteredQueues] = useState([] as Array<TransferQueue>);
+  const [filteredQueues, setFilteredQueues] = useState([] as Array<DirectoryEntry>);
+  const [isLoading, setIsLoading] = useState(true);
 
   const transferQueues = useRef([] as Array<TransferQueue>);
-  const searchInputRef = useRef<HTMLInputElement>(null);
   const queueMap = useRef(null as SyncMap | null);
 
   const { workspaceClient, insightsClient, workerClient } = Manager.getInstance();
+  const na = templates[StringTemplates.NA]();
 
-  // takes the input in the search box and applies it to the queue result
-  // this will trigger the useEffect for a queueFilter update
-  const onQueueSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // eslint-disable-next-line no-eq-null, eqeqeq
-    if (event.target != null) {
-      filterQueuesDebounce();
-    }
-  };
+  const callWarmTransferEnabled =
+    Manager.getInstance().store.getState().flex.featureFlags.features['flex-warm-transfers']?.enabled;
+
+  const isWarmTransferEnabled =
+    props.task && TaskHelper.isCBMTask(props.task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;
+  const isColdTransferEnabled = props.task && TaskHelper.isCBMTask(props.task) ? isCbmColdTransferEnabled() : true;
 
   // async function to retrieve the task queues from the tr sdk
   // this will trigger the useEffect for a fetchedQueues update
@@ -183,13 +179,30 @@ const QueueDirectoryTab = (props: OwnProps) => {
     filterQueues();
   };
 
-  // function to filter the generatedQueueList and trigger a rerender
+  const queueToEntry = (queue: TransferQueue): DirectoryEntry => {
+    const { total_eligible_workers: eligible, total_available_workers: available, total_tasks: tasks } = queue;
+
+    const agentsAvailable = !available || !eligible ? na : `${available}/${eligible}`;
+    // eslint-disable-next-line no-eq-null, eqeqeq
+    const tasksInQueue = tasks != null && tasks >= 0 ? `${tasks}` : na;
+
+    const queue_tooltip = showRealTimeQueueData()
+      ? templates[StringTemplates.QueueTooltip]({ agentsAvailable, tasksInQueue })
+      : `${queue.name}`;
+
+    return {
+      cold_transfer_enabled: isColdTransferEnabled,
+      warm_transfer_enabled: isWarmTransferEnabled,
+      label: queue.name,
+      address: queue.sid,
+      tooltip: queue_tooltip,
+      type: 'queue',
+    };
+  };
+
+  // function to filter the generatedQueueList and trigger a re-render
   const filterQueues = () => {
     const updatedQueues = transferQueues.current
-      .filter((queue) => {
-        const searchString = searchInputRef.current?.value.toLocaleLowerCase() || '';
-        return queue.name.toLocaleLowerCase().includes(searchString);
-      })
       .filter((queue) => {
         if (showOnlyQueuesWithAvailableWorkers()) {
           // returning only queues with available workers
@@ -213,20 +226,18 @@ const QueueDirectoryTab = (props: OwnProps) => {
         }
         return queue;
       })
-      .sort((a: TransferQueue, b: TransferQueue) => (a.name > b.name ? 1 : -1));
+      .sort((a: TransferQueue, b: TransferQueue) => (a.name > b.name ? 1 : -1))
+      .map(queueToEntry);
 
     setFilteredQueues(updatedQueues);
   };
 
-  const filterQueuesDebounce = debounce(filterQueues, 500, { maxWait: 1000 });
-
-  const onTransferQueueClick = (queue: IQueue) => (transferOptions: TransferClickPayload) => {
+  const onTransferQueueClick = (entry: DirectoryEntry, transferOptions: TransferClickPayload) => {
     Actions.invokeAction('TransferTask', {
       task: props.task,
-      targetSid: queue.sid,
+      targetSid: entry.address,
       options: transferOptions,
     });
-    Actions.invokeAction('HideDirectory');
   };
 
   // initial render
@@ -249,29 +260,19 @@ const QueueDirectoryTab = (props: OwnProps) => {
     generateTransferQueueList();
   }, [fetchedQueues, insightsQueues]);
 
+  useEffect(() => {
+    if (transferQueues.current.length > 0) {
+      setIsLoading(false);
+    }
+  }, [filteredQueues]);
+
   return (
-    <Flex key="queue-tab-list" vertical wrap={false} grow={1} shrink={1}>
-      <SearchBox key="key-tab-search-box" onInputChange={onQueueSearchInputChange} inputRef={searchInputRef} />
-      <Flex key="queue-tab-results" vertical element="TRANSFER_DIR_COMMON_ROWS_CONTAINER">
-        {filteredQueues.length === 0 ? (
-          <Alert variant="neutral">
-            <Template source={templates[StringTemplates.NoItemsFound]} />
-            {showOnlyQueuesWithAvailableWorkers() ? ` ${templates[StringTemplates.QueuesFiltered]()}` : ''}
-          </Alert>
-        ) : (
-          Array.from(filteredQueues).map((queue: TransferQueue) => {
-            return (
-              <QueueItem
-                task={props.task}
-                queue={queue}
-                key={`queue-item-${queue.sid}`}
-                onTransferClick={onTransferQueueClick(queue)}
-              />
-            );
-          })
-        )}
-      </Flex>
-    </Flex>
+    <DirectoryTab
+      entries={filteredQueues}
+      isLoading={isLoading}
+      onTransferClick={onTransferQueueClick}
+      noEntriesMessage={templates[StringTemplates.NoQueuesAvailable]}
+    />
   );
 };
 

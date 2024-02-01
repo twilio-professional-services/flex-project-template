@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 
 let overrides = {};
 

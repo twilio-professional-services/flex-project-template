@@ -1,7 +1,10 @@
 import React, { useEffect } from 'react';
 import { useFlexSelector, Template, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { Flex, Stack, Box, Text } from '@twilio-paste/core';
+import { Flex } from '@twilio-paste/core/flex';
+import { Stack } from '@twilio-paste/core/stack';
+import { Box } from '@twilio-paste/core/box';
+import { Text } from '@twilio-paste/core/text';
 
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';

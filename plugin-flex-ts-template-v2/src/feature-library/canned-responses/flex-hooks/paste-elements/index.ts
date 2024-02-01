@@ -2,7 +2,8 @@ import { PasteCustomCSS } from '@twilio-paste/customization';
 
 export const pasteElementHook = {
   CANNED_RESPONSES_MENU: {
-    maxHeight: '70vh',
+    maxHeight: '65vh',
+    maxWidth: '17rem',
     overflowY: 'scroll',
   },
   CANNED_RESPONSES_MENU_BUTTON: {

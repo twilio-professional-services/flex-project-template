@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 import { UIAttributes } from 'types/manager/ServiceConfiguration';
 import { CustomWorkerAttributes } from 'types/task-router/Worker';
 

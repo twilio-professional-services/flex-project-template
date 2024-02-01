@@ -5,6 +5,26 @@
     }
   },
   "custom_data": {
+    "common": {
+      "log_level": "info",
+      "teams": [
+        "Blue Team",
+        "Red Team",
+        "Gold Team",
+        "VIP Team"
+      ],
+      "departments": [
+        "General Management",
+        "Marketing",
+        "Operations",
+        "Finance",
+        "Sales",
+        "Human Resources",
+        "Purchasing",
+        "Customer Service",
+        "Recruiting"
+      ]
+    },
     "features": {
       "activity_skill_filter": {
         "enabled": true,
@@ -39,7 +59,8 @@
         "auto_select_task": true
       },
       "caller_id": {
-        "enabled": true
+        "enabled": true,
+        "include_outgoing_only_numbers": true
       },
       "conversation_transfer": {
         "enabled": true,
@@ -55,9 +76,11 @@
       },
       "enhanced_crm_container": {
         "enabled": true,
-        "url": "https://www.bing.com/search?q={{task.from}}",
-        "should_display_url_when_no_tasks": false,
-        "display_url_when_no_tasks": "https://www.bing.com"
+        "url": "{{serverless.url}}/features/enhanced-crm-container/index.html?line1={{task.from}}&line2={{task.direction}}",
+        "should_display_url_when_no_tasks": true,
+        "display_url_when_no_tasks": "{{serverless.url}}/features/enhanced-crm-container/index.html",
+        "enable_url_tab": true,
+        "url_tab_title": "Web Page"
       },
       "internal_call": {
         "enabled": true
@@ -78,7 +101,8 @@
         "default_max_capacity": 2
       },
       "device_manager": {
-        "enabled": true
+        "enabled": true,
+        "input_select": false
       },
       "dual_channel_recording": {
         "enabled": false,
@@ -111,29 +135,7 @@
           "queue_worker_data": false,
           "team": true,
           "agent_skills": true
-        },
-        "department_options": [
-          "General Management",
-          "Marketing",
-          "Operations",
-          "Finance",
-          "Sales",
-          "Human Resources",
-          "Purchasing",
-          "Customer Service",
-          "Recruiting"
-        ],
-        "team_options": [
-          "Blue Team",
-          "Red Team",
-          "Gold Team",
-          "VIP Team",
-          "Orange Team",
-          "Yellow Team",
-          "Green Team",
-          "Purple Team",
-          "Gray Team"
-        ]
+        }
       },
       "supervisor_capacity": {
         "enabled": true
@@ -191,6 +193,10 @@
       "custom_transfer_directory": {
         "enabled": true,
         "use_paste_search_icon": false,
+        "worker": {
+          "enabled": true,
+          "show_only_available_workers": false
+        },
         "queue": {
           "enabled": true,
           "show_only_queues_with_available_workers": false,
@@ -248,7 +254,8 @@
         "show_menu": true
       },
       "park_interaction": {
-        "enabled": true
+        "enabled": true,
+        "show_list": false
       },
       "teams_view_enhancements": {
         "enabled": true,
@@ -257,14 +264,128 @@
         "handle_time_exceeded_threshold": 300,
         "display_task_queue_name": true,
         "columns": {
-          "team": true,
+          "calls": true,
+          "other_tasks": true,
+          "team": false,
           "department": false,
           "location": false,
-          "agent_skills": true
+          "agent_skills": true,
+          "activity_icon": false
         }
       },
       "ring_notification": {
         "enabled": false
+      },
+      "send_audio_rec_file": {
+        "enabled": true
+      },
+      "metrics_data_tiles": {
+        "enabled": false,
+        "queues_view_tiles": {
+          "active_tasks_data_tile": false,
+          "waiting_tasks_data_tile": false,
+          "longest_wait_time_data_tile": false,
+          "agents_by_activity_bar_chart": true,
+          "all_channels_data_tile": false,
+          "enhanced_agent_by_activity_pie_chart": false
+        },
+        "teams_view_tiles": {
+          "task_summary_tile": false,
+          "team_activity_tile": false,
+          "status_idle_color": "limegreen",
+          "status_busy_color": "royalblue"
+        },
+        "channels": {
+          "Voice": {
+            "color": "#ADD8E6",
+            "SLA_data_tile": true,
+            "task_counts_data_tile": true,
+            "teams_task_summary": true
+          },
+          "Chat": {
+            "color": "#87CEFA",
+            "SLA_data_tile": true,
+            "task_counts_data_tile": true,
+            "teams_task_summary": true
+          },
+          "SMS": {
+            "color": "#59cef8",
+            "SLA_data_tile": false,
+            "task_counts_data_tile": false,
+            "teams_task_summary": true
+          },
+          "Video": {
+            "color": "#00CED1",
+            "SLA_data_tile": false,
+            "task_counts_data_tile": false,
+            "teams_task_summary": false
+          }
+        },
+        "agent_activity_configuration": {
+          "activities": {
+            "Available": {
+              "color": "green",
+              "icon": "Accept"
+            },
+            "Outbound": {
+              "color": "darkgreen",
+              "icon": "Call"
+            },
+            "Break": {
+              "color": "goldenrod",
+              "icon": "Hold"
+            },
+            "Lunch": {
+              "color": "darkorange",
+              "icon": "Hamburger"
+            },
+            "Training": {
+              "color": "red",
+              "icon": "Bulb"
+            },
+            "Offline": {
+              "color": "grey",
+              "icon": "Minus"
+            }
+          },
+          "other": {
+            "color": "darkred",
+            "icon": "More"
+          }
+        }
+      },
+      "queues_stats_metrics": {
+        "enabled": false,
+        "assigned_tasks_column": true,
+        "wrapping_tasks_column": true,
+        "agent_activity_stats_column": true
+      },
+      "sip_support": {
+        "enabled": false
+      },
+      "worker_details": {
+        "enabled": true,
+        "edit_team": true,
+        "edit_department": true,
+        "text_attributes": [],
+        "boolean_attributes": []
+      },
+      "worker_canvas_tabs": {
+        "enabled": true
+      },
+      "datadog_log_integration": {
+        "enabled": false,
+        "log_level": "info",
+        "api_key": "",
+        "intake_region": "",
+        "flush_timeout": 5000
+      },
+      "contact_history": {
+        "enabled": false,
+        "max_contacts": 25
+      },
+      "inline_media": {
+        "enabled": true
       }
     }
   }

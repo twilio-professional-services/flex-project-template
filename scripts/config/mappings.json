@@ -1,0 +1,66 @@
+{
+  "SERVERLESS_SID": {
+    "type": "serverless-service",
+    "name": "custom-flex-extensions-serverless"
+  },
+  "SERVERLESS_ENV_SID": {
+    "type": "serverless-environment",
+    "name": "dev-environment",
+    "parent": "SERVERLESS_SID"
+  },
+  "SERVERLESS_DOMAIN": {
+    "type": "serverless-domain",
+    "name": "custom-flex-extensions-serverless"
+  },
+  "SERVERLESS_CALLBACK_FUNCTION_SID": {
+    "type": "serverless-function",
+    "name": "/features/callback-and-voicemail/studio/create-callback",
+    "parent": "SERVERLESS_SID"
+  },
+  "SCHEDULE_MANAGER_SID": {
+    "type": "serverless-service",
+    "name": "schedule-manager"
+  },
+  "SCHEDULE_MANAGER_ENV_SID": {
+    "type": "serverless-environment",
+    "name": "dev-environment",
+    "parent": "SCHEDULE_MANAGER_SID"
+  },
+  "SCHEDULE_MANAGER_DOMAIN": {
+    "type": "serverless-domain",
+    "name": "schedule-manager"
+  },
+  "SCHEDULE_MANAGER_CHECK_FUNCTION_SID": {
+    "type": "serverless-function",
+    "name": "/check-schedule",
+    "parent": "SCHEDULE_MANAGER_SID"
+  },
+  "TWILIO_FLEX_WORKSPACE_SID": {
+    "type": "tr-workspace",
+    "name": "Flex Task Assignment"
+  },
+  "TWILIO_FLEX_SYNC_SID": {
+    "type": "sync-service",
+    "name": "Default Service"
+  },
+  "TWILIO_FLEX_CHAT_SERVICE_SID": {
+    "type": "chat-service",
+    "name": "/(Flex.*Service)/"
+  },
+  "TWILIO_FLEX_CHAT_TRANSFER_WORKFLOW_SID": {
+    "type": "tr-workflow",
+    "name": "/Chat Transfer/",
+    "parent": "TWILIO_FLEX_WORKSPACE_SID"
+  },
+  "TWILIO_FLEX_CALLBACK_WORKFLOW_SID": {
+    "type": "tr-workflow",
+    "name": "/Callback/",
+    "fallback": "/(Assign.*Anyone)/",
+    "parent": "TWILIO_FLEX_WORKSPACE_SID"
+  },
+  "TWILIO_FLEX_INTERNAL_CALL_WORKFLOW_SID": {
+    "type": "tr-workflow",
+    "name": "/Internal Call/",
+    "parent": "TWILIO_FLEX_WORKSPACE_SID"
+  }
+}

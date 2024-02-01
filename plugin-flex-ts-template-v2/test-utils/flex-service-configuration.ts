@@ -1,5 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
-import { mergeWith, unset } from 'lodash';
+import mergeWith from 'lodash/mergeWith';
+import unset from 'lodash/unset';
 
 import { UIAttributes } from '../src/types/manager/ServiceConfiguration';
 
@@ -22,8 +23,9 @@ const mockedUiAttributes: UIAttributes = {
     serverless_functions_protocol: 'https',
     serverless_functions_port: '443',
     serverless_functions_domain: 'mockServerlessFunctionsDomain',
-    features: {}
-  }
+    language: 'default',
+    features: {},
+  },
 };
 
 let mockedServiceConfiguration: ServiceConfiguration = {
@@ -40,10 +42,10 @@ let mockedServiceConfiguration: ServiceConfiguration = {
   date_created: new Date().toISOString(),
   date_updated: new Date().toISOString(),
   debugger_integration: {
-    enabled: true
+    enabled: true,
   },
   flex_ui_status_report: {
-    enabled: true
+    enabled: true,
   },
   messaging_service_instance_sid: 'mockMessagingServiceInstanceSid',
   outbound_call_flows: {},
@@ -97,10 +99,10 @@ export const resetServiceConfiguration = () => {
     date_created: new Date().toISOString(),
     date_updated: new Date().toISOString(),
     debugger_integration: {
-      enabled: true
+      enabled: true,
     },
     flex_ui_status_report: {
-      enabled: true
+      enabled: true,
     },
     messaging_service_instance_sid: 'mockMessagingServiceInstanceSid',
     outbound_call_flows: {},

@@ -1,29 +1,30 @@
 import { useEffect, useState } from 'react';
 import { Manager, Notifications, Template, templates } from '@twilio/flex-ui';
-import {
-  Heading,
-  Flex,
-  Label,
-  Box,
-  RadioButtonGroup,
-  RadioButton,
-  Input,
-  Spinner,
-  AlertDialog,
-} from '@twilio-paste/core';
+import { AlertDialog } from '@twilio-paste/core/alert-dialog';
+import { Box } from '@twilio-paste/core/box';
+import { Flex } from '@twilio-paste/core/flex';
+import { Heading } from '@twilio-paste/core/heading';
+import { Input } from '@twilio-paste/core/input';
+import { Label } from '@twilio-paste/core/label';
+import { RadioButton, RadioButtonGroup } from '@twilio-paste/core/radio-button-group';
+import { Spinner } from '@twilio-paste/core/spinner';
+import { Button } from '@twilio-paste/core/button';
+import { Stack } from '@twilio-paste/core/stack';
 import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { ProductFlexIcon } from '@twilio-paste/icons/esm/ProductFlexIcon';
+import { ProductSettingsIcon } from '@twilio-paste/icons/esm/ProductSettingsIcon';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import { AdminViewWrapper, FeatureCardWrapper } from './AdminView.Styles';
 import { getFeatureFlagsUser } from '../../../../utils/configuration';
 import FeatureCard from '../FeatureCard';
 import AdminUiService from '../../utils/AdminUiService';
-import { saveUserConfig, saveGlobalConfig, shouldShowFeature } from '../../utils/helpers';
+import { saveUserConfig, saveGlobalConfig, shouldShowFeature, featureCommon } from '../../utils/helpers';
 import { subscribe, unsubscribe, publishMessage, SyncStreamEvent } from '../../utils/sync-stream';
 import { AdminUiNotification } from '../../flex-hooks/notifications';
+import FeatureModal from '../FeatureModal';
 
 const AdminView = () => {
   const [configureFor, setConfigureFor] = useState('user');
@@ -31,6 +32,7 @@ const AdminView = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isUpdatedByOtherUser, setIsUpdatedByOtherUser] = useState(false);
   const [isUpdatedModalOpen, setIsUpdatedModalOpen] = useState(false);
+  const [isCommonSettingsModalOpen, setIsCommonSettingsModalOpen] = useState(false);
   const [featureList, setFeatureList] = useState([] as string[]);
   const [config, setConfig] = useState({} as any);
   const [globalConfig, setGlobalConfig] = useState({} as any);
@@ -48,7 +50,10 @@ const AdminView = () => {
   }, []);
 
   useEffect(() => {
-    setFeatureList(Object.keys(globalConfig).sort());
+    if (!globalConfig?.features) {
+      return;
+    }
+    setFeatureList(Object.keys(globalConfig?.features).sort());
   }, [globalConfig]);
 
   useEffect(() => {
@@ -76,7 +81,7 @@ const AdminView = () => {
 
   const reloadGlobalConfig = async () => {
     try {
-      const newGlobalConfig = (await AdminUiService.fetchUiAttributes()).configuration.custom_data?.features || {};
+      const newGlobalConfig = (await AdminUiService.fetchUiAttributes()).configuration.custom_data || {};
       setGlobalConfig(newGlobalConfig);
     } catch (error) {
       console.log('admin-ui: Unable to load global config', error);
@@ -84,11 +89,11 @@ const AdminView = () => {
   };
 
   const reloadUserConfig = () => {
-    const featuresUser = getFeatureFlagsUser()?.features || {};
+    const featuresUser = getFeatureFlagsUser() || {};
     setUserConfig(featuresUser);
   };
 
-  const handleSave = async (feature: string, config: any): Promise<boolean> => {
+  const handleSave = async (feature: string, config: any, mergeFeature: boolean): Promise<boolean> => {
     if (configureFor === 'user') {
       const saveResult = await saveUserConfig(feature, config);
 
@@ -102,7 +107,7 @@ const AdminView = () => {
         return false;
       }
 
-      const saveResult = await saveGlobalConfig(feature, config);
+      const saveResult = await saveGlobalConfig(feature, config, mergeFeature);
 
       if (saveResult) {
         publishMessage({ event: streamEvent });
@@ -122,10 +127,16 @@ const AdminView = () => {
   return (
     <AdminViewWrapper>
       <Flex vAlignContent="center" margin="space50" marginBottom="space0">
-        <Flex minWidth="195px" width="310px">
-          <Heading as="h2" variant="heading20" marginBottom="space0">
-            <Template source={templates[StringTemplates.ADMIN_TITLE]} />
-          </Heading>
+        <Flex width="420px">
+          <Stack orientation="horizontal" spacing="space40">
+            <Heading as="h2" variant="heading20" marginBottom="space0">
+              <Template source={templates[StringTemplates.ADMIN_TITLE]} />
+            </Heading>
+            <Button variant="secondary" size="rounded_small" onClick={() => setIsCommonSettingsModalOpen(true)}>
+              <ProductSettingsIcon decorative={true} />
+              <Template source={templates[StringTemplates.EDIT_COMMON_SETTINGS]} />
+            </Button>
+          </Stack>
         </Flex>
         <Flex grow hAlignContent="center">
           <Box width="size30" marginLeft="space30" marginRight="space30">
@@ -140,7 +151,7 @@ const AdminView = () => {
             />
           </Box>
         </Flex>
-        <Flex vAlignContent="center" minWidth="310px">
+        <Flex hAlignContent="right" vAlignContent="center" minWidth="310px" width="420px">
           <Box marginRight="space30">
             <Label htmlFor="configure-for" marginBottom="space0">
               <Template source={templates[StringTemplates.CONFIG_FOR_TITLE]} />
@@ -179,8 +190,10 @@ const AdminView = () => {
                   <FeatureCard
                     feature={feature}
                     configureFor={configureFor}
-                    isUserModified={configureFor === 'user' && userConfig[feature] !== undefined}
-                    config={config[feature]}
+                    isUserModified={
+                      configureFor === 'user' && userConfig?.features && userConfig?.features[feature] !== undefined
+                    }
+                    config={config?.features[feature]}
                     handleSave={handleSave}
                     key={feature}
                   />
@@ -197,6 +210,15 @@ const AdminView = () => {
           >
             <Template source={templates[StringTemplates.UPDATED_MODAL_DESC]} />
           </AlertDialog>
+          <FeatureModal
+            feature={featureCommon}
+            configureFor={configureFor}
+            isUserModified={configureFor === 'user' && userConfig?.common !== undefined}
+            config={config?.common ?? {}}
+            isOpen={isCommonSettingsModalOpen}
+            handleClose={() => setIsCommonSettingsModalOpen(false)}
+            handleSave={handleSave}
+          />
         </>
       )}
     </AdminViewWrapper>

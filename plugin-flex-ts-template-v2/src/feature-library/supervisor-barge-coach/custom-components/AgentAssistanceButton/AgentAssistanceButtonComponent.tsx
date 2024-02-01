@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { TaskHelper, useFlexSelector, ITask, IconButton, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
-import { Flex, Tooltip } from '@twilio-paste/core';
+import { Flex } from '@twilio-paste/core/flex';
+import { Tooltip } from '@twilio-paste/core/tooltip';
 
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
@@ -50,7 +51,7 @@ export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
       // We will use this to clear up the Sync Doc and the Agent Alert
       localStorage.setItem('cacheAgentAssistState', 'true');
 
-      // Updating the Sync Doc to add the agent from the assistance array
+      // Updating the Sync Doc to add the agent to the assistance array
       SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, agentFN, conferenceSID, selectedTaskSID, 'add');
     }
   };

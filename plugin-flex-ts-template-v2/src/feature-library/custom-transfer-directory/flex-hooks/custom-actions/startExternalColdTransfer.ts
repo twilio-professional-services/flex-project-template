@@ -40,7 +40,11 @@ export const registerStartExternalColdTransfer = async () => {
       }
 
       try {
-        await CustomTransferDirectoryService.startColdTransfer(task.attributes.call_sid, phoneNumber, callerId);
+        await CustomTransferDirectoryService.startColdTransfer(
+          task?.attributes?.call_sid ?? task.attributes.conference.participants.customer,
+          phoneNumber,
+          callerId,
+        );
       } catch (error: any) {
         console.error('Error executing startColdTransfer', error);
         Notifications.showNotification(CustomTransferDirectoryNotification.ErrorExecutingColdTransfer, {

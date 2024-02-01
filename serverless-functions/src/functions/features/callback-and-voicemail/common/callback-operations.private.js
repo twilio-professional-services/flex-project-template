@@ -19,6 +19,7 @@ exports.createCallbackTask = async (parameters) => {
     transcriptText,
     isDeleted,
     overriddenTaskChannel,
+    virtualStartTime,
   } = parameters;
 
   // use assigned values or use defaults
@@ -31,6 +32,7 @@ exports.createCallbackTask = async (parameters) => {
   // setup required task attributes for task
   const attributes = {
     taskType: recordingSid ? 'voicemail' : 'callback',
+    from: numberToCall,
     name: numberToCall,
     flow_execution_sid: flexFlowSid,
     message: message || null,
@@ -59,5 +61,6 @@ exports.createCallbackTask = async (parameters) => {
     attributes,
     priority,
     timeout,
+    virtualStartTime,
   });
 };

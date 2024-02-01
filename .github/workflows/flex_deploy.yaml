@@ -24,13 +24,14 @@ on:
         required: true
       TF_ENCRYPTION_KEY:
         required: true
+
   # Enables running this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       environment:
         required: true
         type: environment
-        description: 'Environment to use for deployment'
+        description: "Environment to use for deployment"
       deploy_terraform:
         required: true
         type: boolean
@@ -47,77 +48,66 @@ on:
         default: false
         description: Overwrite config set by Admin UI Panel?
 
-jobs:
+concurrency:
+  group: flex-deploy-${{ inputs.environment || github.event.inputs.environment }}
 
+jobs:
   # When performing an initial release
-  # the serverless backend needs an initial deploy so 
+  # the serverless backend needs an initial deploy so
   # the domain name can be pulled in for the terraform deploy
   perform-initial-serverless-release:
     if: |
-      (inputs.initial_release == true && 
+      (inputs.initial_release == true &&
        inputs.deploy_terraform == true)
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install top-level packages
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install
-          npm run populate-missing-placeholders $ENVIRONMENT
+          npm install --ignore-scripts
+          npm run install-serverless-plugin
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm run postinstall -- --skip-plugin >> $GITHUB_STEP_SUMMARY
+      - name: deploy addons
+        run: |
+          npm run deploy-addons
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
-          npm install
-          npm run install-serverless-plugin
-          npm run deploy-env
-# FEATURE: schedule-manager
-      - name: deploy serverless-schedule-manager
-        working-directory: serverless-schedule-manager
-        run: |
-          npm install
-          npm run install-serverless-plugin
-          npm run deploy-env
-# END FEATURE: schedule-manager
+          npm run deploy
 
   deploy-terraform:
-    if: | 
+    needs: [perform-initial-serverless-release]
+    if: |
       always() &&
-        !contains(needs.*.result, 'failure') &&
-        !contains(needs.*.result, 'cancelled') &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') &&
       inputs.deploy_terraform == true
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    env:
-      ENVIRONMENT: ${{ inputs.environment }}
+    uses: ./.github/workflows/terraform_deploy.yaml
+    with:
+      environment: ${{ inputs.environment }}
+    secrets:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-      TF_VAR_TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TF_VAR_TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TF_VAR_TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-    needs: [perform-initial-serverless-release]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/terraform_state_artifact
-        with:
-          encryptionkey: ${{ secrets.TF_ENCRYPTION_KEY }}
-          path: ./infra-as-code/terraform/environments/default
-          environment: ${{ inputs.environment }}
+      TF_ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
 
-
-  deploy-serverless:
-    if: |    
+  deploy-packages:
+    if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -125,73 +115,37 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
     needs: [deploy-terraform]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install npm and apply missing environment variables
         id: initial-env
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install
-          npm run populate-missing-placeholders $ENVIRONMENT
-# FEATURE: chat-to-video-escalation
-      - name: install npm and build video-app-assets
-        working-directory: web-app-examples/video-app-quickstart
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm install --ignore-scripts
+          npm run install-serverless-plugin
+          npm run postinstall -- --skip-plugin >> $GITHUB_STEP_SUMMARY
+      - name: deploy addons
         run: |
-          npm install
-          npm run build
-# END FEATURE: chat-to-video-escalation
+          npm run deploy-addons
       - name: deploy serverless
         working-directory: serverless-functions
         run: |
-          npm install
-          npm run install-serverless-plugin
-          npm run deploy-env
-
-# FEATURE: schedule-manager
-  deploy-schedule-manager:
-    if: |    
-      always() &&
-      !contains(needs.*.result, 'failure') &&
-      !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
-    env:
-      ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
-    needs: [deploy-terraform]
-    steps:
-      - uses: actions/checkout@v3
-      - name: setup node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-      - name: install top-level packages
-        run: |
-          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
-          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install
-          npm run populate-missing-placeholders $ENVIRONMENT
-      - name: deploy serverless-schedule-manager
-        working-directory: serverless-schedule-manager
-        run: |
-          npm install
-          npm run install-serverless-plugin
-          npm run deploy-env
-# END FEATURE: schedule-manager
+          npm run deploy
 
   deploy-flex-config:
-    if: |    
+    if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
@@ -199,31 +153,31 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
-      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       OVERWRITE_CONFIG: ${{ inputs.initial_release == true || inputs.overwrite_config == true }}
     needs:
-      - deploy-serverless
-# FEATURE: schedule-manager
-      - deploy-schedule-manager
-# END FEATURE: schedule-manager
+      - deploy-packages
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '18'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
       - name: install root npm
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Overwrite Config: ${{ env.OVERWRITE_CONFIG }}"  >> $GITHUB_STEP_SUMMARY
-          npm install
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm install --ignore-scripts
+          npm run postinstall -- --packages=flex-config >> $GITHUB_STEP_SUMMARY
       - name: deploy flex config
         working-directory: flex-config
         run: |
-          npm install
           npm run deploy
 
   deploy-release-plugin:
@@ -235,14 +189,14 @@ jobs:
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       PLUGIN_FOLDER: plugin-flex-ts-template-v2
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
-          
+          node-version: '18'
+
       - name: install twilio cli
-        run: npm install skip-postinstall
+        run: npm install --ignore-scripts
 
       - name: deploy and release flex-plugin
         run: |

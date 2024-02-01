@@ -1,13 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Actions, Template, templates } from '@twilio/flex-ui';
-import { Alert, Box, TextArea, Anchor, Label, Switch, Button, Input, HelpText } from '@twilio-paste/core';
+import { Alert } from '@twilio-paste/core/alert';
+import { Box } from '@twilio-paste/core/box';
+import { TextArea } from '@twilio-paste/core/textarea';
+import { Anchor } from '@twilio-paste/core/anchor';
+import { Label } from '@twilio-paste/core/label';
+import { Switch } from '@twilio-paste/core/switch';
+import { Button } from '@twilio-paste/core/button';
+import { Input } from '@twilio-paste/core/input';
+import { HelpText } from '@twilio-paste/core/help-text';
 import { Form, FormControl } from '@twilio-paste/core/form';
 import { useUID, useUIDSeed } from '@twilio-paste/core/uid-library';
 import { Modal, ModalBody, ModalFooter, ModalFooterActions, ModalHeader, ModalHeading } from '@twilio-paste/core/modal';
 import { SkipBackIcon } from '@twilio-paste/icons/esm/SkipBackIcon';
 
 import { StringTemplates } from '../../flex-hooks/strings';
-import { formatName, formatDocsUrl } from '../../utils/helpers';
+import { formatName, formatDocsUrl, featureCommon } from '../../utils/helpers';
 
 interface Props {
   feature: string;
@@ -16,7 +24,7 @@ interface Props {
   config: any;
   isOpen: boolean;
   handleClose: () => void;
-  handleSave: (feature: string, config: any) => Promise<boolean>;
+  handleSave: (feature: string, config: any, mergeFeature: boolean) => Promise<boolean>;
 }
 
 interface CustomComponentPayload {
@@ -69,13 +77,15 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
   useEffect(() => {
     if (isOpen) {
       setModifiedConfig(config);
-      Actions.addListener('afterOpenFeatureSettings', handleCustomComponent);
-      Actions.invokeAction('OpenFeatureSettings', {
-        feature,
-        initialConfig: config,
-        setModifiedConfig: handleCustomComponentUpdate,
-        setAllowSave: handleCustomComponentAllowSave,
-      });
+      if (feature !== featureCommon) {
+        Actions.addListener('afterOpenFeatureSettings', handleCustomComponent);
+        Actions.invokeAction('OpenFeatureSettings', {
+          feature,
+          initialConfig: config,
+          setModifiedConfig: handleCustomComponentUpdate,
+          setAllowSave: handleCustomComponentAllowSave,
+        });
+      }
     } else {
       setCustomComponent(null);
       setHideComponents(false);
@@ -103,7 +113,7 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
       }
     });
 
-    if (await handleSave(feature, modifiedConfig)) {
+    if (await handleSave(feature, modifiedConfig, false)) {
       handleClose();
     } else {
       setHasFailure(true);
@@ -114,7 +124,7 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
   const reset = async () => {
     setHasFailure(false);
     setIsResetting(true);
-    if (await handleSave(feature, undefined)) {
+    if (await handleSave(feature, undefined, true)) {
       handleClose();
     } else {
       setHasFailure(true);
@@ -126,7 +136,11 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
     <Modal ariaLabelledby={modalHeadingID} isOpen={isOpen} onDismiss={handleClose} size="default">
       <ModalHeader>
         <ModalHeading as="h3" id={modalHeadingID}>
-          <Template source={templates[StringTemplates.MODAL_SETTINGS_TITLE]} feature={formatName(feature)} />
+          {feature === featureCommon ? (
+            <Template source={templates[StringTemplates.EDIT_COMMON_SETTINGS]} />
+          ) : (
+            <Template source={templates[StringTemplates.MODAL_SETTINGS_TITLE]} feature={formatName(feature)} />
+          )}
         </ModalHeading>
       </ModalHeader>
       <ModalBody>
@@ -136,6 +150,11 @@ const FeatureModal = ({ feature, configureFor, isUserModified, config, isOpen, h
               <Template source={templates[StringTemplates.SAVE_ERROR]} />
             </Alert>
           </Box>
+        )}
+        {!Object.keys(config).length && (
+          <Alert variant="neutral">
+            <Template source={templates[StringTemplates.MISSING_SETTINGS]} />
+          </Alert>
         )}
         <Form>
           {!hideComponents &&

@@ -1,0 +1,46 @@
+{
+  "task_routing": {
+    "filters": [
+      {
+        "filter_friendly_name": "Assign to Worker",
+        "expression": "transferTargetType == 'worker'",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_EVERYONE}",
+            "known_worker_sid": "task.transferTargetSid"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Assign to Queue - Everyone",
+        "expression": "transferQueueName == 'Template Example Everyone'",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_EVERYONE}",
+            "expression": "worker.sid NOT IN task.workerSidsInConversation"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Assign To Queue - Sales",
+        "expression": "transferQueueName == 'Template Example Sales'",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_TEMPLATE_EXAMPLE_SALES}",
+            "expression": "worker.sid NOT IN task.workerSidsInConversation"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Assign To Queue - Support",
+        "expression": "transferQueueName == 'Template Example Support'",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_TEMPLATE_EXAMPLE_SUPPORT}",
+            "expression": "worker.sid NOT IN task.workerSidsInConversation"
+          }
+        ]
+      }
+    ]
+  }
+}

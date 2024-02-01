@@ -1,6 +1,13 @@
 import { useState } from 'react';
 import { Manager, Template, templates } from '@twilio/flex-ui';
-import { Heading, Flex, Box, Stack, Card, Switch, Button, Anchor } from '@twilio-paste/core';
+import { Heading } from '@twilio-paste/core/heading';
+import { Box } from '@twilio-paste/core/box';
+import { Flex } from '@twilio-paste/core/flex';
+import { Anchor } from '@twilio-paste/core/anchor';
+import { Stack } from '@twilio-paste/core/stack';
+import { Switch } from '@twilio-paste/core/switch';
+import { Button } from '@twilio-paste/core/button';
+import { Card } from '@twilio-paste/core/card';
 import { SkipBackIcon } from '@twilio-paste/icons/esm/SkipBackIcon';
 import { ProductSettingsIcon } from '@twilio-paste/icons/esm/ProductSettingsIcon';
 
@@ -13,7 +20,7 @@ interface Props {
   configureFor: string;
   isUserModified?: boolean;
   config: any;
-  handleSave: (feature: string, config: any) => Promise<boolean>;
+  handleSave: (feature: string, config: any, mergeFeature: boolean) => Promise<boolean>;
 }
 
 const FeatureCard = ({ feature, configureFor, isUserModified, config, handleSave }: Props) => {
@@ -24,13 +31,13 @@ const FeatureCard = ({ feature, configureFor, isUserModified, config, handleSave
 
   const handleReset = async () => {
     setIsSaving(true);
-    await handleSave(feature, undefined);
+    await handleSave(feature, undefined, true);
     setIsSaving(false);
   };
 
   const handleEnabledChanged = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsSaving(true);
-    await handleSave(feature, { enabled: e.target.checked });
+    await handleSave(feature, { enabled: e.target.checked }, true);
     setIsSaving(false);
   };
 

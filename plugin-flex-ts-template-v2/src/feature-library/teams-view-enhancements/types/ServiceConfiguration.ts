@@ -5,9 +5,13 @@ export default interface TeamsViewEnhancementsConfig {
   handle_time_exceeded_threshold: number;
   display_task_queue_name: boolean;
   columns: {
+    calls: boolean;
+    other_tasks: boolean;
     team: boolean;
     department: boolean;
     location: boolean;
     agent_skills: boolean;
+    capacity: boolean;
+    activity_icon: boolean;
   };
 }

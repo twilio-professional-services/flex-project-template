@@ -1,9 +1,16 @@
 import { Manager } from '@twilio/flex-ui';
 
 import { getFeatureFlags } from '../../utils/configuration';
-import { ExternalDirectoryEntry } from './types/ServiceConfiguration';
+import { ExternalDirectoryEntry } from './types/DirectoryEntry';
+import CustomTransferDirectoryConfig from './types/ServiceConfiguration';
 
-const { enabled = false, use_paste_search_icon = false } = getFeatureFlags()?.features?.custom_transfer_directory || {};
+const {
+  enabled = false,
+  use_paste_search_icon = false,
+  queue: queue_config,
+  worker: worker_config,
+  external_directory: external_directory_config,
+} = (getFeatureFlags()?.features?.custom_transfer_directory as CustomTransferDirectoryConfig) || {};
 
 const {
   enabled: queueEnabled = false,
@@ -12,13 +19,15 @@ const {
   enforce_queue_filter_from_worker_object = false,
   enforce_global_exclude_filter = false,
   global_exclude_filter = '',
-} = getFeatureFlags()?.features?.custom_transfer_directory?.queue || {};
+} = queue_config || {};
+
+const { enabled: workerEnabled = false, show_only_available_workers = false } = worker_config || {};
 
 const {
   enabled: externalDirectoryEnabled = false,
   skipPhoneNumberValidation = false,
   directory = [] as Array<ExternalDirectoryEntry>,
-} = getFeatureFlags()?.features?.custom_transfer_directory?.external_directory || {};
+} = external_directory_config || {};
 
 const {
   enabled: conversation_transfer_enabled = false,
@@ -89,4 +98,12 @@ export const isVoiceXWTEnabled = () => {
 
 export const shouldSkipPhoneNumberValidation = () => {
   return skipPhoneNumberValidation;
+};
+
+export const isCustomWorkerTransferEnabled = (): boolean => {
+  return isFeatureEnabled() && workerEnabled;
+};
+
+export const showOnlyAvailableWorkers = (): boolean => {
+  return show_only_available_workers;
 };
