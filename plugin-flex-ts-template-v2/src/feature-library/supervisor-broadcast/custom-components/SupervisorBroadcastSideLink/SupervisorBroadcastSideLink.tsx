@@ -18,8 +18,8 @@ const SupervisorBroadcastSideLink = (props: OwnProps) => {
   return (
     <SideLink
       showLabel={true}
-      icon="AgentIcon"
-      iconActive="AgentIconBold"
+      icon="Volume"
+      iconActive="VolumeBold"
       isActive={props.activeView === props.viewName}
       onClick={navigate}
       key="template-admin-side-link"

@@ -13,8 +13,9 @@ export const stringHook = () => ({
     [StringTemplates.BROADCAST_NOTIFICATION_TEMPLATE]: 'Message from supervisor: {{message}}',
     [StringTemplates.BROADCAST_SIDELINK]: 'Supervisor Broadcast',
     [StringTemplates.BROADCAST_VIEW_TITLE]: 'Send a Broadcast',
-    [StringTemplates.BROADCAST_FORM_TARGETWORKEREXPRESSION_LABEL]: 'TargetWorkerExpression',
-    [StringTemplates.BROADCAST_FORM_TARGETWORKEREXPRESSION_HELP_TEXT]: '1 == 1 to target everyone.',
+    [StringTemplates.BROADCAST_FORM_TARGETWORKEREXPRESSION_LABEL]: 'Worker Lookup',
+    [StringTemplates.BROADCAST_FORM_TARGETWORKEREXPRESSION_HELP_TEXT]:
+      'Type the name or skill of the worker you wish to message.  Type "all" for all workers.',
     [StringTemplates.BROADCAST_FORM_COMPOSEMESSAGE_LABEL]: 'Compose your Message',
     [StringTemplates.BROADCAST_FORM_COMPOSEMESSAGE_HELP_TEXT]: 'This message will be sent to everyone in the preview.',
   },

@@ -12,9 +12,9 @@ export type SyncStreamMessage = {
 
 export type SupervisorBroadcastMessagePayload = {
   type: 'broadcast' | 'command';
-  targetWorkers: null;
+  targetWorkers: string;
   payload: {
-    message: 'string';
+    message: string;
   };
 };
 

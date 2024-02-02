@@ -12,6 +12,7 @@ import debounce from 'lodash/debounce';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import { fetchWorkers } from '../../utils/taskrouter-workspace';
+import { SupervisorBroadcastMessagePayload, publishMessage } from '../../utils/sync-stream';
 
 interface Props {
   targets: Map<string, Worker> | undefined;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 const BroadcastForm = ({ targets, setPreviewTargets }: Props) => {
+  const [message, setMessage] = useState('');
   const handleTargetWorkerExpressionChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === '') {
       setPreviewTargets(undefined);
@@ -26,6 +28,15 @@ const BroadcastForm = ({ targets, setPreviewTargets }: Props) => {
     }
     const workers = await fetchWorkers(event.target.value);
     setPreviewTargets(workers);
+  };
+
+  // New function to handle input changes
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(event.target.value);
+  };
+
+  const registerSyncStreamMessage = (messageObject: any) => {
+    publishMessage(messageObject);
   };
   const debouncedTargetWorkerExpressionChange = debounce(handleTargetWorkerExpressionChange, 1000);
 
@@ -47,19 +58,34 @@ const BroadcastForm = ({ targets, setPreviewTargets }: Props) => {
               <Template source={templates[StringTemplates.BROADCAST_FORM_TARGETWORKEREXPRESSION_HELP_TEXT]} />
             </HelpText>
           </FormControl>
-
           {Boolean(targets) && (
             <>
               <FormControl>
                 <Label htmlFor="compose_message">
                   <Template source={templates[StringTemplates.BROADCAST_FORM_COMPOSEMESSAGE_LABEL]} />
                 </Label>
-                <TextArea id="compose_message" name="compose_message" />
+                <TextArea id="compose_message" name="compose_message" onChange={handleInputChange} />
                 <HelpText id="compose_message_help_text">
                   <Template source={templates[StringTemplates.BROADCAST_FORM_COMPOSEMESSAGE_HELP_TEXT]} />
                 </HelpText>
               </FormControl>
-              <Button variant="primary">Send Broadcast</Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  targets?.forEach((_worker, workerSid) => {
+                    const messageObject: SupervisorBroadcastMessagePayload = {
+                      type: 'broadcast',
+                      targetWorkers: workerSid,
+                      payload: {
+                        message,
+                      },
+                    };
+                    registerSyncStreamMessage(messageObject);
+                  });
+                }}
+              >
+                Send Broadcast
+              </Button>
             </>
           )}
         </Box>
