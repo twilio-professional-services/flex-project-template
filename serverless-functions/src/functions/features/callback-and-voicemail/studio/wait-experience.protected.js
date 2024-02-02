@@ -291,15 +291,15 @@ exports.handler = async (context, event, callback) => {
       return callback(null, twiml);
 
     case 'submit-callback':
-      // Create the Callback task
-      // Option to pull in a few more things from original task like conversation_id or even the workflowSid
+      // Cancel the original task and create the Callback task
       const originalTask = await fetchTask(context, enqueuedTaskSid);
-
       await cancelTask(context, originalTask, 'Opted to request a callback');
 
       // The URL parsing converts + to space so we need to trim
       // Prepend a + if this is not a SIP address
       const numberToCall = `${/^\d/.test(event.to.trim()) ? '+' : ''}${event.to.trim()}`;
+
+      // Option to pull in a few more things from original task like conversation_id or even the workflowSid
       const callbackParams = {
         context,
         numberToCall,
