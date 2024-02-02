@@ -5,7 +5,7 @@ title: keyboard-shortcuts
 
 The _Keyboard Shortcuts Manager_ Twilio Flex plugin empowers contact center users to configure default and custom keyboards shortcuts in their day-to-day activities to increase efficiency and enjoyment when using Twilio Flex.
 
-# Flex User Experience
+## Flex User Experience
 
 The plugin is available to both agents and supervisors alike and it allows the following functionalities:
 
@@ -45,13 +45,13 @@ This view allows users to see custom added keyboard shortcuts and their current 
 
 ![Reset shortcuts](/img/features/keyboard-shortcuts/reset-shortcuts.gif)
 
-# Setup and dependencies
+## Setup and dependencies
 
 This plugin only supports Twilio Flex 2.1 and above because support for keyboard shortcuts has been introduced with Flex 2.1.
 
 Other than that, there are no other specific dependencies or setup steps required.
 
-# How does it work?
+## How does it work?
 
 With the release of Flex 2.1, Flex now supports keyboards shortcuts for the most common actions performed by agents. The official documentation can be found [here](https://www.twilio.com/docs/flex/end-user-guide/keyboard-shortcuts).
 

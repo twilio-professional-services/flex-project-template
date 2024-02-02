@@ -17,8 +17,16 @@ async function selectAndAcceptTask(task: ITask, taskConfig: TaskQualificationCon
   if (taskChannelUniqueName === 'voice' && direction === 'outbound') return;
 
   // Select and accept the task per configuration
-  if (taskConfig.auto_select) await Flex.Actions.invokeAction('SelectTask', { sid });
-  if (taskConfig.auto_accept) await Flex.Actions.invokeAction('AcceptTask', { sid });
+  try {
+    if (taskConfig.auto_select) await Flex.Actions.invokeAction('SelectTask', { sid });
+  } catch (error) {
+    console.error('[agent-automation] Unable to auto select task', error);
+  }
+  try {
+    if (taskConfig.auto_accept) await Flex.Actions.invokeAction('AcceptTask', { sid });
+  } catch (error) {
+    console.error('[agent-automation] Unable to auto accept task', error);
+  }
 }
 
 export const eventName = FlexEvent.taskReceived;

@@ -1,5 +1,6 @@
 import { TaskContext, Template, templates } from '@twilio/flex-ui';
-import { Stack, Badge } from '@twilio-paste/core';
+import { Badge } from '@twilio-paste/core/badge';
+import { Stack } from '@twilio-paste/core/stack';
 
 import { StringTemplates } from '../../flex-hooks/strings/ChatTransferStrings';
 

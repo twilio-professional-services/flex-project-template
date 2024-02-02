@@ -6,7 +6,7 @@ const prepareFunction = (context, event, callback, requiredParameters, handlerFn
   const parameterError = module.exports.validateParameters(context.PATH, event, requiredParameters);
 
   response.appendHeader('Access-Control-Allow-Origin', '*');
-  response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST GET');
+  response.appendHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
   response.appendHeader('Content-Type', 'application/json');
   response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 

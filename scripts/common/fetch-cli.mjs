@@ -4,13 +4,14 @@ import { varNameMapping } from "./constants.mjs";
 
 let fetchedTypes = [];
 let resultCache = {};
+let cliCache = {};
 
 // Reusable function for filtering the desired objects to fetch per type
-const filterWantedVars = (type) => {
+const filterWantedVars = (type, parent) => {
   let wanted = {};
   
   for (const varName in varNameMapping) {
-    if (varNameMapping[varName].type !== type) {
+    if (varNameMapping[varName].type !== type || (parent && resultCache[varNameMapping[varName].parent] !== parent)) {
       continue;
     }
     
@@ -22,7 +23,12 @@ const filterWantedVars = (type) => {
 
 // Reusable function for running and parsing Twilio CLI command output
 const execTwilioCli = (command) => {
-  const outputRaw = shell.exec(`${command} --no-limit -o json`, {silent: true});
+  // first, consult the cache and use it if present
+  if (cliCache[command]) {
+    return cliCache[command];
+  }
+  
+  const outputRaw = shell.exec(`twilio ${command} --no-limit -o json`, {silent: true});
   
   if (outputRaw.code !== 0) {
     // TODO: Is it possible to identify retry-able error codes?
@@ -36,6 +42,7 @@ const execTwilioCli = (command) => {
   
   try {
     const outputParsed = JSON.parse(outputRaw.stdout);
+    cliCache[command] = outputParsed;
     return outputParsed;
   } catch (error) {
     console.error("Failed to parse Twilio CLI output", error);
@@ -62,150 +69,128 @@ const isMatch = (searchValue, valueToCheck, allowFuzz) => {
   return valueToCheck == searchValue;
 }
 
-export const fetchServerlessDomains = () => {
-  const type = "serverless-domain";
+const fetchResources = (type, displayType, command, handler, parent) => {
   // If we already fetched these, no need to do it again
-  if (fetchedTypes.includes(type)) {
+  const cacheKey = `${type}${parent ? "-" + parent : ""}`;
+  if (fetchedTypes.includes(cacheKey)) {
     return;
   }
-  fetchedTypes.push(type);
+  fetchedTypes.push(cacheKey);
   
-  console.log("Fetching serverless domains...");
+  console.log(`Fetching ${displayType}...`);
   
-  let wantedDomains = filterWantedVars(type);
-  const serverlessServices = execTwilioCli("twilio api:serverless:v1:services:list");
+  let found;
+  let wantedResources = filterWantedVars(type, parent);
+  const fetchedResources = execTwilioCli(command);
   
-  if (!serverlessServices || serverlessServices.length < 1) {
+  if (!fetchedResources || fetchedResources.length < 1) {
+    console.error(`No ${displayType} found. Is this a Flex account?`);
     return;
   }
   
-  // for each of the services we found, if it is one we are interested in, get its environments and add to the cache
-  for (const service of serverlessServices) {
-    for (const wanted in wantedDomains) {
-      if (isMatch(wantedDomains[wanted].name, service.uniqueName, false)) {
-        const serviceEnvironments = execTwilioCli(`twilio api:serverless:v1:services:environments:list --service-sid=${service.sid}`);
-        
-        if (!serviceEnvironments || serviceEnvironments.length < 1) {
-          continue;
-        }
-        
-        resultCache[wanted] = serviceEnvironments[0].domainName;
+  // if the resource was requested, save it in the cache
+  for (const fetched of fetchedResources) {
+    for (const wanted in wantedResources) {
+      if (handler(fetched, wanted, wantedResources)) {
+        found = true;
       }
     }
   }
+  
+  if (!found) {
+    console.error(`No ${displayType} found. Account or configuration in scripts/config/mappings.json may be incorrect.`);
+  }
+}
+
+export const fetchServerlessDomains = () => {
+  fetchResources("serverless-domain", "serverless domains", "api:serverless:v1:services:list", (fetched, wanted, wantedResources) => {
+    if (isMatch(wantedResources[wanted].name, fetched.uniqueName, false)) {
+      const serviceEnvironments = execTwilioCli(`api:serverless:v1:services:environments:list --service-sid=${fetched.sid}`);
+      
+      if (!serviceEnvironments || serviceEnvironments.length < 1) {
+        return false;
+      }
+      
+      resultCache[wanted] = serviceEnvironments[0].domainName;
+      return true;
+    }
+  });
+}
+
+export const fetchServerlessServices = () => {
+  fetchResources("serverless-service", "serverless services", "api:serverless:v1:services:list", (fetched, wanted, wantedResources) => {
+    if (isMatch(wantedResources[wanted].name, fetched.uniqueName, false)) {
+      resultCache[wanted] = fetched.sid;
+      return true;
+    }
+  });
+}
+
+export const fetchServerlessEnvironments = (serviceSid) => {
+  if (!serviceSid) {
+    console.warn("Serverless service SID missing; unable to fetch its environments");
+    return;
+  }
+  fetchResources(`serverless-environment`, `serverless environments for service ${serviceSid}`, `api:serverless:v1:services:environments:list --service-sid=${serviceSid}`, (fetched, wanted, wantedResources) => {
+    if (isMatch(wantedResources[wanted].name, fetched.uniqueName, true)) {
+      resultCache[wanted] = fetched.sid;
+      return true;
+    }
+  }, serviceSid);
+}
+
+export const fetchServerlessFunctions = (serviceSid) => {
+  if (!serviceSid) {
+    console.warn("Serverless service SID missing; unable to fetch its functions");
+    return;
+  }
+  fetchResources(`serverless-function`, `serverless functions for service ${serviceSid}`, `api:serverless:v1:services:functions:list --service-sid=${serviceSid}`, (fetched, wanted, wantedResources) => {
+    if (isMatch(wantedResources[wanted].name, fetched.friendlyName, true)) {
+      resultCache[wanted] = fetched.sid;
+      return true;
+    }
+  }, serviceSid);
 }
 
 export const fetchTrWorkflows = (workspaceSid) => {
-  const type = "tr-workflow";
-  // If we already fetched these, no need to do it again
-  if (fetchedTypes.includes(type)) {
-    return;
-  }
-  fetchedTypes.push(type);
-  
   if (!workspaceSid) {
     console.warn("TaskRouter workspace SID missing; unable to fetch workflows");
     return;
   }
-  
-  console.log("Fetching TaskRouter workflows...");
-  
-  const wantedWorkflows = filterWantedVars(type);
-  const workflows = execTwilioCli(`twilio api:taskrouter:v1:workspaces:workflows:list --workspace-sid=${workspaceSid}`);
-  
-  if (!workflows || workflows.length < 1) {
-    return;
-  }
-  
-  // if the workflow was requested, save it in the cache
-  for (const workflow of workflows) {
-    for (const wanted in wantedWorkflows) {
-      if (isMatch(wantedWorkflows[wanted].name, workflow.friendlyName, true) || isMatch(wantedWorkflows[wanted].fallback, workflow.friendlyName, true)) {
-        resultCache[wanted] = workflow.sid;
-      }
+  fetchResources(`tr-workflow`, `TaskRouter workflows`, `api:taskrouter:v1:workspaces:workflows:list --workspace-sid=${workspaceSid}`, (fetched, wanted, wantedResources) => {
+    // only match the fallback if the specified name is not already found
+    if (isMatch(wantedResources[wanted].name, fetched.friendlyName, true) || (!resultCache[wanted] && isMatch(wantedResources[wanted].fallback, fetched.friendlyName, true))) {
+      resultCache[wanted] = fetched.sid;
+      return true;
     }
-  }
+  }, workspaceSid);
 }
 
 export const fetchTrWorkspaces = () => {
-  const type = "tr-workspace";
-  // If we already fetched these, no need to do it again
-  if (fetchedTypes.includes(type)) {
-    return;
-  }
-  fetchedTypes.push(type);
-  
-  console.log("Fetching TaskRouter workspaces...");
-  
-  const wantedWorkspaces = filterWantedVars(type);
-  const workspaces = execTwilioCli("twilio api:taskrouter:v1:workspaces:list");
-  
-  if (!workspaces || workspaces.length < 1) {
-    console.error("No TaskRouter workspaces found! Is this a Flex account?");
-    return;
-  }
-  
-  for (const workspace of workspaces) {
-    for (const wanted in wantedWorkspaces) {
-      if (isMatch(wantedWorkspaces[wanted].name, workspace.friendlyName, false)) {
-        resultCache[wanted] = workspace.sid;
-      }
+  fetchResources("tr-workspace", "TaskRouter workspaces", "api:taskrouter:v1:workspaces:list", (fetched, wanted, wantedResources) => {
+    if (isMatch(wantedResources[wanted].name, fetched.friendlyName, false)) {
+      resultCache[wanted] = fetched.sid;
+      return true;
     }
-  }
+  });
 }
 
 export const fetchSyncServices = () => {
-  const type = "sync-service";
-  // If we already fetched these, no need to do it again
-  if (fetchedTypes.includes(type)) {
-    return;
-  }
-  fetchedTypes.push(type);
-  
-  console.log("Fetching Sync services...");
-  
-  const wantedServices = filterWantedVars(type);
-  const services = execTwilioCli("twilio api:sync:v1:services:list");
-  
-  if (!services || services.length < 1) {
-    console.error("No Sync services found! Is this a Flex account?");
-    return;
-  }
-  
-  for (const service of services) {
-    for (const wanted in wantedServices) {
-      if (isMatch(wantedServices[wanted].name, service.friendlyName, false)) {
-        resultCache[wanted] = service.sid;
-      }
+  fetchResources("sync-service", "Sync services", "api:sync:v1:services:list", (fetched, wanted, wantedResources) => {
+    if (isMatch(wantedResources[wanted].name, fetched.friendlyName, false)) {
+      resultCache[wanted] = fetched.sid;
+      return true;
     }
-  }
+  });
 }
 
 export const fetchChatServices = () => {
-  const type = "chat-service";
-  // If we already fetched these, no need to do it again
-  if (fetchedTypes.includes(type)) {
-    return;
-  }
-  fetchedTypes.push(type);
-  
-  console.log("Fetching chat services...");
-  
-  const wantedServices = filterWantedVars(type);
-  const services = execTwilioCli("twilio api:chat:v2:services:list");
-  
-  if (!services || services.length < 1) {
-    console.error("No chat services found! Is this a Flex account?");
-    return;
-  }
-  
-  for (const service of services) {
-    for (const wanted in wantedServices) {
-      if (isMatch(wantedServices[wanted].name, service.friendlyName, false)) {
-        resultCache[wanted] = service.sid;
-      }
+  fetchResources("chat-service", "chat services", "api:chat:v2:services:list", (fetched, wanted, wantedResources) => {
+    if (isMatch(wantedResources[wanted].name, fetched.friendlyName, false)) {
+      resultCache[wanted] = fetched.sid;
+      return true;
     }
-  }
+  });
 }
 
 export const getFetchedVars = () => resultCache;

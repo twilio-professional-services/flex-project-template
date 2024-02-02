@@ -36,7 +36,7 @@ If you wish to provide alternate feature configurations per environment, such as
 
 The custom_data model that lives in ui_attributes follows this schema:
 
-```json
+```json title=ui_attributes.<env-name>.json
 {
 "custom_data": {
     "common": {
@@ -88,9 +88,42 @@ For example, if the `activity-reservation-handler` feature is globally enabled b
 }
 ```
 
-### Updating the config
+### Configuring skills
 
-There are two strategies for managing the configuration set which are mutually exclusive
+The `taskrouter_skills.json` file under the flex-config directory defines skills that should be automatically deployed. The skills in the file will be merged with any skills existing in the environment. By default this contains two sample skills, `template_example_sales` and `template_example_support`.
+
+:::tip Important note
+Be sure to use skill names without spaces!
+:::
+
+Here is an example of how you can populate this file:
+
+```json title=taskrouter_skills.json
+[
+  {
+    "minimum": null,
+    "multivalue": false,
+    "name": "billing",
+    "maximum": null
+  },
+  {
+    "minimum": null,
+    "multivalue": false,
+    "name": "support",
+    "maximum": null
+  },
+  {
+    "minimum": null,
+    "multivalue": false,
+    "name": "offline_work",
+    "maximum": null
+  }
+]
+```
+
+### Updating the front-end config
+
+There are two strategies for managing the configuration, which are mutually exclusive:
 
 #### Admin UI
 
@@ -101,6 +134,8 @@ You can use the [admin-ui feature](/feature-library/admin-ui), which is the defa
 When running [locally](#local-environment), the admin-ui feature directly ignores what is in `appConfig.js` and shows only what is in [hosted Flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) or what has been overridden using the [per-worker feature overrides](/feature-library/admin-ui#how-does-it-work).  This can cause confusion, and for that reason, admin-ui is disabled by default via `appConfig.js` when running the template locally.
 
 ::: 
+
+When using this strategy, configuration can still be updated from outside the Admin UI via deployment scripts. However, only _new_ configuration will be added and no existing values will be overwritten.
 
 #### Infrastructure-as-code (version control)
 
@@ -130,13 +165,14 @@ When the setup script runs, it finds strings matching the pattern `<YOUR_VARIABL
 
 If the value is not found in the environment variables, the `scripts/config/mappings.json` file is consulted to map that variable to a value (such as a SID or serverless domain) using name-matched results from the Twilio CLI. The format of this file is as follows:
 
-```json
+```json title=mappings.json
 {
   "VARIABLE_NAME_HERE": {
-    "type": "tr-workflow", // Type of Twilio resource to fetch the value of: serverless-domain, tr-workspace, tr-workflow, chat-service, or sync-service
+    "type": "tr-workflow", // Type of Twilio resource to fetch the value of: serverless-domain, serverless-service, serverless-environment, serverless-function, tr-workspace, tr-workflow, chat-service, or sync-service
     "name": "My Workflow", // Name of resource to find
     "localValue": "My Other Workflow", // Optionally override the name property with a different one when running locally
-    "fallback": "/(Assign.*Anyone)/" // Optionally define a fallback in case the defined name is not found. Note that this regex format is allowed in any of these properties except 'type'.
+    "fallback": "/(Assign.*Anyone)/", // Optionally define a fallback in case the defined name is not found. Note that this regex format is allowed in any of these properties except 'type'.
+    "parent": "PARENT_VARIABLE_NAME_HERE" // Required for serverless-environment, serverless-function, and tr-workflow types. Indicates the variable representing this item's parent object (of type serverless-service or tr-workspace, depending on this item's type).
   }
 }
 ```
@@ -171,7 +207,7 @@ We can commit a `.env.<environment name here>` file, for example, `.env.dev`, to
 
 The setup script when run via `npm install` performs the following operations:
 1. Establish the Twilio account to use
-2. Automatically populate the `.env.<environment name here>` file for serverless package(s)
+2. Automatically populate the `.env.<environment name here>` file for each package
 3. Automatically populate the `ui_attributes.<environment name here>.json` file for flex-config deployment if not running locally
 4. Create and populate the `plugin-flex-ts-template-v2/public/appConfig.js` file if running locally
 5. Run `npm install` for each package, so that it is ready to use.
@@ -190,6 +226,36 @@ Normally the script will run `npm install` for each package. However, if you onl
 
 ```bash
 npm run postinstall -- --skip-install
+```
+
+### uninstall
+If you would like to completely remove the installed npm dependencies:
+
+```bash
+npm run postinstall -- --uninstall
+```
+
+This will remove `node_modules` and `package-lock.json` within each package before dependencies are installed (unless `--skip-install` is also specified, in which case dependencies would be removed but not reinstalled).
+
+### skip-packages
+This will cause the script to not process any packages (the default set or any provided via `--packages=`). This means that no environment files or installations will be performed. This is convenient to use in conjunction with the `--files=` parameter when you are using the script to process files outside or independent of a package.
+
+```bash
+npm run postinstall -- --skip-packages
+```
+
+### skip-env
+This will cause the script to not perform any environment variable population; only installation (and/or uninstallation) will be performed.
+
+```bash
+npm run postinstall -- --skip-env
+```
+
+### skip-plugin
+When the `packages` or `skip-packages` parameters are not specified, the Flex plugin package will be installed as part of the default packages. This option prevents the Flex plugin package from being installed.
+
+```bash
+npm run postinstall -- --skip-plugin
 ```
 
 ### env
@@ -211,4 +277,15 @@ However, you can specify the relative path to any npm package(s) for the script 
 
 ```bash
 npm run postinstall -- --packages=flex-config,serverless-schedule-manager
+```
+
+This is ignored if the `--skip-packages` parameter is also specified.
+
+### files
+In most cases, the setup script is used for processing packages. However, you may wish to populate variables within individual files outside or independent of a package. To do so, provide the path of the "example" file containing placeholders. The script will create a copy of the file with the placeholders filled, and the `example` in the filename replaced with the current environment (if none is specified, `local` is used).
+
+You can provide a comma-separated list of files as follows:
+
+```bash
+npm run postinstall -- --files=test/config.example.json,terraform/example.tfvars
 ```

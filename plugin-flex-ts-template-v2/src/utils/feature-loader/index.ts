@@ -19,7 +19,8 @@ import * as TaskRouterReplaceCompleteTask from '../serverless/TaskRouter/Complet
 import * as Logger from './logger';
 import * as SendLogsToBrowserConsole from '../logger/sendLogsToBrowserConsole';
 // @ts-ignore
-import features from '../../feature-library/*';
+// eslint-disable-next-line import/no-useless-path-segments
+import features from '../../feature-library/*/index.ts';
 
 export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   if (typeof features === 'undefined') {
@@ -51,7 +52,7 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   Logger.addHook(flex, manager, 'built-in logger to browser console', SendLogsToBrowserConsole);
 
   // After all features have initialized, execute deferred hooks
-  Logger.init();
+  Logger.init(manager);
   CssOverrides.init(manager);
   PasteElements.init(flex);
   Reducers.init(manager);

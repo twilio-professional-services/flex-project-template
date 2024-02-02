@@ -1,4 +1,6 @@
-import { Flex as FlexBox, Box, Button } from '@twilio-paste/core';
+import { Flex as FlexBox } from '@twilio-paste/core/flex';
+import { Box } from '@twilio-paste/core/box';
+import { Button } from '@twilio-paste/core/button';
 import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 import { AgentIcon } from '@twilio-paste/icons/esm/AgentIcon';
 import { CloseIcon } from '@twilio-paste/icons/esm/CloseIcon';

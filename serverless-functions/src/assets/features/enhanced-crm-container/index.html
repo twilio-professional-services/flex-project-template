@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Twilio Flex CRM Container Demo</title>
+    <link rel="stylesheet" href="https://assets.twilio.com/public_assets/paste-fonts/1.5.1/fonts.css" />
+    <style type="text/css">
+      body {
+        background-color: #f4f4f6;
+        color: #121c2d;
+        font-family: 'TwilioSansText', -apple-system, BlinkMacSystemFont, segoe ui, sans-serif;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        overflow: hidden;
+      }
+      #text-container {
+        flex: 1 0 auto;
+        text-align: center;
+        padding-top: 100px;
+      }
+      #text-container h1 {
+        font-weight: 600;
+        margin: 10px;
+      }
+      #text-container h2 {
+        color: #606b85;
+        font-weight: 500;
+        margin: 10px;
+      }
+    </style>
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const line1 = params.get('line1');
+        const line2 = params.get('line2');
+
+        document.querySelector('#line1').innerText = decodeURI(line1 ?? 'No task selected');
+        document.querySelector('#line2').innerText = decodeURI(line2 ?? '');
+      });
+    </script>
+  </head>
+  <body>
+    <div id="text-container">
+      <h1 id="line1"></h1>
+      <h2 id="line2"></h2>
+    </div>
+    <img src="noActiveTask.png" style="max-height: 50vh" />
+  </body>
+</html>

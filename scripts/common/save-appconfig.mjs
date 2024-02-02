@@ -1,23 +1,25 @@
 import { promises as fs } from 'fs';
 import JSON5 from 'json5';
 import shell from 'shelljs';
+import merge from 'lodash/merge.js';
 
 import getPluginDirs from "./get-plugin.mjs";
 import { flexConfigDir } from "./constants.mjs";
 
-export default async () => {
+export default async (overwrite) => {
   var { pluginDir } = getPluginDirs();
 
   var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`;
   var pluginAppConfig = `./${pluginDir}/public/appConfig.js`;
   var commonFlexConfig = `./${flexConfigDir}/ui_attributes.common.json`;
+  var localFlexConfig = `./${flexConfigDir}/ui_attributes.local.json`;
   
   if (!pluginDir) {
     return;
   }
 
   try {
-    if (shell.test('-e', pluginAppConfig)) {
+    if (!overwrite && shell.test('-e', pluginAppConfig)) {
       return;
     }
     
@@ -30,11 +32,22 @@ export default async () => {
     let flexConfigFileData = await fs.readFile(commonFlexConfig, "utf8");
     let flexConfigJsonData = JSON.parse(flexConfigFileData);
     
-    // disable admin panel for local
-    flexConfigJsonData.custom_data.features.admin_ui.enabled = false
+    // also read the environment-specific config
+    // this file should have been created by earlier script functions
+    let localFlexConfigJsonData = {};
+    if (shell.test('-e', localFlexConfig)) {
+      let localFlexConfigFileData = await fs.readFile(localFlexConfig, "utf8");
+      localFlexConfigJsonData = JSON.parse(localFlexConfigFileData);
+    }
     
-    appConfigFileData = appConfigFileData.replace("common: {}", `common: ${JSON5.stringify(flexConfigJsonData.custom_data.common, null, 2)}`);
-    appConfigFileData = appConfigFileData.replace("features: {}", `features: ${JSON5.stringify(flexConfigJsonData.custom_data.features, null, 2)}`);
+    // the environment-specific flex config should take precedence over the common config
+    let mergedFlexConfigJsonData = merge(flexConfigJsonData, localFlexConfigJsonData);
+    
+    // disable admin panel for local
+    mergedFlexConfigJsonData.custom_data.features.admin_ui.enabled = false
+    
+    appConfigFileData = appConfigFileData.replace("common: {}", `common: ${JSON5.stringify(mergedFlexConfigJsonData.custom_data.common, null, 2)}`);
+    appConfigFileData = appConfigFileData.replace("features: {}", `features: ${JSON5.stringify(mergedFlexConfigJsonData.custom_data.features, null, 2)}`);
     
     await fs.writeFile(pluginAppConfig, appConfigFileData, 'utf8');
   } catch (error) {

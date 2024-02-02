@@ -17,7 +17,7 @@ interface ResponseProps {
 }
 
 const Response: React.FunctionComponent<ResponseProps> = ({ text, task }) => {
-  const conversationSid = task.attributes.conversationSid ?? task.attributes.channelSid;
+  const conversationSid = task?.attributes?.conversationSid ?? task?.attributes?.channelSid;
   const inputState = useFlexSelector((state) => state.flex.chat.conversationInput[conversationSid]?.inputText);
   const parsedText = replaceStringAttributes(text, task);
 

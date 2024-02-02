@@ -7,7 +7,7 @@ import { TextArea } from '@twilio-paste/core/textarea';
 import { Label } from '@twilio-paste/core/label';
 import { HelpText } from '@twilio-paste/core/help-text';
 import { Box } from '@twilio-paste/core/box';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
 
 import { getDispositionsForQueue, isNotesEnabled, isRequireDispositionEnabledForQueue } from '../../config';
 import AppState from '../../../../types/manager/AppState';

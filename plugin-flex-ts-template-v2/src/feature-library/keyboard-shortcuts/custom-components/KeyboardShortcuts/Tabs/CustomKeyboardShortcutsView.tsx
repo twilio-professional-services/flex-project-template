@@ -1,19 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Heading,
-  Paragraph,
-  Card,
-  Tooltip,
-  Text,
-  Stack,
-  Box,
-  Table,
-  THead,
-  Tr,
-  Th,
-  Td,
-  TBody,
-} from '@twilio-paste/core';
+import { Table, THead, Tr, Th, Td, TBody } from '@twilio-paste/core/table';
+import { Box } from '@twilio-paste/core/box';
+import { Card } from '@twilio-paste/core/card';
+import { Heading } from '@twilio-paste/core/heading';
+import { Paragraph } from '@twilio-paste/core/paragraph';
+import { Stack } from '@twilio-paste/core/stack';
+import { Text } from '@twilio-paste/core/text';
+import { Tooltip } from '@twilio-paste/core/tooltip';
 import { Template, templates } from '@twilio/flex-ui';
 import { WarningIcon } from '@twilio-paste/icons/esm/WarningIcon';
 import { InformationIcon } from '@twilio-paste/icons/esm/InformationIcon';

@@ -9,8 +9,9 @@ const CallbackOperations = require(Runtime.getFunctions()['features/callback-and
   .path);
 
 const options = {
+  retainPlaceInQueue: true,
   sayOptions: { voice: 'Polly.Joanna' },
-  holdMusicUrl: '/features/callback-and-voicemail/wait-experience-music-30s.mp3',
+  holdMusicUrl: 'http://com.twilio.music.soft-rock.s3.amazonaws.com/_ghost_-_promo_2_sample_pack.mp3',
   messages: {
     initialGreeting: 'Please wait while we direct your call to the next available representative.',
     repeatingPrompt:
@@ -316,15 +317,22 @@ exports.handler = async (context, event, callback) => {
     case 'submit-callback':
       // Create the Callback task
       // Option to pull in a few more things from original task like conversation_id or even the workflowSid
-      const task = await fetchTask(context, enqueuedTaskSid);
+      const originalTask = await fetchTask(context, enqueuedTaskSid);
 
-      await cancelTask(context, task, 'Opted to request a callback');
+      await cancelTask(context, originalTask, 'Opted to request a callback');
 
-      await CallbackOperations.createCallbackTask({
+      const callbackParams = {
         context,
         numberToCall: `+${event.to.trim()}`,
         numberToCallFrom: event.Called,
-      });
+      };
+
+      if (options.retainPlaceInQueue && enqueuedTaskSid) {
+        // Get the original task's start time to maintain queue ordering.
+        callbackParams.virtualStartTime = originalTask?.dateCreated;
+      }
+
+      await CallbackOperations.createCallbackTask(callbackParams);
 
       // End the interaction. Hangup the call.
       twiml.say(options.sayOptions, options.messages.callbackSubmitted);
@@ -356,12 +364,11 @@ exports.handler = async (context, event, callback) => {
       return callback(null, twiml);
 
     case 'submit-voicemail':
-      // Submit the voicemail to Taskrouter (and/or to your backend if you have a voicemail handling solution)
+      // Submit the voicemail to TaskRouter (and/or to your backend if you have a voicemail handling solution)
 
       // Create the Voicemail task
       // Option to pull in a few more things from original task like conversation_id or even the workflowSid
-
-      await CallbackOperations.createCallbackTask({
+      const vmParams = {
         context,
         numberToCall: event.Caller,
         numberToCallFrom: event.Called,
@@ -369,7 +376,15 @@ exports.handler = async (context, event, callback) => {
         recordingUrl: event.RecordingUrl,
         transcriptSid: event.TranscriptionSid,
         transcriptText: event.TranscriptionText,
-      });
+      };
+
+      if (options.retainPlaceInQueue && enqueuedTaskSid) {
+        // Get the original task's start time to maintain queue ordering.
+        const originalTask = await fetchTask(context, enqueuedTaskSid);
+        vmParams.virtualStartTime = originalTask?.dateCreated;
+      }
+
+      await CallbackOperations.createCallbackTask(vmParams);
 
       return callback(null, '');
 

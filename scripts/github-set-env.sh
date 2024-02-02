@@ -13,5 +13,5 @@ EOF=_PS_TEMPLATE_VAR_EOF_
 to_envs() { jq -r "to_entries[] | \"\(.key)<<$EOF\n\(.value)\n$EOF\n\""; }
 
 # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-environment-variable
-echo "$VARS_CONTEXT" | to_envs >> $GITHUB_ENV
+[[ -n "$VARS_CONTEXT" ]] && echo "$VARS_CONTEXT" | to_envs >> $GITHUB_ENV
 echo "$SECRETS_CONTEXT" | to_envs >> $GITHUB_ENV

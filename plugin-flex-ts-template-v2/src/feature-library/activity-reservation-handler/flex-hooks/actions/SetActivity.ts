@@ -11,9 +11,6 @@ export const actionHook = function beforeSetActivity(flex: typeof Flex, _manager
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     const { activityAvailable, activityName, isInvokedByPlugin } = payload;
 
-    const hasAcceptedTasks = await FlexHelper.doesWorkerHaveReservationsInState(FlexHelper.RESERVATION_STATUS.ACCEPTED);
-    const hasWrappingTasks = await FlexHelper.doesWorkerHaveReservationsInState(FlexHelper.RESERVATION_STATUS.WRAPPING);
-
     if (isInvokedByPlugin) {
       // We will allow any worker activity change invoked by the plugin to
       // proceed as normal
@@ -27,7 +24,13 @@ export const actionHook = function beforeSetActivity(flex: typeof Flex, _manager
       Flex.Notifications.showNotification(NotificationIds.RestrictedActivities, {
         activityName,
       });
-    } else if (hasAcceptedTasks || hasWrappingTasks) {
+      return;
+    }
+
+    const hasAcceptedTasks = await FlexHelper.doesWorkerHaveReservationsInState(FlexHelper.RESERVATION_STATUS.ACCEPTED);
+    const hasWrappingTasks = await FlexHelper.doesWorkerHaveReservationsInState(FlexHelper.RESERVATION_STATUS.WRAPPING);
+
+    if (hasAcceptedTasks || hasWrappingTasks) {
       // if worker requested to go to an offline state or an online state
       // and we are currently in the opposite, this will toggle acd status
       await ActivityManager.enforceEvaluatedState(activityAvailable);

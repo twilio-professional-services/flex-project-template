@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Manager, templates } from '@twilio/flex-ui';
 import { Device } from '@twilio/voice-sdk';
-import { Flex, MenuButton, MenuGroup, useMenuState, Menu, MenuItem, useToaster, Toaster } from '@twilio-paste/core';
+import { Flex } from '@twilio-paste/core/flex';
+import { MenuButton, MenuGroup, useMenuState, Menu, MenuItem } from '@twilio-paste/core/menu';
+import { useToaster, Toaster } from '@twilio-paste/core/toast';
 import { MicrophoneOnIcon } from '@twilio-paste/icons/esm/MicrophoneOnIcon';
 import { VolumeOnIcon } from '@twilio-paste/icons/esm/VolumeOnIcon';
 import { AgentIcon } from '@twilio-paste/icons/esm/AgentIcon';

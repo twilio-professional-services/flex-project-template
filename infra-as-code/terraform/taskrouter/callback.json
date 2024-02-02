@@ -1,8 +1,0 @@
-{
-    "task_routing": {
-      "filters": [],
-      "default_filter": {
-        "queue": "${QUEUE_SID_EVERYONE}"
-      }
-    }
-}

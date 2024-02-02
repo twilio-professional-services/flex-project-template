@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box } from '@twilio-paste/core';
+import { Box } from '@twilio-paste/core/box';
 import { Manager, templates } from '@twilio/flex-ui';
 import { Heading } from '@twilio-paste/core/heading';
 

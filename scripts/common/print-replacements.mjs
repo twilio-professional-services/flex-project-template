@@ -1,4 +1,4 @@
-import { varNameMapping } from "./constants.mjs";
+import { placeholderPrefix, varNameMapping } from "./constants.mjs";
 
 const acronyms = ['sid', 'id', 'ui', 'sip', 'pstn', 'sms', 'crm', 'sla', 'cbm', 'url'];
 const ignoreKeys = ['ACCOUNT_SID', 'AUTH_TOKEN', 'TWILIO_API_KEY', 'TWILIO_API_SECRET'];
@@ -35,7 +35,7 @@ const formatName = (name) => {
 }
 
 const printLine = (name, value) => {
-  if (value == `<YOUR_${name}>`) {
+  if (value == `<${placeholderPrefix}_${name}>`) {
     // Don't print placeholders
     value = "(missing)";
   }
@@ -90,6 +90,25 @@ export default (allReplacements) => {
     if (printHeader) {
       console.log("");
       console.log("---- SERVERLESS DOMAINS ------------------------------------");
+      printHeader = false;
+    }
+    
+    printLine(key, allReplacements[key]);
+    alreadyOutput.push(key);
+  }
+  printHeader = true;
+  for (const key in allReplacements) {
+    if (!varNameMapping[key] || !(
+      varNameMapping[key].type == "serverless-service" ||
+      varNameMapping[key].type == "serverless-environment" ||
+      varNameMapping[key].type == "serverless-function"
+    )) {
+      continue;
+    }
+    
+    if (printHeader) {
+      console.log("");
+      console.log("---- SERVERLESS SIDS ---------------------------------------");
       printHeader = false;
     }
     

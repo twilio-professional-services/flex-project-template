@@ -3,7 +3,7 @@ sidebar_label: custom-transfer-directory
 title: custom-transfer-directory
 ---
 
-This feature enables the replacement of the queue transfer directory enabling the following behavior
+This feature enables the replacement of the queue and worker transfer directories enabling the following behavior
 
 - render different transfer icons for chat channel
 - enable the use of real time data to
@@ -13,15 +13,15 @@ This feature enables the replacement of the queue transfer directory enabling th
 - provide an improved starting point for augmenting queue transfer list with custom data (imagine the need to filter queues based on skills required to transfer to those queues)
 - provide the ability to enforce queue filters by worker
 - provide ability to enforce global queue filter to filter out system queues.
-- external
+- provide the option to filter out unavailable workers
 
 It also enables the addition of an external directory, enabling the following behavior
 
 - present a list of external transfer numbers
   - each transfer number can independently be configured for warm or cold transfers
-  - validtion checks performed on transfer numbers with notifications of any validation failures
+  - validation checks performed on transfer numbers with notifications of any validation failures
 
-# flex-user-experience
+## flex-user-experience
 
 Example queue transfer
 
@@ -31,14 +31,18 @@ Example external transfer
 
 ![alt text](/img/features/custom-transfer-directory/flex-user-experience-external-transfer.gif)
 
-# setup and dependencies
+## setup and dependencies
 
 Enable the feature in the flex-config asset for your environment.
 
 ```javascript
 "custom_transfer_directory": {
   "enabled": true, // globally enable or disable the feature
-  "use_paste_search_icon": false, // use new paste icon or old legacy icon (recommended to use old icon if mixing with OOTB tabs for consistant look)
+  "use_paste_search_icon": false, // use new paste icon or old legacy icon (recommended to use old icon if mixing with OOTB tabs for consistent look)
+  "worker" : {
+    "enabled": true, // enable the custom worker tab
+    "show_only_available_workers": false
+  },
   "queue" : {
     "enabled": true, // enable the custom queue tab
     "show_only_queues_with_available_workers": true,
@@ -68,6 +72,6 @@ worker.attributes : {
 }
 ```
 
-# how does it work?
+## how does it work?
 
-The queue tab is replaced with the custom components using the Flex component framework. When the component is rendered, a queues list is loaded from the taskrouter sdk and cached. Then the insights client is used to load the real time stats for all the queues. The real time stats are appended to each queue retrieved in the insights client and then any filters are applied. Various events trigger a re-evaluation of the filtered list including queue updates (update, add or remove) or an entry into the search field
+The queue and worker tabs are replaced with custom components using the Flex component framework. When the component is rendered, a list is loaded from the TaskRouter SDK and cached. Then the insights client is used to load the real time stats for all the queues. The real time stats are appended to each queue retrieved in the insights client and then any filters are applied. Various events trigger a re-evaluation of the filtered list including queue updates (update, add or remove) or an entry into the search field.
