@@ -97,7 +97,7 @@ Simply set this function's URL as **_Hold Music URL_** in the Studio Send to Fle
 
 `https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callback-and-voicemail/studio/wait-experience?mode=initialize`
 
-There is broad scope to customize the logic in here - potentially to pull more task attributes from the existing call task and apply them to the callback or voicemail task. Our default implementation keeps things simple and just retains the To and From numbers. For example, you may consider also retaining the workflow SID of the original call task, and some pertinent attributes from your IVR - to facilitate TaskRouter in routing those callback and voicemail tasks in an identical fashion to voice calls.
+There is broad scope to customize the logic in here - potentially to pull more task attributes from the existing call task and apply them to the callback or voicemail task. Our default implementation keeps things simple and just retains the To and From numbers (unless the caller opts for a different callback number). For example, you may consider also retaining the workflow SID of the original call task, and some pertinent attributes from your IVR - to facilitate TaskRouter in routing those callback and voicemail tasks in an identical fashion to voice calls.
 
 ### Noteworthy Points Regarding the _wait-experience_ Logic
 
