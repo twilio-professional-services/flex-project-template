@@ -380,8 +380,8 @@ exports.handler = async (context, event, callback) => {
 
       if (options.retainPlaceInQueue && enqueuedTaskSid) {
         // Get the original task's start time to maintain queue ordering.
-        const originalTask = await fetchTask(context, enqueuedTaskSid);
-        vmParams.virtualStartTime = originalTask?.dateCreated;
+        const originalTaskForVm = await fetchTask(context, enqueuedTaskSid);
+        vmParams.virtualStartTime = originalTaskForVm?.dateCreated;
       }
 
       await CallbackOperations.createCallbackTask(vmParams);
