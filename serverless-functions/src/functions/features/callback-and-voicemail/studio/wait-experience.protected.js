@@ -21,11 +21,14 @@ const options = {
           To leave a voicemail for the next available representative, press 2. \
           To continue holding, press any other key, or remain on the line.',
     callbackChoice:
-      'To request a callback on same number you have called from, press 1. \
-          To request a callback on another number, press 2. \
+      'To request a callback to the same number you have called from, press 1. \
+          To request a callback to a different number, press 2. \
           To continue holding, press any other key, or remain on the line.',
     callbackSubmitted: 'Thank you. A callback has been requested. You will receive a call shortly. Goodbye.',
-    callbackForOtherNumber: 'Please enter phone number along with country code followed by # sign',
+    callbackForOtherNumber:
+      'Please enter the phone number, starting with the country code. When you are finished, press the # sign.',
+    callbackForOtherNumberConfirm1: 'You entered',
+    callbackForOtherNumberConfirm2: 'Press 1 to confirm or 2 to re-enter.',
     recordVoicemailPrompt:
       'Please leave a message at the tone. When you are finished recording, you may hang up, or press the star key.',
     voicemailNotCaptured: "Sorry. We weren't able to capture your message.",
@@ -98,63 +101,6 @@ async function cancelTask(context, task, cancelReason) {
       attributes: JSON.stringify(newAttributes),
     },
   });
-}
-
-/**
- * Updates the call with callback or voicemail TwiML URL, and then cancels the ongoing call task with the appropriate reason and attributes.
- *
- * Much of the logic is the same for callback or voicemail, so we're using this single function to handle both.
- *
- * @param {*} context
- * @param {*} isVoicemail
- * @param {*} callSid
- * @param {*} taskSid
- * @returns
- */
-async function handleCallbackOrVoicemailSelected(context, isVoicemail, callSid, taskSid) {
-  const twiml = new Twilio.twiml.VoiceResponse();
-  const domain = `https://${context.DOMAIN_NAME}`;
-
-  const cancelReason = isVoicemail ? 'Opted to leave a voicemail' : 'Opted to request a callback';
-  const mode = isVoicemail ? 'record-voicemail' : 'handle-callback-choice';
-
-  const task = await fetchTask(context, taskSid);
-
-  // Redirect Call to callback or voicemail logic. We need to update the call with a new TwiML URL vs using twiml.redirect() - since
-  // we are still in the waitUrl TwiML execution - and it's not possible to use the <Record> verb in here. We piggyback on the same approach for callbacks,
-  // though technically these could be handled entirely in the waitUrl TwiML
-  if (isVoicemail) {
-    const result = await VoiceOperations.updateCall({
-      context,
-      callSid,
-      params: {
-        method: 'POST',
-        url: `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=${mode}&CallSid=${callSid}&enqueuedTaskSid=${taskSid}`,
-      },
-    });
-    const { success, status } = result;
-    if (success) {
-      //  Cancel (update) the task with handy attributes for reporting
-      await cancelTask(context, task, cancelReason);
-    } else {
-      console.error(`Failed to update call ${callSid} with new TwiML. Status: ${status}`);
-      twiml.say(options.sayOptions, options.messages.processingError);
-      twiml.redirect(
-        `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=main-wait-loop&CallSid=${callSid}&enqueuedTaskSid=${taskSid}&skipGreeting=true`,
-      );
-      return twiml;
-    }
-  } else {
-    const callbackOptionsGather = twiml.gather({
-      input: 'dtmf',
-      timeout: '5',
-      numDigits: 1,
-      action: `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=${mode}&CallSid=${callSid}&enqueuedTaskSid=${taskSid}`,
-    });
-    callbackOptionsGather.say(options.sayOptions, options.messages.callbackChoice);
-    return twiml;
-  }
-  return '';
 }
 
 exports.handler = async (context, event, callback) => {
@@ -235,10 +181,39 @@ exports.handler = async (context, event, callback) => {
       return callback(null, twiml);
 
     case 'handle-callback-or-voicemail-choice':
-      if (Digits === '1' || Digits === '2') {
-        // 1 = callback, 2 = voicemail
-        const isVoicemail = Digits === '2';
-        return callback(null, await handleCallbackOrVoicemailSelected(context, isVoicemail, CallSid, enqueuedTaskSid));
+      // Redirect call to callback or voicemail logic.
+      if (Digits === '1') {
+        // Callback option selected
+        // Prompt the caller if they wish to use the number they called from, or another number.
+        const callbackOptionsGather = twiml.gather({
+          input: 'dtmf',
+          timeout: '5',
+          numDigits: 1,
+          action: `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=handle-callback-choice&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}`,
+        });
+        callbackOptionsGather.say(options.sayOptions, options.messages.callbackChoice);
+        return callback(null, twiml);
+      } else if (Digits === '2') {
+        // Voicemail option selected
+        // We need to update the call with a new TwiML URL vs using twiml.redirect() since we are still in the waitUrl TwiML execution
+        // and it's not possible to use the <Record> verb in here.
+        const result = await VoiceOperations.updateCall({
+          context,
+          callSid: CallSid,
+          params: {
+            method: 'POST',
+            url: `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=record-voicemail&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}`,
+          },
+        });
+        const { success, status } = result;
+        if (success) {
+          //  Cancel (update) the task with handy attributes for reporting
+          const task = await fetchTask(context, enqueuedTaskSid);
+          await cancelTask(context, task, 'Opted to leave a voicemail');
+          return callback(null, '');
+        }
+        console.error(`Failed to update call ${CallSid} with new TwiML. Status: ${status}`);
+        twiml.say(options.sayOptions, options.messages.processingError);
       }
 
       // Loop back to the start of the wait loop if the caller pressed any other key
@@ -249,12 +224,13 @@ exports.handler = async (context, event, callback) => {
 
     case 'handle-callback-choice':
       if (Digits && Digits === '1') {
+        // Caller selected option to use the number they called from
         twiml.redirect(
           `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=submit-callback&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}&to=${event.Caller}`,
         );
         return callback(null, twiml);
       } else if (Digits && Digits === '2') {
-        // Get phone number from customer as input to request a callback
+        // Get desired phone number from caller
         const gather = twiml.gather({
           input: 'dtmf',
           timeout: 10,
@@ -274,7 +250,7 @@ exports.handler = async (context, event, callback) => {
 
     case 'handle-callback-for-other-number-confirmation-option':
       if (Digits) {
-        const say = twiml.say(`You entered `);
+        const say = twiml.say(options.sayOptions, `${options.messages.callbackForOtherNumberConfirm1} `);
         say.sayAs(
           {
             'interpret-as': 'telephone',
@@ -290,7 +266,7 @@ exports.handler = async (context, event, callback) => {
           action: `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=handle-callback-for-other-number-confirmation&enqueuedTaskSid=${enqueuedTaskSid}&updatedPhoneNumber=${Digits.trim()}`,
           method: 'GET',
         });
-        gather.say(` press 1 to confirm and 2 to re-enter`);
+        gather.say(options.sayOptions, ` ${options.messages.callbackForOtherNumberConfirm2}`);
       } else {
         twiml.say(options.sayOptions, options.messages.invalidInput);
       }
@@ -321,9 +297,12 @@ exports.handler = async (context, event, callback) => {
 
       await cancelTask(context, originalTask, 'Opted to request a callback');
 
+      // The URL parsing converts + to space so we need to trim
+      // Prepend a + if this is not a SIP address
+      const numberToCall = `${/^\d/.test(event.to.trim()) ? '+' : ''}${event.to.trim()}`;
       const callbackParams = {
         context,
-        numberToCall: `+${event.to.trim()}`,
+        numberToCall,
         numberToCallFrom: event.Called,
       };
 
