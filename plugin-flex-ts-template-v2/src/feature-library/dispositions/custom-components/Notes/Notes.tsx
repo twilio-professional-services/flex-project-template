@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ITask, Template, templates } from '@twilio/flex-ui';
 import { TextArea } from '@twilio-paste/core/textarea';
 import { Label } from '@twilio-paste/core/label';
@@ -12,12 +11,10 @@ export interface OwnProps {
   saveNotes: (notes: string) => void;
 }
 
-const Notes = ({ task, saveNotes }: OwnProps) => {
-  const [notes, setNotes] = useState('');
+const Notes = ({ task, notes, saveNotes }: OwnProps) => {
   const NOTES_MAX_LENGTH = 100;
 
   const handleChange = (value: string) => {
-    setNotes(value);
     saveNotes(value);
   };
 
