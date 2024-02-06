@@ -221,21 +221,18 @@
       "dispositions": {
         "enabled": true,
         "enable_notes": true,
-        "require_disposition": false,
-        "global_dispositions": [
-          "Resolved",
-          "Not Resolved",
-          "Follow-up Required",
-          "Escalation",
-          "Wrong Department"
-        ],
+        "global": {
+          "require_disposition": false,
+          "dispositions": ["Resolved", "Not Resolved", "Follow-up Required", "Escalation", "Wrong Department"],
+          "text_attributes": [],
+          "select_attributes": []
+        },
         "per_queue": {
-          "exampleQueueSid": {
+          "exampleQueueName": {
             "require_disposition": true,
-            "dispositions": [
-              "Promotional Sale",
-              "Renewal"
-            ]
+            "dispositions": ["Promotional Sale", "Renewal"],
+            "text_attributes": [],
+            "select_attributes": []
           }
         }
       },
