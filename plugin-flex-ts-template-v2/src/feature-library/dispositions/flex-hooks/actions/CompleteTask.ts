@@ -14,11 +14,10 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 import { DispositionsNotification } from '../notifications';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 
-const handleAbort = (flex: typeof Flex, abortFunction: any, disposition: boolean = true) => {
-  if (disposition) flex.Notifications.showNotification(DispositionsNotification.DispositionRequired);
-  else {
-    flex.Notifications.showNotification(DispositionsNotification.AttributeRequired);
-  }
+const handleAbort = (flex: typeof Flex, abortFunction: any, dispositionError: boolean) => {
+  flex.Notifications.showNotification(
+    dispositionError ? DispositionsNotification.DispositionRequired : DispositionsNotification.AttributeRequired,
+  );
 
   flex.Actions.invokeAction('SetComponentState', {
     name: 'AgentTaskCanvasTabs',
@@ -51,7 +50,7 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
 
     if (!tasks || !tasks[payload.task.taskSid]) {
       if (isRequireDispositionEnabledForQueue(queueSid, queueName) && numDispositions > 0) {
-        handleAbort(flex, abortFunction);
+        handleAbort(flex, abortFunction, true);
       }
       return;
     }
@@ -64,7 +63,7 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
       !taskDisposition.disposition &&
       numDispositions > 0
     ) {
-      handleAbort(flex, abortFunction);
+      handleAbort(flex, abortFunction, true);
       return;
     }
     let missing = 0;
@@ -76,7 +75,11 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     });
     if (missing > 0) handleAbort(flex, abortFunction, false);
 
-    if (!taskDisposition.disposition && (!isNotesEnabled() || !taskDisposition.notes)) {
+    if (
+      !taskDisposition.disposition &&
+      (!isNotesEnabled() || !taskDisposition.notes) &&
+      !Object.keys(taskDisposition.custom_attributes).length
+    ) {
       // Nothing for us to do, and it's okay!
       return;
     }
