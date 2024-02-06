@@ -38,8 +38,8 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     const queueSid = payload.task.queueSid;
     const queueName = payload.task.queueName;
     const numDispositions = getDispositionsForQueue(queueSid, queueName).length;
-    const textAttributes = getTextAttributes(queueName);
-    const selectAttributes = getSelectAttributes(queueName);
+    const textAttributes = getTextAttributes(queueSid, queueName);
+    const selectAttributes = getSelectAttributes(queueSid, queueName);
 
     // If notes disabled, and no dispositions are configured, return.
     if (numDispositions < 1 && !isNotesEnabled() && textAttributes.length < 1 && selectAttributes.length < 1) {

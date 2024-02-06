@@ -4,8 +4,12 @@ import DispositionsConfig, { CustomAttribute, WrapUpConfig, SelectAttribute } fr
 const {
   enabled = false,
   enable_notes = false,
-  require_disposition = false,
-  global = {} as WrapUpConfig,
+  global = {
+    dispositions: [],
+    require_disposition: false,
+    select_attributes: [],
+    text_attributes: [],
+  } as WrapUpConfig,
   per_queue = {},
 } = (getFeatureFlags()?.features?.dispositions as DispositionsConfig) || {};
 
@@ -20,7 +24,7 @@ export const isNotesEnabled = () => {
 export const isRequireDispositionEnabledForQueue = (queueSid: string, queueName: string) => {
   if (!isFeatureEnabled()) return false;
 
-  let required = require_disposition;
+  let required = global.require_disposition;
   if (
     queueSid &&
     per_queue[queueSid] &&
@@ -52,30 +56,22 @@ export const getDispositionsForQueue = (queueSid: string, queueName: string): st
   return dispositions;
 };
 
-export const getTextAttributes = (queueName: string): CustomAttribute[] => {
+export const getTextAttributes = (queueSid: string, queueName: string): CustomAttribute[] => {
   let text_attributes = [...global.text_attributes];
-  if (queueName && per_queue[queueName] && per_queue[queueName].text_attributes) {
+  if (queueSid && per_queue[queueSid] && per_queue[queueSid].text_attributes) {
+    text_attributes = [...text_attributes, ...per_queue[queueSid].text_attributes];
+  } else if (queueName && per_queue[queueName] && per_queue[queueName].text_attributes) {
     text_attributes = [...text_attributes, ...per_queue[queueName].text_attributes];
   }
   return text_attributes;
 };
 
-export const getSelectAttributes = (queueName: string): SelectAttribute[] => {
+export const getSelectAttributes = (queueSid: string, queueName: string): SelectAttribute[] => {
   let select_attributes = [...global.select_attributes];
-  if (queueName && per_queue[queueName] && per_queue[queueName].select_attributes) {
+  if (queueSid && per_queue[queueSid] && per_queue[queueSid].select_attributes) {
+    select_attributes = [...select_attributes, ...per_queue[queueSid].select_attributes];
+  } else if (queueName && per_queue[queueName] && per_queue[queueName].select_attributes) {
     select_attributes = [...select_attributes, ...per_queue[queueName].select_attributes];
   }
   return select_attributes;
-};
-
-export const getMultiSelectGroup = (): SelectAttribute => {
-  return global.multi_select_group as SelectAttribute;
-};
-
-export const getQueueMultiSelectGroup = (queueName: string): SelectAttribute => {
-  let queueMultiSelectGroup = {} as SelectAttribute;
-  if (queueName && per_queue[queueName] && per_queue[queueName].multi_select_group) {
-    queueMultiSelectGroup = per_queue[queueName].multi_select_group;
-  }
-  return queueMultiSelectGroup;
 };
