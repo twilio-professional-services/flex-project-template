@@ -71,7 +71,6 @@ const DispositionTab = ({ task }: OwnProps) => {
   };
 
   const updateStore = (payload: DispositionPayload) => {
-    // console.log('Updating store with:', payload);
     dispatch(updateDisposition(payload));
   };
 

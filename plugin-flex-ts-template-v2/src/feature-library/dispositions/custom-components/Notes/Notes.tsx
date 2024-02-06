@@ -17,7 +17,6 @@ const Notes = ({ task, saveNotes }: OwnProps) => {
   const NOTES_MAX_LENGTH = 100;
 
   const handleChange = (value: string) => {
-    console.log('NOTES:', value);
     setNotes(value);
     saveNotes(value);
   };

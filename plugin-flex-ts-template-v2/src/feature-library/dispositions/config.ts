@@ -27,8 +27,7 @@ export const isRequireDispositionEnabledForQueue = (queueSid: string, queueName:
     (per_queue[queueSid].require_disposition === true || per_queue[queueSid].require_disposition === false)
   ) {
     required = per_queue[queueSid].require_disposition;
-  }
-  if (
+  } else if (
     queueName &&
     per_queue[queueName] &&
     (per_queue[queueName].require_disposition === true || per_queue[queueName].require_disposition === false)
@@ -46,8 +45,7 @@ export const getDispositionsForQueue = (queueSid: string, queueName: string): st
 
   if (queueSid && per_queue[queueSid] && per_queue[queueSid].dispositions) {
     dispositions = [...dispositions, ...per_queue[queueSid].dispositions];
-  }
-  if (queueName && per_queue[queueName] && per_queue[queueName].dispositions) {
+  } else if (queueName && per_queue[queueName] && per_queue[queueName].dispositions) {
     dispositions = [...dispositions, ...per_queue[queueName].dispositions];
   }
 

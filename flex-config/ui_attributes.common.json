@@ -229,11 +229,12 @@
           "multi_select_group" : {}
         },
         "per_queue": {
-          "exampleQueueSid": {
+          "exampleQueueName": {
             "require_disposition": true,
             "dispositions": ["Promotional Sale", "Renewal"],
             "text_attributes": [],
-            "select_attributes": []
+            "select_attributes": [],
+            "multi_select_group" : {}
           }
         }
       },
