@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs';
 import shell from 'shelljs';
 
-import { varNameMapping } from "./constants.mjs";
+import { placeholderPrefix, varNameMapping } from "./constants.mjs";
 import * as fetchCli from "./fetch-cli.mjs";
 
 // Initialize env file if necessary, then parse its contents
@@ -19,7 +19,7 @@ const readEnv = async (envFile, exampleFile, overwrite) => {
   // read and parse the env file
   const initialEnv = await fs.readFile(envFile, "utf8");
   let result = {};
-  for (const match of initialEnv.matchAll(/<YOUR_(.*)>/g)) {
+  for (const match of initialEnv.matchAll(new RegExp(`<${placeholderPrefix}_(.*)>`, 'g'))) {
     result[match[1]] = match[0];
   }
   return result;
@@ -29,7 +29,7 @@ const readEnv = async (envFile, exampleFile, overwrite) => {
 const fillKnownEnvVars = (envVars) => {
   for (const key in envVars) {
     // If this isn't a placeholder value, ignore it
-    if (envVars[key] !== `<YOUR_${key}>`) {
+    if (envVars[key] !== `<${placeholderPrefix}_${key}>`) {
       continue;
     }
     
@@ -43,7 +43,7 @@ const fillKnownEnvVars = (envVars) => {
 }
 
 const fillVar = (key, envVars, environment) => {
-  if (envVars[key] !== `<YOUR_${key}>` || !varNameMapping[key]) {
+  if (envVars[key] !== `<${placeholderPrefix}_${key}>` || !varNameMapping[key]) {
     // If this isn't a placeholder value, ignore it.
     // This variable isn't in the constant, so we can't do anything else with it.
     return;
@@ -68,9 +68,13 @@ const fillVar = (key, envVars, environment) => {
   if (parentKey) {
     // if this key is not in the env vars, add it so that it can be referenced
     if (!envVars[parentKey]) {
-      envVars[parentKey] = `<YOUR_${parentKey}>`;
+      envVars[parentKey] = `<${placeholderPrefix}_${parentKey}>`;
     }
     fillVar(parentKey, envVars, environment);
+    if (envVars[parentKey] === `<${placeholderPrefix}_${parentKey}>`) {
+      // if we couldn't populate the parent, we definitely can't fetch this
+      return;
+    }
   }
   
   // fetch the value based on type
@@ -121,7 +125,7 @@ const fillUnknownEnvVars = (envVars, environment) => {
 
 const fillAccountVars = (envVars, account) => {
   for (const key in envVars) {
-    if (envVars[key] !== `<YOUR_${key}>`) {
+    if (envVars[key] !== `<${placeholderPrefix}_${key}>`) {
       // If this isn't a placeholder value, ignore it.
       continue;
     }
@@ -143,7 +147,7 @@ const fillAccountVars = (envVars, account) => {
 const saveReplacements = async (data, path) => {
   try {
     for (const key in data) {
-      shell.sed('-i', new RegExp(`<YOUR_${key}>`, 'g'), data[key], path);
+      shell.sed('-i', new RegExp(`<${placeholderPrefix}_${key}>`, 'g'), data[key], path);
     }
   } catch (error) {
     console.error(`Error saving file ${path}`, error);

@@ -357,6 +357,52 @@ exports.updateWorkerChannel = async function updateWorkerChannel(parameters) {
  * @param {object} parameters the parameters for the function
  * @param {number} parameters.attempts the number of retry attempts performed
  * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.workerSid the worker SID to update
+ * @param {object} parameters.attributesUpdate the object containing new attributes
+ * @returns {object} worker attributes object
+ * @description the following method is used to robustly update
+ *   worker attributes
+ */
+exports.updateWorkerAttributes = async function updateWorkerAttributes(parameters) {
+  const { context, workerSid, attributesUpdate } = parameters;
+
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(workerSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain workerSid string');
+  if (!isString(attributesUpdate))
+    throw new Error('Invalid parameters object passed. Parameters must contain attributes Json string');
+
+  try {
+    const client = context.getTwilioClient();
+    const worker = await client.taskrouter.v1
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .workers(workerSid)
+      .fetch();
+
+    const newAttributes = {
+      ...JSON.parse(worker.attributes),
+      ...JSON.parse(attributesUpdate),
+    };
+
+    const updatedWorker = await client.taskrouter.v1
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .workers(workerSid)
+      .update({ attributes: JSON.stringify(newAttributes) });
+
+    return {
+      success: true,
+      status: 200,
+      worker: updatedWorker,
+    };
+  } catch (error) {
+    return retryHandler(error, parameters, exports.updateWorkerAttributes);
+  }
+};
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {number} parameters.attempts the number of retry attempts performed
+ * @param {object} parameters.context the context from calling lambda function
  * @param {string} parameters.taskSid the task to update
  * @param {object} parameters.updateParams parameters to update on the task
  * @returns {object} an object containing the task if successful

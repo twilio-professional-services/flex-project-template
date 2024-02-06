@@ -227,7 +227,7 @@
           "text_attributes": [],
           "select_attributes": [],
           "multi_select_group" : {}
-      },
+        },
         "per_queue": {
           "exampleQueueSid": {
             "require_disposition": true,
@@ -264,12 +264,15 @@
         "columns": {
           "calls": true,
           "other_tasks": true,
-          "team": true,
+          "team": false,
           "department": false,
           "location": false,
           "agent_skills": true,
           "activity_icon": false
         }
+      },
+      "ring_notification": {
+        "enabled": false
       },
       "send_audio_rec_file": {
         "enabled": true
@@ -358,12 +361,29 @@
       "sip_support": {
         "enabled": false
       },
+      "worker_details": {
+        "enabled": true,
+        "edit_team": true,
+        "edit_department": true,
+        "text_attributes": [],
+        "boolean_attributes": []
+      },
+      "worker_canvas_tabs": {
+        "enabled": true
+      },
       "datadog_log_integration": {
         "enabled": false,
         "log_level": "info",
         "api_key": "",
         "intake_region": "",
         "flush_timeout": 5000
+      },
+      "contact_history": {
+        "enabled": false,
+        "max_contacts": 25
+      },
+      "inline_media": {
+        "enabled": true
       }
     }
   }

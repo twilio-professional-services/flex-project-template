@@ -6,6 +6,10 @@ module.exports = (config, { isProd, isDev, isTest }) => {
    * Consult https://webpack.js.org/configuration for more information
    */
 
+  if (isDev) {
+    config.devtool = 'inline-source-map';
+  }
+
   return {
     ...config,
     node: {

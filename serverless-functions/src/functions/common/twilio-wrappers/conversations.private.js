@@ -24,7 +24,7 @@ exports.getConversation = async function getConversation(parameters) {
 
     return { success: true, status: 200, conversation };
   } catch (error) {
-    return retryHandler(error, parameters, exports.updateAttributes);
+    return retryHandler(error, parameters, exports.getConversation);
   }
 };
 

@@ -6,6 +6,7 @@ import zhHans from './zh-hans.json';
 
 // Export the template names as an enum for better maintainability when accessing them elsewhere
 export enum StringTemplates {
+  Capacity = 'PSSupervisorCapacity',
   ChannelCapacity = 'PSSupervisorCapacityChannelCapacity',
   MissingConfiguration = 'PSSupervisorCapacityMissingConfiguration',
   NoChannels = 'PSSupervisorCapacityNoChannels',
@@ -15,6 +16,7 @@ export enum StringTemplates {
 
 export const stringHook = () => ({
   'en-US': {
+    [StringTemplates.Capacity]: 'Capacity',
     [StringTemplates.ChannelCapacity]: 'Channel Capacity',
     [StringTemplates.MissingConfiguration]: 'Missing configuration. Please notify your system administrator.',
     [StringTemplates.NoChannels]: 'No worker channels available.',

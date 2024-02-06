@@ -51,6 +51,15 @@ variable "SERVERLESS_ENV_SID" {
   }
 }
 
+variable "TWILIO_FLEX_WORKSPACE_SID" {
+  type        = string
+  description = "TaskRouter workspace sid"
+  validation {
+    condition     = length(var.TWILIO_FLEX_WORKSPACE_SID) > 2 && substr(var.TWILIO_FLEX_WORKSPACE_SID, 0, 2) == "WS"
+    error_message = "TWILIO_FLEX_WORKSPACE_SID expected to start with \"WS\"."
+  }
+}
+
 # FEATURE: schedule-manager
 
 variable "SCHEDULE_MANAGER_DOMAIN" {

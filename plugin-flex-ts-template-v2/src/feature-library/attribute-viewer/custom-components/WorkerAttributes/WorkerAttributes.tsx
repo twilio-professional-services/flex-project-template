@@ -3,6 +3,7 @@ import { CodeBlock } from '@twilio-paste/core/code-block';
 
 import { SectionHeader } from './WorkerAttributes.Styles';
 import { StringTemplates } from '../../flex-hooks/strings';
+import { isWorkerCanvasTabsEnabled } from '../../config';
 
 interface Props {
   worker?: IWorker;
@@ -11,9 +12,11 @@ interface Props {
 const WorkerAttributes = ({ worker }: Props) => {
   return (
     <>
-      <SectionHeader>
-        <Template source={templates[StringTemplates.WorkerAttributesHeader]} />
-      </SectionHeader>
+      {isWorkerCanvasTabsEnabled() ? null : (
+        <SectionHeader>
+          <Template source={templates[StringTemplates.WorkerAttributesHeader]} />
+        </SectionHeader>
+      )}
       <CodeBlock variant="multi-line" language="json" code={JSON.stringify(worker?.attributes, null, 2)} />
     </>
   );
