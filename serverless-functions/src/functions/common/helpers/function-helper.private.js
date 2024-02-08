@@ -1,6 +1,8 @@
 const { isObject, isString } = require('lodash');
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 
+const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handler'].path).retryHandler;
+
 const prepareFunction = (context, event, callback, requiredParameters, handlerFn) => {
   const response = new Twilio.Response();
   const parameterError = module.exports.validateParameters(context.PATH, event, requiredParameters);
@@ -95,9 +97,35 @@ exports.prepareStudioFunction = (requiredParameters, handlerFn) => {
 /**
  * @param {object} object
  * @returns {object}
- * @description convenience method to safely extract the standad elements in the response back to flex from serverless functions.  This can be used with any object that is returrned from any twilio-wrapper function.
+ * @description convenience method to safely extract the standard elements in the response back to flex from serverless functions.  This can be used with any object that is returned from any twilio-wrapper function.
  */
 exports.extractStandardResponse = (object) => {
   const { success, message, twilioDocPage, twilioErrorCode } = object;
   return { success, message, twilioDocPage, twilioErrorCode };
+};
+
+/**
+ * Callback function passed to the twilioExecute function
+ *
+ * @callback twilioCallback
+ * @param {Twilio} client - Twilio client instance
+ * @returns {Promise<object>} Twilio client response
+ */
+
+/**
+ * Wrapper for executing Twilio client library functions with custom retry logic
+ *
+ * @param {twilioCallback} callback - Callback containing the Twilio client command to run
+ * @param {object} context - Serverless context, including the Twilio client instance
+ * @returns {Promise<object>} Response from the Twilio client, or errors if present
+ */
+exports.twilioExecute = async (context, callback) => {
+  try {
+    const client = context.getTwilioClient();
+    // eslint-disable-next-line callback-return
+    const data = await callback(client);
+    return { success: true, data, status: 200 };
+  } catch (error) {
+    return retryHandler(error, { context, callback }, exports.twilioExecute);
+  }
 };
