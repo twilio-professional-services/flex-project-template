@@ -70,11 +70,11 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         );
 
         // If map already exists, use the unique name to access it
-        if (syncMap.data.sid || workerSid) {
+        if (syncMap.data?.sid || workerSid) {
           const createMapItemResponse = await twilioExecute(context, (client) =>
             client.sync.v1
               .services(context.TWILIO_FLEX_SYNC_SID)
-              .syncMaps(syncMap.data.sid || `ParkedInteractions_${workerSid}`)
+              .syncMaps(syncMap.data?.sid || `ParkedInteractions_${workerSid}`)
               .syncMapItems.create({
                 key: conversationSid,
                 ttl: 86400, // One day
