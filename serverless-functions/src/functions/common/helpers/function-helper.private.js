@@ -105,11 +105,18 @@ exports.extractStandardResponse = (object) => {
 };
 
 /**
+ * @typedef {object} WebServiceReturn
+ * @property {boolean} success - Whether the web service request was successful
+ * @property {number} status - The HTTP status code from the web service
+ * @property {object} data - Data returned from the web service
+ */
+
+/**
  * Callback function passed to the twilioExecute function
  *
  * @callback twilioExecuteCallback
  * @param {Twilio} client - Twilio client instance
- * @returns {Promise<object>} Twilio client response
+ * @returns {Promise<WebServiceReturn>} Twilio client response
  */
 
 /**
@@ -118,7 +125,7 @@ exports.extractStandardResponse = (object) => {
  * @param {twilioExecuteCallback} callback - Callback containing the Twilio client command to run
  * @param {object} context - Serverless context, including the Twilio client instance
  * @param {number?} attempts - Current retry attempt
- * @returns {Promise<object>} Response from the Twilio client, or errors if present
+ * @returns {Promise<WebServiceReturn>} Response from the Twilio client, or errors if present
  */
 exports.twilioExecute = async (context, callback, attempts = 0) => {
   try {
@@ -127,7 +134,7 @@ exports.twilioExecute = async (context, callback, attempts = 0) => {
     const data = await callback(client);
     return { success: true, data, status: 200 };
   } catch (error) {
-    return retryHandler(error, { context, callback, attempts }, exports.twilioExecute);
+    return retryHandler(error, context, callback, exports.twilioExecute, attempts);
   }
 };
 
@@ -135,7 +142,7 @@ exports.twilioExecute = async (context, callback, attempts = 0) => {
  * Callback function passed to the executeWithRetry function
  *
  * @callback executeCallback
- * @returns {Promise<object>} Web service response
+ * @returns {Promise<WebServiceReturn>} Web service response
  */
 
 /**
@@ -144,7 +151,7 @@ exports.twilioExecute = async (context, callback, attempts = 0) => {
  * @param {executeCallback} callback - Callback containing the web service call to run
  * @param {object} context - Serverless context
  * @param {number?} attempts - Current retry attempt
- * @returns {Promise<object>} Response from the web service, or errors if present
+ * @returns {Promise<WebServiceReturn>} Response from the web service, or errors if present
  */
 exports.executeWithRetry = async (context, callback, attempts = 0) => {
   try {
@@ -152,6 +159,6 @@ exports.executeWithRetry = async (context, callback, attempts = 0) => {
     const data = await callback();
     return { success: true, data, status: 200 };
   } catch (error) {
-    return retryHandler(error, { context, callback, attempts }, exports.twilioExecute);
+    return retryHandler(error, context, callback, exports.executeWithRetry, attempts);
   }
 };
