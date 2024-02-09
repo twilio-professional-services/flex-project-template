@@ -24,7 +24,7 @@ const prepareFunction = (context, event, callback, requiredParameters, handlerFn
     response.setStatusCode(500);
     response.setBody({
       success: false,
-      message: error,
+      message: error.toString(),
     });
     return callback(null, response);
   };
