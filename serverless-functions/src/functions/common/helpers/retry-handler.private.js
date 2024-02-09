@@ -49,7 +49,6 @@ exports.retryHandler = async (error, parameters, callback) => {
     (status === 412 ||
       status === 429 ||
       status === 503 ||
-      status === 404 ||
       twilioErrorCode === 'ECONNRESET' ||
       twilioErrorCode === 'ETIMEDOUT') &&
     isNumber(attempts) &&
