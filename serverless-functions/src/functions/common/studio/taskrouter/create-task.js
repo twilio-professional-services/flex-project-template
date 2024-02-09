@@ -13,7 +13,6 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
   try {
     const { workflowSid, taskChannel, attributes, priority, timeout } = event;
 
-    console.log('attributes: ', attributes);
     const result = await TaskRouterOperations.createTask({
       context,
       workflowSid,
@@ -23,10 +22,10 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       timeout,
     });
 
-    const { task, taskSid, status } = result;
+    const { data: task, status } = result;
 
     response.setStatusCode(status);
-    response.setBody({ task, taskSid, ...extractStandardResponse(result) });
+    response.setBody({ task, taskSid: task.sid, ...extractStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

@@ -1,7 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
 const requiredParameters = [
   { key: 'workerSid', purpose: 'unique ID of the worker' },
@@ -23,14 +22,14 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     }
 
     const { workerSid, workerChannelSid, capacity, available } = event;
-    const result = await TaskRouterOperations.updateWorkerChannel({
-      context,
-      workerSid,
-      workerChannelSid,
-      capacity: Number(capacity),
-      available: available === 'true',
-    });
-    const { status, workerChannelCapacity } = result;
+    const result = await twilioExecute(context, (client) =>
+      client.taskrouter.v1
+        .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+        .workers(workerSid)
+        .workerChannels(workerChannelSid)
+        .update({ capacity: Number(capacity), available: available === 'true' }),
+    );
+    const { status, data: workerChannelCapacity } = result;
 
     response.setStatusCode(status);
     response.setBody({ workerChannelCapacity, ...extractStandardResponse(result) });

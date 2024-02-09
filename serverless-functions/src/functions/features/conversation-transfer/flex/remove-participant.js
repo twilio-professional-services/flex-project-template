@@ -1,4 +1,4 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
 const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
 
@@ -34,13 +34,11 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     // hit this function rather than taking the normal complete task path. That leaves
     // the interaction open with only one participant--the customer. This is undesirable, because
     // then the customer's next message won't open a new interaction until it is cleaned up in 180 days!
-    const participants = await ConversationsOperations.participantList({
-      conversationSid,
-      limit: 100,
-      context,
-    });
+    const participants = await twilioExecute(context, (client) =>
+      client.conversations.v1.conversations(conversationSid).participants.list({ limit: 100 }),
+    );
 
-    if (participants.participants && participants.participants.length <= 1) {
+    if (participants.data && participants.data.length <= 1) {
       // No other participants. Check for outstanding invites.
       const conversationResult = await ConversationsOperations.getConversation({
         conversationSid,
@@ -49,8 +47,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
       let invites = {};
 
-      if (conversationResult?.conversation?.attributes) {
-        const parsedAttrs = JSON.parse(conversationResult.conversation.attributes);
+      if (conversationResult?.data?.attributes) {
+        const parsedAttrs = JSON.parse(conversationResult.data.attributes);
 
         if (parsedAttrs.invites) {
           invites = parsedAttrs.invites;
@@ -59,12 +57,12 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
       if (Object.keys(invites).length < 1) {
         // If the customer is alone, and no invites are pending, close it out.
-        await InteractionsOperations.channelUpdate({
-          status: 'closed',
-          interactionSid: flexInteractionSid,
-          channelSid: flexInteractionChannelSid,
-          context,
-        });
+        await twilioExecute(context, (client) =>
+          client.flexApi.v1
+            .interaction(flexInteractionSid)
+            .channels(flexInteractionChannelSid)
+            .update({ status: 'closed' }),
+        );
       }
     }
 

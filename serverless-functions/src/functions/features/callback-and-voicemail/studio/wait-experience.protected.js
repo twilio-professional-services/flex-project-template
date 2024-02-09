@@ -3,7 +3,7 @@
  * They can - at any point - press the star key to leave a voicemail and abandon the ongoing call.
  *
  */
-const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
+const { twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 const CallbackOperations = require(Runtime.getFunctions()['features/callback-and-voicemail/common/callback-operations']
   .path);
@@ -59,7 +59,7 @@ async function getPendingTaskByCallSid(context, callSid, workflowSid) {
     limit: 50,
   });
 
-  return result.tasks?.find((task) => task.attributes.call_sid === callSid);
+  return result.data?.find((task) => task.attributes.call_sid === callSid);
 }
 
 /**
@@ -73,7 +73,7 @@ async function fetchTask(context, taskSid) {
     context,
     taskSid,
   });
-  return result.task;
+  return result.data;
 }
 /**
  * Cancels the task and updates the attributes to reflect the abandoned status.
@@ -119,8 +119,8 @@ exports.handler = async (context, event, callback) => {
     case 'initialize':
       // Initial logic to find the associated task for the call, and propagate it through to the rest of the TwiML execution
       // If the lookup fails to find the task, the remaining TwiML logic will not offer any callback or voicemail options.
-      const enqueuedWorkflowSid = (await VoiceOperations.fetchVoiceQueue({ context, queueSid: QueueSid }))
-        .queueProperties.friendlyName;
+      const enqueuedWorkflowSid = (await twilioExecute(context, (client) => client.queues(QueueSid).fetch())).data
+        .friendlyName;
       console.log(`Enqueued workflow sid: ${enqueuedWorkflowSid}`);
       const enqueuedTask = await getPendingTaskByCallSid(context, CallSid, enqueuedWorkflowSid);
 
@@ -197,14 +197,12 @@ exports.handler = async (context, event, callback) => {
         // Voicemail option selected
         // We need to update the call with a new TwiML URL vs using twiml.redirect() since we are still in the waitUrl TwiML execution
         // and it's not possible to use the <Record> verb in here.
-        const result = await VoiceOperations.updateCall({
-          context,
-          callSid: CallSid,
-          params: {
+        const result = await twilioExecute(context, (client) =>
+          client.calls(CallSid).update({
             method: 'POST',
             url: `${domain}/features/callback-and-voicemail/studio/wait-experience?mode=record-voicemail&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}`,
-          },
-        });
+          }),
+        );
         const { success, status } = result;
         if (success) {
           //  Cancel (update) the task with handy attributes for reporting

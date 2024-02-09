@@ -49,6 +49,7 @@ exports.retryHandler = async (error, parameters, callback) => {
     (status === 412 ||
       status === 429 ||
       status === 503 ||
+      status === 404 ||
       twilioErrorCode === 'ECONNRESET' ||
       twilioErrorCode === 'ETIMEDOUT') &&
     isNumber(attempts) &&
@@ -57,12 +58,10 @@ exports.retryHandler = async (error, parameters, callback) => {
     console.warn(
       `retrying ${context.PATH}.${callback.name}() after ${retryAttemptsMessage}, http-status-code: ${status}`,
     );
-    if (status === 429 || status === 503 || twilioErrorCode === 'ECONNRESET' || twilioErrorCode === 'ETIMEDOUT')
-      await snooze(random(TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_MAX_BACKOFF));
+    if (status !== 412) await snooze(random(TWILIO_SERVICE_MIN_BACKOFF, TWILIO_SERVICE_MAX_BACKOFF));
 
     const updatedAttempts = attempts + 1;
-    const updatedParameters = { ...parameters, attempts: updatedAttempts };
-    return callback(updatedParameters);
+    return callback(context, parameters.callback, updatedAttempts);
   }
 
   if (ENABLE_LOCAL_LOGGING) {

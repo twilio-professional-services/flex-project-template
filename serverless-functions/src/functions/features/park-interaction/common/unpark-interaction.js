@@ -1,9 +1,8 @@
-const { prepareStudioFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+const { prepareStudioFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
 const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
 const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
-const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sync'].path);
 
 const requiredParameters = [{ key: 'ConversationSid', purpose: 'conversation sid' }];
 
@@ -15,11 +14,9 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
     const routeToSameWorker = event.RouteToSameWorker === 'true';
 
     // Remove webhook so it doesn't keep triggering if parked more than once
-    const webhookResult = await ConversationsOperations.removeWebhook({
-      context,
-      conversationSid,
-      webhookSid,
-    });
+    const webhookResult = await twilioExecute(context, (client) =>
+      client.conversations.v1.conversations(conversationSid).webhooks(webhookSid).remove(),
+    );
     if (!webhookResult.success) throw webhookResult.message;
 
     // Fetch the conversation attributes updated when parked
@@ -39,7 +36,7 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       workflowSid,
       mapSid,
       mapItemKey,
-    } = JSON.parse(conversation.conversation.attributes);
+    } = JSON.parse(conversation.data.attributes);
 
     // Create a new task through the invites endpoint. Alternatively you can pass
     // a queue_sid and a worker_sid inside properties to add a specific agent back to the interaction
@@ -65,14 +62,12 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
     });
 
     if (mapSid && mapItemKey) {
-      await SyncOperations.deleteMapItem({
-        context,
-        mapSid,
-        key: mapItemKey,
-      });
+      await twilioExecute(context, (client) =>
+        client.sync.services(context.TWILIO_FLEX_SYNC_SID).syncMaps(mapSid).syncMapItems(mapItemKey).remove(),
+      );
     }
 
-    const { participantInvite, status } = result;
+    const { data: participantInvite, status } = result;
     response.setStatusCode(status);
     response.setBody({ participantInvite, ...extractStandardResponse(result) });
 

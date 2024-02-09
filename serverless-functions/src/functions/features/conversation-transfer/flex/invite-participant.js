@@ -108,7 +108,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const {
       success,
       message = '',
-      participantInvite = null,
+      data: participantInvite = null,
     } = await InteractionsOperations.participantCreateInvite(participantCreateInviteParams);
 
     // if this failed bail out so we don't remove the agent from the conversation and no one else joins
@@ -131,7 +131,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         conversationSid,
         context,
       });
-      const currentAttributes = JSON.parse(conversation.conversation.attributes);
+      const currentAttributes = JSON.parse(conversation.data.attributes);
       await ConversationsOperations.updateAttributes({
         conversationSid,
         attributes: JSON.stringify({

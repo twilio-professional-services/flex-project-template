@@ -107,7 +107,7 @@ exports.extractStandardResponse = (object) => {
 /**
  * Callback function passed to the twilioExecute function
  *
- * @callback twilioCallback
+ * @callback twilioExecuteCallback
  * @param {Twilio} client - Twilio client instance
  * @returns {Promise<object>} Twilio client response
  */
@@ -115,17 +115,43 @@ exports.extractStandardResponse = (object) => {
 /**
  * Wrapper for executing Twilio client library functions with custom retry logic
  *
- * @param {twilioCallback} callback - Callback containing the Twilio client command to run
+ * @param {twilioExecuteCallback} callback - Callback containing the Twilio client command to run
  * @param {object} context - Serverless context, including the Twilio client instance
+ * @param {number?} attempts - Current retry attempt
  * @returns {Promise<object>} Response from the Twilio client, or errors if present
  */
-exports.twilioExecute = async (context, callback) => {
+exports.twilioExecute = async (context, callback, attempts = 0) => {
   try {
     const client = context.getTwilioClient();
     // eslint-disable-next-line callback-return
     const data = await callback(client);
     return { success: true, data, status: 200 };
   } catch (error) {
-    return retryHandler(error, { context, callback }, exports.twilioExecute);
+    return retryHandler(error, { context, callback, attempts }, exports.twilioExecute);
+  }
+};
+
+/**
+ * Callback function passed to the executeWithRetry function
+ *
+ * @callback executeCallback
+ * @returns {Promise<object>} Web service response
+ */
+
+/**
+ * Wrapper for executing web service request functions with custom retry logic
+ *
+ * @param {executeCallback} callback - Callback containing the web service call to run
+ * @param {object} context - Serverless context
+ * @param {number?} attempts - Current retry attempt
+ * @returns {Promise<object>} Response from the web service, or errors if present
+ */
+exports.executeWithRetry = async (context, callback, attempts = 0) => {
+  try {
+    // eslint-disable-next-line callback-return
+    const data = await callback();
+    return { success: true, data, status: 200 };
+  } catch (error) {
+    return retryHandler(error, { context, callback, attempts }, exports.twilioExecute);
   }
 };

@@ -70,7 +70,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     });
 
     const {
-      task: {
+      data: {
         sid: taskSid,
         attributes: { channelSid },
       },
