@@ -16,7 +16,7 @@ export const actionHook = function handleHoldConferenceParticipant(flex: typeof 
       return;
     }
 
-    const conferenceSid = task.conference?.conferenceSid;
+    const conferenceSid = task.conference?.conferenceSid || task.attributes?.conference?.sid;
     abortFunction();
     console.log('Holding participant', participantSid);
     await ConferenceService.holdParticipant(conferenceSid, participantSid);
