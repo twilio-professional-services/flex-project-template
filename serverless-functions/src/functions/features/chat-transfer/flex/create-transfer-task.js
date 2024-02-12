@@ -57,6 +57,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         ...originalTaskAttributes.conversations,
         conversation_id: conversationId,
       },
+      workerSidsInConversation: [], // Compatibility with conversation transfer workflow
     };
 
     // create task for transfer
@@ -69,31 +70,33 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       timeout,
     });
 
-    const {
-      data: {
-        sid: taskSid,
-        attributes: { channelSid },
-      },
-      success,
-      status,
-    } = result;
+    const { success, status } = result;
 
     // push task data into chat meta data so that should we end the chat
     // while in queue the customer front end can trigger cancelling tasks associated
     // to the chat channel this is not critical to transfer but is ideal
     try {
-      if (success)
+      if (success) {
+        const {
+          data: {
+            sid: taskSid,
+            attributes: { channelSid },
+          },
+        } = result;
         await ChatOperations.addTaskToChannel({
           context,
           taskSid,
           channelSid,
         });
+        response.setBody({ taskSid, ...extractStandardResponse(result) });
+      } else {
+        response.setBody({ ...extractStandardResponse(result) });
+      }
     } catch (error) {
       console.error('Error updating chat channel with task sid created for it');
     }
 
     response.setStatusCode(status);
-    response.setBody({ taskSid, ...extractStandardResponse(result) });
 
     return callback(null, response);
   } catch (error) {
