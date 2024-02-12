@@ -35,8 +35,6 @@
     "rrule": "^2.7.1"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@babel/plugin-proposal-private-methods": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
     "@twilio/flex-ui": "^2",
     "@types/jest": "^29.5.0",
