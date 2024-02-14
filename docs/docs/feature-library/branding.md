@@ -27,6 +27,7 @@ The `branding` feature has several settings:
   - `side_nav_icon` - The color of icons in the navigation menu.
   - `side_nav_selected_icon` - The color of the selected icon in the navigation menu.
   - `side_nav_hover_background` - The background when hovering a navigation item.
+- `component_theme_overrides` - Here you may configure any [valid customizations via component theme overrides](https://assets.flex.twilio.com/docs/releases/flex-ui/latest/theming/Theme/). This allows you to customize the CSS of any component exposed via Flex's theming interface.
 
 ## How does it work?
 

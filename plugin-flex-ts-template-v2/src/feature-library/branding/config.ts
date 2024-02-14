@@ -13,6 +13,7 @@ const {
     side_nav_selected_icon: '',
     side_nav_hover_background: '',
   },
+  component_theme_overrides = {},
 } = (getFeatureFlags()?.features?.branding as BrandingConfig) || {};
 
 export const isFeatureEnabled = () => {
@@ -29,4 +30,8 @@ export const getCustomLogoUrl = () => {
 
 export const getCustomColors = () => {
   return custom_colors;
+};
+
+export const getComponentThemeOverrides = () => {
+  return component_theme_overrides;
 };
