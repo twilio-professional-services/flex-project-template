@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
-import FlexHelper from '../../../../utils/flex-helper';
+import { FlexHelper } from '../../../../utils/helpers';
 import ActivityManager, { reservedSystemActivities } from '../../helper/ActivityManager';
 import { NotificationIds } from '../notifications/ActivityReservationHandler';
 
