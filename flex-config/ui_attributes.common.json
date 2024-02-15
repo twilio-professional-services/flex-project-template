@@ -192,7 +192,6 @@
       },
       "custom_transfer_directory": {
         "enabled": true,
-        "use_paste_search_icon": false,
         "worker": {
           "enabled": true,
           "show_only_available_workers": false
