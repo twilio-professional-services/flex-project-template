@@ -6,7 +6,6 @@ import CustomTransferDirectoryConfig from './types/ServiceConfiguration';
 
 const {
   enabled = false,
-  use_paste_search_icon = false,
   queue: queue_config,
   worker: worker_config,
   external_directory: external_directory_config,
@@ -78,10 +77,6 @@ export const isCbmColdTransferEnabled = (): boolean => {
 
 export const isCbmWarmTransferEnabled = (): boolean => {
   return conversation_transfer_enabled && conversation_transfer_warm_transfer;
-};
-
-export const usePasteSearchIcon = (): boolean => {
-  return use_paste_search_icon;
 };
 
 export const isExternalDirectoryEnabled = (): boolean => {
