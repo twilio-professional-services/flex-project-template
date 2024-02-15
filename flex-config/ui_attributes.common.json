@@ -223,14 +223,23 @@
         "enable_notes": true,
         "global": {
           "require_disposition": false,
-          "dispositions": ["Resolved", "Not Resolved", "Follow-up Required", "Escalation", "Wrong Department"],
+          "dispositions": [
+            "Resolved",
+            "Not Resolved",
+            "Follow-up Required",
+            "Escalation",
+            "Wrong Department"
+          ],
           "text_attributes": [],
           "select_attributes": []
         },
         "per_queue": {
           "exampleQueueName": {
             "require_disposition": true,
-            "dispositions": ["Promotional Sale", "Renewal"],
+            "dispositions": [
+              "Promotional Sale",
+              "Renewal"
+            ],
             "text_attributes": [],
             "select_attributes": []
           }
@@ -383,6 +392,20 @@
       },
       "inline_media": {
         "enabled": true
+      },
+      "branding": {
+        "enabled": false,
+        "custom_logo_url": "",
+        "use_custom_colors": false,
+        "custom_colors": {
+          "main_header_background": "rgb(6, 3, 58)",
+          "side_nav_background": "rgb(255, 255, 255)",
+          "side_nav_border": "rgb(202, 205, 216)",
+          "side_nav_icon": "rgb(18, 28, 45)",
+          "side_nav_selected_icon": "rgb(2, 99, 224)",
+          "side_nav_hover_background": "rgb(225, 227, 234)",
+        },
+        "component_theme_overrides": {}
       }
     }
   }

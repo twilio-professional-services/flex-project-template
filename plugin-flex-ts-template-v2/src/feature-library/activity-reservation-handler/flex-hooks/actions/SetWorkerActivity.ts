@@ -4,7 +4,7 @@ import { Activity } from 'types/task-router';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 import { reservedSystemActivities } from '../../helper/ActivityManager';
 import { NotificationIds } from '../notifications/ActivityReservationHandler';
-import FlexHelper from '../../../../utils/flex-helper';
+import { FlexHelper } from '../../../../utils/helpers';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.SetWorkerActivity;
