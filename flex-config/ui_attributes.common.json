@@ -403,7 +403,7 @@
           "side_nav_border": "rgb(202, 205, 216)",
           "side_nav_icon": "rgb(18, 28, 45)",
           "side_nav_selected_icon": "rgb(2, 99, 224)",
-          "side_nav_hover_background": "rgb(225, 227, 234)",
+          "side_nav_hover_background": "rgb(225, 227, 234)"
         },
         "component_theme_overrides": {}
       }
