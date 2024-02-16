@@ -8,7 +8,9 @@ import * as fetchCli from "./fetch-cli.mjs";
 const readEnv = async (envFile, exampleFile, overwrite) => {
   if (overwrite || !shell.test('-e', envFile)) {
     // create env file based on example
-    shell.cp(exampleFile, envFile);
+    if (envFile !== exampleFile) {
+      shell.cp(exampleFile, envFile);
+    }
     
     // verify creation succeeded
     if (!shell.test('-e', envFile)) {
@@ -155,8 +157,6 @@ const saveReplacements = async (data, path) => {
 }
 
 export default async (path, examplePath, account, environment, overwrite) => {
-  console.log(`Setting up ${path}...`);
-  
   // Check if this package uses environment files
   if (!shell.test('-e', examplePath) && !shell.test('-e', path)) {
     // No environment files, no need to continue

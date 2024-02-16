@@ -5,6 +5,7 @@
     }
   },
   "custom_data": {
+    "serverless_functions_domain": "<YOUR_SERVERLESS_DOMAIN>",
     "common": {
       "log_level": "info",
       "teams": [
@@ -141,7 +142,8 @@
         "enabled": true
       },
       "schedule_manager": {
-        "enabled": true
+        "enabled": true,
+        "serverless_domain": "<YOUR_SCHEDULE_MANAGER_DOMAIN>"
       },
       "multi_call": {
         "enabled": false
@@ -403,7 +405,7 @@
           "side_nav_border": "rgb(202, 205, 216)",
           "side_nav_icon": "rgb(18, 28, 45)",
           "side_nav_selected_icon": "rgb(2, 99, 224)",
-          "side_nav_hover_background": "rgb(225, 227, 234)",
+          "side_nav_hover_background": "rgb(225, 227, 234)"
         },
         "component_theme_overrides": {}
       }
