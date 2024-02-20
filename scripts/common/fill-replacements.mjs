@@ -196,7 +196,7 @@ export const fillReplacementsForString = async (data, account, environment) => {
   // Replace the placeholders with the filled vars
   let newData = data;
   for (const key in envVars) {
-    newData.replace(new RegExp(`<${placeholderPrefix}_${key}>`, 'g'), envVars[key]);
+    newData = newData.replace(new RegExp(`<${placeholderPrefix}_${key}>`, 'g'), envVars[key]);
   }
   
   return {
