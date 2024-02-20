@@ -46,8 +46,10 @@ const printLine = (name, value) => {
 export default (allReplacements) => {
   const alreadyOutput = [];
   let printHeader = true;
-  console.log("");
-  console.log("Environment configuration summary:");
+  if (Object.keys(allReplacements).length) {
+    console.log("");
+    console.log("Environment configuration summary:");
+  }
   for (const key in allReplacements) {
     if (!varNameMapping[key] || !(
       varNameMapping[key].type == "tr-workspace" || 
