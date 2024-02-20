@@ -16,9 +16,7 @@ const parseData = (data) => {
 const readEnv = async (envFile, exampleFile, overwrite) => {
   if (overwrite || !shell.test('-e', envFile)) {
     // create env file based on example
-    if (envFile !== exampleFile) {
-      shell.cp(exampleFile, envFile);
-    }
+    shell.cp(exampleFile, envFile);
     
     // verify creation succeeded
     if (!shell.test('-e', envFile)) {

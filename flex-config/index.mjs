@@ -60,6 +60,7 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
     const commonFileName = './ui_attributes.common.json';
     const defaultEnvFileName = './ui_attributes.example.json';
     const envFileName = `./ui_attributes.${environment}.json`;
+    const skillsFileName = './taskrouter_skills.json';
     const envExists = await exists(envFileName);
 
     // first ensure environment specific file exists
@@ -71,17 +72,17 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
       }
     }
 
-    const uiAttributesOverrides = await fs.readFile(new URL(envFileName, import.meta.url), 'utf8');
-    const uiAttributesCommon = await fs.readFile(new URL(commonFileName, import.meta.url), 'utf8');
-    const taskrouter_skills = JSON.parse(await fs.readFile(new URL("./taskrouter_skills.json", import.meta.url), 'utf8'));
+    const uiAttributesEnvFile = await fs.readFile(new URL(envFileName, import.meta.url), 'utf8');
+    const uiAttributesCommonFile = await fs.readFile(new URL(commonFileName, import.meta.url), 'utf8');
+    const taskrouter_skills = JSON.parse(await fs.readFile(new URL(skillsFileName, import.meta.url), 'utf8'));
     
     console.log("Populating environmental configuration data...");
-    let replacementOverrides = await fillReplacementsForString(uiAttributesOverrides, auth, environment);
-    let replacementCommon = await fillReplacementsForString(uiAttributesCommon, auth, environment);
+    const uiAttributesEnvReplaced = await fillReplacementsForString(uiAttributesEnvFile, auth, environment);
+    const uiAttributesCommonReplaced = await fillReplacementsForString(uiAttributesCommonFile, auth, environment);
     
     printReplacements({
-      ...replacementCommon.envVars,
-      ...replacementOverrides.envVars,
+      ...uiAttributesCommonReplaced.envVars,
+      ...uiAttributesEnvReplaced.envVars,
     });
 
     console.log("Getting current configuration...");
@@ -92,12 +93,14 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
 
     console.log("Merging current configuraton with new configuration...");
     let uiAttributesMerged;
+    const uiAttributesEnvJson = JSON.parse(uiAttributesEnvReplaced.data);
+    const uiAttributesCommonJson = JSON.parse(uiAttributesCommonReplaced.data);
     if (overwrite && overwrite.toLowerCase() === "true") {
       // when overwriting, clear out the existing custom_data object to remove obsolete values
       delete uiAttributesCurrent.custom_data;
-      uiAttributesMerged = merge(uiAttributesCurrent, JSON.parse(replacementCommon.data), JSON.parse(replacementOverrides.data));
+      uiAttributesMerged = merge(uiAttributesCurrent, uiAttributesCommonJson, uiAttributesEnvJson);
     } else {
-      uiAttributesMerged = merge({}, JSON.parse(replacementCommon.data), JSON.parse(replacementOverrides.data), uiAttributesCurrent);
+      uiAttributesMerged = merge({}, uiAttributesCommonJson, uiAttributesEnvJson, uiAttributesCurrent);
     }
     const trskillsMerged = tr_current
       ? tr_current.concat(taskrouter_skills).unique()
