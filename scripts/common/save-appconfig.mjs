@@ -53,7 +53,7 @@ export default async (account, overwrite) => {
     // Perform replacements in the fully assembled string
     const replacements = await fillReplacementsForString(appConfigFileData, account, "local");
     
-    await fs.writeFile(pluginAppConfig, appConfigFileData, 'utf8');
+    await fs.writeFile(pluginAppConfig, replacements.data, 'utf8');
     
     return replacements.envVars;
   } catch (error) {
