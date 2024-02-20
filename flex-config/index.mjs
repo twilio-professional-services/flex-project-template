@@ -114,6 +114,7 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
 
 
     console.log("Configuration updated.");
+    console.log("");
     
     var readableFeatures = []
     Object.entries(configurationUpdated.ui_attributes.custom_data.features).forEach( feature => {
@@ -122,9 +123,12 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
     var readableAttributes = configurationUpdated.ui_attributes;
     readableAttributes.custom_data.features = readableFeatures;
 
-    console.log("UI Attributes: (output reduced for readability)");
+    console.log("### UI attributes (reduced for readability):");
+    console.log("```");
     console.dir(readableAttributes.custom_data, { depth: null });
-    console.log("TaskRouter Skills:");
+    console.log("```");
+    console.log("");
+    console.log("### TaskRouter skills:");
     configurationUpdated.taskrouter_skills.forEach(element => {
       console.log(`- ${element.name}`);
     })
