@@ -46,7 +46,7 @@ const printLine = (name, value) => {
 export default (allReplacements) => {
   const alreadyOutput = [];
   let printHeader = true;
-  if (Object.keys(allReplacements).length) {
+  if (Object.keys(allReplacements).filter(key => !ignoreKeys.includes(key)).length) {
     console.log("");
     console.log("Environment configuration summary:");
   }
