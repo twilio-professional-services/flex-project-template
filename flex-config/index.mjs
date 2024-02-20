@@ -1,7 +1,10 @@
-const axios = require("axios");
-const dotenv = require("dotenv");
-const { promises: fs } = require('fs');
-const _ = require('lodash');
+import axios from 'axios';
+import dotenv from 'dotenv';
+import { promises as fs } from 'fs';
+import merge from 'lodash/merge.js';
+
+import { fillReplacementsForString } from "../scripts/common/fill-replacements.mjs";
+import printReplacements from "../scripts/common/print-replacements.mjs";
 
 async function exists (path) {  
   try {
@@ -32,9 +35,9 @@ async function exists (path) {
 
   deployConfigurationData({
     auth: {
-      TWILIO_ACCOUNT_SID,
-      TWILIO_API_KEY,
-      TWILIO_API_SECRET,
+      accountSid: TWILIO_ACCOUNT_SID,
+      apiKey: TWILIO_API_KEY,
+      apiSecret: TWILIO_API_SECRET,
     },
     environment: ENVIRONMENT,
     overwrite: OVERWRITE_CONFIG,
@@ -54,9 +57,9 @@ Array.prototype.unique = function () {
 
 async function deployConfigurationData({ auth, environment, overwrite }) {
   try {
-
-    defaultEnvFileName = './ui_attributes.example.json';
-    envFileName = `./ui_attributes.${environment}.json`;
+    const commonFileName = './ui_attributes.common.json';
+    const defaultEnvFileName = './ui_attributes.example.json';
+    const envFileName = `./ui_attributes.${environment}.json`;
     const envExists = await exists(envFileName);
 
     // first ensure environment specific file exists
@@ -68,9 +71,18 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
       }
     }
 
-    const uiAttributesOverrides = require(envFileName);
-    const uiAttributesCommon = require("./ui_attributes.common.json");
-    const taskrouter_skills = require("./taskrouter_skills.json");
+    const uiAttributesOverrides = await fs.readFile(new URL(envFileName, import.meta.url), 'utf8');
+    const uiAttributesCommon = await fs.readFile(new URL(commonFileName, import.meta.url), 'utf8');
+    const taskrouter_skills = JSON.parse(await fs.readFile(new URL("./taskrouter_skills.json", import.meta.url), 'utf8'));
+    
+    console.log("Populating environmental configuration data...");
+    let replacementOverrides = await fillReplacementsForString(uiAttributesOverrides, auth, environment);
+    let replacementCommon = await fillReplacementsForString(uiAttributesCommon, auth, environment);
+    
+    printReplacements({
+      ...replacementCommon.envVars,
+      ...replacementOverrides.envVars,
+    });
 
     console.log("Getting current configuration...");
     const {
@@ -83,9 +95,9 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
     if (overwrite && overwrite.toLowerCase() === "true") {
       // when overwriting, clear out the existing custom_data object to remove obsolete values
       delete uiAttributesCurrent.custom_data;
-      uiAttributesMerged = _.merge(uiAttributesCurrent, uiAttributesCommon, uiAttributesOverrides);
+      uiAttributesMerged = merge(uiAttributesCurrent, JSON.parse(replacementCommon.data), JSON.parse(replacementOverrides.data));
     } else {
-      uiAttributesMerged = _.merge({}, uiAttributesCommon, uiAttributesOverrides, uiAttributesCurrent);
+      uiAttributesMerged = merge({}, JSON.parse(replacementCommon.data), JSON.parse(replacementOverrides.data), uiAttributesCurrent);
     }
     const trskillsMerged = tr_current
       ? tr_current.concat(taskrouter_skills).unique()
@@ -101,7 +113,7 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
     });
 
 
-    console.log("Configuration updated: (following output formatted for readability)");
+    console.log("Configuration updated.");
     
     var readableFeatures = []
     Object.entries(configurationUpdated.ui_attributes.custom_data.features).forEach( feature => {
@@ -110,14 +122,14 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
     var readableAttributes = configurationUpdated.ui_attributes;
     readableAttributes.custom_data.features = readableFeatures;
 
-    console.log("UI Attributes");
-    console.dir(readableAttributes, { depth: null });
+    console.log("UI Attributes: (output reduced for readability)");
+    console.dir(readableAttributes.custom_data, { depth: null });
     console.log("TaskRouter Skills:");
     configurationUpdated.taskrouter_skills.forEach(element => {
-      console.log(`\t${element.name}`);
+      console.log(`- ${element.name}`);
     })
   } catch (error) {
-    console.error("error caught", error);
+    console.error("Error caught:", error);
     console.log("Auth", error.config?.auth);
     console.log("Data", error.response?.data);
   }
@@ -128,8 +140,8 @@ async function getConfiguration({ auth }) {
     method: "get",
     url: "https://flex-api.twilio.com/v1/Configuration",
     auth: {
-      username: auth.TWILIO_API_KEY,
-      password: auth.TWILIO_API_SECRET,
+      username: auth.apiKey,
+      password: auth.apiSecret,
     },
   }).then((response) => response.data);
 }
@@ -139,12 +151,12 @@ async function setConfiguration({ auth, configurationChanges }) {
     method: "post",
     url: "https://flex-api.twilio.com/v1/Configuration",
     auth: {
-      username: auth.TWILIO_API_KEY,
-      password: auth.TWILIO_API_SECRET,
+      username: auth.apiKey,
+      password: auth.apiSecret,
     },
     data: {
       ...configurationChanges,
-      account_sid: auth.TWILIO_ACCOUNT_SID,
+      account_sid: auth.accountSid,
     },
   }).then((response) => response.data);
 }

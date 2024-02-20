@@ -178,7 +178,7 @@ jobs:
       - name: deploy flex config
         working-directory: flex-config
         run: |
-          npm run deploy
+          npm run deploy >> $GITHUB_STEP_SUMMARY
 
   deploy-release-plugin:
     runs-on: ubuntu-latest

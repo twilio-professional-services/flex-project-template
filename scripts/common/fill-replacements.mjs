@@ -4,6 +4,14 @@ import shell from 'shelljs';
 import { placeholderPrefix, varNameMapping } from "./constants.mjs";
 import * as fetchCli from "./fetch-cli.mjs";
 
+const parseData = (data) => {
+  let result = {};
+  for (const match of data.matchAll(new RegExp(`<${placeholderPrefix}_(.*)>`, 'g'))) {
+    result[match[1]] = match[0];
+  }
+  return result;
+}
+
 // Initialize env file if necessary, then parse its contents
 const readEnv = async (envFile, exampleFile, overwrite) => {
   if (overwrite || !shell.test('-e', envFile)) {
@@ -20,11 +28,7 @@ const readEnv = async (envFile, exampleFile, overwrite) => {
   
   // read and parse the env file
   const initialEnv = await fs.readFile(envFile, "utf8");
-  let result = {};
-  for (const match of initialEnv.matchAll(new RegExp(`<${placeholderPrefix}_(.*)>`, 'g'))) {
-    result[match[1]] = match[0];
-  }
-  return result;
+  return parseData(initialEnv);
 }
 
 // Fills placeholder variables from process.env if present
@@ -146,31 +150,7 @@ const fillAccountVars = (envVars, account) => {
   return envVars;
 }
 
-const saveReplacements = async (data, path) => {
-  try {
-    for (const key in data) {
-      shell.sed('-i', new RegExp(`<${placeholderPrefix}_${key}>`, 'g'), data[key], path);
-    }
-  } catch (error) {
-    console.error(`Error saving file ${path}`, error);
-  }
-}
-
-export default async (path, examplePath, account, environment, overwrite) => {
-  // Check if this package uses environment files
-  if (!shell.test('-e', examplePath) && !shell.test('-e', path)) {
-    // No environment files, no need to continue
-    return null;
-  }
-  
-  // Initialize the env vars
-  let envVars = await readEnv(path, examplePath, overwrite);
-  
-  if (!envVars) {
-    console.error(`Unable to create the file ${path}.`);
-    return null;
-  }
-  
+const fillAllVars = (envVars, account, environment) => {
   try {
     // Fill known env vars from process.env
     envVars = fillKnownEnvVars(envVars);
@@ -185,8 +165,75 @@ export default async (path, examplePath, account, environment, overwrite) => {
   // Fetch unknown env vars from the API
   envVars = fillUnknownEnvVars(envVars, environment);
   
+  return envVars;
+}
+
+const saveReplacements = async (data, path) => {
+  try {
+    for (const key in data) {
+      shell.sed('-i', new RegExp(`<${placeholderPrefix}_${key}>`, 'g'), data[key], path);
+    }
+  } catch (error) {
+    console.error(`Error saving file ${path}`, error);
+  }
+}
+
+// Function to use for generating a populated string from a string containing placeholders
+export const fillReplacementsForString = async (data, account, environment) => {
+  // Parse out the env vars from the string
+  let envVars = parseData(data);
+  
+  if (!envVars) {
+    console.error(`Error parsing data`, error);
+    return null;
+  }
+  
+  // Fill the envVars with the appropriate replacements
+  envVars = fillAllVars(envVars, account, environment);
+  
+  if (!envVars) {
+    return null;
+  }
+  
+  // Replace the placeholders with the filled vars
+  let newData = data;
+  for (const key in envVars) {
+    newData.replace(new RegExp(`<${placeholderPrefix}_${key}>`, 'g'), envVars[key]);
+  }
+  
+  return {
+    data: newData,
+    envVars,
+  };
+}
+
+// Function to use for generating a populated file based on an example file containing placeholders
+export const fillReplacementsForPath = async (path, examplePath, account, environment, overwrite) => {
+  // Check if this package uses environment files
+  if (!shell.test('-e', examplePath) && !shell.test('-e', path)) {
+    // No environment files, no need to continue
+    return null;
+  }
+  
+  // Parse out the env vars from the file
+  let envVars = await readEnv(path, examplePath, overwrite);
+  
+  if (!envVars) {
+    console.error(`Unable to create the file ${path}.`);
+    return null;
+  }
+  
+  // Fill the envVars with the appropriate replacements
+  envVars = fillAllVars(envVars, account, environment);
+  
+  if (!envVars) {
+    return null;
+  }
+  
   // Save!
   await saveReplacements(envVars, path);
   
   return envVars;
 }
+
+export default fillReplacementsForPath;

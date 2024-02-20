@@ -86,14 +86,6 @@ const execute = async () => {
     packages = defaultPackages;
   }
   
-  // determine additional files to process based on selected packages
-  if (packages.includes(constants.flexConfigDir)) {
-    if (environment) {
-      files.push(`./${constants.flexConfigDir}/ui_attributes.common.json`);
-    }
-    files.push(`./${constants.flexConfigDir}/ui_attributes.example.json`);
-  }
-  
   if (!skipEnvSetup) {
     // Fetch and save env files for each package
     for (const path of packages) {
