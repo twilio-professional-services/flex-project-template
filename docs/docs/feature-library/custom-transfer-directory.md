@@ -38,7 +38,6 @@ Enable the feature in the flex-config asset for your environment.
 ```javascript
 "custom_transfer_directory": {
   "enabled": true, // globally enable or disable the feature
-  "use_paste_search_icon": false, // use new paste icon or old legacy icon (recommended to use old icon if mixing with OOTB tabs for consistent look)
   "worker" : {
     "enabled": true, // enable the custom worker tab
     "show_only_available_workers": false

@@ -3,7 +3,7 @@ import { IconButton, ITask } from '@twilio/flex-ui';
 
 import { IFrameRefreshButtonStyledDiv } from './IFrameCRMTab.Styles';
 import { getUrl, displayUrlWhenNoTasks } from '../../config';
-import { replaceStringAttributes } from '../../utils/helpers';
+import { replaceStringAttributes } from '../../../../utils/helpers';
 
 export interface Props {
   task: ITask;

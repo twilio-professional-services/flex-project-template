@@ -52,6 +52,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | ------------------------------ | --------------------------------------------------------------------------------------------------- |
 | [Activity Reservation Handler](activity-reservation-handler)   | _synchronize agent activities to reservation states_                                                |
 | [Activity Skill Filter](activity-skill-filter)          | _manage visibility for activities based on agent skills_                                            |
+| [Branding](branding)                  | _customize the Flex interface for your brand_                                     |
 | [Chat Transfer](chat-transfer)                  | _introduce programmable chat transfer functionality for agents_                                     |
 | [Contact History](contact-history)                  | _add a view to show a list of recent contacts (calls, chats) with ability to make Outbound calls back to the customer_                                     |
 | [Custom Hold Music](custom-hold-music)              | _customize the experience when an agent places a call on hold_                                      |

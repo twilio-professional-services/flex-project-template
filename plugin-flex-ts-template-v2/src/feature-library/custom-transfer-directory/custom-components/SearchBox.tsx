@@ -4,7 +4,6 @@ import { Input } from '@twilio-paste/core/input';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
 import { Ref } from 'react';
 
-import { usePasteSearchIcon } from '../config';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 
 export interface SearchBoxProps {
@@ -12,29 +11,13 @@ export interface SearchBoxProps {
   inputRef?: Ref<HTMLInputElement>;
 }
 
-const LegacySearchIcon = () => {
-  return (
-    <div className="Twilio-Icon Twilio-Icon-Search  css-1j3rlv1">
-      <svg>
-        <path d="M15.742 14.153l3.091 3.091a.417.417 0 11-.589.59l-3.091-3.092a5.833 5.833 0 11.59-.59zm-4.409 1.18a5 5 0 100-10 5 5 0 000 10z"></path>
-      </svg>
-    </div>
-  );
-};
-
 const SearchInput = ({ onInputChange, inputRef }: SearchBoxProps) => {
   const { WorkerDirectorySearchPlaceholder } = Manager.getInstance().strings;
 
   return (
     <Input
       element="TRANSFER_DIR_COMMON_SEARCH_BOX"
-      insertBefore={
-        usePasteSearchIcon() ? (
-          <SearchIcon decorative={false} title={templates[StringTemplates.SearchDirectory]()} />
-        ) : (
-          <LegacySearchIcon />
-        )
-      }
+      insertBefore={<SearchIcon decorative={false} title={templates[StringTemplates.SearchDirectory]()} />}
       type="text"
       key="custom-directory-input-field"
       onChange={onInputChange}
