@@ -44,7 +44,7 @@
         }
       ],
       "properties": {
-        "waitUrl": "https://${SERVERLESS_DOMAIN}/features/callback-and-voicemail/studio/wait-experience?mode=initialize",
+        "waitUrl": "https://${SERVERLESS_DOMAIN}/features/callback-and-voicemail/studio/wait-experience",
         "offset": {
           "x": 40,
           "y": 170
