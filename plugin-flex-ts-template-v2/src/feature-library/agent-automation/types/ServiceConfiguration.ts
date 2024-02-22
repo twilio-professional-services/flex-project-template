@@ -1,4 +1,4 @@
-interface TaskAttributesQualificationConfig {
+interface AttributesQualificationConfig {
   key: string;
   value: string;
 }
@@ -8,7 +8,8 @@ export interface TaskQualificationConfig {
   auto_select: boolean;
   auto_accept: boolean;
   auto_wrapup: boolean;
-  required_attributes: Array<TaskAttributesQualificationConfig>;
+  required_attributes: Array<AttributesQualificationConfig>;
+  required_worker_attributes: Array<AttributesQualificationConfig>;
   wrapup_time: number;
   default_outcome: string;
 }

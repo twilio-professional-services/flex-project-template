@@ -161,6 +161,7 @@
             "auto_select": true,
             "auto_wrapup": true,
             "required_attributes": [],
+            "required_worker_attributes": [],
             "wrapup_time": 30000,
             "default_outcome": "Automatically completed"
           },
@@ -170,6 +171,7 @@
             "auto_select": true,
             "auto_wrapup": true,
             "required_attributes": [],
+            "required_worker_attributes": [],
             "wrapup_time": 30000,
             "default_outcome": "Automatically completed"
           }
