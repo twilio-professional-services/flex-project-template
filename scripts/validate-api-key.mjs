@@ -16,7 +16,7 @@ const validateAccountSid = async () => {
     
     console.error('API key does not match the provided Flex account SID or this is not a Flex account');
   } catch (error) {
-    console.error('Error validating API key and Flex account SID', error);
+    console.error(`Error validating API key and Flex account SID: ${error}`);
   }
   
   return process.exit(1);

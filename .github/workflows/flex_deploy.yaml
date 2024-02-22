@@ -71,7 +71,7 @@ jobs:
         run: |
           npm install --ignore-scripts
       - name: validate api key
-        run: node scripts/validate-api-key.mjs
+        run: node scripts/validate-api-key.mjs >> $GITHUB_STEP_SUMMARY
 
   # When performing an initial release
   # the serverless backend needs an initial deploy so
