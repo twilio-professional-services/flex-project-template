@@ -10,13 +10,13 @@ const validateAccountSid = async () => {
     });
     
     if (flexConfigResponse?.data?.account_sid === process.env.TWILIO_ACCOUNT_SID) {
-      console.log('Success: API key matches provided Flex account SID');
+      console.log('✅ Success: API key matches provided Flex account SID');
       return process.exit(0);
     }
     
-    console.error('API key does not match the provided Flex account SID or this is not a Flex account');
+    console.error('❌ API key does not match the provided Flex account SID or this is not a Flex account');
   } catch (error) {
-    console.error(`Error validating API key and Flex account SID: ${error}`);
+    console.error(`❌ Error validating API key and Flex account SID: ${error}`);
   }
   
   return process.exit(1);
