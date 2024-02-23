@@ -9,6 +9,7 @@ const {
     onATaskNoAcd: 'On a Task, No ACD',
     wrapup: 'Wrap Up',
     wrapupNoAcd: 'Wrap Up, No ACD',
+    extendedWrapup: 'Extended Wrap Up',
   },
 } = (getFeatureFlags()?.features?.activity_reservation_handler as ActivityReservationHandlerConfig) || {};
 

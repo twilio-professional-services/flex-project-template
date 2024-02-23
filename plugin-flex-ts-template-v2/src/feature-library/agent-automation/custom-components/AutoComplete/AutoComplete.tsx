@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { ITask } from '@twilio/flex-ui';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button } from '@twilio-paste/core/button';
 import { CheckboxCheckIcon } from '@twilio-paste/icons/esm/CheckboxCheckIcon';
 import { PlusIcon } from '@twilio-paste/icons/esm/PlusIcon';
@@ -11,7 +11,8 @@ import { getMatchingTaskConfiguration } from '../../config';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
-import { ExtendedWrapupState, add, remove } from '../../flex-hooks/states/extendedWrapupSlice';
+import { ExtendedWrapupState } from '../../flex-hooks/states/extendedWrapupSlice';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 export type Props = {
   task: ITask;
@@ -35,7 +36,6 @@ const AutoComplete = ({ task }: OwnProps) => {
   const [isExtended, setIsExtended] = useState(false);
   const [wrapTimer, setWrapTimer] = useState<number | null>(null);
 
-  const dispatch = useDispatch();
   const { extendedReservationSids } = useSelector(
     (state: AppState) => state[reduxNamespace].extendedWrapup as ExtendedWrapupState,
   );
@@ -44,6 +44,10 @@ const AutoComplete = ({ task }: OwnProps) => {
     const { sid } = task;
 
     if (!taskConfig) {
+      return;
+    }
+
+    if (isExtended && taskConfig.extended_wrapup_time < 1) {
       return;
     }
 
@@ -106,7 +110,7 @@ const AutoComplete = ({ task }: OwnProps) => {
   }, [extendedReservationSids]);
 
   const extendWrapup = () => {
-    dispatch(isExtended ? remove(task.sid) : add(task.sid));
+    Flex.Actions.invokeAction('ExtendWrapUp', { reservationSid: task.sid, extend: !isExtended });
   };
 
   if (taskConfig?.allow_extended_wrapup) {
@@ -119,7 +123,7 @@ const AutoComplete = ({ task }: OwnProps) => {
         onClick={extendWrapup}
       >
         {isExtended ? <CheckboxCheckIcon decorative /> : <PlusIcon decorative />}
-        Extend Wrap Up
+        <Flex.Template source={Flex.templates[StringTemplates.PSExtendWrapup]} />
       </Button>
     );
   }
