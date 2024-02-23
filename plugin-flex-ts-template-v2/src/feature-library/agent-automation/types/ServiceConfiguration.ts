@@ -12,6 +12,8 @@ export interface TaskQualificationConfig {
   required_worker_attributes: Array<AttributesQualificationConfig>;
   wrapup_time: number;
   default_outcome: string;
+  allow_extended_wrapup: boolean;
+  extended_wrapup_time: number;
 }
 
 export default interface AgentAutomationConfig {
