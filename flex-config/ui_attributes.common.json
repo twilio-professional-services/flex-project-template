@@ -45,6 +45,10 @@
             "required_skill": "system_activities",
             "sort_order": 0
           },
+          "Extended Wrap Up": {
+            "required_skill": "system_activities",
+            "sort_order": 0
+          },
           "Offline": {
             "required_skill": null,
             "sort_order": 100
@@ -121,7 +125,8 @@
           "onATask": "On a Task",
           "onATaskNoAcd": "On a Task, No ACD",
           "wrapup": "Wrap Up",
-          "wrapupNoAcd": "Wrap Up, No ACD"
+          "wrapupNoAcd": "Wrap Up, No ACD",
+          "extendedWrapup": "Extended Wrap Up"
         }
       },
       "teams_view_filters": {
@@ -163,6 +168,8 @@
             "required_attributes": [],
             "required_worker_attributes": [],
             "wrapup_time": 30000,
+            "allow_extended_wrapup": false,
+            "extended_wrapup_time": 0,
             "default_outcome": "Automatically completed"
           },
           {
@@ -173,6 +180,8 @@
             "required_attributes": [],
             "required_worker_attributes": [],
             "wrapup_time": 30000,
+            "allow_extended_wrapup": false,
+            "extended_wrapup_time": 0,
             "default_outcome": "Automatically completed"
           }
         ]
