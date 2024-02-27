@@ -26,7 +26,7 @@ const WrapupCountdown = ({ task, channelDefinition }: OwnProps) => {
   );
 
   useEffect(() => {
-    // set up interval for cleaning up disconnected participants
+    // set up interval to trigger re-render every second
     const interval = setInterval(() => {
       setClock((clock) => !clock);
     }, 1000);

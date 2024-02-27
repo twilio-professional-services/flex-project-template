@@ -106,7 +106,7 @@ const AutoComplete = ({ task }: OwnProps) => {
   }, [extendedReservationSids]);
 
   const extendWrapup = () => {
-    Flex.Actions.invokeAction('ExtendWrapUp', { reservationSid: task.sid, extend: !isExtended });
+    Flex.Actions.invokeAction('ExtendWrapUp', { task, extend: !isExtended });
   };
 
   if (taskConfig?.allow_extended_wrapup) {

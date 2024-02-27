@@ -1,12 +1,11 @@
-import { Actions, Manager, TaskHelper } from '@twilio/flex-ui';
+import { Actions, ITask, Manager } from '@twilio/flex-ui';
 
 import { getMatchingTaskConfiguration } from '../../config';
 import { add, remove } from '../states/extendedWrapupSlice';
 
 export const registerExtendWrapUpAction = async () => {
-  Actions.registerAction('ExtendWrapUp', async (payload: { reservationSid: string; extend: boolean }) => {
-    const { reservationSid, extend } = payload;
-    const task = TaskHelper.getTaskByTaskSid(reservationSid);
+  Actions.registerAction('ExtendWrapUp', async (payload: { task: ITask; extend: boolean }) => {
+    const { task, extend } = payload;
     if (!task) return;
 
     const taskConfig = getMatchingTaskConfiguration(task);

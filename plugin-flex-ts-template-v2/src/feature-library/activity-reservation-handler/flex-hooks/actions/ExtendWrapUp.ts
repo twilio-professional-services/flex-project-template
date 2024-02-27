@@ -8,7 +8,7 @@ export const actionEvent = FlexActionEvent.after;
 export const actionName = 'ExtendWrapUp';
 export const actionHook = function setExtendedWrapUpActivity(flex: typeof Flex, _manager: Flex.Manager) {
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
-    logger.debug(`activity-reservation-handler: handle ${actionName} for ${payload.reservationSid}`);
+    logger.debug(`activity-reservation-handler: handle ${actionName} for ${payload.task?.sid}`);
 
     await ActivityManager.enforceEvaluatedState();
   });

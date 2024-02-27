@@ -3,7 +3,7 @@ sidebar_label: agent-automation
 title: agent-automation
 ---
 
-This feature provides auto select, auto accept and auto wrap-up behavior for agent tasks. Tasks qualify for a configuration set based on their channel and a set of required task and/or worker attributes. The first configuration set to match is the configuration set used.
+This feature provides auto select, auto accept and auto wrap-up behavior for agent tasks. Wrap-up behavior can be optionally configured to allow agents to request extended wrap-up. Tasks qualify for a configuration set based on their channel and a set of required task and/or worker attributes. The first configuration set to match is the configuration set used.
 
 ## known issues
 
@@ -13,9 +13,9 @@ A preferred solution to auto wrap-up would require a backend handler to move the
 
 ## flex-user-experience
 
-An auto selected, auto accepted voice task with an auto wrap-up after 5 seconds.
+An auto selected, auto accepted chat task with an auto wrap-up after 5 seconds, with the agent demonstrating the extended wrap-up option (set to extend by 10 seconds). This also demo also shows the `activity-reservation-handler` and `dispositions` features to demonstrate a more complete agent workflow.
 
-![alt text](/img/features/agent-automation/autto-accept-auto-wrap-5.gif)
+![agent automation screen recording](/img/features/agent-automation/agent-automation.gif)
 
 ## setup and dependencies
 
@@ -34,6 +34,8 @@ To enable the `Agent Automation` feature, under the `flex-config` attributes set
     "auto_select": true,
     "auto_wrapup": true,
     "wrapup_time": 30000,
+    "allow_extended_wrapup": true,
+    "extended_wrapup_time": 0,
     "default_outcome": "Automatically completed"
   }]
 },
@@ -41,6 +43,8 @@ To enable the `Agent Automation` feature, under the `flex-config` attributes set
 
 ## how does it work?
 
-When enabled, this feature listens for taskReceived events and evaluates whether the tasks matches any configuration sets, and if so executes SelectTask & AcceptTask action as configured. This feature also loads a renderless component on the task canvas at wrap-up. When the component mounts, if there is a matching task configuration then a timeout is set per the task configuration that triggers a CompleteTask action.
+When enabled, this feature listens for taskReceived events and evaluates whether the tasks matches any configuration sets, and if so executes SelectTask & AcceptTask action as configured. This feature also loads a component on the task canvas at wrap-up. When the component mounts, if there is a matching task configuration then a timeout is set per the task configuration that triggers a CompleteTask action. In addition, the `TaskCanvasHeader` is modified to show the remaining wrap-up time instead of the elapsed time.
+
+If both `auto_wrapup` and `allow_extended_wrapup` are set to `true`, agents will also have an "Extend Wrap Up" button available during wrap-up, which allows them to optionally extend the duration before auto-wrap-up is triggered. The duration of the extended wrap-up is configured by the `extended_wrapup_time` setting. If `extended_wrapup_time` is set to 0, then agents will have an infinite amount of extended wrap up time. Initiating extended wrap up invokes the `ExtendWrapUp` action, which can be used to add customizations such as setting task attributes. In addition, when extended wrap up is used in conjunction with the `activity-reservation-handler` feature, the agent's activity will be switched to the configured `extendedWrapup` activity during extended wrap up.
 
 When used in combination with the `dispositions` feature's require disposition setting, that setting will take precedence and prevent auto-wrap-up of the affected task if no disposition is selected. If no disposition is required, the optional `default_outcome` setting allows you to configure the value displayed in Flex Insights for the outcome when the wrap-up time expires and there is no disposition selected by the agent via the `dispositions` feature (or it is disabled).
