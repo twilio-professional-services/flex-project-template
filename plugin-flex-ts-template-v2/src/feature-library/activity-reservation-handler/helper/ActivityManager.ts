@@ -1,7 +1,7 @@
 import { Actions, Manager } from '@twilio/flex-ui';
 
 import { getSystemActivityNames, isFeatureEnabled } from '../config';
-import FlexHelper from '../../../utils/flex-helper';
+import { FlexHelper } from '../../../utils/helpers';
 import { CallbackPromise, PendingActivity } from '../types/ActivityManager';
 import { updatePendingActivity } from '../flex-hooks/reducers/ActivityReservationHandler';
 

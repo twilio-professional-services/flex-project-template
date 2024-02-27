@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
-import FlexHelperSingleton from '../flex-helper';
+import { FlexHelper } from '../helpers';
 import logger from '../logger';
 import Destination from '../logger/destination';
 
@@ -11,7 +11,7 @@ export const init = (manager: Flex.Manager) => {
     logger.error('Internal FlexError', error);
   });
 
-  const worker = FlexHelperSingleton.getCurrentWorker();
+  const worker = FlexHelper.getCurrentWorker();
   if (worker) {
     logger.addMetaData('workerSid', worker.sid);
     logger.addMetaData('workerName', worker.name);
