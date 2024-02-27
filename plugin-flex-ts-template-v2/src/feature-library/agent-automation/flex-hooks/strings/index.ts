@@ -1,10 +1,13 @@
 // Export the template names as an enum for better maintainability when accessing them elsewhere
 export enum StringTemplates {
-  PSExtendWrapup = 'ExtendWrapup',
+  ExtendWrapup = 'PSAgentAutomationExtendWrapup',
+  WrapupSecondsRemaining = 'PSAgentAutomationWrapupSecondsRemaining',
 }
 
 export const stringHook = () => ({
   'en-US': {
-    [StringTemplates.PSExtendWrapup]: 'Extend Wrap Up',
+    [StringTemplates.ExtendWrapup]: 'Extend Wrap Up',
+    [StringTemplates.WrapupSecondsRemaining]:
+      'Wrap up | {{seconds}} {{#if singular}}second{{else}}seconds{{/if}} remaining',
   },
 });

@@ -14,10 +14,6 @@ import { reduxNamespace } from '../../../../utils/state';
 import { ExtendedWrapupState } from '../../flex-hooks/states/extendedWrapupSlice';
 import { StringTemplates } from '../../flex-hooks/strings';
 
-export type Props = {
-  task: ITask;
-};
-
 // this component is intended to execute an autocomplete
 // and as such should only added to the canvas when a task is in wrapping
 // eg: if: (props) => props.task.status === 'wrapping',
@@ -123,7 +119,7 @@ const AutoComplete = ({ task }: OwnProps) => {
         onClick={extendWrapup}
       >
         {isExtended ? <CheckboxCheckIcon decorative /> : <PlusIcon decorative />}
-        <Flex.Template source={Flex.templates[StringTemplates.PSExtendWrapup]} />
+        <Flex.Template source={Flex.templates[StringTemplates.ExtendWrapup]} />
       </Button>
     );
   }
