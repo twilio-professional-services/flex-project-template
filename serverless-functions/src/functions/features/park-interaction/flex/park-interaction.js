@@ -1,8 +1,6 @@
 const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
-const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
 
 const requiredParameters = [
   { key: 'channelSid', purpose: 'interaction channel sid' },
@@ -51,13 +49,13 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (webhookResult.success) {
       // Remove the agent
-      const removeAgentResponse = await InteractionsOperations.participantUpdate({
-        context,
-        interactionSid,
-        channelSid,
-        participantSid,
-        status: 'closed',
-      });
+      const removeAgentResponse = await twilioExecute(context, (client) =>
+        client.flexApi.v1
+          .interaction(interactionSid)
+          .channels(channelSid)
+          .participants(participantSid)
+          .update({ status: 'closed' }),
+      );
       if (!removeAgentResponse.success) throw removeAgentResponse.message;
 
       let createMapItem = {};
@@ -114,11 +112,9 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         attributes.mapItemKey = createMapItem.key;
       }
 
-      const updateAttributesResponse = await ConversationsOperations.updateAttributes({
-        context,
-        conversationSid,
-        attributes: JSON.stringify(attributes),
-      });
+      const updateAttributesResponse = await twilioExecute(context, (client) =>
+        client.conversations.v1.conversations(conversationSid).update({ attributes: JSON.stringify(attributes) }),
+      );
       if (!updateAttributesResponse.success) throw updateAttributesResponse.message;
     }
 

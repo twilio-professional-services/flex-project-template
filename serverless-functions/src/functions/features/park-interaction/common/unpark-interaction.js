@@ -1,8 +1,6 @@
 const { prepareStudioFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
-const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
 
 const requiredParameters = [{ key: 'ConversationSid', purpose: 'conversation sid' }];
 
@@ -20,10 +18,9 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
     if (!webhookResult.success) throw webhookResult.message;
 
     // Fetch the conversation attributes updated when parked
-    const conversation = await ConversationsOperations.getConversation({
-      conversationSid,
-      context,
-    });
+    const conversation = await twilioExecute(context, (client) =>
+      client.conversations.v1.conversations(conversationSid).fetch(),
+    );
     if (!conversation.success) throw conversation.message;
     const {
       interactionSid,
@@ -46,20 +43,22 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       additionalProperties.queue_sid = queueSid;
       additionalProperties.worker_sid = workerSid;
     }
-    const result = await InteractionsOperations.participantCreateInvite({
-      context,
-      interactionSid,
-      channelSid,
-      routing: {
-        properties: {
-          workspace_sid: context.TWILIO_FLEX_WORKSPACE_SID,
-          workflow_sid: workflowSid,
-          ...additionalProperties,
-          task_channel_unique_name: taskChannelUniqueName,
-          attributes: { ...JSON.parse(taskAttributes), originalRouting: { queueName, queueSid, workerSid } },
-        },
-      },
-    });
+    const result = await twilioExecute(context, (client) =>
+      client.flexApi.v1
+        .interaction(interactionSid)
+        .channels(channelSid)
+        .invites.create({
+          routing: {
+            properties: {
+              workspace_sid: context.TWILIO_FLEX_WORKSPACE_SID,
+              workflow_sid: workflowSid,
+              ...additionalProperties,
+              task_channel_unique_name: taskChannelUniqueName,
+              attributes: { ...JSON.parse(taskAttributes), originalRouting: { queueName, queueSid, workerSid } },
+            },
+          },
+        }),
+    );
 
     if (mapSid && mapItemKey) {
       await twilioExecute(context, (client) =>

@@ -1,6 +1,4 @@
 const { prepareFlexFunction, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
-const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
-const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
 
 const requiredParameters = [
   {
@@ -21,13 +19,13 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   try {
     const { flexInteractionSid, flexInteractionChannelSid, flexInteractionParticipantSid, conversationSid } = event;
 
-    await InteractionsOperations.participantUpdate({
-      status: 'closed',
-      interactionSid: flexInteractionSid,
-      channelSid: flexInteractionChannelSid,
-      participantSid: flexInteractionParticipantSid,
-      context,
-    });
+    await twilioExecute(context, (client) =>
+      client.flexApi.v1
+        .interaction(flexInteractionSid)
+        .channels(flexInteractionChannelSid)
+        .participants(flexInteractionParticipantSid)
+        .update({ status: 'closed' }),
+    );
 
     // After leaving, check how many participants are left in the conversation.
     // Why? There is a race condition where the agents may both leave at the same time, so both
@@ -40,10 +38,9 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (participants.data && participants.data.length <= 1) {
       // No other participants. Check for outstanding invites.
-      const conversationResult = await ConversationsOperations.getConversation({
-        conversationSid,
-        context,
-      });
+      const conversationResult = await twilioExecute(context, (client) =>
+        client.conversations.v1.conversations(conversationSid).fetch(),
+      );
 
       let invites = {};
 
