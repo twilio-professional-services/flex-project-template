@@ -29,6 +29,7 @@ exports.fetchUiAttributes = async function fetchUiAttributes(parameters) {
  * @param {object} parameters the parameters for the function
  * @param {object} parameters.context the context from calling lambda function
  * @param {object} parameters.attributesUpdate the attributes to update
+ * @param {string} parameters.mergeFeature boolean string, whether we should overwrite or merge with existing config
  * @returns {object} https://www.twilio.com/docs/lookup/v2-api#making-a-request
  * @description updates config using flex api
  */
