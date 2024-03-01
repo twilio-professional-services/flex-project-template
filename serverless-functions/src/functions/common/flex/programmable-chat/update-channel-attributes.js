@@ -1,7 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const ChatOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-chat'].path);
 
 const requiredParameters = [
   { key: 'channelSid', purpose: 'channel to be updated' },
@@ -11,12 +10,10 @@ const requiredParameters = [
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
     const { channelSid, attributes } = event;
-    console.log(attributes);
-    const result = await ChatOperations.updateChannelAttributes({
-      context,
-      channelSid,
-      attributes,
-    });
+
+    const result = await twilioExecute(context, (client) =>
+      client.chat.v2.services(context.TWILIO_FLEX_CHAT_SERVICE_SID).channels(channelSid).update({ attributes }),
+    );
 
     response.setStatusCode(result.status);
     response.setBody({ ...extractStandardResponse(result) });

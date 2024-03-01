@@ -1,5 +1,4 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
-const ConferenceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conference-participant'].path);
+const { prepareFlexFunction, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 
 const requiredParameters = [{ key: 'taskSid', purpose: 'unique ID of task to clean up' }];
 
@@ -7,24 +6,21 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   try {
     const { taskSid } = event;
 
-    const conferencesResponse = await ConferenceOperations.fetchByTask({
-      context,
-      taskSid,
-      status: 'in-progress',
-      limit: 20,
-    });
+    const conferencesResponse = await twilioExecute(context, (client) =>
+      client.conferences.list({
+        friendlyName: taskSid,
+        status: 'in-progress',
+        limit: 20,
+      }),
+    );
 
     if (!conferencesResponse.success) {
       return callback(null, assets.response('json', {}));
     }
 
     await Promise.all(
-      conferencesResponse.conferences.map((conference) => {
-        return ConferenceOperations.updateConference({
-          context,
-          conference: conference.sid,
-          updateParams: { status: 'completed' },
-        });
+      conferencesResponse.data.map((conference) => {
+        return twilioExecute(context, (client) => client.conferences(conference.sid).update({ status: 'completed' }));
       }),
     );
 
