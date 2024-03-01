@@ -1,5 +1,4 @@
-const { prepareStudioFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
-const VideoOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-video'].path);
+const { prepareStudioFunction, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const AccessToken = require('twilio').jwt.AccessToken;
 
 const { VideoGrant } = AccessToken;
@@ -14,12 +13,11 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
     const { identity, roomName } = event;
 
     if (context.VIDEO_ROOM_ALLOW_CREATE !== 'true') {
-      const roomsListResult = await VideoOperations.listRoomsByUniqueName({
-        context,
-        uniqueName: roomName,
-      });
+      const roomsListResult = await twilioExecute(context, (client) =>
+        client.video.v1.rooms.list({ uniqueName: roomName }),
+      );
 
-      if (!roomsListResult.rooms || !roomsListResult.rooms.length) {
+      if (!roomsListResult.data || !roomsListResult.data.length) {
         response.setStatusCode(404);
         response.setBody({ success: false, message: 'Room not found' });
         return callback(null, response);
