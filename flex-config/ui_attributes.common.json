@@ -68,7 +68,7 @@
         "multi_participant": true
       },
       "chat_to_video_escalation": {
-        "enabled": true
+        "enabled": false
       },
       "conference": {
         "enabled": true,
