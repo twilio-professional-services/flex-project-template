@@ -1,9 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
-const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
-const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sync'].path);
 
 const requiredParameters = [
   { key: 'channelSid', purpose: 'interaction channel sid' },
@@ -40,53 +37,58 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const createUpdateSyncMapItem = event.createUpdateSyncMapItem === 'true' || false;
 
     // Create the webhook
-    const webhookResult = await ConversationsOperations.addWebhook({
-      context,
-      conversationSid,
-      method: 'POST',
-      filters: ['onMessageAdded'],
-      url: `https://${context.DOMAIN_NAME}/features/park-interaction/common/unpark-interaction`,
-      target: 'webhook',
-    });
+    const webhookResult = await twilioExecute(context, (client) =>
+      client.conversations.v1.conversations(conversationSid).webhooks.create({
+        'configuration.method': 'POST',
+        'configuration.filters': ['onMessageAdded'],
+        'configuration.url': `https://${context.DOMAIN_NAME}/features/park-interaction/common/unpark-interaction`,
+        target: 'webhook',
+      }),
+    );
+    const { data: webhook, status } = webhookResult;
 
     if (webhookResult.success) {
       // Remove the agent
-      const removeAgentResponse = await InteractionsOperations.participantUpdate({
-        context,
-        interactionSid,
-        channelSid,
-        participantSid,
-        status: 'closed',
-      });
+      const removeAgentResponse = await twilioExecute(context, (client) =>
+        client.flexApi.v1
+          .interaction(interactionSid)
+          .channels(channelSid)
+          .participants(participantSid)
+          .update({ status: 'closed' }),
+      );
       if (!removeAgentResponse.success) throw removeAgentResponse.message;
 
       let createMapItem = {};
       if (createUpdateSyncMapItem) {
         // Open a Sync Map by unique name and update its data
-        const syncMap = await SyncOperations.createMap({
-          context,
-          uniqueName: `ParkedInteractions_${workerSid}`,
-        });
+        const syncMap = await twilioExecute(context, (client) =>
+          client.sync.v1
+            .services(context.TWILIO_FLEX_SYNC_SID)
+            .syncMaps.create({ uniqueName: `ParkedInteractions_${workerSid}` }),
+        );
 
         // If map already exists, use the unique name to access it
-        if (syncMap.sid || workerSid) {
-          const createMapItemResponse = await SyncOperations.createMapItem({
-            context,
-            mapSid: syncMap.sid || `ParkedInteractions_${workerSid}`,
-            key: conversationSid,
-            ttl: 86400, // One day
-            data: {
-              interactionSid,
-              flexInteractionChannelSid: channelSid,
-              channelType,
-              participantSid,
-              workflowSid,
-              taskChannelUniqueName,
-              taskAttributes,
-              webhookSid: webhookResult.webhook.sid,
-            },
-          });
-          createMapItem = createMapItemResponse.mapItem;
+        if (syncMap.data?.sid || workerSid) {
+          const createMapItemResponse = await twilioExecute(context, (client) =>
+            client.sync.v1
+              .services(context.TWILIO_FLEX_SYNC_SID)
+              .syncMaps(syncMap.data?.sid || `ParkedInteractions_${workerSid}`)
+              .syncMapItems.create({
+                key: conversationSid,
+                ttl: 86400, // One day
+                data: {
+                  interactionSid,
+                  flexInteractionChannelSid: channelSid,
+                  channelType,
+                  participantSid,
+                  workflowSid,
+                  taskChannelUniqueName,
+                  taskAttributes,
+                  webhookSid: webhook.sid,
+                },
+              }),
+          );
+          createMapItem = createMapItemResponse.data;
         }
       }
 
@@ -102,7 +104,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         queueSid,
         workerSid,
         taskAttributes,
-        webhookSid: webhookResult.webhook.sid,
+        webhookSid: webhook.sid,
       };
 
       if (createUpdateSyncMapItem && createMapItem.mapSid && createMapItem.key) {
@@ -110,15 +112,12 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         attributes.mapItemKey = createMapItem.key;
       }
 
-      const updateAttributesResponse = await ConversationsOperations.updateAttributes({
-        context,
-        conversationSid,
-        attributes: JSON.stringify(attributes),
-      });
+      const updateAttributesResponse = await twilioExecute(context, (client) =>
+        client.conversations.v1.conversations(conversationSid).update({ attributes: JSON.stringify(attributes) }),
+      );
       if (!updateAttributesResponse.success) throw updateAttributesResponse.message;
     }
 
-    const { webhook, status } = webhookResult;
     response.setStatusCode(status);
     response.setBody({ webhook, ...extractStandardResponse(webhookResult) });
 

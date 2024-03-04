@@ -23,8 +23,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Conference (external)](conference)           | _provide agents the ability to conference in external numbers_              |
 | [Conversation Transfer](conversation-transfer)          | _introduce conversation-based messaging transfer functionality for agents_                          |
 | [Custom Transfer Directory](custom-transfer-directory)       | _customize the agent and queue transfer directories_                        |
-| [Datadog Log Integration](datadog-log-integration) | _forward logs emitted by the template to datadog_
-| [Device Manager](device-manager)                  | _provide agents the ability to select the audio output device_              |
+| [Datadog Log Integration](datadog-log-integration) | _forward logs emitted by the template to datadog_|
 | [Dispositions](dispositions)                   | _provide agents the ability to select a disposition/wrap-up code and enter notes_                   |
 | [Emoji Picker](emoji-picker)                    | _adds an emoji picker for messaging tasks_                                  |
 | [Enhanced CRM Container](enhanced-crm-container)         | _optimize the CRM container experience_                                                             |
@@ -52,9 +51,11 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | ------------------------------ | --------------------------------------------------------------------------------------------------- |
 | [Activity Reservation Handler](activity-reservation-handler)   | _synchronize agent activities to reservation states_                                                |
 | [Activity Skill Filter](activity-skill-filter)          | _manage visibility for activities based on agent skills_                                            |
+| [Branding](branding)                  | _customize the Flex interface for your brand_                                     |
 | [Chat Transfer](chat-transfer)                  | _introduce programmable chat transfer functionality for agents_                                     |
 | [Contact History](contact-history)                  | _add a view to show a list of recent contacts (calls, chats) with ability to make Outbound calls back to the customer_                                     |
 | [Custom Hold Music](custom-hold-music)              | _customize the experience when an agent places a call on hold_                                      |
+| [Device Manager](device-manager)                  | _provide agents the ability to select the audio output device_              |
 | [Dual Channel Recording](dual-channel-recording)         | _automatically record both inbound and outbound calls in dual channel_                              |
 | [Localization](localization)                   | _adds the ability to view Flex in a different language_                                             |
 | [Metrics Data Tiles](metrics-data-tiles)          | _add custom Data Tiles with real-time channel metrics (Task Counts, SLA%) to the Queues View.  <br/> add custom Task and Activity Summary by team tiles to the Teams View_ |

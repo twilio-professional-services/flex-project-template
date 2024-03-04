@@ -57,9 +57,9 @@ exports.handler = prepareStudioFunction(requiredParameters, async (context, even
       overriddenTaskChannel,
     });
 
-    const { status, taskSid } = result;
+    const { status, data: task } = result;
     response.setStatusCode(status);
-    response.setBody({ taskSid, ...extractStandardResponse(result) });
+    response.setBody({ taskSid: task.sid, ...extractStandardResponse(result) });
     return callback(null, response);
   } catch (error) {
     return handleError(error);

@@ -1,8 +1,20 @@
 import { ITask, Manager } from '@twilio/flex-ui';
 
-import EnhancedCRMService from './EnhancedCRMService';
+import ApiService from '../serverless/ApiService';
 
-export const replaceStringAttributes = (text: string, task?: ITask): string => {
+class ReplaceStringService extends ApiService {
+  serverlessUrl = `${this.serverlessProtocol}://${this.serverlessDomain}`;
+}
+
+const replaceStringServiceInstance = new ReplaceStringService();
+
+/**
+ * This function accepts a string and performs templatized replacement of task attributes, worker attributes, and serverless domains
+ * @param {string} text - Templatized input string
+ * @param {ITask} task - Task from which to source attributes
+ * @returns {string}  - The transformed string
+ */
+export default (text: string, task?: ITask): string => {
   return text.replace(/{{(task|worker|serverless)\.((\w|\.)+)}}/g, (match: string, part1: string, part2: string) => {
     // this runs for each match found
 
@@ -13,7 +25,7 @@ export const replaceStringAttributes = (text: string, task?: ITask): string => {
     } else if (part1 === 'worker') {
       attributes = Manager.getInstance().workerClient?.attributes;
     } else if (part1 === 'serverless') {
-      return EnhancedCRMService.serverlessUrl;
+      return replaceStringServiceInstance.serverlessUrl;
     } else {
       return match;
     }
