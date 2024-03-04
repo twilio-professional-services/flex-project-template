@@ -29,4 +29,10 @@ resource "twilio_taskrouter_workspaces_activities_v1" "wrap_up_no_acd" {
   workspace_sid = var.workspace_sid
   friendly_name = "Wrap Up, No ACD"
   available     = false
-} 
+}
+
+resource "twilio_taskrouter_workspaces_activities_v1" "extended_wrap_up" {
+  workspace_sid = var.workspace_sid
+  friendly_name = "Extended Wrap Up"
+  available     = false
+}
