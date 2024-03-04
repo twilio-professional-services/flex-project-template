@@ -1,7 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
 
 const requiredParameters = [{ key: 'callSid', purpose: 'unique ID of call to record' }];
 
@@ -9,15 +8,13 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   try {
     const { callSid } = event;
 
-    const result = await VoiceOperations.createRecording({
-      context,
-      callSid,
-      params: {
+    const result = await twilioExecute(context, (client) =>
+      client.calls(callSid).recordings.create({
         recordingChannels: 'dual',
-      },
-    });
+      }),
+    );
 
-    const { recording, status } = result;
+    const { data: recording, status } = result;
     let developerComment;
 
     if (result.twilioErrorCode) {

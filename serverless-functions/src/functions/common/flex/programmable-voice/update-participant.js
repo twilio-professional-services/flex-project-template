@@ -1,7 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const ConferenceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conference-participant'].path);
 
 const requiredParameters = [
   { key: 'conference', purpose: 'unique ID of conference to update' },
@@ -16,14 +15,16 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   try {
     const { conference, participant, endConferenceOnExit } = event;
 
-    const result = await ConferenceOperations.updateParticipant({
-      context,
-      conference,
-      participant,
-      endConferenceOnExit: endConferenceOnExit === 'true',
-    });
+    const result = await twilioExecute(context, (client) =>
+      client
+        .conferences(conference)
+        .participants(participant)
+        .update({
+          endConferenceOnExit: endConferenceOnExit === 'true',
+        }),
+    );
 
-    const { participantsResponse, status } = result;
+    const { data: participantsResponse, status } = result;
 
     response.setStatusCode(status);
     response.setBody({ participantsResponse, ...extractStandardResponse(result) });

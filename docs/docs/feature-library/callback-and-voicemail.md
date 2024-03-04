@@ -95,7 +95,7 @@ If you also want to offer up a post-IVR "wait experience" to your customers - to
 
 Simply set this function's URL as **_Hold Music URL_** in the Studio Send to Flex widget, or as the `waitUrl` if using the `<Enqueue>` TwiML verb. e.g.
 
-`https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callback-and-voicemail/studio/wait-experience?mode=initialize`
+`https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callback-and-voicemail/studio/wait-experience`
 
 There is broad scope to customize the logic in here - potentially to pull more task attributes from the existing call task and apply them to the callback or voicemail task. Our default implementation keeps things simple and just retains the To and From numbers (unless the caller opts for a different callback number). For example, you may consider also retaining the workflow SID of the original call task, and some pertinent attributes from your IVR - to facilitate TaskRouter in routing those callback and voicemail tasks in an identical fashion to voice calls.
 
@@ -106,4 +106,3 @@ There is broad scope to customize the logic in here - potentially to pull more t
 - **Cancelling the ongoing call task programmatically also prevents the call task reaching an agent when the customer has already committed to leaving a voicemail (or requesting a callback)**. We leave this task cancellation until the very last possible moment - to maximize the opportunity for an agent to answer.
 - **It is essential to lookup and retain the task SID of the ongoing call task immediately - so that we can cancel it later and make changes to its reporting attributes as mentioned above.** Our implementation (see _getPendingTaskByCallSid()_) immediately retrieves the top 20 most recent `pending` or `reserved` (i.e. not-yet-accepted) tasks on the provided `workflowSid`, and finds the one with the matching `call_sid` attribute. Since this lookup occurs immediately on entering our configured `waitUrl` TwiML application - milliseconds after the associated task is created - this approach works very reliably and has been extensively load tested (100% success over a 1000 call test at a rate of 30 calls per second).
 - **If for some reason the _wait-experience_ logic fails to find the task for the ongoing call's call SID, it will fail gracefully** by informing the customer that the callback and voicemail capability is currently unavailable.
-- The bundled _wait-experience-music-30s.mp3_ file is an arbitrary 30s audio file used to ensure the caller is repeatedly prompted every ~30 seconds with the option to request a callback or leave a voicemail. You would want to customize this to meet your hold music needs.

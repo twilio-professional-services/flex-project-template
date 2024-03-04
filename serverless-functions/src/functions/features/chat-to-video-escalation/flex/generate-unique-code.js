@@ -1,6 +1,5 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
-const VideoOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-video'].path);
 const randomstring = require('randomstring');
 
 const requiredParameters = [
@@ -24,17 +23,18 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       charset: 'alphanumeric',
     });
 
-    const roomResult = await VideoOperations.createRoom({
-      context,
-      recordParticipantsOnConnect: context.VIDEO_RECORD_BY_DEFAULT === 'true',
-      type: context.VIDEO_ROOM_TYPE,
-      emptyRoomTimeout: Number(context.VIDEO_CODE_TTL),
-      uniqueName,
-    });
+    const roomResult = await twilioExecute(context, (client) =>
+      client.video.v1.rooms.create({
+        recordParticipantsOnConnect: context.VIDEO_RECORD_BY_DEFAULT === 'true',
+        type: context.VIDEO_ROOM_TYPE,
+        emptyRoomTimeout: Number(context.VIDEO_CODE_TTL),
+        uniqueName,
+      }),
+    );
 
     const attributesUpdate = {
       videoRoom: uniqueName,
-      videoRoomSid: roomResult?.room?.sid,
+      videoRoomSid: roomResult?.data?.sid,
     };
 
     await TaskOperations.updateTaskAttributes({
@@ -46,7 +46,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     response.setStatusCode(roomResult.status);
     response.setBody({
       roomName: uniqueName,
-      roomSid: roomResult.sid,
+      roomSid: roomResult.data?.sid,
     });
 
     return callback(null, response);

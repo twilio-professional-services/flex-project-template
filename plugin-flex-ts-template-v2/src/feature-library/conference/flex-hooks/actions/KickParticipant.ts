@@ -19,7 +19,7 @@ export const actionHook = function handleKickConferenceParticipant(flex: typeof 
 
       const { task, targetSid } = payload;
 
-      const conference = task.conference?.conferenceSid;
+      const conference = task.conference?.conferenceSid || task.attributes?.conference?.sid;
 
       const participantSid = targetSid;
 

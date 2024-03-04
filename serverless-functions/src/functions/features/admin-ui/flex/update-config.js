@@ -21,7 +21,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       context,
     });
 
-    const { configuration } = result;
+    const { data: configuration } = result;
     response.setStatusCode(result.status);
     response.setBody({ configuration, ...extractStandardResponse(result) });
 
