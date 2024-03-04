@@ -8,6 +8,7 @@ export interface DispositionsState {
 export interface DispositionsTaskState {
   disposition: string;
   notes: string;
+  custom_attributes: { [key: string]: string };
 }
 
 export interface DispositionsTaskUpdate extends DispositionsTaskState {
@@ -28,6 +29,7 @@ const dispositionsSlice = createSlice({
         [action.payload.taskSid]: {
           disposition: action.payload.disposition,
           notes: action.payload.notes,
+          custom_attributes: { ...action.payload.custom_attributes },
         },
       };
     },
