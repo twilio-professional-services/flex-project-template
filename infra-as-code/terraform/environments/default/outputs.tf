@@ -1,10 +1,5 @@
 # these aren't used for anything other than debug output within the CI workflow.
 
-output "workspace_sid" {
-  value = twilio_taskrouter_workspaces_v1.flex_task_assignment.sid
-  description = "Flex Task Assignment workspace SID"
-}
-
 # FEATURE: remove-all
 output "template_example_assign_to_anyone_workflow_sid" {
   value = twilio_taskrouter_workspaces_workflows_v1.template_example_assign_to_anyone.sid

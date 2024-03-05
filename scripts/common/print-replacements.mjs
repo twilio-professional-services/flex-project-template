@@ -1,4 +1,4 @@
-import { varNameMapping } from "./constants.mjs";
+import { placeholderPrefix, varNameMapping } from "./constants.mjs";
 
 const acronyms = ['sid', 'id', 'ui', 'sip', 'pstn', 'sms', 'crm', 'sla', 'cbm', 'url'];
 const ignoreKeys = ['ACCOUNT_SID', 'AUTH_TOKEN', 'TWILIO_API_KEY', 'TWILIO_API_SECRET'];
@@ -35,7 +35,7 @@ const formatName = (name) => {
 }
 
 const printLine = (name, value) => {
-  if (value == `<YOUR_${name}>`) {
+  if (value == `<${placeholderPrefix}_${name}>`) {
     // Don't print placeholders
     value = "(missing)";
   }
@@ -46,8 +46,10 @@ const printLine = (name, value) => {
 export default (allReplacements) => {
   const alreadyOutput = [];
   let printHeader = true;
-  console.log("");
-  console.log("Environment configuration summary:");
+  if (Object.keys(allReplacements).filter(key => !ignoreKeys.includes(key)).length) {
+    console.log("");
+    console.log("Environment configuration summary:");
+  }
   for (const key in allReplacements) {
     if (!varNameMapping[key] || !(
       varNameMapping[key].type == "tr-workspace" || 

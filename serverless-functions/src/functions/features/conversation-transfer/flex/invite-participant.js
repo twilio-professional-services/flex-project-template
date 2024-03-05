@@ -1,6 +1,4 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
-const ConversationsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conversations'].path);
-const InteractionsOperations = require(Runtime.getFunctions()['common/twilio-wrappers/interactions'].path);
+const { prepareFlexFunction, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 
 const requiredParameters = [
   {
@@ -98,18 +96,15 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       workersToIgnore,
     );
 
-    const participantCreateInviteParams = {
-      routing: routingParams,
-      interactionSid: flexInteractionSid,
-      channelSid: flexInteractionChannelSid,
-      context,
-    };
-
     const {
       success,
       message = '',
-      participantInvite = null,
-    } = await InteractionsOperations.participantCreateInvite(participantCreateInviteParams);
+      data: participantInvite = null,
+    } = await twilioExecute(context, (client) =>
+      client.flexApi.v1.interaction(flexInteractionSid).channels(flexInteractionChannelSid).invites.create({
+        routing: routingParams,
+      }),
+    );
 
     // if this failed bail out so we don't remove the agent from the conversation and no one else joins
     if (!success) {
@@ -117,41 +112,40 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     }
 
     if (removeFlexInteractionParticipantSid) {
-      await InteractionsOperations.participantUpdate({
-        status: 'closed',
-        interactionSid: flexInteractionSid,
-        channelSid: flexInteractionChannelSid,
-        participantSid: removeFlexInteractionParticipantSid,
-        context,
-      });
+      await twilioExecute(context, (client) =>
+        client.flexApi.v1
+          .interaction(flexInteractionSid)
+          .channels(flexInteractionChannelSid)
+          .participants(removeFlexInteractionParticipantSid)
+          .update({ status: 'closed' }),
+      );
     } else {
       // Add invite to conversation attributes
       const inviteTargetType = transferTargetSid.startsWith('WK') ? 'Worker' : 'Queue';
-      const conversation = await ConversationsOperations.getConversation({
-        conversationSid,
-        context,
-      });
-      const currentAttributes = JSON.parse(conversation.conversation.attributes);
-      await ConversationsOperations.updateAttributes({
-        conversationSid,
-        attributes: JSON.stringify({
-          ...currentAttributes,
-          invites: {
-            ...currentAttributes.invites,
-            [participantInvite.routing.properties.sid]: {
-              invitesTaskSid: participantInvite.routing.properties.sid,
-              targetSid: transferTargetSid,
-              timestampCreated: new Date(),
-              targetName: inviteTargetType === 'Queue' ? transferQueueName : transferWorkerName,
-              inviteTargetType,
+      const conversation = await twilioExecute(context, (client) =>
+        client.conversations.v1.conversations(conversationSid).fetch(),
+      );
+      const currentAttributes = JSON.parse(conversation.data.attributes);
+      await twilioExecute(context, (client) =>
+        client.conversations.v1.conversations(conversationSid).update({
+          attributes: JSON.stringify({
+            ...currentAttributes,
+            invites: {
+              ...currentAttributes.invites,
+              [participantInvite.routing.properties.sid]: {
+                invitesTaskSid: participantInvite.routing.properties.sid,
+                targetSid: transferTargetSid,
+                timestampCreated: new Date(),
+                targetName: inviteTargetType === 'Queue' ? transferQueueName : transferWorkerName,
+                inviteTargetType,
+              },
             },
-          },
+          }),
         }),
-        context,
-      });
+      );
     }
 
-    response.setStatusCode(201);
+    response.setStatusCode(200);
     response.setBody({
       success: true,
       message: `Participant invite ${participantInvite.sid}`,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ITask, templates } from '@twilio/flex-ui';
 import { Box } from '@twilio-paste/core/box';
 import { Tooltip } from '@twilio-paste/tooltip';
-import { Menu, MenuButton, useMenuState } from '@twilio-paste/core/menu';
+import { Menu, MenuButton, MenuGroup, useMenuState } from '@twilio-paste/core/menu';
 import { SkeletonLoader } from '@twilio-paste/core/skeleton-loader';
 import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 import { ErrorIcon } from '@twilio-paste/icons/esm/ErrorIcon';
@@ -61,9 +61,11 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
             <ChatIcon decorative title={templates[StringTemplates.CannedResponses]()} />
           </MenuButton>
           <Menu {...menu} aria-label="canned-responses">
-            {responseCategories?.categories.map((category: ResponseCategory) => (
-              <CategorySubMenu category={category} menu={menu} task={task} key={category.section} />
-            ))}
+            <MenuGroup label={templates[StringTemplates.CannedResponses]()} element="CANNED_RESPONSES_MENU">
+              {responseCategories?.categories.map((category: ResponseCategory) => (
+                <CategorySubMenu category={category} menu={menu} task={task} key={category.section} />
+              ))}
+            </MenuGroup>
           </Menu>
         </>
       )}

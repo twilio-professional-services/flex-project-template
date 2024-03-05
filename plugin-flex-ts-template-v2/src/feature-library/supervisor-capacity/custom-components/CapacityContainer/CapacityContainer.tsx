@@ -9,7 +9,7 @@ import { SectionHeader } from './CapacityContainerStyles';
 import TaskRouterService, {
   WorkerChannelCapacityResponse,
 } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
-import { getRules } from '../../config';
+import { getRules, isWorkerCanvasTabsEnabled } from '../../config';
 import CapacityChannel from '../CapacityChannel';
 import { StringTemplates } from '../../flex-hooks/strings';
 
@@ -131,9 +131,11 @@ export default function CapacityContainer(props: OwnProps) {
 
   return (
     <Stack orientation="vertical" spacing="space0">
-      <SectionHeader>
-        <Template source={templates[StringTemplates.ChannelCapacity]} />
-      </SectionHeader>
+      {isWorkerCanvasTabsEnabled() ? null : (
+        <SectionHeader>
+          <Template source={templates[StringTemplates.ChannelCapacity]} />
+        </SectionHeader>
+      )}
       {workerChannels.length > 0 &&
         workerChannels.map((workerChannel) => (
           <CapacityChannel

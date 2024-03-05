@@ -34,21 +34,6 @@ if (!apiKey || !apiSecret) {
 
 let domain = '';
 const outputPath = process.argv[2];
-const environment = process.argv[3];
-
-if (environment) {
-  // First, attempt to get domain via flex-config
-  try {
-    const flexConfig = JSON.parse(await fs.readFile(`../../flex-config/ui_attributes.${environment}.json`, 'utf8'));
-    const configDomain = flexConfig?.custom_data?.features?.schedule_manager?.serverless_domain;
-
-    if (configDomain && configDomain.includes('twil.io')) {
-      domain = configDomain;
-    }
-  } catch (error) {
-    console.log('Unable to read from flex-config, fetching domain via API...', error);
-  }
-}
 
 if (!domain) {
   // Fall back to fetching domain via API

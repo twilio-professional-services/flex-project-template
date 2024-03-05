@@ -1,6 +1,12 @@
 import { TaskAttributes } from '../../../types/task-router/Task';
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
 
+export interface QueueIndexItem {
+  queue_sid: string;
+  queue_name: string;
+  workspace_sid: string;
+}
+
 export interface WorkerIndexItem {
   activity_name: string;
   attributes: CustomWorkerAttributes;

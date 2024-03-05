@@ -1,6 +1,12 @@
 import * as Flex from '@twilio/flex-ui';
 
-import { getDispositionsForQueue, isNotesEnabled, isRequireDispositionEnabledForQueue } from '../../config';
+import {
+  getDispositionsForQueue,
+  isNotesEnabled,
+  isRequireDispositionEnabledForQueue,
+  getTextAttributes,
+  getSelectAttributes,
+} from '../../config';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { DispositionsState } from '../states';
@@ -8,8 +14,10 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 import { DispositionsNotification } from '../notifications';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 
-const handleAbort = (flex: typeof Flex, abortFunction: any) => {
-  flex.Notifications.showNotification(DispositionsNotification.DispositionRequired);
+const handleAbort = (flex: typeof Flex, abortFunction: any, dispositionError: boolean) => {
+  flex.Notifications.showNotification(
+    dispositionError ? DispositionsNotification.DispositionRequired : DispositionsNotification.AttributeRequired,
+  );
 
   flex.Actions.invokeAction('SetComponentState', {
     name: 'AgentTaskCanvasTabs',
@@ -26,11 +34,14 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     if (!payload.task?.taskSid) {
       return;
     }
-
-    const numDispositions = getDispositionsForQueue(payload.task?.queueSid ?? '').length;
+    const queueSid = payload.task.queueSid;
+    const queueName = payload.task.queueName;
+    const numDispositions = getDispositionsForQueue(queueSid, queueName).length;
+    const textAttributes = getTextAttributes(queueSid, queueName);
+    const selectAttributes = getSelectAttributes(queueSid, queueName);
 
     // If notes disabled, and no dispositions are configured, return.
-    if (numDispositions < 1 && !isNotesEnabled()) {
+    if (numDispositions < 1 && !isNotesEnabled() && textAttributes.length < 1 && selectAttributes.length < 1) {
       return;
     }
 
@@ -38,8 +49,8 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     const { tasks } = (manager.store.getState() as AppState)[reduxNamespace].dispositions as DispositionsState;
 
     if (!tasks || !tasks[payload.task.taskSid]) {
-      if (isRequireDispositionEnabledForQueue(payload.task.queueSid) && numDispositions > 0) {
-        handleAbort(flex, abortFunction);
+      if (isRequireDispositionEnabledForQueue(queueSid, queueName) && numDispositions > 0) {
+        handleAbort(flex, abortFunction, true);
       }
       return;
     }
@@ -48,15 +59,27 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     let newConvAttributes = {};
 
     if (
-      isRequireDispositionEnabledForQueue(payload.task.queueSid) &&
+      isRequireDispositionEnabledForQueue(queueSid, queueName) &&
       !taskDisposition.disposition &&
       numDispositions > 0
     ) {
-      handleAbort(flex, abortFunction);
+      handleAbort(flex, abortFunction, true);
       return;
     }
+    let missing = 0;
+    textAttributes.forEach((attr) => {
+      if (attr.required && !taskDisposition?.custom_attributes[attr.conversation_attribute]) missing += 1;
+    });
+    selectAttributes.forEach((attr) => {
+      if (attr.required && !taskDisposition?.custom_attributes[attr.conversation_attribute]) missing += 1;
+    });
+    if (missing > 0) handleAbort(flex, abortFunction, false);
 
-    if (!taskDisposition.disposition && (!isNotesEnabled() || !taskDisposition.notes)) {
+    if (
+      !taskDisposition.disposition &&
+      (!isNotesEnabled() || !taskDisposition.notes) &&
+      !Object.keys(taskDisposition.custom_attributes).length
+    ) {
       // Nothing for us to do, and it's okay!
       return;
     }
@@ -74,6 +97,10 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
         content: taskDisposition.notes,
       };
     }
+    newConvAttributes = {
+      ...newConvAttributes,
+      ...taskDisposition.custom_attributes,
+    };
 
     try {
       await TaskRouterService.updateTaskAttributes(

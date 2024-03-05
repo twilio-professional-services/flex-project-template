@@ -1,8 +1,16 @@
 import { promises as fs } from 'fs';
 import shell from 'shelljs';
 
-import { varNameMapping } from "./constants.mjs";
+import { placeholderPrefix, varNameMapping } from "./constants.mjs";
 import * as fetchCli from "./fetch-cli.mjs";
+
+const parseData = (data) => {
+  let result = {};
+  for (const match of data.matchAll(new RegExp(`<${placeholderPrefix}_(.*)>`, 'g'))) {
+    result[match[1]] = match[0];
+  }
+  return result;
+}
 
 // Initialize env file if necessary, then parse its contents
 const readEnv = async (envFile, exampleFile, overwrite) => {
@@ -18,18 +26,14 @@ const readEnv = async (envFile, exampleFile, overwrite) => {
   
   // read and parse the env file
   const initialEnv = await fs.readFile(envFile, "utf8");
-  let result = {};
-  for (const match of initialEnv.matchAll(/<YOUR_(.*)>/g)) {
-    result[match[1]] = match[0];
-  }
-  return result;
+  return parseData(initialEnv);
 }
 
 // Fills placeholder variables from process.env if present
 const fillKnownEnvVars = (envVars) => {
   for (const key in envVars) {
     // If this isn't a placeholder value, ignore it
-    if (envVars[key] !== `<YOUR_${key}>`) {
+    if (envVars[key] !== `<${placeholderPrefix}_${key}>`) {
       continue;
     }
     
@@ -43,7 +47,7 @@ const fillKnownEnvVars = (envVars) => {
 }
 
 const fillVar = (key, envVars, environment) => {
-  if (envVars[key] !== `<YOUR_${key}>` || !varNameMapping[key]) {
+  if (envVars[key] !== `<${placeholderPrefix}_${key}>` || !varNameMapping[key]) {
     // If this isn't a placeholder value, ignore it.
     // This variable isn't in the constant, so we can't do anything else with it.
     return;
@@ -68,9 +72,13 @@ const fillVar = (key, envVars, environment) => {
   if (parentKey) {
     // if this key is not in the env vars, add it so that it can be referenced
     if (!envVars[parentKey]) {
-      envVars[parentKey] = `<YOUR_${parentKey}>`;
+      envVars[parentKey] = `<${placeholderPrefix}_${parentKey}>`;
     }
     fillVar(parentKey, envVars, environment);
+    if (envVars[parentKey] === `<${placeholderPrefix}_${parentKey}>`) {
+      // if we couldn't populate the parent, we definitely can't fetch this
+      return;
+    }
   }
   
   // fetch the value based on type
@@ -121,7 +129,7 @@ const fillUnknownEnvVars = (envVars, environment) => {
 
 const fillAccountVars = (envVars, account) => {
   for (const key in envVars) {
-    if (envVars[key] !== `<YOUR_${key}>`) {
+    if (envVars[key] !== `<${placeholderPrefix}_${key}>`) {
       // If this isn't a placeholder value, ignore it.
       continue;
     }
@@ -140,33 +148,7 @@ const fillAccountVars = (envVars, account) => {
   return envVars;
 }
 
-const saveReplacements = async (data, path) => {
-  try {
-    for (const key in data) {
-      shell.sed('-i', new RegExp(`<YOUR_${key}>`, 'g'), data[key], path);
-    }
-  } catch (error) {
-    console.error(`Error saving file ${path}`, error);
-  }
-}
-
-export default async (path, examplePath, account, environment, overwrite) => {
-  console.log(`Setting up ${path}...`);
-  
-  // Check if this package uses environment files
-  if (!shell.test('-e', examplePath) && !shell.test('-e', path)) {
-    // No environment files, no need to continue
-    return null;
-  }
-  
-  // Initialize the env vars
-  let envVars = await readEnv(path, examplePath, overwrite);
-  
-  if (!envVars) {
-    console.error(`Unable to create the file ${path}.`);
-    return null;
-  }
-  
+const fillAllVars = (envVars, account, environment) => {
   try {
     // Fill known env vars from process.env
     envVars = fillKnownEnvVars(envVars);
@@ -181,8 +163,75 @@ export default async (path, examplePath, account, environment, overwrite) => {
   // Fetch unknown env vars from the API
   envVars = fillUnknownEnvVars(envVars, environment);
   
+  return envVars;
+}
+
+const saveReplacements = async (data, path) => {
+  try {
+    for (const key in data) {
+      shell.sed('-i', new RegExp(`<${placeholderPrefix}_${key}>`, 'g'), data[key], path);
+    }
+  } catch (error) {
+    console.error(`Error saving file ${path}`, error);
+  }
+}
+
+// Function to use for generating a populated string from a string containing placeholders
+export const fillReplacementsForString = async (data, account, environment) => {
+  // Parse out the env vars from the string
+  let envVars = parseData(data);
+  
+  if (!envVars) {
+    console.error(`Error parsing data`, error);
+    return null;
+  }
+  
+  // Fill the envVars with the appropriate replacements
+  envVars = fillAllVars(envVars, account, environment);
+  
+  if (!envVars) {
+    return null;
+  }
+  
+  // Replace the placeholders with the filled vars
+  let newData = data;
+  for (const key in envVars) {
+    newData = newData.replace(new RegExp(`<${placeholderPrefix}_${key}>`, 'g'), envVars[key]);
+  }
+  
+  return {
+    data: newData,
+    envVars,
+  };
+}
+
+// Function to use for generating a populated file based on an example file containing placeholders
+export const fillReplacementsForPath = async (path, examplePath, account, environment, overwrite) => {
+  // Check if this package uses environment files
+  if (!shell.test('-e', examplePath) && !shell.test('-e', path)) {
+    // No environment files, no need to continue
+    return null;
+  }
+  
+  // Parse out the env vars from the file
+  let envVars = await readEnv(path, examplePath, overwrite);
+  
+  if (!envVars) {
+    console.error(`Unable to create the file ${path}.`);
+    return null;
+  }
+  
+  // Fill the envVars with the appropriate replacements
+  envVars = fillAllVars(envVars, account, environment);
+  
+  if (!envVars) {
+    return null;
+  }
+  
   // Save!
   await saveReplacements(envVars, path);
   
   return envVars;
 }
+
+export default fillReplacementsForPath;

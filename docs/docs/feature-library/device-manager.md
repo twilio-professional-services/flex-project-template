@@ -3,7 +3,11 @@ sidebar_label: device-manager
 title: device-manager
 ---
 
-This feature is intended to demonstrate how to use web APIs to select audio devices and apply them for use within Flex, specifically with the Flex Voice Client. This plugin was built for **Flex 2.0**.
+This feature is intended to demonstrate how to use web APIs to select audio devices and apply them for use within Flex, specifically with the Flex Voice Client.
+
+:::caution Deprecated
+This feature has been replaced by [the native device manager feature](https://www.twilio.com/docs/flex/end-user-guide/initial-audio-device-check#how-do-i-switch-audio-devices-public-beta) in Flex UI 2.6 and later. To use the native feature, navigate to Flex > Admin > Features > Beta, and enable the toggle for Device Manager. It will then be visible after reloading Flex.
+:::
 
 ---
 

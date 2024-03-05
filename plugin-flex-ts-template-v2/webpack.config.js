@@ -8,10 +8,6 @@ module.exports = (config, { isProd, isDev, isTest }) => {
 
   return {
     ...config,
-    node: {
-      ...config.node,
-      global: true,
-    },
     performance: {
       ...config.performance,
       hints: false,

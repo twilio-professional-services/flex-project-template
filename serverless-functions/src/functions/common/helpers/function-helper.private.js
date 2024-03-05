@@ -1,6 +1,8 @@
 const { isObject, isString } = require('lodash');
 const TokenValidator = require('twilio-flex-token-validator').functionValidator;
 
+const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handler'].path).retryHandler;
+
 const prepareFunction = (context, event, callback, requiredParameters, handlerFn) => {
   const response = new Twilio.Response();
   const parameterError = module.exports.validateParameters(context.PATH, event, requiredParameters);
@@ -22,7 +24,7 @@ const prepareFunction = (context, event, callback, requiredParameters, handlerFn
     response.setStatusCode(500);
     response.setBody({
       success: false,
-      message: error,
+      message: error.toString(),
     });
     return callback(null, response);
   };
@@ -95,9 +97,68 @@ exports.prepareStudioFunction = (requiredParameters, handlerFn) => {
 /**
  * @param {object} object
  * @returns {object}
- * @description convenience method to safely extract the standad elements in the response back to flex from serverless functions.  This can be used with any object that is returrned from any twilio-wrapper function.
+ * @description convenience method to safely extract the standard elements in the response back to flex from serverless functions.  This can be used with any object that is returned from any twilio-wrapper function.
  */
 exports.extractStandardResponse = (object) => {
   const { success, message, twilioDocPage, twilioErrorCode } = object;
   return { success, message, twilioDocPage, twilioErrorCode };
+};
+
+/**
+ * @typedef {object} WebServiceReturn
+ * @property {boolean} success - Whether the web service request was successful
+ * @property {number} status - The HTTP status code from the web service
+ * @property {object} data - Data returned from the web service
+ */
+
+/**
+ * Callback function passed to the twilioExecute function
+ *
+ * @callback twilioExecuteCallback
+ * @param {Twilio} client - Twilio client instance
+ * @returns {Promise<WebServiceReturn>} Twilio client response
+ */
+
+/**
+ * Wrapper for executing Twilio client library functions with custom retry logic
+ *
+ * @param {twilioExecuteCallback} callback - Callback containing the Twilio client command to run
+ * @param {object} context - Serverless context, including the Twilio client instance
+ * @param {number?} attempts - Current retry attempt
+ * @returns {Promise<WebServiceReturn>} Response from the Twilio client, or errors if present
+ */
+exports.twilioExecute = async (context, callback, attempts = 0) => {
+  try {
+    const client = context.getTwilioClient();
+    // eslint-disable-next-line callback-return
+    const data = await callback(client);
+    return { success: true, data, status: 200 };
+  } catch (error) {
+    return retryHandler(error, context, callback, exports.twilioExecute, attempts);
+  }
+};
+
+/**
+ * Callback function passed to the executeWithRetry function
+ *
+ * @callback executeCallback
+ * @returns {Promise<WebServiceReturn>} Web service response
+ */
+
+/**
+ * Wrapper for executing web service request functions with custom retry logic
+ *
+ * @param {executeCallback} callback - Callback containing the web service call to run
+ * @param {object} context - Serverless context
+ * @param {number?} attempts - Current retry attempt
+ * @returns {Promise<WebServiceReturn>} Response from the web service, or errors if present
+ */
+exports.executeWithRetry = async (context, callback, attempts = 0) => {
+  try {
+    // eslint-disable-next-line callback-return
+    const data = await callback();
+    return { success: true, data, status: 200 };
+  } catch (error) {
+    return retryHandler(error, context, callback, exports.executeWithRetry, attempts);
+  }
 };
