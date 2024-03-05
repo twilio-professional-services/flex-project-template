@@ -8,12 +8,7 @@
     "serverless_functions_domain": "<YOUR_SERVERLESS_DOMAIN>",
     "common": {
       "log_level": "info",
-      "teams": [
-        "Blue Team",
-        "Red Team",
-        "Gold Team",
-        "VIP Team"
-      ],
+      "teams": ["Blue Team", "Red Team", "Gold Team", "VIP Team"],
       "departments": [
         "General Management",
         "Marketing",
@@ -418,6 +413,9 @@
           "side_nav_hover_background": "rgb(225, 227, 234)"
         },
         "component_theme_overrides": {}
+      },
+      "post_call_survey": {
+        "enabled": true
       }
     }
   }
