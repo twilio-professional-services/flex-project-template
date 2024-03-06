@@ -59,7 +59,8 @@ The reason we cannot change the agent's state directly to the correct resolved s
       "onATask": "On a Task",
       "onATaskNoAcd": "On a Task, No ACD",
       "wrapup": "Wrap Up",
-      "wrapupNoAcd": "Wrap Up, No ACD"
+      "wrapupNoAcd": "Wrap Up, No ACD",
+      "extendedWrapup": "Extended Wrap Up"
     }
   }
 }
@@ -78,6 +79,7 @@ this object allows the administrator to customize which activity names to use fo
 - **onATaskNoAcd**:  this variable represents the name of the activity to set when the system needs to move the agent to a state representing they are not available for work but are currently working a task.
 - **wrapup**:  this variable represents the name of the activity to set when the system needs to move the agent to a state representing they are available for work and are currently in after call work
 - **wrapupNoAcd**:  this variable represents the name of the activity to set when the system needs to move the agent to a state representing they are not available for work but are currently in after call.
+- **extendedWrapup**: this variable represents the name of the activity to set when the `ExtendWrapUp` action is invoked by an agent requesting extended wrap up via the `agent-automation` feature.
 
 ### dependencies
 
@@ -157,6 +159,7 @@ sequenceDiagram
 
 | Action Hook | Action Name | Description |
 | ----------- | ----------- | ----------- |
+| after | ExtendWrapUp | triggers ActivityManager.enforceEvaluatedState() |
 | after | SelectTask | triggers ActivityManager.enforceEvaluatedState() |
 | before | SetActivity | triggers ActivityManager.enforceEvaluatedState(), ActivityManager.storePendingActivityChange() |
 | before | StartOutboundCall | triggers ActivityManager.storePendingActivityChange, ActivityManager.setWorkerActivity(newActivity) |

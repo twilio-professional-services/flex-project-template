@@ -6,5 +6,6 @@ export default interface ActivityReservationHandlerConfig {
     onATaskNoAcd: string;
     wrapup: string;
     wrapupNoAcd: string;
+    extendedWrapup: string;
   };
 }

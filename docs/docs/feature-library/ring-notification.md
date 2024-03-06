@@ -33,6 +33,10 @@ To enable the feature, under the `flex-config` attributes set the `ring_notifica
 
 The ringtone mp3 file is stored as a serverless asset at `serverless-functions/assets/features/ring-notification/phone_ringtone.mp3`. You may change the ringtone by overwriting this file.
 
+:::info Browser autoplay behavior
+Most popular browsers will block automatically played audio if the user has not interacted with the webpage. This means that if the user has just opened Flex, and has not yet interacted with Flex, the notification audio will not play until user interaction occurs. [More details, including workarounds, are available here.](https://www.twilio.com/docs/flex/developer/ui/sound-and-audio#troubleshooting)
+:::
+
 ## Technical Details
 
 This feature plays a ring notification on the reservation `created` event and it stops playing on reservation `accepted`, `canceled`, `rejected`, `rescinded`, or `timeout` events.

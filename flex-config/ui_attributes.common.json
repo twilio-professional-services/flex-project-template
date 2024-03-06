@@ -5,6 +5,7 @@
     }
   },
   "custom_data": {
+    "serverless_functions_domain": "<YOUR_SERVERLESS_DOMAIN>",
     "common": {
       "log_level": "info",
       "teams": [
@@ -45,6 +46,10 @@
             "required_skill": "system_activities",
             "sort_order": 0
           },
+          "Extended Wrap Up": {
+            "required_skill": "system_activities",
+            "sort_order": 0
+          },
           "Offline": {
             "required_skill": null,
             "sort_order": 100
@@ -68,7 +73,7 @@
         "multi_participant": true
       },
       "chat_to_video_escalation": {
-        "enabled": true
+        "enabled": false
       },
       "conference": {
         "enabled": true,
@@ -101,7 +106,7 @@
         "default_max_capacity": 2
       },
       "device_manager": {
-        "enabled": true,
+        "enabled": false,
         "input_select": false
       },
       "dual_channel_recording": {
@@ -121,7 +126,8 @@
           "onATask": "On a Task",
           "onATaskNoAcd": "On a Task, No ACD",
           "wrapup": "Wrap Up",
-          "wrapupNoAcd": "Wrap Up, No ACD"
+          "wrapupNoAcd": "Wrap Up, No ACD",
+          "extendedWrapup": "Extended Wrap Up"
         }
       },
       "teams_view_filters": {
@@ -141,7 +147,8 @@
         "enabled": true
       },
       "schedule_manager": {
-        "enabled": true
+        "enabled": true,
+        "serverless_domain": "<YOUR_SCHEDULE_MANAGER_DOMAIN>"
       },
       "multi_call": {
         "enabled": false
@@ -161,7 +168,10 @@
             "auto_select": true,
             "auto_wrapup": true,
             "required_attributes": [],
+            "required_worker_attributes": [],
             "wrapup_time": 30000,
+            "allow_extended_wrapup": false,
+            "extended_wrapup_time": 0,
             "default_outcome": "Automatically completed"
           },
           {
@@ -170,7 +180,10 @@
             "auto_select": true,
             "auto_wrapup": true,
             "required_attributes": [],
+            "required_worker_attributes": [],
             "wrapup_time": 30000,
+            "allow_extended_wrapup": false,
+            "extended_wrapup_time": 0,
             "default_outcome": "Automatically completed"
           }
         ]

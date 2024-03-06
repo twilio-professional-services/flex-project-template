@@ -20,6 +20,9 @@ const ActivityHandlerAdmin = (props: OwnProps) => {
   const [onATaskNoAcd, setOnATaskNoAcd] = useState(props.initialConfig?.system_activity_names?.onATaskNoAcd ?? '');
   const [wrapup, setWrapup] = useState(props.initialConfig?.system_activity_names?.wrapup ?? '');
   const [wrapupNoAcd, setWrapupNoAcd] = useState(props.initialConfig?.system_activity_names?.wrapupNoAcd ?? '');
+  const [extendedWrapup, setExtendedWrapup] = useState(
+    props.initialConfig?.system_activity_names?.extendedWrapup ?? '',
+  );
 
   const { activities } = useFlexSelector((state: AppState) => state.flex.worker);
 
@@ -42,9 +45,10 @@ const ActivityHandlerAdmin = (props: OwnProps) => {
         onATaskNoAcd,
         wrapup,
         wrapupNoAcd,
+        extendedWrapup,
       },
     });
-  }, [available, onATask, onATaskNoAcd, wrapup, wrapupNoAcd]);
+  }, [available, onATask, onATaskNoAcd, wrapup, wrapupNoAcd, extendedWrapup]);
 
   return (
     <>
@@ -136,6 +140,26 @@ const ActivityHandlerAdmin = (props: OwnProps) => {
           name="wrapupnoacd"
           value={wrapupNoAcd}
           onChange={(e) => setWrapupNoAcd(e.target.value)}
+          required
+        >
+          <Option value="" disabled>
+            Select an activity...
+          </Option>
+          {[...activities].map((entry) => {
+            const activity = entry[1];
+            if (activity.available) return <></>;
+
+            return <Option value={activity.name}>{activity.name}</Option>;
+          })}
+        </Select>
+      </FormControl>
+      <FormControl key="extendedwrapup-control">
+        <Label htmlFor="extendedwrapup">Extended Wrap Up</Label>
+        <Select
+          id="extendedwrapup"
+          name="extendedwrapup"
+          value={extendedWrapup}
+          onChange={(e) => setExtendedWrapup(e.target.value)}
           required
         >
           <Option value="" disabled>
