@@ -5,5 +5,5 @@ import hooks from './flex-hooks/**/*.*';
 
 export const register = (): FeatureDefinition => {
   if (!isFeatureEnabled()) return {};
-  return { name: 'contact-history', hooks: typeof hooks === 'undefined' ? [] : hooks };
+  return { name: 'contacts', hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

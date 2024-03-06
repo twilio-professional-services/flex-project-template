@@ -398,7 +398,7 @@
         "intake_region": "",
         "flush_timeout": 5000
       },
-      "contact_history": {
+      "contacts": {
         "enabled": false,
         "max_contacts": 25
       },
