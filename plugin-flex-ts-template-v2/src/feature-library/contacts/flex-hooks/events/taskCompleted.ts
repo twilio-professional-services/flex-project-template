@@ -5,5 +5,5 @@ import contactsUtil from '../../utils/ContactsUtil';
 
 export const eventName = FlexEvent.taskCompleted;
 export const eventHook = async (_flex: typeof Flex, _manager: Flex.Manager, task: Flex.ITask) => {
-  contactsUtil.addContact(task);
+  contactsUtil.addHistoricalContact(task);
 };

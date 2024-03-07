@@ -24,7 +24,7 @@ const ContactHistorySideLink = (props: OwnProps) => {
       onClick={navigate}
       key="contact-history-side-link"
     >
-      {AllStrings[StringTemplates.ContactHistory]}
+      {AllStrings[StringTemplates.Contacts]}
     </SideLink>
   );
 };

@@ -1,4 +1,12 @@
+export interface Contact {
+  key: string;
+  name: string;
+  notes: string;
+  phoneNumber: string;
+}
+
 export interface HistoricalContact {
+  key: string;
   taskSid: string;
   from?: string;
   direction: string | undefined;

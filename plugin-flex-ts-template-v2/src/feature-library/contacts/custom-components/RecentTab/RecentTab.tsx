@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { templates, Template } from '@twilio/flex-ui';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
 import { Heading } from '@twilio-paste/core/heading';
@@ -9,8 +9,7 @@ import { Table, THead, TBody, Tr, Th } from '@twilio-paste/core/table';
 import { AlertDialog } from '@twilio-paste/core/alert-dialog';
 import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon';
 
-import { clearContactList } from '../../flex-hooks/state';
-import RecentContacts from '../../utils/ContactsUtil';
+import ContactsUtil from '../../utils/ContactsUtil';
 import HistoricalContactRecord from './HistoricalContactRecord';
 import { HistoricalContact } from '../../types';
 import AppState from '../../../../types/manager/AppState';
@@ -20,17 +19,11 @@ import { StringTemplates } from '../../flex-hooks/strings';
 const RecentTab = () => {
   const [confirmClearHistory, setConfirmClearHistory] = useState(false);
 
-  const contactData = useSelector((state: AppState) => {
-    return { contactList: state[reduxNamespace]?.contactHistory?.contactList };
-  });
-
-  const contactList = contactData?.contactList || [];
-  const dispatch = useDispatch();
+  const contactList = useSelector((state: AppState) => state[reduxNamespace]?.contacts?.recents);
 
   const clearHistory = () => {
     setConfirmClearHistory(false);
-    dispatch(clearContactList());
-    RecentContacts.clearContactList();
+    ContactsUtil.clearRecents();
   };
 
   const closeClearHistory = () => setConfirmClearHistory(false);

@@ -3,7 +3,10 @@ import esES from './es-es.json';
 import esMX from './es-mx.json';
 
 export enum StringTemplates {
-  ContactHistory = 'PSContactHistory',
+  Contacts = 'PSContacts',
+  MyContacts = 'PSMyContacts',
+  SharedContacts = 'PSSharedContacts',
+  Recent = 'PSContactsRecent',
   NoHistory = 'PSNoHistory',
   ClearHistory = 'PSClearHistory',
   ClearHistoryDialog = 'PSClearHistoryDialog',
@@ -30,7 +33,10 @@ export enum StringTemplates {
 
 export const stringHook = () => ({
   'en-US': {
-    [StringTemplates.ContactHistory]: 'Contact History',
+    [StringTemplates.Contacts]: 'Contacts',
+    [StringTemplates.MyContacts]: 'My Contacts',
+    [StringTemplates.SharedContacts]: 'Shared Contacts',
+    [StringTemplates.Recent]: 'Recent',
     [StringTemplates.NoHistory]: 'Calls and chats will appear here once they are completed.',
     [StringTemplates.ClearHistory]: 'Clear History',
     [StringTemplates.ClearHistoryDialog]: 'Please confirm that you want to delete all your contact history.',

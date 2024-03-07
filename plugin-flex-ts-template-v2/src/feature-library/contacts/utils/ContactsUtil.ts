@@ -1,35 +1,106 @@
 import * as Flex from '@twilio/flex-ui';
 import { Manager } from '@twilio/flex-ui';
+import { v4 as uuidv4 } from 'uuid';
 
-import { addContact, setContactList } from '../flex-hooks/state';
-import { HistoricalContact } from '../types';
-import { getMaxContacts } from '../config';
+import {
+  addHistoricalContact,
+  initRecents,
+  clearRecents,
+  addDirectoryContact,
+  updateDirectoryContact,
+  removeDirectoryContact,
+  initDirectory,
+} from '../flex-hooks/state';
+import { Contact, HistoricalContact } from '../types';
+import { getRecentDays } from '../config';
 import { getUserLanguage } from '../../../utils/configuration';
+import SyncClient, { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
+import logger from '../../../utils/logger';
 
 const manager = Manager.getInstance();
-const ContactHistoryKey = 'CONTACT_HISTORY';
+const ContactHistoryKey = 'Contacts_Recent';
+const ContactKey = 'Contacts';
 
 class ContactsUtil {
-  getRecentContactsList(): HistoricalContact[] {
-    const item = localStorage.getItem(ContactHistoryKey);
-    if (item) {
-      return JSON.parse(item);
-    }
-    return [];
-  }
+  isRecentsInitialized = false;
 
-  initContactHistory = () => {
-    const contactList = this.getRecentContactsList();
-    if (contactList && contactList.length > 0) {
-      manager.store.dispatch(setContactList({ contactList }));
+  initRecents = async () => {
+    if (this.isRecentsInitialized) {
+      return;
+    }
+    const workerSid = manager.workerClient?.workerSid;
+    if (!workerSid) {
+      logger.error('[contacts] Error loading recent contacts: No worker sid');
+      return;
+    }
+    try {
+      const map = await SyncClient.map(`${ContactHistoryKey}_${workerSid}`);
+      const mapItems = await getAllSyncMapItems(map);
+
+      // Subscribe to events which trigger Redux updates
+      map.on('itemAdded', (args) => {
+        manager.store.dispatch(addHistoricalContact(args.item.data));
+      });
+      map.on('itemRemoved', (args) => {
+        console.log(`Map item ${args.key} was removed`);
+      });
+      map.on('itemUpdated', (args) => {
+        console.log(`Map item ${args.item.key} was updated`);
+      });
+      map.on('removed', () => {
+        manager.store.dispatch(clearRecents());
+        this.isRecentsInitialized = false;
+      });
+
+      const contactList = mapItems.map((mapItem) => mapItem.data as HistoricalContact);
+      if (contactList && contactList.length > 0) {
+        manager.store.dispatch(initRecents(contactList));
+      }
+      this.isRecentsInitialized = true;
+    } catch (error: any) {
+      logger.error('[contacts] Error loading recent contacts', error);
     }
   };
 
-  setContactList = (contactList: HistoricalContact[]) => {
-    localStorage.setItem(ContactHistoryKey, JSON.stringify(contactList));
+  initDirectory = async (shared: boolean) => {
+    const workerSid = manager.workerClient?.workerSid;
+    if (!workerSid) {
+      logger.error('[contacts] Error loading contacts: No worker sid');
+      return;
+    }
+    try {
+      const map = await SyncClient.map(
+        `${ContactKey}_${shared ? manager.serviceConfiguration.account_sid : workerSid}`,
+      );
+      const mapItems = await getAllSyncMapItems(map);
+
+      // Subscribe to events which trigger Redux updates
+      map.on('itemAdded', (args) => {
+        manager.store.dispatch(addDirectoryContact({ shared, contact: args.item.data }));
+      });
+      map.on('itemRemoved', (args) => {
+        manager.store.dispatch(removeDirectoryContact({ shared, key: args.key }));
+      });
+      map.on('itemUpdated', (args) => {
+        manager.store.dispatch(updateDirectoryContact({ shared, contact: args.item.data }));
+      });
+
+      const contacts = mapItems.map((mapItem) => mapItem.data as Contact);
+      if (contacts && contacts.length > 0) {
+        manager.store.dispatch(initDirectory({ shared, contacts }));
+      }
+    } catch (error: any) {
+      logger.error('[contacts] Error loading contacts', error);
+    }
   };
 
-  addContact = (task: Flex.ITask) => {
+  initContacts = async () => {
+    await this.initRecents();
+    await this.initDirectory(false);
+    await this.initDirectory(true);
+  };
+
+  addHistoricalContact = async (task: Flex.ITask) => {
     const { taskChannelUniqueName: channel, sid: taskSid, queueName, age: duration } = task;
     const lang = getUserLanguage();
     const dateTime = task.dateCreated.toLocaleString(lang);
@@ -62,6 +133,7 @@ class ContactsUtil {
       customerCallSid = conference?.participants.customer;
     }
     const contact: HistoricalContact = {
+      key: uuidv4(),
       from,
       name,
       direction,
@@ -98,16 +170,39 @@ class ContactsUtil {
       contact.twilioPhoneNumber = from;
     }
 
-    // Using localStorage to persist contact list
-    const contactList = this.getRecentContactsList();
-    const newList = [contact].concat(contactList).slice(0, getMaxContacts());
-    localStorage.setItem(ContactHistoryKey, JSON.stringify(newList));
-    // Using Redux app state
-    manager.store.dispatch(addContact({ contact }));
+    // add item to the sync map
+    const workerSid = manager.workerClient?.workerSid;
+    if (!workerSid) {
+      logger.error('[contacts] Error adding to recent contacts: No worker sid');
+      return;
+    }
+    try {
+      const map = await SyncClient.map(`${ContactHistoryKey}_${workerSid}`);
+      await map.set(contact.key, contact, { ttl: getRecentDays() * 86400 });
+      if (!this.isRecentsInitialized) {
+        this.initRecents();
+      }
+      // Update Redux app state
+      // manager.store.dispatch(addContact(contact));
+    } catch (error: any) {
+      logger.error('[contacts] Error adding to recent contacts', error);
+    }
   };
 
-  clearContactList = () => {
-    localStorage.removeItem(ContactHistoryKey);
+  clearRecents = async () => {
+    const workerSid = manager.workerClient?.workerSid;
+    if (!workerSid) {
+      logger.error('[contacts] Error adding to recent contacts: No worker sid');
+      return;
+    }
+    try {
+      const map = await SyncClient.map(`${ContactHistoryKey}_${workerSid}`);
+      await map.removeMap();
+      // Update Redux app state
+      // manager.store.dispatch(clearRecents());
+    } catch (error: any) {
+      logger.error('[contacts] Error clearing recent contacts', error);
+    }
   };
 }
 

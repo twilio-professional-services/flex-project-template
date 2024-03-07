@@ -1,4 +1,4 @@
-import { templates, Template } from '@twilio/flex-ui';
+import { Template } from '@twilio/flex-ui';
 import { Flex } from '@twilio-paste/core/flex';
 import { Heading } from '@twilio-paste/core/heading';
 import { Box } from '@twilio-paste/core/box';
@@ -14,14 +14,20 @@ const ContactsView = () => {
   return (
     <Flex element="CONTACTS_VIEW_WRAPPER" vertical grow shrink>
       <Heading as="h1" variant="heading30">
-        Contacts
+        <Template code={StringTemplates.Contacts} />
       </Heading>
       <Box width="100%">
-        <Tabs selectedId={selectedId} baseId="horizontal-tabs-example">
-          <TabList aria-label="Horizontal product tabs">
-            <Tab id={selectedId}>Recent</Tab>
-            <Tab>My Contacts</Tab>
-            <Tab>Shared Contacts</Tab>
+        <Tabs selectedId={selectedId} baseId="contacts-tabs">
+          <TabList aria-label="Contacts tabs">
+            <Tab id={selectedId}>
+              <Template code={StringTemplates.Recent} />
+            </Tab>
+            <Tab>
+              <Template code={StringTemplates.MyContacts} />
+            </Tab>
+            <Tab>
+              <Template code={StringTemplates.SharedContacts} />
+            </Tab>
           </TabList>
           <TabPanels>
             <TabPanel>

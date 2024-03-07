@@ -1,44 +1,85 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { HistoricalContact } from '../../types';
-import { getMaxContacts } from '../../config';
+import { Contact, HistoricalContact } from '../../types';
 
-export interface ContactHistoryState {
-  contactList: HistoricalContact[];
+export interface ContactsState {
+  recents: HistoricalContact[];
+  directory: Contact[];
+  sharedDirectory: Contact[];
 }
 
-export interface AddContact {
-  contact: HistoricalContact;
+export interface UpdateContactPayload {
+  shared: boolean;
+  contact: Contact;
 }
 
-export interface SetContactList {
-  contactList: HistoricalContact[];
+export interface RemoveContactPayload {
+  shared: boolean;
+  key: string;
+}
+
+export interface InitDirectoryPayload {
+  shared: boolean;
+  contacts: Contact[];
 }
 
 const initialState = {
-  contactList: [],
-} as ContactHistoryState;
+  recents: [],
+  directory: [],
+  sharedDirectory: [],
+} as ContactsState;
 
-const contactHistorySlice = createSlice({
-  name: 'contact_history',
+const contactsSlice = createSlice({
+  name: 'contacts',
   initialState,
   reducers: {
-    addContact(state, action: PayloadAction<AddContact>) {
-      let newContactList: HistoricalContact[] = [action.payload.contact];
-      if (state.contactList) {
-        newContactList = newContactList.concat(state.contactList).slice(0, getMaxContacts());
+    addHistoricalContact(state, action: PayloadAction<HistoricalContact>) {
+      let newRecentsList: HistoricalContact[] = [action.payload];
+      if (state.recents) {
+        newRecentsList = newRecentsList.concat(state.recents);
       }
-      state.contactList = newContactList;
+      state.recents = newRecentsList;
     },
-    setContactList(state, action: PayloadAction<SetContactList>) {
-      state.contactList = action.payload.contactList;
+    initRecents(state, action: PayloadAction<HistoricalContact[]>) {
+      state.recents = action.payload;
     },
-    clearContactList(state) {
-      state.contactList = [];
+    clearRecents(state) {
+      state.recents = [];
+    },
+    addDirectoryContact(state, action: PayloadAction<UpdateContactPayload>) {
+      (action.payload.shared ? state.sharedDirectory : state.directory).push(action.payload.contact);
+    },
+    updateDirectoryContact(state, action: PayloadAction<UpdateContactPayload>) {
+      const contactIndex = (action.payload.shared ? state.sharedDirectory : state.directory).findIndex(
+        (contact) => contact.key === action.payload.contact.key,
+      );
+      (action.payload.shared ? state.sharedDirectory : state.directory)[contactIndex] = action.payload.contact;
+    },
+    removeDirectoryContact(state, action: PayloadAction<RemoveContactPayload>) {
+      if (action.payload.shared) {
+        state.sharedDirectory = state.sharedDirectory.filter((contact) => contact.key === action.payload.key);
+      } else {
+        state.directory = state.directory.filter((contact) => contact.key === action.payload.key);
+      }
+    },
+    initDirectory(state, action: PayloadAction<InitDirectoryPayload>) {
+      if (action.payload.shared) {
+        state.sharedDirectory = action.payload.contacts;
+      } else {
+        state.directory = action.payload.contacts;
+      }
     },
   },
 });
 
-export const { addContact, setContactList, clearContactList } = contactHistorySlice.actions;
-export const reducerHook = () => ({ contactHistory: contactHistorySlice.reducer });
+export const {
+  addHistoricalContact,
+  initRecents,
+  clearRecents,
+  addDirectoryContact,
+  updateDirectoryContact,
+  removeDirectoryContact,
+  initDirectory,
+} = contactsSlice.actions;
+export const reducerHook = () => ({ contacts: contactsSlice.reducer });
