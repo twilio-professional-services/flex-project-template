@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import { Manager } from '@twilio/flex-ui';
 
 import { addContact, setContactList } from '../flex-hooks/state';
-import { Contact } from '../types';
+import { HistoricalContact } from '../types';
 import { getMaxContacts } from '../config';
 import { getUserLanguage } from '../../../utils/configuration';
 
@@ -10,7 +10,7 @@ const manager = Manager.getInstance();
 const ContactHistoryKey = 'CONTACT_HISTORY';
 
 class ContactsUtil {
-  getRecentContactsList(): Contact[] {
+  getRecentContactsList(): HistoricalContact[] {
     const item = localStorage.getItem(ContactHistoryKey);
     if (item) {
       return JSON.parse(item);
@@ -25,7 +25,7 @@ class ContactsUtil {
     }
   };
 
-  setContactList = (contactList: Contact[]) => {
+  setContactList = (contactList: HistoricalContact[]) => {
     localStorage.setItem(ContactHistoryKey, JSON.stringify(contactList));
   };
 
@@ -61,7 +61,7 @@ class ContactsUtil {
       workerCallSid = conference?.participants.worker;
       customerCallSid = conference?.participants.customer;
     }
-    const contact: Contact = {
+    const contact: HistoricalContact = {
       from,
       name,
       direction,

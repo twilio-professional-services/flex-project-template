@@ -1,4 +1,4 @@
-export interface Contact {
+export interface HistoricalContact {
   taskSid: string;
   from?: string;
   direction: string | undefined;

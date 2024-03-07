@@ -1,19 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { Contact } from '../../types';
+import { HistoricalContact } from '../../types';
 import { getMaxContacts } from '../../config';
 
 export interface ContactHistoryState {
-  contactList: Contact[];
+  contactList: HistoricalContact[];
 }
 
 export interface AddContact {
-  contact: Contact;
+  contact: HistoricalContact;
 }
 
 export interface SetContactList {
-  contactList: Contact[];
+  contactList: HistoricalContact[];
 }
 
 const initialState = {
@@ -25,7 +25,7 @@ const contactHistorySlice = createSlice({
   initialState,
   reducers: {
     addContact(state, action: PayloadAction<AddContact>) {
-      let newContactList: Contact[] = [action.payload.contact];
+      let newContactList: HistoricalContact[] = [action.payload.contact];
       if (state.contactList) {
         newContactList = newContactList.concat(state.contactList).slice(0, getMaxContacts());
       }

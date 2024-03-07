@@ -11,15 +11,15 @@ import { PopoverContainer, PopoverButton, Popover } from '@twilio-paste/core/pop
 import { Text } from '@twilio-paste/core/text';
 import { Heading } from '@twilio-paste/core/heading';
 
-import { StringTemplates } from '../flex-hooks/strings';
-import { Contact } from '../types';
-import OutboundCallModal from './OutboundCallModal';
+import { StringTemplates } from '../../flex-hooks/strings';
+import { HistoricalContact } from '../../types';
+import OutboundCallModal from '../OutboundCallModal';
 
 export interface OwnProps {
-  contact: Contact;
+  contact: HistoricalContact;
 }
 
-const ContactRecord = ({ contact }: OwnProps) => {
+const HistoricalContactRecord = ({ contact }: OwnProps) => {
   const {
     taskSid,
     channelType,
@@ -97,4 +97,4 @@ const ContactRecord = ({ contact }: OwnProps) => {
   );
 };
 
-export default ContactRecord;
+export default HistoricalContactRecord;
