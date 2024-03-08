@@ -66,7 +66,7 @@ const RecentTab = () => {
                   <Th>
                     <Template source={templates[StringTemplates.ContactOutcome]} />
                   </Th>
-                  <Th>
+                  <Th textAlign="right">
                     <Template source={templates[StringTemplates.ContactActions]} />
                   </Th>
                 </Tr>

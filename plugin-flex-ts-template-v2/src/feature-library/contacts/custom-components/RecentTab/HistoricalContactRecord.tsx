@@ -75,9 +75,8 @@ const HistoricalContactRecord = ({ contact }: OwnProps) => {
       <Td>{taskDuration}</Td>
       <Td>{queueName}</Td>
       <Td>{outcome}</Td>
-      <Td>
-        <Flex vAlignContent="center">
-          {channelType === 'voice' && <OutboundCallModal phoneNumber={phoneNumber || ''} />}
+      <Td textAlign="right">
+        <Flex vAlignContent="center" hAlignContent="right">
           {notes && (
             <PopoverContainer baseId="notes">
               <PopoverButton variant="primary_icon" disabled={!notes}>
@@ -85,12 +84,13 @@ const HistoricalContactRecord = ({ contact }: OwnProps) => {
               </PopoverButton>
               <Popover aria-label="Popover">
                 <Heading as="h3" variant="heading30">
-                  Notes
+                  <Template source={templates[StringTemplates.ContactNotes]} />
                 </Heading>
                 <Text as="p">{notes}</Text>
               </Popover>
             </PopoverContainer>
           )}
+          {channelType === 'voice' && <OutboundCallModal phoneNumber={phoneNumber || ''} />}
         </Flex>
       </Td>
     </Tr>

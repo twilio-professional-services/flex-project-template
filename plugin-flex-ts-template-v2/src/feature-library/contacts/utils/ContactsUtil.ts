@@ -52,7 +52,10 @@ class ContactsUtil {
         this.isRecentsInitialized = false;
       });
 
-      const contactList = mapItems.map((mapItem) => mapItem.data as HistoricalContact);
+      // Sort the recents so that most recent is first
+      const contactList = mapItems
+        .map((mapItem) => mapItem.data as HistoricalContact)
+        .sort((a, b) => (new Date(a.dateTime) < new Date(b.dateTime) ? 1 : -1));
       if (contactList && contactList.length > 0) {
         manager.store.dispatch(initRecents(contactList));
       }

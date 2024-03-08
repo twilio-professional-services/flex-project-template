@@ -7,6 +7,7 @@ import { useUID } from '@twilio-paste/core/uid-library';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import RecentTab from '../RecentTab/RecentTab';
+import DirectoryTab from '../DirectoryTab/DirectoryTab';
 
 const ContactsView = () => {
   const selectedId = useUID();
@@ -34,10 +35,10 @@ const ContactsView = () => {
               <RecentTab />
             </TabPanel>
             <TabPanel>
-              <></>
+              <DirectoryTab shared={false} />
             </TabPanel>
             <TabPanel>
-              <></>
+              <DirectoryTab shared={true} />
             </TabPanel>
           </TabPanels>
         </Tabs>
