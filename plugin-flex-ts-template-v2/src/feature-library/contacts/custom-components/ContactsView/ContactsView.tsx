@@ -8,6 +8,7 @@ import { useUID } from '@twilio-paste/core/uid-library';
 import { StringTemplates } from '../../flex-hooks/strings';
 import RecentTab from '../RecentTab/RecentTab';
 import DirectoryTab from '../DirectoryTab/DirectoryTab';
+import { isRecentsEnabled, isPersonalDirectoryEnabled, isSharedDirectoryEnabled } from '../../config';
 
 const ContactsView = () => {
   const selectedId = useUID();
@@ -20,26 +21,38 @@ const ContactsView = () => {
       <Box width="100%">
         <Tabs selectedId={selectedId} baseId="contacts-tabs">
           <TabList aria-label="Contacts tabs">
-            <Tab id={selectedId}>
-              <Template code={StringTemplates.Recent} />
-            </Tab>
-            <Tab>
-              <Template code={StringTemplates.MyContacts} />
-            </Tab>
-            <Tab>
-              <Template code={StringTemplates.SharedContacts} />
-            </Tab>
+            {isRecentsEnabled() && (
+              <Tab id={selectedId}>
+                <Template code={StringTemplates.Recent} />
+              </Tab>
+            )}
+            {isPersonalDirectoryEnabled() && (
+              <Tab>
+                <Template code={StringTemplates.MyContacts} />
+              </Tab>
+            )}
+            {isSharedDirectoryEnabled() && (
+              <Tab>
+                <Template code={StringTemplates.SharedContacts} />
+              </Tab>
+            )}
           </TabList>
           <TabPanels>
-            <TabPanel>
-              <RecentTab />
-            </TabPanel>
-            <TabPanel>
-              <DirectoryTab shared={false} />
-            </TabPanel>
-            <TabPanel>
-              <DirectoryTab shared={true} />
-            </TabPanel>
+            {isRecentsEnabled() && (
+              <TabPanel>
+                <RecentTab />
+              </TabPanel>
+            )}
+            {isPersonalDirectoryEnabled() && (
+              <TabPanel>
+                <DirectoryTab shared={false} allowEdits={true} />
+              </TabPanel>
+            )}
+            {isSharedDirectoryEnabled() && (
+              <TabPanel>
+                <DirectoryTab shared={true} allowEdits={true} />
+              </TabPanel>
+            )}
           </TabPanels>
         </Tabs>
       </Box>

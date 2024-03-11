@@ -1,4 +1,7 @@
 export default interface ContactsConfig {
   enabled: boolean;
-  recent_days: number;
+  enable_recents: boolean;
+  enable_personal: boolean;
+  enable_shared: boolean;
+  recent_days_to_keep: number;
 }

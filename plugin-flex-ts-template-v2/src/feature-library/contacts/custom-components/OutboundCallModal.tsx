@@ -33,7 +33,6 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
   const modalWidth = phoneNumber.length > 30 ? 'wide' : 'default';
 
   const placeOutboundCall = () => {
-    console.log('Calling: ', phoneNumber);
     Actions.invokeAction('StartOutboundCall', {
       destination: phoneNumber,
     });
@@ -42,7 +41,6 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
     <div>
       <Button
         variant="primary_icon"
-        size="rounded_small"
         title={AllStrings[StringTemplates.ClickToCall]}
         disabled={workerActivitySid === Manager.getInstance().serviceConfiguration.taskrouter_offline_activity_sid}
         onClick={() => {

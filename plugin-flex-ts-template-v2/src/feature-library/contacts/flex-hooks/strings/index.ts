@@ -31,6 +31,10 @@ export enum StringTemplates {
   ContactQueue = 'PSContactQueue',
   ContactOutcome = 'PSContactOutcome',
   ContactNotes = 'PSContactNotes',
+  ContactAdd = 'PSContactAdd',
+  ContactDelete = 'PSContactDelete',
+  ContactDeleteConfirm = 'PSContactDeleteConfirm',
+  ContactEdit = 'PSContactEdit',
 }
 
 export const stringHook = () => ({
@@ -63,6 +67,10 @@ export const stringHook = () => ({
     [StringTemplates.ContactQueue]: 'Queue',
     [StringTemplates.ContactOutcome]: 'Outcome',
     [StringTemplates.ContactNotes]: 'Notes',
+    [StringTemplates.ContactAdd]: 'Add contact',
+    [StringTemplates.ContactDelete]: 'Delete contact',
+    [StringTemplates.ContactDeleteConfirm]: 'Are you sure you wish to delete the contact "{{name}}"?',
+    [StringTemplates.ContactEdit]: 'Edit contact',
   },
   'es-MX': esMX,
   'es-ES': esES,

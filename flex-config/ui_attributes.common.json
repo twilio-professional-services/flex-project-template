@@ -400,7 +400,10 @@
       },
       "contacts": {
         "enabled": false,
-        "max_contacts": 25
+        "enable_recents": true,
+        "enable_personal": true,
+        "enable_shared": true,
+        "recent_days_to_keep": 14,
       },
       "inline_media": {
         "enabled": true

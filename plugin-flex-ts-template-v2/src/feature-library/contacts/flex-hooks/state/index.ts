@@ -48,19 +48,21 @@ const contactsSlice = createSlice({
       state.recents = [];
     },
     addDirectoryContact(state, action: PayloadAction<UpdateContactPayload>) {
-      (action.payload.shared ? state.sharedDirectory : state.directory).push(action.payload.contact);
+      const directory = action.payload.shared ? state.sharedDirectory : state.directory;
+      directory.push(action.payload.contact);
+      directory.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
     },
     updateDirectoryContact(state, action: PayloadAction<UpdateContactPayload>) {
-      const contactIndex = (action.payload.shared ? state.sharedDirectory : state.directory).findIndex(
-        (contact) => contact.key === action.payload.contact.key,
-      );
-      (action.payload.shared ? state.sharedDirectory : state.directory)[contactIndex] = action.payload.contact;
+      const directory = action.payload.shared ? state.sharedDirectory : state.directory;
+      const contactIndex = directory.findIndex((contact) => contact.key === action.payload.contact.key);
+      directory[contactIndex] = action.payload.contact;
+      directory.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
     },
     removeDirectoryContact(state, action: PayloadAction<RemoveContactPayload>) {
       if (action.payload.shared) {
-        state.sharedDirectory = state.sharedDirectory.filter((contact) => contact.key === action.payload.key);
+        state.sharedDirectory = state.sharedDirectory.filter((contact) => contact.key !== action.payload.key);
       } else {
-        state.directory = state.directory.filter((contact) => contact.key === action.payload.key);
+        state.directory = state.directory.filter((contact) => contact.key !== action.payload.key);
       }
     },
     initDirectory(state, action: PayloadAction<InitDirectoryPayload>) {
