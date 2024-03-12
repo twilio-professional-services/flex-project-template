@@ -28,7 +28,6 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
 
   const workerActivitySid = useFlexSelector((state) => state.flex.worker?.activity?.sid);
   const { selectedCallerId } = Manager.getInstance().workerClient?.attributes as CustomWorkerAttributes;
-  const AllStrings = Manager.getInstance().strings as any;
 
   const modalWidth = phoneNumber.length > 30 ? 'wide' : 'default';
 
@@ -38,10 +37,11 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
     });
   };
   return (
-    <div>
+    <>
       <Button
         variant="primary_icon"
-        title={AllStrings[StringTemplates.ClickToCall]}
+        size="icon_small"
+        title={templates[StringTemplates.ClickToCall]()}
         disabled={workerActivitySid === Manager.getInstance().serviceConfiguration.taskrouter_offline_activity_sid}
         onClick={() => {
           setIsOpen(true);
@@ -109,7 +109,7 @@ const OutboundCallModal = ({ phoneNumber }: Props) => {
           </ModalFooterActions>
         </ModalFooter>
       </Modal>
-    </div>
+    </>
   );
 };
 

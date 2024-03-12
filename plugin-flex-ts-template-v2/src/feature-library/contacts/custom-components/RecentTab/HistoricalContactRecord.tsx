@@ -6,13 +6,12 @@ import { Tr, Td } from '@twilio-paste/core/table';
 import { ProductChatIcon } from '@twilio-paste/icons/esm/ProductChatIcon';
 import { CallIncomingIcon } from '@twilio-paste/icons/esm/CallIncomingIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
-import { NotesIcon } from '@twilio-paste/icons/esm/NotesIcon';
-import { PopoverContainer, PopoverButton, Popover } from '@twilio-paste/core/popover';
-import { Text } from '@twilio-paste/core/text';
-import { Heading } from '@twilio-paste/core/heading';
+import { SMSIcon } from '@twilio-paste/icons/esm/SMSIcon';
+import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import { HistoricalContact } from '../../types';
+import NotesPopover from '../NotesPopover';
 import OutboundCallModal from '../OutboundCallModal';
 
 export interface OwnProps {
@@ -46,7 +45,7 @@ const HistoricalContactRecord = ({ contact }: OwnProps) => {
     <Tr key={taskSid}>
       <Td textAlign="center">
         <Flex hAlignContent="center">
-          <Box>
+          <Box padding="space20">
             {channelType === 'voice' && direction === 'inbound' && (
               <Tooltip text={templates[StringTemplates.ContactInboundCall]()} placement="top">
                 <div>
@@ -61,10 +60,10 @@ const HistoricalContactRecord = ({ contact }: OwnProps) => {
                 </div>
               </Tooltip>
             )}
-            {channelType === 'sms' && <Icon icon="Sms" />}
-            {channelType === 'web' && <Icon icon="Message" />}
-            {channelType === 'whatsapp' && <Icon icon="Whatsapp" />}
-            {channelType === 'custom' && <ProductChatIcon decorative={false} title="Custom Chat" />}
+            {channelType === 'sms' && <SMSIcon decorative={true} />}
+            {channelType === 'web' && <ChatIcon decorative={true} />}
+            {channelType === 'whatsapp' && <Icon icon="Whatsapp" sizeMultiplier={20 / 24} />}
+            {channelType === 'custom' && <ProductChatIcon decorative={true} />}
           </Box>
         </Flex>
       </Td>
@@ -77,19 +76,7 @@ const HistoricalContactRecord = ({ contact }: OwnProps) => {
       <Td>{outcome}</Td>
       <Td textAlign="right">
         <Flex vAlignContent="center" hAlignContent="right">
-          {notes && (
-            <PopoverContainer baseId="notes">
-              <PopoverButton variant="primary_icon" disabled={!notes}>
-                <NotesIcon decorative={false} title={templates[StringTemplates.ContactNotes]()} />
-              </PopoverButton>
-              <Popover aria-label="Popover">
-                <Heading as="h3" variant="heading30">
-                  <Template source={templates[StringTemplates.ContactNotes]} />
-                </Heading>
-                <Text as="p">{notes}</Text>
-              </Popover>
-            </PopoverContainer>
-          )}
+          {notes && <NotesPopover notes={notes} />}
           {channelType === 'voice' && <OutboundCallModal phoneNumber={phoneNumber || ''} />}
         </Flex>
       </Td>

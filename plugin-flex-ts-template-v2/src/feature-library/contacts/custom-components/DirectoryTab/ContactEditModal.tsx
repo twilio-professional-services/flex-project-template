@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Manager, Actions, Template, templates, useFlexSelector } from '@twilio/flex-ui';
-import { Flex } from '@twilio-paste/core/flex';
-import { Box } from '@twilio-paste/core/box';
+import { Template, templates } from '@twilio/flex-ui';
 import { Button } from '@twilio-paste/core/button';
 import { Input } from '@twilio-paste/core/input';
 import { useUIDSeed } from '@twilio-paste/core/uid-library';
@@ -29,6 +27,14 @@ const ContactEditModal = ({ contact, isOpen, shared, handleClose }: Props) => {
 
   const seed = useUIDSeed();
   const isNew = !Boolean(contact);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setName('');
+      setPhoneNumber('');
+      setNotes('');
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     setName(contact?.name ?? '');

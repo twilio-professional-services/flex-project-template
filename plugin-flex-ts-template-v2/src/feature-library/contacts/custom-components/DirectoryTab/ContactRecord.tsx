@@ -1,18 +1,15 @@
 import { Template, templates } from '@twilio/flex-ui';
 import { Flex } from '@twilio-paste/core/flex';
 import { Tr, Td } from '@twilio-paste/core/table';
-import { NotesIcon } from '@twilio-paste/icons/esm/NotesIcon';
-import { PopoverContainer, PopoverButton, Popover } from '@twilio-paste/core/popover';
 import { Menu, MenuButton, MenuItem, useMenuState } from '@twilio-paste/core/menu';
 import { MediaObject, MediaFigure, MediaBody } from '@twilio-paste/core/media-object';
-import { Text } from '@twilio-paste/core/text';
-import { Heading } from '@twilio-paste/core/heading';
 import { MoreIcon } from '@twilio-paste/icons/esm/MoreIcon';
 import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon';
 import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import { Contact } from '../../types';
+import NotesPopover from '../NotesPopover';
 import OutboundCallModal from '../OutboundCallModal';
 
 export interface OwnProps {
@@ -32,23 +29,11 @@ const ContactRecord = ({ contact, allowEdits, deleteContact, editContact }: OwnP
       <Td>{phoneNumber}</Td>
       <Td textAlign="right">
         <Flex vAlignContent="center" hAlignContent="right">
-          {notes && (
-            <PopoverContainer baseId="notes">
-              <PopoverButton variant="primary_icon" disabled={!notes}>
-                <NotesIcon decorative={false} title={templates[StringTemplates.ContactNotes]()} />
-              </PopoverButton>
-              <Popover aria-label="Popover">
-                <Heading as="h3" variant="heading30">
-                  <Template source={templates[StringTemplates.ContactNotes]} />
-                </Heading>
-                <Text as="p">{notes}</Text>
-              </Popover>
-            </PopoverContainer>
-          )}
+          {notes && <NotesPopover notes={notes} />}
           <OutboundCallModal phoneNumber={phoneNumber || ''} />
           {allowEdits && (
             <>
-              <MenuButton {...menu} variant="primary_icon">
+              <MenuButton {...menu} variant="primary_icon" size="icon_small">
                 <MoreIcon decorative={false} title={templates.MoreOptionsAriaLabel()} />
               </MenuButton>
               <Menu {...menu} aria-label={templates.MoreOptionsAriaLabel()}>

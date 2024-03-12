@@ -404,6 +404,7 @@
         "enable_personal": true,
         "enable_shared": true,
         "recent_days_to_keep": 14,
+        "shared_agent_editable": false
       },
       "inline_media": {
         "enabled": true
