@@ -49,7 +49,7 @@ The `contacts` feature has several settings:
 }
 ```
 
-# How does it work?
+## How does it work?
 
 The contacts [view](https://www.twilio.com/docs/flex/developer/ui/custom-views-and-routes) is added to the [view collection](https://assets.flex.twilio.com/docs/releases/flex-ui/2.4.1/programmable-components/components/ViewCollection/) and a new SideLink component is added to the [navigation menu](https://assets.flex.twilio.com/docs/releases/flex-ui/2.4.1/programmable-components/components/SideNav/).
 
