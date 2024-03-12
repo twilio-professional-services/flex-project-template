@@ -156,7 +156,6 @@ class ContactsUtil {
       customerCallSid = conference?.participants.customer;
     }
     const contact: HistoricalContact = {
-      key: uuidv4(),
       from,
       name,
       direction,
@@ -200,7 +199,7 @@ class ContactsUtil {
     }
     try {
       const map = await SyncClient.map(`${CONTACTS_RECENT_KEY}_${this.workerSid}`);
-      await map.set(contact.key, contact, { ttl: getRecentDaysToKeep() * 86400 });
+      await map.set(contact.taskSid, contact, { ttl: getRecentDaysToKeep() * 86400 });
       if (!this.isRecentsInitialized) {
         this.initRecents();
       }

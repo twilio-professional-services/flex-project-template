@@ -399,7 +399,7 @@
         "flush_timeout": 5000
       },
       "contacts": {
-        "enabled": false,
+        "enabled": true,
         "enable_recents": true,
         "enable_personal": true,
         "enable_shared": true,

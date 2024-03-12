@@ -6,7 +6,6 @@ export interface Contact {
 }
 
 export interface HistoricalContact {
-  key: string;
   taskSid: string;
   from?: string;
   direction: string | undefined;
