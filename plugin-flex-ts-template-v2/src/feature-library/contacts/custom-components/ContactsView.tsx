@@ -5,10 +5,11 @@ import { Box } from '@twilio-paste/core/box';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@twilio-paste/core/tabs';
 import { useUID } from '@twilio-paste/core/uid-library';
 
-import { StringTemplates } from '../../flex-hooks/strings';
-import RecentTab from '../RecentTab/RecentTab';
-import DirectoryTab from '../DirectoryTab/DirectoryTab';
-import { isRecentsEnabled, isPersonalDirectoryEnabled, isSharedDirectoryEnabled } from '../../config';
+import { StringTemplates } from '../flex-hooks/strings';
+import RecentTab from './RecentTab/RecentTab';
+import DirectoryTab from './DirectoryTab/DirectoryTab';
+import { isRecentsEnabled, isPersonalDirectoryEnabled, isSharedDirectoryEnabled } from '../config';
+import ContactsUtil from '../utils/ContactsUtil';
 
 const ContactsView = () => {
   const selectedId = useUID();
@@ -50,7 +51,7 @@ const ContactsView = () => {
             )}
             {isSharedDirectoryEnabled() && (
               <TabPanel>
-                <DirectoryTab shared={true} allowEdits={true} />
+                <DirectoryTab shared={true} allowEdits={ContactsUtil.canEditShared()} />
               </TabPanel>
             )}
           </TabPanels>

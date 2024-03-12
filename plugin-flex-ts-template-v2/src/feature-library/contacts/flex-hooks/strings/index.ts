@@ -35,6 +35,8 @@ export enum StringTemplates {
   ContactDelete = 'PSContactDelete',
   ContactDeleteConfirm = 'PSContactDeleteConfirm',
   ContactEdit = 'PSContactEdit',
+  OutboundContactHeader = 'PSOutboundContactHeader',
+  OutboundContactPlaceholder = 'PSOutboundContactPlaceholder',
 }
 
 export const stringHook = () => ({
@@ -71,6 +73,8 @@ export const stringHook = () => ({
     [StringTemplates.ContactDelete]: 'Delete contact',
     [StringTemplates.ContactDeleteConfirm]: 'Are you sure you wish to delete the contact "{{name}}"?',
     [StringTemplates.ContactEdit]: 'Edit contact',
+    [StringTemplates.OutboundContactHeader]: 'Call Contact',
+    [StringTemplates.OutboundContactPlaceholder]: 'Select a contact',
   },
   'es-MX': esMX,
   'es-ES': esES,

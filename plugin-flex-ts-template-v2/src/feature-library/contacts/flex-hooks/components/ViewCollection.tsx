@@ -2,7 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 
 import { FlexComponent } from '../../../../types/feature-loader';
 import { isRecentsEnabled, isPersonalDirectoryEnabled, isSharedDirectoryEnabled } from '../../config';
-import ContactsView from '../../custom-components/ContactsView/ContactsView';
+import ContactsView from '../../custom-components/ContactsView';
 
 export const componentName = FlexComponent.ViewCollection;
 export const componentHook = function addContactsView(flex: typeof Flex) {

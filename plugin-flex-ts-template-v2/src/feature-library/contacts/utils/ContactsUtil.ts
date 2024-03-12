@@ -12,35 +12,49 @@ import {
   initDirectory,
 } from '../flex-hooks/state';
 import { Contact, HistoricalContact } from '../types';
-import { getRecentDaysToKeep, isRecentsEnabled, isPersonalDirectoryEnabled, isSharedDirectoryEnabled } from '../config';
+import {
+  getRecentDaysToKeep,
+  isRecentsEnabled,
+  isPersonalDirectoryEnabled,
+  isSharedDirectoryEnabled,
+  isSharedDirectoryAgentEditable,
+} from '../config';
 import { getUserLanguage } from '../../../utils/configuration';
 import SyncClient, { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
 import logger from '../../../utils/logger';
 
-const manager = Manager.getInstance();
-const accountSid = manager.serviceConfiguration.account_sid;
-const ContactHistoryKey = 'Contacts_Recent';
-const ContactKey = 'Contacts';
+const CONTACTS_RECENT_KEY = 'Contacts_Recent';
+const CONTACTS_KEY = 'Contacts';
 
 class ContactsUtil {
   isRecentsInitialized = false;
+
+  manager = Manager.getInstance();
+
+  accountSid = this.manager.serviceConfiguration.account_sid;
+
+  workerSid = this.manager.workerClient?.workerSid;
+
+  canEditShared = () => {
+    const { roles } = this.manager.user;
+    return isSharedDirectoryAgentEditable() === true || roles.indexOf('admin') >= 0 || roles.indexOf('supervisor') >= 0;
+  };
 
   initRecents = async () => {
     if (this.isRecentsInitialized) {
       return;
     }
-    const workerSid = manager.workerClient?.workerSid;
-    if (!workerSid) {
+    if (!this.workerSid) {
       logger.error('[contacts] Error loading recent contacts: No worker sid');
       return;
     }
     try {
-      const map = await SyncClient.map(`${ContactHistoryKey}_${workerSid}`);
+      const map = await SyncClient.map(`${CONTACTS_RECENT_KEY}_${this.workerSid}`);
       const mapItems = await getAllSyncMapItems(map);
 
       // Subscribe to events which trigger Redux updates
       map.on('itemAdded', (args) => {
-        manager.store.dispatch(addHistoricalContact(args.item.data));
+        this.manager.store.dispatch(addHistoricalContact(args.item.data));
       });
       map.on('itemRemoved', (args) => {
         console.log(`Map item ${args.key} was removed`);
@@ -49,7 +63,7 @@ class ContactsUtil {
         console.log(`Map item ${args.item.key} was updated`);
       });
       map.on('removed', () => {
-        manager.store.dispatch(clearRecents());
+        this.manager.store.dispatch(clearRecents());
         this.isRecentsInitialized = false;
       });
 
@@ -58,7 +72,7 @@ class ContactsUtil {
         .map((mapItem) => mapItem.data as HistoricalContact)
         .sort((a, b) => (new Date(a.dateTime) < new Date(b.dateTime) ? 1 : -1));
       if (contactList && contactList.length > 0) {
-        manager.store.dispatch(initRecents(contactList));
+        this.manager.store.dispatch(initRecents(contactList));
       }
       this.isRecentsInitialized = true;
     } catch (error: any) {
@@ -67,31 +81,30 @@ class ContactsUtil {
   };
 
   initDirectory = async (shared: boolean) => {
-    const workerSid = manager.workerClient?.workerSid;
-    if (!workerSid) {
+    if (!this.workerSid) {
       logger.error('[contacts] Error loading contacts: No worker sid');
       return;
     }
     try {
-      const map = await SyncClient.map(`${ContactKey}_${shared ? accountSid : workerSid}`);
+      const map = await SyncClient.map(`${CONTACTS_KEY}_${shared ? this.accountSid : this.workerSid}`);
       const mapItems = await getAllSyncMapItems(map);
 
       // Subscribe to events which trigger Redux updates
       map.on('itemAdded', (args) => {
-        manager.store.dispatch(addDirectoryContact({ shared, contact: args.item.data }));
+        this.manager.store.dispatch(addDirectoryContact({ shared, contact: args.item.data }));
       });
       map.on('itemRemoved', (args) => {
-        manager.store.dispatch(removeDirectoryContact({ shared, key: args.key }));
+        this.manager.store.dispatch(removeDirectoryContact({ shared, key: args.key }));
       });
       map.on('itemUpdated', (args) => {
-        manager.store.dispatch(updateDirectoryContact({ shared, contact: args.item.data }));
+        this.manager.store.dispatch(updateDirectoryContact({ shared, contact: args.item.data }));
       });
 
       const contacts = mapItems
         .map((mapItem) => mapItem.data as Contact)
         .sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
       if (contacts && contacts.length > 0) {
-        manager.store.dispatch(initDirectory({ shared, contacts }));
+        this.manager.store.dispatch(initDirectory({ shared, contacts }));
       }
     } catch (error: any) {
       logger.error('[contacts] Error loading contacts', error);
@@ -181,13 +194,12 @@ class ContactsUtil {
     }
 
     // add item to the sync map
-    const workerSid = manager.workerClient?.workerSid;
-    if (!workerSid) {
+    if (!this.workerSid) {
       logger.error('[contacts] Error adding to recent contacts: No worker sid');
       return;
     }
     try {
-      const map = await SyncClient.map(`${ContactHistoryKey}_${workerSid}`);
+      const map = await SyncClient.map(`${CONTACTS_RECENT_KEY}_${this.workerSid}`);
       await map.set(contact.key, contact, { ttl: getRecentDaysToKeep() * 86400 });
       if (!this.isRecentsInitialized) {
         this.initRecents();
@@ -198,13 +210,12 @@ class ContactsUtil {
   };
 
   clearRecents = async () => {
-    const workerSid = manager.workerClient?.workerSid;
-    if (!workerSid) {
-      logger.error('[contacts] Error adding to recent contacts: No worker sid');
+    if (!this.workerSid) {
+      logger.error('[contacts] Error clearing recent contacts: No worker sid');
       return;
     }
     try {
-      const map = await SyncClient.map(`${ContactHistoryKey}_${workerSid}`);
+      const map = await SyncClient.map(`${CONTACTS_RECENT_KEY}_${this.workerSid}`);
       await map.removeMap();
     } catch (error: any) {
       logger.error('[contacts] Error clearing recent contacts', error);
@@ -212,9 +223,12 @@ class ContactsUtil {
   };
 
   addContact = async (name: string, phoneNumber: string, notes: string, shared: boolean) => {
-    const workerSid = manager.workerClient?.workerSid;
-    if (!workerSid && !shared) {
+    if (!this.workerSid && !shared) {
       logger.error('[contacts] Error adding contact: No worker sid');
+      return;
+    }
+    if (shared && !this.canEditShared()) {
+      logger.error('[contacts] User not authorized to modify shared contacts');
       return;
     }
     try {
@@ -224,7 +238,7 @@ class ContactsUtil {
         phoneNumber,
         notes,
       };
-      const map = await SyncClient.map(`${ContactKey}_${shared ? accountSid : workerSid}`);
+      const map = await SyncClient.map(`${CONTACTS_KEY}_${shared ? this.accountSid : this.workerSid}`);
       await map.set(contact.key, contact);
     } catch (error: any) {
       logger.error('[contacts] Error adding contact', error);
@@ -232,13 +246,16 @@ class ContactsUtil {
   };
 
   deleteContact = async (key: string, shared: boolean) => {
-    const workerSid = manager.workerClient?.workerSid;
-    if (!workerSid && !shared) {
+    if (!this.workerSid && !shared) {
       logger.error('[contacts] Error removing contact: No worker sid');
       return;
     }
+    if (shared && !this.canEditShared()) {
+      logger.error('[contacts] User not authorized to modify shared contacts');
+      return;
+    }
     try {
-      const map = await SyncClient.map(`${ContactKey}_${shared ? accountSid : workerSid}`);
+      const map = await SyncClient.map(`${CONTACTS_KEY}_${shared ? this.accountSid : this.workerSid}`);
       await map.remove(key);
     } catch (error: any) {
       logger.error('[contacts] Error removing contact', error);
@@ -246,13 +263,16 @@ class ContactsUtil {
   };
 
   updateContact = async (contact: Contact, shared: boolean) => {
-    const workerSid = manager.workerClient?.workerSid;
-    if (!workerSid && !shared) {
+    if (!this.workerSid && !shared) {
       logger.error('[contacts] Error updating contact: No worker sid');
       return;
     }
+    if (shared && !this.canEditShared()) {
+      logger.error('[contacts] User not authorized to modify shared contacts');
+      return;
+    }
     try {
-      const map = await SyncClient.map(`${ContactKey}_${shared ? accountSid : workerSid}`);
+      const map = await SyncClient.map(`${CONTACTS_KEY}_${shared ? this.accountSid : this.workerSid}`);
       await map.set(contact.key, contact);
     } catch (error: any) {
       logger.error('[contacts] Error updating contact', error);

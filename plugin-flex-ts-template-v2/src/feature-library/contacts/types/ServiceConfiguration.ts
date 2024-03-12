@@ -4,4 +4,5 @@ export default interface ContactsConfig {
   enable_personal: boolean;
   enable_shared: boolean;
   recent_days_to_keep: number;
+  shared_agent_editable: boolean;
 }

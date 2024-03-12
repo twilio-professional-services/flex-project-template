@@ -7,6 +7,7 @@ const {
   enable_personal = false,
   enable_shared = false,
   recent_days_to_keep = 14,
+  shared_agent_editable = false,
 } = (getFeatureFlags()?.features?.contacts as ContactsConfig) || {};
 
 export const isFeatureEnabled = () => {
@@ -27,4 +28,8 @@ export const isPersonalDirectoryEnabled = () => {
 
 export const isSharedDirectoryEnabled = () => {
   return enable_shared;
+};
+
+export const isSharedDirectoryAgentEditable = () => {
+  return shared_agent_editable;
 };
