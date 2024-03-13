@@ -1,6 +1,7 @@
 import { withTaskContext, ITask, Actions, Manager, useFlexSelector } from '@twilio/flex-ui';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
 import { getExternalDirectory, isVoiceXWTEnabled } from '../config';
 import { DirectoryEntry } from '../types/DirectoryEntry';
@@ -29,6 +30,7 @@ const ExternalDirectoryTab = (props: OwnProps) => {
           address: entry.number,
           tooltip: entry.number,
           type: 'number',
+          key: uuidv4(),
         } as DirectoryEntry),
     );
   };
@@ -45,6 +47,7 @@ const ExternalDirectoryTab = (props: OwnProps) => {
             address: entry.phoneNumber,
             tooltip: entry.phoneNumber,
             type: 'number',
+            key: uuidv4(),
           } as DirectoryEntry),
       ) ?? [] // Return an empty array if the contacts feature is disabled
     );

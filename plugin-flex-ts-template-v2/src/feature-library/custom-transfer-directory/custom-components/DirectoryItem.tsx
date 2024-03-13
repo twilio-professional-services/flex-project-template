@@ -50,7 +50,7 @@ const DirectoryItem = (props: DirectoryItemProps) => {
   };
 
   const renderLabel = (): React.JSX.Element => (
-    <Box key={`directory-item-label-${entry.type}-${entry.address}`} element="TRANSFER_DIR_COMMON_ROW_LABEL">
+    <Box key={`directory-item-label-${entry.type}-${entry.key}`} element="TRANSFER_DIR_COMMON_ROW_LABEL">
       {entry.labelComponent || (
         <Text as="div" className="Twilio" element="TRANSFER_DIR_COMMON_ROW_NAME">
           {entry.label}
@@ -64,14 +64,14 @@ const DirectoryItem = (props: DirectoryItemProps) => {
       element="TRANSFER_DIR_COMMON_HORIZONTAL_ROW_CONTAINER"
       vertical={false}
       vAlignContent="center"
-      key={`directory-item-container-${entry.type}-${entry.address}`}
+      key={`directory-item-container-${entry.type}-${entry.key}`}
     >
-      <Box key={`directory-item-icon-${entry.type}-${entry.address}`} element="TRANSFER_DIR_COMMON_ROW_ICON">
+      <Box key={`directory-item-icon-${entry.type}-${entry.key}`} element="TRANSFER_DIR_COMMON_ROW_ICON">
         {renderIcon()}
       </Box>
       {entry.tooltip ? (
         <Tooltip
-          key={`directory-item-label-tooltip-${entry.type}-${entry.address}`}
+          key={`directory-item-label-tooltip-${entry.type}-${entry.key}`}
           element="TRANSFER_DIR_COMMON_TOOLTIP"
           text={entry.tooltip}
         >
@@ -83,31 +83,31 @@ const DirectoryItem = (props: DirectoryItemProps) => {
 
       <ButtonGroup
         element="TRANSFER_DIR_COMMON_ROW_BUTTONGROUP"
-        key={`directory-item-buttongroup-${entry.type}-${entry.address}`}
+        key={`directory-item-buttongroup-${entry.type}-${entry.key}`}
         attached
       >
         {entry.warm_transfer_enabled ? (
           <Tooltip
-            key={`directory-item-buttons-warm-transfer-tooltip-${entry.type}-${entry.address}`}
+            key={`directory-item-buttons-warm-transfer-tooltip-${entry.type}-${entry.key}`}
             element="TRANSFER_DIR_COMMON_TOOLTIP"
             text={templates[StringTemplates.WarmTransfer]()}
           >
             <Button
               element="TRANSFER_DIR_COMMON_ROW_BUTTON"
-              key={`directory-item-warm-transfer-button-${entry.type}-${entry.address}`}
+              key={`directory-item-warm-transfer-button-${entry.type}-${entry.key}`}
               variant="secondary_icon"
               size="circle"
               onClick={onWarmTransferClick}
             >
               {task && TaskHelper.isChatBasedTask(task) ? (
                 <ChatIcon
-                  key={`directory-item-warm-transfer-icon-${entry.type}-${entry.address}`}
+                  key={`directory-item-warm-transfer-icon-${entry.type}-${entry.key}`}
                   decorative={false}
                   title=""
                 />
               ) : (
                 <CallTransferIcon
-                  key={`directory-item-warm-transfer-icon-${entry.type}-${entry.address}`}
+                  key={`directory-item-warm-transfer-icon-${entry.type}-${entry.key}`}
                   decorative={false}
                   title=""
                 />
@@ -119,26 +119,26 @@ const DirectoryItem = (props: DirectoryItemProps) => {
         )}
         {entry.cold_transfer_enabled ? (
           <Tooltip
-            key={`directory-item-buttons-cold-transfer-tooltip-${entry.type}-${entry.address}`}
+            key={`directory-item-buttons-cold-transfer-tooltip-${entry.type}-${entry.key}`}
             element="TRANSFER_DIR_COMMON_TOOLTIP"
             text={templates[StringTemplates.ColdTransfer]()}
           >
             <Button
               element="TRANSFER_DIR_COMMON_ROW_BUTTON"
-              key={`directory-item-warm-transfer-button-${entry.type}-${entry.address}`}
+              key={`directory-item-warm-transfer-button-${entry.type}-${entry.key}`}
               variant="secondary_icon"
               size="circle"
               onClick={onColdTransferClick}
             >
               {task && TaskHelper.isChatBasedTask(task) ? (
                 <SendIcon
-                  key={`directory-item-cold-transfer-icon-${entry.type}-${entry.address}`}
+                  key={`directory-item-cold-transfer-icon-${entry.type}-${entry.key}`}
                   decorative={false}
                   title=""
                 />
               ) : (
                 <CallOutgoingIcon
-                  key={`directory-item-cold-transfer-icon-${entry.type}-${entry.address}`}
+                  key={`directory-item-cold-transfer-icon-${entry.type}-${entry.key}`}
                   decorative={false}
                   title=""
                 />
