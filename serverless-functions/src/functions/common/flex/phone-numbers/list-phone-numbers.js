@@ -8,11 +8,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   try {
     const fetchOutgoingCallerIds = event.IncludeOutgoing === 'true' || false;
 
-    const result = await twilioExecute(context, (client) =>
-      client.incomingPhoneNumbers.list({
-        limit: 1000,
-      }),
-    );
+    const result = await twilioExecute(context, (client) => client.incomingPhoneNumbers.list());
 
     const { data: fullPhoneNumberList } = result;
     let phoneNumbers = fullPhoneNumberList
@@ -23,11 +19,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       : null;
 
     if (fetchOutgoingCallerIds) {
-      const outgoingResult = await twilioExecute(context, (client) =>
-        client.outgoingCallerIds.list({
-          limit: 1000,
-        }),
-      );
+      const outgoingResult = await twilioExecute(context, (client) => client.outgoingCallerIds.list());
 
       if (outgoingResult?.success) {
         const { data: callerIds } = outgoingResult;
