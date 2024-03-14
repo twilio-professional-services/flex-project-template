@@ -37,6 +37,7 @@ export enum StringTemplates {
   ContactEdit = 'PSContactEdit',
   OutboundContactHeader = 'PSOutboundContactHeader',
   OutboundContactPlaceholder = 'PSOutboundContactPlaceholder',
+  ContactSearch = 'PSContactSearch',
 }
 
 export const stringHook = () => ({
@@ -75,6 +76,7 @@ export const stringHook = () => ({
     [StringTemplates.ContactEdit]: 'Edit contact',
     [StringTemplates.OutboundContactHeader]: 'Call Contact',
     [StringTemplates.OutboundContactPlaceholder]: 'Select a contact',
+    [StringTemplates.ContactSearch]: 'Search contacts',
   },
   'es-MX': esMX,
   'es-ES': esES,

@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { templates, Template } from '@twilio/flex-ui';
 import { useSelector } from 'react-redux';
 import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
 import { Heading } from '@twilio-paste/core/heading';
 import { Box } from '@twilio-paste/core/box';
+import { Input } from '@twilio-paste/core/input';
 import { Table, THead, TBody, Tr, Th } from '@twilio-paste/core/table';
 import { AlertDialog } from '@twilio-paste/core/alert-dialog';
 import { PlusIcon } from '@twilio-paste/icons/esm/PlusIcon';
+import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
+import debounce from 'lodash/debounce';
 
 import ContactsUtil from '../../utils/ContactsUtil';
 import ContactEditModal from './ContactEditModal';
@@ -26,10 +29,28 @@ const DirectoryTab = ({ shared, allowEdits }: OwnProps) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [contactToEdit, setContactToEdit] = useState(null as Contact | null);
   const [contactToDelete, setContactToDelete] = useState(null as Contact | null);
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredContacts, setFilteredContacts] = useState([] as Contact[]);
 
   const contactList = useSelector((state: AppState) =>
     shared ? state[reduxNamespace]?.contacts?.sharedDirectory : state[reduxNamespace]?.contacts?.directory,
   );
+
+  useEffect(() => {
+    if (!Boolean(searchValue)) {
+      setFilteredContacts(contactList);
+      return;
+    }
+    const searchValueLower = searchValue.toLowerCase();
+    setFilteredContacts(
+      contactList.filter(
+        (contact: Contact) =>
+          contact.name.toLowerCase().includes(searchValueLower) ||
+          contact.notes.toLowerCase().includes(searchValueLower) ||
+          contact.phoneNumber.toLowerCase().includes(searchValueLower),
+      ),
+    );
+  }, [contactList, searchValue]);
 
   const closeEditModal = () => {
     setEditModalOpen(false);
@@ -58,6 +79,16 @@ const DirectoryTab = ({ shared, allowEdits }: OwnProps) => {
     setContactToDelete(null);
   };
 
+  const filterDirectory = (value: string) => {
+    setSearchValue(value);
+  };
+
+  const filterDirectoryDebounce = debounce(filterDirectory, 500, { maxWait: 1000 });
+
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    filterDirectoryDebounce(e.target.value);
+  };
+
   return (
     <>
       {!contactList || contactList.length === 0 ? (
@@ -76,14 +107,25 @@ const DirectoryTab = ({ shared, allowEdits }: OwnProps) => {
         </Flex>
       ) : (
         <Flex vertical hAlignContent="right">
-          {allowEdits && (
-            <Box marginBottom="space50">
-              <Button variant="primary" onClick={addContact}>
-                <PlusIcon decorative />
-                <Template source={templates[StringTemplates.ContactAdd]} />
-              </Button>
-            </Box>
-          )}
+          <Box width="100%">
+            <Flex hAlignContent="between" marginBottom="space50" grow shrink>
+              <Box maxWidth="300px">
+                <Input
+                  insertBefore={<SearchIcon decorative={true} />}
+                  type="text"
+                  key={`directory-search-field-${shared}`}
+                  onChange={onSearch}
+                  placeholder={templates[StringTemplates.ContactSearch]()}
+                />
+              </Box>
+              {allowEdits && (
+                <Button variant="primary" onClick={addContact}>
+                  <PlusIcon decorative />
+                  <Template source={templates[StringTemplates.ContactAdd]} />
+                </Button>
+              )}
+            </Flex>
+          </Box>
           <Box width="100%">
             <Table variant="default" striped>
               <THead>
@@ -100,7 +142,7 @@ const DirectoryTab = ({ shared, allowEdits }: OwnProps) => {
                 </Tr>
               </THead>
               <TBody>
-                {contactList?.map((contact: Contact) => (
+                {filteredContacts?.map((contact: Contact) => (
                   <ContactRecord
                     key={contact.key}
                     contact={contact}
