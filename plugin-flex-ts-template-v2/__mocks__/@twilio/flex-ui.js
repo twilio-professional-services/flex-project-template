@@ -1,5 +1,6 @@
 import React from 'react';
 import { EventEmitter } from 'events';
+import { ReplayEventEmitter } from "@twilio/replay-event-emitter";
 import { getMockedServiceConfiguration, getMockedUiAttributes } from '../../test-utils/flex-service-configuration';
 import { getMockedReduxState } from '../../test-utils/flex-redux';
 
@@ -13,6 +14,21 @@ class WorkerClient extends EventEmitter {
 
     };
     this.reservations = new Map();
+    this.on = jest.fn();
+  }
+}
+
+class ConversationsClient extends ReplayEventEmitter {
+  constructor() {
+    super();
+    this.on = jest.fn()
+  }
+}
+
+class VoiceClient extends EventEmitter {
+  constructor() {
+    super();
+    this.on = jest.fn()
   }
 }
 
@@ -28,6 +44,8 @@ class Manager {
   constructor() {
     this.events = new EventEmitter();
     this.workerClient = new WorkerClient();
+    this.conversationsClient = new ConversationsClient();
+    this.voiceClient = new VoiceClient();
     this.store = {
       addReducer: jest.fn(),
       dispatch: jest.fn(),
