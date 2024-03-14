@@ -22,7 +22,7 @@ This feature provides the following functionality:
 
 Within your `ui_attributes` file, you must set two settings for this feature:
 
-- `enable` - set this to true to enable the feature
+- `enabled` - set this to true to enable the feature
 - `enable_url_tab` - set this to true to enable the iframe tab within the container
 - `url_tab_title` - set the tab title that will be displayed for the configured URL
 - `url` - set this to the URL to embed within the CRM container
