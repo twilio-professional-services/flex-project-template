@@ -39,6 +39,7 @@ class ActivityManager {
 
   private maxConcurrentRequests: number;
 
+  // eslint-disable-next-line no-restricted-syntax
   constructor(maxConcurrentRequests = 1) {
     this.currentRequests = [];
     this.runningRequests = 0;
