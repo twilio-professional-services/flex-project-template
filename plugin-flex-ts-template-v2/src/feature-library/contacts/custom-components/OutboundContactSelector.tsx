@@ -4,7 +4,7 @@ import { Box } from '@twilio-paste/core/box';
 import { Flex } from '@twilio-paste/core/flex';
 import { Stack } from '@twilio-paste/core/stack';
 import { Text } from '@twilio-paste/core/text';
-import { Select, Option } from '@twilio-paste/core/select';
+import { Combobox } from '@twilio-paste/core/combobox';
 import { Actions, IconButton, Template, templates } from '@twilio/flex-ui';
 
 import { PhoneNumberItem } from '../../../utils/serverless/PhoneNumbers/PhoneNumberService';
@@ -17,39 +17,43 @@ const OutboundContactSelector = () => {
   const myContactList = useSelector((state: AppState) => state[reduxNamespace].contacts.directory);
   const sharedContactList = useSelector((state: AppState) => state[reduxNamespace].contacts.sharedDirectory);
 
-  const placeholder = 'placeholder';
-
   const [selectOptions, setSelectOptions] = useState([] as PhoneNumberItem[]);
-  const [selectedNumber, setSelectedNumber] = useState(placeholder);
+  const [selectedNumber, setSelectedNumber] = useState(null as PhoneNumberItem | null);
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
-    const options = myContactList
-      .map((contact: Contact) => ({
-        friendlyName: contact.name,
-        phoneNumber: contact.phoneNumber,
-      }))
-      .concat(
-        sharedContactList.map((contact: Contact) => ({
+    const inputValueLower = inputValue.toLowerCase();
+    setSelectOptions(
+      myContactList
+        .map((contact: Contact) => ({
           friendlyName: contact.name,
           phoneNumber: contact.phoneNumber,
-        })),
-      )
-      .sort((a: PhoneNumberItem, b: PhoneNumberItem) =>
-        a.friendlyName.toLowerCase() > b.friendlyName.toLowerCase() ? 1 : -1,
-      );
-    setSelectOptions([
-      {
-        friendlyName: templates[StringTemplates.OutboundContactPlaceholder](),
-        phoneNumber: placeholder,
-      },
-      ...options,
-    ]);
-  }, [myContactList, sharedContactList]);
+        }))
+        .concat(
+          sharedContactList.map((contact: Contact) => ({
+            friendlyName: contact.name,
+            phoneNumber: contact.phoneNumber,
+          })),
+        )
+        .filter(
+          (item: PhoneNumberItem) => !Boolean(inputValue) || item.friendlyName.toLowerCase().includes(inputValueLower),
+        )
+        .sort((a: PhoneNumberItem, b: PhoneNumberItem) =>
+          a.friendlyName.toLowerCase() > b.friendlyName.toLowerCase() ? 1 : -1,
+        ),
+    );
+  }, [inputValue, myContactList, sharedContactList]);
+
+  useEffect(() => {
+    if (selectedNumber?.friendlyName !== inputValue) {
+      setSelectedNumber(null);
+    }
+  }, [inputValue]);
 
   const callContact = () => {
-    if (selectedNumber === placeholder) return;
+    if (!selectedNumber) return;
     Actions.invokeAction('StartOutboundCall', {
-      destination: selectedNumber,
+      destination: selectedNumber.phoneNumber,
     });
   };
 
@@ -60,21 +64,32 @@ const OutboundContactSelector = () => {
       borderTopStyle="solid"
       marginTop="space80"
       paddingTop="space80"
+      paddingBottom="space200"
       width="100%"
     >
       <Stack orientation="vertical" spacing="space60">
         <Text as="span" fontSize="fontSize60" fontWeight="fontWeightBold">
           <Template source={templates[StringTemplates.OutboundContactHeader]} />
         </Text>
-        <Select id="outboundContactSelect" value={selectedNumber} onChange={(e) => setSelectedNumber(e.target.value)}>
-          {selectOptions.map((item: PhoneNumberItem) => (
-            <Option value={item.phoneNumber} disabled={item.phoneNumber === placeholder} key={item.phoneNumber}>
-              {item.friendlyName}
-            </Option>
-          ))}
-        </Select>
+        <Combobox
+          autocomplete
+          items={selectOptions}
+          inputValue={inputValue}
+          itemToString={(item) => item.friendlyName}
+          labelText={templates[StringTemplates.OutboundContactLabel]()}
+          onInputValueChange={({ inputValue }) => setInputValue(inputValue as string)}
+          onSelectedItemChange={({ selectedItem }) => setSelectedNumber(selectedItem)}
+          optionTemplate={(item) => (
+            <Stack orientation="vertical" spacing="space0">
+              <Text as="p">{item.friendlyName}</Text>
+              <Text as="p" color="colorTextWeak" fontSize="fontSize20">
+                {item.phoneNumber}
+              </Text>
+            </Stack>
+          )}
+        />
         <Flex hAlignContent="center">
-          <IconButton variant="primary" icon="Call" disabled={selectedNumber === placeholder} onClick={callContact} />
+          <IconButton variant="primary" icon="Call" disabled={!Boolean(selectedNumber)} onClick={callContact} />
         </Flex>
       </Stack>
     </Box>
