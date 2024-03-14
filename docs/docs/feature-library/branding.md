@@ -15,7 +15,7 @@ The branding feature allows you to customize the appearance of the Flex interfac
 
 The `branding` feature has several settings:
 
-- `enable` - Set to `true` to enable the feature
+- `enabled` - Set to `true` to enable the feature
 - `custom_logo_url` - If you would like to replace the Twilio Flex logo with your own, set this to the URL of your logo. It will be scaled to a maximum size of 240x36.
   - **Tip:** You may upload your logo as a serverless asset by placing it in the `serverless-functions/src/assets` directory. In this setting, place `{{serverless.url}}` within the URL to reference the serverless domain. For example, if my serverless asset is at `serverless-functions/src/assets/logo.png`, set this setting to `{{serverless.url}}/logo.png`.
 - `use_custom_colors` - Set to `true` to use the colors set in the `custom_colors` section below.
