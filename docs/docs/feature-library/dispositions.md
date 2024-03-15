@@ -21,7 +21,7 @@ Extended wrap-up form with additional fields:
 
 Within your `ui_attributes` file, there are several settings for the `dispositions` feature:
 
-- `enable` - set this to true to enable the feature
+- `enabled` - set this to true to enable the feature
 - `enable_notes` - set this to true to enable a free-form notes field in addition to disposition selection
 
 - `global` - this section contains the configuration that applies to all types of contacts (all queues)
