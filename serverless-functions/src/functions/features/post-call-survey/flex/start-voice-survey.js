@@ -1,11 +1,4 @@
-const {
-  prepareFlexFunction,
-  extractStandardResponse,
-} = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
-
-const VoiceOperations = require(Runtime.getFunctions()[
-  'common/twilio-wrappers/programmable-voice'
-].path);
+const { prepareFlexFunction, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 
 const requiredParameters = [
   { key: 'queueName', purpose: 'The Queue that handled the call' },
@@ -15,37 +8,41 @@ const requiredParameters = [
   { key: 'Token', purpose: 'Flex Token' },
 ];
 
-exports.handler = prepareFlexFunction(
-  requiredParameters,
-  async (context, event, callback, response, handleError) => {
-    try {
-      console.log('start-voice-survey');
-      const { queueName, callSid, taskSid, surveyKey } = event;
+exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
+  try {
+    console.log('start-voice-survey');
+    const { queueName, callSid, taskSid, surveyKey } = event;
 
-      const url = `https://6e6d12fab128.ngrok.app/features/post-call-survey/common/survey-questions?queueName=${queueName}&callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&questionIndex=0`;
-      // const url = `https://${context.DOMAIN_NAME}/features/post-call-survey/common/survey-questions?queueName=${queueName}&callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&questionIndex=0`;
-      console.log(url);
+    const url = `https://c32784d1d061.ngrok.app/features/post-call-survey/common/survey-questions?queueName=${queueName}&callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&questionIndex=0`;
+    // const url = `https://${context.DOMAIN_NAME}/features/post-call-survey/common/survey-questions?queueName=${queueName}&callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&questionIndex=0`;
+    console.log(url);
 
-      const params = {
-        method: 'POST',
-        url: encodeURI(url),
-      };
+    const params = {
+      method: 'POST',
+      url: encodeURI(url),
+    };
 
-      const result = await VoiceOperations.updateCall({
-        context,
-        callSid,
-        params,
-      });
+    // UPDATE: Rethink serverless wrappers #492
+    const result = await twilioExecute(context, async (client) => {
+      try {
+        return await client.calls(callSid).update(params);
+      } catch (error) {
+        // Re-throw the error for the retry handler to catch
+        throw error;
+      }
+    });
 
-      console.log('result:', result);
-      const { call, status } = result;
-
-      response.setStatusCode(status);
-      response.setBody({ call, ...extractStandardResponse(result) });
-      return callback(null, response);
-    } catch (error) {
-      console.log(error);
-      return handleError(error);
+    if (result.success) {
+      console.log('Twilio Update Call API response:', result.data);
     }
+
+    console.log('result:', result);
+    const { status } = result;
+    response.setStatusCode(status);
+
+    return callback(null, response);
+  } catch (error) {
+    console.log(error);
+    return handleError(error);
   }
-);
+});
