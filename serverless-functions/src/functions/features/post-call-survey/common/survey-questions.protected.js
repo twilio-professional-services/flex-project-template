@@ -69,23 +69,16 @@ exports.handler = async (context, event, callback) => {
     surveyTaskSid = taskResult.data.sid;
     console.log(`Survey task SID: ${surveyTaskSid}`);
     attributes = taskResult.data.attributes;
-    console.log(`Task attributes after create`, attributes);
   } else {
     attributes.conversations[`conversation_label_${questionIndex}`] = survey.questions[questionIndex - 1].label;
     attributes.conversations[`conversation_attribute_${questionIndex}`] = digits;
-
-    console.log(`Task attributes before update 1`, attributes);
 
     const updateTaskResult = await TaskOperations.updateTask({
       taskSid: surveyTaskSid,
       updateParams: { attributes: JSON.stringify(attributes) },
       context,
     });
-
-    console.log('updateTaskResult-1', updateTaskResult);
-    console.log(`updateTaskResult-1-data-attributes`, updateTaskResult.data.attributes);
     attributes = updateTaskResult.data.attributes || attributes;
-    console.log(`Task attributes after update 1`, attributes);
   }
 
   if (questionIndex === survey.questions.length) {
@@ -102,9 +95,7 @@ exports.handler = async (context, event, callback) => {
       context,
     });
 
-    console.log('updateTaskResult-2', updateTaskResult);
     attributes = updateTaskResult.data.attributes || attributes;
-    console.log(`Task attributes 3`, attributes);
 
     twiml.say(survey.message_end);
   } else {
@@ -113,8 +104,9 @@ exports.handler = async (context, event, callback) => {
     twiml.say(question.prompt);
     const nextQuestion = questionIndex + 1;
 
-    // const nextUrl = `https://${context.DOMAIN_NAME}/survey-questions?callSid=${callSid}&taskSid=${taskSid}&surveyTaskSid=${surveyTaskSid}&questionIndex=${nextQuestion}&attributes=${attributes}`
-    const nextUrl = `https://c32784d1d061.ngrok.app/features/post-call-survey/common/survey-questions?callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&queueName=${queueName}&surveyTaskSid=${surveyTaskSid}&questionIndex=${nextQuestion}&attributes=${encodeURIComponent(
+    const nextUrl = `https://${
+      context.DOMAIN_NAME
+    }/features/post-call-survey/common/survey-questions?callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&queueName=${queueName}&surveyTaskSid=${surveyTaskSid}&questionIndex=${nextQuestion}&attributes=${encodeURIComponent(
       JSON.stringify(attributes),
     )}`;
 
