@@ -13,8 +13,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     console.log('start-voice-survey');
     const { queueName, callSid, taskSid, surveyKey } = event;
 
-    const url = `https://c32784d1d061.ngrok.app/features/post-call-survey/common/survey-questions?queueName=${queueName}&callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&questionIndex=0`;
-    // const url = `https://${context.DOMAIN_NAME}/features/post-call-survey/common/survey-questions?queueName=${queueName}&callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&questionIndex=0`;
+    const url = `https://${context.DOMAIN_NAME}/features/post-call-survey/common/survey-questions?queueName=${queueName}&callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&questionIndex=0`;
     console.log(url);
 
     const params = {
