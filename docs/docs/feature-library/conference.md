@@ -19,7 +19,7 @@ This feature is based on [the dialpad addon plugin](https://github.com/twilio-pr
 
 Within your `ui_attributes` file, the `conference` feature has 3 settings you may modify:
 
-- `enable` - whether any functionality from this feature is enabled
+- `enabled` - whether any functionality from this feature is enabled
 - `hold_workaround` - without the hold workaround, after a third participant is added to the conference while the caller is on hold, the entire conference will end if the caller hangs up. when the workaround is enabled, the customer will be taken off hold briefly when the third participant is added, then placed back on hold. This workaround allows the caller to later disconnect without ending the entire conference.
 
 ### Outbound Call Configuration

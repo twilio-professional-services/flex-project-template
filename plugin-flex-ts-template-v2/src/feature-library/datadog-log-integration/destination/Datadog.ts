@@ -9,6 +9,7 @@ export default class DatadogDestination extends Destination {
 
   api: string = '';
 
+  // eslint-disable-next-line no-restricted-syntax
   constructor(opts: DatadogDestinationConfig) {
     super({ minLogLevel: opts.minLogLevel });
 
