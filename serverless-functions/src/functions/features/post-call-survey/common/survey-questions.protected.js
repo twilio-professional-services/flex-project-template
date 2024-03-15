@@ -1,27 +1,13 @@
-const { map, at } = require('lodash');
-
-const SyncOperations = require(Runtime.getFunctions()[
-  'common/twilio-wrappers/sync'
-].path);
-
-const TaskOperations = require(Runtime.getFunctions()[
-  'common/twilio-wrappers/taskrouter'
-].path);
+const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
+const { twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 
 exports.handler = async (context, event, callback) => {
+  console.log('PCS >> Incoming >>', event);
+
   const twiml = new Twilio.twiml.VoiceResponse();
   // twiml.say('This is the survey.');
 
-  let {
-    queueName,
-    callSid,
-    taskSid,
-    surveyKey,
-    Digits,
-    questionIndex,
-    newTaskSid,
-    attributes,
-  } = event;
+  let { queueName, callSid, taskSid, surveyKey, Digits, questionIndex, surveyTaskSid, attributes } = event;
 
   questionIndex = parseInt(questionIndex);
   const digits = parseInt(Digits);
@@ -29,11 +15,26 @@ exports.handler = async (context, event, callback) => {
   attributes = attributes ? JSON.parse(attributes) : { conversations: {} };
   console.log('attributes 2:', attributes);
 
-  const { mapItem } = await SyncOperations.fetchMapItem({
-    context,
-    mapSid: 'Post Call Survey Definitions',
-    key: surveyKey,
+  // UPDATE: Rethink serverless wrappers #492
+  const result = await twilioExecute(context, async (client) => {
+    try {
+      return await client.sync.v1
+        .services(context.TWILIO_FLEX_SYNC_SID)
+        .syncMaps(context.TWILIO_FLEX_POST_CALL_SURVEY_SYNC_MAP_SID)
+        .syncMapItems(surveyKey)
+        .fetch();
+    } catch (error) {
+      twiml.say("I'm sorry an error occurred in the post call survey. Goodbye.");
+      // Re-throw the error for the retry handler to catch
+      return callback(null, twiml);
+    }
   });
+
+  if (result.success) {
+    console.log('Twilio Fetch Survey from sync API response:', result.data);
+  }
+
+  const mapItem = result.data;
   console.log('mapItem: ', mapItem);
 
   const survey = mapItem.data;
@@ -64,22 +65,27 @@ exports.handler = async (context, event, callback) => {
       timeout: 300,
     });
 
-    console.log('taskResult', taskResult);
-    taskSid = taskResult.taskSid;
-    attributes = taskResult.task.attributes;
+    console.log('create taskResult', taskResult);
+    surveyTaskSid = taskResult.data.sid;
+    console.log(`Survey task SID: ${surveyTaskSid}`);
+    attributes = taskResult.data.attributes;
+    console.log(`Task attributes after create`, attributes);
   } else {
-    attributes.conversations[`conversation_label_${questionIndex}`] =
-      survey.questions[questionIndex - 1].label;
-    attributes.conversations[`conversation_attribute_${questionIndex}`] =
-      digits;
+    attributes.conversations[`conversation_label_${questionIndex}`] = survey.questions[questionIndex - 1].label;
+    attributes.conversations[`conversation_attribute_${questionIndex}`] = digits;
+
+    console.log(`Task attributes before update 1`, attributes);
 
     const updateTaskResult = await TaskOperations.updateTask({
-      taskSid,
-      updateParams: attributes,
+      taskSid: surveyTaskSid,
+      updateParams: { attributes: JSON.stringify(attributes) },
       context,
     });
 
-    attributes = updateTaskResult.task.attributes || attributes;
+    console.log('updateTaskResult-1', updateTaskResult);
+    console.log(`updateTaskResult-1-data-attributes`, updateTaskResult.data.attributes);
+    attributes = updateTaskResult.data.attributes || attributes;
+    console.log(`Task attributes after update 1`, attributes);
   }
 
   if (questionIndex === survey.questions.length) {
@@ -87,12 +93,18 @@ exports.handler = async (context, event, callback) => {
     console.log('taskSid', taskSid);
 
     const updateTaskResult = await TaskOperations.updateTask({
-      taskSid,
-      updateParams: attributes,
+      taskSid: surveyTaskSid,
+      updateParams: {
+        reason: 'Survey completed',
+        assignmentStatus: 'canceled',
+        attributes: JSON.stringify(attributes),
+      },
       context,
     });
 
-    attributes = updateTaskResult.task.attributes || attributes;
+    console.log('updateTaskResult-2', updateTaskResult);
+    attributes = updateTaskResult.data.attributes || attributes;
+    console.log(`Task attributes 3`, attributes);
 
     twiml.say(survey.message_end);
   } else {
@@ -100,16 +112,19 @@ exports.handler = async (context, event, callback) => {
     var question = survey.questions[parseInt(questionIndex)];
     twiml.say(question.prompt);
     const nextQuestion = questionIndex + 1;
+
+    // const nextUrl = `https://${context.DOMAIN_NAME}/survey-questions?callSid=${callSid}&taskSid=${taskSid}&surveyTaskSid=${surveyTaskSid}&questionIndex=${nextQuestion}&attributes=${attributes}`
+    const nextUrl = `https://c32784d1d061.ngrok.app/features/post-call-survey/common/survey-questions?callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&queueName=${queueName}&surveyTaskSid=${surveyTaskSid}&questionIndex=${nextQuestion}&attributes=${encodeURIComponent(
+      JSON.stringify(attributes),
+    )}`;
+
+    console.log(`Next URL: ${nextUrl}`);
+
     twiml.gather({
       timeout: 10,
       numDigits: 1,
       method: 'POST',
-      action: encodeURI(
-        // `https://${context.DOMAIN_NAME}/survey-questions?callSid=${callSid}&taskSid=${taskSid}&newTaskSid=${newTaskSid}&questionIndex=${nextQuestion}&attributes=${attributes}`
-        `https://6e6d12fab128.ngrok.app/features/post-call-survey/common/survey-questions?callSid=${callSid}&taskSid=${taskSid}&surveyKey=${surveyKey}&queueName=${queueName}&newTaskSid=${newTaskSid}&questionIndex=${nextQuestion}&attributes=${JSON.stringify(
-          attributes
-        )}`
-      ),
+      action: nextUrl,
     });
   }
 
