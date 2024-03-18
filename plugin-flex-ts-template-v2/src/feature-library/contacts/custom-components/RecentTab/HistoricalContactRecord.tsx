@@ -11,7 +11,6 @@ import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import { HistoricalContact } from '../../types';
-import NotesPopover from './NotesPopover';
 import OutboundCallModal from '../OutboundCallModal';
 
 export interface OwnProps {
@@ -74,9 +73,9 @@ const HistoricalContactRecord = ({ contact }: OwnProps) => {
       <Td>{taskDuration}</Td>
       <Td>{queueName}</Td>
       <Td>{outcome}</Td>
+      <Td>{notes}</Td>
       <Td textAlign="right">
         <Flex vAlignContent="center" hAlignContent="right">
-          {notes && <NotesPopover notes={notes} />}
           {channelType === 'voice' && <OutboundCallModal phoneNumber={phoneNumber || ''} />}
         </Flex>
       </Td>
