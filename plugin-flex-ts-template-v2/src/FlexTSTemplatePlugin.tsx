@@ -6,6 +6,7 @@ import { initFeatures } from './utils/feature-loader';
 const PLUGIN_NAME = 'FlexTSTemplatePlugin';
 
 export default class FlexTSTemplatePlugin extends FlexPlugin {
+  // eslint-disable-next-line no-restricted-syntax
   constructor() {
     super(PLUGIN_NAME);
   }

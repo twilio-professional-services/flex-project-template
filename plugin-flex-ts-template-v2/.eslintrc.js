@@ -37,6 +37,14 @@ module.exports = {
         ],
       },
     ],
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: 'MethodDefinition[kind="constructor"]',
+        message:
+          'Constructor methods are not allowed, as singleton constructors execute within a disabled feature. You may ignore this if your constructor validates that the feature is enabled or if it is not exported as a singleton.',
+      },
+    ],
     'prefer-destructuring': 'off',
     'prefer-named-capture-group': 'off',
     'prefer-promise-reject-errors': 'off',
