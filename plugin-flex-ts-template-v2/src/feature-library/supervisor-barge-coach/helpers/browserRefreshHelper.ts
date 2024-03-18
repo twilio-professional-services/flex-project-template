@@ -77,4 +77,14 @@ export const supervisorBrowserRefresh = async () => {
       }),
     );
   }
+  // This is here if the Supervisor refreshes and joined the chatBarge feature
+  const cacheChatBarge = localStorage.getItem('chatBarge');
+  if (cacheChatBarge) {
+    const chatBargeObject = JSON.parse(cacheChatBarge);
+    Flex.Manager.getInstance().store.dispatch(
+      Actions.setBargeCoachStatus({
+        chatBarge: chatBargeObject,
+      }),
+    );
+  }
 };
