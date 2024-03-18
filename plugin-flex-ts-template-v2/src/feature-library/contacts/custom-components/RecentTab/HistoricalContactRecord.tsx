@@ -11,7 +11,7 @@ import { ChatIcon } from '@twilio-paste/icons/esm/ChatIcon';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import { HistoricalContact } from '../../types';
-import NotesPopover from '../NotesPopover';
+import NotesPopover from './NotesPopover';
 import OutboundCallModal from '../OutboundCallModal';
 
 export interface OwnProps {

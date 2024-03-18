@@ -136,6 +136,9 @@ const DirectoryTab = ({ shared, allowEdits }: OwnProps) => {
                   <Th>
                     <Template source={templates[StringTemplates.ContactPhoneNumber]} />
                   </Th>
+                  <Th>
+                    <Template source={templates[StringTemplates.ContactNotes]} />
+                  </Th>
                   <Th textAlign="right">
                     <Template source={templates[StringTemplates.ContactActions]} />
                   </Th>

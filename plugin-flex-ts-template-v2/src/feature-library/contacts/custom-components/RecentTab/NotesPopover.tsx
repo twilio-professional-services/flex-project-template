@@ -4,7 +4,7 @@ import { PopoverContainer, PopoverButton, Popover } from '@twilio-paste/core/pop
 import { Text } from '@twilio-paste/core/text';
 import { Heading } from '@twilio-paste/core/heading';
 
-import { StringTemplates } from '../flex-hooks/strings';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 interface Props {
   notes: string;
