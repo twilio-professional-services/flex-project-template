@@ -8,10 +8,11 @@ import { useUID } from '@twilio-paste/core/uid-library';
 import { StringTemplates } from '../flex-hooks/strings';
 import RecentTab from './RecentTab/RecentTab';
 import DirectoryTab from './DirectoryTab/DirectoryTab';
-import { isRecentsEnabled, isPersonalDirectoryEnabled, isSharedDirectoryEnabled } from '../config';
+import { isRecentsEnabled, isPersonalDirectoryEnabled, isSharedDirectoryEnabled, getPageSize } from '../config';
 import ContactsUtil from '../utils/ContactsUtil';
 
 const ContactsView = () => {
+  const pageSize = getPageSize();
   const selectedId = useUID();
 
   return (
@@ -41,17 +42,17 @@ const ContactsView = () => {
           <TabPanels>
             {isRecentsEnabled() && (
               <TabPanel>
-                <RecentTab />
+                <RecentTab pageSize={pageSize} />
               </TabPanel>
             )}
             {isPersonalDirectoryEnabled() && (
               <TabPanel>
-                <DirectoryTab shared={false} allowEdits={true} />
+                <DirectoryTab shared={false} allowEdits={true} pageSize={pageSize} />
               </TabPanel>
             )}
             {isSharedDirectoryEnabled() && (
               <TabPanel>
-                <DirectoryTab shared={true} allowEdits={ContactsUtil.canEditShared()} />
+                <DirectoryTab shared={true} allowEdits={ContactsUtil.canEditShared()} pageSize={pageSize} />
               </TabPanel>
             )}
           </TabPanels>

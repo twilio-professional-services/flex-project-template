@@ -38,6 +38,10 @@ export enum StringTemplates {
   OutboundContactHeader = 'PSOutboundContactHeader',
   OutboundContactLabel = 'PSOutboundContactLabel',
   ContactSearch = 'PSContactSearch',
+  NoItems = 'PSContactNoItems',
+  CurrentPage = 'PSContactCurrentPage',
+  NextPage = 'PSContactNextPage',
+  PreviousPage = 'PSContactPreviousPage',
 }
 
 export const stringHook = () => ({
@@ -77,6 +81,10 @@ export const stringHook = () => ({
     [StringTemplates.OutboundContactHeader]: 'Call Contact',
     [StringTemplates.OutboundContactLabel]: 'Select a contact',
     [StringTemplates.ContactSearch]: 'Search contacts',
+    [StringTemplates.NoItems]: 'No items found',
+    [StringTemplates.CurrentPage]: 'Page {{current}} of {{total}}',
+    [StringTemplates.NextPage]: 'Next page',
+    [StringTemplates.PreviousPage]: 'Previous page',
   },
   'es-MX': esMX,
   'es-ES': esES,

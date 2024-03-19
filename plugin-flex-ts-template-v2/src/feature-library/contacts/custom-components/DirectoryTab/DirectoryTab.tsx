@@ -6,7 +6,7 @@ import { Flex } from '@twilio-paste/core/flex';
 import { Heading } from '@twilio-paste/core/heading';
 import { Box } from '@twilio-paste/core/box';
 import { Input } from '@twilio-paste/core/input';
-import { Table, THead, TBody, Tr, Th } from '@twilio-paste/core/table';
+import { DataGrid, DataGridHead, DataGridHeader, DataGridRow, DataGridBody } from '@twilio-paste/core/data-grid';
 import { AlertDialog } from '@twilio-paste/core/alert-dialog';
 import { PlusIcon } from '@twilio-paste/icons/esm/PlusIcon';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
@@ -15,6 +15,7 @@ import debounce from 'lodash/debounce';
 import ContactsUtil from '../../utils/ContactsUtil';
 import ContactEditModal from './ContactEditModal';
 import ContactRecord from './ContactRecord';
+import Paginator from '../Paginator';
 import { Contact } from '../../types';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
@@ -23,14 +24,17 @@ import { StringTemplates } from '../../flex-hooks/strings';
 export interface OwnProps {
   shared: boolean;
   allowEdits: boolean;
+  pageSize: number;
 }
 
-const DirectoryTab = ({ shared, allowEdits }: OwnProps) => {
+const DirectoryTab = ({ shared, allowEdits, pageSize }: OwnProps) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [contactToEdit, setContactToEdit] = useState(null as Contact | null);
   const [contactToDelete, setContactToDelete] = useState(null as Contact | null);
   const [searchValue, setSearchValue] = useState('');
-  const [filteredContacts, setFilteredContacts] = useState([] as Contact[]);
+  const [currentPageContacts, setCurrentPageContacts] = useState([] as Contact[]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const contactList = useSelector((state: AppState) =>
     shared ? state[reduxNamespace]?.contacts?.sharedDirectory : state[reduxNamespace]?.contacts?.directory,
@@ -38,19 +42,40 @@ const DirectoryTab = ({ shared, allowEdits }: OwnProps) => {
 
   useEffect(() => {
     if (!Boolean(searchValue)) {
-      setFilteredContacts(contactList);
+      // Skip filtering if no search was specified
+      setupPage(contactList);
       return;
     }
+    // Search by all properties except these
+    const keysToIgnore = ['key'];
     const searchValueLower = searchValue.toLowerCase();
-    setFilteredContacts(
-      contactList.filter(
-        (contact: Contact) =>
-          contact.name.toLowerCase().includes(searchValueLower) ||
-          contact.notes.toLowerCase().includes(searchValueLower) ||
-          contact.phoneNumber.toLowerCase().includes(searchValueLower),
-      ),
+    setupPage(
+      contactList.filter((contact: Contact) => {
+        for (const key of Object.keys(contact)) {
+          if (keysToIgnore.includes(key)) continue;
+          if (
+            String((contact as any)[key])
+              .toLowerCase()
+              .includes(searchValueLower)
+          )
+            return true;
+        }
+        return false;
+      }),
     );
-  }, [contactList, searchValue]);
+  }, [contactList, currentPage, searchValue]);
+
+  const setupPage = (contacts: Contact[]) => {
+    const newTotalPages = Math.ceil(contacts.length / pageSize);
+    const newStartIndex = (currentPage - 1) * pageSize;
+    setTotalPages(newTotalPages);
+    if (contacts.length && contacts.length <= newStartIndex) {
+      // If the current page is no longer valid, such as after searching, jump to the new last page
+      setCurrentPage(newTotalPages);
+      return;
+    }
+    setCurrentPageContacts(contacts.slice(newStartIndex, Math.min(currentPage * pageSize, contacts.length)));
+  };
 
   const closeEditModal = () => {
     setEditModalOpen(false);
@@ -87,6 +112,10 @@ const DirectoryTab = ({ shared, allowEdits }: OwnProps) => {
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     filterDirectoryDebounce(e.target.value);
+  };
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -127,25 +156,29 @@ const DirectoryTab = ({ shared, allowEdits }: OwnProps) => {
             </Flex>
           </Box>
           <Box width="100%">
-            <Table variant="default" striped>
-              <THead>
-                <Tr>
-                  <Th>
+            <DataGrid
+              variant="default"
+              striped
+              aria-label={
+                shared ? templates[StringTemplates.SharedContacts]() : templates[StringTemplates.MyContacts]()
+              }
+              element="CONTACTS_TABLE"
+            >
+              <DataGridHead>
+                <DataGridRow>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL">
                     <Template source={templates[StringTemplates.ContactName]} />
-                  </Th>
-                  <Th>
+                  </DataGridHeader>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL">
                     <Template source={templates[StringTemplates.ContactPhoneNumber]} />
-                  </Th>
-                  <Th>
-                    <Template source={templates[StringTemplates.ContactNotes]} />
-                  </Th>
-                  <Th textAlign="right">
+                  </DataGridHeader>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL" textAlign="right">
                     <Template source={templates[StringTemplates.ContactActions]} />
-                  </Th>
-                </Tr>
-              </THead>
-              <TBody>
-                {filteredContacts?.map((contact: Contact) => (
+                  </DataGridHeader>
+                </DataGridRow>
+              </DataGridHead>
+              <DataGridBody>
+                {currentPageContacts?.map((contact: Contact) => (
                   <ContactRecord
                     key={contact.key}
                     contact={contact}
@@ -154,8 +187,11 @@ const DirectoryTab = ({ shared, allowEdits }: OwnProps) => {
                     deleteContact={deleteContact}
                   />
                 ))}
-              </TBody>
-            </Table>
+              </DataGridBody>
+            </DataGrid>
+            <Flex hAlignContent="center" marginTop="space50">
+              <Paginator currentPage={currentPage} totalPages={totalPages} goToPage={goToPage} />
+            </Flex>
           </Box>
         </Flex>
       )}

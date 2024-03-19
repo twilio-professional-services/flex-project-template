@@ -6,7 +6,7 @@ import { Flex } from '@twilio-paste/core/flex';
 import { Heading } from '@twilio-paste/core/heading';
 import { Box } from '@twilio-paste/core/box';
 import { Input } from '@twilio-paste/core/input';
-import { Table, THead, TBody, Tr, Th } from '@twilio-paste/core/table';
+import { DataGrid, DataGridHead, DataGridHeader, DataGridRow, DataGridBody } from '@twilio-paste/core/data-grid';
 import { AlertDialog } from '@twilio-paste/core/alert-dialog';
 import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon';
 import { SearchIcon } from '@twilio-paste/icons/esm/SearchIcon';
@@ -14,36 +14,61 @@ import debounce from 'lodash/debounce';
 
 import ContactsUtil from '../../utils/ContactsUtil';
 import HistoricalContactRecord from './HistoricalContactRecord';
+import Paginator from '../Paginator';
 import { HistoricalContact } from '../../types';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { StringTemplates } from '../../flex-hooks/strings';
 
-const RecentTab = () => {
+export interface OwnProps {
+  pageSize: number;
+}
+
+const RecentTab = ({ pageSize }: OwnProps) => {
   const [confirmClearHistory, setConfirmClearHistory] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [filteredContacts, setFilteredContacts] = useState([] as HistoricalContact[]);
+  const [currentPageContacts, setCurrentPageContacts] = useState([] as HistoricalContact[]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   const contactList = useSelector((state: AppState) => state[reduxNamespace]?.contacts?.recents);
 
   useEffect(() => {
     if (!Boolean(searchValue)) {
-      setFilteredContacts(contactList);
+      // Skip filtering if no search was specified
+      setupPage(contactList);
       return;
     }
+    // Set the properties to search by
+    const keysToSearch = ['name', 'notes', 'outcome', 'queueName', 'twilioPhoneNumber', 'phoneNumber'];
     const searchValueLower = searchValue.toLowerCase();
-    setFilteredContacts(
-      contactList.filter(
-        (contact: HistoricalContact) =>
-          contact.name?.toLowerCase().includes(searchValueLower) ||
-          contact.notes?.toLowerCase().includes(searchValueLower) ||
-          contact.outcome?.toLowerCase().includes(searchValueLower) ||
-          contact.queueName?.toLowerCase().includes(searchValueLower) ||
-          contact.twilioPhoneNumber?.toLowerCase().includes(searchValueLower) ||
-          contact.phoneNumber?.toLowerCase().includes(searchValueLower),
-      ),
+    setupPage(
+      contactList.filter((contact: HistoricalContact) => {
+        for (const key of Object.keys(contact)) {
+          if (!keysToSearch.includes(key)) continue;
+          if (
+            String((contact as any)[key])
+              .toLowerCase()
+              .includes(searchValueLower)
+          )
+            return true;
+        }
+        return false;
+      }),
     );
-  }, [contactList, searchValue]);
+  }, [contactList, currentPage, searchValue]);
+
+  const setupPage = (contacts: HistoricalContact[]) => {
+    const newTotalPages = Math.ceil(contacts.length / pageSize);
+    const newStartIndex = (currentPage - 1) * pageSize;
+    setTotalPages(newTotalPages);
+    if (contacts.length && contacts.length <= newStartIndex) {
+      // If the current page is no longer valid, such as after searching, jump to the new last page
+      setCurrentPage(newTotalPages);
+      return;
+    }
+    setCurrentPageContacts(contacts.slice(newStartIndex, Math.min(currentPage * pageSize, contacts.length)));
+  };
 
   const clearHistory = () => {
     setConfirmClearHistory(false);
@@ -60,6 +85,10 @@ const RecentTab = () => {
 
   const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     filterDirectoryDebounce(e.target.value);
+  };
+
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -100,47 +129,52 @@ const RecentTab = () => {
             </Flex>
           </Box>
           <Box width="100%">
-            <Table variant="default" striped>
-              <THead>
-                <Tr>
-                  <Th>
+            <DataGrid
+              variant="default"
+              striped
+              aria-label={templates[StringTemplates.Recent]()}
+              element="CONTACTS_TABLE"
+            >
+              <DataGridHead>
+                <DataGridRow>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL">
                     <Template source={templates[StringTemplates.ContactChannel]} />
-                  </Th>
-                  <Th>
+                  </DataGridHeader>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL">
                     <Template source={templates[StringTemplates.ContactInboundAddress]} />
-                  </Th>
-                  <Th>
+                  </DataGridHeader>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL">
                     <Template source={templates[StringTemplates.ContactCustomerAddress]} />
-                  </Th>
-                  <Th>
+                  </DataGridHeader>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL">
                     <Template source={templates[StringTemplates.ContactName]} />
-                  </Th>
-                  <Th>
+                  </DataGridHeader>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL">
                     <Template source={templates[StringTemplates.ContactDateTime]} />
-                  </Th>
-                  <Th align="center">
+                  </DataGridHeader>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL">
                     <Template source={templates[StringTemplates.ContactDuration]} />
-                  </Th>
-                  <Th>
+                  </DataGridHeader>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL">
                     <Template source={templates[StringTemplates.ContactQueue]} />
-                  </Th>
-                  <Th>
+                  </DataGridHeader>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL">
                     <Template source={templates[StringTemplates.ContactOutcome]} />
-                  </Th>
-                  <Th>
-                    <Template source={templates[StringTemplates.ContactNotes]} />
-                  </Th>
-                  <Th textAlign="right">
+                  </DataGridHeader>
+                  <DataGridHeader element="CONTACTS_TABLE_CELL" textAlign="right">
                     <Template source={templates[StringTemplates.ContactActions]} />
-                  </Th>
-                </Tr>
-              </THead>
-              <TBody>
-                {filteredContacts?.map((contact: HistoricalContact) => (
+                  </DataGridHeader>
+                </DataGridRow>
+              </DataGridHead>
+              <DataGridBody>
+                {currentPageContacts?.map((contact: HistoricalContact) => (
                   <HistoricalContactRecord key={contact.taskSid} contact={contact} />
                 ))}
-              </TBody>
-            </Table>
+              </DataGridBody>
+            </DataGrid>
+            <Flex hAlignContent="center" marginTop="space50">
+              <Paginator currentPage={currentPage} totalPages={totalPages} goToPage={goToPage} />
+            </Flex>
           </Box>
         </Flex>
       )}

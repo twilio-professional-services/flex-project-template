@@ -37,6 +37,7 @@ The `contacts` feature has several settings:
 - `enable_shared` - Set to `true` to enable the shared contacts directory
 - `recent_days_to_keep` - Number of days to retain recent contacts
 - `shared_agent_editable` - Whether agents can edit the shared contacts directory
+- `page_size` - Number of contacts to display per page
 
 ```json
 "contacts": {
@@ -45,7 +46,8 @@ The `contacts` feature has several settings:
   "enable_personal": true,
   "enable_shared": true,
   "recent_days_to_keep": 14,
-  "shared_agent_editable": false
+  "shared_agent_editable": false,
+  "page_size": 10
 }
 ```
 

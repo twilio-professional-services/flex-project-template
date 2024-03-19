@@ -8,6 +8,7 @@ const {
   enable_shared = false,
   recent_days_to_keep = 14,
   shared_agent_editable = false,
+  page_size = 10,
 } = (getFeatureFlags()?.features?.contacts as ContactsConfig) || {};
 
 export const isFeatureEnabled = () => {
@@ -32,4 +33,8 @@ export const isSharedDirectoryEnabled = () => {
 
 export const isSharedDirectoryAgentEditable = () => {
   return shared_agent_editable;
+};
+
+export const getPageSize = () => {
+  return page_size;
 };

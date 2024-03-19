@@ -9,4 +9,13 @@ export const pasteElementHook = {
     padding: 'space40',
     overflow: 'auto',
   },
+  CONTACTS_TABLE_WRAPPER: {
+    boxShadow: 'none',
+  },
+  CONTACTS_TABLE_CELL: {
+    verticalAlign: 'middle',
+    ':focus': {
+      boxShadow: 'none',
+    },
+  },
 } as { [key: string]: PasteCustomCSS };

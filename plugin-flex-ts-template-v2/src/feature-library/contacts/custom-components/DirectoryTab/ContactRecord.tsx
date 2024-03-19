@@ -1,12 +1,13 @@
 import { templates } from '@twilio/flex-ui';
 import { Flex } from '@twilio-paste/core/flex';
-import { Tr, Td } from '@twilio-paste/core/table';
 import { Button } from '@twilio-paste/core/button';
 import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon';
 import { EditIcon } from '@twilio-paste/icons/esm/EditIcon';
+import { DataGridRow, DataGridCell } from '@twilio-paste/core/data-grid';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import { Contact } from '../../types';
+import NotesPopover from '../NotesPopover';
 import OutboundCallModal from '../OutboundCallModal';
 
 export interface OwnProps {
@@ -20,12 +21,12 @@ const ContactRecord = ({ contact, allowEdits, deleteContact, editContact }: OwnP
   const { key, phoneNumber, name, notes } = contact;
 
   return (
-    <Tr key={key}>
-      <Td>{name}</Td>
-      <Td>{phoneNumber}</Td>
-      <Td>{notes}</Td>
-      <Td textAlign="right">
+    <DataGridRow key={key}>
+      <DataGridCell element="CONTACTS_TABLE_CELL">{name}</DataGridCell>
+      <DataGridCell element="CONTACTS_TABLE_CELL">{phoneNumber}</DataGridCell>
+      <DataGridCell element="CONTACTS_TABLE_CELL" textAlign="right">
         <Flex vAlignContent="center" hAlignContent="right">
+          {notes && <NotesPopover notes={notes} />}
           <OutboundCallModal phoneNumber={phoneNumber || ''} />
           {allowEdits && (
             <Flex marginLeft="space50">
@@ -52,8 +53,8 @@ const ContactRecord = ({ contact, allowEdits, deleteContact, editContact }: OwnP
             </Flex>
           )}
         </Flex>
-      </Td>
-    </Tr>
+      </DataGridCell>
+    </DataGridRow>
   );
 };
 
