@@ -39,13 +39,13 @@ const RecentTab = ({ pageSize }: OwnProps) => {
       setupPage(contactList);
       return;
     }
-    // Set the properties to search by
-    const keysToSearch = ['name', 'notes', 'outcome', 'queueName', 'twilioPhoneNumber', 'phoneNumber'];
+    // Search by all properties except these
+    const keysToIgnore = ['taskSid', 'direction', 'channelType', 'dateTime', 'duration'];
     const searchValueLower = searchValue.toLowerCase();
     setupPage(
       contactList.filter((contact: HistoricalContact) => {
         for (const key of Object.keys(contact)) {
-          if (!keysToSearch.includes(key)) continue;
+          if (keysToIgnore.includes(key)) continue;
           if (
             String((contact as any)[key])
               .toLowerCase()
