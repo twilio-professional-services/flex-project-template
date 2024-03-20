@@ -398,9 +398,14 @@
         "intake_region": "",
         "flush_timeout": 5000
       },
-      "contact_history": {
-        "enabled": false,
-        "max_contacts": 25
+      "contacts": {
+        "enabled": true,
+        "enable_recents": true,
+        "enable_personal": true,
+        "enable_shared": true,
+        "recent_days_to_keep": 14,
+        "shared_agent_editable": false,
+        "page_size": 10
       },
       "inline_media": {
         "enabled": true

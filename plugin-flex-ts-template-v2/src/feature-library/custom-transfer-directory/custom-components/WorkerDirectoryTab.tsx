@@ -5,6 +5,7 @@ import { Stack } from '@twilio-paste/core/stack';
 import { Text } from '@twilio-paste/core/text';
 import { Avatar } from '@twilio-paste/core/avatar';
 import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
+import { v4 as uuidv4 } from 'uuid';
 
 import { showOnlyAvailableWorkers, isCbmColdTransferEnabled, isCbmWarmTransferEnabled } from '../config';
 import { DirectoryEntry } from '../types/DirectoryEntry';
@@ -88,6 +89,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
             ),
             address: worker.sid,
             type: 'worker',
+            key: uuidv4(),
           } as DirectoryEntry),
       );
 

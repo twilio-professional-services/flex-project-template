@@ -12,6 +12,7 @@ import {
 } from '@twilio/flex-ui';
 import { useEffect, useState, useRef } from 'react';
 import { SyncMap } from 'twilio-sync';
+import { v4 as uuidv4 } from 'uuid';
 
 import { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
 import {
@@ -197,6 +198,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
       address: queue.sid,
       tooltip: queue_tooltip,
       type: 'queue',
+      key: uuidv4(),
     };
   };
 

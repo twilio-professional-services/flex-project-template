@@ -21,6 +21,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Callbacks and Voicemail](callback-and-voicemail)         | _introduce support for callback and voicemail tasks_                        |
 | [Caller ID](caller-id)                       | _provide agents with means to select their caller id when dialing out_      |
 | [Conference (external)](conference)           | _provide agents the ability to conference in external numbers_              |
+| [Contacts](contacts)                  | _adds contact directories and provides a list of recent contacts_                                     |
 | [Conversation Transfer](conversation-transfer)          | _introduce conversation-based messaging transfer functionality for agents_                          |
 | [Custom Transfer Directory](custom-transfer-directory)       | _customize the agent and queue transfer directories_                        |
 | [Datadog Log Integration](datadog-log-integration) | _forward logs emitted by the template to datadog_|
@@ -30,6 +31,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Hang Up By Reporting](hang-up-by)           | _populates the Hang Up By and Destination attributes in Flex Insights_                              |
 | [Inline Media](inline-media) | _render chat message attachments inline_                                                     |
 | [Internal Call (Agent to Agent)](internal-call) | _provide agents the ability to dial each other_                                                     |
+| [Keyboard Shortcuts](keyboard-shortcuts) | _configure default and custom keyboard shortcuts for Flex_                                                     |
 | [Park interaction](park-interaction)               | _provide agents the ability to park interactions, preserving conversation history_                  |
 | [Pause Recording](pause-recording)                 | _provide agents the ability to temporarily pause and resume call recording_ |
 | [Schedule Manager](schedule-manager)               | _a flexible, robust, and scalable way to manage open and closed hours for Twilio Flex applications_ |
@@ -53,7 +55,6 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Activity Skill Filter](activity-skill-filter)          | _manage visibility for activities based on agent skills_                                            |
 | [Branding](branding)                  | _customize the Flex interface for your brand_                                     |
 | [Chat Transfer](chat-transfer)                  | _introduce programmable chat transfer functionality for agents_                                     |
-| [Contact History](contact-history)                  | _add a view to show a list of recent contacts (calls, chats) with ability to make Outbound calls back to the customer_                                     |
 | [Custom Hold Music](custom-hold-music)              | _customize the experience when an agent places a call on hold_                                      |
 | [Device Manager](device-manager)                  | _provide agents the ability to select the audio output device_              |
 | [Dual Channel Recording](dual-channel-recording)         | _automatically record both inbound and outbound calls in dual channel_                              |
