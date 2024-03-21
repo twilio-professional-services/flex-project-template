@@ -25,7 +25,7 @@ const Paginator = ({ currentPage, totalPages, goToPage }: OwnProps) => {
           label={templates[StringTemplates.PreviousPage]()}
           variant="back"
           onClick={goToPreviousPage}
-          disabled={currentPage <= 1}
+          disabled={currentPage <= 1 || totalPages < 1}
         />
         <PaginationLabel>
           {totalPages < 1 ? (
