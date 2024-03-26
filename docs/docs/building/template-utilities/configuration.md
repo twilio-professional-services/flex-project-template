@@ -68,6 +68,7 @@ If you have two features which need to share a piece of configuration, consider 
 The following common configuration properties are included by default:
 
 - **`log_level`** - The minimum log level to output to the browser console. `info` by default; may be set to `debug`, `log`, `warn`, `info`, or `error`
+- **`audit_log_ttl`** - The number of seconds before audit events should be removed from Sync. `1209600` (two weeks) by default.
 - **`teams`** - Array of team names used by various features to populate team lists, matching the values used in worker attributes.
 - **`departments`** - Array of department names used by various features to populate department lists, matching the values used in worker attributes.
 
