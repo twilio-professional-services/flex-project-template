@@ -2,11 +2,11 @@ import { Actions, Manager, Notifications } from '@twilio/flex-ui';
 import merge from 'lodash/merge';
 
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
+import { UIAttributes } from '../../../types/manager/ServiceConfiguration';
 import { isFeatureEnabled, isAuditLoggingEnabled } from '../config';
 import { AdminUiNotification } from '../flex-hooks/notifications';
 import AdminUiService from './AdminUiService';
 import { saveAuditEvent } from '../../../utils/helpers/AuditHelper';
-import { getFeatureFlags } from '../../../utils/configuration';
 
 const acronyms = ['id', 'ui', 'sip', 'pstn', 'sms', 'crm', 'sla', 'cbm', 'url', 'ttl'];
 const hiddenFeatures = ['admin_ui'];
@@ -15,6 +15,12 @@ const docsBaseUrl = 'https://twilio-professional-services.github.io/flex-project
 // String to identify the 'common' feature
 // Explicitly a value that is invalid per the 'add-feature' script
 export const featureCommon = '_common_';
+
+let globalConfigCache = {} as UIAttributes;
+export const getGlobalConfig = async () => {
+  globalConfigCache = (await AdminUiService.fetchUiAttributes()).configuration || {};
+  return globalConfigCache;
+};
 
 export const canShowAdminUi = (manager: Manager) => {
   const { roles } = manager.user;
@@ -67,14 +73,18 @@ const updateWorkerSetting = async (feature: string, config: any) => {
     updatePayload = {
       common: config,
     };
-    originalConfig = { common: { ...attributes?.config_overrides?.common } };
+    if (attributes?.config_overrides?.common) {
+      originalConfig = { common: { ...attributes?.config_overrides?.common } };
+    }
   } else {
     updatePayload = {
       features: {
         [feature]: config,
       },
     };
-    originalConfig = { features: { [feature]: { ...attributes?.config_overrides?.features[feature] } } };
+    if (attributes?.config_overrides?.features && attributes?.config_overrides?.features[feature]) {
+      originalConfig = { features: { [feature]: { ...attributes?.config_overrides?.features[feature] } } };
+    }
   }
 
   await Actions.invokeAction('SetWorkerAttributes', {
@@ -94,7 +104,8 @@ const resetWorkerSetting = async (feature: string) => {
   }
 
   const attributes = workerClient.attributes as CustomWorkerAttributes;
-  const originalConfig = { ...attributes?.config_overrides };
+  // stringify the original config to preserve nested original objects
+  const originalConfig = JSON.stringify(attributes?.config_overrides ?? {});
 
   if (feature === featureCommon) {
     if (attributes?.config_overrides?.common) {
@@ -105,7 +116,7 @@ const resetWorkerSetting = async (feature: string) => {
   }
 
   await workerClient.setAttributes(attributes);
-  auditLog(false, originalConfig, attributes?.config_overrides);
+  auditLog(false, JSON.parse(originalConfig), attributes?.config_overrides);
 };
 
 const auditLog = (global: boolean, oldValue: any, newValue: any) => {
@@ -137,7 +148,7 @@ export const saveUserConfig = async (feature: string, config: any): Promise<bool
 };
 
 export const saveGlobalConfig = async (feature: string, config: any, mergeFeature: boolean): Promise<any> => {
-  let returnVal = false;
+  let returnVal;
   try {
     let updatePayload = {} as any;
     let originalConfig = {};
@@ -148,7 +159,9 @@ export const saveGlobalConfig = async (feature: string, config: any, mergeFeatur
           common: config,
         },
       };
-      originalConfig = { common: { ...getFeatureFlags()?.common } };
+      if (globalConfigCache.custom_data?.common) {
+        originalConfig = { common: { ...globalConfigCache.custom_data?.common } };
+      }
     } else {
       updatePayload = {
         custom_data: {
@@ -157,12 +170,15 @@ export const saveGlobalConfig = async (feature: string, config: any, mergeFeatur
           },
         },
       };
-      originalConfig = { features: { [feature]: { ...getFeatureFlags()?.features[feature] } } };
+      if (globalConfigCache.custom_data?.features && globalConfigCache.custom_data?.features[feature]) {
+        originalConfig = { features: { [feature]: { ...globalConfigCache.custom_data?.features[feature] } } };
+      }
     }
 
     const updateResponse = await AdminUiService.updateUiAttributes(JSON.stringify(updatePayload), mergeFeature);
     if (updateResponse?.configuration?.custom_data) {
-      returnVal = updateResponse.configuration.custom_data;
+      globalConfigCache.custom_data = updateResponse.configuration.custom_data;
+      returnVal = globalConfigCache.custom_data;
       auditLog(true, originalConfig, merge({}, originalConfig, updatePayload.custom_data));
     } else {
       console.error('admin-ui: Unexpected response upon updating global config', updateResponse);
