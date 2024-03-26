@@ -1,6 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 import { ITask } from '@twilio/flex-ui';
+import { useDispatch } from 'react-redux';
 
+import { Actions } from '../../../supervisor-barge-coach/flex-hooks/states/SupervisorBargeCoach';
 import { ParticipantDetails } from '../../types/ParticipantDetails';
 import { InvitedParticipantDetails, InvitedParticipants } from '../../types/InvitedParticipantDetails';
 import { ConversationState } from '../../../../types/conversations';
@@ -53,6 +55,20 @@ const getCBMParticipantsWrapper = async (task: ITask, flexInteractionChannelSid:
   return [];
 };
 
+export const useParticipantCountEffect = (task: ITask, dispatch: ReturnType<typeof useDispatch>) => {
+  const fetchParticipants = async () => {
+    const flexInteractionChannelSid = task?.attributes?.flexInteractionChannelSid;
+    const participants = await task.getParticipants(flexInteractionChannelSid);
+
+    const count = participants.length;
+    dispatch(Actions.setBargeCoachStatus({ interactionParticipants: count }));
+  };
+
+  if (task) {
+    fetchParticipants(); // Call the async function
+  }
+};
+
 // we use a mix of conversation participants (MBxxx sids) and Interactions Participants (UTxxx) to build what we need
 export const getUpdatedParticipantDetails = async (
   task: Flex.ITask,
@@ -78,8 +94,6 @@ export const getUpdatedParticipantDetails = async (
   if (!intertactionParticipants || !conversation?.participants) return participantDetails;
 
   const conversationParticipants = Array.from(conversation?.participants.values());
-
-  console.log('getParticipantDetails', conversationParticipants, intertactionParticipants);
 
   conversationParticipants.forEach((conversationParticipant) => {
     const intertactionParticipant = intertactionParticipants.find(

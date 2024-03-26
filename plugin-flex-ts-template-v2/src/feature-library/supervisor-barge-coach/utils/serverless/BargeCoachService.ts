@@ -28,6 +28,18 @@ export interface RemoveWorkerParticipant {
   myWorkerName: string;
 }
 
+export interface GetParticipants {
+  response: any;
+  conferenceSid: string;
+  result: any;
+}
+
+export interface updateConversationStatus {
+  success: boolean;
+  conferenceSid: string;
+  status: string;
+}
+
 class BargeCoachService extends ApiService {
   async updateParticipantBargeCoach(
     conferenceSid: string,
@@ -70,9 +82,9 @@ class BargeCoachService extends ApiService {
       // Update Conference Participant with the appropriate Muted and Coaching status
       const { success } = await this.#inviteWorkerParticipant(conversationSid, myWorkerName);
       if (success) {
-        console.log(`Successfully added Participant:${myWorkerName} to Conversation:${conversationSid}`);
+        console.log(`Successfully added Participant: ${myWorkerName} to Conversation:${conversationSid}`);
       } else if (!success) {
-        console.log(`Failed to add Participant:${myWorkerName} to Conversation:${conversationSid}`);
+        console.log(`Failed to add Participant: ${myWorkerName} to Conversation:${conversationSid}`);
       }
       return success;
     } catch (error) {
@@ -88,11 +100,23 @@ class BargeCoachService extends ApiService {
       // Update Conference Participant with the appropriate Muted and Coaching status
       const { success } = await this.#removeWorkerParticipant(conversationSid, myWorkerName);
       if (success) {
-        console.log(`Successfully removed Participant:${myWorkerName} from Conversation:${conversationSid}`);
+        console.log(`Successfully removed Participant: ${myWorkerName} from Conversation:${conversationSid}`);
       } else if (!success) {
-        console.log(`Failed to remove Participant:${myWorkerName} from Conversation:${conversationSid}`);
+        console.log(`Failed to remove Participant: ${myWorkerName} from Conversation:${conversationSid}`);
       }
       return success;
+    } catch (error) {
+      if (error instanceof TypeError) {
+        error.message = 'Unable to reach host';
+      }
+      return false;
+    }
+  }
+
+  async workerPartOfConversation(conversationSid: string, myWorkerName: string): Promise<boolean> {
+    try {
+      const response = await this.#getChatParticipants(conversationSid);
+      return response.result.data.some((participant: any) => participant.identity === myWorkerName);
     } catch (error) {
       if (error instanceof TypeError) {
         error.message = 'Unable to reach host';
@@ -179,6 +203,28 @@ class BargeCoachService extends ApiService {
         body: this.buildBody(encodedParams),
       },
     ).then((response): RemoveWorkerParticipant => {
+      return {
+        ...response,
+      };
+    });
+  };
+
+  #getChatParticipants = async (conversationSid: string): Promise<GetParticipants> => {
+    const manager = Flex.Manager.getInstance();
+
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(manager.user.token),
+      conversationSid: encodeURIComponent(conversationSid),
+    };
+
+    return this.fetchJsonWithReject<GetParticipants>(
+      `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/conversations/get-participants`,
+      {
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      },
+    ).then((response): GetParticipants => {
       return {
         ...response,
       };

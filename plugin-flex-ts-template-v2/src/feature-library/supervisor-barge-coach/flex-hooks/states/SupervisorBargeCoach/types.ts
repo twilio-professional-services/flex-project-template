@@ -18,4 +18,5 @@ export interface SupervisorBargeCoachState {
   agentAssistanceSyncSubscribed: boolean;
   agentAssistanceArray: Array<any>;
   chatBarge: { [key: string]: boolean };
+  interactionParticipants: number;
 }
