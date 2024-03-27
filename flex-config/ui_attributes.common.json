@@ -8,6 +8,7 @@
     "serverless_functions_domain": "<YOUR_SERVERLESS_DOMAIN>",
     "common": {
       "log_level": "info",
+      "audit_log_ttl": 1209600,
       "teams": [
         "Blue Team",
         "Red Team",
@@ -265,7 +266,8 @@
         "enabled_for_agents": false
       },
       "admin_ui": {
-        "enabled": true
+        "enabled": true,
+        "enable_audit_logging": true
       },
       "localization": {
         "enabled": false,

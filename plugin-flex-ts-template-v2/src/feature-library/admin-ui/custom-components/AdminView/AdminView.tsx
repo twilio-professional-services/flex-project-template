@@ -20,8 +20,13 @@ import { StringTemplates } from '../../flex-hooks/strings';
 import { AdminViewWrapper, FeatureCardWrapper } from './AdminView.Styles';
 import { getFeatureFlagsUser } from '../../../../utils/configuration';
 import FeatureCard from '../FeatureCard';
-import AdminUiService from '../../utils/AdminUiService';
-import { saveUserConfig, saveGlobalConfig, shouldShowFeature, featureCommon } from '../../utils/helpers';
+import {
+  saveUserConfig,
+  saveGlobalConfig,
+  shouldShowFeature,
+  featureCommon,
+  getGlobalConfig,
+} from '../../utils/helpers';
 import { subscribe, unsubscribe, publishMessage, SyncStreamEvent } from '../../../../utils/sdk-clients/sync/SyncClient';
 import { AdminUiNotification } from '../../flex-hooks/notifications';
 import FeatureModal from '../FeatureModal';
@@ -83,7 +88,7 @@ const AdminView = () => {
 
   const reloadGlobalConfig = async () => {
     try {
-      const newGlobalConfig = (await AdminUiService.fetchUiAttributes()).configuration.custom_data || {};
+      const newGlobalConfig = (await getGlobalConfig())?.custom_data || {};
       setGlobalConfig(newGlobalConfig);
     } catch (error) {
       console.log('admin-ui: Unable to load global config', error);
