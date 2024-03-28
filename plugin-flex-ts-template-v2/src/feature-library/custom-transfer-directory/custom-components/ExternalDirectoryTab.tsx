@@ -1,9 +1,12 @@
 import { withTaskContext, ITask, Actions, Manager, useFlexSelector } from '@twilio/flex-ui';
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
 import { getExternalDirectory, isVoiceXWTEnabled } from '../config';
-import { DirectoryEntry, ExternalDirectoryEntry } from '../types/DirectoryEntry';
+import { DirectoryEntry } from '../types/DirectoryEntry';
 import AppState from '../../../types/manager/AppState';
+import { reduxNamespace } from '../../../utils/state';
 import DirectoryTab, { TransferClickPayload } from './DirectoryTab';
 
 export interface OwnProps {
@@ -11,25 +14,55 @@ export interface OwnProps {
 }
 
 const ExternalDirectoryTab = (props: OwnProps) => {
-  const [directory] = useState(getExternalDirectory() as Array<ExternalDirectoryEntry>);
+  const [directory, setDirectory] = useState([] as Array<DirectoryEntry>);
 
   const workerAttrs = useFlexSelector((state: AppState) => state.flex.worker.attributes);
+  const myContactList = useSelector((state: AppState) => state[reduxNamespace]?.contacts?.directory);
+  const sharedContactList = useSelector((state: AppState) => state[reduxNamespace]?.contacts?.sharedDirectory);
 
-  // sort the directory and map to a DirectoryEntry array
+  // Map the configurable entries to a DirectoryEntry array
   const generateDirectoryEntries = (): Array<DirectoryEntry> => {
-    return directory
-      .sort((a: ExternalDirectoryEntry, b: ExternalDirectoryEntry) => (a.label > b.label ? 1 : -1))
-      .map(
-        (entry) =>
-          ({
-            ...entry,
-            warm_transfer_enabled: entry.warm_transfer_enabled && isVoiceXWTEnabled(),
-            address: entry.number,
-            tooltip: entry.number,
-            type: 'number',
-          } as DirectoryEntry),
-      );
+    return getExternalDirectory().map(
+      (entry) =>
+        ({
+          ...entry,
+          warm_transfer_enabled: entry.warm_transfer_enabled && isVoiceXWTEnabled(),
+          address: entry.number,
+          tooltip: entry.number,
+          type: 'number',
+          key: uuidv4(),
+        } as DirectoryEntry),
+    );
   };
+
+  // Map the contacts directory entries to a DirectoryEntry array
+  const generateContactsEntries = (shared: boolean): Array<DirectoryEntry> => {
+    return (
+      (shared ? sharedContactList : myContactList)?.map(
+        (entry: any) =>
+          ({
+            cold_transfer_enabled: true,
+            warm_transfer_enabled: isVoiceXWTEnabled(),
+            label: entry.name,
+            address: entry.phoneNumber,
+            tooltip: entry.phoneNumber,
+            type: 'number',
+            key: uuidv4(),
+          } as DirectoryEntry),
+      ) ?? [] // Return an empty array if the contacts feature is disabled
+    );
+  };
+
+  useEffect(() => {
+    // Combine the configurable directory entries with contacts from the contacts feature
+    // Then sort the complete directory by name
+    setDirectory(
+      generateDirectoryEntries()
+        .concat(generateContactsEntries(false))
+        .concat(generateContactsEntries(true))
+        .sort((a: DirectoryEntry, b: DirectoryEntry) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1)),
+    );
+  }, [myContactList, sharedContactList]);
 
   const onTransferEntryClick = (entry: DirectoryEntry, transferOptions: TransferClickPayload) => {
     const defaultFromNumber = Manager.getInstance().serviceConfiguration.outbound_call_flows.default.caller_id;
@@ -64,11 +97,7 @@ const ExternalDirectoryTab = (props: OwnProps) => {
     }
   };
 
-  useEffect(() => {
-    generateDirectoryEntries();
-  }, [directory]);
-
-  return <DirectoryTab entries={generateDirectoryEntries()} isLoading={false} onTransferClick={onTransferEntryClick} />;
+  return <DirectoryTab entries={directory} isLoading={false} onTransferClick={onTransferEntryClick} />;
 };
 
 export default withTaskContext(ExternalDirectoryTab);
