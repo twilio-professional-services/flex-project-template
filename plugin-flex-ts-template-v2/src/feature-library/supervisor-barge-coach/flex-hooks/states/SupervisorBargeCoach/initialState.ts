@@ -14,6 +14,8 @@ const initialState: SupervisorBargeCoachState = {
   agentAssistanceSyncSubscribed: false,
   enableAgentAssistanceAlerts: true,
   agentAssistanceArray: [],
+  chatBarge: {},
+  interactionParticipants: 0,
 };
 
 export default initialState;

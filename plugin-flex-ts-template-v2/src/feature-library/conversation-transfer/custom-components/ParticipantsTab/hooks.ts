@@ -1,6 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 import { ITask } from '@twilio/flex-ui';
+import { useDispatch } from 'react-redux';
 
+import { Actions } from '../../../supervisor-barge-coach/flex-hooks/states/SupervisorBargeCoach';
 import { ParticipantDetails } from '../../types/ParticipantDetails';
 import { InvitedParticipantDetails, InvitedParticipants } from '../../types/InvitedParticipantDetails';
 import { ConversationState } from '../../../../types/conversations';
@@ -53,14 +55,28 @@ const getCBMParticipantsWrapper = async (task: ITask, flexInteractionChannelSid:
   return [];
 };
 
+export const useParticipantCountEffect = (task: ITask, dispatch: ReturnType<typeof useDispatch>) => {
+  const fetchParticipants = async () => {
+    const flexInteractionChannelSid = task?.attributes?.flexInteractionChannelSid;
+    const participants = await task.getParticipants(flexInteractionChannelSid);
+
+    const count = participants.length;
+    dispatch(Actions.setBargeCoachStatus({ interactionParticipants: count }));
+  };
+
+  if (task) {
+    fetchParticipants(); // Call the async function
+  }
+};
+
 // we use a mix of conversation participants (MBxxx sids) and Interactions Participants (UTxxx) to build what we need
+
 export const getUpdatedParticipantDetails = async (
   task: Flex.ITask,
   conversation: ConversationState,
   participantDetails: ParticipantDetails[],
 ) => {
   const myIdentity = manager.conversationsClient?.user?.identity;
-
   const flexInteractionChannelSid = task?.attributes?.flexInteractionChannelSid;
   if (!flexInteractionChannelSid) return [];
 
@@ -72,28 +88,23 @@ export const getUpdatedParticipantDetails = async (
   if (participantDetailsUpToDateCheck(conversation, participantDetails)) return participantDetails;
 
   const participants: ParticipantDetails[] = [];
-
-  const intertactionParticipants: any[] = await getCBMParticipantsWrapper(task, flexInteractionChannelSid);
-
-  if (!intertactionParticipants || !conversation?.participants) return participantDetails;
-
+  const interactionParticipants: any[] = await getCBMParticipantsWrapper(task, flexInteractionChannelSid);
   const conversationParticipants = Array.from(conversation?.participants.values());
 
-  console.log('getParticipantDetails', conversationParticipants, intertactionParticipants);
-
+  // Add interaction participants to the array
   conversationParticipants.forEach((conversationParticipant) => {
-    const intertactionParticipant = intertactionParticipants.find(
+    const interactionParticipant = interactionParticipants.find(
       (participant) => participant.mediaProperties?.sid === conversationParticipant.source.sid,
     );
 
-    if (intertactionParticipant) {
+    if (interactionParticipant) {
       const friendlyName =
         conversationParticipant.friendlyName ||
-        intertactionParticipant.mediaProperties?.messagingBinding?.address ||
-        intertactionParticipant.mediaProperties?.identity;
-      const participantType = intertactionParticipant.type;
+        interactionParticipant.mediaProperties?.messagingBinding?.address ||
+        interactionParticipant.mediaProperties?.identity;
+      const participantType = interactionParticipant.type;
       const isMe = conversationParticipant.source.identity === myIdentity;
-      const interactionParticipantSid = intertactionParticipant.participantSid;
+      const interactionParticipantSid = interactionParticipant.participantSid;
       const conversationMemberSid = conversationParticipant.source.sid;
 
       participants.push({

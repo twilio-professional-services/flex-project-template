@@ -2,12 +2,13 @@ import * as Flex from '@twilio/flex-ui';
 import { useState, useEffect } from 'react';
 import { Stack } from '@twilio-paste/core/stack';
 import { ConversationState, styled, Actions } from '@twilio/flex-ui';
+import { useDispatch } from 'react-redux';
 
 import { Participants } from './Participants.tsx/Participants';
 import { InvitedParticipants } from './InvitedParticipants/InvitedParticipants';
 import { ParticipantDetails } from '../../types/ParticipantDetails';
 import { InvitedParticipantDetails } from '../../types/InvitedParticipantDetails';
-import { getUpdatedParticipantDetails, getUpdatedInvitedParticipantDetails } from './hooks';
+import { getUpdatedParticipantDetails, getUpdatedInvitedParticipantDetails, useParticipantCountEffect } from './hooks';
 import {
   CancelChatParticipantInviteActionPayload,
   RemoveChatParticipantActionPayload,
@@ -27,16 +28,17 @@ interface ParticipantsTabProps {
 }
 
 export const ParticipantsTab = ({ task, conversation }: ParticipantsTabProps) => {
+  const dispatch = useDispatch();
   const [participantDetails, setParticipantDetails] = useState<ParticipantDetails[]>([]);
   const [invitedParticipantDetails, setInvitedParticipantDetails] = useState<InvitedParticipantDetails[]>([]);
 
+  useParticipantCountEffect(task, dispatch);
   useEffect(() => {
     const updateParticipants = () => {
       getUpdatedParticipantDetails(task, conversation, participantDetails).then((participantDetails) => {
         if (participantDetails) setParticipantDetails(participantDetails);
       });
     };
-
     updateParticipants();
     setInvitedParticipantDetails(getUpdatedInvitedParticipantDetails(conversation));
   }, [conversation]);

@@ -27,6 +27,11 @@ export enum StringTemplates {
   PanelBarge = 'PSBargeCoachMonitorPanelBarge',
   PanelCoaching = 'PSBargeCoachMonitorPanelCoaching',
   PanelMonitoring = 'PSBargeCoachMonitorPanelMonitoring',
+  Join = 'PSChatBargeJoin',
+  Joining = 'PSChatBargeJoining',
+  Leave = 'PSChatBargeLeave',
+  Leaving = 'PSChatBargeLeaving',
+  TaskAssignedToYou = 'PSTaskAssignedToYou',
 }
 
 export const stringHook = () => ({
@@ -52,6 +57,11 @@ export const stringHook = () => ({
     [StringTemplates.PanelBarge]: '{{supervisor}} has joined',
     [StringTemplates.PanelCoaching]: '{{supervisor}} is coaching',
     [StringTemplates.PanelMonitoring]: '{{supervisor}} is monitoring',
+    [StringTemplates.Join]: 'Join',
+    [StringTemplates.Joining]: 'Joining',
+    [StringTemplates.Leave]: 'Leave',
+    [StringTemplates.Leaving]: 'Leaving',
+    [StringTemplates.TaskAssignedToYou]: 'Manage this task within the agent view',
   },
   'es-ES': esES,
   'es-MX': esMX,

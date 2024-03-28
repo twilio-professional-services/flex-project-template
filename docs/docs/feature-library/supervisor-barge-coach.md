@@ -22,8 +22,10 @@ There is a private toggle to enable/disable the agent's ability to see who is co
 ![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-4.gif)
 
 There is also a Supervisor Monitor Panel, which gives the supervisors the ability to see if other supervisors are monitoring, coaching, or have joined (barged) the call. \*\*Note that the private toggle feature does apply to this feature as well. If a Supervisor has private mode on, they will not show up in the Supervisor Monitor Panel
-
 ![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-5.gif)
+
+You are now able to barge into a chat/conversation by clicking the Join button when monitoring a live conversation. Click Leave to remove yourself from the conversation. You are able to type within the Monitor Task Panel and both the customer and agent will see your responses.
+![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-10.gif)
 
 We've also included Agent Assistance into this plugin suite. This adds a button to the agent's call canvas to ask for assistance.
 
