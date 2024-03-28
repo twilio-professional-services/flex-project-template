@@ -117,6 +117,28 @@ export const getUpdatedParticipantDetails = async (
     }
   });
 
+  // Add only conversation participants to the array
+  conversationParticipants.forEach((conversationParticipant) => {
+    const existingParticipant = participants.find(
+      (participant) => participant.conversationMemberSid === conversationParticipant.source.sid,
+    );
+
+    if (!existingParticipant) {
+      const friendlyName = conversationParticipant.friendlyName || conversationParticipant.source.identity || 'null';
+      const participantType = 'supervisor';
+      const isMe = conversationParticipant.source.identity === myIdentity;
+      const conversationMemberSid = conversationParticipant.source.sid;
+
+      participants.push({
+        friendlyName,
+        participantType,
+        isMe,
+        interactionParticipantSid: 'null',
+        conversationMemberSid,
+      });
+    }
+  });
+
   return participants;
 };
 
