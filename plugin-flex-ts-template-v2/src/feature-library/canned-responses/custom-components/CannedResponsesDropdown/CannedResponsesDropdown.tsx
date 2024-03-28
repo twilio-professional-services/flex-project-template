@@ -27,6 +27,7 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
   const menu = useMenuState({
     placement: 'top-start',
     wrap: 'horizontal',
+    modal: true,
   });
 
   useEffect(() => {
