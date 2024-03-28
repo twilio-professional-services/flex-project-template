@@ -1,15 +1,14 @@
-import { v4 as uuidv4 } from 'uuid';
 import { Manager } from '@twilio/flex-ui';
 
 import SyncClient from '../sdk-clients/sync/SyncClient';
 import { getFeatureFlags } from '../configuration';
 
-const AUDIT_MAP_PREFIX = 'AuditLog';
+const AUDIT_LIST_PREFIX = 'AuditLog';
 const { audit_log_ttl = 1209600 } = getFeatureFlags().common || {};
 
-const performSave = async (feature: string, key: string, data: any) => {
-  const map = await SyncClient.map(`${AUDIT_MAP_PREFIX}_${feature}`);
-  await map.set(key, data, { ttl: audit_log_ttl });
+const performSave = async (feature: string, data: any) => {
+  const list = await SyncClient.list(`${AUDIT_LIST_PREFIX}_${feature}`);
+  await list.push(data, { ttl: audit_log_ttl });
 };
 
 export const saveAuditEvent = async (feature: string, event: string, oldValue?: any, newValue?: any) => {
@@ -30,11 +29,10 @@ export const saveAuditEvent = async (feature: string, event: string, oldValue?: 
     }
   }
 
-  const key = uuidv4();
   try {
-    await performSave(feature, key, data);
+    await performSave(feature, data);
   } catch (error) {
     console.log('[AuditHelper] Retrying audit event save due to error.', error);
-    await performSave(feature, key, data);
+    await performSave(feature, data);
   }
 };
