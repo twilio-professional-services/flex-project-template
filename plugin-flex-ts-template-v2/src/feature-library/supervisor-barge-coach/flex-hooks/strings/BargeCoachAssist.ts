@@ -31,6 +31,7 @@ export enum StringTemplates {
   Joining = 'PSChatBargeJoining',
   Leave = 'PSChatBargeLeave',
   Leaving = 'PSChatBargeLeaving',
+  TaskAssignedToYou = 'PSTaskAssignedToYou',
 }
 
 export const stringHook = () => ({
@@ -60,6 +61,7 @@ export const stringHook = () => ({
     [StringTemplates.Joining]: 'Joining',
     [StringTemplates.Leave]: 'Leave',
     [StringTemplates.Leaving]: 'Leaving',
+    [StringTemplates.TaskAssignedToYou]: 'Manage this task within the agent view',
   },
   'es-ES': esES,
   'es-MX': esMX,

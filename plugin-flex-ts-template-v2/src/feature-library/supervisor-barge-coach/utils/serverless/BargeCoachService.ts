@@ -113,18 +113,6 @@ class BargeCoachService extends ApiService {
     }
   }
 
-  async workerPartOfConversation(conversationSid: string, myWorkerName: string): Promise<boolean> {
-    try {
-      const response = await this.#getChatParticipants(conversationSid);
-      return response.result.data.some((participant: any) => participant.identity === myWorkerName);
-    } catch (error) {
-      if (error instanceof TypeError) {
-        error.message = 'Unable to reach host';
-      }
-      return false;
-    }
-  }
-
   #updateParticipantBargeCoach = async (
     conferenceSid: string,
     participantSid: string,
@@ -203,28 +191,6 @@ class BargeCoachService extends ApiService {
         body: this.buildBody(encodedParams),
       },
     ).then((response): RemoveWorkerParticipant => {
-      return {
-        ...response,
-      };
-    });
-  };
-
-  #getChatParticipants = async (conversationSid: string): Promise<GetParticipants> => {
-    const manager = Flex.Manager.getInstance();
-
-    const encodedParams: EncodedParams = {
-      Token: encodeURIComponent(manager.user.token),
-      conversationSid: encodeURIComponent(conversationSid),
-    };
-
-    return this.fetchJsonWithReject<GetParticipants>(
-      `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/conversations/get-participants`,
-      {
-        method: 'post',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: this.buildBody(encodedParams),
-      },
-    ).then((response): GetParticipants => {
       return {
         ...response,
       };
