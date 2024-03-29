@@ -45,7 +45,7 @@ export const SupervisorChatBargeButton = ({ task }: SupervisorChatBargeProps) =>
     }
     if (chatBargeStatus) {
       await BargeCoachService.removeWorkerParticipant(conversationSid, myWorkerName);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // Also remove/clean up redux to account for the worker removal
       const { [teamViewTaskSID]: value, ...newChatBargeState } = chatBarge;
       dispatch(Actions.setBargeCoachStatus({ chatBarge: newChatBargeState }));
       setChatBargeStatus(false);
@@ -54,7 +54,7 @@ export const SupervisorChatBargeButton = ({ task }: SupervisorChatBargeProps) =>
       localStorage.setItem('chatBarge', JSON.stringify(newChatBargeState));
     } else {
       await BargeCoachService.inviteWorkerParticipant(conversationSid, myWorkerName);
-      const newChatBargeState = { ...chatBarge, [teamViewTaskSID]: true };
+      const newChatBargeState = { ...chatBarge, [teamViewTaskSID]: conversationSid };
       dispatch(Actions.setBargeCoachStatus({ chatBarge: newChatBargeState }));
       setChatBargeStatus(true);
       // Storing chatBarge to browser cache to help if a refresh happens
