@@ -16,15 +16,16 @@
   "dependencies": {
     "@hookform/resolvers": "^2.9.10",
     "@reduxjs/toolkit": "^1.9.1",
-    "@twilio-paste/core": "^17.0.0",
-    "@twilio-paste/icons": "^9.3.1",
+    "@twilio-paste/core": "^20.11.0",
+    "@twilio-paste/icons": "^12.4.0",
     "axios": "^1.6.2",
     "emoji-picker-react": "^4.4.7",
     "env-cmd": "^10.1.0",
+    "eslint-config-next": "^13.5.6",
     "next": "^13.5.6",
     "prop-types": "^15.7.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
     "react-icons": "^4.7.1",
     "react-query": "^3.39.2",
@@ -35,7 +36,6 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.33",
-    "@types/twilio": "^3.19.3",
     "@typescript-eslint/parser": "^6.7.0",
     "eslint": "^7.32.0",
     "typescript": "^4.6.4"
