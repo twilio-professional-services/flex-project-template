@@ -1,6 +1,5 @@
-import { Manager, ConversationState } from '@twilio/flex-ui';
+import { Manager } from '@twilio/flex-ui';
 
-import { InvitedParticipants } from '../types/InvitedParticipantDetails';
 import { ParticipantInviteType } from '../types/ParticipantInvite';
 import ConversationsService from '../../../utils/serverless/Conversations/ConversationsService';
 
@@ -53,9 +52,4 @@ export const removeInvitedParticipant = async (conversationSid: string, currentA
     } catch (error) {
       console.log('Error', error, conversationSid);
     }
-};
-
-export const countOfOutstandingInvitesForConversation = (conversation: ConversationState.ConversationState): number => {
-  const { invites = undefined } = (conversation?.source?.attributes as any as InvitedParticipants) || {};
-  return Object.keys(invites || {}).length;
 };

@@ -4,7 +4,7 @@ import { ITask, TaskHelper, StateHelper } from '@twilio/flex-ui';
 import { isColdTransferEnabled, isMultiParticipantEnabled } from '../../config';
 import TransferButton from '../../custom-components/TransferButton';
 import LeaveChatButton from '../../custom-components/LeaveChatButton';
-import { countOfOutstandingInvitesForConversation } from '../../helpers/inviteTracker';
+import { ConversationsHelper } from '../../../../utils/helpers';
 import { FlexComponent } from '../../../../types/feature-loader';
 
 interface Props {
@@ -28,7 +28,8 @@ export const componentHook = function addConvTransferButtons(flex: typeof Flex) 
       const conversationState = StateHelper.getConversationStateForTask(task);
       if (
         conversationState &&
-        (conversationState.participants.size > 2 || countOfOutstandingInvitesForConversation(conversationState))
+        (conversationState.participants.size > 2 ||
+          ConversationsHelper.countOfOutstandingInvitesForConversation(conversationState))
       ) {
         return true;
       }
