@@ -3,7 +3,7 @@ import { Button } from '@twilio-paste/core/button';
 import { Switch } from '@twilio-paste/core/switch';
 import { Flex } from '@twilio-paste/core/flex';
 import { Input } from '@twilio-paste/core/input';
-import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon';
+import { SkipBackIcon } from '@twilio-paste/icons/esm/SkipBackIcon';
 import { templates } from '@twilio/flex-ui';
 
 import { WorkerChannelCapacityResponse } from '../../../../utils/serverless/TaskRouter/TaskRouterService';
@@ -102,7 +102,7 @@ export default function CapacityChannel(props: OwnProps) {
       {changed && (
         <Flex margin="space30">
           <Button variant="destructive_icon" disabled={props.isSaving} size="reset" onClick={reset}>
-            <DeleteIcon decorative={false} title={templates[StringTemplates.RestorePreviousValue]()} />
+            <SkipBackIcon decorative={false} title={templates[StringTemplates.RestorePreviousValue]()} />
           </Button>
         </Flex>
       )}

@@ -16,7 +16,9 @@ This feature provides the following functionality:
 
 ## flex-user-experience
 
-![alt text](/img/features/enhanced-crm-container/flex-user-experience-enhanced-crm-container.gif)
+Below is a demonstration showing the CRM container maintained for outbound callbacks, as well as the extensible tabbed interface (using canned responses as an example).
+
+![Enhanced CRM Container demo](/img/features/enhanced-crm-container/flex-user-experience-enhanced-crm-container.gif)
 
 ## setup and dependencies
 
