@@ -93,7 +93,7 @@ class CallbackService extends ApiService {
       }
     } else {
       Flex.Notifications.showNotification(CallbackNotification.OutboundDialingNotEnabled);
-      throw new Error('Oubound dialing is not enabled');
+      throw new Error('Outbound dialing is not enabled');
     }
     return task;
   }
