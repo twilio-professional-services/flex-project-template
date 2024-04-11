@@ -140,7 +140,7 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
           </Box>
         )}
 
-        {callBackData.transcriptText && !callBackData.isDeleted && (
+        {callBackData?.transcriptText && !callBackData.isDeleted && (
           <Box element="C_AND_V_CONTENT_BOX">
             <Heading element="C_AND_V_CONTENT_HEADING" as="h4" variant="heading40">
               <Template source={templates[StringTemplates.VoicemailTranscript]} />
