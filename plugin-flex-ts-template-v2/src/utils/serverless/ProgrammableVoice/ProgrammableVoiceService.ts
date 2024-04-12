@@ -5,7 +5,7 @@
 
 */
 
-import ApiService from '../../../utils/serverless/ApiService';
+import ApiService from '../ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedCall, FetchedConferenceParticipant } from '../../../types/serverless/twilio-api';
 
@@ -19,22 +19,47 @@ export interface ParticipantResponse {
   participantsResponse: FetchedConferenceParticipant;
 }
 
-export interface RemoveParticipantResponse {
+export interface GenericSuccessResponse {
   success: boolean;
 }
 
-class ConferenceService extends ApiService {
-  _toggleParticipantHold = async (conference: string, participantSid: string, hold: boolean): Promise<string> => {
+class ProgrammableVoiceService extends ApiService {
+  holdUrl = '';
+
+  startColdTransfer = async (callSid: string, to: string, from?: string): Promise<boolean> => {
+    const { success } = await this._startColdTransfer(callSid, to, from);
+    return success;
+  };
+
+  _startColdTransfer = async (callSid: string, to: string, from?: string): Promise<any> => {
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(this.manager.store.getState().flex.session.ssoTokenPayload.token),
+      callSid: encodeURIComponent(callSid),
+      to: encodeURIComponent(to),
+      from: from ? encodeURIComponent(from) : '',
+    };
+
+    return this.fetchJsonWithReject<GenericSuccessResponse>(
+      `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/cold-transfer`,
+      {
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      },
+    );
+  };
+
+  _toggleMuteParticipant = async (conferenceSid: string, participantSid: string, muted: boolean): Promise<string> => {
     return new Promise((resolve, reject) => {
       const encodedParams: EncodedParams = {
-        conference: encodeURIComponent(conference),
+        conference: encodeURIComponent(conferenceSid),
         participant: encodeURIComponent(participantSid),
-        hold: encodeURIComponent(hold),
+        muted: encodeURIComponent(muted),
         Token: encodeURIComponent(this.manager.user.token),
       };
 
       this.fetchJsonWithReject<ParticipantResponse>(
-        `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/hold-participant`,
+        `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/mute-participant`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -42,14 +67,22 @@ class ConferenceService extends ApiService {
         },
       )
         .then((response: ParticipantResponse) => {
-          console.log(`${hold ? 'Hold' : 'Unhold'} successful for participant`, participantSid);
+          console.log(`${muted ? 'Muted' : 'Unmuted'} successful for participant`, participantSid);
           resolve(response.participantsResponse.callSid);
         })
         .catch((error) => {
-          console.error(`Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`, error);
+          console.error(`Error ${muted ? 'muting' : 'un-muting'} participant ${participantSid}\r\n`, error);
           reject(error);
         });
     });
+  };
+
+  muteParticipant = async (conference: string, participantSid: string): Promise<string> => {
+    return this._toggleMuteParticipant(conference, participantSid, true);
+  };
+
+  unmuteParticipant = async (conference: string, participantSid: string): Promise<string> => {
+    return this._toggleMuteParticipant(conference, participantSid, false);
   };
 
   setEndConferenceOnExit = async (
@@ -112,6 +145,38 @@ class ConferenceService extends ApiService {
     });
   };
 
+  _toggleParticipantHold = async (conference: string, participantSid: string, hold: boolean): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const encodedParams: EncodedParams = {
+        conference: encodeURIComponent(conference),
+        participant: encodeURIComponent(participantSid),
+        hold: encodeURIComponent(hold),
+        Token: encodeURIComponent(this.manager.user.token),
+      };
+
+      if (hold && this.holdUrl) {
+        encodedParams.holdUrl = encodeURIComponent(this.holdUrl);
+      }
+
+      this.fetchJsonWithReject<ParticipantResponse>(
+        `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/hold-participant`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: this.buildBody(encodedParams),
+        },
+      )
+        .then((response: ParticipantResponse) => {
+          console.log(`${hold ? 'Hold' : 'Unhold'} successful for participant`, participantSid);
+          resolve(response.participantsResponse.callSid);
+        })
+        .catch((error) => {
+          console.error(`Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`, error);
+          reject(error);
+        });
+    });
+  };
+
   holdParticipant = async (conference: string, participantSid: string): Promise<string> => {
     return this._toggleParticipantHold(conference, participantSid, true);
   };
@@ -128,7 +193,7 @@ class ConferenceService extends ApiService {
         Token: encodeURIComponent(this.manager.user.token),
       };
 
-      this.fetchJsonWithReject<RemoveParticipantResponse>(
+      this.fetchJsonWithReject<GenericSuccessResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/remove-participant`,
         {
           method: 'POST',
@@ -136,7 +201,7 @@ class ConferenceService extends ApiService {
           body: this.buildBody(encodedParams),
         },
       )
-        .then((_response: RemoveParticipantResponse) => {
+        .then((_response: GenericSuccessResponse) => {
           console.log(`Participant ${participantSid} removed from conference`);
           resolve(participantSid);
         })
@@ -174,4 +239,4 @@ class ConferenceService extends ApiService {
   };
 }
 
-export default new ConferenceService();
+export default new ProgrammableVoiceService();
