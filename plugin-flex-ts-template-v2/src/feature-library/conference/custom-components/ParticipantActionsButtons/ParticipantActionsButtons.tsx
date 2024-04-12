@@ -14,23 +14,20 @@ import AppState from '../../../../types/manager/AppState';
 import { StringTemplates } from '../../flex-hooks/strings/Conference';
 
 const ActionsContainer = styled('div')`
-  min-width: 88px;
-  margin-top: 10px;
+  margin-top: 0.75rem;
   button {
-    width: 36px;
-    height: 36px;
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
   }
 `;
 
 const ActionsContainerListItem = styled('div')`
-  min-width: 88px;
+  display: flex;
+  -moz-box-flex: 0;
+  flex-grow: 0;
   button {
-    width: 32px;
-    height: 32px;
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
   }
 `;
 
