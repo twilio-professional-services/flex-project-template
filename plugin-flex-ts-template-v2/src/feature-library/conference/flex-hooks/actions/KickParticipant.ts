@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
-import ConferenceService from '../../utils/ConferenceService';
+import ProgrammableVoiceService from '../../../../utils/serverless/ProgrammableVoice/ProgrammableVoiceService';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
@@ -24,7 +24,7 @@ export const actionHook = function handleKickConferenceParticipant(flex: typeof 
       const participantSid = targetSid;
 
       console.log(`Removing participant ${participantSid} from conference`);
-      await ConferenceService.removeParticipant(conference, participantSid);
+      await ProgrammableVoiceService.removeParticipant(conference, participantSid);
     }
   });
 };

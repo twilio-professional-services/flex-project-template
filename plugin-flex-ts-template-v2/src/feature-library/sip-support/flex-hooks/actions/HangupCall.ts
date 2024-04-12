@@ -6,7 +6,7 @@ import {
   getLocalParticipantForTask,
   isWorkerUsingWebRTC,
 } from '../../helpers/CallControlHelper';
-import CallControlService from '../../helpers/CallControlService';
+import ProgrammableVoiceService from '../../../../utils/serverless/ProgrammableVoice/ProgrammableVoiceService';
 
 export const actionEvent = FlexActionEvent.replace;
 export const actionName = FlexAction.HangupCall;
@@ -38,7 +38,7 @@ export const actionHook = function handleSipHangup(flex: typeof Flex, _manager: 
     }
 
     // Hangup worker leg
-    await CallControlService.removeParticipant(conferenceSid, workerCallSid);
+    await ProgrammableVoiceService.removeParticipant(conferenceSid, workerCallSid);
     console.log('SIP Support - HangUp for worker leg completed');
   });
 };
