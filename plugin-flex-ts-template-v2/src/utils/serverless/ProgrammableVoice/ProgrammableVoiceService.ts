@@ -24,6 +24,8 @@ export interface GenericSuccessResponse {
 }
 
 class ProgrammableVoiceService extends ApiService {
+  holdUrl = '';
+
   startColdTransfer = async (callSid: string, to: string, from?: string): Promise<boolean> => {
     const { success } = await this._startColdTransfer(callSid, to, from);
     return success;
@@ -83,34 +85,6 @@ class ProgrammableVoiceService extends ApiService {
     return this._toggleMuteParticipant(conference, participantSid, false);
   };
 
-  _toggleParticipantHold = async (conference: string, participantSid: string, hold: boolean): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        conference: encodeURIComponent(conference),
-        participant: encodeURIComponent(participantSid),
-        hold: encodeURIComponent(hold),
-        Token: encodeURIComponent(this.manager.user.token),
-      };
-
-      this.fetchJsonWithReject<ParticipantResponse>(
-        `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/hold-participant`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: this.buildBody(encodedParams),
-        },
-      )
-        .then((response: ParticipantResponse) => {
-          console.log(`${hold ? 'Hold' : 'Unhold'} successful for participant`, participantSid);
-          resolve(response.participantsResponse.callSid);
-        })
-        .catch((error) => {
-          console.error(`Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`, error);
-          reject(error);
-        });
-    });
-  };
-
   setEndConferenceOnExit = async (
     conference: string,
     participantSid: string,
@@ -166,6 +140,38 @@ class ProgrammableVoiceService extends ApiService {
         })
         .catch((error) => {
           console.log('There is an error while adding participan', error);
+          reject(error);
+        });
+    });
+  };
+
+  _toggleParticipantHold = async (conference: string, participantSid: string, hold: boolean): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const encodedParams: EncodedParams = {
+        conference: encodeURIComponent(conference),
+        participant: encodeURIComponent(participantSid),
+        hold: encodeURIComponent(hold),
+        Token: encodeURIComponent(this.manager.user.token),
+      };
+
+      if (hold && this.holdUrl) {
+        encodedParams.holdUrl = encodeURIComponent(this.holdUrl);
+      }
+
+      this.fetchJsonWithReject<ParticipantResponse>(
+        `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/programmable-voice/hold-participant`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: this.buildBody(encodedParams),
+        },
+      )
+        .then((response: ParticipantResponse) => {
+          console.log(`${hold ? 'Hold' : 'Unhold'} successful for participant`, participantSid);
+          resolve(response.participantsResponse.callSid);
+        })
+        .catch((error) => {
+          console.error(`Error ${hold ? 'holding' : 'unholding'} participant ${participantSid}\r\n`, error);
           reject(error);
         });
     });
