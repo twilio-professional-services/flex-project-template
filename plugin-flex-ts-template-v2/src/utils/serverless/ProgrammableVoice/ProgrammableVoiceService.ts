@@ -24,7 +24,18 @@ export interface GenericSuccessResponse {
 }
 
 class ProgrammableVoiceService extends ApiService {
-  holdUrl = '';
+  #holdUrl = '';
+
+  get holdUrl(): string {
+    return this.#holdUrl;
+  }
+
+  set holdUrl(holdUrl: string) {
+    if (Boolean(this.#holdUrl)) {
+      console.warn('[ProgrammableVoiceService] holdUrl is being overwritten.');
+    }
+    this.#holdUrl = holdUrl;
+  }
 
   startColdTransfer = async (callSid: string, to: string, from?: string): Promise<boolean> => {
     const { success } = await this._startColdTransfer(callSid, to, from);

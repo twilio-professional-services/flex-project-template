@@ -13,21 +13,24 @@ import {
 import AppState from '../../../../types/manager/AppState';
 import { StringTemplates } from '../../flex-hooks/strings/Conference';
 
-const ActionsContainer = styled('div')`
-  margin-top: 0.75rem;
+interface ThemeOnlyProps {
+  theme?: any;
+}
+
+const ActionsContainer = styled('div')<ThemeOnlyProps>`
+  margin-top: ${(props) => props.theme.tokens.spacings.space40};
   button {
-    margin-left: 0.25rem;
-    margin-right: 0.25rem;
+    margin-left: ${(props) => props.theme.tokens.spacings.space20};
+    margin-right: ${(props) => props.theme.tokens.spacings.space20};
   }
 `;
 
-const ActionsContainerListItem = styled('div')`
+const ActionsContainerListItem = styled('div')<ThemeOnlyProps>`
   display: flex;
-  -moz-box-flex: 0;
   flex-grow: 0;
   button {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
+    margin-left: ${(props) => props.theme.tokens.spacings.space30};
+    margin-right: ${(props) => props.theme.tokens.spacings.space30};
   }
 `;
 
