@@ -34,7 +34,7 @@ class InternalCallService extends ApiService {
 
       const encodedParams = {
         taskSid,
-        Token: encodeURIComponent(this.manager.store.getState().flex.session.ssoTokenPayload.token),
+        Token: encodeURIComponent(this.manager.user.token),
       };
 
       this.fetchJsonWithReject(

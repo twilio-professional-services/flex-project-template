@@ -17,7 +17,7 @@ class ChatToVideoService extends ApiService {
   generateVideoCode = async (taskSid: string): Promise<GenerateCodeReponse> => {
     return new Promise((resolve, reject) => {
       const encodedParams: EncodedParams = {
-        Token: encodeURIComponent(this.manager.store.getState().flex.session.ssoTokenPayload.token),
+        Token: encodeURIComponent(this.manager.user.token),
         taskSid: encodeURIComponent(taskSid),
       };
 
@@ -42,7 +42,7 @@ class ChatToVideoService extends ApiService {
   completeRoom = async (roomSid: string): Promise<CompleteRoomReponse> => {
     return new Promise((resolve, reject) => {
       const encodedParams: EncodedParams = {
-        Token: encodeURIComponent(this.manager.store.getState().flex.session.ssoTokenPayload.token),
+        Token: encodeURIComponent(this.manager.user.token),
         roomSid: encodeURIComponent(roomSid),
       };
 
