@@ -5,12 +5,12 @@ exports.handler = async (context, event, callback) => {
   console.log('PCS >> Incoming >>', event);
 
   const twiml = new Twilio.twiml.VoiceResponse();
-  // twiml.say('This is the survey.');
 
-  let { queueName, callSid, taskSid, surveyKey, Digits, questionIndex, surveyTaskSid, attributes } = event;
+  const { queueName, callSid, taskSid, surveyKey, Digits } = event;
+  let { questionIndex, surveyTaskSid, attributes } = event;
 
-  questionIndex = parseInt(questionIndex);
-  const digits = parseInt(Digits);
+  questionIndex = parseInt(questionIndex, 10);
+  const digits = parseInt(Digits, 10);
   console.log(`attributes: ${attributes}`);
   attributes = attributes ? JSON.parse(attributes) : { conversations: {} };
   console.log('attributes 2:', attributes);
@@ -43,17 +43,18 @@ exports.handler = async (context, event, callback) => {
   if (questionIndex === 0) {
     twiml.say(survey.message_intro);
 
-    let conversations = {};
-    conversations.conversation_id = taskSid;
-    conversations.queue = queueName;
-    conversations.virtual = 'Yes';
-    conversations.abandoned = 'Yes';
-    conversations.ivr_time = 0;
-    conversations.talk_time = 0;
-    conversations.ring_time = 0;
-    conversations.queue_time = 0;
-    conversations.wrap_up_time = 0;
-    conversations.kind = 'Survey';
+    const conversations = {
+      conversation_id: taskSid,
+      queue: queueName,
+      virtual: 'Yes',
+      abandoned: 'Yes',
+      ivr_time: 0,
+      talk_time: 0,
+      ring_time: 0,
+      queue_time: 0,
+      wrap_up_time: 0,
+      kind: 'Survey',
+    };
 
     attributes.conversations = conversations;
 
@@ -99,8 +100,7 @@ exports.handler = async (context, event, callback) => {
 
     twiml.say(survey.message_end);
   } else {
-    // TODO: validate questionIndex
-    var question = survey.questions[parseInt(questionIndex)];
+    const question = survey.questions[parseInt(questionIndex, 10)];
     twiml.say(question.prompt);
     const nextQuestion = questionIndex + 1;
 

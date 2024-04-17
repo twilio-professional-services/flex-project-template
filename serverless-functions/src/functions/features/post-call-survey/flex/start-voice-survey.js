@@ -23,12 +23,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     // UPDATE: Rethink serverless wrappers #492
     const result = await twilioExecute(context, async (client) => {
-      try {
-        return await client.calls(callSid).update(params);
-      } catch (error) {
-        // Re-throw the error for the retry handler to catch
-        throw error;
-      }
+      return client.calls(callSid).update(params);
     });
 
     if (result.success) {
