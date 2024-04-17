@@ -1,20 +1,12 @@
+/* eslint-disable no-restricted-syntax */
 import { MapItem } from './MapItem';
-
-export interface IRuleDefinition {
-  queue_name: string;
-  survey_key: string;
-  active: boolean;
-}
-
-export class RuleDefinition implements IRuleDefinition {
-  queue_name: string = '';
-  survey_key: string = '';
-  active: boolean = false;
-}
+import { IRuleDefinition, RuleDefinition } from './RuleDefinition';
 
 export class RuleItem implements MapItem {
   data: IRuleDefinition;
+
   key: string;
+
   descriptor?: {
     created_by?: string | undefined;
     date_expires?: string | undefined;

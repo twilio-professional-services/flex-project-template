@@ -1,14 +1,14 @@
-import { ISurveyDefinition } from "./Survey";
+import { ISurveyDefinition } from './SurveyDefinition';
 
 export const ExampleSurveyDefinition1: ISurveyDefinition = {
-  name: "Some survey",
-  last_updated_by: "System",
-  message_intro: "yo yo",
+  name: 'Some survey',
+  last_updated_by: 'System',
+  message_intro: 'yo yo',
   questions: [
     {
-      label: "NPS",
+      label: 'NPS',
       prompt: "Who's your daddy?",
-      answers: "",
+      answers: '',
       answer_options: {
         0: true,
         1: false,
@@ -23,9 +23,9 @@ export const ExampleSurveyDefinition1: ISurveyDefinition = {
       },
     },
     {
-      label: "CSAT",
+      label: 'CSAT',
       prompt: "Who's your daddy?",
-      answers: "",
+      answers: '',
       answer_options: {
         0: true,
         1: true,
@@ -40,18 +40,18 @@ export const ExampleSurveyDefinition1: ISurveyDefinition = {
       },
     },
   ],
-  message_end: "bye bye",
+  message_end: 'bye bye',
 };
 
 export const ExampleSurveyDefinition2: ISurveyDefinition = {
-  name: "Some survey",
-  last_updated_by: "System",
-  message_intro: "yo yo",
+  name: 'Some survey',
+  last_updated_by: 'System',
+  message_intro: 'yo yo',
   questions: [
     {
-      label: "",
-      prompt: "",
-      answers: "",
+      label: '',
+      prompt: '',
+      answers: '',
       answer_options: {
         0: true,
         1: false,
@@ -66,9 +66,9 @@ export const ExampleSurveyDefinition2: ISurveyDefinition = {
       },
     },
     {
-      label: "",
-      prompt: "",
-      answers: "",
+      label: '',
+      prompt: '',
+      answers: '',
       answer_options: {
         0: true,
         1: true,
@@ -83,5 +83,5 @@ export const ExampleSurveyDefinition2: ISurveyDefinition = {
       },
     },
   ],
-  message_end: "",
+  message_end: '',
 };
