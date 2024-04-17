@@ -31,6 +31,7 @@
   "devDependencies": {
     "axios": "^1.6.8",
     "eslint": "^8.37.0",
+    "eslint-config-twilio": "^2.0.0",
     "json5": "^2.2.3",
     "lodash": "^4.17.21",
     "npm-run-all2": "^6.0.6",
