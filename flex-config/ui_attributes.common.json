@@ -8,7 +8,13 @@
     "serverless_functions_domain": "<YOUR_SERVERLESS_DOMAIN>",
     "common": {
       "log_level": "info",
-      "teams": ["Blue Team", "Red Team", "Gold Team", "VIP Team"],
+      "audit_log_ttl": 1209600,
+      "teams": [
+        "Blue Team",
+        "Red Team",
+        "Gold Team",
+        "VIP Team"
+      ],
       "departments": [
         "General Management",
         "Marketing",
@@ -260,7 +266,8 @@
         "enabled_for_agents": false
       },
       "admin_ui": {
-        "enabled": true
+        "enabled": true,
+        "enable_audit_logging": true
       },
       "localization": {
         "enabled": false,
@@ -393,9 +400,14 @@
         "intake_region": "",
         "flush_timeout": 5000
       },
-      "contact_history": {
-        "enabled": false,
-        "max_contacts": 25
+      "contacts": {
+        "enabled": true,
+        "enable_recents": true,
+        "enable_personal": true,
+        "enable_shared": true,
+        "recent_days_to_keep": 14,
+        "shared_agent_editable": false,
+        "page_size": 10
       },
       "inline_media": {
         "enabled": true
@@ -413,9 +425,6 @@
           "side_nav_hover_background": "rgb(225, 227, 234)"
         },
         "component_theme_overrides": {}
-      },
-      "post_call_survey": {
-        "enabled": true
       }
     }
   }

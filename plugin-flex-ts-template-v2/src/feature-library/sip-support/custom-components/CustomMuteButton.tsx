@@ -2,7 +2,7 @@ import { IconButton, TaskHelper, ITask, templates } from '@twilio/flex-ui';
 import { useEffect, useState } from 'react';
 
 import { getConferenceSidFromTask, getLocalParticipantForTask } from '../helpers/CallControlHelper';
-import CallControlService from '../helpers/CallControlService';
+import ProgrammableVoiceService from '../../../utils/serverless/ProgrammableVoice/ProgrammableVoiceService';
 
 export interface OwnProps {
   task?: ITask;
@@ -48,11 +48,11 @@ const CustomMuteButton = (props: OwnProps) => {
     // during an active call, which means there will be no state in Redux
     // This should not occur generally but if it does this will resolve the UI mute state
     if (muted) {
-      CallControlService.unmuteParticipant(conferenceSid, participantCallSid)
+      ProgrammableVoiceService.unmuteParticipant(conferenceSid, participantCallSid)
         .then(() => setMuted(false))
         .finally(() => setPending(false));
     } else {
-      CallControlService.muteParticipant(conferenceSid, participantCallSid)
+      ProgrammableVoiceService.muteParticipant(conferenceSid, participantCallSid)
         .then(() => setMuted(true))
         .finally(() => setPending(false));
     }

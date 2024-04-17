@@ -18,6 +18,7 @@ This feature enables the replacement of the queue and worker transfer directorie
 It also enables the addition of an external directory, enabling the following behavior
 
 - present a list of external transfer numbers
+  - includes contacts from the `contacts` feature if enabled
   - each transfer number can independently be configured for warm or cold transfers
   - validation checks performed on transfer numbers with notifications of any validation failures
 
