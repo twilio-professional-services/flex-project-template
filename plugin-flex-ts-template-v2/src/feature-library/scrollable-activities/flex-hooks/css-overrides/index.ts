@@ -9,7 +9,7 @@ export const cssOverrideHook = (_flex: typeof Flex, _manager: Flex.Manager) => {
    * <CustomizationProvider baseTheme="default" elements={{
    *   "ACTIVITY_MENU": {
    *     overflowY: 'scroll',
-   *     maxHeight: '90vh',
+   *     maxHeight: 'calc(100vh - 68px)',
    *   }
    * }}>
    *
@@ -20,7 +20,7 @@ export const cssOverrideHook = (_flex: typeof Flex, _manager: Flex.Manager) => {
         '.Twilio-MainHeader-end': {
           "[data-paste-element='MENU']": {
             overflowY: 'scroll',
-            maxHeight: '90vh',
+            maxHeight: 'calc(100vh - 68px)', // Account for the menu being shifted 68px from the top of the viewport
           },
         },
       },

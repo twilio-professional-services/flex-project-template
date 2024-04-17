@@ -2,12 +2,13 @@
 sidebar_label: scrollable-activities
 title: scrollable-activities
 ---
+import ScrollableActivitiesScreenshot from '/img/features/scrollable-activities/scrollable-activities.gif';
 
 This feature will add a scrolling CSS config to the activities drop down. This is useful when a large number of activities have been created in the system.
 
 ## flex-user-experience
 
-![alt text](/img/features/scrollable-activities/flex-user-experience-scrollable-activities.gif)
+<img src={ScrollableActivitiesScreenshot} style={{width: 301}} />
 
 ## setup and dependencies
 

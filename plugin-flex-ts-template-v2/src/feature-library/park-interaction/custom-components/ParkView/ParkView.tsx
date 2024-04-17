@@ -1,62 +1,65 @@
 import { useEffect, useState } from 'react';
 import { Box } from '@twilio-paste/core/box';
-import { Manager, templates } from '@twilio/flex-ui';
+import { Manager, Notifications, templates } from '@twilio/flex-ui';
 import { Heading } from '@twilio-paste/core/heading';
 
-import SyncHelper from '../../utils/SyncHelper.js';
 import { StringTemplates } from '../../flex-hooks/strings';
 import ParkViewTable from './ParkViewTable';
 import { ParkedInteraction } from '../../utils/ParkInteractionService';
+import SyncClient, { getAllSyncMapItems } from '../../../../utils/sdk-clients/sync/SyncClient';
+import { UnparkInteractionNotification } from '../../flex-hooks/notifications';
 
-interface MapItem {
-  item: MapItemItem;
-}
-interface MapItemItem {
-  descriptor: MapItemDescriptor;
-  dateUpdated: Date;
-}
-
-export interface MapItemDescriptor {
+interface RecentInteraction {
   key: string;
-  date_created: Date;
-  date_updated: Date;
-  data: ParkedInteraction;
+  channel: string;
+  address?: string;
+  customerName?: string;
+  parkingDate: Date;
+  webhookSid: string;
 }
 
 const ParkView = () => {
-  const [recentInteractionsList, setRecentInteractionsList] = useState([]);
+  const [recentInteractionsList, setRecentInteractionsList] = useState<RecentInteraction[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [deletedMapItem, setDeletedMapItem] = useState('');
   const workerSid = Manager?.getInstance()?.workerClient?.sid || '';
 
   const getParkedInteractions = async () => {
     setIsLoaded(false);
-    const getSyncMapItems = await SyncHelper.getMapItems(`ParkedInteractions_${workerSid}`);
+    let getSyncMapItems;
+    try {
+      const map = await SyncClient.map(`ParkedInteractions_${workerSid}`);
+      getSyncMapItems = await getAllSyncMapItems(map);
+    } catch (error) {
+      console.error('Map getItems() failed', error);
+      Notifications.showNotification(UnparkInteractionNotification.UnparkListError, { message: error });
+    }
 
-    if (getSyncMapItems.length === 0) {
+    if (!getSyncMapItems || !getSyncMapItems.length) {
       setRecentInteractionsList([]);
       setIsLoaded(true);
       return;
     }
 
     const formattedSyncMapItems = getSyncMapItems
-      .filter((mapItem: MapItem) => {
+      .filter((mapItem) => {
         // Sometimes the item that was just deleted is still returned
         // So I included this fallback check
-        return mapItem.item.descriptor.key !== deletedMapItem;
+        return mapItem.key !== deletedMapItem;
       })
-      .map((mapItem: MapItem) => {
-        const data = mapItem.item.descriptor.data;
+      .map((mapItem) => {
+        const data = mapItem.data as ParkedInteraction;
         if (typeof data.taskAttributes === 'string') {
           data.taskAttributes = JSON.parse(data.taskAttributes);
         }
         let parkingDate;
-        if (mapItem.item.descriptor.date_created) {
-          parkingDate = new Date(mapItem.item.descriptor.date_created);
+        // We need to cast because descriptor is private
+        if ((mapItem as any).descriptor?.date_created) {
+          parkingDate = new Date((mapItem as any).descriptor.date_created);
         } else {
           // Bug: right after sync map item created, the date_created attribute is not available in the object
           // So we need to use the date_updated, which is the same initially
-          parkingDate = mapItem.item.dateUpdated;
+          parkingDate = mapItem.dateUpdated;
         }
 
         // Use TaskRouter channel name as the main descriptor (e.g. "Chat"), and if channelType is set too - append that for
@@ -67,7 +70,7 @@ const ParkView = () => {
         }
 
         return {
-          key: mapItem.item.descriptor.key,
+          key: mapItem.key,
           channel: channelDisplayText,
           address: data.taskAttributes.customers?.phone || data.taskAttributes.customers?.email,
           customerName: data.taskAttributes?.from,

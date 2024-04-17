@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
-import ConferenceService from '../../utils/ConferenceService';
+import ProgrammableVoiceService from '../../../../utils/serverless/ProgrammableVoice/ProgrammableVoiceService';
 import { isConferenceEnabledWithoutNativeXWT } from '../../config';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
@@ -19,6 +19,6 @@ export const actionHook = function handleHoldConferenceParticipant(flex: typeof 
     const conferenceSid = task.conference?.conferenceSid || task.attributes?.conference?.sid;
     abortFunction();
     console.log('Holding participant', participantSid);
-    await ConferenceService.holdParticipant(conferenceSid, participantSid);
+    await ProgrammableVoiceService.holdParticipant(conferenceSid, participantSid);
   });
 };

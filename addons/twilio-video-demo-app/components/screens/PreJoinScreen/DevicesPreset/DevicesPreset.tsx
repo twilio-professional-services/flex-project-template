@@ -335,7 +335,6 @@ export default function DevicesPreset({}: DevicesPresetProps) {
                   variant="destructive"
                   onClick={async () => await joinVideoClicked()}
                   loading={loading}
-                  style={{ background: "#F22F46" }}
                   disabled={preflightStatus !== "passed" || tokenStatus !== "success" || isFetching}
                 >
                   {joinButtonText()}

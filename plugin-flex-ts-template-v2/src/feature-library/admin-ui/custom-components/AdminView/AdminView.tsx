@@ -20,9 +20,14 @@ import { StringTemplates } from '../../flex-hooks/strings';
 import { AdminViewWrapper, FeatureCardWrapper } from './AdminView.Styles';
 import { getFeatureFlagsUser } from '../../../../utils/configuration';
 import FeatureCard from '../FeatureCard';
-import AdminUiService from '../../utils/AdminUiService';
-import { saveUserConfig, saveGlobalConfig, shouldShowFeature, featureCommon } from '../../utils/helpers';
-import { subscribe, unsubscribe, publishMessage, SyncStreamEvent } from '../../utils/sync-stream';
+import {
+  saveUserConfig,
+  saveGlobalConfig,
+  shouldShowFeature,
+  featureCommon,
+  getGlobalConfig,
+} from '../../utils/helpers';
+import { subscribe, unsubscribe, publishMessage, SyncStreamEvent } from '../../../../utils/sdk-clients/sync/SyncClient';
 import { AdminUiNotification } from '../../flex-hooks/notifications';
 import FeatureModal from '../FeatureModal';
 
@@ -37,15 +42,17 @@ const AdminView = () => {
   const [config, setConfig] = useState({} as any);
   const [globalConfig, setGlobalConfig] = useState({} as any);
   const [userConfig, setUserConfig] = useState({} as any);
+  const [syncStream, setSyncStream] = useState(null as any); // twilio-sync does not export the SyncStream type
 
   const strings = Manager.getInstance().strings as any;
+  const streamName = 'template-admin';
   const streamEvent = 'template-admin-update';
 
   useEffect(() => {
     initialize();
     return () => {
       Notifications.dismissNotificationById(AdminUiNotification.SAVE_DISABLED);
-      unsubscribe();
+      unsubscribe(syncStream);
     };
   }, []);
 
@@ -73,7 +80,7 @@ const AdminView = () => {
     setIsUpdatedByOtherUser(false);
     setIsUpdatedModalOpen(false);
     setIsLoading(true);
-    await subscribe(handleSyncMessage);
+    setSyncStream(await subscribe(streamName, handleSyncMessage));
     await reloadGlobalConfig();
     reloadUserConfig();
     setIsLoading(false);
@@ -81,7 +88,7 @@ const AdminView = () => {
 
   const reloadGlobalConfig = async () => {
     try {
-      const newGlobalConfig = (await AdminUiService.fetchUiAttributes()).configuration.custom_data || {};
+      const newGlobalConfig = (await getGlobalConfig())?.custom_data || {};
       setGlobalConfig(newGlobalConfig);
     } catch (error) {
       console.log('admin-ui: Unable to load global config', error);
@@ -110,7 +117,7 @@ const AdminView = () => {
       const saveResult = await saveGlobalConfig(feature, config, mergeFeature);
 
       if (saveResult) {
-        publishMessage({ event: streamEvent });
+        publishMessage(syncStream, { event: streamEvent });
         setGlobalConfig(saveResult);
         return true;
       }

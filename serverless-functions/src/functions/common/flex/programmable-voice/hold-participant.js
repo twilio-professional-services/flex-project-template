@@ -10,15 +10,18 @@ const requiredParameters = [
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    const { conference, participant, hold } = event;
+    const { conference, participant, hold, holdUrl } = event;
+
+    const updateOpts = {
+      hold: hold === 'true',
+    };
+
+    if (updateOpts.hold && Boolean(holdUrl)) {
+      updateOpts.holdUrl = holdUrl;
+    }
 
     const result = await twilioExecute(context, (client) =>
-      client
-        .conferences(conference)
-        .participants(participant)
-        .update({
-          hold: hold === 'true',
-        }),
+      client.conferences(conference).participants(participant).update(updateOpts),
     );
 
     const { data: participantsResponse, status } = result;
