@@ -1,26 +1,22 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Card,
-  Combobox,
-  Form,
-  FormControl,
-  Heading,
-  HelpText,
-  Paragraph,
-  Stack,
-  Switch,
-  Text,
-  useToaster,
-  Toaster,
-} from '@twilio-paste/core';
-
+import { Box } from '@twilio-paste/core/box';
+import { Button } from '@twilio-paste/core/button';
+import { ButtonGroup } from '@twilio-paste/core/button-group';
+import { Card } from '@twilio-paste/core/card';
+import { Combobox } from '@twilio-paste/core/combobox';
+import { Heading } from '@twilio-paste/core/heading';
+import { Paragraph } from '@twilio-paste/core/paragraph';
+import { Text } from '@twilio-paste/core/text';
+import { Stack } from '@twilio-paste/core/stack';
+import { Switch } from '@twilio-paste/core/switch';
+import { useToaster, Toaster } from '@twilio-paste/core/toast';
+import { HelpText } from '@twilio-paste/core/help-text';
+import { Form, FormControl } from '@twilio-paste/core/form';
 import { FC, useEffect, useState } from 'react';
-import { RuleItem } from '../../types/Rule';
+
+import { RuleItem } from '../../types/RuleItem';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import SurveyService from '../../utils/SurveyService';
-import { SurveyItem } from '../../types/Survey';
+import { SurveyItem } from '../../types/SurveyItem';
 
 export interface RuleEditorProps {
   rule: RuleItem;
@@ -51,8 +47,8 @@ const RuleEditor: FC<RuleEditorProps> = (props) => {
   }, [props.surveys, surveyName]);
 
   useEffect(() => {
-    setQueueHasError(queue_name === '' ? true : false);
-    setSurveyHasError(surveyName === '' ? true : false);
+    setQueueHasError(queue_name === '');
+    setSurveyHasError(surveyName === '');
     setIsDirty(
       queue_name !== props.rule.data.queue_name ||
         surveyName !== props.rule.data.survey_key ||
@@ -165,7 +161,7 @@ const RuleEditor: FC<RuleEditorProps> = (props) => {
                 onSelectedItemChange={(changes) => setSurveyName(changes.selectedItem)}
               />
               <HelpText variant="default" id="survey_name_help">
-                This is the survey that will be used for this queue {' - ' + survey_key}
+                This is the survey that will be used for this queue {` - ${survey_key}`}
               </HelpText>
             </FormControl>
 

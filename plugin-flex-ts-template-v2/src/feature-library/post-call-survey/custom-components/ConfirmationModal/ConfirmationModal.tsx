@@ -1,16 +1,8 @@
-import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalHeading,
-  ModalBody,
-  ModalFooter,
-  ModalFooterActions,
-  Spinner,
-} from "@twilio-paste/core";
-import { useUID } from "@twilio-paste/core/dist/uid-library";
-import { FC } from "react";
-import React from "react";
+import { Button } from '@twilio-paste/core/button';
+import { Modal, ModalHeading, ModalHeader, ModalBody, ModalFooter, ModalFooterActions } from '@twilio-paste/core/modal';
+import { Spinner } from '@twilio-paste/core/spinner';
+import { useUID } from '@twilio-paste/core/dist/uid-library';
+import React from 'react';
 
 export interface ConfirmationModalProps {
   isOpen: boolean;
@@ -23,17 +15,12 @@ export interface ConfirmationModalProps {
   handleCancelAction: () => void;
 }
 
-const ConfirmationModal: FC<ConfirmationModalProps> = (props) => {
+const ConfirmationModal: React.FC<ConfirmationModalProps> = (props) => {
   // Modal properties
   const modalHeadingID = useUID();
 
   return (
-    <Modal
-      ariaLabelledby={modalHeadingID}
-      isOpen={props.isOpen}
-      onDismiss={props.handleCancelAction}
-      size="default"
-    >
+    <Modal ariaLabelledby={modalHeadingID} isOpen={props.isOpen} onDismiss={props.handleCancelAction} size="default">
       <ModalHeader>
         <ModalHeading as="h3" id={modalHeadingID}>
           {props.modalHeader}
@@ -42,15 +29,11 @@ const ConfirmationModal: FC<ConfirmationModalProps> = (props) => {
       <ModalBody>{props.modalBody}</ModalBody>
       <ModalFooter>
         <ModalFooterActions>
-          <Button
-            variant="secondary"
-            onClick={props.handleCancelAction}
-            disabled={props.isProcessingAction}
-          >
+          <Button variant="secondary" onClick={props.handleCancelAction} disabled={props.isProcessingAction}>
             Cancel
           </Button>
           <Button
-            variant={props.actionIsDestructive ? "destructive" : "primary"}
+            variant={props.actionIsDestructive ? 'destructive' : 'primary'}
             onClick={props.handleConfirmAction}
             disabled={props.isProcessingAction}
           >

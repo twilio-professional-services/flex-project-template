@@ -1,32 +1,21 @@
 import { MoreIcon } from '@twilio-paste/icons/esm/MoreIcon';
-
-import {
-  Box,
-  TBody,
-  THead,
-  Table,
-  Td,
-  Th,
-  Tr,
-  MenuButton,
-  MenuItem,
-  Menu,
-  MenuSeparator,
-  useMenuState,
-  Button,
-  Heading,
-  Paragraph,
-  Stack,
-  Anchor,
-  SkeletonLoader,
-  Text,
-  ButtonGroup,
-  Badge,
-  Spinner,
-} from '@twilio-paste/core';
+import { Box } from '@twilio-paste/core/box';
+import { Button } from '@twilio-paste/core/button';
+import { ButtonGroup } from '@twilio-paste/core/button-group';
+import { Heading } from '@twilio-paste/core/heading';
+import { Paragraph } from '@twilio-paste/core/paragraph';
+import { Stack } from '@twilio-paste/core/stack';
+import { Anchor } from '@twilio-paste/core/anchor';
+import { SkeletonLoader } from '@twilio-paste/core/skeleton-loader';
+import { Text } from '@twilio-paste/core/text';
+import { Badge } from '@twilio-paste/core/badge';
+import { Spinner } from '@twilio-paste/core/spinner';
+import { MenuButton, MenuItem, Menu, MenuSeparator, useMenuState } from '@twilio-paste/core/menu';
+import { TBody, THead, Table, Td, Th, Tr } from '@twilio-paste/core/table';
 import { FC } from 'react';
-import { RuleItem } from '../../types/Rule';
-import { SurveyItem } from '../../types/Survey';
+
+import { RuleItem } from '../../types/RuleItem';
+import { SurveyItem } from '../../types/SurveyItem';
 import RuleListEmpty from './RuleListEmpty';
 
 export interface RuleListProps {

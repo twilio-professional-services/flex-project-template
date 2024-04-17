@@ -1,7 +1,13 @@
-import { Box, BreadcrumbItem, Breadcrumb, Stack, Separator, Toaster, useToaster } from '@twilio-paste/core';
+import { Box } from '@twilio-paste/core/box';
+import { Breadcrumb, BreadcrumbItem } from '@twilio-paste/core/breadcrumb';
+import { Stack } from '@twilio-paste/core/stack';
+import { Separator } from '@twilio-paste/core/separator';
+import { useToaster } from '@twilio-paste/core/toast';
 import { useEffect, useState } from 'react';
-import { Phase, SurveyItem } from '../../types/Survey';
-import { RuleItem } from '../../types/Rule';
+
+import { SurveyItem } from '../../types/SurveyItem';
+import { Phase } from '../../types/Phase';
+import { RuleItem } from '../../types/RuleItem';
 import SurveyDesigner from '../SurveyDesigner/SurveyDesigner';
 import SurveyList from '../SurveyList/SurveyList';
 import RuleEditor from '../RuleEditor/RuleEditor';

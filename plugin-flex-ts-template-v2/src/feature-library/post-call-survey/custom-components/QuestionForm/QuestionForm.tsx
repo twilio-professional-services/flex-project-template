@@ -1,20 +1,18 @@
-import {
-  Form,
-  FormControl,
-  Label,
-  FormActions,
-  HelpText,
-  TextArea,
-  Combobox,
-  Input,
-  Card,
-  Heading,
-} from "@twilio-paste/core";
-import { useUIDSeed } from "@twilio-paste/core/uid-library";
-import { FC, useEffect, useState } from "react";
-import { AnswerOptions, ISurveyQuestion } from "../../types/Survey";
-import { answerToTypeMap } from "../../types/AnswerTypes";
-import EditButtonGroup from "../EditButtonGroup/EditButtonGroup";
+import { Heading } from '@twilio-paste/core/heading';
+import { Card } from '@twilio-paste/core/card';
+import { Input } from '@twilio-paste/core/input';
+import { Combobox } from '@twilio-paste/core/combobox';
+import { Form, FormControl, FormActions } from '@twilio-paste/core/form';
+import { Label } from '@twilio-paste/core/label';
+import { HelpText } from '@twilio-paste/core/help-text';
+import { TextArea } from '@twilio-paste/core/textarea';
+import { useUIDSeed } from '@twilio-paste/core/uid-library';
+import { FC, useEffect, useState } from 'react';
+
+import { ISurveyQuestion } from '../../types/SurveyQuestion';
+import { AnswerOptions } from '../../types/AnswerOptions';
+import { answerToTypeMap } from '../../types/AnswerTypes';
+import EditButtonGroup from '../EditButtonGroup/EditButtonGroup';
 
 export interface QuestionFormProps {
   isSurveyDirty: boolean;
@@ -27,11 +25,7 @@ export interface QuestionFormProps {
   handleEditPress: () => void;
   handleAddPress: (index: number) => void;
   handleDeletePress: (index: number) => void;
-  handleChange: (
-    index: number,
-    attribute: keyof ISurveyQuestion,
-    value: string | AnswerOptions
-  ) => void;
+  handleChange: (index: number, attribute: keyof ISurveyQuestion, value: string | AnswerOptions) => void;
 }
 
 const QuestionForm: FC<QuestionFormProps> = (props) => {
@@ -42,26 +36,20 @@ const QuestionForm: FC<QuestionFormProps> = (props) => {
   const [answersHasError, setAnswersHasError] = useState(false);
 
   useEffect(() => {
-    setQuestionHasError(props.question.prompt === "" ? true : false);
-    setLabelHasError(props.question.label === "" ? true : false);
-    setAnswersHasError(props.question.answers === "" ? true : false);
+    setQuestionHasError(props.question.prompt === '');
+    setLabelHasError(props.question.label === '');
+    setAnswersHasError(props.question.answers === '');
   }, [props.question.prompt, props.question.label, props.question.answers]);
 
   return (
     <Card>
-      <Form aria-labelledby={seed("question-heading")}>
-        <Heading
-          as="h3"
-          variant="heading30"
-          marginBottom="space0"
-          id={seed("question-heading")}
-        >
-          Question {props.index + 1}{" "}
-          {props.question.label && <>{" - " + props.question.label}</>}
+      <Form aria-labelledby={seed('question-heading')}>
+        <Heading as="h3" variant="heading30" marginBottom="space0" id={seed('question-heading')}>
+          Question {props.index + 1} {props.question.label && <>{` - ${props.question.label}`}</>}
         </Heading>
 
         <FormControl>
-          <Label htmlFor={seed("reporting_label")} required>
+          <Label htmlFor={seed('reporting_label')} required>
             Short reporting label
           </Label>
           <Input
@@ -71,8 +59,7 @@ const QuestionForm: FC<QuestionFormProps> = (props) => {
             type="text"
             placeholder="e.g. CSAT, NPS, Agent Rating"
             onChange={(e) => {
-              if (e.target.value.length < 30)
-                props.handleChange(props.index, "label", e.target.value);
+              if (e.target.value.length < 30) props.handleChange(props.index, 'label', e.target.value);
             }}
             required
             readOnly={!props.isEditMode}
@@ -80,25 +67,22 @@ const QuestionForm: FC<QuestionFormProps> = (props) => {
             hasError={labelHasError}
           />
           <HelpText variant="default" id="reporting_label_help">
-            This value will be used in Flex Insights as the question label (Max
-            length 30 characters)
+            This value will be used in Flex Insights as the question label (Max length 30 characters)
           </HelpText>
         </FormControl>
 
         <FormControl>
-          <Label htmlFor={seed("prompt")} required>
+          <Label htmlFor={seed('prompt')} required>
             Question text
           </Label>
           <TextArea
             aria-describedby="prompt_help"
-            id={seed("prompt")}
+            id={seed('prompt')}
             name="prompt"
             required={true}
             readOnly={!props.isEditMode}
             value={props.question.prompt}
-            onChange={(e) =>
-              props.handleChange(props.index, "prompt", e.target.value)
-            }
+            onChange={(e) => props.handleChange(props.index, 'prompt', e.target.value)}
             placeholder="e.g. On a scale from 1 to ... how likely are you to ..."
             hasError={questionHasError}
           />
@@ -118,17 +102,10 @@ const QuestionForm: FC<QuestionFormProps> = (props) => {
             aria-describedby="answer_options_help"
             hasError={answersHasError}
             onSelectedItemChange={(changes) => {
-              props.handleChange(props.index, "answers", changes.selectedItem);
+              props.handleChange(props.index, 'answers', changes.selectedItem);
 
-              const answer_options = answerToTypeMap.find(
-                (o) => o.label === changes.selectedItem
-              );
-              if (answer_options)
-                props.handleChange(
-                  props.index,
-                  "answer_options",
-                  answer_options?.answers
-                );
+              const answer_options = answerToTypeMap.find((o) => o.label === changes.selectedItem);
+              if (answer_options) props.handleChange(props.index, 'answer_options', answer_options?.answers);
             }}
           />
           <HelpText variant="default" id="answer_options_help">

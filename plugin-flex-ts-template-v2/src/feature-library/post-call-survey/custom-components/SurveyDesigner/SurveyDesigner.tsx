@@ -1,21 +1,17 @@
-import {
-  Heading,
-  Box,
-  Stack,
-  Paragraph,
-  Button,
-  Tab,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Text,
-  Toaster,
-  useToaster,
-} from '@twilio-paste/core';
-
-import { AnswerOptions, ISurveyQuestion, ISurveyDefinition, SurveyItem, SurveyQuestion } from '../../types/Survey';
+import { Box } from '@twilio-paste/core/box';
+import { Button } from '@twilio-paste/core/button';
+import { Heading } from '@twilio-paste/core/heading';
+import { Paragraph } from '@twilio-paste/core/paragraph';
+import { Text } from '@twilio-paste/core/text';
+import { Stack } from '@twilio-paste/core/stack';
+import { Toaster, useToaster } from '@twilio-paste/core/toast';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@twilio-paste/core/tabs';
 import { FC, useEffect, useState } from 'react';
+
+import { AnswerOptions } from '../../types/AnswerOptions';
+import { ISurveyQuestion, SurveyQuestion } from '../../types/SurveyQuestion';
+import { ISurveyDefinition } from '../../types/SurveyDefinition';
+import { SurveyItem } from '../../types/SurveyItem';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import SurveyService from '../../utils/SurveyService';
 import GeneralForm from '../GeneralForm/GeneralForm';
@@ -106,7 +102,7 @@ const SurveyDesigner: FC<SurveyDesignerProps> = (props) => {
     setDeleteQuestionConfirmationIsOpen(false);
     setIsDirty(true);
     setSurveyDefinition((prev) => {
-      let target: ISurveyDefinition = { ...prev };
+      const target: ISurveyDefinition = { ...prev };
       const newQuestions = target.questions.filter((v, idx) => idx !== index);
       target.questions = newQuestions;
       return target;
@@ -141,8 +137,7 @@ const SurveyDesigner: FC<SurveyDesignerProps> = (props) => {
   const handleGeneralChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setSurveyDefinition((prev) => {
-      const target = { ...prev, [name]: value };
-      return target;
+      return { ...prev, [name]: value };
     });
     setIsDirty(true);
   };

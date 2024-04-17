@@ -1,30 +1,19 @@
 import { MoreIcon } from '@twilio-paste/icons/esm/MoreIcon';
-
-import {
-  Box,
-  TBody,
-  THead,
-  Table,
-  Td,
-  Th,
-  Tr,
-  MenuButton,
-  MenuItem,
-  Menu,
-  MenuSeparator,
-  useMenuState,
-  Button,
-  Heading,
-  Paragraph,
-  Stack,
-  Anchor,
-  SkeletonLoader,
-  Text,
-  ButtonGroup,
-  Spinner,
-} from '@twilio-paste/core';
+import { Anchor } from '@twilio-paste/core/anchor';
+import { SkeletonLoader } from '@twilio-paste/core/skeleton-loader';
+import { Box } from '@twilio-paste/core/box';
+import { Button } from '@twilio-paste/core/button';
+import { ButtonGroup } from '@twilio-paste/core/button-group';
+import { Heading } from '@twilio-paste/core/heading';
+import { Paragraph } from '@twilio-paste/core/paragraph';
+import { Text } from '@twilio-paste/core/text';
+import { Stack } from '@twilio-paste/core/stack';
+import { Spinner } from '@twilio-paste/core/spinner';
+import { MenuButton, MenuItem, Menu, MenuSeparator, useMenuState } from '@twilio-paste/core/menu';
+import { TBody, THead, Table, Td, Th, Tr } from '@twilio-paste/core/table';
 import { FC } from 'react';
-import { SurveyItem } from '../../types/Survey';
+
+import { SurveyItem } from '../../types/SurveyItem';
 import SurveyListEmpty from './SurveyListEmpty';
 
 export interface SurveyListProps {
