@@ -55,6 +55,8 @@ jobs:
   validate-environment:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - name: setup node.js
