@@ -14,9 +14,9 @@ const validateAccountSid = async () => {
       return;
     }
     
-    console.error('❌ Error: API key does not match the provided Flex account SID or this is not a Flex account');
+    console.log('❌ Error: API key does not match the provided Flex account SID or this is not a Flex account');
   } catch (error) {
-    console.error(`❌ Error validating API key and Flex account SID: ${error}`);
+    console.log(`❌ Error validating API key and Flex account SID: ${error}`);
   }
   
   process.exitCode = 1;
@@ -24,7 +24,7 @@ const validateAccountSid = async () => {
 
 const validateEnvName = () => {
   if (process.env.ENVIRONMENT.includes('/')) {
-    console.error(`❌ Error: Environment name includes invalid character '/'`);
+    console.log(`❌ Error: Environment name includes invalid character '/'`);
     process.exitCode = 1;
   }
 }
