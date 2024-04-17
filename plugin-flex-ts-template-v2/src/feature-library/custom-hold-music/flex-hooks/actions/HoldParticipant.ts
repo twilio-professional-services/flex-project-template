@@ -14,7 +14,7 @@ export const actionHook = function setHoldMusicBeforeHoldParticipant(flex: typeo
       return;
     }
 
-    // Override hold handling for participants from the native XWT functionality due to Flex ignoring payload.holdMusicUrl
+    // Override hold handling for participants from the native XWT functionality due to Flex ignoring payload.holdMusicUrl: SEFLEX-3875
     // Find the full participant object based on the targetSid
     const participant = payload?.task?.conference?.participants?.find(
       (p: any) => payload.targetSid === (payload.targetSid.startsWith('UT') ? p.participantSid : p.callSid),
