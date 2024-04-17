@@ -13,7 +13,7 @@ interface VideoRoomProps {
 const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
   const [activeRoom, setActiveRoom] = useState('');
 
-  const identity = Manager.getInstance().store.getState().flex.session.identity;
+  const identity = Manager.getInstance().user.identity;
 
   useEffect(() => {
     if (task?.attributes?.videoRoom && task.attributes.videoRoom !== activeRoom) {

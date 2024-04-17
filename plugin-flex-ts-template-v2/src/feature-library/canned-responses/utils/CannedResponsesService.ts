@@ -17,7 +17,7 @@ class CannedResponsesService extends ApiService {
       }
 
       const encodedParams: EncodedParams = {
-        Token: encodeURIComponent(this.manager.store.getState().flex.session.ssoTokenPayload.token),
+        Token: encodeURIComponent(this.manager.user.token),
       };
 
       this.fetchJsonWithReject<CannedResponsesReponse>(

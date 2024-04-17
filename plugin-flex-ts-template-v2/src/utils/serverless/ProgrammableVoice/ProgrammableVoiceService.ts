@@ -44,7 +44,7 @@ class ProgrammableVoiceService extends ApiService {
 
   _startColdTransfer = async (callSid: string, to: string, from?: string): Promise<any> => {
     const encodedParams: EncodedParams = {
-      Token: encodeURIComponent(this.manager.store.getState().flex.session.ssoTokenPayload.token),
+      Token: encodeURIComponent(this.manager.user.token),
       callSid: encodeURIComponent(callSid),
       to: encodeURIComponent(to),
       from: from ? encodeURIComponent(from) : '',
