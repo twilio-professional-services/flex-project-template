@@ -22,4 +22,9 @@ const validateAccountSid = async () => {
   return process.exit(1);
 }
 
+if (process.env.ENVIRONMENT.includes('/')) {
+  console.error(`❌ Environment name includes invalid character '/'`);
+  return process.exit(1);
+}
+
 validateAccountSid();
