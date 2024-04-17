@@ -1,39 +1,31 @@
+import { EncodedParams } from 'types/serverless';
+
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 import ApiService from '../../../utils/serverless/ApiService';
-import { RuleItem } from '../types/Rule';
-import { ISurveyDefinition, SurveyItem } from '../types/Survey';
-
+import { RuleItem } from '../types/RuleItem';
+import { ISurveyDefinition } from '../types/SurveyDefinition';
+import { SurveyItem } from '../types/SurveyItem';
 import SyncHelper from './SyncHelper';
 import SyncClient from '../../../utils/sdk-clients/sync/SyncClient';
-import {
-  getRuleDefinitionsMapName,
-  getSurveyDefinitionsMapName,
-} from '../config';
-import { EncodedParams } from 'types/serverless';
+import { getRuleDefinitionsMapName, getSurveyDefinitionsMapName } from '../config';
 
 class SurveyService extends ApiService {
   getQueueNames = async (): Promise<string[]> => {
-    const myPromise = new Promise<string[]>((resolve, reject) => {
+    return new Promise<string[]>((resolve, reject) => {
       TaskRouterService.getQueues()
         .then((queues) => {
-          let listOfQueues = queues?.map((q) => q.friendlyName);
-          if (listOfQueues !== undefined) {
-            resolve(listOfQueues);
-          } else {
+          const listOfQueues = queues?.map((q) => q.friendlyName);
+          if (listOfQueues === undefined) {
             reject('Error getting queue names');
+          } else {
+            resolve(listOfQueues);
           }
         })
         .catch((e) => reject(e));
     });
-    return myPromise;
   };
 
-  startSurvey = async (
-    queueName: string,
-    callSid: string,
-    taskSid: string,
-    surveyKey: string
-  ) => {
+  startSurvey = async (queueName: string, callSid: string, taskSid: string, surveyKey: string) => {
     return new Promise((resolve, reject) => {
       const encodedParams: EncodedParams = {
         queueName: encodeURIComponent(queueName),
@@ -50,7 +42,7 @@ class SurveyService extends ApiService {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
-        }
+        },
       )
         .then((resp: any) => {
           resolve(resp);
@@ -67,10 +59,7 @@ class SurveyService extends ApiService {
   };
 
   saveSurvey = async (key: string, survey: ISurveyDefinition) => {
-    return (await SyncClient.map(getSurveyDefinitionsMapName())).update(
-      key,
-      survey
-    );
+    return (await SyncClient.map(getSurveyDefinitionsMapName())).update(key, survey);
   };
 
   deleteSurvey = async (key: string) => {
@@ -86,7 +75,7 @@ class SurveyService extends ApiService {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
       counter += 1;
     }
-    return 'PCSS' + result;
+    return `PCSS${result}`;
   };
 
   createNewSurveyItem = (): SurveyItem => {
@@ -102,7 +91,7 @@ class SurveyService extends ApiService {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
       counter += 1;
     }
-    return 'PCSR' + result;
+    return `PCSR${result}`;
   };
 
   getRules = async (): Promise<RuleItem[]> => {
@@ -110,10 +99,7 @@ class SurveyService extends ApiService {
   };
 
   saveRule = async (rule: RuleItem) => {
-    return (await SyncClient.map(getRuleDefinitionsMapName())).update(
-      rule.key,
-      rule.data
-    );
+    return (await SyncClient.map(getRuleDefinitionsMapName())).update(rule.key, rule.data);
   };
 
   deleteRule = async (key: string) => {

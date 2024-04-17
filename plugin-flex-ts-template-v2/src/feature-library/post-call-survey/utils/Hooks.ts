@@ -1,5 +1,5 @@
-import { useTabState } from "@twilio-paste/core";
-import { useEffect, useRef } from "react";
+import { useTabState } from '@twilio-paste/core/tabs';
+import { useEffect, useRef } from 'react';
 
 const usePrevious = (value: any) => {
   const ref = useRef();
@@ -13,7 +13,7 @@ const useDesignerTabState = () => {
   const tab = useTabState();
   return {
     ...tab,
-    baseId: "designer-tab",
+    baseId: 'designer-tab',
   };
 };
 

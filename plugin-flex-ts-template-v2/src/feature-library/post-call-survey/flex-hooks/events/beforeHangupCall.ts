@@ -6,8 +6,8 @@ import surveyService from '../../utils/SurveyService';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.HangupCall;
-export const actionHook = async (flex: typeof Flex, manager: Flex.Manager, task: Flex.ITask) => {
-  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
+export const actionHook = async (flex: typeof Flex) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
     const { task } = payload;
     if (!TaskHelper.isCallTask(task) || TaskHelper.isOutboundCallTask(task)) {
       return;

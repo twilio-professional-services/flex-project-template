@@ -3,7 +3,6 @@ import * as Flex from '@twilio/flex-ui';
 import { FlexComponent } from '../../../../types/feature-loader';
 import { canShowAdminUi } from '../../utils/helpers';
 import PostCallSurveyView from '../../custom-components/PostCallSurveyView/PostCallSurveyView';
-import { Box } from '@twilio-paste/core';
 
 export const componentName = FlexComponent.ViewCollection;
 export const componentHook = function addAdminView(flex: typeof Flex, manager: Flex.Manager) {

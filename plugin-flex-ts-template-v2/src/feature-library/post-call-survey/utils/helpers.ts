@@ -1,4 +1,5 @@
 import { Manager } from '@twilio/flex-ui';
+
 import { isFeatureEnabled } from '../config';
 
 export const canShowAdminUi = (manager: Manager) => {
