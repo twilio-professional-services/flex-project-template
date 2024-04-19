@@ -39,7 +39,7 @@ const CategorySubMenu = ({ category, menu, task }: OwnProps) => {
       <Menu {...submenu} aria-label={category.section} element="CANNED_RESPONSES_MENU">
         {category.responses.map((response: CannedResponse) => (
           <MenuItem {...submenu} key={response.text} onClick={() => onClickInsert(response.text)}>
-            {response.text}
+            {replaceStringAttributes(response.text, task)}
           </MenuItem>
         ))}
       </Menu>
