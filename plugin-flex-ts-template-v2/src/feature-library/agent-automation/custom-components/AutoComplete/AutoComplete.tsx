@@ -57,15 +57,19 @@ const AutoComplete = ({ task }: OwnProps) => {
         window.setTimeout(async () => {
           if (task && Flex.TaskHelper.isInWrapupMode(task)) {
             if (taskConfig.default_outcome) {
-              await TaskRouterService.updateTaskAttributes(
-                task.taskSid,
-                {
-                  conversations: {
-                    outcome: taskConfig.default_outcome,
+              try {
+                await TaskRouterService.updateTaskAttributes(
+                  task.taskSid,
+                  {
+                    conversations: {
+                      outcome: taskConfig.default_outcome,
+                    },
                   },
-                },
-                true,
-              );
+                  true,
+                );
+              } catch (error) {
+                console.error(`[agent-automation] Error updating task outcome: ${error}`);
+              }
             }
             Flex.Actions.invokeAction('CompleteTask', { sid });
           }
