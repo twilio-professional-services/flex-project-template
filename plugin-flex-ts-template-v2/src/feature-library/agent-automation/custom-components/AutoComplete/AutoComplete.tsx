@@ -113,7 +113,7 @@ const AutoComplete = ({ task }: OwnProps) => {
     Flex.Actions.invokeAction('ExtendWrapUp', { task, extend: !isExtended });
   };
 
-  if (taskConfig?.allow_extended_wrapup) {
+  if (taskConfig?.auto_wrapup && taskConfig?.allow_extended_wrapup) {
     return (
       <Button
         variant="secondary"
