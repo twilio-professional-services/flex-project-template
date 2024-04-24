@@ -38,7 +38,7 @@ npm install
 ```
 5. follow the prompt and provide your auth token
 
-6. Run the serverless functions and plugin together locally by running the following at the top level of the checkout
+6. Run the serverless functions, Insights proxy, and plugin together locally by running the following at the top level of the checkout
 
 ```bash
 npm start
