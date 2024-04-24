@@ -56,7 +56,7 @@ const CannedResponsesDropdown: React.FunctionComponent<CannedResponsesDropdownPr
   return (
     <Box>
       {isLoading && <SkeletonLoader />}
-      {Boolean(responseCategories) && !isLoading && (
+      {Boolean(responseCategories) && !isLoading && task && (
         <>
           <MenuButton {...menu} variant="reset" disabled={isDisabled} element="CANNED_RESPONSES_MENU_BUTTON">
             <ChatIcon decorative title={templates[StringTemplates.CannedResponses]()} />
