@@ -68,10 +68,6 @@ const DispositionTab = ({ task }: OwnProps) => {
       // No need to create an empty entry
       return;
     }
-    if (taskFromRedux && taskFromRedux.notes === notes) {
-      // No need to update an unchanged value
-      return;
-    }
     updateStoreNotesDebounced({ taskSid, value: notes });
   }, [notes]);
 
