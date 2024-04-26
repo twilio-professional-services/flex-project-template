@@ -18,7 +18,7 @@ const ParticipantsTabContainer = styled.div`
   padding-right: 3%;
   padding-top: 3%;
   width: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 interface ParticipantsTabProps {
