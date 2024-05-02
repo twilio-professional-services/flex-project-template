@@ -17,9 +17,9 @@ import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRoute
 
 const handleAbort = (flex: typeof Flex, abortFunction: any, queueSid: string, dispositionError: boolean) => {
   if (isNativeWrapupEnabled()) {
-    const enabledQueues = flex.Manager.getInstance().store.getState().flex.agentCopilot?.config?.enabledQueues;
+    const enabledQueues = (flex.Manager.getInstance().store.getState().flex as any).agentCopilot?.config?.enabledQueues;
 
-    if (enabledQueues && (!enabledQueues.length || enabledQueues.find((item) => item === queueSid))) {
+    if (enabledQueues && (!enabledQueues.length || enabledQueues.find((item: string) => item === queueSid))) {
       // If the native wrapup component is enabled for this queue, we don't want to abort the CompleteTask action.
       // This is because the native wrapup component will also submit within beforeCompleteTask, then clear its inputs.
       // So when we abort, the native wrapup values get cleared, and then when the agent attempts to complete again, they cannot due to missing values!
