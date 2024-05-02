@@ -3,6 +3,7 @@ import * as Flex from '@twilio/flex-ui';
 import {
   getDispositionsForQueue,
   isNotesEnabled,
+  isNativeWrapupEnabled,
   isRequireDispositionEnabledForQueue,
   getTextAttributes,
   getSelectAttributes,
@@ -14,7 +15,19 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 import { DispositionsNotification } from '../notifications';
 import TaskRouterService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 
-const handleAbort = (flex: typeof Flex, abortFunction: any, dispositionError: boolean) => {
+const handleAbort = (flex: typeof Flex, abortFunction: any, queueSid: string, dispositionError: boolean) => {
+  if (isNativeWrapupEnabled()) {
+    const enabledQueues = flex.Manager.getInstance().store.getState().flex.agentCopilot?.config?.enabledQueues;
+
+    if (enabledQueues && (!enabledQueues.length || enabledQueues.find((item) => item === queueSid))) {
+      // If the native wrapup component is enabled for this queue, we don't want to abort the CompleteTask action.
+      // This is because the native wrapup component will also submit within beforeCompleteTask, then clear its inputs.
+      // So when we abort, the native wrapup values get cleared, and then when the agent attempts to complete again, they cannot due to missing values!
+      flex.Notifications.showNotification(DispositionsNotification.DispositionRequiredBypassed);
+      return;
+    }
+  }
+
   flex.Notifications.showNotification(
     dispositionError ? DispositionsNotification.DispositionRequired : DispositionsNotification.AttributeRequired,
   );
@@ -69,9 +82,9 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
     // If nothing exists for this task in Redux, we only need to check the configuration to see if we should abort.
     if (!taskDisposition) {
       if (isRequireDispositionEnabledForQueue(queueSid, queueName) && numDispositions > 0) {
-        handleAbort(flex, abortFunction, true);
+        handleAbort(flex, abortFunction, queueSid, true);
       } else if (missingCustomAttrs > 0) {
-        handleAbort(flex, abortFunction, false);
+        handleAbort(flex, abortFunction, queueSid, false);
       }
       return;
     }
@@ -82,12 +95,12 @@ export const actionHook = function setDispositionBeforeCompleteTask(flex: typeof
       !taskDisposition.disposition &&
       numDispositions > 0
     ) {
-      handleAbort(flex, abortFunction, true);
+      handleAbort(flex, abortFunction, queueSid, true);
       return;
     }
 
     if (missingCustomAttrs > 0) {
-      handleAbort(flex, abortFunction, false);
+      handleAbort(flex, abortFunction, queueSid, false);
       return;
     }
 
