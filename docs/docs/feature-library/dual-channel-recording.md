@@ -37,7 +37,7 @@ The feature is enabled via flex-config asset for your environment. There is also
 
 If enabling the dual channel recording feature - you should also **disable** the call recording flag in the Flex Configuration within Twilio Console > Flex > Manage > Voice.
 
-You may also optionally specify task attributes and/or queues that should exclude a task from being recorded:
+You may also optionally specify task attributes and/or queues that should exclude a task from being recorded by the dual-channel recording feature:
 - To exclude recording tasks based on the task attributes present, set the `exclude_attributes` configuration property to an array of key/value pair objects. For example, to prevent recording outbound calls:
   ```
   "exclude_attributes": [{ "key":"direction", "value":"outbound" }]
