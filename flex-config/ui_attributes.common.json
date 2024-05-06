@@ -112,7 +112,9 @@
       },
       "dual_channel_recording": {
         "enabled": false,
-        "channel": "worker"
+        "channel": "worker",
+        "exclude_attributes": [],
+        "exclude_queues": []
       },
       "pause_recording": {
         "enabled": true,

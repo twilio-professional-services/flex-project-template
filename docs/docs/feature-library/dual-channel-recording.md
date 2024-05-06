@@ -33,11 +33,16 @@ There are various ways to enable call recordings with Twilio Flex. Let's outline
 
 ## setup and dependencies
 
-Enabling the feature in the flex-config asset for your environment. There is also a `channel` configuration property to choose which perspective should be recorded--the customer perspective or the worker perspective. For example, if the customer is on hold and `channel` is set to `customer`, the recording will contain hold music. If `channel` is set to `worker`, the recording will not contain hold music and the worker will be heard instead.
+The feature is enabled via flex-config asset for your environment. There is also a `channel` configuration property to choose which perspective should be recorded--the customer perspective or the worker perspective. For example, if the customer is on hold and `channel` is set to `customer`, the recording will contain hold music. If `channel` is set to `worker`, the recording will not contain hold music and the worker will be heard instead.
 
-If enabling the dual channel recording feature - you should also **disable** the call recording flag in the Flex Configuration of your twilio console.
+If enabling the dual channel recording feature - you should also **disable** the call recording flag in the Flex Configuration within Twilio Console > Flex > Manage > Voice.
 
-Twilio Console > Flex > Manage > Voice
+You may also optionally specify task attributes and/or queues that should exclude a task from being recorded by the dual-channel recording feature:
+- To exclude recording tasks based on the task attributes present, set the `exclude_attributes` configuration property to an array of key/value pair objects. For example, to prevent recording outbound calls:
+  ```
+  "exclude_attributes": [{ "key":"direction", "value":"outbound" }]
+  ```
+- To exclude recording tasks based on queue name or queue SID, set the `exclude_queues` configuration property to an array or queue names or SIDs.
 
 ## how it works
 
