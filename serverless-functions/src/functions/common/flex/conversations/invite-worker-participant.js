@@ -12,7 +12,9 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     const { conversationSid, myWorkerName } = event;
 
     const result = await twilioExecute(context, (client) =>
-      client.conversations.v1.conversations(conversationSid).participants.create({ identity: myWorkerName }),
+      client.conversations.v1.conversations(conversationSid).participants.create({
+        identity: myWorkerName,
+      }),
     );
 
     response.setStatusCode(result.status);

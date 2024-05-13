@@ -38,31 +38,24 @@ export const SupervisorChatBargeButton = ({ task }: SupervisorChatBargeProps) =>
     localStorage.setItem('agentWorkerSID', agentWorkerSID);
   }
   const bargeHandleClick = async () => {
-    setProcessing(true);
-    if (!teamViewTaskSID) {
-      setProcessing(false);
+    if (!teamViewTaskSID || processing) {
       return;
     }
-    if (chatBargeStatus) {
+    setProcessing(true);
+    if (chatBarge[teamViewTaskSID]) {
       await BargeCoachService.removeWorkerParticipant(conversationSid, myWorkerName);
-      // Also remove/clean up redux to account for the worker removal
       const { [teamViewTaskSID]: value, ...newChatBargeState } = chatBarge;
       dispatch(Actions.setBargeCoachStatus({ chatBarge: newChatBargeState }));
-      setChatBargeStatus(false);
-      // Storing chatBarge to browser cache to help if a refresh happens
-      // will use this in the browserRefreshHelper
       localStorage.setItem('chatBarge', JSON.stringify(newChatBargeState));
     } else {
       await BargeCoachService.inviteWorkerParticipant(conversationSid, myWorkerName);
       const newChatBargeState = { ...chatBarge, [teamViewTaskSID]: conversationSid };
       dispatch(Actions.setBargeCoachStatus({ chatBarge: newChatBargeState }));
-      setChatBargeStatus(true);
-      // Storing chatBarge to browser cache to help if a refresh happens
-      // will use this in the browserRefreshHelper
       localStorage.setItem('chatBarge', JSON.stringify(newChatBargeState));
     }
     // Because of how the monitor panel renders, we need to close it and re-open it to show
     // we are part of the conversation
+    console.warn('teamViewTaskSID', teamViewTaskSID);
     await Flex.Actions.invokeAction('SelectTaskInSupervisor', { sid: null });
     Flex.Actions.invokeAction('SelectTaskInSupervisor', { sid: teamViewTaskSID });
     setProcessing(false);
@@ -72,25 +65,22 @@ export const SupervisorChatBargeButton = ({ task }: SupervisorChatBargeProps) =>
     // First will check if we have it from the redux value, otherwise let's check the conversation state itself
     const checkSupervisorInChat = async () => {
       if (teamViewTaskSID in chatBarge) {
-        setChatBargeStatus(chatBarge[teamViewTaskSID]);
-      } else {
         setIsChecking(true);
         let supervisorInChat = false;
         if (conversationState && !conversationState.isLoadingParticipants) {
           supervisorInChat = conversationState.participants.has(myWorkerName);
           if (supervisorInChat) {
-            if (!teamViewTaskSID) {
-              setIsChecking(false);
-              return;
-            }
-            const newChatBargeState = { ...chatBarge, [teamViewTaskSID]: true };
-            dispatch(Actions.setBargeCoachStatus({ chatBarge: newChatBargeState }));
             setChatBargeStatus(true);
+          } else {
+            const { [teamViewTaskSID]: value, ...newChatBargeState } = chatBarge;
+            dispatch(Actions.setBargeCoachStatus({ chatBarge: newChatBargeState }));
             localStorage.setItem('chatBarge', JSON.stringify(newChatBargeState));
+            setChatBargeStatus(false);
           }
-          setChatBargeStatus(false);
         }
         setIsChecking(false);
+      } else {
+        setChatBargeStatus(false);
       }
     };
     checkSupervisorInChat();
@@ -132,10 +122,8 @@ export const SupervisorChatBargeButton = ({ task }: SupervisorChatBargeProps) =>
             disabled={processing || isChecking || !isLiveConversation(task)}
           >
             {processing
-              ? chatBargeStatus
-                ? templates[StringTemplates.Leaving]()
-                : templates[StringTemplates.Joining]()
-              : chatBargeStatus
+              ? templates[StringTemplates.Joining]()
+              : chatBarge[teamViewTaskSID]
               ? templates[StringTemplates.Leave]()
               : templates[StringTemplates.Join]()}
           </Button>

@@ -83,7 +83,7 @@ export const supervisorBrowserRefresh = async () => {
     const chatBargeObject = JSON.parse(cacheChatBarge);
     Flex.Manager.getInstance().store.dispatch(
       Actions.setBargeCoachStatus({
-        chatBarge: chatBargeObject,
+        chatBarge: [chatBargeObject],
       }),
     );
   }

@@ -3,6 +3,7 @@ import { Box } from '@twilio-paste/core/box';
 import { Button } from '@twilio-paste/core/button';
 import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { AgentIcon } from '@twilio-paste/icons/esm/AgentIcon';
+import { CommunityIcon } from '@twilio-paste/icons/esm/CommunityIcon';
 import { CloseIcon } from '@twilio-paste/icons/esm/CloseIcon';
 import { useState } from 'react';
 import { templates } from '@twilio/flex-ui';
@@ -28,6 +29,8 @@ export const Participant = ({ participantType, name, allowKick, handleKickPartic
   const icon =
     participantType === 'agent' ? (
       <AgentIcon decorative={false} title={templates[StringTemplates.Agent]()} />
+    ) : participantType === 'supervisor' ? (
+      <CommunityIcon decorative={false} title={templates[StringTemplates.Supervisor]()} />
     ) : (
       <UserIcon decorative={false} title={templates[StringTemplates.Customer]()} />
     );
