@@ -11,8 +11,14 @@ export interface DispositionsTaskState {
   custom_attributes: { [key: string]: string };
 }
 
-export interface DispositionsTaskUpdate extends DispositionsTaskState {
+export interface DispositionsTaskStringUpdate {
   taskSid: string;
+  value: string;
+}
+
+export interface DispositionsTaskAttributeUpdate {
+  taskSid: string;
+  value: { [key: string]: string };
 }
 
 const initialState = {
@@ -23,18 +29,35 @@ const dispositionsSlice = createSlice({
   name: 'dispositions',
   initialState,
   reducers: {
-    updateDisposition(state, action: PayloadAction<DispositionsTaskUpdate>) {
+    updateDisposition(state, action: PayloadAction<DispositionsTaskStringUpdate>) {
       state.tasks = {
         ...state.tasks,
         [action.payload.taskSid]: {
-          disposition: action.payload.disposition,
-          notes: action.payload.notes,
-          custom_attributes: { ...action.payload.custom_attributes },
+          ...state.tasks[action.payload.taskSid],
+          disposition: action.payload.value,
+        },
+      };
+    },
+    updateNotes(state, action: PayloadAction<DispositionsTaskStringUpdate>) {
+      state.tasks = {
+        ...state.tasks,
+        [action.payload.taskSid]: {
+          ...state.tasks[action.payload.taskSid],
+          notes: action.payload.value,
+        },
+      };
+    },
+    updateCustomAttributes(state, action: PayloadAction<DispositionsTaskAttributeUpdate>) {
+      state.tasks = {
+        ...state.tasks,
+        [action.payload.taskSid]: {
+          ...state.tasks[action.payload.taskSid],
+          custom_attributes: { ...action.payload.value },
         },
       };
     },
   },
 });
 
-export const { updateDisposition } = dispositionsSlice.actions;
+export const { updateDisposition, updateNotes, updateCustomAttributes } = dispositionsSlice.actions;
 export const reducerHook = () => ({ dispositions: dispositionsSlice.reducer });

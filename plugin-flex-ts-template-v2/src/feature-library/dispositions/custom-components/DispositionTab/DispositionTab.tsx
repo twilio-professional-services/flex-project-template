@@ -20,72 +20,62 @@ import {
 } from '../../config';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
-import { updateDisposition, DispositionsState } from '../../flex-hooks/states';
+import {
+  updateDisposition,
+  updateNotes,
+  updateCustomAttributes,
+  DispositionsState,
+  DispositionsTaskStringUpdate,
+} from '../../flex-hooks/states';
 import { StringTemplates } from '../../flex-hooks/strings';
 
 export interface OwnProps {
   task?: ITask;
 }
 
-interface StringPropsObject {
-  [key: string]: string;
-}
-
-interface DispositionPayload {
-  taskSid: string;
-  disposition: string;
-  notes: string;
-  custom_attributes: { [key: string]: string };
-}
-
 const DispositionTab = ({ task }: OwnProps) => {
-  const [disposition, setDisposition] = useState('');
+  // Store notes state locally for debounce
   const [notes, setNotes] = useState('');
-  const [customAttributes, setCustomAttributes] = useState({} as StringPropsObject);
-
-  const queueSid = task?.queueSid || '';
-  const queueName = task?.queueName || '';
-  const textAttributes = getTextAttributes(queueSid, queueName);
-  const selectAttributes = getSelectAttributes(queueSid, queueName);
-  const NO_OPTION_SELECTED = 'NoOptionSelected';
 
   const dispatch = useDispatch();
   const { tasks: tasksFromRedux } = useSelector(
     (state: AppState) => state[reduxNamespace].dispositions as DispositionsState,
   );
 
-  const payload: DispositionPayload = {
-    taskSid: task?.taskSid || '',
-    disposition: disposition ? disposition : '',
-    notes: notes ? notes : '',
-    custom_attributes: { ...customAttributes },
+  if (!task) {
+    return null;
+  }
+
+  const taskSid = task.taskSid;
+  const queueSid = task.queueSid;
+  const queueName = task.queueName;
+  const taskFromRedux = tasksFromRedux[taskSid];
+  const textAttributes = getTextAttributes(queueSid, queueName);
+  const selectAttributes = getSelectAttributes(queueSid, queueName);
+  const NO_OPTION_SELECTED = 'NoOptionSelected';
+
+  const updateStoreNotes = (payload: DispositionsTaskStringUpdate) => {
+    dispatch(updateNotes(payload));
   };
 
-  const updateStore = (payload: DispositionPayload) => {
-    dispatch(updateDisposition(payload));
-  };
-
-  const updateStoreDebounced = useCallback(
-    debounce((payload) => updateStore(payload), 250, { maxWait: 1000 }),
+  const updateStoreNotesDebounced = useCallback(
+    debounce((payload) => updateStoreNotes(payload), 250, { maxWait: 1000 }),
     [],
   );
 
   useEffect(() => {
-    updateStoreDebounced(payload);
-  }, [disposition, notes, customAttributes]);
+    if (!taskFromRedux && !notes) {
+      // No need to create an empty entry
+      return;
+    }
+    updateStoreNotesDebounced({ taskSid, value: notes });
+  }, [notes]);
 
   useEffect(() => {
-    if (tasksFromRedux && task && tasksFromRedux[task.taskSid]) {
-      if (tasksFromRedux[task.taskSid].disposition) {
-        setDisposition(tasksFromRedux[task.taskSid].disposition);
-      }
-
-      if (isNotesEnabled()) {
-        setNotes(tasksFromRedux[task.taskSid].notes || '');
-      }
-      // set custom attributes from Redux state
-      setCustomAttributes(tasksFromRedux[task.taskSid].custom_attributes);
+    if (!isNotesEnabled()) {
+      return;
     }
+    setNotes(taskFromRedux?.notes || '');
   }, [task?.taskSid]);
 
   useEffect(() => {
@@ -100,13 +90,21 @@ const DispositionTab = ({ task }: OwnProps) => {
     }
   }, [task?.status]);
 
+  const setDisposition = (value: string) => {
+    dispatch(updateDisposition({ taskSid, value }));
+  };
+
+  const setCustomAttributes = (value: { [key: string]: string }) => {
+    dispatch(updateCustomAttributes({ taskSid, value }));
+  };
+
   const handleChange = (key: string, value: string) => {
-    const attributes = { ...customAttributes, [key]: value };
+    const attributes = { ...taskFromRedux?.custom_attributes, [key]: value };
     setCustomAttributes(attributes);
   };
 
   const handleCheckboxChange = (key: string, option: string, checked: boolean) => {
-    const currentSelected = customAttributes[key];
+    const currentSelected = taskFromRedux?.custom_attributes && taskFromRedux?.custom_attributes[key];
     const newSelected = currentSelected?.split('|') ?? [];
 
     if (checked && !newSelected.includes(option)) {
@@ -115,7 +113,7 @@ const DispositionTab = ({ task }: OwnProps) => {
       newSelected.splice(newSelected.indexOf(option), 1);
     }
 
-    const attributes = { ...customAttributes, [key]: newSelected.join('|') };
+    const attributes = { ...taskFromRedux?.custom_attributes, [key]: newSelected.join('|') };
     if (!newSelected.length) {
       delete attributes[key];
     }
@@ -123,12 +121,12 @@ const DispositionTab = ({ task }: OwnProps) => {
   };
 
   return (
-    <Box padding="space80" overflowY="scroll">
+    <Box padding="space80" overflowY="auto">
       <Stack orientation="vertical" spacing="space50">
         {getDispositionsForQueue(queueSid, queueName).length > 0 && (
           <RadioGroup
             name={`${task?.sid}-disposition`}
-            value={disposition}
+            value={taskFromRedux?.disposition || ''}
             legend={templates[StringTemplates.SelectDispositionTitle]()}
             helpText={templates[StringTemplates.SelectDispositionHelpText]()}
             onChange={(value) => setDisposition(value)}
@@ -160,7 +158,10 @@ const DispositionTab = ({ task }: OwnProps) => {
                   {options.map((option) => (
                     <Checkbox
                       key={option}
-                      checked={customAttributes[id]?.includes(option) || false}
+                      checked={
+                        (taskFromRedux?.custom_attributes && taskFromRedux?.custom_attributes[id]?.includes(option)) ||
+                        false
+                      }
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         handleCheckboxChange(id, option, e.target.checked);
                       }}
@@ -181,7 +182,7 @@ const DispositionTab = ({ task }: OwnProps) => {
               </Label>
               <Select
                 id={id}
-                value={customAttributes[id] || NO_OPTION_SELECTED}
+                value={(taskFromRedux?.custom_attributes && taskFromRedux?.custom_attributes[id]) || NO_OPTION_SELECTED}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                   const value = e.target.value;
                   if (value !== NO_OPTION_SELECTED) handleChange(id, value);
@@ -207,12 +208,12 @@ const DispositionTab = ({ task }: OwnProps) => {
             <Input
               type="text"
               id={id}
-              value={customAttributes[id] || ''}
+              value={(taskFromRedux?.custom_attributes && taskFromRedux?.custom_attributes[id]) || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(id, e.target.value)}
             />
           </div>
         ))}
-        {isNotesEnabled() && <Notes task={task} notes={notes} saveNotes={setNotes} />}
+        {isNotesEnabled() && <Notes task={task} notes={notes || ''} saveNotes={setNotes} />}
       </Stack>
     </Box>
   );

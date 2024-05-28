@@ -15,6 +15,7 @@ export enum StringTemplates {
   ChooseAnOption = 'PSChooseAnOption',
   ChooseOptions = 'PSChooseOption',
   AttributeRequired = 'PSAttributeRequired',
+  DispositionRequiredBypassed = 'PSDispositionRequiredBypassed',
 }
 
 export const stringHook = () => ({
@@ -28,6 +29,8 @@ export const stringHook = () => ({
     [StringTemplates.ChooseAnOption]: 'Choose an option',
     [StringTemplates.ChooseOptions]: 'Choose one or more options',
     [StringTemplates.AttributeRequired]: 'Please select an option or enter a value for all required fields.',
+    [StringTemplates.DispositionRequiredBypassed]:
+      'A disposition was required in both the Notes tab and the Disposition tab, but no disposition was provided in the Disposition tab. Due to an incompatibility, the task will be completed anyway if the Notes tab is populated. Please contact your administrator, as this is likely a misconfiguration.',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,
