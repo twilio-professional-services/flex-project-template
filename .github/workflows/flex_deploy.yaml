@@ -52,9 +52,11 @@ concurrency:
   group: flex-deploy-${{ inputs.environment || github.event.inputs.environment }}
 
 jobs:
-  validate-flex-account:
+  validate-environment:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v4
       - name: setup node.js
@@ -70,15 +72,15 @@ jobs:
         id: initial-env
         run: |
           npm install --ignore-scripts
-      - name: validate api key
-        run: node scripts/validate-api-key.mjs >> $GITHUB_STEP_SUMMARY
+      - name: validate environment
+        run: node scripts/validate-environment.mjs >> $GITHUB_STEP_SUMMARY
 
   # When performing an initial release
   # the serverless backend needs an initial deploy so
   # the domain name can be pulled in for the terraform deploy
   perform-initial-serverless-release:
     needs:
-      - validate-flex-account
+      - validate-environment
     if: |
       (inputs.initial_release == true &&
        inputs.deploy_terraform == true)
@@ -116,7 +118,7 @@ jobs:
   deploy-terraform:
     needs:
       - perform-initial-serverless-release
-      - validate-flex-account
+      - validate-environment
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -142,7 +144,7 @@ jobs:
       ENVIRONMENT: ${{ inputs.environment }}
     needs:
       - deploy-terraform
-      - validate-flex-account
+      - validate-environment
     steps:
       - uses: actions/checkout@v4
       - name: setup node.js
@@ -183,7 +185,7 @@ jobs:
       OVERWRITE_CONFIG: ${{ inputs.initial_release == true || inputs.overwrite_config == true }}
     needs:
       - deploy-packages
-      - validate-flex-account
+      - validate-environment
     steps:
       - uses: actions/checkout@v4
       - name: setup node.js
@@ -210,7 +212,7 @@ jobs:
 
   deploy-release-plugin:
     needs:
-      - validate-flex-account
+      - validate-environment
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:

@@ -11,15 +11,23 @@ const validateAccountSid = async () => {
     
     if (flexConfigResponse?.data?.account_sid === process.env.TWILIO_ACCOUNT_SID) {
       console.log('✅ Success: API key matches provided Flex account SID');
-      return process.exit(0);
+      return;
     }
     
-    console.error('❌ API key does not match the provided Flex account SID or this is not a Flex account');
+    console.log('❌ Error: API key does not match the provided Flex account SID or this is not a Flex account');
   } catch (error) {
-    console.error(`❌ Error validating API key and Flex account SID: ${error}`);
+    console.log(`❌ Error validating API key and Flex account SID: ${error}`);
   }
   
-  return process.exit(1);
+  process.exitCode = 1;
 }
 
+const validateEnvName = () => {
+  if (process.env.ENVIRONMENT.includes('/')) {
+    console.log(`❌ Error: Environment name includes invalid character '/'`);
+    process.exitCode = 1;
+  }
+}
+
+validateEnvName();
 validateAccountSid();
