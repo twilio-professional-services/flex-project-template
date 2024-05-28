@@ -136,12 +136,14 @@ const ParticipantActionsButtons = (props: OwnProps) => {
           className="ParticipantCanvas-AcceptAction"
           onClick={onKickParticipantConfirmClick}
           variant="secondary"
+          title={templates.CallParticipantStatusKickConfirmation()}
         />
         <IconButton
           icon="Close"
           className="ParticipantCanvas-DeclineAction"
           onClick={hideKickConfirmation}
           variant="secondary"
+          title={templates.CallParticipantStatusKickCancellation()}
         />
       </>
     );
