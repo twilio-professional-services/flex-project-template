@@ -4,7 +4,7 @@ const regionUrl = process.env.TWILIO_REGION ? `${process.env.TWILIO_REGION}.twil
 
 const validateAccountSid = async () => {
   try {
-    const flexConfigResponse = await axios.get(`https://flex-api.${regionUrl}.com/v1/Configuration`, {
+    const flexConfigResponse = await axios.get(`https://flex-api.${regionUrl}/v1/Configuration`, {
       auth: {
         username: process.env.TWILIO_API_KEY,
         password: process.env.TWILIO_API_SECRET
