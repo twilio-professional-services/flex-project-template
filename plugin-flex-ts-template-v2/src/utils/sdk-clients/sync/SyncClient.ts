@@ -7,7 +7,9 @@ export type SyncStreamEvent = {
   isLocal: boolean;
 };
 
-const client = new SyncClient(Flex.Manager.getInstance().user.token);
+const client = new SyncClient(Flex.Manager.getInstance().user.token, {
+  region: Flex.Manager.getInstance().configuration.sdkOptions?.worker?.region,
+});
 
 export default client;
 
