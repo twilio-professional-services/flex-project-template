@@ -1,7 +1,9 @@
 const { isString, isObject } = require('lodash');
 const axios = require('axios');
 
-const { executeWithRetry, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { executeWithRetry, twilioExecute, getRegionUrl } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 
 /**
  * @param {object} parameters the parameters for the function
@@ -60,7 +62,7 @@ exports.fetchRecordingMedia = async (parameters) => {
 
   return executeWithRetry(parameters.context, async () => {
     const getResponse = await axios.get(
-      `https://api.twilio.com/2010-04-01/Accounts/${process.env.ACCOUNT_SID}/Recordings/${recordingSid}.mp3`,
+      `https://api.${getRegionUrl()}/2010-04-01/Accounts/${process.env.ACCOUNT_SID}/Recordings/${recordingSid}.mp3`,
       config,
     );
 

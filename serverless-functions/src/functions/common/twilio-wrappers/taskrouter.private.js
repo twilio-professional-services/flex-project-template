@@ -1,7 +1,9 @@
 const { merge, isString, isObject, omitBy, isNil } = require('lodash');
 const axios = require('axios');
 
-const { executeWithRetry, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { executeWithRetry, twilioExecute, getRegionUrl } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 
 /**
  * @param {object} parameters the parameters for the function
@@ -23,7 +25,9 @@ exports.updateTaskAttributes = async function updateTaskAttributes(parameters) {
     throw new Error('Invalid parameters object passed. Parameters must contain attributesUpdate JSON string');
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
 
-  const taskContextURL = `https://taskrouter.twilio.com/v1/Workspaces/${process.env.TWILIO_FLEX_WORKSPACE_SID}/Tasks/${taskSid}`;
+  const taskContextURL = `https://taskrouter.${getRegionUrl()}/v1/Workspaces/${
+    process.env.TWILIO_FLEX_WORKSPACE_SID
+  }/Tasks/${taskSid}`;
   const config = {
     auth: {
       username: process.env.ACCOUNT_SID,
