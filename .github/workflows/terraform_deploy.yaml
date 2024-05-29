@@ -6,9 +6,6 @@ on:
       environment:
         required: true
         type: string
-      region:
-        required: false
-        type: string
     secrets:
       TWILIO_ACCOUNT_SID:
         required: true
@@ -16,6 +13,8 @@ on:
         required: true
       TWILIO_API_SECRET:
         required: true
+      TWILIO_REGION:
+        required: false
       TF_ENCRYPTION_KEY:
         required: true
 
@@ -37,8 +36,8 @@ jobs:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TWILIO_REGION: ${{ secrets.TWILIO_REGION }}
       ENVIRONMENT: ${{ inputs.environment }}
-      TWILIO_REGION: ${{ inputs.region }}
     steps:
       - uses: actions/checkout@v4
       - uses: hashicorp/setup-terraform@v3

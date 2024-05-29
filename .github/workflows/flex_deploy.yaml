@@ -127,11 +127,11 @@ jobs:
     uses: ./.github/workflows/terraform_deploy.yaml
     with:
       environment: ${{ inputs.environment }}
-      region: ${{ vars.TWILIO_REGION }}
     secrets:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TWILIO_REGION: ${{ vars.TWILIO_REGION }}
       TF_ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
 
   deploy-packages:
