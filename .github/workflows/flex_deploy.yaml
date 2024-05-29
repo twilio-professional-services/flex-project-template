@@ -127,6 +127,7 @@ jobs:
     uses: ./.github/workflows/terraform_deploy.yaml
     with:
       environment: ${{ inputs.environment }}
+      region: ${{ vars.TWILIO_REGION }}
     secrets:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
