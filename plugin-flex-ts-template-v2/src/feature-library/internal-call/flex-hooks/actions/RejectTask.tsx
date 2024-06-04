@@ -7,11 +7,12 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.RejectTask;
 export const actionHook = function handleInternalRejectTask(flex: typeof Flex, _manager: Flex.Manager) {
-  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload, abortFunction) => {
     if (!isInternalCall(payload.task)) {
       return;
     }
 
+    abortFunction();
     await InternalCallService.rejectInternalTask(payload.task);
   });
 };

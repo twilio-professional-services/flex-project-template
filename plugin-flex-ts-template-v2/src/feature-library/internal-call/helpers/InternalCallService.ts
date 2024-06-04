@@ -26,10 +26,9 @@ class InternalCallService extends ApiService {
 
   rejectInternalTask = async (task: ITask) => {
     return new Promise((resolve, reject) => {
-      const taskSid = task.attributes.conferenceSid;
-
       const encodedParams = {
-        taskSid,
+        taskSid: task.taskSid,
+        conferenceSid: task.attributes.conference?.sid,
         Token: encodeURIComponent(this.manager.user.token),
       };
 
