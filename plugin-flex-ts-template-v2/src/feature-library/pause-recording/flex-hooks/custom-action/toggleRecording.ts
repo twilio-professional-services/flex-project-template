@@ -18,9 +18,9 @@ export const registerToggleCallRecordingAction = async () => {
       pausedRecordings &&
       pausedRecordings.find((pausedRecording) => payload.task && pausedRecording.reservationSid === payload.task.sid)
     ) {
-      Actions.invokeAction('ResumeCallRecording', payload);
+      await Actions.invokeAction('ResumeCallRecording', payload);
     } else {
-      Actions.invokeAction('PauseCallRecording', payload);
+      await Actions.invokeAction('PauseCallRecording', payload);
     }
   });
 };

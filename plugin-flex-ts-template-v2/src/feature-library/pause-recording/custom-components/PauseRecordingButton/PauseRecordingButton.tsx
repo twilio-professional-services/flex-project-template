@@ -53,9 +53,9 @@ const PauseRecordingButton = (props: OwnProps) => {
     setWaiting(true);
 
     if (paused) {
-      Actions.invokeAction('ResumeCallRecording', { task: props.task });
+      await Actions.invokeAction('ResumeCallRecording', { task: props.task });
     } else {
-      Actions.invokeAction('PauseCallRecording', { task: props.task });
+      await Actions.invokeAction('PauseCallRecording', { task: props.task });
     }
 
     setWaiting(false);
