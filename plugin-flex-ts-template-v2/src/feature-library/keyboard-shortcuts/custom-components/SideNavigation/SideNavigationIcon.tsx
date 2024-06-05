@@ -1,9 +1,7 @@
 import { SideLink, Actions, Template, templates } from '@twilio/flex-ui';
-import { useEffect } from 'react';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import { KeyboardIcon, KeyboardIconFilled } from '../../../../icons/Keyboard';
-import { getCustomShortcuts, getDefaultShortcuts } from '../../utils/KeyboardShortcutsUtil';
 
 interface SideNavigationProps {
   activeView?: string;
@@ -16,11 +14,6 @@ const SideNavigationIcon = ({ activeView, viewName }: SideNavigationProps) => {
       viewName,
     });
   };
-
-  useEffect(() => {
-    getDefaultShortcuts();
-    getCustomShortcuts();
-  }, []);
 
   return (
     <SideLink

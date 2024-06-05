@@ -7,6 +7,8 @@ import { readFromLocalStorage, deleteMultipleFromLocalStorage } from './LocalSto
 import { presetCustomShortcuts } from './CustomKeyboardShortcuts';
 import { shortcutsConfig, deleteShortcuts, enableThrottling, removeAllShortcuts } from './constants';
 
+let initialShortcuts: KeyboardShortcuts = {};
+
 export const isSupported = (): boolean => {
   return !(
     Flex.VERSION.startsWith('1') ||
@@ -14,6 +16,12 @@ export const isSupported = (): boolean => {
     Flex.VERSION === '2.0.1' ||
     Flex.VERSION === '2.0.2'
   );
+};
+
+export const initialize = () => {
+  addKeyboardShortcutUtil(presetCustomShortcuts());
+  initialShortcuts = getCurrentShortcuts();
+  getUserConfig();
 };
 
 export const getCurrentShortcuts = (): KeyboardShortcuts => {
@@ -35,7 +43,7 @@ export const disableKeyboardShortcutsUtil = (): void => {
 export const resetKeyboardShortcutsUtil = (): void => {
   disableKeyboardShortcutsUtil();
   deleteMultipleFromLocalStorage([deleteShortcuts, enableThrottling, removeAllShortcuts, shortcutsConfig]);
-  shortcutInitUtil(Flex.defaultKeyboardShortcuts);
+  shortcutInitUtil(initialShortcuts);
 };
 
 export const addKeyboardShortcutUtil = (shortcutObject: KeyboardShortcuts): void => {
@@ -75,35 +83,22 @@ export const getAllShortcuts = (): ShortcutsObject[] => {
   });
 };
 
-export const getDefaultShortcuts = (): ShortcutsObject[] => {
-  getUserConfig();
+export const getShortcuts = (getCustom: boolean): ShortcutsObject[] => {
   const customShortcuts = initCustomShortcuts();
   const allShortcuts = getAllShortcuts();
 
   const customShortcutsKeys = Object.values(customShortcuts).map((item) => item.actionName);
 
-  return allShortcuts.filter((item) => customShortcutsKeys.indexOf(item.actionName) === -1);
-};
-
-export const getCustomShortcuts = (): ShortcutsObject[] => {
-  getUserConfig();
-  if (readFromLocalStorage(shortcutsConfig) === (undefined || null)) {
-    addKeyboardShortcutUtil(presetCustomShortcuts());
+  if (getCustom) {
+    return allShortcuts.filter((item) => customShortcutsKeys.indexOf(item.actionName) !== -1);
   }
-
-  const customShortcuts = initCustomShortcuts();
-  const allShortcuts = getAllShortcuts();
-
-  const customShortcutsKeys = Object.values(customShortcuts).map((item) => item.actionName);
-
-  return allShortcuts.filter((item) => customShortcutsKeys.indexOf(item.actionName) !== -1);
+  return allShortcuts.filter((item) => customShortcutsKeys.indexOf(item.actionName) === -1);
 };
 
 export const getUserConfig = (): void => {
   const localConfig = readFromLocalStorage(shortcutsConfig);
 
   if (localConfig) {
-    addKeyboardShortcutUtil(presetCustomShortcuts());
     const userLocalConfig: ShortcutsObject = JSON.parse(localConfig);
     const systemConfig = getCurrentShortcuts();
 
