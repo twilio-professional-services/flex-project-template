@@ -16,6 +16,6 @@ export const registerPauseCallRecordingAction = async () => {
       return;
     }
 
-    pauseRecording(payload.task);
+    await pauseRecording(payload.task);
   });
 };

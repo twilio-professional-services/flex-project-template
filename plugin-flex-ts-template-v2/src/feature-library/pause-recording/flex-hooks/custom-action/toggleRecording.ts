@@ -11,13 +11,6 @@ export const registerToggleCallRecordingAction = async () => {
       return;
     }
 
-    const isLiveCall = payload.task ? TaskHelper.isLiveCall(payload.task) : false;
-
-    if (!isLiveCall) {
-      console.log('Current task is not a live call, cannot pause/resume recording');
-      return;
-    }
-
     const state: AppState = Manager.getInstance().store.getState() as AppState;
     const { pausedRecordings } = state[reduxNamespace].pauseRecording as PauseRecordingState;
 

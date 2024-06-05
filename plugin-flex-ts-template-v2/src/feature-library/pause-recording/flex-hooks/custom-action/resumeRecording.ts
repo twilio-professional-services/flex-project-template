@@ -16,6 +16,6 @@ export const registerResumeCallRecordingAction = async () => {
       return;
     }
 
-    resumeRecording(payload.task);
+    await resumeRecording(payload.task);
   });
 };
