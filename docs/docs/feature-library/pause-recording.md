@@ -23,7 +23,7 @@ There are some additional configuration properties you may change if desired:
 
 ## keyboard shortcuts
 
-Default keyboard shortcuts have been created but may be remapped using the keyboard shortcut feature. Default the following keys are mapped:
+Default keyboard shortcuts have been created but may be remapped using the keyboard shortcut feature. By default, the following keys are mapped:
 
 | Key | Full Command     | Action                                     |
 | --- | ---------------- | ------------------------------------------ |
