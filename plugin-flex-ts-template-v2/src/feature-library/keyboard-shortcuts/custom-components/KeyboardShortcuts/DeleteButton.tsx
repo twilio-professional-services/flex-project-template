@@ -4,7 +4,7 @@ import { DeleteIcon } from '@twilio-paste/icons/esm/DeleteIcon';
 
 import { ShortcutsObject } from '../../types/types';
 import { writeToLocalStorage } from '../../utils/LocalStorageUtil';
-import { getCurrentShortcuts, deleteShortcutsUtil } from '../../utils/KeyboardShortcutsUtil';
+import { getCurrentShortcuts, deleteShortcut } from '../../utils/KeyboardShortcutsUtil';
 import { shortcutsConfig } from '../../utils/constants';
 
 interface DeleteButtonProps {
@@ -26,7 +26,7 @@ const DeleteButton = ({
     const updatedShortcuts = shortcuts.filter((shortcut) => shortcut.key !== shortcutKey);
     setShortcuts(updatedShortcuts);
 
-    deleteShortcutsUtil(shortcutKey);
+    deleteShortcut(shortcutKey);
     toasterDeleteNotification(actionName);
     writeToLocalStorage(shortcutsConfig, getCurrentShortcuts());
   };

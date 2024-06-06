@@ -13,6 +13,9 @@ export enum StringTemplates {
   RESUME_FAILED = 'PSResumeRecordingFailed',
   PAUSE_TOOLTIP = 'PSPauseRecordingTooltip',
   RESUME_TOOLTIP = 'PSResumeRecordingTooltip',
+  SHORTCUT_TOGGLE_RECORDING = 'PSShortcutToggleCallRecording',
+  SHORTCUT_PAUSE_RECORDING = 'PSShortcutPauseCallRecording',
+  SHORTCUT_RESUME_RECORDING = 'PSShortcutResumeCallRecording',
 }
 
 export const stringHook = () => ({
@@ -25,6 +28,9 @@ export const stringHook = () => ({
     [StringTemplates.RESUME_FAILED]: 'Failed to resume call recording. Please try again.',
     [StringTemplates.PAUSE_TOOLTIP]: 'Pause Recording',
     [StringTemplates.RESUME_TOOLTIP]: 'Resume Recording',
+    [StringTemplates.SHORTCUT_TOGGLE_RECORDING]: 'Toggle call recording pause/resume',
+    [StringTemplates.SHORTCUT_PAUSE_RECORDING]: 'Pause call recording',
+    [StringTemplates.SHORTCUT_RESUME_RECORDING]: 'Resume call recording',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,
