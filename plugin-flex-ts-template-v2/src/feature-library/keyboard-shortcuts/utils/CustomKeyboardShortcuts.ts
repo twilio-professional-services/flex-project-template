@@ -1,8 +1,38 @@
+import * as Flex from '@twilio/flex-ui';
 import { Actions, Manager } from '@twilio/flex-ui';
 
 import { StringTemplates } from '../flex-hooks/strings';
 
 const manager = Manager.getInstance();
+
+const getCurrentTask = () => {
+  // Get the state of the Flex store
+  const state = manager.store.getState();
+
+  // Find the currently focused task
+  const focusedTaskSid = state.flex.view.selectedTaskSid;
+
+  if (focusedTaskSid) {
+    const task = Flex.TaskHelper.getTaskByTaskSid(focusedTaskSid);
+    console.log(`Returning focused task`, task);
+    return task;
+  }
+
+  console.log(`No focused task found, returning null`);
+  return null;
+};
+
+const toggleCallRecording = () => {
+  Actions.invokeAction('ToggleCallRecording', { task: getCurrentTask() });
+};
+
+const pauseCallRecording = () => {
+  Actions.invokeAction('PauseCallRecording', { task: getCurrentTask() });
+};
+
+const resumeCallRecording = () => {
+  Actions.invokeAction('ResumeCallRecording', { task: getCurrentTask() });
+};
 
 const toggleDialpad = () => {
   Actions.invokeAction('ToggleOutboundDialer');
@@ -50,6 +80,21 @@ const debuggingHelper = () => {
 
 export const presetCustomShortcuts = () => {
   return {
+    2: {
+      action: toggleCallRecording,
+      name: (manager.strings as any)[StringTemplates.CustomShortcutToggleCallRecording],
+      throttle: 1000,
+    },
+    3: {
+      action: pauseCallRecording,
+      name: (manager.strings as any)[StringTemplates.CustomShortcutPauseCallRecording],
+      throttle: 1000,
+    },
+    4: {
+      action: resumeCallRecording,
+      name: (manager.strings as any)[StringTemplates.CustomShortcutResumeCallRecording],
+      throttle: 1000,
+    },
     D: {
       action: toggleDialpad,
       name: (manager.strings as any)[StringTemplates.CustomShortcutToggleDialpad],
