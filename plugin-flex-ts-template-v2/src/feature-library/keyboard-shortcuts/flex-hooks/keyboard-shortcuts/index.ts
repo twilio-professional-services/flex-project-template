@@ -3,7 +3,7 @@ import * as Flex from '@twilio/flex-ui';
 import { StringTemplates } from '../strings';
 
 // Return an object of KeyboardShortcuts
-export const keyboardShortcutHook = (flex: typeof Flex, manager: Flex.Manager) => ({
+export const keyboardShortcutHook = () => ({
   D: {
     action: toggleDialpad,
     name: StringTemplates.CustomShortcutToggleDialpad,

@@ -6,7 +6,7 @@ import { ShortcutsObject, RemapShortcutObject, ShortcutActions } from '../types/
 import { readFromLocalStorage, deleteMultipleFromLocalStorage } from './LocalStorageUtil';
 import { shortcutsConfig, deleteShortcuts, enableThrottling, removeAllShortcuts } from './constants';
 
-let initialShortcuts: KeyboardShortcuts = {};
+const initialShortcuts: KeyboardShortcuts = {};
 
 export const isSupported = (): boolean => {
   return !(
@@ -18,7 +18,14 @@ export const isSupported = (): boolean => {
 };
 
 export const initialize = () => {
-  initialShortcuts = { ...getCurrentShortcuts() };
+  // Clone the initial shortcuts state before we remap them
+  for (const [key, value] of Object.entries(getCurrentShortcuts())) {
+    initialShortcuts[key] = {
+      name: value.name,
+      throttle: value.throttle,
+      action: value.action,
+    };
+  }
   getUserConfig();
 };
 
