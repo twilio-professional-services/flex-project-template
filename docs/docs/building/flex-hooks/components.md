@@ -1,16 +1,13 @@
 Use a component hook to [modify or add components](https://www.twilio.com/docs/flex/developer/ui/work-with-components-and-props) to Flex UI.
 
 ```ts
-import * as Flex from "@twilio/flex-ui";
+import * as Flex from '@twilio/flex-ui';
 
-import MyComponentName from "../../custom-components/MyComponentName";
-import { FlexComponent } from "../../../../types/feature-loader";
+import MyComponentName from '../../custom-components/MyComponentName';
+import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.CallCanvas;
-export const componentHook = function addMyComponentToCallCanvas(
-  flex: typeof Flex,
-  manager: Flex.Manager
-) {
+export const componentHook = function addMyComponentToCallCanvas(flex: typeof Flex, manager: Flex.Manager) {
   flex.CallCanvas.Content.add(<MyComponentName key="my-awesome-component" />, {
     sortOrder: -1,
   });
