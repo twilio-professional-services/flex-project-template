@@ -1,4 +1,5 @@
 export type PausedRecording = {
   reservationSid: string;
-  recordingSid: string;
+  recordingSidDC: string;
+  recordingSidSC: string;
 };
