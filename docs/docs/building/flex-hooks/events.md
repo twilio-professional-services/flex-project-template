@@ -1,15 +1,15 @@
 Use an event hook to add your own handler for [Flex events](https://assets.flex.twilio.com/docs/releases/flex-ui/2.1.0/ui-actions/FlexEvent/).
 
 ```ts
-import * as Flex from "@twilio/flex-ui";
+import * as Flex from '@twilio/flex-ui';
 
-import { FlexEvent } from "../../../../types/feature-loader";
+import { FlexEvent } from '../../../../types/feature-loader';
 
 export const eventName = FlexEvent.taskReceived;
 export const eventHook = function exampleTaskReceivedHandler(
   flex: typeof Flex,
   manager: Flex.Manager,
-  task: Flex.ITask
+  task: Flex.ITask,
 ) {
   // your code here
 };

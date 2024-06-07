@@ -1,24 +1,21 @@
 Use a channels hook to register new [task channel definitions](https://www.twilio.com/docs/flex/developer/ui/task-channel-definitions).
 
 ```ts
-import * as Flex from "@twilio/flex-ui";
-import PhoneCallbackIcon from "@material-ui/icons/PhoneCallback";
+import * as Flex from '@twilio/flex-ui';
+import PhoneCallbackIcon from '@material-ui/icons/PhoneCallback';
 
-import { TaskAttributes } from "../../../../types/task-router/Task";
+import { TaskAttributes } from '../../../../types/task-router/Task';
 
-export const channelHook = function createCallbackChannel(
-  flex: typeof Flex,
-  manager: Flex.Manager
-) {
+export const channelHook = function createCallbackChannel(flex: typeof Flex, manager: Flex.Manager) {
   const channelDefinition = flex.DefaultTaskChannels.createDefaultTaskChannel(
-    "callback",
+    'callback',
     (task) => {
       const { taskType } = task.attributes as TaskAttributes;
-      return task.taskChannelUniqueName === "voice" && taskType === "callback";
+      return task.taskChannelUniqueName === 'voice' && taskType === 'callback';
     },
-    "CallbackIcon",
-    "CallbackIcon",
-    "palegreen"
+    'CallbackIcon',
+    'CallbackIcon',
+    'palegreen',
   );
 
   const { templates } = channelDefinition;
@@ -28,13 +25,11 @@ export const channelHook = function createCallbackChannel(
       ...templates,
       TaskListItem: {
         ...templates?.TaskListItem,
-        firstLine: (task: Flex.ITask) =>
-          `${task.queueName}: ${task.attributes.name}`,
+        firstLine: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`,
       },
       TaskCanvasHeader: {
         ...templates?.TaskCanvasHeader,
-        title: (task: Flex.ITask) =>
-          `${task.queueName}: ${task.attributes.name}`,
+        title: (task: Flex.ITask) => `${task.queueName}: ${task.attributes.name}`,
       },
       IncomingTaskCanvas: {
         ...templates?.IncomingTaskCanvas,
