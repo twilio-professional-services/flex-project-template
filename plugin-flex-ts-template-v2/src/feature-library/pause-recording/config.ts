@@ -1,4 +1,4 @@
-import { getFeatureFlags, loadedFeatures } from '../../utils/configuration';
+import { getFeatureFlags, getLoadedFeatures } from '../../utils/configuration';
 import PauseRecordingConfig from './types/ServiceConfiguration';
 
 const {
@@ -27,7 +27,7 @@ export const isIncludeSilenceEnabled = () => {
 };
 
 export const isDualChannelEnabled = () => {
-  return loadedFeatures.includes('dual-channel-recording');
+  return getLoadedFeatures().includes('dual-channel-recording');
 };
 
 export const getChannelToRecord = () => {

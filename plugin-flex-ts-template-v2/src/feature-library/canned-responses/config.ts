@@ -1,4 +1,4 @@
-import { getFeatureFlags, loadedFeatures } from '../../utils/configuration';
+import { getFeatureFlags, getLoadedFeatures } from '../../utils/configuration';
 import CannedResponsesConfig from './types/ServiceConfiguration';
 
 const { enabled = false, location = 'CRM' } =
@@ -13,5 +13,5 @@ export const getUILocation = () => {
 };
 
 export const isEnhancedCRMEnabled = () => {
-  return loadedFeatures.includes('enhanced-crm-container');
+  return getLoadedFeatures().includes('enhanced-crm-container');
 };

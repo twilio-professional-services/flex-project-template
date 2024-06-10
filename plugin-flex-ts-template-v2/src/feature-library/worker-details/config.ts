@@ -1,4 +1,4 @@
-import { getFeatureFlags, loadedFeatures } from '../../utils/configuration';
+import { getFeatureFlags, getLoadedFeatures } from '../../utils/configuration';
 import WorkerDetailsConfig from './types/ServiceConfiguration';
 
 const {
@@ -40,5 +40,5 @@ export const getDepartments = () => {
 };
 
 export const isWorkerCanvasTabsEnabled = () => {
-  return loadedFeatures.includes('worker-canvas-tabs');
+  return getLoadedFeatures().includes('worker-canvas-tabs');
 };

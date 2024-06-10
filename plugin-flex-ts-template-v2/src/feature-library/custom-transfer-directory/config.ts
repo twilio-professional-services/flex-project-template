@@ -1,6 +1,6 @@
 import { Manager } from '@twilio/flex-ui';
 
-import { getFeatureFlags, loadedFeatures } from '../../utils/configuration';
+import { getFeatureFlags, getLoadedFeatures } from '../../utils/configuration';
 import { ExternalDirectoryEntry } from './types/DirectoryEntry';
 import CustomTransferDirectoryConfig from './types/ServiceConfiguration';
 
@@ -69,11 +69,11 @@ export const shouldFetchInsightsData = (): boolean => {
 };
 
 export const isCbmColdTransferEnabled = (): boolean => {
-  return loadedFeatures.includes('conversation-transfer') && conversation_transfer_cold_transfer;
+  return getLoadedFeatures().includes('conversation-transfer') && conversation_transfer_cold_transfer;
 };
 
 export const isCbmWarmTransferEnabled = (): boolean => {
-  return loadedFeatures.includes('conversation-transfer') && conversation_transfer_warm_transfer;
+  return getLoadedFeatures().includes('conversation-transfer') && conversation_transfer_warm_transfer;
 };
 
 export const isExternalDirectoryEnabled = (): boolean => {
@@ -85,7 +85,7 @@ export const getExternalDirectory = (): Array<ExternalDirectoryEntry> => {
 };
 
 export const isVoiceXWTEnabled = () => {
-  return loadedFeatures.includes('conference') || nativeXwtEnabled;
+  return getLoadedFeatures().includes('conference') || nativeXwtEnabled;
 };
 
 export const shouldSkipPhoneNumberValidation = () => {

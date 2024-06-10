@@ -1,4 +1,4 @@
-import { getFeatureFlags, loadedFeatures } from '../../utils/configuration';
+import { getFeatureFlags, getLoadedFeatures } from '../../utils/configuration';
 import SupervisorCapacityConfig from './types/ServiceConfiguration';
 
 const { enabled = false, rules } = (getFeatureFlags()?.features?.supervisor_capacity as SupervisorCapacityConfig) || {};
@@ -12,5 +12,5 @@ export const getRules = () => {
 };
 
 export const isWorkerCanvasTabsEnabled = () => {
-  return loadedFeatures.includes('worker-canvas-tabs');
+  return getLoadedFeatures().includes('worker-canvas-tabs');
 };
