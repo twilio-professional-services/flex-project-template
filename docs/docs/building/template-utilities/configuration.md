@@ -89,6 +89,32 @@ For example, if the `activity-reservation-handler` feature is globally enabled b
 }
 ```
 
+#### Checking for enabled features
+
+When developing your feature, it may be beneficial to know which other features are enabled so that your feature can robustly handle all scenarios. For example, the `pause-recording` feature may wish to know if the `dual-channel-recording` feature is enabled, in order to determine what recording object to pause. While you can check the loaded configuration for which features are enabled, this does not necessarily reflect which features are actually loaded--for example, if a feature was removed from the codebase but not from the configuration. Therefore, a bespoke utility has been created for this purpose.
+
+The configuration utility in the template plugin (located at `plugin-flex-ts-template-v2/src/utils/configuration/index.ts`) allows you to query for enabled loaded features at runtime by calling the exported `getLoadedFeatures()` function.
+
+Example usage within a feature:
+
+```typescript
+import { getLoadedFeatures } from '../../utils/configuration';
+
+const isDualChannelEnabled = () => {
+  return getLoadedFeatures().includes('dual-channel-recording');
+};
+```
+
+:::danger Usage warning
+If `getLoadedFeatures()` is accessed before all features have loaded, it will return an empty array, along with the following console log:
+
+```
+Caution! getLoadedFeatures() was called before all features were loaded, so none will be returned.
+```
+
+When using this function, be sure to call it only after all features have loaded, and validate that the above error message does not appear within your browser's JavaScript console.
+:::
+
 ### Configuring skills
 
 The `taskrouter_skills.json` file under the flex-config directory defines skills that should be automatically deployed. The skills in the file will be merged with any skills existing in the environment. By default this contains two sample skills, `template_example_sales` and `template_example_support`.
