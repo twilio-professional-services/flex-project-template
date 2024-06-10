@@ -1,8 +1,8 @@
 Use this example Redux Toolkit slice as a starting point for keeping Redux state within your feature.
 
 ```ts
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 export interface ExampleState {
   myValue: boolean;
@@ -15,7 +15,7 @@ const initialState = {
 } as ExampleState;
 
 const exampleSlice = createSlice({
-  name: "exampleStateName",
+  name: 'exampleStateName',
   initialState,
   reducers: {
     updateMyValue(state, action: PayloadAction<boolean>) {

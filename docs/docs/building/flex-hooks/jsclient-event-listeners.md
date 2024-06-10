@@ -1,20 +1,17 @@
 Use a JS client event listener hook to add your own handler for events from the various client SDKs within Flex.
 
 ```ts
-import * as Flex from "@twilio/flex-ui";
-import { Conversation } from "@twilio/conversations";
+import * as Flex from '@twilio/flex-ui';
+import { Conversation } from '@twilio/conversations';
 
-import {
-  FlexJsClient,
-  ConversationEvent,
-} from "../../../../../types/feature-loader";
+import { FlexJsClient, ConversationEvent } from '../../../../../types/feature-loader';
 
 export const clientName = FlexJsClient.conversationsClient;
 export const eventName = ConversationEvent.conversationJoined;
 export const jsClientHook = function exampleConversationJoinedHandler(
   flex: typeof Flex,
   manager: Flex.Manager,
-  conversation: Conversation
+  conversation: Conversation,
 ) {
   // your code here
 };
