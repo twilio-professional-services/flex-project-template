@@ -8,6 +8,7 @@ export enum NotificationIds {
   RESUME_RECORDING = 'PSResumeRecording',
   PAUSE_FAILED = 'PSPauseFailed',
   RESUME_FAILED = 'PSResumeFailed',
+  MISSING_RECORDING = 'PSPauseMissingRecording',
 }
 
 export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => [
@@ -37,6 +38,13 @@ export const notificationHook = (_flex: typeof Flex, _manager: Flex.Manager) => 
     closeButton: true,
     content: StringTemplates.RESUME_FAILED,
     type: NotificationType.error,
+    timeout: 3000,
+  },
+  {
+    id: NotificationIds.MISSING_RECORDING,
+    closeButton: true,
+    content: StringTemplates.MISSING_RECORDING,
+    type: NotificationType.warning,
     timeout: 3000,
   },
 ];
