@@ -21,5 +21,5 @@
     "noUnusedParameters": false
   },
   "include": ["./src/**/*"],
-  "exclude": ["./**/*.test.ts", "./**/*.test.tsx", "./**/__mocks__/*.ts", "./**/__mocks__/*.tsx"]
+  "exclude": []
 }
