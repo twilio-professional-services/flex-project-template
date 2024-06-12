@@ -87,7 +87,7 @@ const validateUiVersion = (flexConfig) => {
 }
 
 const validateTaskRouterWorkspace = (flexConfig) => {
-  const workspaceResultsRaw = shell.exec(`twilio api:taskrouter:v1:workspaces:fetch --sid=${flexConfig.taskrouter_workspace_sid} -o json`, {silent: false});
+  const workspaceResultsRaw = shell.exec(`twilio api:taskrouter:v1:workspaces:fetch --sid=${flexConfig.taskrouter_workspace_sid} -o json`, {silent: true});
   
   if (workspaceResultsRaw.code !== 0 || !workspaceResultsRaw.stdout) {
     console.log('❌ Error: Unable to retrieve the configured TaskRouter workspace');
