@@ -1,11 +1,9 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
-import { FetchedRecording } from '../../../types/serverless/twilio-api';
 import { isListEnabled } from '../config';
 
 export interface ParkInteractionResponse {
   success: boolean;
-  recording: FetchedRecording;
 }
 
 export interface ParkedInteraction {
@@ -36,7 +34,6 @@ interface Customers {
 
 interface UnparkInteractionResponse {
   success: boolean;
-  recording: FetchedRecording;
 }
 
 class ParkInteractionService extends ApiService {
@@ -52,7 +49,7 @@ class ParkInteractionService extends ApiService {
     queueName: string,
     queueSid: string,
     taskAttributes: string,
-  ): Promise<FetchedRecording> => {
+  ): Promise<ParkInteractionResponse> => {
     return new Promise((resolve, reject) => {
       const encodedParams: EncodedParams = {
         channelSid: encodeURIComponent(channelSid),
@@ -80,7 +77,7 @@ class ParkInteractionService extends ApiService {
         },
       )
         .then((resp: ParkInteractionResponse) => {
-          resolve(resp.recording);
+          resolve(resp);
         })
         .catch((error) => {
           console.log('Error parking interaction', error);
@@ -89,7 +86,7 @@ class ParkInteractionService extends ApiService {
     });
   };
 
-  unparkInteraction = async (ConversationSid: string, WebhookSid: string): Promise<any> => {
+  unparkInteraction = async (ConversationSid: string, WebhookSid: string): Promise<UnparkInteractionResponse> => {
     return new Promise((resolve, reject) => {
       const encodedParams: EncodedParams = {
         ConversationSid: encodeURIComponent(ConversationSid),
@@ -106,7 +103,7 @@ class ParkInteractionService extends ApiService {
         },
       )
         .then((resp: any) => {
-          resolve(resp.recording);
+          resolve(resp);
         })
         .catch((error) => {
           console.log('Error unparking interaction', error);
