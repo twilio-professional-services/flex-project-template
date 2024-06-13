@@ -75,7 +75,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
               .syncMaps(syncMap.data?.sid || `ParkedInteractions_${workerSid}`)
               .syncMapItems.create({
                 key: conversationSid,
-                ttl: 86400, // One day
+                ttl: channelType === 'whatsapp' ? 86400 : 0, // WhatsApp rules dictate that a non-templated message cannot be sent more than 24 hours after the last inbound message.
                 data: {
                   interactionSid,
                   flexInteractionChannelSid: channelSid,
