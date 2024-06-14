@@ -4,6 +4,7 @@ import { TaskQualificationConfig } from 'feature-library/agent-automation/types/
 
 import { getMatchingTaskConfiguration } from '../../config';
 import { FlexEvent } from '../../../../types/feature-loader';
+import logger from '../../../../utils/logger';
 
 async function selectAndAcceptTask(task: ITask, taskConfig: TaskQualificationConfig) {
   const {
@@ -19,13 +20,13 @@ async function selectAndAcceptTask(task: ITask, taskConfig: TaskQualificationCon
   // Select and accept the task per configuration
   try {
     if (taskConfig.auto_select) await Flex.Actions.invokeAction('SelectTask', { sid });
-  } catch (error) {
-    console.error('[agent-automation] Unable to auto select task', error);
+  } catch (error: any) {
+    logger.error('[agent-automation] Unable to auto select task', error);
   }
   try {
     if (taskConfig.auto_accept) await Flex.Actions.invokeAction('AcceptTask', { sid });
-  } catch (error) {
-    console.error('[agent-automation] Unable to auto accept task', error);
+  } catch (error: any) {
+    logger.error('[agent-automation] Unable to auto accept task', error);
   }
 }
 

@@ -3,6 +3,7 @@ import * as Flex from '@twilio/flex-ui';
 import ProgrammableVoiceService from '../../../../utils/serverless/ProgrammableVoice/ProgrammableVoiceService';
 import { isConferenceEnabledWithoutNativeXWT } from '../../config';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import logger from '../../../../utils/logger';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.UnholdParticipant;
@@ -16,7 +17,7 @@ export const actionHook = function handleUnholdConferenceParticipant(flex: typeo
       return;
     }
 
-    console.log('Unholding participant', participantSid);
+    logger.info('[conference] Unholding participant', participantSid);
 
     const conferenceSid = task.conference?.conferenceSid || task.attributes?.conference?.sid;
     abortFunction();

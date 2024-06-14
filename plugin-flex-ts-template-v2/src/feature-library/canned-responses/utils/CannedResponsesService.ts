@@ -1,6 +1,7 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { CannedResponseCategories } from '../types/CannedResponses';
+import logger from '../../../utils/logger';
 
 export interface CannedResponsesReponse {
   data: CannedResponseCategories;
@@ -32,8 +33,8 @@ class CannedResponsesService extends ApiService {
           this.cannedResponseCache = response;
           resolve(response);
         })
-        .catch((error) => {
-          console.error(`Error fetching canned responses\r\n`, error);
+        .catch((error: any) => {
+          logger.error(`[canned-responses] Error fetching canned responses\r\n`, error);
           reject(error);
         });
     });

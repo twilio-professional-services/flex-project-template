@@ -1,6 +1,7 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedRecording } from '../../../types/serverless/twilio-api';
+import logger from '../../../utils/logger';
 
 export interface RecordingResponse {
   success: boolean;
@@ -26,8 +27,8 @@ class DualChannelService extends ApiService {
         .then((resp: RecordingResponse) => {
           resolve(resp.recording);
         })
-        .catch((error) => {
-          console.log('Error starting dual channel recording', error);
+        .catch((error: any) => {
+          logger.error('[dual-channel-recording] Error starting dual channel recording', error);
           reject(error);
         });
     });

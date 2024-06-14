@@ -1,6 +1,7 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { FetchedConferenceParticipant } from '../../../types/serverless/twilio-api';
+import logger from '../../../utils/logger';
 
 export interface ParticipantResponse {
   success: boolean;
@@ -27,8 +28,8 @@ class HangUpByService extends ApiService {
         .then((response) => {
           resolve(response);
         })
-        .catch((error) => {
-          console.error(`Error fetching participant ${participantSid} from conference\r\n`, error);
+        .catch((error: any) => {
+          logger.error(`[hang-up-by] Error fetching participant ${participantSid} from conference\r\n`, error);
           reject(error);
         });
     });

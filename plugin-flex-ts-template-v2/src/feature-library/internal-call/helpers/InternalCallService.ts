@@ -2,6 +2,7 @@ import { ITask } from '@twilio/flex-ui';
 import { Reservation } from 'types/task-router';
 
 import ApiService from '../../../utils/serverless/ApiService';
+import logger from '../../../utils/logger';
 
 class InternalCallService extends ApiService {
   acceptInternalTask = async (reservation: Reservation, taskSid: string) => {
@@ -41,11 +42,11 @@ class InternalCallService extends ApiService {
         },
       )
         .then((response) => {
-          console.log('[internal-call] Outbound call has been placed into wrapping');
+          logger.info('[internal-call] Outbound task has been placed into wrapping');
           resolve(response);
         })
-        .catch((error) => {
-          console.log(error);
+        .catch((error: any) => {
+          logger.error('[internal-call] Unable to place outbound task into wrapping', error);
           reject(error);
         });
     });
