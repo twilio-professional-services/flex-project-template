@@ -30,7 +30,7 @@ Here is how you can create and use a TwiML Bin for this functionality:
 
 Within your `ui_attributes` file, you must set two settings for the `custom-hold-music` feature:
 
-- `enable` - set this to true to enable the feature
+- `enabled` - set this to true to enable the feature
 - `url` - set this to the URL of the TwiML containing the desired hold experience
 
 > **Note**

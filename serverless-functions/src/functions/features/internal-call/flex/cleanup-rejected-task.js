@@ -1,32 +1,29 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
-const ConferenceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conference-participant'].path);
+const { prepareFlexFunction, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/taskrouter'].path);
 
-const requiredParameters = [{ key: 'taskSid', purpose: 'unique ID of task to clean up' }];
+const requiredParameters = [
+  { key: 'taskSid', purpose: 'unique ID of task to clean up' },
+  { key: 'conferenceSid', purpose: 'unique ID of conference to clean up' },
+];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    const { taskSid } = event;
+    const { taskSid, conferenceSid } = event;
 
-    const conferencesResponse = await ConferenceOperations.fetchByTask({
-      context,
-      taskSid,
-      status: 'in-progress',
-      limit: 20,
-    });
-
-    if (!conferencesResponse.success) {
-      return callback(null, assets.response('json', {}));
+    try {
+      await TaskOperations.updateTask({
+        context,
+        taskSid,
+        updateParams: {
+          assignmentStatus: 'canceled',
+          reason: 'Rejected internal call',
+        },
+      });
+    } catch {
+      // Even if the task cannot be canceled, we still want to continue on to end the conference
     }
 
-    await Promise.all(
-      conferencesResponse.conferences.map((conference) => {
-        return ConferenceOperations.updateConference({
-          context,
-          conference: conference.sid,
-          updateParams: { status: 'completed' },
-        });
-      }),
-    );
+    await twilioExecute(context, (client) => client.conferences(conferenceSid).update({ status: 'completed' }));
 
     response.setBody({});
     return callback(null, response);

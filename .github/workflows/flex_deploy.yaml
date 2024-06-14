@@ -52,10 +52,35 @@ concurrency:
   group: flex-deploy-${{ inputs.environment || github.event.inputs.environment }}
 
 jobs:
+  validate-environment:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
+      - name: install npm
+        id: initial-env
+        run: |
+          npm install --ignore-scripts
+      - name: validate environment
+        run: node scripts/validate-environment.mjs >> $GITHUB_STEP_SUMMARY
+
   # When performing an initial release
   # the serverless backend needs an initial deploy so
   # the domain name can be pulled in for the terraform deploy
   perform-initial-serverless-release:
+    needs:
+      - validate-environment
     if: |
       (inputs.initial_release == true &&
        inputs.deploy_terraform == true)
@@ -91,7 +116,9 @@ jobs:
           npm run deploy
 
   deploy-terraform:
-    needs: [perform-initial-serverless-release]
+    needs:
+      - perform-initial-serverless-release
+      - validate-environment
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
@@ -115,7 +142,9 @@ jobs:
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
-    needs: [deploy-terraform]
+    needs:
+      - deploy-terraform
+      - validate-environment
     steps:
       - uses: actions/checkout@v4
       - name: setup node.js
@@ -156,6 +185,7 @@ jobs:
       OVERWRITE_CONFIG: ${{ inputs.initial_release == true || inputs.overwrite_config == true }}
     needs:
       - deploy-packages
+      - validate-environment
     steps:
       - uses: actions/checkout@v4
       - name: setup node.js
@@ -178,9 +208,11 @@ jobs:
       - name: deploy flex config
         working-directory: flex-config
         run: |
-          npm run deploy
+          npm run deploy >> $GITHUB_STEP_SUMMARY
 
   deploy-release-plugin:
+    needs:
+      - validate-environment
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:

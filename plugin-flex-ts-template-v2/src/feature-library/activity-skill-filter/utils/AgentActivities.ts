@@ -17,6 +17,7 @@ class AgentActivities {
 
   config: ActivitySkillFilterRules;
 
+  // eslint-disable-next-line no-restricted-syntax
   constructor() {
     this.manager = Flex.Manager.getInstance();
 

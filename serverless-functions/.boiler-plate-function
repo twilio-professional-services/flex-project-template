@@ -1,7 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const PhoneNumbers = require(Runtime.getFunctions()['common/twilio-wrappers/phone-numbers'].path);
 
 const requiredParameters = [
   { key: 'requiredParamOneName', purpose: 'parameter description' },
@@ -15,11 +14,13 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     // object
 
     /* 
-    const result = await PhoneNumbers.listPhoneNumbers({
-      context,
-    });
+    const result = await twilioExecute(context, (client) =>
+      client.incomingPhoneNumbers.list({
+        limit: 1000,
+      }),
+    );
 
-    const { phoneNumbers } = result;
+    const { data: phoneNumbers } = result;
     response.setStatusCode(result.status);
     response.setBody({ phoneNumbers, ...extractStandardResponse(result) });
     */

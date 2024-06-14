@@ -3,10 +3,11 @@ import JSON5 from 'json5';
 import shell from 'shelljs';
 import merge from 'lodash/merge.js';
 
+import { fillReplacementsForString } from "./fill-replacements.mjs";
 import getPluginDirs from "./get-plugin.mjs";
 import { flexConfigDir } from "./constants.mjs";
 
-export default async (overwrite) => {
+export default async (account, overwrite) => {
   var { pluginDir } = getPluginDirs();
 
   var pluginAppConfigExample = `./${pluginDir}/public/appConfig.example.js`;
@@ -49,7 +50,12 @@ export default async (overwrite) => {
     appConfigFileData = appConfigFileData.replace("common: {}", `common: ${JSON5.stringify(mergedFlexConfigJsonData.custom_data.common, null, 2)}`);
     appConfigFileData = appConfigFileData.replace("features: {}", `features: ${JSON5.stringify(mergedFlexConfigJsonData.custom_data.features, null, 2)}`);
     
-    await fs.writeFile(pluginAppConfig, appConfigFileData, 'utf8');
+    // Perform replacements in the fully assembled string
+    const replacements = await fillReplacementsForString(appConfigFileData, account, "local");
+    
+    await fs.writeFile(pluginAppConfig, replacements.data, 'utf8');
+    
+    return replacements.envVars;
   } catch (error) {
     console.error(`Error attempting to generate appConfig file ${pluginAppConfig}`, error);
   }

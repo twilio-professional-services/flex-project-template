@@ -8,7 +8,7 @@ import { Tr, Td } from '@twilio-paste/table';
 import { Flex } from '@twilio-paste/flex';
 import { Tooltip } from '@twilio-paste/tooltip';
 
-import { replaceStringAttributes } from '../../../utils/helpers';
+import { replaceStringAttributes } from '../../../../../utils/helpers';
 
 interface ResponseProps {
   label: string;

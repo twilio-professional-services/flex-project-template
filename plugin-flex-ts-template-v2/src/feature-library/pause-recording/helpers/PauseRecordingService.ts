@@ -28,7 +28,7 @@ class PauseRecordingService extends ApiService {
           resolve(resp.recording);
         })
         .catch((error) => {
-          console.log('Error pausing recording', error);
+          console.log('[pause-recording] Error pausing recording', error);
           reject(error);
         });
     });
@@ -54,7 +54,7 @@ class PauseRecordingService extends ApiService {
           resolve(resp.recording);
         })
         .catch((error) => {
-          console.log('Error resuming recording', error);
+          console.log('[pause-recording] Error resuming recording', error);
           reject(error);
         });
     });
@@ -80,7 +80,7 @@ class PauseRecordingService extends ApiService {
           resolve(resp.recording);
         })
         .catch((error) => {
-          console.log('Error pausing recording', error);
+          console.log('[pause-recording] Error pausing recording', error);
           reject(error);
         });
     });
@@ -106,7 +106,7 @@ class PauseRecordingService extends ApiService {
           resolve(resp.recording);
         })
         .catch((error) => {
-          console.log('Error resuming recording', error);
+          console.log('[pause-recording] Error resuming recording', error);
           reject(error);
         });
     });

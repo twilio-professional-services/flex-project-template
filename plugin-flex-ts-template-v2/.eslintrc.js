@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   extends: ['twilio-ts'],
-  ignorePatterns: ['/*', '!/src', '*.test.ts', '*.test.tsx', './**/__mocks__/*.ts', './**/__mocks__/*.tsx'],
+  ignorePatterns: ['/*', '!/src'],
   parserOptions: {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
@@ -35,6 +35,14 @@ module.exports = {
               'Importing lodash this way bloats plugin size. Instead, use specific imports such as `lodash/sortBy`.',
           },
         ],
+      },
+    ],
+    'no-restricted-syntax': [
+      'error',
+      {
+        selector: 'MethodDefinition[kind="constructor"]',
+        message:
+          'Constructor methods are not allowed, as singleton constructors execute within a disabled feature. You may ignore this if your constructor validates that the feature is enabled or if it is not exported as a singleton.',
       },
     ],
     'prefer-destructuring': 'off',

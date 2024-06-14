@@ -18,6 +18,7 @@ This feature enables the replacement of the queue and worker transfer directorie
 It also enables the addition of an external directory, enabling the following behavior
 
 - present a list of external transfer numbers
+  - includes contacts from the `contacts` feature if enabled
   - each transfer number can independently be configured for warm or cold transfers
   - validation checks performed on transfer numbers with notifications of any validation failures
 
@@ -38,7 +39,6 @@ Enable the feature in the flex-config asset for your environment.
 ```javascript
 "custom_transfer_directory": {
   "enabled": true, // globally enable or disable the feature
-  "use_paste_search_icon": false, // use new paste icon or old legacy icon (recommended to use old icon if mixing with OOTB tabs for consistent look)
   "worker" : {
     "enabled": true, // enable the custom worker tab
     "show_only_available_workers": false

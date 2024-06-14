@@ -1,7 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const ConferenceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/conference-participant'].path);
 
 const requiredParameters = [
   { key: 'conferenceSid', purpose: 'conference sid to target for changes' },
@@ -25,33 +24,28 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     // If agentSid isn't null/blank, we know we are updating the conference coaching status
     if (agentSid && agentSid !== '') {
-      const result = await ConferenceOperations.coachToggle({
-        context,
-        conferenceSid,
-        participantSid,
-        agentSid,
-        muted,
-        coaching,
-      });
+      const result = await twilioExecute(context, (client) =>
+        client.conferences(conferenceSid).participants(participantSid).update({
+          coaching,
+          callSidToCoach: agentSid,
+          muted,
+        }),
+      );
       response.setStatusCode(result.status);
       response.setBody({
-        conference: result.conferenceSid,
         ...extractStandardResponse(result),
       });
     }
     // If the agentSid is null/blank, we know we are updating the conference muted status
     if (agentSid === '') {
-      const result = await ConferenceOperations.bargeToggle({
-        context,
-        conferenceSid,
-        participantSid,
-        muted,
-      });
+      const result = await twilioExecute(context, (client) =>
+        client.conferences(conferenceSid).participants(participantSid).update({
+          muted,
+        }),
+      );
 
-      const { status, conferenceSid: conference } = result;
-      response.setStatusCode(status);
+      response.setStatusCode(result.status);
       response.setBody({
-        conference,
         ...extractStandardResponse(result),
       });
     }

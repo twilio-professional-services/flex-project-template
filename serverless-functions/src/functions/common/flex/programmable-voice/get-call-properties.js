@@ -1,7 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
   'common/helpers/function-helper'
 ].path);
-const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
 
 const requiredParameters = [{ key: 'callSid', purpose: 'unique ID of call to fetch' }];
 
@@ -9,12 +8,9 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   try {
     const { callSid } = event;
 
-    const result = await VoiceOperations.fetchProperties({
-      context,
-      callSid,
-    });
+    const result = await twilioExecute(context, (client) => client.calls(callSid).fetch());
 
-    const { callProperties, status } = result;
+    const { data: callProperties, status } = result;
 
     response.setStatusCode(status);
     response.setBody({ callProperties, ...extractStandardResponse(result) });

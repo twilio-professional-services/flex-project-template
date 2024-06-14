@@ -13,24 +13,24 @@ import {
 import AppState from '../../../../types/manager/AppState';
 import { StringTemplates } from '../../flex-hooks/strings/Conference';
 
-const ActionsContainer = styled('div')`
-  min-width: 88px;
-  margin-top: 10px;
+interface ThemeOnlyProps {
+  theme?: any;
+}
+
+const ActionsContainer = styled('div')<ThemeOnlyProps>`
+  margin-top: ${(props) => props.theme.tokens.spacings.space40};
   button {
-    width: 36px;
-    height: 36px;
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: ${(props) => props.theme.tokens.spacings.space20};
+    margin-right: ${(props) => props.theme.tokens.spacings.space20};
   }
 `;
 
-const ActionsContainerListItem = styled('div')`
-  min-width: 88px;
+const ActionsContainerListItem = styled('div')<ThemeOnlyProps>`
+  display: flex;
+  flex-grow: 0;
   button {
-    width: 32px;
-    height: 32px;
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: ${(props) => props.theme.tokens.spacings.space30};
+    margin-right: ${(props) => props.theme.tokens.spacings.space30};
   }
 `;
 
@@ -136,12 +136,14 @@ const ParticipantActionsButtons = (props: OwnProps) => {
           className="ParticipantCanvas-AcceptAction"
           onClick={onKickParticipantConfirmClick}
           variant="secondary"
+          title={templates.CallParticipantStatusKickConfirmation()}
         />
         <IconButton
           icon="Close"
           className="ParticipantCanvas-DeclineAction"
           onClick={hideKickConfirmation}
           variant="secondary"
+          title={templates.CallParticipantStatusKickCancellation()}
         />
       </>
     );

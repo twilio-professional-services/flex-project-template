@@ -86,16 +86,12 @@ const execute = async () => {
     packages = defaultPackages;
   }
   
-  // determine additional files to process based on selected packages
-  if (packages.includes(constants.flexConfigDir)) {
-    files.push(`./${constants.flexConfigDir}/ui_attributes.example.json`);
-  }
-  
   if (!skipEnvSetup) {
     // Fetch and save env files for each package
     for (const path of packages) {
       const envFile = `./${path}/.env${environment ? `.${environment}` : ''}`;
       const exampleFile = `./${path}/.env.example`;
+      console.log(`Setting up ${envFile}...`);
       let environmentData = await fillReplacements(envFile, exampleFile, account, environment, overwrite);
       allReplacements = { ...allReplacements, ...environmentData };
     }
@@ -107,13 +103,15 @@ const execute = async () => {
       if (!environment) filenameEnv = 'local';
       
       const configFile = exampleFile.replace(/([_\-\./])(example)([_\-\./])/g, `$1${filenameEnv}$3`);
-      let configData = await fillReplacements(configFile, exampleFile, account, filenameEnv, overwrite);
+      console.log(`Setting up ${configFile}...`);
+      const configData = await fillReplacements(configFile, exampleFile, account, filenameEnv, overwrite);
       allReplacements = { ...allReplacements, ...configData };
     }
     
     if (!environment && !skipPlugin && !skipPackages) {
       // When running locally, we need to generate appConfig.js for the plugin
-      saveAppConfig(overwrite);
+      const appConfigData = await saveAppConfig(account, overwrite);
+      allReplacements = { ...allReplacements, ...appConfigData };
     }
   }
   

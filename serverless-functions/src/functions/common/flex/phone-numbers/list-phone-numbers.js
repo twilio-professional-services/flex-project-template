@@ -1,6 +1,6 @@
-const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
-const PhoneNumberOperations = require(Runtime.getFunctions()['common/twilio-wrappers/phone-numbers'].path);
-const VoiceOperations = require(Runtime.getFunctions()['common/twilio-wrappers/programmable-voice'].path);
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 
 const requiredParameters = [];
 
@@ -22,11 +22,9 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
   try {
     const fetchOutgoingCallerIds = event.IncludeOutgoing === 'true' || false;
 
-    const result = await PhoneNumberOperations.listPhoneNumbers({
-      context,
-    });
+    const result = await twilioExecute(context, (client) => client.incomingPhoneNumbers.list());
 
-    const { phoneNumbers: fullPhoneNumberList } = result;
+    const { data: fullPhoneNumberList } = result;
     let phoneNumbers = fullPhoneNumberList
       ? fullPhoneNumberList
         .map(({ friendlyName, phoneNumber }) => ({ friendlyName, phoneNumber }))
@@ -34,9 +32,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       : [];
 
     if (fetchOutgoingCallerIds) {
-      const outgoingResult = await VoiceOperations.listOutgoingCallerIds({
-        context,
-      });
+      const outgoingResult = await twilioExecute(context, (client) => client.outgoingCallerIds.list());
 
       if (outgoingResult?.success) {
         const { callerIds } = outgoingResult;

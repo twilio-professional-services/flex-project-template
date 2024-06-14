@@ -46,7 +46,7 @@ const getCBMParticipantsWrapper = async (task: ITask, flexInteractionChannelSid:
     if (!missingMediaProperties) return participants;
     retry += 1;
     console.log('getCBMParticipantsWrapper retry', retry);
-    wait(retryTimer);
+    await wait(retryTimer);
     retryTimer *= 2;
   }
 

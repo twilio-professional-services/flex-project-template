@@ -99,69 +99,69 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
   `;
 
   return (
-    <Box marginLeft="space30" marginRight="space30">
-      <Stack orientation="vertical" spacing="space0">
-        {isWorkerCanvasTabsEnabled() ? null : (
-          <SectionHeader>
-            <Template source={templates[StringTemplates.PSWorkerDetailsContainerName]} />
-          </SectionHeader>
-        )}
-        <Table variant="borderless">
-          <TBody>
-            <AttributeSelect
-              label="Team"
-              value={teamName || 'NO_ITEM_SELECTED'}
-              options={getTeams()}
-              onChangeHandler={handleTeamChange}
-              disabled={!editTeam()}
-            />
-            <AttributeSelect
-              label="Department"
-              value={departmentName || 'NO_ITEM_SELECTED'}
-              options={getDepartments()}
-              onChangeHandler={handleDeptChange}
-              disabled={!editDepartment()}
-            />
-            {textAttributes.map((attr) => (
-              <AttributeCustom
-                key={attr}
-                label={attr}
-                value={otherAttributes[attr] || ''}
-                onChangeHandler={handleOtherChange}
+    <Stack orientation="vertical" spacing="space0">
+      {isWorkerCanvasTabsEnabled() ? null : (
+        <SectionHeader>
+          <Template source={templates[StringTemplates.PSWorkerDetailsContainerName]} />
+        </SectionHeader>
+      )}
+      <Box marginLeft="space30" marginRight="space30">
+        <Stack orientation="vertical" spacing="space0">
+          <Table variant="borderless">
+            <TBody>
+              <AttributeSelect
+                label="Team"
+                value={teamName || 'NO_ITEM_SELECTED'}
+                options={getTeams()}
+                onChangeHandler={handleTeamChange}
+                disabled={!editTeam()}
               />
-            ))}
-          </TBody>
-        </Table>
-        {booleanAttributes.length > 0 && (
-          <FlexBox padding="space30">
-            <Box
-              width="100%"
-              paddingTop="space50"
-              borderTopColor="colorBorder"
-              borderTopStyle="solid"
-              borderTopWidth="borderWidth10"
-            >
-              <SwitchGroup name="settings" legend={<Template source={templates.PSWorkerDetailsSettings} />}>
-                {booleanAttributes.map((attr) => (
-                  <Switch
-                    key={attr}
-                    value={attr}
-                    checked={otherAttributes[attr] || false}
-                    onChange={() => {
-                      setChanged(true);
-                      const attributes = { ...otherAttributes, [attr]: !otherAttributes[attr] };
-                      setOtherAttributes(attributes);
-                    }}
-                  >
-                    {attr}
-                  </Switch>
-                ))}
-              </SwitchGroup>
-            </Box>
-          </FlexBox>
-        )}
-        <FlexBox hAlignContent="right" margin="space30">
-          <Stack orientation="horizontal" spacing="space30">
+              <AttributeSelect
+                label="Department"
+                value={departmentName || 'NO_ITEM_SELECTED'}
+                options={getDepartments()}
+                onChangeHandler={handleDeptChange}
+                disabled={!editDepartment()}
+              />
+              {textAttributes.map((attr) => (
+                <AttributeCustom
+                  key={attr}
+                  label={attr}
+                  value={otherAttributes[attr] || ''}
+                  onChangeHandler={handleOtherChange}
+                />
+              ))}
+            </TBody>
+          </Table>
+          {booleanAttributes.length > 0 && (
+            <FlexBox padding="space30">
+              <Box
+                width="100%"
+                paddingTop="space50"
+                borderTopColor="colorBorder"
+                borderTopStyle="solid"
+                borderTopWidth="borderWidth10"
+              >
+                <SwitchGroup name="settings" legend={<Template source={templates.PSWorkerDetailsSettings} />}>
+                  {booleanAttributes.map((attr) => (
+                    <Switch
+                      key={attr}
+                      value={attr}
+                      checked={otherAttributes[attr] || false}
+                      onChange={() => {
+                        setChanged(true);
+                        const attributes = { ...otherAttributes, [attr]: !otherAttributes[attr] };
+                        setOtherAttributes(attributes);
+                      }}
+                    >
+                      {attr}
+                    </Switch>
+                  ))}
+                </SwitchGroup>
+              </Box>
+            </FlexBox>
+          )}
+          <FlexBox hAlignContent="right" margin="space30">
             <Button
               variant="primary"
               id="saveButton"
@@ -171,10 +171,10 @@ const WorkerDetailsContainer = ({ worker }: OwnProps) => {
             >
               <Template source={templates.Save} />
             </Button>
-          </Stack>
-        </FlexBox>
-      </Stack>
-    </Box>
+          </FlexBox>
+        </Stack>
+      </Box>
+    </Stack>
   );
 };
 

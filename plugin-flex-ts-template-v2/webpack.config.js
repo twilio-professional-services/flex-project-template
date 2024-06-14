@@ -6,16 +6,17 @@ module.exports = (config, { isProd, isDev, isTest }) => {
    * Consult https://webpack.js.org/configuration for more information
    */
 
-  if (isDev) {
-    config.devtool = 'inline-source-map';
+  for (const plugin of config.plugins) {
+    // Change tsconfig for ForkTsCheckerWebpackPlugin to version which excludes test files
+    if (plugin.tsconfig && plugin.options?.tsconfig) {
+      const tsconfig = plugin.tsconfig.replace('.json', '.build.json');
+      plugin.options.tsconfig = tsconfig;
+      plugin.tsconfig = tsconfig;
+    }
   }
 
   return {
     ...config,
-    node: {
-      ...config.node,
-      global: true,
-    },
     performance: {
       ...config.performance,
       hints: false,

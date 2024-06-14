@@ -28,7 +28,7 @@ The `appConfig.js` file is created for you as part of the initial local environm
 #### The `custom_data` object
 The template maintains the configuration that is deployed to [hosted Flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes) in version control under the flex-config folder. Here, you will find `ui_attributes.common.json` file containing the main configuration set.  
 
-At the time of a GitHub action script deploy of the template, when an environment is provided, a new file is generated from `ui_attributes.example.json` and it is called `ui_attributes.<env-name>.json`.  After creating this file any placeholder values in the file, such as the serverless domain, are replaced as part of the GitHub deployment scripts.  The contents of this file are merged over the top of the `ui_attributes.common.json` file and the output creates the final configuration set that is pushed to the [hosted Flex configuration API](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes).
+At the time of a GitHub action script deploy of the template, when an environment is provided, a new file is generated from `ui_attributes.example.json` and it is called `ui_attributes.<env-name>.json` (unless it already exists). The contents of this file are merged over the top of the `ui_attributes.common.json` file. After merging the configuration, any placeholder values, such as the serverless domain, are replaced as part of the deployment scripts, and the final configuration set is pushed to the [hosted Flex configuration API](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes).
 
 If you wish to provide alternate feature configurations per environment, such as IDs or for testing different settings, you may create this file yourself. Simply copy `ui_attributes.example.json` to `ui_attributes.<env-name>.json`, perform the desired changes, and commit the file to the repository. Placeholder values within this file will continue to be automatically replaced as described above during deployment.
 
@@ -68,6 +68,7 @@ If you have two features which need to share a piece of configuration, consider 
 The following common configuration properties are included by default:
 
 - **`log_level`** - The minimum log level to output to the browser console. `info` by default; may be set to `debug`, `log`, `warn`, `info`, or `error`
+- **`audit_log_ttl`** - The number of seconds before audit events should be removed from Sync. `1209600` (two weeks) by default. Set to `0` to keep items indefinitely.
 - **`teams`** - Array of team names used by various features to populate team lists, matching the values used in worker attributes.
 - **`departments`** - Array of department names used by various features to populate department lists, matching the values used in worker attributes.
 
@@ -208,9 +209,8 @@ We can commit a `.env.<environment name here>` file, for example, `.env.dev`, to
 The setup script when run via `npm install` performs the following operations:
 1. Establish the Twilio account to use
 2. Automatically populate the `.env.<environment name here>` file for each package
-3. Automatically populate the `ui_attributes.<environment name here>.json` file for flex-config deployment if not running locally
-4. Create and populate the `plugin-flex-ts-template-v2/public/appConfig.js` file if running locally
-5. Run `npm install` for each package, so that it is ready to use.
+3. Create and populate the `plugin-flex-ts-template-v2/public/appConfig.js` file if running locally
+4. Run `npm install` for each package, so that it is ready to use.
 
 Several parameters are accepted when the script is run via `npm run postinstall`, which can be used to customize the script's functionality. These parameters can be set as follows:
 

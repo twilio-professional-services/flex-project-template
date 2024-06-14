@@ -38,7 +38,7 @@ import { templates } from '@twilio/flex-ui';
 
 const myString = templates[StringTemplates.MyString2]({
   customString: 'apples',
-})
+});
 ```
 
 JSX:
@@ -55,8 +55,8 @@ If you wish to replace built-in Flex UI strings, rather than defining new string
 ```ts
 export const systemStringHook = () => ({
   'es-MX': {
-    "SetYourStatus": "Establece tu estado",
-    "LogOut": "Cerrar sesión",
+    SetYourStatus: 'Establece tu estado',
+    LogOut: 'Cerrar sesión',
   },
 });
 ```

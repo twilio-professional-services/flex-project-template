@@ -81,7 +81,7 @@ const DirectoryTab = (props: OwnProps) => {
               <DirectoryItem
                 task={props.task}
                 entry={entry}
-                key={`dir-item-${entry.type}-${entry.address}`}
+                key={`dir-item-${entry.type}-${entry.key}`}
                 onTransferClick={onTransferEntryClick(entry)}
               />
             );

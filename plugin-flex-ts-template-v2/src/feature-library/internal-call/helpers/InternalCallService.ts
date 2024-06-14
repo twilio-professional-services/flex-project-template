@@ -25,16 +25,11 @@ class InternalCallService extends ApiService {
   };
 
   rejectInternalTask = async (task: ITask) => {
-    await (task.sourceObject as Reservation).accept();
-    await task.wrapUp();
-    await task.complete();
-
     return new Promise((resolve, reject) => {
-      const taskSid = task.attributes.conferenceSid;
-
       const encodedParams = {
-        taskSid,
-        Token: encodeURIComponent(this.manager.store.getState().flex.session.ssoTokenPayload.token),
+        taskSid: task.taskSid,
+        conferenceSid: task.attributes.conference?.sid,
+        Token: encodeURIComponent(this.manager.user.token),
       };
 
       this.fetchJsonWithReject(
@@ -46,7 +41,7 @@ class InternalCallService extends ApiService {
         },
       )
         .then((response) => {
-          console.log('Outbound call has been placed into wrapping');
+          console.log('[internal-call] Outbound call has been placed into wrapping');
           resolve(response);
         })
         .catch((error) => {

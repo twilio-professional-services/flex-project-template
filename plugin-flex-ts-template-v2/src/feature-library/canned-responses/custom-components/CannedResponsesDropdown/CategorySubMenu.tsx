@@ -3,7 +3,7 @@ import { Actions, ITask, useFlexSelector } from '@twilio/flex-ui';
 import { Menu, MenuItem, useMenuState, SubMenuButton } from '@twilio-paste/core/menu';
 
 import { CannedResponse, ResponseCategory } from '../../types/CannedResponses';
-import { replaceStringAttributes } from '../../utils/helpers';
+import { replaceStringAttributes } from '../../../../utils/helpers';
 
 export interface OwnProps {
   category: ResponseCategory;
@@ -39,7 +39,7 @@ const CategorySubMenu = ({ category, menu, task }: OwnProps) => {
       <Menu {...submenu} aria-label={category.section} element="CANNED_RESPONSES_MENU">
         {category.responses.map((response: CannedResponse) => (
           <MenuItem {...submenu} key={response.text} onClick={() => onClickInsert(response.text)}>
-            {response.text}
+            {replaceStringAttributes(response.text, task)}
           </MenuItem>
         ))}
       </Menu>

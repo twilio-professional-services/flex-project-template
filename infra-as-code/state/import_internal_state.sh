@@ -81,6 +81,7 @@ importInternalState() {
 	import_resource "$activities" "On a Task, No ACD" "module.activity-reservation-handler.twilio_taskrouter_workspaces_activities_v1.on_a_task_no_acd" "friendlyName"
 	import_resource "$activities" "Wrap Up" "module.activity-reservation-handler.twilio_taskrouter_workspaces_activities_v1.wrap_up" "friendlyName"
 	import_resource "$activities" "Wrap Up, No ACD" "module.activity-reservation-handler.twilio_taskrouter_workspaces_activities_v1.wrap_up_no_acd" "friendlyName"
+	import_resource "$activities" "Extended Wrap Up" "module.activity-reservation-handler.twilio_taskrouter_workspaces_activities_v1.extended_wrap_up" "friendlyName"
 	echo "   - :white_check_mark: activity-reservation-handler resources" >>$GITHUB_STEP_SUMMARY
 # END FEATURE: activity-reservation-handler
 
