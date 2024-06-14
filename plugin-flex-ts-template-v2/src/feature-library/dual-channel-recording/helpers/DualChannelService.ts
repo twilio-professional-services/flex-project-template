@@ -10,28 +10,24 @@ export interface RecordingResponse {
 
 class DualChannelService extends ApiService {
   startDualChannelRecording = async (callSid: string): Promise<FetchedRecording> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        callSid: encodeURIComponent(callSid),
-        Token: encodeURIComponent(this.manager.user.token),
-      };
-
-      this.fetchJsonWithReject<RecordingResponse>(
+    const encodedParams: EncodedParams = {
+      callSid: encodeURIComponent(callSid),
+      Token: encodeURIComponent(this.manager.user.token),
+    };
+    try {
+      const { recording } = await this.fetchJsonWithReject<RecordingResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/dual-channel-recording/flex/create-recording`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((resp: RecordingResponse) => {
-          resolve(resp.recording);
-        })
-        .catch((error: any) => {
-          logger.error('[dual-channel-recording] Error starting dual channel recording', error);
-          reject(error);
-        });
-    });
+      );
+      return recording;
+    } catch (error: any) {
+      logger.error('[dual-channel-recording] Error starting dual channel recording', error);
+      throw error;
+    }
   };
 }
 

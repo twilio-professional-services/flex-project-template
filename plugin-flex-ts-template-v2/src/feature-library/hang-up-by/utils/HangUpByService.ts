@@ -10,29 +10,25 @@ export interface ParticipantResponse {
 
 class HangUpByService extends ApiService {
   fetchParticipant = async (conferenceSid: string, participantSid: string): Promise<ParticipantResponse> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        conference: encodeURIComponent(conferenceSid),
-        participant: encodeURIComponent(participantSid),
-        Token: encodeURIComponent(this.manager.user.token),
-      };
+    const encodedParams: EncodedParams = {
+      conference: encodeURIComponent(conferenceSid),
+      participant: encodeURIComponent(participantSid),
+      Token: encodeURIComponent(this.manager.user.token),
+    };
 
-      this.fetchJsonWithReject<ParticipantResponse>(
+    try {
+      return await this.fetchJsonWithReject<ParticipantResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/hang-up-by/flex/fetch-conference-participant`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error: any) => {
-          logger.error(`[hang-up-by] Error fetching participant ${participantSid} from conference\r\n`, error);
-          reject(error);
-        });
-    });
+      );
+    } catch (error: any) {
+      logger.error(`[hang-up-by] Error fetching participant ${participantSid} from conference\r\n`, error);
+      throw error;
+    }
   };
 }
 

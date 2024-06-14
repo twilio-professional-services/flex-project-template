@@ -10,107 +10,95 @@ export interface RecordingResponse {
 
 class PauseRecordingService extends ApiService {
   pauseCallRecording = async (callSid: string, pauseBehavior: string): Promise<FetchedRecording> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        callSid: encodeURIComponent(callSid),
-        pauseBehavior: encodeURIComponent(pauseBehavior),
-        Token: encodeURIComponent(this.manager.user.token),
-      };
+    const encodedParams: EncodedParams = {
+      callSid: encodeURIComponent(callSid),
+      pauseBehavior: encodeURIComponent(pauseBehavior),
+      Token: encodeURIComponent(this.manager.user.token),
+    };
 
-      this.fetchJsonWithReject<RecordingResponse>(
+    try {
+      const { recording } = await this.fetchJsonWithReject<RecordingResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/pause-recording/flex/pause-call-recording`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((resp: RecordingResponse) => {
-          resolve(resp.recording);
-        })
-        .catch((error) => {
-          logger.error('[pause-recording] Error pausing recording', error);
-          reject(error);
-        });
-    });
+      );
+      return recording;
+    } catch (error: any) {
+      logger.error('[pause-recording] Error pausing recording', error);
+      throw error;
+    }
   };
 
   resumeCallRecording = async (callSid: string, recordingSid: string): Promise<FetchedRecording> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        callSid: encodeURIComponent(callSid),
-        recordingSid: encodeURIComponent(recordingSid),
-        Token: encodeURIComponent(this.manager.user.token),
-      };
+    const encodedParams: EncodedParams = {
+      callSid: encodeURIComponent(callSid),
+      recordingSid: encodeURIComponent(recordingSid),
+      Token: encodeURIComponent(this.manager.user.token),
+    };
 
-      this.fetchJsonWithReject<RecordingResponse>(
+    try {
+      const { recording } = await this.fetchJsonWithReject<RecordingResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/pause-recording/flex/resume-call-recording`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((resp: RecordingResponse) => {
-          resolve(resp.recording);
-        })
-        .catch((error) => {
-          logger.error('[pause-recording] Error resuming recording', error);
-          reject(error);
-        });
-    });
+      );
+      return recording;
+    } catch (error: any) {
+      logger.error('[pause-recording] Error resuming recording', error);
+      throw error;
+    }
   };
 
   pauseConferenceRecording = async (conferenceSid: string, pauseBehavior: string): Promise<FetchedRecording> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        conferenceSid: encodeURIComponent(conferenceSid),
-        pauseBehavior: encodeURIComponent(pauseBehavior),
-        Token: encodeURIComponent(this.manager.user.token),
-      };
+    const encodedParams: EncodedParams = {
+      conferenceSid: encodeURIComponent(conferenceSid),
+      pauseBehavior: encodeURIComponent(pauseBehavior),
+      Token: encodeURIComponent(this.manager.user.token),
+    };
 
-      this.fetchJsonWithReject<RecordingResponse>(
+    try {
+      const { recording } = await this.fetchJsonWithReject<RecordingResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/pause-recording/flex/pause-conference-recording`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((resp: RecordingResponse) => {
-          resolve(resp.recording);
-        })
-        .catch((error) => {
-          logger.error('[pause-recording] Error pausing recording', error);
-          reject(error);
-        });
-    });
+      );
+      return recording;
+    } catch (error: any) {
+      logger.error('[pause-recording] Error pausing recording', error);
+      throw error;
+    }
   };
 
   resumeConferenceRecording = async (conferenceSid: string, recordingSid: string): Promise<FetchedRecording> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        conferenceSid: encodeURIComponent(conferenceSid),
-        recordingSid: encodeURIComponent(recordingSid),
-        Token: encodeURIComponent(this.manager.user.token),
-      };
+    const encodedParams: EncodedParams = {
+      conferenceSid: encodeURIComponent(conferenceSid),
+      recordingSid: encodeURIComponent(recordingSid),
+      Token: encodeURIComponent(this.manager.user.token),
+    };
 
-      this.fetchJsonWithReject<RecordingResponse>(
+    try {
+      const { recording } = await this.fetchJsonWithReject<RecordingResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/pause-recording/flex/resume-conference-recording`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((resp: RecordingResponse) => {
-          resolve(resp.recording);
-        })
-        .catch((error) => {
-          logger.error('[pause-recording] Error resuming recording', error);
-          reject(error);
-        });
-    });
+      );
+      return recording;
+    } catch (error: any) {
+      logger.error('[pause-recording] Error resuming recording', error);
+      throw error;
+    }
   };
 }
 

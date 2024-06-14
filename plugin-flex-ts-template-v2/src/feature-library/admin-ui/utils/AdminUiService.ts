@@ -8,53 +8,43 @@ export interface AdminUiServiceReponse {
 
 class AdminUiService extends ApiService {
   fetchUiAttributes = async (): Promise<AdminUiServiceReponse> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        Token: encodeURIComponent(this.manager.user.token),
-      };
-
-      this.fetchJsonWithReject<AdminUiServiceReponse>(
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(this.manager.user.token),
+    };
+    try {
+      return await this.fetchJsonWithReject<AdminUiServiceReponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/admin-ui/flex/fetch-config`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error: any) => {
-          logger.error(`[admin-ui] Error fetching configuration\r\n`, error);
-          reject(error);
-        });
-    });
+      );
+    } catch (error: any) {
+      logger.error(`[admin-ui] Error fetching configuration\r\n`, error);
+      throw error;
+    }
   };
 
   updateUiAttributes = async (attributesUpdate: string, mergeFeature: boolean): Promise<AdminUiServiceReponse> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        Token: encodeURIComponent(this.manager.user.token),
-        attributesUpdate: encodeURIComponent(attributesUpdate),
-        mergeFeature: encodeURIComponent(mergeFeature),
-      };
-
-      this.fetchJsonWithReject<AdminUiServiceReponse>(
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(this.manager.user.token),
+      attributesUpdate: encodeURIComponent(attributesUpdate),
+      mergeFeature: encodeURIComponent(mergeFeature),
+    };
+    try {
+      return await this.fetchJsonWithReject<AdminUiServiceReponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/admin-ui/flex/update-config`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error: any) => {
-          logger.error(`[admin-ui] Error updating configuration\r\n`, error);
-          reject(error);
-        });
-    });
+      );
+    } catch (error: any) {
+      logger.error(`[admin-ui] Error updating configuration\r\n`, error);
+      throw error;
+    }
   };
 }
 

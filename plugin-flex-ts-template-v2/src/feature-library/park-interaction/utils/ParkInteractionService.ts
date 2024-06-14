@@ -53,67 +53,57 @@ class ParkInteractionService extends ApiService {
     queueName: string,
     queueSid: string,
     taskAttributes: string,
-  ): Promise<FetchedRecording> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        channelSid: encodeURIComponent(channelSid),
-        interactionSid: encodeURIComponent(interactionSid),
-        participantSid: encodeURIComponent(participantSid),
-        conversationSid: encodeURIComponent(conversationSid),
-        channelType: encodeURIComponent(channelType),
-        taskSid: encodeURIComponent(taskSid),
-        workflowSid: encodeURIComponent(workflowSid),
-        taskChannelUniqueName: encodeURIComponent(taskChannelUniqueName),
-        queueName: encodeURIComponent(queueName),
-        queueSid: encodeURIComponent(queueSid),
-        taskAttributes: encodeURIComponent(taskAttributes),
-        workerSid: encodeURIComponent(this.manager.store.getState().flex.worker.worker?.sid ?? ''),
-        createUpdateSyncMapItem: encodeURIComponent(isListEnabled()),
-        Token: encodeURIComponent(this.manager.user.token),
-      };
-
-      this.fetchJsonWithReject<ParkInteractionResponse>(
+  ): Promise<ParkInteractionResponse> => {
+    const encodedParams: EncodedParams = {
+      channelSid: encodeURIComponent(channelSid),
+      interactionSid: encodeURIComponent(interactionSid),
+      participantSid: encodeURIComponent(participantSid),
+      conversationSid: encodeURIComponent(conversationSid),
+      channelType: encodeURIComponent(channelType),
+      taskSid: encodeURIComponent(taskSid),
+      workflowSid: encodeURIComponent(workflowSid),
+      taskChannelUniqueName: encodeURIComponent(taskChannelUniqueName),
+      queueName: encodeURIComponent(queueName),
+      queueSid: encodeURIComponent(queueSid),
+      taskAttributes: encodeURIComponent(taskAttributes),
+      workerSid: encodeURIComponent(this.manager.store.getState().flex.worker.worker?.sid ?? ''),
+      createUpdateSyncMapItem: encodeURIComponent(isListEnabled()),
+      Token: encodeURIComponent(this.manager.user.token),
+    };
+    try {
+      return await this.fetchJsonWithReject<ParkInteractionResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/park-interaction/flex/park-interaction`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((resp: ParkInteractionResponse) => {
-          resolve(resp.recording);
-        })
-        .catch((error: any) => {
-          logger.error('[park-interaction] Error parking interaction', error);
-          reject(error);
-        });
-    });
+      );
+    } catch (error: any) {
+      logger.error('[park-interaction] Error parking interaction', error);
+      throw error;
+    }
   };
 
-  unparkInteraction = async (ConversationSid: string, WebhookSid: string): Promise<any> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        ConversationSid: encodeURIComponent(ConversationSid),
-        WebhookSid: encodeURIComponent(WebhookSid),
-        RouteToSameWorker: encodeURIComponent(true),
-      };
-
-      this.fetchJsonWithReject<UnparkInteractionResponse>(
+  unparkInteraction = async (ConversationSid: string, WebhookSid: string): Promise<UnparkInteractionResponse> => {
+    const encodedParams: EncodedParams = {
+      ConversationSid: encodeURIComponent(ConversationSid),
+      WebhookSid: encodeURIComponent(WebhookSid),
+      RouteToSameWorker: encodeURIComponent(true),
+    };
+    try {
+      return await this.fetchJsonWithReject<UnparkInteractionResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/park-interaction/common/unpark-interaction`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((resp: any) => {
-          resolve(resp.recording);
-        })
-        .catch((error: any) => {
-          logger.error('[park-interaction] Error unparking interaction', error);
-          reject(error);
-        });
-    });
+      );
+    } catch (error: any) {
+      logger.error('[park-interaction] Error unparking interaction', error);
+      throw error;
+    }
   };
 }
 
