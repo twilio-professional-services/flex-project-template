@@ -17,7 +17,7 @@ export const actionHook = function handleUnholdConferenceParticipant(flex: typeo
       return;
     }
 
-    logger.info('[conference] Unholding participant', participantSid);
+    logger.info(`[conference] Unholding participant ${participantSid}`);
 
     const conferenceSid = task.conference?.conferenceSid || task.attributes?.conference?.sid;
     abortFunction();

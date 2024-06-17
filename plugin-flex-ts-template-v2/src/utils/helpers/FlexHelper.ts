@@ -3,6 +3,7 @@ import * as Flex from '@twilio/flex-ui';
 import { Activity } from '../../types/task-router';
 import { QueueInstantQuery, WorkerInstantQuery, ReservationInstantQuery } from '../index-query/InstantQueryHelper';
 import { QueueIndexItem, WorkerIndexItem, ReservationIndexItem } from '../index-query/InstantQueryHelper/types';
+import logger from '../logger';
 
 enum RESERVATION_STATUS {
   ACCEPTED = 'accepted',
@@ -81,14 +82,14 @@ class FlexHelper {
   getQueue = async (queueSid: string): Promise<QueueIndexItem | undefined> => {
     const queueResult = await QueueInstantQuery(`data.queue_sid EQ "${queueSid}"`);
     const queue = queueResult[queueSid];
-    if (!queue) console.warn(`FlexHelper.getQueue(): unable to find queue for queuesid ${queueSid}`);
+    if (!queue) logger.warn(`[FlexHelper] getQueue(): unable to find queue for queuesid ${queueSid}`);
     return queue;
   };
 
   getWorker = async (workerSid: string): Promise<WorkerIndexItem | undefined> => {
     const workerResult = await WorkerInstantQuery(`data.worker_sid EQ "${workerSid}"`);
     const worker = workerResult[workerSid];
-    if (!worker) console.warn(`FlexHelper.getWorker(): unable to find worker for workersid ${workerSid}`);
+    if (!worker) logger.warn(`[FlexHelper] getWorker(): unable to find worker for workersid ${workerSid}`);
     return worker;
   };
 

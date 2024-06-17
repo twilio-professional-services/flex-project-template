@@ -19,7 +19,7 @@ export const actionHook = function handleHoldConferenceParticipant(flex: typeof 
 
     const conferenceSid = task.conference?.conferenceSid || task.attributes?.conference?.sid;
     abortFunction();
-    logger.info('[conference] Holding participant', participantSid);
+    logger.info(`[conference] Holding participant ${participantSid}`);
     await ProgrammableVoiceService.holdParticipant(conferenceSid, participantSid);
   });
 };
