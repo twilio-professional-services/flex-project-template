@@ -5,6 +5,7 @@ import SelectFilter from '../custom-components/SelectFilter';
 import SelectFilterLabel from '../custom-components/SelectFilterLabel';
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 import { StringTemplates } from '../flex-hooks/strings/TeamViewQueueFilter';
+import logger from '../../../utils/logger';
 
 /* 
     this filter only works when a supporting backend solution is keeping
@@ -17,8 +18,8 @@ export const queueWorkerDataFilter = async () => {
 
   try {
     queueOptions = await TaskRouterService.getQueues();
-  } catch (error) {
-    console.error('teams-view-filters: Unable to get queues', error);
+  } catch (error: any) {
+    logger.error('[teams-view-filters] Unable to get queues', error);
   }
 
   const options = queueOptions

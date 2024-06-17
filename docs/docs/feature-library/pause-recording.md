@@ -11,7 +11,7 @@ This feature adds a Pause/Resume Recording button and keyboard shortcuts to the 
 
 ## setup and dependencies
 
-Recording must be enabled either via the dual channel recording feature in this repository, or via the "Call Recording" setting in Twilio Console > Flex > Manage > Voice. Do not enable both recording methods simultaneously, or only one of the recordings will be paused.
+Recording must be enabled either via the dual channel recording feature in this repository, or via the "Call Recording" setting in Twilio Console > Flex > Manage > Voice.
 
 There are no additional setup steps required, only enabling the feature in the flex-config asset for your environment.
 

@@ -16,6 +16,7 @@ export enum StringTemplates {
   SHORTCUT_TOGGLE_RECORDING = 'PSShortcutToggleCallRecording',
   SHORTCUT_PAUSE_RECORDING = 'PSShortcutPauseCallRecording',
   SHORTCUT_RESUME_RECORDING = 'PSShortcutResumeCallRecording',
+  MISSING_RECORDING = 'PSPauseMissingRecording',
 }
 
 export const stringHook = () => ({
@@ -31,6 +32,7 @@ export const stringHook = () => ({
     [StringTemplates.SHORTCUT_TOGGLE_RECORDING]: 'Toggle call recording pause/resume',
     [StringTemplates.SHORTCUT_PAUSE_RECORDING]: 'Pause call recording',
     [StringTemplates.SHORTCUT_RESUME_RECORDING]: 'Resume call recording',
+    [StringTemplates.MISSING_RECORDING]: 'This call is not being recorded, so there is no recording to pause.',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,

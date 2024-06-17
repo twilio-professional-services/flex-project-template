@@ -5,7 +5,7 @@
   "scripts": {
     "test:watch": "jest --watch",
     "test:mychanges": "jest --onlyChanged",
-    "test:precommit": "jest",
+    "test": "jest",
     "test:ci": "jest --silent --ci --coverage --coverageReporters=cobertura --reporters=default --reporters=jest-junit --testResultsProcessor=jest-junit",
     "test:coverage": "jest --silent --coverage && http-server -c-1 ./coverage -o /lcov-report",
     "lint": "eslint .",
@@ -36,39 +36,20 @@
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.12.1",
+    "@testing-library/react": "^12.1.5",
     "@twilio/flex-ui": "^2.7.0",
-    "@types/jest": "^29.5.0",
+    "@types/jest": "^27.5.2",
     "@types/luxon": "^3.1.0",
     "@types/react-redux": "^7.1.1",
     "@types/uuid": "^9.0.1",
     "eslint": "^8.12.0",
     "eslint-config-twilio-ts": "^2.0.0",
     "import-glob": "^1.5.0",
-    "jest": "^29.5.0",
+    "jest": "^27.5.1",
     "jest-fetch-mock": "^3.0.3",
     "jest-junit": "^16.0.0",
     "react-test-renderer": "17.0.2",
     "typescript": "^5"
-  },
-  "jest": {
-    "clearMocks": true,
-    "automock": false,
-    "testResultsProcessor": "jest-junit",
-    "reporters": [
-      "default",
-      "jest-junit"
-    ],
-    "coverageReporters": [
-      "json",
-      "lcov",
-      "text",
-      "clover",
-      "cobertura"
-    ],
-    "globalSetup": "<rootDir>/globalSetupTests.js",
-    "setupFilesAfterEnv": [
-      "<rootDir>/setupTests.js"
-    ]
   },
   "jest-junit": {
     "outputDirectory": "./test-results"
