@@ -28,7 +28,7 @@ export const actionHook = function setHoldMusicBeforeHoldParticipant(flex: typeo
 
     const conferenceSid = payload.task.conference?.conferenceSid || payload.task.attributes?.conference?.sid;
     abortFunction();
-    logger.info('[custom-hold-music] Holding participant', participant.callSid);
+    logger.info(`[custom-hold-music] Holding participant ${participant.callSid}`);
     await ProgrammableVoiceService.holdParticipant(conferenceSid, participant.callSid);
   });
 };
