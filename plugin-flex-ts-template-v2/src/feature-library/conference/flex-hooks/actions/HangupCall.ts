@@ -3,6 +3,7 @@ import * as Flex from '@twilio/flex-ui';
 import { ConferenceNotification } from '../notifications/Conference';
 import { isConferenceEnabledWithoutNativeXWT } from '../../config';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import logger from '../../../../utils/logger';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.HangupCall;
@@ -33,8 +34,8 @@ export const actionHook = function handleConferenceHangup(flex: typeof Flex, _ma
               task: payload.task,
               targetSid: participantType === 'worker' ? workerSid : callSid,
             });
-          } catch (error) {
-            console.log('Conference: unable to unhold participant', error);
+          } catch (error: any) {
+            logger.error('[conference] Conference: unable to unhold participant', error);
           }
         }
       });

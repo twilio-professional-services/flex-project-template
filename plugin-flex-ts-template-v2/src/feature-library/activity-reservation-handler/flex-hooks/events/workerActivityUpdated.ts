@@ -7,7 +7,7 @@ import logger from '../../../../utils/logger';
 
 export const eventName = FlexEvent.workerActivityUpdated;
 export const eventHook = async (_flex: typeof Flex, _manager: Flex.Manager, activity: Activity) => {
-  logger.debug(`activity-reservation-handler: handle ${eventName} for ${activity.name}`);
+  logger.debug(`[activity-reservation-handler] handle ${eventName} for ${activity.name}`);
 
   // This event is needed to handle activity changes by a supervisor, but it also
   // runs for local changes made by the worker or this feature. When we set activity

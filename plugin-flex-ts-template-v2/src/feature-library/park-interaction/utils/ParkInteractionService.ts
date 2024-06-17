@@ -1,6 +1,7 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
 import { isListEnabled } from '../config';
+import logger from '../../../utils/logger';
 
 export interface ParkInteractionResponse {
   success: boolean;
@@ -50,66 +51,56 @@ class ParkInteractionService extends ApiService {
     queueSid: string,
     taskAttributes: string,
   ): Promise<ParkInteractionResponse> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        channelSid: encodeURIComponent(channelSid),
-        interactionSid: encodeURIComponent(interactionSid),
-        participantSid: encodeURIComponent(participantSid),
-        conversationSid: encodeURIComponent(conversationSid),
-        channelType: encodeURIComponent(channelType),
-        taskSid: encodeURIComponent(taskSid),
-        workflowSid: encodeURIComponent(workflowSid),
-        taskChannelUniqueName: encodeURIComponent(taskChannelUniqueName),
-        queueName: encodeURIComponent(queueName),
-        queueSid: encodeURIComponent(queueSid),
-        taskAttributes: encodeURIComponent(taskAttributes),
-        workerSid: encodeURIComponent(this.manager.store.getState().flex.worker.worker?.sid ?? ''),
-        createUpdateSyncMapItem: encodeURIComponent(isListEnabled()),
-        Token: encodeURIComponent(this.manager.user.token),
-      };
-
-      this.fetchJsonWithReject<ParkInteractionResponse>(
+    const encodedParams: EncodedParams = {
+      channelSid: encodeURIComponent(channelSid),
+      interactionSid: encodeURIComponent(interactionSid),
+      participantSid: encodeURIComponent(participantSid),
+      conversationSid: encodeURIComponent(conversationSid),
+      channelType: encodeURIComponent(channelType),
+      taskSid: encodeURIComponent(taskSid),
+      workflowSid: encodeURIComponent(workflowSid),
+      taskChannelUniqueName: encodeURIComponent(taskChannelUniqueName),
+      queueName: encodeURIComponent(queueName),
+      queueSid: encodeURIComponent(queueSid),
+      taskAttributes: encodeURIComponent(taskAttributes),
+      workerSid: encodeURIComponent(this.manager.store.getState().flex.worker.worker?.sid ?? ''),
+      createUpdateSyncMapItem: encodeURIComponent(isListEnabled()),
+      Token: encodeURIComponent(this.manager.user.token),
+    };
+    try {
+      return await this.fetchJsonWithReject<ParkInteractionResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/park-interaction/flex/park-interaction`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((resp: ParkInteractionResponse) => {
-          resolve(resp);
-        })
-        .catch((error) => {
-          console.log('Error parking interaction', error);
-          reject(error);
-        });
-    });
+      );
+    } catch (error: any) {
+      logger.error('[park-interaction] Error parking interaction', error);
+      throw error;
+    }
   };
 
   unparkInteraction = async (ConversationSid: string, WebhookSid: string): Promise<UnparkInteractionResponse> => {
-    return new Promise((resolve, reject) => {
-      const encodedParams: EncodedParams = {
-        ConversationSid: encodeURIComponent(ConversationSid),
-        WebhookSid: encodeURIComponent(WebhookSid),
-        RouteToSameWorker: encodeURIComponent(true),
-      };
-
-      this.fetchJsonWithReject<UnparkInteractionResponse>(
+    const encodedParams: EncodedParams = {
+      ConversationSid: encodeURIComponent(ConversationSid),
+      WebhookSid: encodeURIComponent(WebhookSid),
+      RouteToSameWorker: encodeURIComponent(true),
+    };
+    try {
+      return await this.fetchJsonWithReject<UnparkInteractionResponse>(
         `${this.serverlessProtocol}://${this.serverlessDomain}/features/park-interaction/common/unpark-interaction`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: this.buildBody(encodedParams),
         },
-      )
-        .then((resp: any) => {
-          resolve(resp);
-        })
-        .catch((error) => {
-          console.log('Error unparking interaction', error);
-          reject(error);
-        });
-    });
+      );
+    } catch (error: any) {
+      logger.error('[park-interaction] Error unparking interaction', error);
+      throw error;
+    }
   };
 }
 

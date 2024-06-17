@@ -2,6 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 import { Actions, Manager } from '@twilio/flex-ui';
 
 import { StringTemplates } from '../flex-hooks/strings';
+import logger from '../../../utils/logger';
 
 const manager = Manager.getInstance();
 
@@ -14,11 +15,11 @@ const getCurrentTask = () => {
 
   if (focusedTaskSid) {
     const task = Flex.TaskHelper.getTaskByTaskSid(focusedTaskSid);
-    console.log(`Returning focused task`, task);
+    logger.debug(`[keyboard-shortcuts] Returning focused task`, task);
     return task;
   }
 
-  console.log(`No focused task found, returning null`);
+  logger.warn(`[keyboard-shortcuts] No focused task found, returning null`);
   return null;
 };
 
@@ -67,7 +68,7 @@ const navigateToQueuesView = () => {
 };
 
 const debuggingHelper = () => {
-  console.log(
+  logger.info(
     `This information is for debugging purposes only:
     accountSid: ${Manager.getInstance().workerClient?.accountSid}
     workerSid: ${Manager.getInstance().workerClient?.sid}
