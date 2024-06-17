@@ -7,6 +7,7 @@ import TaskService from '../../../../utils/serverless/TaskRouter/TaskRouterServi
 import ProgrammableChatService from '../../../../utils/serverless/ProgrammableChat/ProgrammableChatService';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 import { StringTemplates } from '../strings/ChatTransfer';
+import logger from '../../../../utils/logger';
 
 export interface MessageAttributes {
   senderInfo: { type: string; name: string };
@@ -77,7 +78,9 @@ export const actionHook = async function announceOnChannelWhenLeavingAndRemoveCh
       try {
         await notifyChatChannelTaskComplete(task, manager);
       } catch (e) {
-        console.warn(`Unable to update chat channel that task is complete: ${task.taskSid} and ${channelSid}`);
+        logger.warn(
+          `[chat-transfer] Unable to update chat channel that task is complete: ${task.taskSid} and ${channelSid}`,
+        );
       }
       await TaskService.updateTaskAttributes(task.taskSid, attributesUpdate);
     }
