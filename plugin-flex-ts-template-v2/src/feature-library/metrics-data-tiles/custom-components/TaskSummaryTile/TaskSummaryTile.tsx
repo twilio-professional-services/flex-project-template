@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Box } from '@twilio-paste/core/box';
 import { Table, THead, TBody, Th, Tr, Td } from '@twilio-paste/core/table';
 import { Tooltip } from '@twilio-paste/core/tooltip';
-import { SupervisorWorkerState } from '@twilio/flex-ui/src/state/State.definition';
 import AppState from 'types/manager/AppState';
 import { CallIncomingIcon } from '@twilio-paste/icons/esm/CallIncomingIcon';
 import { CallOutgoingIcon } from '@twilio-paste/icons/esm/CallOutgoingIcon';
@@ -20,7 +19,7 @@ import { getChannelIcon } from '../../utils/helpers';
 const TaskSummaryTile = () => {
   const teams = getTeams();
   const taskCounts: TeamTaskCounts = useFlexSelector((state: AppState) => {
-    const workers: SupervisorWorkerState[] = state.flex.supervisor.workers;
+    const workers = state.flex.supervisor.workers;
     return getTasksByTeamCounts(workers, teams);
   });
   const channels: Channels = getChannelsConfig();

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { styled, ConferenceParticipant, ITask, templates } from '@twilio/flex-ui';
 
-import ConferenceService from '../../utils/ConferenceService';
+import ProgrammableVoiceService from '../../../../utils/serverless/ProgrammableVoice/ProgrammableVoiceService';
 import { FetchedCall } from '../../../../types/serverless/twilio-api';
 import { StringTemplates } from '../../flex-hooks/strings/Conference';
 
@@ -46,7 +46,7 @@ const ParticipantName = (props: OwnProps) => {
     }
 
     if (participant.callSid && participant.participantType === 'unknown') {
-      ConferenceService.getCallProperties(participant.callSid)
+      ProgrammableVoiceService.getCallProperties(participant.callSid)
         .then((response: FetchedCall) => {
           if (response) {
             setName(response.to || unknown);

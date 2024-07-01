@@ -1,4 +1,5 @@
 import client from '../../../../utils/sdk-clients/sync/SyncClient';
+import logger from '../../../../utils/logger';
 
 class SyncDocClass {
   // Getting the Sync Document
@@ -10,7 +11,7 @@ class SyncDocClass {
           resolve(doc);
         })
         .catch((error: any) => {
-          console.error('Sync Util: getSyncDoc: Error calling this function', error);
+          logger.error('[supervisor-barge-coach] Sync Util: getSyncDoc: Error calling this function', error);
         });
     });
   };
@@ -51,7 +52,10 @@ class SyncDocClass {
         }
       })
       .catch((error: any) => {
-        console.error('Sync Util: initSyncDocAgentAssistance: Error calling this function', error);
+        logger.error(
+          '[supervisor-barge-coach] Sync Util: initSyncDocAgentAssistance: Error calling this function',
+          error,
+        );
       });
   };
 
@@ -95,7 +99,7 @@ class SyncDocClass {
         }
       })
       .catch((error: any) => {
-        console.error('Sync Util: initSyncDocSupervisors: Error calling this function', error);
+        logger.error('[supervisor-barge-coach] Sync Util: initSyncDocSupervisors: Error calling this function', error);
       });
   };
 
@@ -121,7 +125,7 @@ class SyncDocClass {
         });
       })
       .catch((error: any) => {
-        console.error('Sync Util: updateSyncDoc: Error calling this function', error);
+        logger.error('[supervisor-barge-coach] Sync Util: updateSyncDoc: Error calling this function', error);
       });
   };
 
@@ -135,7 +139,7 @@ class SyncDocClass {
         });
       })
       .catch((error: any) => {
-        console.error('Sync Util: clearSyncDoc: Error calling this function', error);
+        logger.error('[supervisor-barge-coach] Sync Util: clearSyncDoc: Error calling this function', error);
       });
   };
 }

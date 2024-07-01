@@ -2,8 +2,9 @@ import { Actions, ITask, Notifications, TaskHelper } from '@twilio/flex-ui';
 
 import { shouldSkipPhoneNumberValidation } from '../../config';
 import PhoneNumberService from '../../../../utils/serverless/PhoneNumbers/PhoneNumberService';
-import CustomTransferDirectoryService from '../../utils/CustomTransferDirectoryService';
+import ProgrammableVoiceService from '../../../../utils/serverless/ProgrammableVoice/ProgrammableVoiceService';
 import { CustomTransferDirectoryNotification } from '../notifications/CustomTransferDirectory';
+import logger from '../../../../utils/logger';
 
 export const registerStartExternalColdTransfer = async () => {
   Actions.registerAction(
@@ -16,7 +17,9 @@ export const registerStartExternalColdTransfer = async () => {
       }
 
       if (!task) {
-        console.error('Cannot start cold transfer without either a task or a valid task sid');
+        logger.error(
+          '[custom-transfer-directory] Cannot start cold transfer without either a task or a valid task sid',
+        );
         return;
       }
 
@@ -40,13 +43,13 @@ export const registerStartExternalColdTransfer = async () => {
       }
 
       try {
-        await CustomTransferDirectoryService.startColdTransfer(
+        await ProgrammableVoiceService.startColdTransfer(
           task?.attributes?.call_sid ?? task.attributes.conference.participants.customer,
           phoneNumber,
           callerId,
         );
       } catch (error: any) {
-        console.error('Error executing startColdTransfer', error);
+        logger.error('[custom-transfer-directory] Error executing startColdTransfer', error);
         Notifications.showNotification(CustomTransferDirectoryNotification.ErrorExecutingColdTransfer, {
           message: error.message,
         });

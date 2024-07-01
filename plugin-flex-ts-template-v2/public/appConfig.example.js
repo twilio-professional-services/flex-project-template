@@ -3,6 +3,9 @@ var appConfig = {
     enabled: true,
     url: '/plugins',
   },
+  insights: {
+    analyticsUrl: 'http://localhost:8081',
+  },
   ytica: false,
   logLevel: 'info',
   showSupervisorDesktopView: true,

@@ -6,6 +6,7 @@ import { TeamViewQueueFilterNotification } from '../notifications/TeamViewQueueF
 import { isQueueNoWorkerDataFilterEnabled } from '../../config';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 import { selectQueue, ResetQueuePlaceholder } from '../states/QueueNoWorkerDataFilterSlice';
+import logger from '../../../../utils/logger';
 
 export interface ApplyTeamsViewFiltersPayload {
   extraFilterQuery?: string;
@@ -86,8 +87,8 @@ function replaceQueueFiltersForTeamView(flex: typeof Flex, manager: Flex.Manager
         queue = queues.find((queue) => {
           return queue.friendlyName === queueEligibilityFilter?.values[0];
         });
-      } catch (error) {
-        console.error('teams-view-filters: Unable to get queues', error);
+      } catch (error: any) {
+        logger.error('[teams-view-filters] Unable to get queues', error);
       }
 
       // if there is no queue found notify user

@@ -2,6 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 
 import { EncodedParams } from '../../../types/serverless';
 import { getFeatureFlags } from '../../configuration';
+import logger from '../../logger';
 
 const MAX_ATTEMPTS = 10;
 const MAX_RETRY_DELAY = 3000;
@@ -36,7 +37,8 @@ export default abstract class ApiService {
 
     if (custom_data?.serverless_functions_port) this.serverlessDomain += `:${custom_data.serverless_functions_port}`;
 
-    if (!this.serverlessDomain) console.error('serverless_functions_domain is not set in flex config or env file');
+    if (!this.serverlessDomain)
+      logger.error('[ApiService] serverless_functions_domain is not set in flex config or env file');
   }
 
   protected buildBody(encodedParams: EncodedParams): string {

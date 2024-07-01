@@ -5,6 +5,7 @@ export const pasteElementHook = {
     alignSelf: 'center',
     marginLeft: 'space30',
     marginRight: 'space30',
+    whiteSpace: 'nowrap',
   },
   WRAPUP_HEADER_CONTAINER: {
     alignItems: 'stretch',

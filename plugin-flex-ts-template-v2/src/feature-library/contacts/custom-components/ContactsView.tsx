@@ -13,7 +13,10 @@ import ContactsUtil from '../utils/ContactsUtil';
 
 const ContactsView = () => {
   const pageSize = getPageSize();
-  const selectedId = useUID();
+  const recentTabId = useUID();
+  const personalTabId = useUID();
+  const sharedTabId = useUID();
+  const selectedId = isRecentsEnabled() ? recentTabId : isPersonalDirectoryEnabled() ? personalTabId : sharedTabId; // Default to Recents if enabled, else Personal Directory if enabled, else Shared Directory if enabled
 
   return (
     <Flex element="CONTACTS_VIEW_WRAPPER" vertical grow shrink>
@@ -24,17 +27,17 @@ const ContactsView = () => {
         <Tabs selectedId={selectedId} baseId="contacts-tabs">
           <TabList aria-label="Contacts tabs">
             {isRecentsEnabled() && (
-              <Tab id={selectedId}>
+              <Tab id={recentTabId}>
                 <Template code={StringTemplates.Recent} />
               </Tab>
             )}
             {isPersonalDirectoryEnabled() && (
-              <Tab>
+              <Tab id={personalTabId}>
                 <Template code={StringTemplates.MyContacts} />
               </Tab>
             )}
             {isSharedDirectoryEnabled() && (
-              <Tab>
+              <Tab id={sharedTabId}>
                 <Template code={StringTemplates.SharedContacts} />
               </Tab>
             )}

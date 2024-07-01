@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   extends: ['twilio-ts'],
-  ignorePatterns: ['/*', '!/src', '*.test.ts', '*.test.tsx', './**/__mocks__/*.ts', './**/__mocks__/*.tsx'],
+  ignorePatterns: ['/*', '!/src'],
   parserOptions: {
     project: './tsconfig.json',
     tsconfigRootDir: __dirname,
