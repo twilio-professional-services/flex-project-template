@@ -1,8 +1,8 @@
-import { Manager, ConversationState } from '@twilio/flex-ui';
+import { Manager } from '@twilio/flex-ui';
 
-import { InvitedParticipants } from '../types/InvitedParticipantDetails';
-import { ParticipantInviteType } from '../types/ParticipantInvite';
+import { ParticipantInviteType } from '../../../types/conversations/Participant';
 import ConversationsService from '../../../utils/serverless/Conversations/ConversationsService';
+import logger from '../../../utils/logger';
 
 const syncClient = Manager.getInstance()?.insightsClient;
 
@@ -18,12 +18,12 @@ const instantQuery = async (targetSid: string, targetType: ParticipantInviteType
       q.on('searchResult', (items) => {
         if (items && Object.keys(items).length > 0) {
           Object.entries(items).forEach(([key, value]) => {
-            console.log('instantQuery', key, value);
+            logger.debug('[conversation-transfer] instantQuery', { key, value });
             const name = targetType === 'Worker' ? (value as any).attributes.full_name : (value as any).queue_name;
             resolve(name);
           });
         } else {
-          console.log('Invite participant name instantQuery failed for ', targetSid);
+          logger.warn(`[conversation-transfer] Invite participant name instantQuery failed for ${targetSid}`);
           resolve(targetSid);
         }
       });
@@ -50,12 +50,7 @@ export const removeInvitedParticipant = async (conversationSid: string, currentA
   if (conversationSid)
     try {
       await ConversationsService.updateChannelAttributes(conversationSid, updatedAttributes);
-    } catch (error) {
-      console.log('Error', error, conversationSid);
+    } catch (error: any) {
+      logger.error(`[conversation-transfer] Error updating channel attributes for ${conversationSid}`, error);
     }
-};
-
-export const countOfOutstandingInvitesForConversation = (conversation: ConversationState.ConversationState): number => {
-  const { invites = undefined } = (conversation?.source?.attributes as any as InvitedParticipants) || {};
-  return Object.keys(invites || {}).length;
 };

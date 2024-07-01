@@ -1,6 +1,8 @@
 import { Actions, ConferenceParticipant, ITask, Manager, TaskHelper, VERSION as FlexVersion } from '@twilio/flex-ui';
 import { Call, Device } from '@twilio/voice-sdk';
 
+import logger from '../../../utils/logger';
+
 export let SecondDevice: Device | null = null;
 export let SecondDeviceCall: Call | null = null;
 export let FlexDeviceCall: Call | null = null;
@@ -41,7 +43,7 @@ const destroySecondDevice = () => {
     return;
   }
   SecondDevice?.destroy();
-  console.log('MultiCall: SecondDevice destroyed');
+  logger.debug('[multi-call] SecondDevice destroyed');
 };
 
 const muteCall = (callSid: string, mute: boolean) => {
@@ -116,7 +118,7 @@ export const handleUnhold = (payload: any) => {
 };
 
 const handleFlexCallDisconnect = (call: Call) => {
-  console.log('MultiCall: FlexDeviceCall disconnect', call);
+  logger.debug('[multi-call] FlexDeviceCall disconnect', call);
   FlexDeviceCall = null;
 
   if (SecondDeviceCall) {
@@ -130,7 +132,7 @@ const handleFlexCallDisconnect = (call: Call) => {
 };
 
 const handleFlexCallReject = () => {
-  console.log('MultiCall: FlexDeviceCall reject');
+  logger.debug('[multi-call] FlexDeviceCall reject');
   FlexDeviceCall = null;
 
   if (SecondDeviceCall) {
@@ -144,7 +146,7 @@ const handleFlexCallReject = () => {
 };
 
 const handleSecondDeviceRegistered = () => {
-  console.log('MultiCall: SecondDevice registered');
+  logger.debug('[multi-call] SecondDevice registered');
 
   const speakerDevices = Manager.getInstance().voiceClient?.audio?.speakerDevices.get();
 
@@ -157,9 +159,9 @@ const handleSecondDeviceRegistered = () => {
 
       try {
         SecondDevice?.audio?.speakerDevices.set(speaker.deviceId);
-        console.log(`MultiCall: Set output device to ${speaker.label}`);
-      } catch (error) {
-        console.error('MultiCall: Unable to change output device', error);
+        logger.info(`[multi-call] Set output device to ${speaker.label}`);
+      } catch (error: any) {
+        logger.error('[multi-call] Unable to change output device', error);
       }
     });
   }
@@ -167,10 +169,10 @@ const handleSecondDeviceRegistered = () => {
 
 const handleSecondCallIncoming = (call: Call) => {
   const manager = Manager.getInstance();
-  console.log('MultiCall: SecondDeviceCall incoming', call);
+  logger.debug('[multi-call] SecondDeviceCall incoming', call);
 
   call.on('accept', (_innerCall) => {
-    console.log('MultiCall: SecondDeviceCall accept', call);
+    logger.debug('[multi-call] SecondDeviceCall accept', call);
     SecondDeviceCall = call;
 
     // place other calls on hold
@@ -181,7 +183,7 @@ const handleSecondCallIncoming = (call: Call) => {
   });
 
   call.on('disconnect', (_innerCall: Call) => {
-    console.log('MultiCall: SecondDeviceCall disconnect', call);
+    logger.debug('[multi-call] SecondDeviceCall disconnect', call);
     SecondDeviceCall = null;
 
     if (!FlexDeviceCall) {
@@ -201,7 +203,7 @@ const handleSecondCallIncoming = (call: Call) => {
 };
 
 export const handleFlexCallIncoming = (manager: Manager, call: Call) => {
-  console.log('MultiCall: FlexDeviceCall incoming');
+  logger.debug('[multi-call] FlexDeviceCall incoming');
 
   FlexDeviceCall = call;
   call.on('disconnect', handleFlexCallDisconnect);
@@ -227,7 +229,7 @@ export const handleFlexCallIncoming = (manager: Manager, call: Call) => {
   SecondDevice?.on('incoming', handleSecondCallIncoming);
   SecondDevice?.on('registered', handleSecondDeviceRegistered);
   SecondDevice?.on('error', (error) => {
-    console.log('MultiCall: Error in SecondDevice', error);
+    logger.error('[multi-call] Error in SecondDevice', error);
   });
 
   // register the new device with Twilio

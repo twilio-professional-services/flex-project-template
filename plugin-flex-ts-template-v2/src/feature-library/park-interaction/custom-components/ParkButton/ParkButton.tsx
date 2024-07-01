@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Actions, IconButton, ITask, styled, templates, StateHelper, ConversationState } from '@twilio/flex-ui';
+import { Actions, IconButton, ITask, styled, templates, StateHelper } from '@twilio/flex-ui';
 
+import { ConversationsHelper } from '../../../../utils/helpers';
 import { StringTemplates } from '../../flex-hooks/strings';
 
 const IconContainer = styled.div`
@@ -14,17 +15,13 @@ interface TransferButtonProps {
 const ParkButton = (props: TransferButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const countOfOutstandingInvitesForConversation = (conversation: ConversationState.ConversationState): number => {
-    const { invites = undefined } = (conversation?.source?.attributes as any) || {};
-    return Object.keys(invites || {}).length;
-  };
-
   const allowPark = () => {
     // more than two participants or are there any active invites?
     const conversationState = StateHelper.getConversationStateForTask(props.task);
     if (
       conversationState &&
-      (conversationState.participants.size > 2 || countOfOutstandingInvitesForConversation(conversationState))
+      (conversationState.participants.size > 2 ||
+        ConversationsHelper.countOfOutstandingInvitesForConversation(conversationState))
     ) {
       return false;
     }
