@@ -7,6 +7,7 @@ import { getRules } from '../../config';
 import { FlexComponent } from '../../../../types/feature-loader';
 import ActivityWrapper from '../../custom-components/activity-wrapper';
 import AgentActivities from '../../utils/AgentActivities';
+import logger from '../../../../utils/logger';
 
 export const componentName = FlexComponent.MainHeader;
 export const componentHook = function wrapActivityComponent(flex: typeof Flex, _manager: Flex.Manager) {
@@ -19,7 +20,7 @@ export const componentHook = function wrapActivityComponent(flex: typeof Flex, _
     const workerAttrs = Flex.useFlexSelector((state: AppState) => state.flex.worker.attributes);
 
     useEffect(() => {
-      console.log('Worker attributes changed; updating filtered activities');
+      logger.debug('[activity-skill-filter] Worker attributes changed; updating filtered activities');
     }, [workerAttrs]);
 
     // NOTE: This will use a "hack" of sorts...

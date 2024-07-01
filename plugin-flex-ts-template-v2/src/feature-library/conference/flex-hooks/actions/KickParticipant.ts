@@ -2,6 +2,7 @@ import * as Flex from '@twilio/flex-ui';
 
 import ProgrammableVoiceService from '../../../../utils/serverless/ProgrammableVoice/ProgrammableVoiceService';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
+import logger from '../../../../utils/logger';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.KickParticipant;
@@ -23,7 +24,7 @@ export const actionHook = function handleKickConferenceParticipant(flex: typeof 
 
       const participantSid = targetSid;
 
-      console.log(`Removing participant ${participantSid} from conference`);
+      logger.info(`[conference] Removing participant ${participantSid} from conference`);
       await ProgrammableVoiceService.removeParticipant(conference, participantSid);
     }
   });

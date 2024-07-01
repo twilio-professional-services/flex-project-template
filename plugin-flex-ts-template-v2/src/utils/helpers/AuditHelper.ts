@@ -2,6 +2,7 @@ import { Manager } from '@twilio/flex-ui';
 
 import SyncClient from '../sdk-clients/sync/SyncClient';
 import { getFeatureFlags } from '../configuration';
+import logger from '../logger';
 
 const AUDIT_LIST_PREFIX = 'AuditLog';
 const { audit_log_ttl = 1209600 } = getFeatureFlags().common || {};
@@ -31,8 +32,8 @@ export const saveAuditEvent = async (feature: string, event: string, oldValue?: 
 
   try {
     await performSave(feature, data);
-  } catch (error) {
-    console.log('[AuditHelper] Retrying audit event save due to error.', error);
+  } catch (error: any) {
+    logger.error('[AuditHelper] Retrying audit event save due to error.', error);
     await performSave(feature, data);
   }
 };

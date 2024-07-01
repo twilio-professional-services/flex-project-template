@@ -5,6 +5,7 @@ import { Flex } from '@twilio-paste/core/flex';
 import { iframeStyle } from './styles';
 import { StringTemplates } from '../../flex-hooks/strings/ChatToVideo';
 import ChatToVideoService from '../../utils/ChatToVideoService';
+import logger from '../../../../utils/logger';
 
 interface VideoRoomProps {
   task: ITask;
@@ -24,7 +25,7 @@ const VideoRoom: React.FunctionComponent<VideoRoomProps> = ({ task }) => {
   }, [task.attributes.videoRoom]);
 
   function roomJoined(room: string) {
-    console.log('chat-to-video-escalation: room joined: ', room);
+    logger.info(`[chat-to-video-escalation] room joined: ${room}`);
     setActiveRoom(room);
   }
 

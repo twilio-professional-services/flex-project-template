@@ -4,7 +4,7 @@ import { Heading } from '@twilio-paste/core/heading';
 import { Template, templates } from '@twilio/flex-ui';
 
 import { InvitedParticipant } from './InvitedParticipant/InvitedParticipant';
-import { InvitedParticipantDetails } from '../../../types/InvitedParticipantDetails';
+import { InvitedParticipantDetails } from '../../../../../types/conversations/Participant';
 import { StringTemplates } from '../../../flex-hooks/strings/ChatTransferStrings';
 
 interface InvitedParticipantsProps {

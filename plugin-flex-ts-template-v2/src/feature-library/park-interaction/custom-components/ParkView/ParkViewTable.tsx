@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 import { StringTemplates } from '../../flex-hooks/strings';
 import ParkViewTableBodyWrapper from './ParkViewTableBodyWrapper';
+import logger from '../../../../utils/logger';
 
 interface ParkViewTableProps {
   recentInteractionsList: Array<any>;
@@ -33,8 +34,8 @@ const ParkViewTable = (props: ParkViewTableProps) => {
       await Actions.invokeAction('UnparkInteraction', { ConversationSid, WebhookSid });
       props.setDeletedMapItem(ConversationSid);
       props.reloadTable();
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      logger.error('[park-interaction] Error unparking interaction', error);
     }
     setIsUnparkingSid('');
   };

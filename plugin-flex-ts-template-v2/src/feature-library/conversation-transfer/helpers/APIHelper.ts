@@ -6,6 +6,7 @@ import { EncodedParams } from '../../../types/serverless';
 import ApiService from '../../../utils/serverless/ApiService';
 import { getWorkerName } from './inviteTracker';
 import { TransferOptions } from '../types/ActionPayloads';
+import logger from '../../../utils/logger';
 
 const manager: any | undefined = Manager.getInstance();
 
@@ -52,8 +53,8 @@ const _queueNameFromSid = async (transferTargetSid: string) => {
 
   try {
     queues = await TaskService.getQueues();
-  } catch (error) {
-    console.error('conversation-transfer: Unable to get queues', error);
+  } catch (error: any) {
+    logger.error('[conversation-transfer] Unable to get queues', error);
   }
 
   const queueResult = queues
@@ -124,7 +125,7 @@ export const buildInviteParticipantAPIPayload = async (
   if (transferTargetSid.startsWith('WQ')) {
     transferQueueName = await _queueNameFromSid(transferTargetSid);
     if (!transferQueueName) {
-      console.error('Transfer failed. queueNameFromSid failed for', transferTargetSid);
+      logger.error(`[conversation-transfer] Transfer failed. queueNameFromSid failed for ${transferTargetSid}`);
       return null;
     }
   } else {
@@ -134,7 +135,9 @@ export const buildInviteParticipantAPIPayload = async (
   const { flexInteractionSid = null, flexInteractionChannelSid = null, conversationSid = null } = task.attributes;
 
   if (!flexInteractionSid || !flexInteractionChannelSid) {
-    console.error('Transfer failed. Missing flexInteractionSid or flexInteractionChannelSid', task.sid);
+    logger.error(
+      `[conversation-transfer] Transfer failed. Missing flexInteractionSid or flexInteractionChannelSid for ${task.sid}`,
+    );
     return null;
   }
 
@@ -150,7 +153,7 @@ export const buildInviteParticipantAPIPayload = async (
     removeFlexInteractionParticipantSid = _getMyParticipantSid(participants) || '';
 
     if (!removeFlexInteractionParticipantSid) {
-      console.error("Transfer failed. Didn't find flexInteractionPartipantSid", task.sid);
+      logger.error(`[conversation-transfer] Transfer failed. Didn't find flexInteractionPartipantSid for ${task.sid}`);
       return null;
     }
   }
