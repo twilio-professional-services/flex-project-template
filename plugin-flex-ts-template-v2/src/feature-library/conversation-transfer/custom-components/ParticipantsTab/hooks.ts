@@ -1,8 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
 import { ITask } from '@twilio/flex-ui';
 
-import { ParticipantDetails } from '../../types/ParticipantDetails';
-import { InvitedParticipantDetails, InvitedParticipants } from '../../types/InvitedParticipantDetails';
+import {
+  InvitedParticipantDetails,
+  InvitedParticipants,
+  ParticipantDetails,
+} from '../../../../types/conversations/Participant';
 import { ConversationState } from '../../../../types/conversations';
 import logger from '../../../../utils/logger';
 

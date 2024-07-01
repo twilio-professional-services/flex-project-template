@@ -1,7 +1,6 @@
-import { Manager, ConversationState } from '@twilio/flex-ui';
+import { Manager } from '@twilio/flex-ui';
 
-import { InvitedParticipants } from '../types/InvitedParticipantDetails';
-import { ParticipantInviteType } from '../types/ParticipantInvite';
+import { ParticipantInviteType } from '../../../types/conversations/Participant';
 import ConversationsService from '../../../utils/serverless/Conversations/ConversationsService';
 import logger from '../../../utils/logger';
 
@@ -54,9 +53,4 @@ export const removeInvitedParticipant = async (conversationSid: string, currentA
     } catch (error: any) {
       logger.error(`[conversation-transfer] Error updating channel attributes for ${conversationSid}`, error);
     }
-};
-
-export const countOfOutstandingInvitesForConversation = (conversation: ConversationState.ConversationState): number => {
-  const { invites = undefined } = (conversation?.source?.attributes as any as InvitedParticipants) || {};
-  return Object.keys(invites || {}).length;
 };
