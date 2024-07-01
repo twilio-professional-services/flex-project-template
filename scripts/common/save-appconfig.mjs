@@ -44,6 +44,9 @@ export default async (account, overwrite) => {
     // the environment-specific flex config should take precedence over the common config
     let mergedFlexConfigJsonData = merge(flexConfigJsonData, localFlexConfigJsonData);
     
+    // set debug logging for local
+    mergedFlexConfigJsonData.custom_data.common.log_level = 'debug';
+    
     // disable admin panel for local
     mergedFlexConfigJsonData.custom_data.features.admin_ui.enabled = false
     
