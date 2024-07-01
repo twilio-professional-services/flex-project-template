@@ -57,10 +57,10 @@ class ContactsUtil {
         this.manager.store.dispatch(addHistoricalContact(args.item.data));
       });
       map.on('itemRemoved', (args) => {
-        console.log(`Map item ${args.key} was removed`);
+        logger.debug(`[contacts] Map item ${args.key} was removed`);
       });
       map.on('itemUpdated', (args) => {
-        console.log(`Map item ${args.item.key} was updated`);
+        logger.debug(`[contacts] Map item ${args.item.key} was updated`);
       });
       map.on('removed', () => {
         this.manager.store.dispatch(clearRecents());

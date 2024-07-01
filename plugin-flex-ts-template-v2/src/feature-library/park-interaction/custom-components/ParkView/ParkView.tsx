@@ -8,6 +8,7 @@ import ParkViewTable from './ParkViewTable';
 import { ParkedInteraction } from '../../utils/ParkInteractionService';
 import SyncClient, { getAllSyncMapItems } from '../../../../utils/sdk-clients/sync/SyncClient';
 import { UnparkInteractionNotification } from '../../flex-hooks/notifications';
+import logger from '../../../../utils/logger';
 
 interface RecentInteraction {
   key: string;
@@ -30,8 +31,8 @@ const ParkView = () => {
     try {
       const map = await SyncClient.map(`ParkedInteractions_${workerSid}`);
       getSyncMapItems = await getAllSyncMapItems(map);
-    } catch (error) {
-      console.error('Map getItems() failed', error);
+    } catch (error: any) {
+      logger.error('[park-interaction] Map getItems() failed', error);
       Notifications.showNotification(UnparkInteractionNotification.UnparkListError, { message: error });
     }
 
