@@ -4,6 +4,7 @@ import { NotificationIds } from '../flex-hooks/notifications/ScheduleManager';
 import ScheduleManagerService from './ScheduleManagerService';
 import { Rule, Schedule, ScheduleManagerConfig } from '../types/schedule-manager';
 import { isFeatureEnabled } from '../config';
+import logger from '../../../utils/logger';
 
 let config = {
   data: {
@@ -108,7 +109,7 @@ export const publishSchedules = async (): Promise<number> => {
   const updateResponse = await ScheduleManagerService.update(config);
 
   if (!updateResponse.success) {
-    console.log('Schedule update failed', updateResponse);
+    logger.error('[schedule-manager] Schedule update failed', updateResponse);
 
     if (updateResponse.buildSid === 'versionError') {
       Notifications.showNotification(NotificationIds.PUBLISH_FAILED_OTHER_UPDATE);
@@ -126,7 +127,7 @@ export const publishSchedules = async (): Promise<number> => {
   while (updateStatus.buildStatus !== 'completed') {
     if (updateStatus.buildStatus === 'failed' || updateStatus.buildStatus === 'error') {
       // oh no
-      console.log('Schedule update build failed', updateStatus);
+      logger.error('[schedule-manager] Schedule update build failed', updateStatus);
       Notifications.showNotification(NotificationIds.PUBLISH_FAILED);
       return 3;
     }
@@ -138,7 +139,7 @@ export const publishSchedules = async (): Promise<number> => {
   const publishResponse = await ScheduleManagerService.publish(updateResponse.buildSid);
 
   if (!publishResponse.success) {
-    console.log('Schedule publish failed', publishResponse);
+    logger.error('[schedule-manager] Schedule publish failed', publishResponse);
     Notifications.showNotification(NotificationIds.PUBLISH_FAILED);
     return 3;
   }

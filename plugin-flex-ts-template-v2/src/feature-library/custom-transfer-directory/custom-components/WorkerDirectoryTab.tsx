@@ -11,6 +11,7 @@ import { showOnlyAvailableWorkers, isCbmColdTransferEnabled, isCbmWarmTransferEn
 import { DirectoryEntry } from '../types/DirectoryEntry';
 import DirectoryTab from './DirectoryTab';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
+import logger from '../../../utils/logger';
 
 export interface TransferClickPayload {
   mode: 'WARM' | 'COLD';
@@ -107,7 +108,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
   // initial render
   useEffect(() => {
     // fetch the workers from the taskrouter sdk on initial render
-    fetchSDKWorkers().catch(console.error);
+    fetchSDKWorkers().catch(logger.error);
   }, []);
 
   useEffect(() => {

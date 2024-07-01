@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import ProgrammableVoiceService from '../../../../utils/serverless/ProgrammableVoice/ProgrammableVoiceService';
 import { isConferenceEnabledWithoutNativeXWT, isHoldWorkaroundEnabled } from '../../config';
+import logger from '../../../../utils/logger';
 
 export interface OwnProps {
   task?: ITask;
@@ -58,7 +59,7 @@ class ConferenceMonitor extends React.Component {
       // My worker has clearly left since previously joining
       // Time to stop monitoring at this point. Covers warm and cold transfers and generally stops Flex UI from tinkering
       // once the agent is done with the call.
-      console.debug('ConferenceMonitor: My participant left. Time to STOP monitoring this task/conference');
+      logger.debug('[conference] ConferenceMonitor: My participant left. Time to STOP monitoring this task/conference');
       this.setState({ stopMonitoring: true, didMyWorkerJoinYet: false });
     }
   }
@@ -68,23 +69,24 @@ class ConferenceMonitor extends React.Component {
   };
 
   shouldUpdateParticipants = (participants: ConferenceParticipant[], liveWorkerCount: number) => {
-    console.debug(
-      'ConferenceMonitor: shouldUpdateParticipants:',
-      liveWorkerCount <= 1 && this.hasUnknownParticipant(participants),
+    logger.debug(
+      `[conference] ConferenceMonitor: shouldUpdateParticipants: ${
+        liveWorkerCount <= 1 && this.hasUnknownParticipant(participants)
+      }`,
     );
     return liveWorkerCount <= 1 && this.hasUnknownParticipant(participants);
   };
 
   handleMoreThanTwoParticipants = (task: ITask, conferenceSid: string, participants: ConferenceParticipant[]) => {
-    console.log(
-      'ConferenceMonitor: More than two conference participants. Setting endConferenceOnExit to false for all participants.',
+    logger.info(
+      '[conference] ConferenceMonitor: More than two conference participants. Setting endConferenceOnExit to false for all participants.',
     );
     this.setEndConferenceOnExit(task, conferenceSid, participants, false);
   };
 
   handleOnlyTwoParticipants = (task: ITask, conferenceSid: string, participants: ConferenceParticipant[]) => {
-    console.log(
-      'ConferenceMonitor: Conference participants dropped to two. Setting endConferenceOnExit to true for all participants.',
+    logger.info(
+      '[conference] ConferenceMonitor: Conference participants dropped to two. Setting endConferenceOnExit to true for all participants.',
     );
     this.setEndConferenceOnExit(task, conferenceSid, participants, true);
   };
@@ -112,10 +114,12 @@ class ConferenceMonitor extends React.Component {
 
     try {
       await Promise.all(promises);
-      console.log(`ConferenceMonitor: endConferenceOnExit set to ${endConferenceOnExit} for all participants`);
-    } catch (error) {
-      console.error(
-        `ConferenceMonitor: Error setting endConferenceOnExit to ${endConferenceOnExit} for all participants\r\n`,
+      logger.info(
+        `[conference] ConferenceMonitor: endConferenceOnExit set to ${endConferenceOnExit} for all participants`,
+      );
+    } catch (error: any) {
+      logger.error(
+        `[conference] ConferenceMonitor: Error setting endConferenceOnExit to ${endConferenceOnExit} for all participants\r\n`,
         error,
       );
     }
@@ -134,8 +138,8 @@ class ConferenceMonitor extends React.Component {
       // only set on customer participants because Flex sets the others for us
       return;
     }
-    console.log(
-      `ConferenceMonitor: setting endConferenceOnExit = ${endConferenceOnExit} for callSid: ${participant.callSid} status: ${participant.status}`,
+    logger.debug(
+      `[conference] ConferenceMonitor: setting endConferenceOnExit = ${endConferenceOnExit} for callSid: ${participant.callSid} status: ${participant.status}`,
     );
 
     let doWorkaround = false;

@@ -8,6 +8,7 @@ import { Spinner } from '@twilio-paste/core/spinner';
 
 import { AudioRecorderWrapper, AudioRecorderPopover } from './AudioRecorderPanel.Styles';
 import { StringTemplates } from '../../flex-hooks/strings';
+import logger from '../../../../utils/logger';
 
 export interface OwnProps {
   showRecorder: boolean;
@@ -51,7 +52,7 @@ const AudioRecorderPanel = (props: OwnProps) => {
     };
 
     recorder.onerror = (error: any) => {
-      console.error('send-audio-rec-file: Error:', error);
+      logger.error('[send-audio-rec-file] Error:', error);
       setRecState(RecordingState.Error);
     };
 
@@ -74,8 +75,8 @@ const AudioRecorderPanel = (props: OwnProps) => {
         await detachRec();
       }
       recorder.start();
-    } catch (error) {
-      console.error('send-audio-rec-file: Error starting recording:', error);
+    } catch (error: any) {
+      logger.error('[send-audio-rec-file] Error starting recording:', error);
     }
   };
 
@@ -97,15 +98,15 @@ const AudioRecorderPanel = (props: OwnProps) => {
       });
 
       setAudioFile(file);
-    } catch (error) {
-      console.error('send-audio-rec-file: Error while attaching file:', error);
+    } catch (error: any) {
+      logger.error('[send-audio-rec-file] Error while attaching file:', error);
     }
   };
 
   const detachRec = async () => {
     try {
       if (!audioFile) {
-        console.error('send-audio-rec-file: No file to detach');
+        logger.error('[send-audio-rec-file] No file to detach');
         return;
       }
 
@@ -113,8 +114,8 @@ const AudioRecorderPanel = (props: OwnProps) => {
         file: audioFile,
         conversationSid: Manager.getInstance().store.getState().flex.chat.messageList.activeConversation,
       });
-    } catch (error) {
-      console.error('send-audio-rec-file: Error during file detachment:', error);
+    } catch (error: any) {
+      logger.error('[send-audio-rec-file] Error during file detachment:', error);
     }
 
     setAudioFile(null);

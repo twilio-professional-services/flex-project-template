@@ -1,23 +1,17 @@
 Use a chat orchestrator hook to modify chat orchestration via `ChatOrchestrator.setOrchestrations`.
 
 ```ts
-import * as Flex from "@twilio/flex-ui";
+import * as Flex from '@twilio/flex-ui';
 
-import { FlexOrchestrationEvent } from "../../../../types/feature-loader";
+import { FlexOrchestrationEvent } from '../../../../types/feature-loader';
 
-export const chatOrchestratorHook = (
-  flex: typeof Flex,
-  manager: Flex.Manager
-) => ({
+export const chatOrchestratorHook = (flex: typeof Flex, manager: Flex.Manager) => ({
   event: FlexOrchestrationEvent.completed,
   handler: handleChatComplete,
 });
 
 const handleChatComplete = (task: Flex.ITask): any => {
-  return [
-    Flex.ChatOrchestratorEvent.DeactivateConversation,
-    Flex.ChatOrchestratorEvent.LeaveConversation,
-  ];
+  return [Flex.ChatOrchestratorEvent.DeactivateConversation, Flex.ChatOrchestratorEvent.LeaveConversation];
 };
 ```
 

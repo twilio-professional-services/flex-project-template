@@ -6,6 +6,7 @@ import { reduxNamespace } from '../../../utils/state';
 import { ExtendedWrapupState } from '../flex-hooks/states/extendedWrapupSlice';
 import { TaskQualificationConfig } from '../types/ServiceConfiguration';
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
+import logger from '../../../utils/logger';
 
 const startTimer = (
   task: Flex.ITask,
@@ -37,14 +38,14 @@ const startTimer = (
             true,
           );
         } catch (error) {
-          console.error(`[agent-automation] Error updating task outcome: ${error}`);
+          logger.error(`[agent-automation] Error updating task outcome: ${error}`);
         }
       }
-      console.debug(`[agent-automation] Performing auto-wrapup for ${sid}`);
+      logger.info(`[agent-automation] Performing auto-wrapup for ${sid}`);
       Flex.Actions.invokeAction('CompleteTask', { sid });
       return;
     }
-    console.debug(`[agent-automation] Didn't auto-wrapup due to task already completed for ${sid}`);
+    logger.info(`[agent-automation] Didn't auto-wrapup due to task already completed for ${sid}`);
   }, timeout);
 };
 
@@ -67,7 +68,7 @@ export const setAutoCompleteTimeout = async (
   }
 
   try {
-    console.debug(`[agent-automation] Setting auto-wrapup timer for ${sid}`);
+    logger.info(`[agent-automation] Setting auto-wrapup timer for ${sid}`);
     let wrapTimer: number;
 
     // Subscribe to redux updates if we need to handle extended wrapup
@@ -85,7 +86,7 @@ export const setAutoCompleteTimeout = async (
           isExtended = newIsExtended;
 
           if (wrapTimer) {
-            console.debug(`[agent-automation] Clearing existing auto-wrapup timer for ${sid}`);
+            logger.info(`[agent-automation] Clearing existing auto-wrapup timer for ${sid}`);
             window.clearTimeout(wrapTimer);
           }
           if (
@@ -94,14 +95,14 @@ export const setAutoCompleteTimeout = async (
             taskConfig.allow_extended_wrapup &&
             (!isExtended || taskConfig.extended_wrapup_time > 0)
           ) {
-            console.debug(`[agent-automation] Creating new auto-wrapup timer for ${sid}`);
+            logger.info(`[agent-automation] Creating new auto-wrapup timer for ${sid}`);
             wrapTimer = startTimer(task, taskConfig, isExtended, unsubscribe);
           }
         })
       : undefined;
 
     wrapTimer = startTimer(task, taskConfig, isExtended, unsubscribe);
-  } catch (error) {
-    console.error(`Error attempting to set wrap up timeout for reservation: ${sid}`, error);
+  } catch (error: any) {
+    logger.error(`Error attempting to set wrap up timeout for reservation: ${sid}`, error);
   }
 };

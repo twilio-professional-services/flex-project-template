@@ -3,15 +3,16 @@ import { Actions, Notifications } from '@twilio/flex-ui';
 import ChatTransferService, { buildRemovePartiticipantAPIPayload } from '../helpers/APIHelper';
 import { NotificationIds } from '../flex-hooks/notifications/TransferResult';
 import { RemoveChatParticipantActionPayload } from '../types/ActionPayloads';
+import logger from '../../../utils/logger';
 
 const handleRemoveChatParticipant = async (payload: RemoveChatParticipantActionPayload) => {
   const { task, interactionParticipantSid } = payload;
-  console.log('handleRemoveChatParticipant', task, interactionParticipantSid);
+  logger.debug(`[conversation-transfer] handleRemoveChatParticipant ${interactionParticipantSid}`, task);
 
   const removePartcipantAPIPayload = buildRemovePartiticipantAPIPayload(task, interactionParticipantSid);
 
   if (!removePartcipantAPIPayload) {
-    console.error('error building removePartcipantAPIPayload');
+    logger.error('[conversation-transfer] error building removePartcipantAPIPayload');
     Notifications.showNotification(NotificationIds.ChatRemoveParticipantFailed);
     return;
   }
@@ -20,8 +21,8 @@ const handleRemoveChatParticipant = async (payload: RemoveChatParticipantActionP
     await ChatTransferService.removeParticipantAPIRequest(removePartcipantAPIPayload);
 
     Notifications.showNotification(NotificationIds.ChatRemoveParticipantSuccess);
-  } catch (error) {
-    console.error('remove participant API request failed', error);
+  } catch (error: any) {
+    logger.error('[conversation-transfer] remove participant API request failed', error);
     Notifications.showNotification(NotificationIds.ChatRemoveParticipantFailed);
   }
 };
