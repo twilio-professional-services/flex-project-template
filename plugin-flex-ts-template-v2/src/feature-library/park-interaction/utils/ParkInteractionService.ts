@@ -1,12 +1,10 @@
 import ApiService from '../../../utils/serverless/ApiService';
 import { EncodedParams } from '../../../types/serverless';
-import { FetchedRecording } from '../../../types/serverless/twilio-api';
 import { isListEnabled } from '../config';
 import logger from '../../../utils/logger';
 
 export interface ParkInteractionResponse {
   success: boolean;
-  recording: FetchedRecording;
 }
 
 export interface ParkedInteraction {
@@ -37,7 +35,6 @@ interface Customers {
 
 interface UnparkInteractionResponse {
   success: boolean;
-  recording: FetchedRecording;
 }
 
 class ParkInteractionService extends ApiService {

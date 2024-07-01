@@ -4,7 +4,7 @@ import { Heading } from '@twilio-paste/core/heading';
 import { Template, templates } from '@twilio/flex-ui';
 
 import { Participant } from './Participant/Participant';
-import { ParticipantDetails } from '../../../types/ParticipantDetails';
+import { ParticipantDetails } from '../../../../../types/conversations/Participant';
 import { StringTemplates } from '../../../flex-hooks/strings/ChatTransferStrings';
 
 interface ParticipantsProps {
