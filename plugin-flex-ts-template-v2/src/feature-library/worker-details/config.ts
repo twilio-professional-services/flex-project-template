@@ -1,4 +1,4 @@
-import { getFeatureFlags } from '../../utils/configuration';
+import { getFeatureFlags, getLoadedFeatures } from '../../utils/configuration';
 import WorkerDetailsConfig from './types/ServiceConfiguration';
 
 const {
@@ -10,8 +10,6 @@ const {
 } = (getFeatureFlags()?.features?.worker_details as WorkerDetailsConfig) || {};
 
 const { teams = [], departments = [] } = getFeatureFlags().common || {};
-
-const { enabled: workerCanvasTabsEnabled = false } = getFeatureFlags()?.features?.worker_canvas_tabs || {};
 
 export const isFeatureEnabled = () => {
   return enabled;
@@ -42,5 +40,5 @@ export const getDepartments = () => {
 };
 
 export const isWorkerCanvasTabsEnabled = () => {
-  return workerCanvasTabsEnabled;
+  return getLoadedFeatures().includes('worker-canvas-tabs');
 };
