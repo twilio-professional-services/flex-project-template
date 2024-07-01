@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
-import { InvitedParticipants } from '../../types/conversations/ConversationState';
+import { InvitedParticipants } from '../../types/conversations/Participant';
 
 class ConversationsHelper {
   countOfOutstandingInvitesForConversation = (conversation: Flex.ConversationState.ConversationState): number => {

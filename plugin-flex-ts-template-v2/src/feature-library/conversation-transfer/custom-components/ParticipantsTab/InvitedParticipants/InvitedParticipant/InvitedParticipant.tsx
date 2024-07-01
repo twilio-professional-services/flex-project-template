@@ -7,7 +7,7 @@ import { CloseIcon } from '@twilio-paste/icons/esm/CloseIcon';
 import { useState } from 'react';
 import { templates } from '@twilio/flex-ui';
 
-import { ParticipantInviteType } from '../../../../types/ParticipantInvite';
+import { ParticipantInviteType } from '../../../../../../types/conversations/Participant';
 import { StringTemplates } from '../../../../flex-hooks/strings/ChatTransferStrings';
 
 interface InvitedParticipantProps {

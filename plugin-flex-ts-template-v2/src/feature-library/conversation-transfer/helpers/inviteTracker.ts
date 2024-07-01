@@ -1,6 +1,6 @@
 import { Manager } from '@twilio/flex-ui';
 
-import { ParticipantInviteType } from '../types/ParticipantInvite';
+import { ParticipantInviteType } from '../../../types/conversations/Participant';
 import ConversationsService from '../../../utils/serverless/Conversations/ConversationsService';
 import logger from '../../../utils/logger';
 
