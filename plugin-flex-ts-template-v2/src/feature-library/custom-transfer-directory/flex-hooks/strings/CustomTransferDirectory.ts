@@ -22,6 +22,8 @@ export enum StringTemplates {
   QueuesFiltered = 'PSDirectoryQueuesFiltered',
   QueueTooltip = 'PSDirectoryQueueTooltip',
   NA = 'PSDirectoryNA',
+  CountryDisabled = 'PSDirectoryCountryDisabled',
+  HighRiskSpecialNumberDisabled = 'PSDirectoryHighRiskSpecialNumberDisabled',
 }
 
 export const stringHook = () => ({
@@ -46,6 +48,9 @@ export const stringHook = () => ({
     [StringTemplates.QueuesFiltered]: 'Queues may be filtered out due to lack of available workers in queues.',
     [StringTemplates.QueueTooltip]: 'Agents: {{agentsAvailable}}, Tasks in queue: {{tasksInQueue}}',
     [StringTemplates.NA]: 'N/A',
+    [StringTemplates.CountryDisabled]: 'Dialing to this country has been disabled.',
+    [StringTemplates.HighRiskSpecialNumberDisabled]:
+      'This number is considered high-risk and dialing it has been disabled.',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,
