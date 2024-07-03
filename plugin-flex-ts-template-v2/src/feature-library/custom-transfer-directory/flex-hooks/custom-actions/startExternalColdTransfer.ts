@@ -1,9 +1,10 @@
-import { Actions, ITask, Notifications, TaskHelper } from '@twilio/flex-ui';
+import { Actions, ITask, Notifications, TaskHelper, templates } from '@twilio/flex-ui';
 
 import { shouldSkipPhoneNumberValidation } from '../../config';
 import PhoneNumberService from '../../../../utils/serverless/PhoneNumbers/PhoneNumberService';
 import ProgrammableVoiceService from '../../../../utils/serverless/ProgrammableVoice/ProgrammableVoiceService';
 import { CustomTransferDirectoryNotification } from '../notifications/CustomTransferDirectory';
+import { StringTemplates } from '../strings/CustomTransferDirectory';
 import logger from '../../../../utils/logger';
 
 export const registerStartExternalColdTransfer = async () => {
@@ -30,7 +31,14 @@ export const registerStartExternalColdTransfer = async () => {
           Notifications.showNotification(CustomTransferDirectoryNotification.PhoneNumberFailedValidationCheckRequest);
           return;
         } else if (validationCheck.success && !validationCheck.valid) {
-          const errors = validationCheck.invalidReason;
+          let errors = validationCheck.invalidReason;
+
+          errors = errors?.replace('COUNTRY_DISABLED', templates[StringTemplates.CountryDisabled]());
+          errors = errors?.replace(
+            'HIGH_RISK_SPECIAL_NUMBER_DISABLED',
+            templates[StringTemplates.HighRiskSpecialNumberDisabled](),
+          );
+
           Notifications.showNotification(
             CustomTransferDirectoryNotification.PhoneNumberFailedValidationCheckWithErrors,
             {

@@ -21,7 +21,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
       if (!permissionsResponse.lowRiskNumbersEnabled) {
         valid = false;
-        invalidReason = 'Dialing to this country has been disabled.';
+        invalidReason = 'COUNTRY_DISABLED';
       } else if (!permissionsResponse.highRiskSpecialNumbersEnabled) {
         // Check if this number is considered a high-risk special number
         const { data: highRiskResponse } = await twilioExecute(context, (client) =>
@@ -34,7 +34,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
         if (matchedPrefix?.length) {
           valid = false;
-          invalidReason = 'This number is considered high-risk and dialing it has been disabled.';
+          invalidReason = 'HIGH_RISK_SPECIAL_NUMBER_DISABLED';
         }
       }
     } else {
