@@ -62,5 +62,10 @@
     "type": "tr-workflow",
     "name": "/Internal Call/",
     "parent": "TWILIO_FLEX_WORKSPACE_SID"
+  },
+  "TWILIO_FLEX_INTERNAL_CALL_QUEUE_WORKFLOW_SID": {
+    "type": "tr-workflow",
+    "name": "/Internal Call to Queue/",
+    "parent": "TWILIO_FLEX_WORKSPACE_SID"
   }
 }
