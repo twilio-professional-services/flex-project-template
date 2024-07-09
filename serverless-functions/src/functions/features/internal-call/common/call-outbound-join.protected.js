@@ -17,7 +17,7 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
         taskSid,
       });
 
-      const { data: task } = fetchTaskResult;
+      const { task } = fetchTaskResult;
 
       const newAttributes = {
         conference: {
@@ -52,9 +52,10 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
             taskChannel: 'voice',
           });
 
-          newAttributes.conference.participants.taskSid = createTaskResult.data.sid;
+          newAttributes.conference.participants.taskSid = createTaskResult.task.sid;
         }
         if (to.substring(0, 5) === 'queue') {
+          const { callToQueue } = task.attributes;
           const createTaskResult = await TaskOperations.createTask({
             context,
             attributes: {
@@ -75,7 +76,7 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
             taskChannel: 'voice',
           });
 
-          newAttributes.conference.participants.taskSid = createTaskResult.data.sid;
+          newAttributes.conference.participants.taskSid = createTaskResult.task.sid;
         }
 
         await TaskOperations.updateTaskAttributes({
@@ -94,7 +95,7 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
         taskSid,
       });
 
-      const { data: task } = fetchTaskResult;
+      const { task } = fetchTaskResult;
 
       if (['assigned', 'pending', 'reserved'].includes(task.assignmentStatus)) {
         await TaskOperations.updateTask({
@@ -115,7 +116,7 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
           taskSid: targetTaskSid,
         });
 
-        const { data: targetTask } = fetchTargetTaskResult;
+        const { task: targetTask } = fetchTargetTaskResult;
 
         if (['assigned', 'pending', 'reserved'].includes(targetTask.assignmentStatus)) {
           await TaskOperations.updateTask({
