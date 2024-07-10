@@ -154,15 +154,7 @@ const InternalDialpad = (props: OwnProps) => {
   const selectedId = isCallAgentEnabled() ? agentCallId : isCallQueueEnabled() ? queueCallId : agentCallId;
 
   return (
-    <Box
-      borderTopWidth="borderWidth10"
-      borderTopColor="colorBorder"
-      borderTopStyle="solid"
-      marginTop="space80"
-      paddingTop="space80"
-      paddingBottom="space200"
-      width="100%"
-    >
+    <Box marginTop="space80" paddingBottom="space200" width="100%">
       <Tabs selectedId={selectedId} baseId="internal-call-tabs">
         <TabList aria-label="Internal call tabs">
           {isCallAgentEnabled() && (

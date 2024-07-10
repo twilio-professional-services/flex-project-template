@@ -90,8 +90,8 @@
       },
       "internal_call": {
         "enabled": true,
-        "enable_call_agent":true,
-        "enable_call_queue":true
+        "enable_call_agent": true,
+        "enable_call_queue": true
       },
       "scrollable_activities": {
         "enabled": true
