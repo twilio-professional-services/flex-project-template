@@ -7,9 +7,9 @@ import { Stack } from '@twilio-paste/core/stack';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@twilio-paste/core/tabs';
 import { useUID } from '@twilio-paste/core/uid-library';
 import debounce from 'lodash/debounce';
-import { Worker as InstantQueryWorker, Queue as InstantQueryQueue } from 'types/sync/InstantQuery';
-import { isCallAgentEnabled, isCallQueueEnabled } from '../../config';
 
+import { Worker as InstantQueryWorker, Queue as InstantQueryQueue } from '../../../../types/sync/InstantQuery';
+import { isCallAgentEnabled, isCallQueueEnabled } from '../../config';
 import { makeInternalCall, makeInternalCallToQueue } from '../../helpers/internalCall';
 import { StringTemplates } from '../../flex-hooks/strings';
 
@@ -54,7 +54,7 @@ const InternalDialpad = (props: OwnProps) => {
     const queueQuery = await props.manager.insightsClient.instantQuery('tr-queue');
     queueQuery.on('searchResult', (items: { [key: string]: InstantQueryQueue }) => {
       const initialList = Object.keys(items).map((queueSid: string) => items[queueSid]);
-      setQueueList(initialList.sort((a: any, b: any) => (a.queue_name < b.queue_name) ? -1 : 1));
+      setQueueList(initialList.sort((a: any, b: any) => (a.queue_name < b.queue_name ? -1 : 1)));
       setInitialQueueList(initialList);
     });
     queueQuery.search(query);
@@ -114,7 +114,11 @@ const InternalDialpad = (props: OwnProps) => {
   };
 
   const handleInputQueue = (inputValue: string) => {
-    setQueueList(initialQueueList.filter((item: InstantQueryQueue) => item.queue_name.toLocaleLowerCase().startsWith(inputValue.toLocaleLowerCase())));
+    setQueueList(
+      initialQueueList.filter((item: InstantQueryQueue) =>
+        item.queue_name.toLocaleLowerCase().startsWith(inputValue.toLocaleLowerCase()),
+      ),
+    );
     setInputTextQueue(inputValue);
   };
 
