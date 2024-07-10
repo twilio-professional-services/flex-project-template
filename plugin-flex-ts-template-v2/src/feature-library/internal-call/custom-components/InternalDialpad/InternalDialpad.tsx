@@ -80,7 +80,7 @@ const InternalDialpad = (props: OwnProps) => {
   const handleQueueListUpdate = debounce(
     (e) => {
       if (e) {
-        setWorkers(`(data.queue_name CONTAINS "${e}" OR data.name CONTAINS "${e}")`);
+        setQueues(`(data.queue_name CONTAINS "${e}" OR data.name CONTAINS "${e}")`);
       }
     },
     250,
