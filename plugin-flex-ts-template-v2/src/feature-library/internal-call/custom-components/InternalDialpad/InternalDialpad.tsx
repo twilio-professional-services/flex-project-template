@@ -208,7 +208,7 @@ const InternalDialpad = (props: OwnProps) => {
                   onInputValueChange={({ inputValue }) => handleInputQueue(inputValue as string)}
                   onIsOpenChange={({ isOpen }) => handleOpenChangeQueue(isOpen)}
                   onSelectedItemChange={({ selectedItem }) => selectQueue(selectedItem)}
-                  optionTemplate={(item) => <>{item.friendlyName || null}</>}
+                  optionTemplate={(item) => <>{item.queue_name || null}</>}
                 />
                 <Flex hAlignContent="center">
                   <IconButton variant="primary" icon="Call" disabled={!selectedQueue} onClick={makeCallToQueue} />
