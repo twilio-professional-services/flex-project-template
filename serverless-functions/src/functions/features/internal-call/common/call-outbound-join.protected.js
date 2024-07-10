@@ -62,7 +62,7 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
               to,
               name: fromName,
               from: targetWorker,
-              callToQueue: callToQueue,
+              callToQueue,
               autoAnswer: 'false',
               conferenceSid: taskSid,
               conference: {

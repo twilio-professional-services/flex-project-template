@@ -5,12 +5,10 @@ import { Combobox } from '@twilio-paste/core/combobox';
 import { Flex } from '@twilio-paste/core/flex';
 import { Stack } from '@twilio-paste/core/stack';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@twilio-paste/core/tabs';
-import { CallIcon } from "@twilio-paste/icons/esm/CallIcon";
+import { useUID } from '@twilio-paste/core/uid-library';
 import debounce from 'lodash/debounce';
 import { Worker as InstantQueryWorker, Queue as InstantQueryQueue } from 'types/sync/InstantQuery';
 import { isCallAgentEnabled, isCallQueueEnabled } from '../../config';
-import { useUID } from '@twilio-paste/core/uid-library';
-import TaskService from '../../../../utils/serverless/TaskRouter/TaskRouterService';
 
 import { makeInternalCall, makeInternalCallToQueue } from '../../helpers/internalCall';
 import { StringTemplates } from '../../flex-hooks/strings';
@@ -86,7 +84,6 @@ const InternalDialpad = (props: OwnProps) => {
     250,
     { maxWait: 1000 },
   );
-
 
   useEffect(() => {
     handleWorkersListUpdate(inputText);

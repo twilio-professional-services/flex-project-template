@@ -111,7 +111,7 @@ const ScheduleView = () => {
         isOpen={publishState === 1}
         onDismiss={
           // eslint-disable-next-line no-empty-function
-          () => {}
+          () => { }
         }
         size="default"
         ariaLabelledby=""
@@ -134,7 +134,7 @@ const ScheduleView = () => {
         isOpen={loadFailed}
         onDismiss={
           // eslint-disable-next-line no-empty-function
-          () => {}
+          () => { }
         }
         size="default"
         ariaLabelledby=""
