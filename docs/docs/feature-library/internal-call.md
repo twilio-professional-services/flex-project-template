@@ -50,9 +50,9 @@ Before using this plugin you must first create a dedicated TaskRouter workflow o
 
 2. Taskrouter Workflow for 'Call Queue'
   - name the workflow "Internal Call to Queue"
-  - ensure to have filter created for each queue with matching task expression as: _callToQueue==<queue_name>_
+  - ensure to have filter created for each queue with matching task expression as: _callToQueue=='queue_name'_
   - ensure the priority of the filter is set to 1000 (or at least the highest in the system)
-  - make sure the filter matches to a _<queue_name>_ mentioned in the matching expression
+  - make sure the filter matches to a _'queue_name'_ mentioned in the matching expression
 
 ![Workflow filter configuration for queue](/img/features/internal-call/outbound-call-queue-filter.png)
 
