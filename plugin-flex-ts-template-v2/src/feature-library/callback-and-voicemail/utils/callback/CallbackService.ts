@@ -14,24 +14,6 @@ export interface CreateCallbackResponse {
   message: string;
 }
 
-export interface CreateCallbackRequest {
-  numberToCall: string;
-  numberToCallFrom: string;
-  flexFlowSid: string;
-  workflowSid?: string;
-  timeout?: number;
-  priority?: number;
-  attempts?: number;
-  conversation_id?: string;
-  message?: string;
-  utcDateTimeReceived?: string;
-  recordingSid?: string;
-  recordingUrl?: string;
-  transcriptSid?: string;
-  transcriptText?: string;
-  isDeleted?: boolean;
-}
-
 export interface FetchVoicemailResponse {
   type: string;
   recording: string;
@@ -61,7 +43,9 @@ class CallbackService extends ApiService {
         const { queueSid } = task;
         const { callBackData, conversations } = task.attributes as TaskAttributes;
         if (callBackData) {
-          const { numberToCall: destination, numberToCallFrom: callerId } = callBackData;
+          const { numberToCall: destination, numberToCallFrom } = callBackData;
+          // Don't pass SIP caller IDs, because they cannot be used.
+          const callerId = numberToCallFrom && !numberToCallFrom.startsWith('sip:') ? numberToCallFrom : undefined;
 
           const outboundCallTaskAttributes = {
             ...task.attributes,
@@ -101,27 +85,7 @@ class CallbackService extends ApiService {
 
   async requeueCallback(task: Flex.ITask): Promise<Flex.ITask> {
     try {
-      const request: CreateCallbackRequest = {
-        numberToCall: task.attributes.callBackData.numberToCall,
-        numberToCallFrom: task.attributes.callBackData.numberToCallFrom,
-        flexFlowSid: task.attributes.flow_execution_sid,
-        workflowSid: task.workflowSid,
-        timeout: task.timeout,
-        priority: task.priority,
-        attempts: task.attributes.callBackData.attempts ? Number(task.attributes.callBackData.attempts) + 1 : 1,
-        conversation_id: task.taskSid,
-        message: task.attributes.message,
-        utcDateTimeReceived: task.attributes.callBackData.utcDateTimeReceived
-          ? task.attributes.callBackData.utcDateTimeReceived
-          : new Date(),
-        recordingSid: task.attributes.callBackData.recordingSid,
-        recordingUrl: task.attributes.callBackData.recordingUrl,
-        transcriptSid: task.attributes.callBackData.transcriptSid,
-        transcriptText: task.attributes.callBackData.transcriptText,
-        isDeleted: task.attributes.callBackData.isDeleted,
-      };
-
-      const response = await this.#createCallback(request);
+      const response = await this.#requeueCallback(task.taskSid);
 
       if (response.success) {
         await Flex.Actions.invokeAction('WrapupTask', { task });
@@ -133,28 +97,14 @@ class CallbackService extends ApiService {
     return task;
   }
 
-  #createCallback = async (request: CreateCallbackRequest): Promise<CreateCallbackResponse> => {
+  #requeueCallback = async (taskSid: string): Promise<CreateCallbackResponse> => {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(this.manager.user.token),
-      numberToCall: encodeURIComponent(request.numberToCall),
-      numberToCallFrom: encodeURIComponent(request.numberToCallFrom),
-      flexFlowSid: encodeURIComponent(request.flexFlowSid),
-      workflowSid: request.workflowSid ? encodeURIComponent(request.workflowSid) : undefined,
-      timeout: request.timeout ? encodeURIComponent(request.timeout) : undefined,
-      priority: request.priority ? encodeURIComponent(request.priority) : undefined,
-      attempts: request.attempts ? encodeURIComponent(request.attempts) : undefined,
-      conversation_id: request.conversation_id ? encodeURIComponent(request.conversation_id) : undefined,
-      message: request.message ? encodeURIComponent(request.message) : undefined,
-      utcDateTimeReceived: request.utcDateTimeReceived ? encodeURIComponent(request.utcDateTimeReceived) : undefined,
-      recordingSid: request.recordingSid ? encodeURIComponent(request.recordingSid) : undefined,
-      recordingUrl: request.recordingUrl ? encodeURIComponent(request.recordingUrl) : undefined,
-      transcriptSid: request.transcriptSid ? encodeURIComponent(request.transcriptSid) : undefined,
-      transcriptText: request.transcriptText ? encodeURIComponent(request.transcriptText) : undefined,
-      isDeleted: request.isDeleted ? encodeURIComponent(request.isDeleted) : undefined,
+      taskSid: encodeURIComponent(taskSid),
     };
 
     return this.fetchJsonWithReject<CreateCallbackResponse>(
-      `${this.serverlessProtocol}://${this.serverlessDomain}/features/callback-and-voicemail/flex/create-callback`,
+      `${this.serverlessProtocol}://${this.serverlessDomain}/features/callback-and-voicemail/flex/requeue-callback`,
       {
         method: 'post',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

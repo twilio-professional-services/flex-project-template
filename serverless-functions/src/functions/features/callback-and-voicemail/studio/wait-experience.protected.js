@@ -298,9 +298,10 @@ exports.handler = async (context, event, callback) => {
       // Prepend a + if this is not a SIP address
       const numberToCall = `${/^\d/.test(event.to.trim()) ? '+' : ''}${event.to.trim()}`;
 
-      // Option to pull in a few more things from original task like conversation_id or even the workflowSid
+      // TODO: Should we override workflowSid or have the flow reference the callback workflow for the original task too?
       const callbackParams = {
         context,
+        originalTask,
         numberToCall,
         numberToCallFrom: event.Called,
       };
@@ -341,11 +342,13 @@ exports.handler = async (context, event, callback) => {
 
     case 'submit-voicemail':
       // Submit the voicemail to TaskRouter (and/or to your backend if you have a voicemail handling solution)
+      const originalTaskForVm = await fetchTask(context, enqueuedTaskSid);
 
       // Create the Voicemail task
-      // Option to pull in a few more things from original task like conversation_id or even the workflowSid
+      // TODO: For some reason in the transcribeCallback, Caller is CallerName :( Need to pass the actual number through to here instead.
       const vmParams = {
         context,
+        originalTask: originalTaskForVm,
         numberToCall: event.Caller,
         numberToCallFrom: event.Called,
         recordingSid: event.RecordingSid,
@@ -356,7 +359,6 @@ exports.handler = async (context, event, callback) => {
 
       if (options.retainPlaceInQueue && enqueuedTaskSid) {
         // Get the original task's start time to maintain queue ordering.
-        const originalTaskForVm = await fetchTask(context, enqueuedTaskSid);
         vmParams.virtualStartTime = originalTaskForVm?.dateCreated;
       }
 
