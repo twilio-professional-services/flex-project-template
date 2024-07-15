@@ -4,7 +4,7 @@ import InternalCallConfig from './types/ServiceConfiguration';
 const {
   enabled = false,
   enable_call_queue = false,
-  enable_call_agent = false,
+  enable_call_agent = true,
 } = (getFeatureFlags()?.features?.internal_call as InternalCallConfig) || {};
 
 export const isFeatureEnabled = () => {
