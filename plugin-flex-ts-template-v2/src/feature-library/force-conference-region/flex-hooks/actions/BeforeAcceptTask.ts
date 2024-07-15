@@ -16,6 +16,8 @@ export const actionHook = function setConferenceRegion(flex: typeof Flex, _manag
     if (region && region !== '') {
       console.log(`[force-conference-region] Setting conferenceOptions.region = ${region}`);
       payload.conferenceOptions.region = region;
+    } else {
+      console.log(`[force-conference-region] Region not set for call`);
     }
   });
 };

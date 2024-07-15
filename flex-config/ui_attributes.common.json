@@ -421,7 +421,8 @@
         "component_theme_overrides": {}
       },
       "force_conference_region": {
-        "enabled": false
+        "enabled": false,
+        "region": ""
       }
     }
   }
