@@ -72,7 +72,7 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
               internal: 'true',
               client_call: true,
             },
-            workflowSid: process.env.TWILIO_FLEX_INTERNAL_CALL_QUEUE_WORKFLOW_SID,
+            workflowSid: process.env.TWILIO_FLEX_INTERNAL_CALL_WORKFLOW_SID,
             taskChannel: 'voice',
           });
 

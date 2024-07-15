@@ -40,24 +40,16 @@ Content-Type: application/json
 
 Before using this plugin you must first create a dedicated TaskRouter workflow or just add the following filter to your current workflow. Make sure it is part of your Flex Task Assignment workspace.
 
-1. Taskrouter Workflow for 'Call Agent'
   - name the workflow "Internal Call"
   - ensure the following matching worker expression: _task.targetWorker==worker.contact_uri_
   - ensure the priority of the filter is set to 1000 (or at least the highest in the system)
   - make sure the filter matches to a queue with Everyone on it. The default Everyone queue will work but if you want to seperate real time reporting for outbound calls, you should make a dedicated queue for it with a queue expression _1==1_
+  - ensure to have filter created for each queue with matching task expression as: _callToQueue=='queue_name'_
+  - make sure the filter matches to a _'queue_name'_ mentioned in the matching expression
 
 ![Workflow filter configuration](/img/features/internal-call/outbound-filter.png)
 
-2. Taskrouter Workflow for 'Call Queue'
-  - name the workflow "Internal Call to Queue"
-  - ensure to have filter created for each queue with matching task expression as: _callToQueue=='queue_name'_
-  - ensure the priority of the filter is set to 1000 (or at least the highest in the system)
-  - make sure the filter matches to a _'queue_name'_ mentioned in the matching expression
-
-![Workflow filter configuration for queue](/img/features/internal-call/outbound-call-queue.png)
-
-In the `serverless-functions/.env` file, be sure to set `TWILIO_FLEX_INTERNAL_CALL_WORKFLOW_SID` to the SID of the workflow configured in step 1,
-and set `TWILIO_FLEX_INTERNAL_CALL_QUEUE_WORKFLOW_SID`to set SID of workflow configured in step 2 above (and set `TWILIO_FLEX_WORKSPACE_SID` if it has not been already). If your workflow name begins with "Internal Call" and "Internal Call to Queue", the `npm install` script, `npm run generate-env` script, and the included CI scripts will automatically populate these SIDs for you.
+In the `serverless-functions/.env` file, be sure to set `TWILIO_FLEX_INTERNAL_CALL_WORKFLOW_SID` to the SID of the workflow configured above and set `TWILIO_FLEX_WORKSPACE_SID` if it has not been already. If your workflow name begins with "Internal Call" the `npm install` script, `npm run generate-env` script, and the included CI scripts will automatically populate these SIDs for you.
 
 ## how does it work?
 
