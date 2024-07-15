@@ -24,6 +24,6 @@ resource "twilio_studio_flows_v2" "template_example_callback_flow" {
     "SERVERLESS_ENV_SID" = var.serverless_env_sid
     "FUNCTION_CREATE_CALLBACK" = var.function_create_callback
     "VOICE_CHANNEL_SID" = var.voice_channel_sid
-    "WORKFLOW_SID" = var.workflow_sid
+    "WORKFLOW_SID" = twilio_taskrouter_workspaces_workflows_v1.template_example_callback.sid
   })
 }

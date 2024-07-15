@@ -296,7 +296,7 @@ exports.handler = async (context, event, callback) => {
       const originalTask = await fetchTask(context, enqueuedTaskSid);
       await cancelTask(context, originalTask, 'Opted to request a callback');
 
-      // TODO: Should we override workflowSid or have the flow reference the callback workflow for the original task too?
+      // Here you can optionally adjust callback parameters, such as a overriddenWorkflowSid
       const callbackParams = {
         context,
         originalTask,
@@ -346,6 +346,7 @@ exports.handler = async (context, event, callback) => {
       const originalTaskForVm = await fetchTask(context, enqueuedTaskSid);
 
       // Create the Voicemail task
+      // Here you can optionally adjust voicemail parameters, such as a overriddenWorkflowSid
       const vmParams = {
         context,
         originalTask: originalTaskForVm,

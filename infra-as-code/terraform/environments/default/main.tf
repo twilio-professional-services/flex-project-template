@@ -20,7 +20,6 @@ module "callback-and-voicemail" {
   
   workspace_sid = var.TWILIO_FLEX_WORKSPACE_SID
   voice_channel_sid = twilio_taskrouter_workspaces_task_channels_v1.voice.sid
-  workflow_sid = twilio_taskrouter_workspaces_workflows_v1.template_example_assign_to_anyone.sid
   queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_everyone.sid
   
   serverless_domain = var.SERVERLESS_DOMAIN
