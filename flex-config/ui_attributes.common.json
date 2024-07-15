@@ -9,12 +9,7 @@
     "common": {
       "log_level": "info",
       "audit_log_ttl": 1209600,
-      "teams": [
-        "Blue Team",
-        "Red Team",
-        "Gold Team",
-        "VIP Team"
-      ],
+      "teams": ["Blue Team", "Red Team", "Gold Team", "VIP Team"],
       "departments": [
         "General Management",
         "Marketing",
@@ -251,10 +246,7 @@
         "per_queue": {
           "exampleQueueName": {
             "require_disposition": true,
-            "dispositions": [
-              "Promotional Sale",
-              "Renewal"
-            ],
+            "dispositions": ["Promotional Sale", "Renewal"],
             "text_attributes": [],
             "select_attributes": []
           }
@@ -427,6 +419,9 @@
           "side_nav_hover_background": "rgb(225, 227, 234)"
         },
         "component_theme_overrides": {}
+      },
+      "force_conference_region": {
+        "enabled": false
       }
     }
   }
