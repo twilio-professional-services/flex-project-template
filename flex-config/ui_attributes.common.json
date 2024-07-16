@@ -89,7 +89,9 @@
         "url_tab_title": "Web Page"
       },
       "internal_call": {
-        "enabled": true
+        "enabled": true,
+        "enable_call_agent": true,
+        "enable_call_queue": true
       },
       "scrollable_activities": {
         "enabled": true
