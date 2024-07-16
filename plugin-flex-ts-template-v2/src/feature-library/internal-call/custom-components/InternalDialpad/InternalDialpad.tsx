@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { IconButton, Manager, WorkerAttributes, Template, templates, IQueue } from '@twilio/flex-ui';
 import { Box } from '@twilio-paste/core/box';
-import { Combobox } from '@twilio-paste/core/combobox';
+import { Combobox, useCombobox } from '@twilio-paste/core/combobox';
 import { Flex } from '@twilio-paste/core/flex';
 import { Stack } from '@twilio-paste/core/stack';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@twilio-paste/core/tabs';
@@ -22,28 +22,28 @@ const InternalDialpad = (props: OwnProps) => {
   const [inputTextQueue, setInputTextQueue] = useState('');
   const [selectedWorker, setSelectedWorker] = useState(null as InstantQueryWorker | null);
   const [selectedQueue, setSelectedQueue] = useState(null as IQueue | null);
+  const [canLoadWorkers, setCanLoadWorkers] = useState(false);
   const [workerList, setWorkerList] = useState([] as InstantQueryWorker[]);
   const [queueList, setQueueList] = useState([] as IQueue[]);
   const [initialQueueList, setInitialQueueList] = useState([] as IQueue[]);
   const { workspaceClient } = Manager.getInstance();
 
-  // async function to retrieve the task queues from the tr sdk
-  // this will trigger the useEffect for a fetchedQueues update
-  const fetchSDKTaskQueues = async () => {
-    if (workspaceClient)
-      setInitialQueueList(
-        Array.from(
-          (
-            await workspaceClient.fetchTaskQueues({
-              Ordering: 'DateUpdated:desc',
-            })
-          ).values(),
-        ).sort((a, b) => (a.name > b.name ? 1 : -1)) as unknown as Array<IQueue>,
-      );
-  };
+  const {
+    selectItem: queueComboboxSelectItem,
+    setInputValue: queueComboboxSetInputValue,
+    ...queueComboboxState
+  } = useCombobox({
+    items: queueList,
+    inputValue: inputTextQueue,
+    itemToString: (item) => item?.name || '',
+    onInputValueChange: ({ inputValue }) => setInputTextQueue(inputValue as string),
+    onIsOpenChange: ({ isOpen }) => handleOpenChangeQueue(isOpen),
+    onSelectedItemChange: ({ selectedItem }) => setSelectedQueue(selectedItem || null),
+  });
 
   const setWorkers = async (query = '') => {
-    if (!props.manager.workerClient) {
+    if (!canLoadWorkers || !props.manager.workerClient) {
+      // canLoadWorkers is in place so that we wait until the user has opened the combobox before loading the workers list.
       return;
     }
     const { contact_uri: worker_contact_uri } = props.manager.workerClient.attributes as WorkerAttributes;
@@ -63,35 +63,48 @@ const InternalDialpad = (props: OwnProps) => {
     workerQuery.search(`data.attributes.contact_uri != "${worker_contact_uri}"${query === '' ? '' : appendQuery}`);
   };
 
+  // async function to retrieve the task queues from the tr sdk
+  // this will trigger the useEffect for a initialQueueList update
   const setQueues = async () => {
-    fetchSDKTaskQueues();
-    setQueueList(initialQueueList);
+    if (!workspaceClient) {
+      return;
+    }
+    setInitialQueueList(
+      Array.from(
+        (
+          await workspaceClient.fetchTaskQueues({
+            Ordering: 'DateUpdated:desc',
+          })
+        ).values(),
+      ).sort((a, b) => (a.name > b.name ? 1 : -1)) as unknown as Array<IQueue>,
+    );
+  };
+
+  const handleWorkersListUpdate = debounce(
+    (e) => {
+      setWorkers(e ? `(data.attributes.full_name CONTAINS "${e}" OR data.friendly_name CONTAINS "${e}")` : '');
+    },
+    250,
+    { maxWait: 1000 },
+  );
+
+  const handleQueueListUpdate = () => {
+    setQueueList(
+      inputTextQueue
+        ? initialQueueList.filter((item: IQueue) =>
+            item.name.toLocaleLowerCase().startsWith(inputTextQueue.toLocaleLowerCase()),
+          )
+        : initialQueueList,
+    );
   };
 
   useEffect(() => {
     setWorkers();
-    setQueues();
-  }, []);
+  }, [canLoadWorkers]);
 
-  const handleWorkersListUpdate = debounce(
-    (e) => {
-      if (e) {
-        setWorkers(`(data.attributes.full_name CONTAINS "${e}" OR data.friendly_name CONTAINS "${e}")`);
-      }
-    },
-    250,
-    { maxWait: 1000 },
-  );
-
-  const handleQueueListUpdate = debounce(
-    (e) => {
-      if (e) {
-        setQueues();
-      }
-    },
-    250,
-    { maxWait: 1000 },
-  );
+  useEffect(() => {
+    handleQueueListUpdate();
+  }, [initialQueueList]);
 
   useEffect(() => {
     handleWorkersListUpdate(inputText);
@@ -102,37 +115,19 @@ const InternalDialpad = (props: OwnProps) => {
   }, [inputText]);
 
   useEffect(() => {
-    handleQueueListUpdate(inputText);
+    handleQueueListUpdate();
 
     if (selectedQueue && inputTextQueue !== selectedQueue.name) {
       setSelectedQueue(null);
+      // Manually reset Paste combobox state to match our state.
+      queueComboboxSelectItem(null as any);
+      queueComboboxSetInputValue(inputTextQueue);
     }
   }, [inputTextQueue]);
 
-  const selectWorker = (selected: InstantQueryWorker) => {
-    setSelectedWorker(selected);
-  };
-
-  const selectQueue = (selected: IQueue) => {
-    setSelectedQueue(selected);
-  };
-
-  const handleAgentInput = (inputValue: string) => {
-    setInputText(inputValue);
-  };
-
-  const handleInputQueue = (inputValue: string) => {
-    setQueueList(
-      initialQueueList.filter((item: IQueue) =>
-        item.name.toLocaleLowerCase().startsWith(inputValue.toLocaleLowerCase()),
-      ),
-    );
-    setInputTextQueue(inputValue);
-  };
-
   const handleOpenChange = (isOpen?: boolean) => {
     if (isOpen === true && inputText === '' && workerList.length === 0) {
-      setWorkers();
+      setCanLoadWorkers(true);
     }
   };
 
@@ -186,9 +181,9 @@ const InternalDialpad = (props: OwnProps) => {
                   inputValue={inputText}
                   itemToString={(item) => item.attributes.full_name || item.friendly_name}
                   labelText={templates[StringTemplates.SelectAgent]()}
-                  onInputValueChange={({ inputValue }) => handleAgentInput(inputValue as string)}
+                  onInputValueChange={({ inputValue }) => setInputText(inputValue as string)}
                   onIsOpenChange={({ isOpen }) => handleOpenChange(isOpen)}
-                  onSelectedItemChange={({ selectedItem }) => selectWorker(selectedItem)}
+                  onSelectedItemChange={({ selectedItem }) => setSelectedWorker(selectedItem)}
                   optionTemplate={(item) => <>{item.attributes.full_name || item.friendly_name}</>}
                 />
                 <Flex hAlignContent="center">
@@ -203,13 +198,9 @@ const InternalDialpad = (props: OwnProps) => {
                 <Combobox
                   autocomplete
                   items={queueList}
-                  inputValue={inputTextQueue}
-                  itemToString={(item) => item.name || null}
                   labelText={templates[StringTemplates.SelectQueue]()}
-                  onInputValueChange={({ inputValue }) => handleInputQueue(inputValue as string)}
-                  onIsOpenChange={({ isOpen }) => handleOpenChangeQueue(isOpen)}
-                  onSelectedItemChange={({ selectedItem }) => selectQueue(selectedItem)}
-                  optionTemplate={(item) => <>{item.name || null}</>}
+                  optionTemplate={(item) => <>{item.name}</>}
+                  state={{ ...queueComboboxState }}
                 />
                 <Flex hAlignContent="center">
                   <IconButton variant="primary" icon="Call" disabled={!selectedQueue} onClick={makeCallToQueue} />
