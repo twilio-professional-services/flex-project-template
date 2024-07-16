@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { IconButton, Manager, WorkerAttributes, Template, templates } from '@twilio/flex-ui';
+import { IconButton, Manager, WorkerAttributes, Template, templates, IQueue } from '@twilio/flex-ui';
 import { Box } from '@twilio-paste/core/box';
 import { Combobox } from '@twilio-paste/core/combobox';
 import { Flex } from '@twilio-paste/core/flex';
@@ -8,7 +8,7 @@ import { Tabs, TabList, Tab, TabPanels, TabPanel } from '@twilio-paste/core/tabs
 import { useUID } from '@twilio-paste/core/uid-library';
 import debounce from 'lodash/debounce';
 
-import { Worker as InstantQueryWorker, Queue as InstantQueryQueue } from '../../../../types/sync/InstantQuery';
+import { Worker as InstantQueryWorker } from '../../../../types/sync/InstantQuery';
 import { isCallAgentEnabled, isCallQueueEnabled } from '../../config';
 import { makeInternalCall, makeInternalCallToQueue } from '../../helpers/internalCall';
 import { StringTemplates } from '../../flex-hooks/strings';
@@ -21,10 +21,26 @@ const InternalDialpad = (props: OwnProps) => {
   const [inputText, setInputText] = useState('');
   const [inputTextQueue, setInputTextQueue] = useState('');
   const [selectedWorker, setSelectedWorker] = useState(null as InstantQueryWorker | null);
-  const [selectedQueue, setSelectedQueue] = useState(null as InstantQueryQueue | null);
+  const [selectedQueue, setSelectedQueue] = useState(null as IQueue | null);
   const [workerList, setWorkerList] = useState([] as InstantQueryWorker[]);
-  const [queueList, setQueueList] = useState([] as InstantQueryQueue[]);
-  const [initialQueueList, setInitialQueueList] = useState([] as InstantQueryQueue[]);
+  const [queueList, setQueueList] = useState([] as IQueue[]);
+  const [initialQueueList, setInitialQueueList] = useState([] as IQueue[]);
+  const { workspaceClient } = Manager.getInstance();
+
+  // async function to retrieve the task queues from the tr sdk
+  // this will trigger the useEffect for a fetchedQueues update
+  const fetchSDKTaskQueues = async () => {
+    if (workspaceClient)
+      setInitialQueueList(
+        Array.from(
+          (
+            await workspaceClient.fetchTaskQueues({
+              Ordering: 'DateUpdated:desc',
+            })
+          ).values(),
+        ).sort((a, b) => (a.name > b.name ? 1 : -1)) as unknown as Array<IQueue>,
+      );
+  };
 
   const setWorkers = async (query = '') => {
     if (!props.manager.workerClient) {
@@ -48,16 +64,8 @@ const InternalDialpad = (props: OwnProps) => {
   };
 
   const setQueues = async (query = '') => {
-    if (!props.manager.workerClient) {
-      return;
-    }
-    const queueQuery = await props.manager.insightsClient.instantQuery('tr-queue');
-    queueQuery.on('searchResult', (items: { [key: string]: InstantQueryQueue }) => {
-      const initialList = Object.keys(items).map((queueSid: string) => items[queueSid]);
-      setQueueList(initialList.sort((a: any, b: any) => (a.queue_name < b.queue_name ? -1 : 1)));
-      setInitialQueueList(initialList);
-    });
-    queueQuery.search(query);
+    fetchSDKTaskQueues();
+    setQueueList(initialQueueList)
   };
 
   useEffect(() => {
@@ -78,7 +86,7 @@ const InternalDialpad = (props: OwnProps) => {
   const handleQueueListUpdate = debounce(
     (e) => {
       if (e) {
-        setQueues(`(data.queue_name CONTAINS "${e}" OR data.name CONTAINS "${e}")`);
+        setQueues();
       }
     },
     250,
@@ -96,7 +104,7 @@ const InternalDialpad = (props: OwnProps) => {
   useEffect(() => {
     handleQueueListUpdate(inputText);
 
-    if (selectedQueue && inputTextQueue !== selectedQueue.queue_name) {
+    if (selectedQueue && inputTextQueue !== selectedQueue.name) {
       setSelectedQueue(null);
     }
   }, [inputTextQueue]);
@@ -105,7 +113,7 @@ const InternalDialpad = (props: OwnProps) => {
     setSelectedWorker(selected);
   };
 
-  const selectQueue = (selected: InstantQueryQueue) => {
+  const selectQueue = (selected: IQueue) => {
     setSelectedQueue(selected);
   };
 
@@ -115,8 +123,8 @@ const InternalDialpad = (props: OwnProps) => {
 
   const handleInputQueue = (inputValue: string) => {
     setQueueList(
-      initialQueueList.filter((item: InstantQueryQueue) =>
-        item.queue_name.toLocaleLowerCase().startsWith(inputValue.toLocaleLowerCase()),
+      initialQueueList.filter((item: IQueue) =>
+        item.name.toLocaleLowerCase().startsWith(inputValue.toLocaleLowerCase()),
       ),
     );
     setInputTextQueue(inputValue);
@@ -196,12 +204,12 @@ const InternalDialpad = (props: OwnProps) => {
                   autocomplete
                   items={queueList}
                   inputValue={inputTextQueue}
-                  itemToString={(item) => item.queue_name || null}
+                  itemToString={(item) => item.name || null}
                   labelText={templates[StringTemplates.SelectQueue]()}
                   onInputValueChange={({ inputValue }) => handleInputQueue(inputValue as string)}
                   onIsOpenChange={({ isOpen }) => handleOpenChangeQueue(isOpen)}
                   onSelectedItemChange={({ selectedItem }) => selectQueue(selectedItem)}
-                  optionTemplate={(item) => <>{item.queue_name || null}</>}
+                  optionTemplate={(item) => <>{item.name || null}</>}
                 />
                 <Flex hAlignContent="center">
                   <IconButton variant="primary" icon="Call" disabled={!selectedQueue} onClick={makeCallToQueue} />

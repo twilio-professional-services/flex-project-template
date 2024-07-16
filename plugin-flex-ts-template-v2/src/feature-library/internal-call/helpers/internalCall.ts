@@ -1,4 +1,4 @@
-import { ITask, Manager, WorkerAttributes } from '@twilio/flex-ui';
+import { ITask, Manager, WorkerAttributes, IQueue } from '@twilio/flex-ui';
 import { Worker as InstantQueryWorker, Queue as InstantQueryQueue } from 'types/sync/InstantQuery';
 
 export const isInternalCall = (task: ITask) => task.attributes.client_call === true;
@@ -33,7 +33,7 @@ export const makeInternalCall = (manager: Manager, selectedWorker: InstantQueryW
   });
 };
 
-export const makeInternalCallToQueue = (manager: Manager, selectedQueue: InstantQueryQueue) => {
+export const makeInternalCallToQueue = (manager: Manager, selectedQueue: IQueue) => {
   const { workflow_sid, queue_sid } = manager.serviceConfiguration.outbound_call_flows.default;
 
   if (!manager.workerClient) {
@@ -44,10 +44,10 @@ export const makeInternalCallToQueue = (manager: Manager, selectedQueue: Instant
 
   const { contact_uri: from_uri, full_name: fromFullName } = manager.workerClient.attributes as WorkerAttributes;
 
-  manager.workerClient.createTask(selectedQueue.queue_name, from_uri, workflow_sid, queue_sid, {
+  manager.workerClient.createTask(selectedQueue.name, from_uri, workflow_sid, queue_sid, {
     attributes: {
-      to: `queue:${selectedQueue.queue_name}`,
-      callToQueue: selectedQueue.queue_name,
+      to: `queue:${selectedQueue.name}`,
+      callToQueue: selectedQueue.name,
       direction: 'outbound',
       fromName: fromFullName || fromName,
       targetWorker: from_uri,
