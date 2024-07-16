@@ -1,5 +1,3 @@
-import { Manager } from '@twilio/flex-ui';
-
 import { getFeatureFlags, getFlexFeatureFlag } from '../../utils/configuration';
 import { ExternalDirectoryEntry } from './types/DirectoryEntry';
 import CustomTransferDirectoryConfig from './types/ServiceConfiguration';
