@@ -63,9 +63,9 @@ const InternalDialpad = (props: OwnProps) => {
     workerQuery.search(`data.attributes.contact_uri != "${worker_contact_uri}"${query === '' ? '' : appendQuery}`);
   };
 
-  const setQueues = async (query = '') => {
+  const setQueues = async () => {
     fetchSDKTaskQueues();
-    setQueueList(initialQueueList)
+    setQueueList(initialQueueList);
   };
 
   useEffect(() => {

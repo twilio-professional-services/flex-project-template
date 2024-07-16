@@ -1,5 +1,5 @@
 import { ITask, Manager, WorkerAttributes, IQueue } from '@twilio/flex-ui';
-import { Worker as InstantQueryWorker, Queue as InstantQueryQueue } from 'types/sync/InstantQuery';
+import { Worker as InstantQueryWorker } from 'types/sync/InstantQuery';
 
 export const isInternalCall = (task: ITask) => task.attributes.client_call === true;
 
