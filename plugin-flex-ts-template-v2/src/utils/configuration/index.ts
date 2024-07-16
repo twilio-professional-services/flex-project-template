@@ -43,3 +43,14 @@ export const getUserLanguage = () => {
 
   return language;
 };
+
+export const getFlexFeatureFlag = (feature: string): boolean => {
+  const flagState = manager.store.getState().flex.featureFlags;
+  const localFeatureEnabled = flagState.localOverrides[feature]?.enabled;
+
+  if (localFeatureEnabled === undefined) {
+    return flagState.features[feature]?.enabled === true;
+  }
+
+  return localFeatureEnabled === true;
+};
