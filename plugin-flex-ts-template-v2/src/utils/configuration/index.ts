@@ -44,6 +44,9 @@ export const getUserLanguage = () => {
   return language;
 };
 
+/**
+ * Returns the effective enablement state of the provided feature flag name.
+ */
 export const getFlexFeatureFlag = (feature: string): boolean => {
   const flagState = manager.store.getState().flex.featureFlags;
   const localFeatureEnabled = flagState.localOverrides[feature]?.enabled;
