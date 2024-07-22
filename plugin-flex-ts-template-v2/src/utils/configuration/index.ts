@@ -46,6 +46,11 @@ export const getUserLanguage = () => {
   return language;
 };
 
+/**
+ * Returns whether or not the current Flex UI version intersects the provided
+ * [semver range](https://github.com/npm/node-semver?tab=readme-ov-file#ranges).
+ * Use this to conditionally perform logic based on the running Flex UI version.
+ */
 export const validateUiVersion = (validVersion: string): boolean => {
   return semver.intersects(Flex.VERSION, validVersion, { includePrerelease: true });
 };
