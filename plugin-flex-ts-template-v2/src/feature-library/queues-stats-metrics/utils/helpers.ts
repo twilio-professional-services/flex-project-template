@@ -1,6 +1,5 @@
-import * as Flex from '@twilio/flex-ui';
+import { validateUiVersion } from '../../../utils/configuration';
 
 export const isColumnDescriptionSupported = (): boolean => {
-  const version = parseFloat(Flex.VERSION);
-  return version >= 2.3;
+  return validateUiVersion('>=2.3');
 };
