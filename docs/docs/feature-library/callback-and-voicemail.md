@@ -36,9 +36,7 @@ The feature works by registering custom Flex Channels for callbacks and voicemai
 
 When the channel is registered, it renders custom components based on the task attribute; _taskType: callback_ or _taskType: voicemail_
 
-There are two associated serverless functions called _create-callback_.
-
-The only difference between these functions is one is intended to be called from Flex, the other from anywhere else, but typically Studio (could also be from a TwiML app). The difference is the security model for each function but both do the same thing, taking in task attributes and generating a new callback (or voicemail) task (via a common utility). The Flex interface is used for the re-queueing feature.
+There are assorted serverless functions for creating a callback, re-queueing a callback, and for orchestrating a wait experience that offers an in-queue callback option.
 
 When retrieving voicemail, the `fetch-voicemail` function is invoked. This fetches the recording media using HTTP authentication and returns it base64-encoded to Flex UI.
 
@@ -46,7 +44,7 @@ When retrieving voicemail, the `fetch-voicemail` function is invoked. This fetch
 
 Once you've set the flag for the feature in flex-config, and all of that is deployed, you now have a functioning callback and voicemail feature! Now you just need to create some callbacks and/or voicemails via Studio or TwiML.
 
-### Creating a Callback Task Using _create-callback_ Function
+### Creating a Callback Task Using the _create-callback_ Function
 
 Creating a callback involves creating a task with at a minimum a number to callback and a number to call from. If you deployed the template with the `Deploy Terraform?` option selected, a Studio flow called `Template Example Callback Flow` has already been created for you, which you can hook up to a phone number in the Twilio Console. Otherwise, a sample setup is shown here in a Studio flow where a number has been wired up to immediately create a callback and hang up.
 
@@ -70,14 +68,14 @@ Once you have decided which workflow you are using, you can either reference it 
 The setup scripts will automatically set `TWILIO_FLEX_CALLBACK_WORKFLOW_SID` if it finds a workflow called "Callback". If Terraform was used to deploy the template, [this callback workflow](https://github.com/twilio-professional-services/flex-project-template/blob/main/infra-as-code/terraform/taskrouter/callback.json) has already been created for you.
 :::
 
-### Voicemail Additional Parameters
+#### Voicemail Additional Parameters
 
 Creating a voicemail involves the same setup as the example above, however the following additional parameters must be passed to the _create-callback_ function from a Record Voicemail widget:
 
 - `recordingSid: {{widgets.record_voicemail_1.RecordingSid}}` - the recording SID from the Record Voicemail widget
 - `recordingUrl: {{widgets.record_voicemail_1.RecordingUrl}}` - the recording URL from the Record Voicemail widget
 
-## Using Transcriptions in Voicemail Tasks
+#### Using Transcriptions in Voicemail Tasks
 
 If you wish to enable transcriptions and show the transcription text on the voicemail task, you can invoke the create-callback function from the Transcription Callback URL on the Record Voicemail widget. Just be sure to include the required params in the URL. e.g.
 
@@ -97,9 +95,9 @@ Simply set this function's URL as **_Hold Music URL_** in the Studio Send to Fle
 
 `https://custom-flex-extensions-serverless-XXXX-dev.twil.io/features/callback-and-voicemail/studio/wait-experience`
 
-There is broad scope to customize the logic in here - potentially to pull more task attributes from the existing call task and apply them to the callback or voicemail task. Our default implementation keeps things simple and just retains the To and From numbers (unless the caller opts for a different callback number). For example, you may consider also retaining the workflow SID of the original call task, and some pertinent attributes from your IVR - to facilitate TaskRouter in routing those callback and voicemail tasks in an identical fashion to voice calls.
+The in-queue logic is designed to maintain the initial task's workflow, attributes, etc, so that callback requests follow the same routing logic as the initial task. However, there are customization points within the `wait-experience` function allowing you to override these, such as specifying an alternate workflow or task channel.
 
-### Noteworthy Points Regarding the _wait-experience_ Logic
+#### Noteworthy Points Regarding the _wait-experience_ Logic
 
 - **Creating a callback (or voicemail) via the _wait-experience_ logic will _retain_ your place in queue by default** - when we create a new task representing the callback or voicemail request, by default we set the `virtualStartTime` parameter to the original task's `dateCreated` timestamp. This effectively orders the new task within the queue the same as the original task. This may optionally be disabled within the options under `wait-experience.protected.js`.
 - **We are able to set useful reporting attributes by programmatically canceling the original call task when a customer chooses to request a callback (or leave a voicemail)** - rather than letting the task auto-cancel via native TaskRouter orchestration when the call ends. This includes a custom cancelation reason, as well as marking the task as `abandoned: "Follow-Up"` in the `conversations` attribute - which prevents Flex Insights from including this call in any Abandoned metrics (see [Track Abandoned Conversations in Flex Insights](https://www.twilio.com/docs/flex/end-user-guide/insights/abandoned-conversations#abandoned)).
