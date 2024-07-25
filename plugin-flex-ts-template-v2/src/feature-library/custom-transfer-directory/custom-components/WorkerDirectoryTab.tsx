@@ -12,6 +12,7 @@ import { DirectoryEntry } from '../types/DirectoryEntry';
 import DirectoryTab from './DirectoryTab';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 import logger from '../../../utils/logger';
+import { getFlexFeatureFlag } from '../../../utils/configuration';
 
 export interface TransferClickPayload {
   mode: 'WARM' | 'COLD';
@@ -28,8 +29,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
 
   const { workspaceClient, workerClient } = Manager.getInstance();
 
-  const callWarmTransferEnabled =
-    Manager.getInstance().store.getState().flex.featureFlags.features['flex-warm-transfers']?.enabled;
+  const callWarmTransferEnabled = getFlexFeatureFlag('flex-warm-transfers');
 
   const isWarmTransferEnabled =
     props.task && TaskHelper.isCBMTask(props.task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;
