@@ -38,6 +38,8 @@ Several helper functions are available for reading configuration, and can be imp
 
 - `getUserLanguage`: Returns the currently configured language, using the same order of precedence as `getFeatureFlags`. If the configured value is `default`, the browser's language will be returned. Otherwise, if no value is configured, `en-US` will be returned.
 
+- `getFlexFeatureFlag`: Returns the effective enablement state of the provided feature flag name.
+
 ### Configuration management
 
 #### The `custom_data` object
