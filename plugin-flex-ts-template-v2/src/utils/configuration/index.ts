@@ -12,6 +12,10 @@ let loadedFeaturesPopulated = false;
 // Populated by the feature loader after each feature loads. Note: Do not access during initialization before all features have loaded, or the array will be incomplete!
 const loadedFeatures: string[] = [];
 
+/**
+ * Allows you to query for enabled loaded features at runtime. When using this
+ * function, be sure to call it only after all features have loaded.
+ */
 export const getLoadedFeatures = () => {
   if (!loadedFeaturesPopulated) {
     console.error('Caution! getLoadedFeatures() was called before all features were loaded, so none will be returned.');
