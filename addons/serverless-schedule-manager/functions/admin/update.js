@@ -1,4 +1,6 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { prepareFlexFunction, extractStandardResponse } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 const ServerlessOperations = require(Runtime.getFunctions()['common/twilio-wrappers/serverless'].path);
 
 const requiredParameters = [

@@ -6,14 +6,20 @@ import zhHans from './zh-hans.json';
 
 // Export the template names as an enum for better maintainability when accessing them elsewhere
 export enum StringTemplates {
+  InternalDial = 'InternalDial',
   CallAgent = 'PSInternalCallCallAgent',
   SelectAgent = 'PSInternalCallSelectAgent',
+  CallQueue = 'PSInternalCallCallQueue',
+  SelectQueue = 'PSInternalCallSelectQueue',
 }
 
 export const stringHook = () => ({
   'en-US': {
+    [StringTemplates.InternalDial]: 'Internal Dial',
     [StringTemplates.CallAgent]: 'Call Agent',
     [StringTemplates.SelectAgent]: 'Select an agent',
+    [StringTemplates.CallQueue]: 'Call Queue',
+    [StringTemplates.SelectQueue]: 'Select a queue',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,
