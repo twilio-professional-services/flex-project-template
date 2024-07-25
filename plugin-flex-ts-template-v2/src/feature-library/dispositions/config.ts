@@ -1,6 +1,4 @@
-import { Manager } from '@twilio/flex-ui';
-
-import { getFeatureFlags } from '../../utils/configuration';
+import { getFeatureFlags, getFlexFeatureFlag } from '../../utils/configuration';
 import DispositionsConfig, { CustomAttribute, WrapUpConfig, SelectAttribute } from './types/ServiceConfiguration';
 
 const {
@@ -15,8 +13,7 @@ const {
   per_queue = {},
 } = (getFeatureFlags()?.features?.dispositions as DispositionsConfig) || {};
 
-const nativeWrapupEnabled =
-  Manager.getInstance().store.getState().flex.featureFlags.features['ai-conversation-wrapup-notes']?.enabled === true;
+const nativeWrapupEnabled = getFlexFeatureFlag('ai-conversation-wrapup-notes');
 
 export const isFeatureEnabled = () => {
   return enabled;

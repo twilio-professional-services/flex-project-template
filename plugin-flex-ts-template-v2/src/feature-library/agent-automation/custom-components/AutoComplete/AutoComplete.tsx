@@ -12,6 +12,7 @@ import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 import { ExtendedWrapupState } from '../../flex-hooks/states/extendedWrapupSlice';
 import { StringTemplates } from '../../flex-hooks/strings';
+import { validateUiVersion } from '../../../../utils/configuration';
 
 export interface OwnProps {
   task: ITask;
@@ -24,6 +25,8 @@ const AutoComplete = ({ task }: OwnProps) => {
   const { extendedReservationSids } = useSelector(
     (state: AppState) => state[reduxNamespace].extendedWrapup as ExtendedWrapupState,
   );
+
+  const buttonSize = validateUiVersion('>=2.8') ? 'default' : 'small';
 
   useEffect(() => {
     setTaskConfig(getMatchingTaskConfiguration(task));
@@ -48,7 +51,7 @@ const AutoComplete = ({ task }: OwnProps) => {
     return (
       <Button
         variant="secondary"
-        size="small"
+        size={buttonSize}
         element="EXTENDED_WRAPUP_BUTTON"
         pressed={isExtended}
         onClick={extendWrapup}

@@ -9,7 +9,7 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
 
     const call = await client.calls(event.CallSid).fetch();
 
-    if (call.to.includes('client')) {
+    if (call.to.includes('client') || call.to.includes('queue')) {
       console.log(`agent ${call.to} joined the conference`);
 
       const fetchTaskResult = await TaskOperations.fetchTask({
@@ -39,6 +39,30 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
               name: fromName,
               from: targetWorker,
               targetWorker: to,
+              autoAnswer: 'false',
+              conferenceSid: taskSid,
+              conference: {
+                sid: ConferenceSid,
+                friendlyName: taskSid,
+              },
+              internal: 'true',
+              client_call: true,
+            },
+            workflowSid: process.env.TWILIO_FLEX_INTERNAL_CALL_WORKFLOW_SID,
+            taskChannel: 'voice',
+          });
+
+          newAttributes.conference.participants.taskSid = createTaskResult.data.sid;
+        }
+        if (to.substring(0, 5) === 'queue') {
+          const { callToQueue } = task.attributes;
+          const createTaskResult = await TaskOperations.createTask({
+            context,
+            attributes: {
+              to,
+              name: fromName,
+              from: targetWorker,
+              callToQueue,
               autoAnswer: 'false',
               conferenceSid: taskSid,
               conference: {

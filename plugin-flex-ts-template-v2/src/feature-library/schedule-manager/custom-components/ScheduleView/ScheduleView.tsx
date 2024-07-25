@@ -110,7 +110,7 @@ const ScheduleView = () => {
       <Modal
         isOpen={publishState === 1}
         onDismiss={
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          // eslint-disable-next-line no-empty-function
           () => {}
         }
         size="default"
@@ -133,7 +133,7 @@ const ScheduleView = () => {
       <Modal
         isOpen={loadFailed}
         onDismiss={
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          // eslint-disable-next-line no-empty-function
           () => {}
         }
         size="default"
