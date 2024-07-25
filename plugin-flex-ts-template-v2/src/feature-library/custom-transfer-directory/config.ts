@@ -1,6 +1,4 @@
-import { Manager } from '@twilio/flex-ui';
-
-import { getFeatureFlags } from '../../utils/configuration';
+import { getFeatureFlags, getFlexFeatureFlag } from '../../utils/configuration';
 import { ExternalDirectoryEntry } from './types/DirectoryEntry';
 import CustomTransferDirectoryConfig from './types/ServiceConfiguration';
 
@@ -36,8 +34,7 @@ const {
 
 const { enabled: conference_enabled = false } = getFeatureFlags()?.features?.conference || {};
 
-const nativeXwtEnabled =
-  Manager.getInstance().store.getState().flex.featureFlags.features['external-warm-transfers']?.enabled === true;
+const nativeXwtEnabled = getFlexFeatureFlag('external-warm-transfers');
 
 export const isFeatureEnabled = (): boolean => {
   return enabled;

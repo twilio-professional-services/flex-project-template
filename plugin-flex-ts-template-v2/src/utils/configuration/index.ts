@@ -75,6 +75,20 @@ export const getUserLanguage = () => {
 };
 
 /**
+ * Returns the effective enablement state of the provided feature flag name.
+ */
+export const getFlexFeatureFlag = (feature: string): boolean => {
+  const flagState = manager.store.getState().flex.featureFlags;
+  const localFeatureEnabled = flagState.localOverrides[feature]?.enabled;
+
+  if (localFeatureEnabled === undefined) {
+    return flagState.features[feature]?.enabled === true;
+  }
+
+  return localFeatureEnabled === true;
+};
+
+/**
  * Returns whether or not the current Flex UI version intersects the provided
  * [semver range](https://github.com/npm/node-semver?tab=readme-ov-file#ranges).
  * Use this to conditionally perform logic based on the running Flex UI version.
