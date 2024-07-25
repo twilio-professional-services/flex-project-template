@@ -225,7 +225,9 @@ exports.handler = async (context, event, callback) => {
       if (Digits && Digits === '1') {
         // Caller selected option to use the number they called from
         twiml.redirect(
-          `${baseUrl}?mode=submit-callback&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}&to=${event.Caller}`,
+          `${baseUrl}?mode=submit-callback&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}&to=${encodeURIComponent(
+            event.Caller,
+          )}`,
         );
         return callback(null, twiml);
       } else if (Digits && Digits === '2') {
@@ -294,14 +296,11 @@ exports.handler = async (context, event, callback) => {
       const originalTask = await fetchTask(context, enqueuedTaskSid);
       await cancelTask(context, originalTask, 'Opted to request a callback');
 
-      // The URL parsing converts + to space so we need to trim
-      // Prepend a + if this is not a SIP address
-      const numberToCall = `${/^\d/.test(event.to.trim()) ? '+' : ''}${event.to.trim()}`;
-
-      // Option to pull in a few more things from original task like conversation_id or even the workflowSid
+      // Here you can optionally adjust callback parameters, such as a overriddenWorkflowSid
       const callbackParams = {
         context,
-        numberToCall,
+        originalTask,
+        numberToCall: event.to,
         numberToCallFrom: event.Called,
       };
 
@@ -318,11 +317,14 @@ exports.handler = async (context, event, callback) => {
       return callback(null, twiml);
 
     case 'record-voicemail':
-      //  Main logic for Recording the voicemail
+      // Main logic for Recording the voicemail
       twiml.say(options.sayOptions, options.messages.recordVoicemailPrompt);
+      // Manually append caller and called number to the transcribeCallback, as it passes incorrect values when Caller Name Lookup is enabled
       twiml.record({
         action: `${baseUrl}?mode=voicemail-recorded&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}`,
-        transcribeCallback: `${baseUrl}?mode=submit-voicemail&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}`,
+        transcribeCallback: `${baseUrl}?mode=submit-voicemail&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}&calledNumber=${encodeURIComponent(
+          event.Called,
+        )}&callerNumber=${encodeURIComponent(event.Caller)}`,
         method: 'GET',
         playBeep: 'true',
         transcribe: true,
@@ -341,13 +343,15 @@ exports.handler = async (context, event, callback) => {
 
     case 'submit-voicemail':
       // Submit the voicemail to TaskRouter (and/or to your backend if you have a voicemail handling solution)
+      const originalTaskForVm = await fetchTask(context, enqueuedTaskSid);
 
       // Create the Voicemail task
-      // Option to pull in a few more things from original task like conversation_id or even the workflowSid
+      // Here you can optionally adjust voicemail parameters, such as a overriddenWorkflowSid
       const vmParams = {
         context,
-        numberToCall: event.Caller,
-        numberToCallFrom: event.Called,
+        originalTask: originalTaskForVm,
+        numberToCall: event.callerNumber,
+        numberToCallFrom: event.calledNumber,
         recordingSid: event.RecordingSid,
         recordingUrl: event.RecordingUrl,
         transcriptSid: event.TranscriptionSid,
@@ -356,7 +360,6 @@ exports.handler = async (context, event, callback) => {
 
       if (options.retainPlaceInQueue && enqueuedTaskSid) {
         // Get the original task's start time to maintain queue ordering.
-        const originalTaskForVm = await fetchTask(context, enqueuedTaskSid);
         vmParams.virtualStartTime = originalTaskForVm?.dateCreated;
       }
 

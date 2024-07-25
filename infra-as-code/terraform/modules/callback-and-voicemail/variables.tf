@@ -16,15 +16,6 @@ variable "voice_channel_sid" {
   }
 }
 
-variable "workflow_sid" {
-  type        = string
-  description = "SID of workflow"
-  validation {
-    condition     = length(var.workflow_sid) > 2 && substr(var.workflow_sid, 0, 2) == "WW"
-    error_message = "workflow_sid expected to start with \"WW\"."
-  }
-}
-
 variable "queue_sid" {
   type        = string
   description = "SID of callbacks queue"
