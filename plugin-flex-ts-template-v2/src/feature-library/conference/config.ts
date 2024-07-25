@@ -1,13 +1,10 @@
-import * as Flex from '@twilio/flex-ui';
-
-import { getFeatureFlags } from '../../utils/configuration';
+import { getFeatureFlags, getFlexFeatureFlag } from '../../utils/configuration';
 import ConferenceConfig from './types/ServiceConfiguration';
 
 const { enabled = false, hold_workaround = false } =
   (getFeatureFlags()?.features?.conference as ConferenceConfig) || {};
 
-const nativeXwtEnabled =
-  Flex.Manager.getInstance().store.getState().flex.featureFlags.features['external-warm-transfers']?.enabled === true;
+const nativeXwtEnabled = getFlexFeatureFlag('external-warm-transfers');
 
 export const isFeatureEnabled = () => {
   return enabled;

@@ -2,18 +2,14 @@
 import * as Flex from '@twilio/flex-ui';
 import { KeyboardShortcuts } from '@twilio/flex-ui/src/KeyboardShortcuts';
 
+import { validateUiVersion } from '../../../utils/configuration';
 import { ShortcutsObject, CustomShortcut, RemapShortcutObject, ShortcutActions } from '../types/types';
 import { readFromLocalStorage, deleteMultipleFromLocalStorage } from './LocalStorageUtil';
 import { presetCustomShortcuts } from './CustomKeyboardShortcuts';
 import { shortcutsConfig, deleteShortcuts, enableThrottling, removeAllShortcuts } from './constants';
 
 export const isSupported = (): boolean => {
-  return !(
-    Flex.VERSION.startsWith('1') ||
-    Flex.VERSION === '2.0.0' ||
-    Flex.VERSION === '2.0.1' ||
-    Flex.VERSION === '2.0.2'
-  );
+  return validateUiVersion('>=2.1');
 };
 
 export const getCurrentShortcuts = (): KeyboardShortcuts => {

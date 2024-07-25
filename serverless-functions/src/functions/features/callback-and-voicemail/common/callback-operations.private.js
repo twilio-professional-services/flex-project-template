@@ -3,6 +3,7 @@ const TaskOperations = require(Runtime.getFunctions()['common/twilio-wrappers/ta
 exports.createCallbackTask = async (parameters) => {
   const {
     context,
+    originalTask,
     numberToCall,
     numberToCallFrom,
     flexFlowSid,
@@ -11,7 +12,6 @@ exports.createCallbackTask = async (parameters) => {
     overriddenPriority,
     retryAttempt,
     conversation_id,
-    message,
     utcDateTimeReceived,
     recordingSid,
     recordingUrl,
@@ -23,36 +23,50 @@ exports.createCallbackTask = async (parameters) => {
   } = parameters;
 
   // use assigned values or use defaults
-  const workflowSid = overriddenWorkflowSid || process.env.TWILIO_FLEX_CALLBACK_WORKFLOW_SID;
-  const timeout = overriddenTimeout || 86400;
-  const priority = overriddenPriority || 0;
-  const attempts = retryAttempt || 0;
-  const taskChannel = overriddenTaskChannel || 'voice';
+  const workflowSid =
+    overriddenWorkflowSid || originalTask?.workflowSid || process.env.TWILIO_FLEX_CALLBACK_WORKFLOW_SID;
+  const timeout = overriddenTimeout || originalTask?.timeout || 86400;
+  const priority = overriddenPriority || originalTask?.priority || 0;
+  const attempts = retryAttempt || originalTask?.attributes?.callBackData?.attempts + 1 || 0;
+  const taskChannel = overriddenTaskChannel || originalTask?.taskChannelUniqueName || 'voice';
+  const taskType = recordingSid || originalTask?.attributes?.callBackData?.recordingSid ? 'voicemail' : 'callback';
+  const mainTimeZone =
+    originalTask?.attributes?.callBackData?.mainTimeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   // setup required task attributes for task
+  // use provided values, fall back to original task if provided
   const attributes = {
-    taskType: recordingSid ? 'voicemail' : 'callback',
-    from: numberToCall,
-    name: numberToCall,
-    flow_execution_sid: flexFlowSid,
-    message: message || null,
+    ...originalTask?.attributes,
+    ...(numberToCall ? { from: numberToCall, name: numberToCall } : {}),
+    ...(flexFlowSid ? { flow_execution_sid: flexFlowSid } : {}),
+    taskType,
     callBackData: {
-      numberToCall,
-      numberToCallFrom,
+      ...originalTask?.attributes?.callBackData,
+      ...(numberToCall ? { numberToCall } : {}),
+      ...(numberToCallFrom ? { numberToCallFrom } : {}),
+      ...(recordingSid ? { recordingSid } : {}),
+      ...(recordingUrl ? { recordingUrl } : {}),
+      ...(transcriptSid ? { transcriptSid } : {}),
+      ...(transcriptText ? { transcriptText } : {}),
+      mainTimeZone,
+      utcDateTimeReceived:
+        utcDateTimeReceived || originalTask?.attributes?.callBackData?.utcDateTimeReceived || new Date(),
+      isDeleted: isDeleted || originalTask?.attributes?.callBackData?.isDeleted || false,
       attempts,
-      mainTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-      utcDateTimeReceived: utcDateTimeReceived || new Date(),
-      recordingSid,
-      recordingUrl,
-      transcriptSid,
-      transcriptText,
-      isDeleted: isDeleted || false,
     },
     direction: 'inbound',
     conversations: {
-      conversation_id,
+      ...originalTask?.attributes?.conversations,
+      conversation_id: conversation_id || originalTask?.attributes?.conversations?.conversation_id || originalTask?.sid,
     },
   };
+
+  // Remove attributes we definitely don't want to persist to the new task
+  delete attributes.call_sid;
+  delete attributes.reservation_attributes;
+  delete attributes.conference;
+  delete attributes.conversations?.abandoned;
+  delete attributes.conversations?.hang_up_by;
 
   return TaskOperations.createTask({
     context,
