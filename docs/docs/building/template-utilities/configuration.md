@@ -23,6 +23,25 @@ When running Flex locally, the configuration from [hosted Flex configuration](ht
 The `appConfig.js` file is created for you as part of the initial local environment setup script, which executes when running `npm install` in the root template directory. The file is automatically populated with the feature config from the `flex-config/ui_attributes.common.json` file at the time of creation, as long as the file does not already exist.
 :::
 
+### Reading configuration within Flex
+
+Several helper functions are available for reading configuration, and can be imported from `plugin-flex-ts-template-v2/src/utils/configuration/index.ts`. The exported functions from this file are as follows:
+
+- `getFeatureFlagsGlobal`: Fetches the `custom_data` object from the [hosted Flex configuration](https://www.twilio.com/docs/flex/developer/config/flex-configuration-rest-api#ui_attributes), providing all of the global feature configuration and global common configuration for the template. If running locally, any values contained within `plugin-flex-ts-template-v2/public/appConfig.js` will also be returned, overriding the corresponding hosted Flex configuration values.
+
+- `getFeatureFlagsUser`: Fetches the `config_overrides` object from the current worker's attributes. This object contains any configuration values that were set on the worker level, overriding the corresponding global configuration values.
+
+- `getFeatureFlags`: Returns the complete effective configuration. **This is the function you should use in most cases when determining a configuration value.** For each configuration value, the value returned will be as follows:
+  - If a override has been configured on the worker, that will be returned.
+  - If no worker override has been configured, and the plugin is running locally, and the value is configured in `appConfig.js`, the value from `appConfig.js` will be returned.
+  - Otherwise, the hosted Flex configuration value will be returned.
+
+- `getUserLanguage`: Returns the currently configured language, using the same order of precedence as `getFeatureFlags`. If the configured value is `default`, the browser's language will be returned. Otherwise, if no value is configured, `en-US` will be returned.
+
+- `getFlexFeatureFlag`: Returns the effective enablement state of the provided feature flag name.
+
+- `validateUiVersion`: Returns whether or not the current Flex UI version intersects the provided [semver range](https://github.com/npm/node-semver?tab=readme-ov-file#ranges). Use this to conditionally perform logic based on the running Flex UI version.
+
 ### Configuration management
 
 #### The `custom_data` object

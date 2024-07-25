@@ -31,6 +31,7 @@ import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 import { DirectoryEntry } from '../types/DirectoryEntry';
 import DirectoryTab, { TransferClickPayload } from './DirectoryTab';
 import logger from '../../../utils/logger';
+import { getFlexFeatureFlag } from '../../../utils/configuration';
 
 export interface IRealTimeQueueData {
   total_tasks: number | null;
@@ -81,8 +82,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
   const { workspaceClient, insightsClient, workerClient } = Manager.getInstance();
   const na = templates[StringTemplates.NA]();
 
-  const callWarmTransferEnabled =
-    Manager.getInstance().store.getState().flex.featureFlags.features['flex-warm-transfers']?.enabled;
+  const callWarmTransferEnabled = getFlexFeatureFlag('flex-warm-transfers');
 
   const isWarmTransferEnabled =
     props.task && TaskHelper.isCBMTask(props.task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;

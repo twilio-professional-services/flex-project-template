@@ -1,6 +1,5 @@
-import { VERSION } from '@twilio/flex-ui';
-
 import InlineMediaAttachment from './InlineMediaAttachment';
+import { validateUiVersion } from '../../../utils/configuration';
 
 interface OwnProps {
   message?: any;
@@ -10,8 +9,7 @@ const InlineMedia = ({ message, updateFocus }: OwnProps) => {
   const setFocus = () => {
     try {
       // The focus workaround is no longer needed as of Flex UI 2.7.1
-      const versionNum = Number(VERSION?.replaceAll('.', ''));
-      if (!isNaN(versionNum) && versionNum >= 271) {
+      if (!validateUiVersion('>=2.7.1')) {
         return;
       }
     } catch {}
