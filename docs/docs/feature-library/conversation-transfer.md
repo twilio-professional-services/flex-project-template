@@ -18,7 +18,7 @@ The two different features can be enabled/disabled independently. In the case of
 
 ### Multi participant chat
 
-![multiple partcipants](/img/features/conversation-transfer/multi-participant.gif)
+![multiple participants](/img/features/conversation-transfer/multi-participant.gif)
 
 ## Setup
 
