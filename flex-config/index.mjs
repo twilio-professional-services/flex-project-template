@@ -2,6 +2,7 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 import { promises as fs } from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 import merge from 'lodash/merge.js';
 
 import { fillReplacementsForString } from "../scripts/common/fill-replacements.mjs";
@@ -74,7 +75,7 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
     }
 
     // The env-specific file name may contain special characters that the URL interface encodes undesirably
-    const pathEnvFile = path.join(import.meta.url.replace(/^(file:\/\/)/,""), '..', envFileName);
+    const pathEnvFile = path.join(fileURLToPath(new URL('.', import.meta.url)), envFileName);
     const uiAttributesEnvFile = await fs.readFile(pathEnvFile, 'utf8');
     const uiAttributesCommonFile = await fs.readFile(new URL(commonFileName, import.meta.url), 'utf8');
     const taskrouter_skills = JSON.parse(await fs.readFile(new URL(skillsFileName, import.meta.url), 'utf8'));
