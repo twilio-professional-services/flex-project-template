@@ -13,6 +13,6 @@ export const actionHook = function handleInternalAcceptTask(flex: typeof Flex, _
     }
 
     abortFunction();
-    await InternalCallService.acceptInternalTask(payload.task.sourceObject, payload.task.taskSid);
+    await InternalCallService.acceptInternalTask(_manager, payload.task.sourceObject, payload.task.taskSid);
   });
 };
