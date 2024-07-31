@@ -21,9 +21,7 @@ export const jsClientHook = async function cleanStateAndSyncUponAgentHangUp(
   reservation.on('wrapup', (_reservation: any) => {
     manager.store.dispatch(
       BargeCoachStatusAction.setBargeCoachStatus({
-        enableCoachButton: false,
         coaching: false,
-        enableBargeinButton: false,
         muted: true,
         agentAssistanceButton: false,
         syncSubscribed: false,

@@ -21,7 +21,7 @@ type SupervisorBargeCoachProps = {
 export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps) => {
   const dispatch = useDispatch();
 
-  const { muted, barge, enableBargeinButton, coaching, enableCoachButton, privateMode } = useSelector(
+  const { muted, barge, coaching, privateMode } = useSelector(
     (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
   );
 
@@ -29,6 +29,8 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
   const agentWorkerSID = useFlexSelector((state) => state?.flex?.supervisor?.stickyWorker?.worker?.sid) || '';
   const myWorkerSID = useFlexSelector((state) => state?.flex?.worker?.worker?.sid) || '';
   const supervisorFN = useFlexSelector((state) => state?.flex?.worker?.attributes?.full_name) || '';
+  const monitoringState = useFlexSelector((state) => state?.flex?.supervisor?.callMonitoring?.status) || 0;
+  const monitoringTask = useFlexSelector((state) => state?.flex?.supervisor?.callMonitoring?.task);
 
   // Confirming if Agent Coaching Panel is enabled, we will use this in the Supervisor Barge Coach component
   const agent_coaching_panel = isAgentCoachingPanelEnabled();
@@ -238,12 +240,14 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
   // if the supervisor isn't monitoring the call, toggle the icon based on coach and barge-in status
   const isLiveCall = TaskHelper.isLiveCall(task);
 
+  const isMonitoringThisTask = monitoringState === 2 && monitoringTask?.sid === task?.sid;
+
   return (
     <Flex hAlignContent="center" vertical>
       <Stack orientation="horizontal" spacing="space30" element="BARGE_COACH_BUTTON_BOX">
         <IconButton
           icon={muted ? 'MuteLargeBold' : 'MuteLarge'}
-          disabled={!isLiveCall || !enableBargeinButton || !enableCoachButton || (!barge && !coaching)}
+          disabled={!isMonitoringThisTask || !isLiveCall || (!barge && !coaching)}
           onClick={bargeHandleClick}
           title={muted ? templates.UnmuteAriaLabel() : templates.MuteCallTooltip()}
           variant="secondary"
@@ -251,7 +255,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
         ></IconButton>
         <IconButton
           icon={barge ? `IncomingCallBold` : 'IncomingCall'}
-          disabled={!isLiveCall || !enableBargeinButton || coaching}
+          disabled={!isMonitoringThisTask || !isLiveCall || coaching}
           onClick={bargeHandleClick}
           title={barge ? templates[StringTemplates.BargeOut]() : templates[StringTemplates.BargeIn]()}
           variant={barge ? 'primary' : 'secondary'}
@@ -259,7 +263,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
         />
         <IconButton
           icon={coaching ? `DefaultAvatarBold` : `DefaultAvatar`}
-          disabled={!isLiveCall || !enableCoachButton}
+          disabled={!isMonitoringThisTask || !isLiveCall}
           onClick={coachHandleClick}
           title={coaching ? templates[StringTemplates.DisableCoach]() : templates[StringTemplates.EnableCoach]()}
           variant={coaching ? 'primary' : 'secondary'}

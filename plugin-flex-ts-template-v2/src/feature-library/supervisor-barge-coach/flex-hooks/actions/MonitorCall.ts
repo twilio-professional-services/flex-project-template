@@ -14,10 +14,9 @@ export const actionHook = async function enableBargeCoachButtonsUponMonitor(flex
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
     manager.store.dispatch(
       BargeCoachStatusAction.setBargeCoachStatus({
-        enableCoachButton: true,
         coaching: false,
-        enableBargeinButton: true,
         muted: true,
+        barge: false,
       }),
     );
 
