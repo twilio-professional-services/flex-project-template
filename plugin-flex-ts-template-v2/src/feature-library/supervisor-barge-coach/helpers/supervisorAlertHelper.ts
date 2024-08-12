@@ -1,8 +1,8 @@
 import * as Flex from '@twilio/flex-ui';
 
 import { reduxNamespace } from '../../../utils/state';
+import { setBargeCoachStatus } from '../flex-hooks/states/SupervisorBargeCoachSlice';
 import { AppState } from '../../../types/manager';
-import { Actions } from '../flex-hooks/states/SupervisorBargeCoach';
 import { SyncDoc } from '../utils/sync/Sync';
 import { NotificationIds } from '../flex-hooks/notifications/BargeCoachAssist';
 
@@ -27,7 +27,7 @@ export const syncUpdates = async () => {
     SyncDoc.getSyncDoc('Agent-Assistance').then((doc: any) => {
       // Update the redux store/state with the latest array of agents needing assistance
       Flex.Manager.getInstance().store.dispatch(
-        Actions.setBargeCoachStatus({
+        setBargeCoachStatus({
           agentAssistanceArray: doc.data.agentAssistance,
         }),
       );
@@ -38,7 +38,7 @@ export const syncUpdates = async () => {
         // Every time we get an update on the Sync Doc, update the redux store/state
         // with the latest array of agents needing assistance
         Flex.Manager.getInstance().store.dispatch(
-          Actions.setBargeCoachStatus({
+          setBargeCoachStatus({
             agentAssistanceArray: doc.data.agentAssistance,
           }),
         );
@@ -47,7 +47,7 @@ export const syncUpdates = async () => {
     });
     // Setting agentAssistanceSyncSubscribed to true so we don't attempt more sync update/subscribes
     Flex.Manager.getInstance().store.dispatch(
-      Actions.setBargeCoachStatus({
+      setBargeCoachStatus({
         agentAssistanceSyncSubscribed: true,
       }),
     );

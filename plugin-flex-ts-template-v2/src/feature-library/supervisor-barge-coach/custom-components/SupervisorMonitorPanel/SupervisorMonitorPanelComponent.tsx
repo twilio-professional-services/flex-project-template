@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useFlexSelector, Template, templates } from '@twilio/flex-ui';
+import { useFlexSelector, Template, templates, ITask } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex } from '@twilio-paste/core/flex';
 import { Stack } from '@twilio-paste/core/stack';
@@ -8,7 +8,7 @@ import { Text } from '@twilio-paste/core/text';
 
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
-import { Actions, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoach';
+import { setBargeCoachStatus, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoachSlice';
 import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
@@ -16,9 +16,10 @@ import { SyncDoc } from '../../utils/sync/Sync';
 type SupervisorMonitorPanelProps = {
   icon: string;
   uniqueName: string;
+  task?: ITask;
 };
 
-export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
+export const SupervisorMonitorPanel = (props: SupervisorMonitorPanelProps) => {
   const dispatch = useDispatch();
 
   let { supervisorArray } = useSelector(
@@ -27,8 +28,6 @@ export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
   const { syncSubscribed } = useSelector(
     (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
   );
-
-  const agentWorkerSID = useFlexSelector((state) => state?.flex?.supervisor?.stickyWorker?.worker?.sid);
 
   const supervisorSwitch = (status: string, supervisor: string) => {
     switch (status) {
@@ -49,6 +48,7 @@ export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
   };
 
   const syncUpdates = () => {
+    const agentWorkerSID = props?.task?.workerSid;
     if (agentWorkerSID) {
       // Let's subscribe to the sync doc as an agent/worker and check
       // if we are being coached, if we are, render that in the UI
@@ -65,14 +65,14 @@ export const SupervisorMonitorPanel = (_props: SupervisorMonitorPanelProps) => {
 
           // Set Supervisor's name that is coaching into props
           dispatch(
-            Actions.setBargeCoachStatus({
+            setBargeCoachStatus({
               supervisorArray,
             }),
           );
         });
       });
       dispatch(
-        Actions.setBargeCoachStatus({
+        setBargeCoachStatus({
           syncSubscribed: true,
         }),
       );

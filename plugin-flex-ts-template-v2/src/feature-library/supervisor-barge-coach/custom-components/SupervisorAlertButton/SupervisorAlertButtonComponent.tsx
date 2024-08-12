@@ -6,7 +6,7 @@ import { Tooltip } from '@twilio-paste/core/tooltip';
 
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
-import { Actions } from '../../flex-hooks/states/SupervisorBargeCoach';
+import { setBargeCoachStatus } from '../../flex-hooks/states/SupervisorBargeCoachSlice';
 import { alertSupervisorsCheck, syncUpdates } from '../../helpers/supervisorAlertHelper';
 import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 
@@ -20,7 +20,7 @@ export const SupervisorAlertButton = () => {
   const agentAssistanceAlertToggle = () => {
     if (enableAgentAssistanceAlerts) {
       dispatch(
-        Actions.setBargeCoachStatus({
+        setBargeCoachStatus({
           enableAgentAssistanceAlerts: false,
         }),
       );
@@ -30,7 +30,7 @@ export const SupervisorAlertButton = () => {
       localStorage.setItem('cacheAlerts', 'false');
     } else {
       dispatch(
-        Actions.setBargeCoachStatus({
+        setBargeCoachStatus({
           enableAgentAssistanceAlerts: true,
         }),
       );

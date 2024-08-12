@@ -6,7 +6,7 @@ import { Tooltip } from '@twilio-paste/core/tooltip';
 
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
-import { Actions } from '../../flex-hooks/states/SupervisorBargeCoach';
+import { setBargeCoachStatus } from '../../flex-hooks/states/SupervisorBargeCoachSlice';
 import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
@@ -31,7 +31,7 @@ export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
     const conferenceSID = conference?.conferenceSid || '';
     if (agentAssistanceButton) {
       dispatch(
-        Actions.setBargeCoachStatus({
+        setBargeCoachStatus({
           agentAssistanceButton: false,
         }),
       );
@@ -42,7 +42,7 @@ export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
       SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, agentFN, conferenceSID, selectedTaskSID, 'remove');
     } else {
       dispatch(
-        Actions.setBargeCoachStatus({
+        setBargeCoachStatus({
           agentAssistanceButton: true,
         }),
       );

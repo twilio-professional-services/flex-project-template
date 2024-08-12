@@ -8,7 +8,7 @@ import { Text } from '@twilio-paste/core/text';
 
 import { AppState } from '../../../../types/manager';
 import { reduxNamespace } from '../../../../utils/state';
-import { Actions, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoach';
+import { setBargeCoachStatus, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoachSlice';
 import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 // Import to get Sync Doc updates
 import { SyncDoc } from '../../utils/sync/Sync';
@@ -49,14 +49,14 @@ export const CoachingStatusPanel = () => {
 
         // Set Supervisor's name that is coaching into props
         dispatch(
-          Actions.setBargeCoachStatus({
+          setBargeCoachStatus({
             supervisorArray,
           }),
         );
       });
     });
     dispatch(
-      Actions.setBargeCoachStatus({
+      setBargeCoachStatus({
         syncSubscribed: true,
       }),
     );

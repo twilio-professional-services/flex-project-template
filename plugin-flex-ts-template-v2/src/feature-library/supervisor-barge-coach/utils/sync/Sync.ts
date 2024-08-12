@@ -76,24 +76,26 @@ class SyncDocClass {
         if (doc.data.supervisors) {
           supervisorsArray = [...doc.data.supervisors];
         }
-        if (updateStatus === 'add') {
-          supervisorsArray.push({
-            conference: conferenceSID,
-            supervisorSID,
-            supervisor: supervisorFN,
-            status: supervisorStatus,
-          });
-          this.updateSyncDoc(docToUpdate, supervisorsArray);
-        } else if (updateStatus === 'update') {
-          const updateSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
-          if (updateSupervisorIndex > -1) {
-            supervisorsArray[updateSupervisorIndex].status = supervisorStatus;
-          }
-          this.updateSyncDoc(docToUpdate, supervisorsArray);
-        } else if (updateStatus === 'remove') {
+        if (updateStatus === 'remove') {
           const removeSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
           if (removeSupervisorIndex > -1) {
             supervisorsArray.splice(removeSupervisorIndex, 1);
+            this.updateSyncDoc(docToUpdate, supervisorsArray);
+          }
+        } else {
+          const updateSupervisorIndex = supervisorsArray.findIndex((s) => s.supervisorSID === supervisorSID);
+          if (updateSupervisorIndex > -1) {
+            supervisorsArray[updateSupervisorIndex] = {
+              ...supervisorsArray[updateSupervisorIndex],
+              status: supervisorStatus,
+            };
+          } else {
+            supervisorsArray.push({
+              conference: conferenceSID,
+              supervisorSID,
+              supervisor: supervisorFN,
+              status: supervisorStatus,
+            });
           }
           this.updateSyncDoc(docToUpdate, supervisorsArray);
         }

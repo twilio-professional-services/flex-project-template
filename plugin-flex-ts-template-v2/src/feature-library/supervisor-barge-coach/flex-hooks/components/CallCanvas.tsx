@@ -3,7 +3,6 @@ import * as Flex from '@twilio/flex-ui';
 import CoachingStatusPanel from '../../custom-components/CoachingStatusPanel';
 import AgentAssistanceButton from '../../custom-components/AgentAssistanceButton';
 import { isAgentAssistanceEnabled, isAgentCoachingPanelEnabled } from '../../config';
-import { agentBrowserRefresh } from '../../helpers/browserRefreshHelper';
 import { FlexComponent } from '../../../../types/feature-loader';
 
 export const componentName = FlexComponent.CallCanvas;
@@ -15,8 +14,6 @@ export const componentHook = function addSupervisorCoachingPanelToAgent(flex: ty
   });
 
   if (!isAgentAssistanceEnabled()) return;
-
-  agentBrowserRefresh();
 
   // Add the Agent Assistance Button to the CallCanvas
   flex.CallCanvas.Content.add(<AgentAssistanceButton key="agent-assistance-button"> </AgentAssistanceButton>, {
