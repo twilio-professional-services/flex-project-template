@@ -1,4 +1,3 @@
-import * as Flex from '@twilio/flex-ui';
 import { ITask, WorkerAttributes } from '@twilio/flex-ui';
 import { Reservation } from 'types/task-router';
 
@@ -6,9 +5,9 @@ import ApiService from '../../../utils/serverless/ApiService';
 import logger from '../../../utils/logger';
 
 class InternalCallService extends ApiService {
-  acceptInternalTask = async (manager: Flex.Manager, reservation: Reservation, taskSid: string) => {
-    const { contact_uri: from_uri } = manager.workerClient?.attributes as WorkerAttributes;
-    const { caller_id } = manager.serviceConfiguration.outbound_call_flows.default;
+  acceptInternalTask = async (reservation: Reservation, taskSid: string) => {
+    const { contact_uri: from_uri } = this.manager.workerClient?.attributes as WorkerAttributes;
+    const { caller_id } = this.manager.serviceConfiguration.outbound_call_flows.default;
 
     let from = reservation.task.attributes.from;
     if (from_uri.includes('sip:')) {
