@@ -2,7 +2,6 @@ import React from 'react';
 import { Template, templates } from '@twilio/flex-ui';
 import { useSelector } from 'react-redux';
 import { Flex } from '@twilio-paste/core/flex';
-import { Stack } from '@twilio-paste/core/stack';
 import { Box } from '@twilio-paste/core/box';
 import { Text } from '@twilio-paste/core/text';
 
@@ -19,29 +18,24 @@ export const CoachingStatusPanel = () => {
   // If the supervisor array has value in it, that means someone is coaching
   // We will map each of the supervisors that may be actively coaching
   // Otherwise we will not display anything if no one is actively coaching
-  if (supervisorArray.length !== 0) {
+  if (supervisorArray.length > 0) {
     return (
       <Flex hAlignContent="center" vertical padding="space40">
-        <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-          <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-            <Template source={templates[StringTemplates.AgentCoachedBy]} />
-            <Box>
-              <ol>
-                <Text
-                  as="p"
-                  fontWeight="fontWeightMedium"
-                  fontSize="fontSize30"
-                  marginBottom="space40"
-                  color="colorTextSuccess"
-                >
-                  {supervisorArray.map((supervisorArray: { supervisor: string }) => (
-                    <li key={`${Math.random()}`}>{supervisorArray.supervisor}</li>
-                  ))}
-                </Text>
-              </ol>
-            </Box>
-          </Box>
-        </Stack>
+        <Box
+          backgroundColor="colorBackgroundPrimaryWeakest"
+          borderColor="colorBorderPrimaryWeaker"
+          borderRadius="borderRadius30"
+          borderStyle="solid"
+          borderWidth="borderWidth10"
+          padding="space40"
+        >
+          <Template source={templates[StringTemplates.AgentCoachedBy]} />
+          {supervisorArray.map((supervisorArray: { supervisor: string }) => (
+            <Text key={`${Math.random()}`} as="p" fontWeight="fontWeightMedium" color="colorTextSuccess">
+              {supervisorArray.supervisor}
+            </Text>
+          ))}
+        </Box>
       </Flex>
     );
   }

@@ -113,7 +113,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
 
   // Using a ButtonGroup rather than a RadioButtonGroup because RadioButtonGroup does not re-render when the value changes
   return (
-    <Flex hAlignContent="center" vertical>
+    <Flex hAlignContent="center" vertical paddingBottom="space30">
       <Stack orientation="horizontal" spacing="space30" element="BARGE_COACH_BUTTON_BOX">
         <ButtonGroup attached id="barge-coach-mode">
           <Button

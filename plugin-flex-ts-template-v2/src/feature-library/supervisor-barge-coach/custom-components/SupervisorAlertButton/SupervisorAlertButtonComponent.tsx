@@ -18,25 +18,15 @@ export const SupervisorAlertButton = () => {
   );
 
   const agentAssistanceAlertToggle = () => {
-    if (enableAgentAssistanceAlerts) {
-      dispatch(
-        setBargeCoachStatus({
-          enableAgentAssistanceAlerts: false,
-        }),
-      );
-      // If the supervisor disabled the agent assistance alerts, let's cache this
-      // to ensure it is set to false if a browser refresh happens
-      alertSupervisorsCheck();
-      localStorage.setItem('cacheAlerts', 'false');
-    } else {
-      dispatch(
-        setBargeCoachStatus({
-          enableAgentAssistanceAlerts: true,
-        }),
-      );
-      alertSupervisorsCheck();
-      localStorage.setItem('cacheAlerts', 'true');
-    }
+    const newValue = !enableAgentAssistanceAlerts;
+    dispatch(
+      setBargeCoachStatus({
+        enableAgentAssistanceAlerts: newValue,
+      }),
+    );
+    alertSupervisorsCheck();
+    // Cache the value so it can be restored after a refresh
+    localStorage.setItem('cacheAlerts', `${newValue}`);
   };
 
   useEffect(() => {

@@ -29,31 +29,18 @@ export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
   const agentAssistanceClick = () => {
     const conference = task && task.conference;
     const conferenceSID = conference?.conferenceSid || '';
-    if (agentAssistanceButton) {
-      dispatch(
-        setBargeCoachStatus({
-          agentAssistanceButton: false,
-        }),
-      );
-      // Caching this to help with browser refresh recovery
-      localStorage.setItem('cacheAgentAssistState', 'false');
+    const newValue = !agentAssistanceButton;
+    const updateStatus = newValue ? 'add' : 'remove';
+    dispatch(
+      setBargeCoachStatus({
+        agentAssistanceButton: newValue,
+      }),
+    );
+    // Caching this to help with browser refresh recovery
+    localStorage.setItem('cacheAgentAssistState', `${newValue}`);
 
-      // Updating the Sync Doc to remove the agent from the assistance array
-      SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, agentFN, conferenceSID, selectedTaskSID, 'remove');
-    } else {
-      dispatch(
-        setBargeCoachStatus({
-          agentAssistanceButton: true,
-        }),
-      );
-
-      // Caching this if the browser is refreshed while the agent actively had agent assistance up
-      // We will use this to clear up the Sync Doc and the Agent Alert
-      localStorage.setItem('cacheAgentAssistState', 'true');
-
-      // Updating the Sync Doc to add the agent to the assistance array
-      SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, agentFN, conferenceSID, selectedTaskSID, 'add');
-    }
+    // Updating the Sync Doc to add/remove the agent from the assistance array
+    SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, agentFN, conferenceSID, selectedTaskSID, updateStatus);
   };
 
   // Return the agent assistance button, disable if the call isn't live

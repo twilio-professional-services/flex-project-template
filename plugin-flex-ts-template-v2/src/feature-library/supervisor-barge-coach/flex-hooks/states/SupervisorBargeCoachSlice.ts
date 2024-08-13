@@ -4,6 +4,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 export interface SupervisorBargeCoachState {
   coaching: boolean;
   muted: boolean;
+  monitorPanelArray: Array<any>;
   supervisorArray: Array<any>;
   privateMode: boolean;
   agentAssistanceButton: boolean;
@@ -15,6 +16,7 @@ export interface SupervisorBargeCoachState {
 const initialState = {
   coaching: false,
   muted: true,
+  monitorPanelArray: [],
   supervisorArray: [],
   privateMode: false,
   agentAssistanceButton: false,
