@@ -25,9 +25,7 @@ export const SupervisorMonitorPanel = (props: SupervisorMonitorPanelProps) => {
   let { supervisorArray } = useSelector(
     (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
   );
-  const { syncSubscribed } = useSelector(
-    (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
-  );
+  const selectedTaskInSupervisorSid = useFlexSelector((state) => state?.flex?.view?.selectedTaskInSupervisorSid);
 
   const supervisorSwitch = (status: string, supervisor: string) => {
     switch (status) {
@@ -47,43 +45,49 @@ export const SupervisorMonitorPanel = (props: SupervisorMonitorPanelProps) => {
     ));
   };
 
-  const syncUpdates = () => {
+  const syncUpdates = async (): Promise<any> => {
+    let doc: any = null;
     const agentWorkerSID = props?.task?.workerSid;
     if (agentWorkerSID) {
       // Let's subscribe to the sync doc as an agent/worker and check
       // if we are being coached, if we are, render that in the UI
       // otherwise leave it blank
       const mySyncDoc = `syncDoc.${agentWorkerSID}`;
-      SyncDoc.getSyncDoc(mySyncDoc).then((doc: any) => {
-        // We are subscribing to Sync Doc updates here and logging anytime that happens
-        doc.on('updated', (_updatedDoc: string) => {
-          if (doc.data.supervisors) {
-            supervisorArray = [...doc.data.supervisors];
-          } else {
-            supervisorArray = [];
-          }
+      doc = await SyncDoc.getSyncDoc(mySyncDoc);
+      // We are subscribing to Sync Doc updates here and logging anytime that happens
+      doc.on('updated', (_updatedDoc: string) => {
+        if (doc.data.supervisors) {
+          supervisorArray = [...doc.data.supervisors];
+        } else {
+          supervisorArray = [];
+        }
 
-          // Set Supervisor's name that is coaching into props
-          dispatch(
-            setBargeCoachStatus({
-              supervisorArray,
-            }),
-          );
-        });
+        // Set Supervisor's name that is coaching into props
+        dispatch(
+          setBargeCoachStatus({
+            supervisorArray,
+          }),
+        );
       });
       dispatch(
         setBargeCoachStatus({
-          syncSubscribed: true,
+          supervisorArray: doc?.data?.supervisors || [],
         }),
       );
     }
+    return doc;
   };
 
   useEffect(() => {
-    if (!syncSubscribed) {
-      syncUpdates();
-    }
-  });
+    let doc: any = null;
+    (async () => {
+      doc = await syncUpdates();
+    })();
+
+    return () => {
+      doc?.close();
+    };
+  }, [selectedTaskInSupervisorSid]);
 
   return (
     <Flex hAlignContent="center" vertical padding="space40">

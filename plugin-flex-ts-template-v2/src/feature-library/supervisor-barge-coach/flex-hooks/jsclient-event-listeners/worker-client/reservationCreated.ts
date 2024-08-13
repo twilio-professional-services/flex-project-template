@@ -22,8 +22,6 @@ export const jsClientHook = async function cleanStateAndSyncUponAgentHangUp(
     manager.store.dispatch(
       setBargeCoachStatus({
         agentAssistanceButton: false,
-        syncSubscribed: false,
-        agentAssistanceSyncSubscribed: false,
       }),
     );
     const agentWorkerSID = manager.store.getState().flex?.worker?.worker?.sid || '';

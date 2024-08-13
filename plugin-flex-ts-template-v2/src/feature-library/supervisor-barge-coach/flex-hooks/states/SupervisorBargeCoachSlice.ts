@@ -6,7 +6,6 @@ export interface SupervisorBargeCoachState {
   muted: boolean;
   supervisorArray: Array<any>;
   privateMode: boolean;
-  syncSubscribed: boolean;
   agentAssistanceButton: boolean;
   enableAgentAssistanceAlerts: boolean;
   agentAssistanceSyncSubscribed: boolean;
@@ -18,7 +17,6 @@ const initialState = {
   muted: true,
   supervisorArray: [],
   privateMode: false,
-  syncSubscribed: false,
   agentAssistanceButton: false,
   agentAssistanceSyncSubscribed: false,
   enableAgentAssistanceAlerts: true,

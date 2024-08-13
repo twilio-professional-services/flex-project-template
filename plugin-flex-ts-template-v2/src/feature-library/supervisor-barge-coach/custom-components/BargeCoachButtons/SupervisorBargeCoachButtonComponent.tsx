@@ -118,7 +118,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
         <ButtonGroup attached id="barge-coach-mode">
           <Button
             variant="secondary"
-            pressed={bargeCoachMode === 'monitoring'}
+            pressed={isMonitoringThisTask && bargeCoachMode === 'monitoring'}
             onClick={async () => setBargeCoach('monitoring')}
             disabled={!isMonitoringThisTask || !isLiveCall || isLoading}
           >
@@ -127,7 +127,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
           </Button>
           <Button
             variant="secondary"
-            pressed={bargeCoachMode === 'barge'}
+            pressed={isMonitoringThisTask && bargeCoachMode === 'barge'}
             onClick={async () => setBargeCoach('barge')}
             disabled={!isMonitoringThisTask || !isLiveCall || isLoading}
           >
@@ -136,7 +136,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
           </Button>
           <Button
             variant="secondary"
-            pressed={bargeCoachMode === 'coaching'}
+            pressed={isMonitoringThisTask && bargeCoachMode === 'coaching'}
             onClick={async () => setBargeCoach('coaching')}
             disabled={!isMonitoringThisTask || !isLiveCall || isLoading}
           >

@@ -47,8 +47,8 @@ class SyncDocClass {
           );
           if (removeAgentAssistanceIndex > -1) {
             agentAssistanceArray.splice(removeAgentAssistanceIndex, 1);
+            this.updateSyncDoc(docToUpdate, agentAssistanceArray);
           }
-          this.updateSyncDoc(docToUpdate, agentAssistanceArray);
         }
       })
       .catch((error: any) => {

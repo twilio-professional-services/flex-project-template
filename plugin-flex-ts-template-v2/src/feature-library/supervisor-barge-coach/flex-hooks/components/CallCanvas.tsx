@@ -11,6 +11,7 @@ export const componentHook = function addSupervisorCoachingPanelToAgent(flex: ty
   // Adding Coaching Status Panel to notify the agent who is Coaching them
   flex.CallCanvas.Content.add(<CoachingStatusPanel key="coaching-status-panel"> </CoachingStatusPanel>, {
     sortOrder: -1,
+    if: (props) => props.task?.status === 'accepted',
   });
 
   if (!isAgentAssistanceEnabled()) return;
@@ -18,5 +19,6 @@ export const componentHook = function addSupervisorCoachingPanelToAgent(flex: ty
   // Add the Agent Assistance Button to the CallCanvas
   flex.CallCanvas.Content.add(<AgentAssistanceButton key="agent-assistance-button"> </AgentAssistanceButton>, {
     sortOrder: 0,
+    if: (props) => props.task?.status === 'accepted',
   });
 };
