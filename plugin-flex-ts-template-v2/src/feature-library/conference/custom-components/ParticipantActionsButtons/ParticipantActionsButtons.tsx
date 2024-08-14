@@ -49,44 +49,23 @@ const ParticipantActionsButtons = (props: OwnProps) => {
   const [isKickConfirmationVisible, setIsKickConfirmationVisible] = useState(false);
 
   useEffect(() => {
-    return () => {
-      const { participant } = props;
-      if (participant && participant.status === 'recently_left') {
-        let newViewState: { [index: string]: any } = {};
-
-        if (componentViewState) {
-          newViewState = {
-            ...componentViewState,
-          };
-        }
-
-        if (participant.callSid && newViewState[participant.callSid]) {
-          delete newViewState[participant.callSid];
-        }
-
-        Actions.invokeAction('SetComponentState', {
-          name: 'customParticipants',
-          state: newViewState,
-        });
-      }
-    };
-  }, []);
-
-  useEffect(() => {
     const { participant } = props;
-    if (!participant || !participant.callSid) return;
+    if (!participant?.callSid) return;
 
-    let newViewState: { [index: string]: any } = {};
+    const newViewState: { [index: string]: any } = {};
 
-    if (componentViewState) {
-      newViewState = {
-        ...componentViewState,
+    if (
+      isKickConfirmationVisible ||
+      (componentViewState &&
+        componentViewState[participant.callSid] &&
+        componentViewState[participant.callSid].showKickConfirmation !== isKickConfirmationVisible)
+    ) {
+      newViewState[participant.callSid] = {
+        showKickConfirmation: isKickConfirmationVisible,
       };
+    } else {
+      return;
     }
-
-    newViewState[participant.callSid] = {
-      showKickConfirmation: isKickConfirmationVisible,
-    };
 
     Actions.invokeAction('SetComponentState', {
       name: 'customParticipants',
