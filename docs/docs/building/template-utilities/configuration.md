@@ -317,8 +317,7 @@ The setup script, by default, will automatically perform its steps for the follo
 - flex-config
 - plugin-flex-ts-template-v2
 - serverless-functions
-- serverless-schedule-manager
-- web-app-examples/twilio-video-demo-app
+- addons
 
 However, you can specify the relative path to any npm package(s) for the script to process, such as if you have added your own packages to the template, or if you want to save time in CI scripts. You can provide a comma-separated list of packages as follows:
 
