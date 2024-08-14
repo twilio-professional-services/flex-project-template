@@ -9,6 +9,7 @@
     "add-feature": "node scripts/add-feature.mjs",
     "remove-features": "node scripts/remove-features.mjs",
     "rename-template": "node scripts/rename-template.mjs",
+    "validate-environment": "node scripts/validate-environment.mjs",
     "install-serverless-plugin": "twilio plugins:install @twilio-labs/plugin-serverless@v3",
     "start:serverless": "cd serverless-functions && twilio serverless:start --inspect=localhost --port=3001 --env .env",
     "start:plugin": "cd plugin-flex-ts-template-v2 && twilio flex:plugins:start --port=3000",
@@ -36,6 +37,7 @@
     "lodash": "^4.17.21",
     "npm-run-all2": "^6.0.6",
     "prompt": "^1.3.0",
+    "semver": "^7.6.2",
     "shelljs": "^0.8.5",
     "twilio-cli": "5.20.1"
   }
