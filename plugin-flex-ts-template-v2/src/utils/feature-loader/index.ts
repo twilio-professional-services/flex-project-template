@@ -1,6 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 
 import { FeatureDefinition } from '../../types/feature-loader';
+import { addLoadedFeature, setLoadedFeaturesPopulated } from '../configuration';
 import * as Actions from './actions';
 import * as Channels from './channels';
 import * as ChatOrchestrator from './chat-orchestrator';
@@ -40,11 +41,14 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
 
       if (feature && feature.name) {
         loadFeature(flex, manager, feature);
+        addLoadedFeature(feature.name);
       }
     } catch (error) {
       console.error('Error loading feature:', error);
     }
   }
+
+  setLoadedFeaturesPopulated(true);
 
   // Register built-in hooks
   Actions.addHook(flex, manager, 'built-in TaskRouterService', TaskRouterReplaceCompleteTask);

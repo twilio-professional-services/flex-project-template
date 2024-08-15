@@ -3,10 +3,6 @@ sidebar_label: conversation-transfer
 title: conversation-transfer
 ---
 
-:::danger Flex UI 2.8.x Issue
-There is currently an issue in Flex UI 2.8.x that prevents this feature from working, unless the [custom-transfer-directory feature](custom-transfer-directory) is also enabled. With both features enabled, transfers work properly in Flex UI 2.8.x.
-:::
-
 This feature implements transferring of chats between agents and multiple agents in the same chat. It supports webchat, SMS and whatsapp that use [Flex Conversations](https://www.twilio.com/docs/flex/conversations).
 
 **Config options allows for two different options:**
@@ -22,7 +18,7 @@ The two different features can be enabled/disabled independently. In the case of
 
 ### Multi participant chat
 
-![multiple partcipants](/img/features/conversation-transfer/multi-participant.gif)
+![multiple participants](/img/features/conversation-transfer/multi-participant.gif)
 
 ## Setup
 

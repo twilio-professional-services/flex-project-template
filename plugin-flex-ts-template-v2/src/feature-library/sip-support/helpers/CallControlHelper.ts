@@ -13,7 +13,8 @@ export const isWorkerUsingWebRTC = (): boolean => {
 export const getLocalParticipantForTask = (task: ITask) => {
   return (
     task.conference?.participants.find((p) => p.isCurrentWorker)?.callSid ||
-    task.attributes?.conference?.participants?.worker
+    task.attributes?.conference?.participants?.worker ||
+    task.attributes?.worker_call_sid
   );
 };
 

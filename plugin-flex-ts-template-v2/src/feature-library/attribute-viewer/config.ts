@@ -1,10 +1,8 @@
-import { getFeatureFlags } from '../../utils/configuration';
+import { getFeatureFlags, getLoadedFeatures } from '../../utils/configuration';
 import AttributeViewerConfig from './types/ServiceConfiguration';
 
 const { enabled = false, enabled_for_agents = false } =
   (getFeatureFlags()?.features?.attribute_viewer as AttributeViewerConfig) || {};
-
-const { enabled: workerCanvasTabsEnabled = false } = getFeatureFlags()?.features?.worker_canvas_tabs || {};
 
 export const isFeatureEnabled = () => {
   return enabled;
@@ -15,5 +13,5 @@ export const isEnabledForAgents = () => {
 };
 
 export const isWorkerCanvasTabsEnabled = () => {
-  return workerCanvasTabsEnabled;
+  return getLoadedFeatures().includes('worker-canvas-tabs');
 };
