@@ -13,7 +13,7 @@ export const componentHook = function addAgentAssistanceTeamsIcon(flex: typeof F
       header={''}
       style={{ width: '50px' }}
       content={(items: any) => (
-        <AgentAssistanceTeamsIcon key={`agent-assistance-icon-${items.worker.sid}`} worker={items.worker.sid} />
+        <AgentAssistanceTeamsIcon key={`agent-assistance-icon-${items.worker.sid}`} worker={items.worker} />
       )}
     />,
     {

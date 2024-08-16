@@ -7,33 +7,28 @@ import { Tooltip } from '@twilio-paste/core/tooltip';
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
 import { setBargeCoachStatus } from '../../flex-hooks/states/SupervisorBargeCoachSlice';
-import { alertSupervisorsCheck, syncUpdates } from '../../helpers/supervisorAlertHelper';
+import { alertSupervisorsCheck } from '../../helpers/supervisorAlertHelper';
 import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 
 export const SupervisorAlertButton = () => {
   const dispatch = useDispatch();
 
-  const { enableAgentAssistanceAlerts, agentAssistanceSyncSubscribed } = useSelector(
-    (state: AppState) => state[reduxNamespace].supervisorBargeCoach,
-  );
-
-  const agentAssistanceAlertToggle = () => {
-    const newValue = !enableAgentAssistanceAlerts;
-    dispatch(
-      setBargeCoachStatus({
-        enableAgentAssistanceAlerts: newValue,
-      }),
-    );
-    alertSupervisorsCheck();
-    // Cache the value so it can be restored after a refresh
-    localStorage.setItem('cacheAlerts', `${newValue}`);
-  };
+  const { enableAgentAssistanceAlerts } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
 
   useEffect(() => {
-    if (!agentAssistanceSyncSubscribed) {
-      syncUpdates();
-    }
-  });
+    alertSupervisorsCheck();
+    // Cache the value so it can be restored after a refresh
+    localStorage.setItem('cacheAlerts', `${enableAgentAssistanceAlerts}`);
+  }, [enableAgentAssistanceAlerts]);
+
+  const agentAssistanceAlertToggle = () => {
+    dispatch(
+      setBargeCoachStatus({
+        enableAgentAssistanceAlerts: !enableAgentAssistanceAlerts,
+      }),
+    );
+  };
+
   // Return the Supervisor Agent Assistance Toggle, this gives the supervisor
   // the option to enable or disable Agent Assistance Alerts
   return (

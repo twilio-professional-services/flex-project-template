@@ -3,7 +3,7 @@ import * as Flex from '@twilio/flex-ui';
 import { FlexEvent } from '../../../../types/feature-loader';
 import { isAgentAssistanceEnabled, isAgentCoachingPanelEnabled } from '../../config';
 import { SyncDoc } from '../../utils/sync/Sync';
-import { SupervisorBargeCoachState, setBargeCoachStatus } from '../states/SupervisorBargeCoachSlice';
+import { SupervisorBargeCoachState } from '../states/SupervisorBargeCoachSlice';
 import AppState from '../../../../types/manager/AppState';
 import { reduxNamespace } from '../../../../utils/state';
 
@@ -26,11 +26,6 @@ export const eventHook = function cleanStateAndSyncUponAgentHangUp(_flex: typeof
 
     if (!agentAssistanceButton) return;
 
-    manager.store.dispatch(
-      setBargeCoachStatus({
-        agentAssistanceButton: false,
-      }),
-    );
     SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, '', '', '', 'remove');
   }
 };
