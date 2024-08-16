@@ -33,11 +33,11 @@ We've also included Agent Assistance into this plugin suite. This adds a button 
 
 ![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-6.gif)
 
-When the agent clicks the assistance button, supervisors will be sent a notification with the agent seeking assistance. The notification bar is clickable and will navigate the supervisor the Teams view if clicked.
+When the agent clicks the assistance button, supervisors will be sent a notification with the agent seeking assistance. The notification bar is clickable and will navigate the supervisor the Teams view if clicked. There is also an option to go directly to the associated task, assuming the worker is not currently filtered out of the Teams view.
 
 ![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-7.gif)
 
-From the Teams view, supervisors will notice an _alert_ icon next to any agent that is actively seeking assistance.
+From the Teams view, supervisors will notice an _alert_ icon next to any agent that is actively seeking assistance. Clicking this icon allows the supervisor to clear the request after it has been handled.
 
 ![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-8.gif)
 
@@ -69,6 +69,6 @@ This plugin adds a barge-in and a coach button to the supervisor monitoring call
 
 Some additional features have been added to give the ability for the agent to see who is coaching them, and the ability for the supervisor to get into a "private mode" if they wish to not be shown (this applies to both the agent coach panel and supervisor monitor panel features). If the supervisor monitor panel is enabled, supervisors can see who may be actively monitoring, coaching, or have joined (barged) the call.
 
-The latest feature, Agent Assistance has been added! This feature allows an agent on a voice task to ask a supervisor for assistance. When the agent clicks the assistance button (found within their call interface), it will send a notification, including the agent's name, to all supervisors. The notification bar, if clicked, will navigate them to the Teams view. The Teams view will have an "alert" icon next to any agent that is actively seeking assistance. If the supervisor alert toggle is enabled, supervisors will have a button allowing them to suppress any agent assistance notifications for them.
+The agent assistance feature allows an agent on a voice task to ask a supervisor for assistance. When the agent clicks the assistance button (found within their call interface), it will send a notification, including the agent's name, to all supervisors. The notification bar, if clicked, will navigate them to the Teams view. The Teams view will have an "alert" icon next to any agent that is actively seeking assistance, which can be clicked to clear the request. If the supervisor alert toggle is enabled, supervisors will have a button allowing them to suppress any agent assistance notifications for them.
 
 Combining the agent assistance feature with barge/coach made the most sense as these two features naturally benefit each other. In addition, having the supervisor monitor panel and the coaching panel for the agents allows for your organization to see who is actively engaged with an agent, especially if they are seeking assistance.
