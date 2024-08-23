@@ -1,7 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 import { ITask, TaskHelper, StateHelper } from '@twilio/flex-ui';
 
-import { isColdTransferEnabled, isMultiParticipantEnabled } from '../../config';
+import { isColdTransferEnabled, isMultiParticipantEnabled, isNativeDigitalXferEnabled } from '../../config';
 import TransferButton from '../../custom-components/TransferButton';
 import LeaveChatButton from '../../custom-components/LeaveChatButton';
 import { ConversationsHelper } from '../../../../utils/helpers';
@@ -13,7 +13,7 @@ interface Props {
 
 export const componentName = FlexComponent.TaskCanvasHeader;
 export const componentHook = function addConvTransferButtons(flex: typeof Flex) {
-  if (!isColdTransferEnabled() && !isMultiParticipantEnabled()) return;
+  if ((!isColdTransferEnabled() && !isMultiParticipantEnabled()) || isNativeDigitalXferEnabled()) return;
 
   flex.TaskCanvasHeader.Content.add(<TransferButton key="conversation-transfer-button" />, {
     sortOrder: 1,

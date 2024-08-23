@@ -1,4 +1,4 @@
-import { getFeatureFlags } from '../../utils/configuration';
+import { getFeatureFlags, getFlexFeatureFlag } from '../../utils/configuration';
 import ConversationTransferConfiguration from './types/ServiceConfiguration';
 
 const {
@@ -6,6 +6,8 @@ const {
   cold_transfer = false,
   multi_participant = false,
 } = (getFeatureFlags()?.features?.conversation_transfer as ConversationTransferConfiguration) || {};
+
+const nativeDigitalXferEnabled = getFlexFeatureFlag('new-transfer-experience');
 
 export const isFeatureEnabled = () => {
   return enabled;
@@ -17,4 +19,8 @@ export const isColdTransferEnabled = () => {
 
 export const isMultiParticipantEnabled = () => {
   return enabled && multi_participant;
+};
+
+export const isNativeDigitalXferEnabled = (): boolean => {
+  return nativeDigitalXferEnabled;
 };

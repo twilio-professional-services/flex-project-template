@@ -24,6 +24,7 @@ import {
   isCbmColdTransferEnabled,
   isCbmWarmTransferEnabled,
   showRealTimeQueueData,
+  isNativeDigitalXferEnabled,
 } from '../config';
 import { CustomTransferDirectoryNotification } from '../flex-hooks/notifications/CustomTransferDirectory';
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
@@ -236,6 +237,23 @@ const QueueDirectoryTab = (props: OwnProps) => {
   };
 
   const onTransferQueueClick = (entry: DirectoryEntry, transferOptions: TransferClickPayload) => {
+    if (isNativeDigitalXferEnabled() && TaskHelper.isCBMTask(props.task) && transferOptions.mode !== 'WARM') {
+      const { flexInteractionSid: interactionSid, flexInteractionChannelSid: channelSid } = props.task.attributes;
+      (async () => {
+        const participants = await props.task.getParticipants(channelSid);
+        const agent = participants.find(
+          (p: any) => p.type === 'agent' && props.task.workerSid === p.routingProperties?.workerSid,
+        );
+        Actions.invokeAction('StartChannelTransfer', {
+          instanceSid: Manager.getInstance().serviceConfiguration.flex_instance_sid,
+          interactionSid,
+          channelSid,
+          fromSid: agent.participantSid,
+          toSid: entry.address,
+        });
+      })();
+      return;
+    }
     Actions.invokeAction('TransferTask', {
       task: props.task,
       targetSid: entry.address,

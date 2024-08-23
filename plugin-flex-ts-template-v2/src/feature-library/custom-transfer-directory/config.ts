@@ -33,6 +33,8 @@ const {
 
 const nativeXwtEnabled = getFlexFeatureFlag('external-warm-transfers');
 
+const nativeDigitalXferEnabled = getFlexFeatureFlag('new-transfer-experience');
+
 export const isFeatureEnabled = (): boolean => {
   return enabled;
 };
@@ -66,7 +68,10 @@ export const shouldFetchInsightsData = (): boolean => {
 };
 
 export const isCbmColdTransferEnabled = (): boolean => {
-  return getLoadedFeatures().includes('conversation-transfer') && conversation_transfer_cold_transfer;
+  return (
+    (nativeDigitalXferEnabled || getLoadedFeatures().includes('conversation-transfer')) &&
+    conversation_transfer_cold_transfer
+  );
 };
 
 export const isCbmWarmTransferEnabled = (): boolean => {
@@ -95,4 +100,8 @@ export const isCustomWorkerTransferEnabled = (): boolean => {
 
 export const showOnlyAvailableWorkers = (): boolean => {
   return show_only_available_workers;
+};
+
+export const isNativeDigitalXferEnabled = (): boolean => {
+  return nativeDigitalXferEnabled;
 };

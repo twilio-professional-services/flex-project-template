@@ -7,7 +7,12 @@ import { Avatar } from '@twilio-paste/core/avatar';
 import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { v4 as uuidv4 } from 'uuid';
 
-import { showOnlyAvailableWorkers, isCbmColdTransferEnabled, isCbmWarmTransferEnabled } from '../config';
+import {
+  showOnlyAvailableWorkers,
+  isCbmColdTransferEnabled,
+  isCbmWarmTransferEnabled,
+  isNativeDigitalXferEnabled,
+} from '../config';
 import { DirectoryEntry } from '../types/DirectoryEntry';
 import DirectoryTab from './DirectoryTab';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
@@ -98,6 +103,23 @@ const QueueDirectoryTab = (props: OwnProps) => {
   };
 
   const onTransferClick = (entry: DirectoryEntry, transferOptions: TransferClickPayload) => {
+    if (isNativeDigitalXferEnabled() && TaskHelper.isCBMTask(props.task) && transferOptions.mode !== 'WARM') {
+      const { flexInteractionSid: interactionSid, flexInteractionChannelSid: channelSid } = props.task.attributes;
+      (async () => {
+        const participants = await props.task.getParticipants(channelSid);
+        const agent = participants.find(
+          (p: any) => p.type === 'agent' && props.task.workerSid === p.routingProperties?.workerSid,
+        );
+        Actions.invokeAction('StartChannelTransfer', {
+          instanceSid: Manager.getInstance().serviceConfiguration.flex_instance_sid,
+          interactionSid,
+          channelSid,
+          fromSid: agent.participantSid,
+          toSid: entry.address,
+        });
+      })();
+      return;
+    }
     Actions.invokeAction('TransferTask', {
       task: props.task,
       targetSid: entry.address,
