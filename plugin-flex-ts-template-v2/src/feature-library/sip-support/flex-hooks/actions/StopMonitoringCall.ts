@@ -9,11 +9,11 @@ import logger from '../../../../utils/logger';
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.StopMonitoringCall;
 export const actionHook = function handleSipStopMonitoring(flex: typeof Flex, manager: Flex.Manager) {
-  if (isWorkerUsingWebRTC()) {
-    return;
-  }
-
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
+    if (isWorkerUsingWebRTC()) {
+      logger.info('[sip-support] Worker is using WebRTC, skipping StopMonitoringCall hook');
+      return;
+    }
     if (!payload.task) {
       logger.error('[sip-support] No task found');
       return;
