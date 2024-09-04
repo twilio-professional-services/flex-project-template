@@ -3,6 +3,12 @@ sidebar_label: dual-channel-recording
 title: dual-channel-recording
 ---
 
+:::info Native feature available
+Native dual-channel recording is now available and can be enabled via the Twilio Console. The first agent to join the call will be on the left channel, and the other participants on the right channel. See [the changelog entry](https://www.twilio.com/en-us/changelog/dual-channel-voice-conference-recordings) for more details, including restrictions and instructions to enable.
+
+This template feature will remain available for use cases that are not supported by the native feature.
+:::
+
 There are various ways to enable call recordings with Twilio Flex. Let's outline those methods to better understand when using this custom solution would be preferable.
 
 1. The simplest approach is to turn on "Call Recording" in [Flex Settings](https://www.twilio.com/console/flex/settings) on the Twilio Console. Enabling this setting records the conference and automatically updates the task attribute `conversations.segment_link` with the recording URL so it can be played back in Flex Insights.
