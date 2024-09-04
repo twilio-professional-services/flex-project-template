@@ -30,6 +30,7 @@ There are various ways to enable call recordings with Twilio Flex. Let's outline
    - Cons:
      - Custom code is required, both on the front end and the backend (facilitated by this feature)
      - If it's desired to record the IVR messaging, that will not be included
+     - If the worker uses the "Join Call" button in Flex UI when multiple instances are open, and the worker call leg is the one being recorded, the recording will not restart when the new instance's call leg starts.
 
 ## setup and dependencies
 
