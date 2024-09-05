@@ -1,4 +1,4 @@
-import { getFeatureFlags, getFlexFeatureFlag } from '../../utils/configuration';
+import { getFeatureFlags, getFlexFeatureFlag, getLoadedFeatures } from '../../utils/configuration';
 import { ExternalDirectoryEntry } from './types/DirectoryEntry';
 import CustomTransferDirectoryConfig from './types/ServiceConfiguration';
 
@@ -27,12 +27,9 @@ const {
 } = external_directory_config || {};
 
 const {
-  enabled: conversation_transfer_enabled = false,
   cold_transfer: conversation_transfer_cold_transfer = false,
   multi_participant: conversation_transfer_warm_transfer = false,
 } = getFeatureFlags()?.features?.conversation_transfer || {};
-
-const { enabled: conference_enabled = false } = getFeatureFlags()?.features?.conference || {};
 
 const nativeXwtEnabled = getFlexFeatureFlag('external-warm-transfers');
 
@@ -69,11 +66,11 @@ export const shouldFetchInsightsData = (): boolean => {
 };
 
 export const isCbmColdTransferEnabled = (): boolean => {
-  return conversation_transfer_enabled && conversation_transfer_cold_transfer;
+  return getLoadedFeatures().includes('conversation-transfer') && conversation_transfer_cold_transfer;
 };
 
 export const isCbmWarmTransferEnabled = (): boolean => {
-  return conversation_transfer_enabled && conversation_transfer_warm_transfer;
+  return getLoadedFeatures().includes('conversation-transfer') && conversation_transfer_warm_transfer;
 };
 
 export const isExternalDirectoryEnabled = (): boolean => {
@@ -85,7 +82,7 @@ export const getExternalDirectory = (): Array<ExternalDirectoryEntry> => {
 };
 
 export const isVoiceXWTEnabled = () => {
-  return conference_enabled || nativeXwtEnabled;
+  return getLoadedFeatures().includes('conference') || nativeXwtEnabled;
 };
 
 export const shouldSkipPhoneNumberValidation = () => {

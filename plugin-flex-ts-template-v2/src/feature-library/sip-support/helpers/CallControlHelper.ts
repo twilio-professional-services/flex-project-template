@@ -12,8 +12,9 @@ export const isWorkerUsingWebRTC = (): boolean => {
 // or from task attributes (for example if the UI was reloaded and note in state)
 export const getLocalParticipantForTask = (task: ITask) => {
   return (
-    task.conference?.participants.find((p) => p.isCurrentWorker)?.callSid ||
-    task.attributes?.conference?.participants?.worker
+    task.conference?.participants.find((p) => p.isCurrentWorker && p.status === 'joined')?.callSid ||
+    task.attributes?.conference?.participants?.worker ||
+    task.attributes?.worker_call_sid
   );
 };
 

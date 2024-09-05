@@ -51,7 +51,7 @@ const execTwilioCli = (command) => {
 }
 
 // Reusable function for string compare including regex
-const isMatch = (searchValue, valueToCheck, allowFuzz) => {
+export const isMatch = (searchValue, valueToCheck, allowFuzz) => {
   if (!searchValue) {
     return false;
   }

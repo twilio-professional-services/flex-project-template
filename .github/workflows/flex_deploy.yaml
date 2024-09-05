@@ -73,7 +73,7 @@ jobs:
         run: |
           npm install --ignore-scripts
       - name: validate environment
-        run: node scripts/validate-environment.mjs >> $GITHUB_STEP_SUMMARY
+        run: npm run -s validate-environment >> $GITHUB_STEP_SUMMARY
 
   # When performing an initial release
   # the serverless backend needs an initial deploy so

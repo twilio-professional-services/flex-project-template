@@ -9,7 +9,7 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
 
     const call = await client.calls(event.CallSid).fetch();
 
-    if (call.to.includes('client') || call.to.includes('queue')) {
+    if (call.to.includes('sip:') || call.to.includes('client') || call.to.includes('queue')) {
       console.log(`agent ${call.to} joined the conference`);
 
       const fetchTaskResult = await TaskOperations.fetchTask({
@@ -31,7 +31,7 @@ exports.handler = async function callOutboundJoin(context, event, callback) {
       if (task.attributes.worker_call_sid === newAttributes.conference.participants.worker) {
         const { to, fromName, targetWorker } = task.attributes;
 
-        if (to.substring(0, 6) === 'client') {
+        if (to.substring(0, 4) === 'sip:' || to.substring(0, 6) === 'client') {
           const createTaskResult = await TaskOperations.createTask({
             context,
             attributes: {

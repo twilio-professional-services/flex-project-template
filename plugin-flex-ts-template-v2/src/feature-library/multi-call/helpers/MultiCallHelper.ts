@@ -60,7 +60,7 @@ export const getMyCallSid = (task: ITask): string | null => {
   if (task && task.conference && task.conference.participants) {
     task.conference.participants.forEach((p: ConferenceParticipant) => {
       // Find our worker in the list of participants to get the call SID.
-      if (p.isCurrentWorker && p.callSid) {
+      if (p.isCurrentWorker && p.status === 'joined' && p.callSid) {
         callSid = p.callSid;
       }
     });

@@ -219,15 +219,7 @@
         },
         "external_directory": {
           "enabled": true,
-          "skipPhoneNumberValidation": false,
-          "directory": [
-            {
-              "cold_transfer_enabled": true,
-              "warm_transfer_enabled": true,
-              "label": "Sample Entry",
-              "number": "+10000000000"
-            }
-          ]
+          "skipPhoneNumberValidation": false
         }
       },
       "dispositions": {
