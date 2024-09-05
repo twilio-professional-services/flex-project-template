@@ -16,7 +16,9 @@ const CustomMuteButton = (props: OwnProps) => {
 
   useEffect(() => {
     if (!props.task?.conference) return;
-    const workerParticipant = props.task.conference.participants.find((p) => p.isCurrentWorker);
+    const workerParticipant = props.task.conference.participants.find(
+      (p) => p.isCurrentWorker && p.status === 'joined',
+    );
 
     if (workerParticipant) {
       setMuted(workerParticipant.muted);

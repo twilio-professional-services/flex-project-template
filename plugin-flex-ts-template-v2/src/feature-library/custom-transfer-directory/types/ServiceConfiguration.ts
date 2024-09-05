@@ -17,6 +17,6 @@ export default interface CustomTransferDirectoryConfig {
   external_directory: {
     enabled: boolean;
     skipPhoneNumberValidation: boolean;
-    directory: Array<ExternalDirectoryEntry>;
+    directory?: Array<ExternalDirectoryEntry>;
   };
 }
