@@ -10,23 +10,27 @@ import ProgrammableVoiceService from '../../../../utils/serverless/ProgrammableV
 import logger from '../../../../utils/logger';
 import { validateUiVersion } from '../../../../utils/configuration';
 
-export const actionEvent = FlexActionEvent.replace;
-export const actionName = FlexAction.HangupCall;
-export const actionHook = function handleSipHangup(flex: typeof Flex, _manager: Flex.Manager) {
-  if (validateUiVersion('>= 2.7')) {
-    // Flex UI 2.7 and later calls WrapupTask instead, so do not install this hook on those versions.
+export const actionEvent = FlexActionEvent.before;
+export const actionName = FlexAction.WrapupTask;
+export const actionHook = function handleSipWrapup(flex: typeof Flex) {
+  if (validateUiVersion('< 2.7')) {
+    // Flex UI earlier than 2.7 calls HangupCall instead, so do not install this hook on those versions.
     return;
   }
 
-  if (isWorkerUsingWebRTC()) {
-    logger.info('[sip-support] Worker is using WebRTC, hangup hook NOT enabled');
-    return;
-  }
+  flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
+    if (isWorkerUsingWebRTC()) {
+      logger.info('[sip-support] Worker is using WebRTC, skipping wrapup hook');
+      return;
+    }
 
-  flex.Actions.replaceAction(FlexAction.HangupCall, async (payload, original) => {
     if (!payload.task) {
-      logger.error('[sip-support] No task found, calling original action');
-      original(payload);
+      logger.error('[sip-support] No task found');
+      return;
+    }
+
+    if (!Flex.TaskHelper.isCallTask(payload.task)) {
+      logger.info('[sip-support] Task is not a call, skipping wrapup hook');
       return;
     }
 
