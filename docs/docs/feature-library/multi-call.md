@@ -3,6 +3,10 @@ sidebar_label: multi-call
 title: multi-call
 ---
 
+:::info Flex UI 2.8 or later required
+This feature requires Flex UI 2.8 or later, as it depends on Twilio Voice SDK features that were unavailable prior to that version.
+:::
+
 Out of the box, Flex does not allow a single worker to have more than one call active at once. Due to this limitation, another worker cannot transfer a call to another worker if they already are on a call. This feature allows a worker to handle more than one call at once, and will automatically place other calls on hold when accepting a new call. As a result, a worker can gracefully handle a transferred call while already assigned another call, for example.
 
 ![Multi-call demo](/img/features/multi-call/multi-call.gif)

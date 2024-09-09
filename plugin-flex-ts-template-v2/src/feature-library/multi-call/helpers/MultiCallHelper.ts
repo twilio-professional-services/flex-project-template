@@ -85,11 +85,15 @@ const holdOtherCalls = (ignoreCallSid: string) => {
       if (task?.conference?.participants) {
         task.conference.participants.forEach((p: ConferenceParticipant) => {
           if (!p.isCurrentWorker && p.status === 'joined' && !p.onHold) {
-            Actions.invokeAction('HoldParticipant', {
-              participantType: p.participantType,
-              task,
-              targetSid: p.participantType === 'worker' ? p.workerSid : p.callSid,
-            });
+            try {
+              Actions.invokeAction('HoldParticipant', {
+                participantType: p.participantType,
+                task,
+                targetSid: p.participantType === 'worker' ? p.workerSid : p.callSid,
+              });
+            } catch (error: any) {
+              logger.error('[multi-call] Error holding participant', error);
+            }
           }
         });
       }
@@ -116,8 +120,13 @@ export const handleUnhold = (payload: any) => {
   }
 };
 
-const updateCallState = (manager: Manager) => {
+const updateCallState = (manager: Manager, endedCall: Call, device?: Device) => {
   if (MultiCallCalls.length < 1) {
+    return;
+  }
+  if (device && manager.store.getState().flex?.phone?.activeCall?.parameters.CallSid !== endedCall.parameters.CallSid) {
+    // The call that ended wasn't the one in state, so we don't need to do anything
+    // However, if device is null, this call used the Flex device. We always want to update state in that case, as Flex's built-in handlers remove it from state.
     return;
   }
   // Another call is still in flight, so put it into state
@@ -134,7 +143,11 @@ const updateCallState = (manager: Manager) => {
       }
     }
   }
-  manager.store.dispatch({ type: 'PHONE_ADD_CALL', payload: selectedCall });
+  try {
+    manager.store.dispatch({ type: 'PHONE_ADD_CALL', payload: selectedCall });
+  } catch (error: any) {
+    logger.error('[multi-call] Unable to update phone state', error);
+  }
 };
 
 const setAudioDevices = async (manager: Manager, device: Device) => {
@@ -157,7 +170,11 @@ const setAudioDevices = async (manager: Manager, device: Device) => {
   }
 
   if (manager.voiceClient.audio?.inputDevice?.deviceId) {
-    await device?.audio?.setInputDevice(manager.voiceClient.audio.inputDevice.deviceId);
+    try {
+      await device?.audio?.setInputDevice(manager.voiceClient.audio.inputDevice.deviceId);
+    } catch (error: any) {
+      logger.error('[multi-call] Unable to change input device', error);
+    }
   }
 };
 
@@ -181,7 +198,7 @@ const handleCallEnd = (manager: Manager, call: Call, device?: Device) => {
   if (callIndex >= 0) {
     MultiCallCalls.splice(callIndex, 1);
   }
-  updateCallState(manager);
+  updateCallState(manager, call, device);
   if (device) {
     destroyDevice(device);
   }
@@ -193,7 +210,13 @@ const forwardCall = async (manager: Manager, connectToken: string | undefined) =
     return;
   }
 
-  const device = createNewDevice(manager);
+  let device: Device;
+  try {
+    device = createNewDevice(manager);
+  } catch (error: any) {
+    logger.error('[multi-call] Error creating new device', error);
+    return;
+  }
 
   const { acceptOptions } = manager.configuration.sdkOptions?.voice ?? {};
   const connectOptions: Device.ConnectOptions = {
@@ -202,9 +225,15 @@ const forwardCall = async (manager: Manager, connectToken: string | undefined) =
   if (acceptOptions?.rtcConfiguration) connectOptions.rtcConfiguration = acceptOptions.rtcConfiguration;
   if (acceptOptions?.rtcConstraints) connectOptions.rtcConstraints = acceptOptions.rtcConstraints;
 
-  const call = await device.connect(connectOptions);
+  let call: Call;
+  try {
+    call = await device.connect(connectOptions);
+  } catch (error: any) {
+    logger.error('[multi-call] Error connecting call', error);
+    return;
+  }
 
-  logger.debug('[multi-call] SecondDeviceCall accept', call);
+  logger.debug('[multi-call] Multi-call accept', call);
   MultiCallDevices.push(device);
   MultiCallCalls.push(call);
 
