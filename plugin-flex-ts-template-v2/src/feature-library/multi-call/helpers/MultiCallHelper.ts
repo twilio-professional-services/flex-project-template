@@ -53,28 +53,27 @@ export const getCall = (callSid: string): Call | null => {
   return null;
 };
 
-export const getMyCallSid = (task: ITask): string | null => {
+export const getMyCallSid = (task: ITask): string | null | undefined => {
   let callSid = null;
 
   if (task && task.conference && task.conference.participants) {
-    task.conference.participants.forEach((p: ConferenceParticipant) => {
-      // Find our worker in the list of participants to get the call SID.
-      if (p.isCurrentWorker && p.status === 'joined' && p.callSid) {
-        callSid = p.callSid;
-      }
-    });
+    callSid = task.conference.participants
+      .sort((a, b) => (b.mediaProperties?.sequenceNumber || 0) - (a.mediaProperties?.sequenceNumber || 0))
+      .find((p) => p.isCurrentWorker && p.status === 'joined' && p.callSid)?.callSid;
   }
 
   return callSid;
 };
 
-const holdOtherCalls = (ignoreCallSid: string) => {
+export const holdOtherCalls = (ignoreCallSid?: string) => {
   Manager.getInstance()
     .store.getState()
     .flex.worker.tasks.forEach((task) => {
+      if (task.taskStatus !== 'assigned') return;
+
       const callSid = getMyCallSid(task);
 
-      if (callSid === ignoreCallSid) return;
+      if (ignoreCallSid && callSid === ignoreCallSid) return;
 
       if (callSid) {
         // mute the call: even though we're holding it, the worker may still be recorded
@@ -240,9 +239,6 @@ const forwardCall = async (manager: Manager, connectToken: string | undefined) =
   // set devices based on preference
   await setAudioDevices(manager, device);
 
-  // place other calls on hold
-  holdOtherCalls(call?.parameters.CallSid ?? '');
-
   // put the current call in state
   manager.store.dispatch({ type: 'PHONE_ADD_CALL', payload: call });
 
@@ -266,9 +262,6 @@ export const handleFlexCallIncoming = async (manager: Manager, call: Call) => {
   }
 
   MultiCallCalls.push(call);
-
-  // place other calls on hold
-  holdOtherCalls(call?.parameters.CallSid ?? '');
 
   call.on('disconnect', (_innerCall) => {
     logger.debug('[multi-call] Flex device call disconnect', call);
