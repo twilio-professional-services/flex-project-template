@@ -64,7 +64,7 @@ const addCallDataToTask = async (task: ITask, callSid: string | null, recording:
     // worker leg, which could result in multiple recordings per call in the case
     // of a transfer, then you'll want to use the reservation_attributes pattern:
     // https://www.twilio.com/docs/flex/developer/insights/custom-media-attached-conversations#add-media-links
-    const mediaObj = {
+    const mediaObj: any = {
       url: recordingUrl,
       type: 'VoiceRecording',
       start_time: recordingStartTime,
@@ -73,11 +73,22 @@ const addCallDataToTask = async (task: ITask, callSid: string | null, recording:
 
     switch (getChannelToRecord()) {
       case 'worker':
+        let existingMedia: any[] = [];
+        if (
+          task?.attributes?.reservation_attributes &&
+          task?.attributes?.reservation_attributes[reservationSid]?.media
+        ) {
+          existingMedia = [...task.attributes.reservation_attributes[reservationSid].media];
+          mediaObj.title = `Voice Recording ${existingMedia.length + 1}`;
+          mediaObj.start_time = new Date().valueOf();
+        }
         newAttributes = {
           ...newAttributes,
           reservation_attributes: {
             [reservationSid]: {
-              media: [mediaObj],
+              // TODO: Flex Insights player doesn't seem to properly switch recordings?
+              // Add title
+              media: [...existingMedia, mediaObj],
             },
           },
         };
@@ -111,7 +122,9 @@ const isTaskActive = (task: ITask) => {
 
 const getParticipantToRecord = (channel: 'worker' | 'customer', participants: ConferenceParticipant[]) => {
   if (channel === 'worker') {
-    return participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined');
+    return participants
+      .sort((a, b) => (b.mediaProperties?.sequenceNumber || 0) - (a.mediaProperties?.sequenceNumber || 0))
+      .find((p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined');
   }
 
   return participants.find((p) => p.participantType === 'customer');
@@ -283,22 +296,7 @@ export const recordExternalCall = async (task: ITask) => {
   // conference before we start the recording
   logger.debug('[dual-channel-recording] Waiting for customer and worker to join the conference');
   const participants = await waitForConferenceParticipants(task);
-
-  let participantLeg;
-  switch (getChannelToRecord()) {
-    case 'customer': {
-      participantLeg = participants.find((p) => p.participantType === 'customer');
-      break;
-    }
-    case 'worker': {
-      participantLeg = participants.find(
-        (p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined',
-      );
-      break;
-    }
-    default:
-      break;
-  }
+  const participantLeg = getParticipantToRecord(getChannelToRecord(), participants);
 
   logger.info('[dual-channel-recording] Recorded Participant: ', participantLeg);
 
@@ -310,4 +308,38 @@ export const recordExternalCall = async (task: ITask) => {
   const { callSid } = participantLeg;
 
   await startRecording(task, callSid);
+};
+
+export const initiateRecording = (task: ITask) => {
+  if (!TaskHelper.isCallTask(task)) {
+    return;
+  }
+
+  const { attributes } = task;
+  const { client_call, direction, conversations } = attributes;
+
+  if (conversations && conversations.media && getChannelToRecord() === 'customer') {
+    // This indicates a recording has already been started for this call
+    // and all relevant metadata should already be on task attributes
+    return;
+  }
+
+  if (!canRecordTask(task)) {
+    logger.info(`[dual-channel-recording] Skipping recording for task excluded by configuration: ${task.sid}`);
+    return;
+  }
+
+  if (client_call && direction === 'outbound') {
+    // internal call - always record based on call SID, as conference state is unknown by Flex
+    // Record only the outbound leg to prevent duplicate recordings
+    // Do not await so that event processing is not blocked
+    recordInternalCall(task);
+  } else if (client_call) {
+    // internal call, inbound leg - skip recording this leg
+    logger.info(`[dual-channel-recording] Skipping recording for inbound internal call ${task.sid}`);
+  } else {
+    // External call
+    // Do not await so that event processing is not blocked
+    recordExternalCall(task);
+  }
 };
