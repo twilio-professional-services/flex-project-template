@@ -42,6 +42,8 @@ export enum StringTemplates {
   CurrentPage = 'PSContactCurrentPage',
   NextPage = 'PSContactNextPage',
   PreviousPage = 'PSContactPreviousPage',
+  AllowColdTransfer = 'PSContactAllowColdTransfer',
+  AllowWarmTransfer = 'PSContactAllowWarmTransfer',
 }
 
 export const stringHook = () => ({
@@ -85,6 +87,8 @@ export const stringHook = () => ({
     [StringTemplates.CurrentPage]: 'Page {{current}} of {{total}}',
     [StringTemplates.NextPage]: 'Next page',
     [StringTemplates.PreviousPage]: 'Previous page',
+    [StringTemplates.AllowColdTransfer]: 'Allow cold transfers to this contact',
+    [StringTemplates.AllowWarmTransfer]: 'Allow warm transfers to this contact',
   },
   'es-MX': esMX,
   'es-ES': esES,
