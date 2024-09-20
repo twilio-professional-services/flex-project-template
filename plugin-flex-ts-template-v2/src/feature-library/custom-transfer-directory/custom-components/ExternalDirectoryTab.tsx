@@ -38,18 +38,20 @@ const ExternalDirectoryTab = (props: OwnProps) => {
   // Map the contacts directory entries to a DirectoryEntry array
   const generateContactsEntries = (shared: boolean): Array<DirectoryEntry> => {
     return (
-      (shared ? sharedContactList : myContactList)?.map(
-        (entry: any) =>
-          ({
-            cold_transfer_enabled: true,
-            warm_transfer_enabled: isVoiceXWTEnabled(),
-            label: entry.name,
-            address: entry.phoneNumber,
-            tooltip: entry.phoneNumber,
-            type: 'number',
-            key: uuidv4(),
-          } as DirectoryEntry),
-      ) ?? [] // Return an empty array if the contacts feature is disabled
+      (shared ? sharedContactList : myContactList)
+        ?.map(
+          (entry: any) =>
+            ({
+              cold_transfer_enabled: shared ? entry.allowColdTransfer ?? true : true,
+              warm_transfer_enabled: isVoiceXWTEnabled() && shared ? entry.allowWarmTransfer ?? true : true,
+              label: entry.name,
+              address: entry.phoneNumber,
+              tooltip: entry.phoneNumber,
+              type: 'number',
+              key: uuidv4(),
+            } as DirectoryEntry),
+        )
+        ?.filter((entry: DirectoryEntry) => entry.cold_transfer_enabled || entry.warm_transfer_enabled) ?? [] // Return an empty array if the contacts feature is disabled
     );
   };
 

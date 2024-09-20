@@ -1,6 +1,6 @@
 import * as Flex from '@twilio/flex-ui';
 
-import { FlexDeviceCall, getMyCallSid, SecondDeviceCall } from '../../helpers/MultiCallHelper';
+import { getMyCallSid, getCall } from '../../helpers/MultiCallHelper';
 import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
@@ -25,10 +25,9 @@ export const actionHook = function handleMultiCallSelectTask(flex: typeof Flex, 
     }
 
     // update state with the currently selected call
-    if (SecondDeviceCall && callSid === SecondDeviceCall.parameters.CallSid) {
-      manager.store.dispatch({ type: 'PHONE_ADD_CALL', payload: SecondDeviceCall });
-    } else if (FlexDeviceCall && callSid === FlexDeviceCall.parameters.CallSid) {
-      manager.store.dispatch({ type: 'PHONE_ADD_CALL', payload: FlexDeviceCall });
+    const call = getCall(callSid);
+    if (call) {
+      manager.store.dispatch({ type: 'PHONE_ADD_CALL', payload: call });
     }
   });
 };
