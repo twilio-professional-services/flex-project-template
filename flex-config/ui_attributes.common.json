@@ -1,9 +1,4 @@
 {
-  "sdkOptions": {
-    "voice": {
-      "allowIncomingWhileBusy": true
-    }
-  },
   "custom_data": {
     "serverless_functions_domain": "<YOUR_SERVERLESS_DOMAIN>",
     "common": {
