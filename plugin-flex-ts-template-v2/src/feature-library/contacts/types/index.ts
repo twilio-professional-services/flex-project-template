@@ -3,6 +3,8 @@ export interface Contact {
   name: string;
   notes: string;
   phoneNumber: string;
+  allowColdTransfer?: boolean;
+  allowWarmTransfer?: boolean;
 }
 
 export interface HistoricalContact {
