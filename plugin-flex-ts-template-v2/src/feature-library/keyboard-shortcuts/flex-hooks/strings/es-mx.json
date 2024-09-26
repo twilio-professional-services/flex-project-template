@@ -14,7 +14,7 @@
   "KeyboardMgrTooltipMsg": "Ctrl y Shift son los modificadores predeterminados que no se pueden cambiar.",
   "KeyboardMgrToastDelete": "Atajo de teclado llamado {{actionName}} ha sido eliminado exitosamente.",
   "KeyboardMgrWarningMsg": "Volver a habilitar los atajos de teclado",
-  "KeyboardMgrToastSuccess": "¡Acción del teclado {{actionName}} modificada exitosamente de {{oldShortcut}} a {{upperCase}}! Tu nuevo atajo de teclado es: Ctrl + Shift + {{upperCase}},",
+  "KeyboardMgrToastSuccess": "¡Acción del teclado {{actionName}} modificada exitosamente de {{oldShortcut}} a {{upperCase}}! Tu nuevo atajo de teclado es: Ctrl + Shift + {{upperCase}}",
   "KeyboardMgrModalTitle": "Modificar un atajo de teclado",
   "KeyboardMgrModalCurrentConfig": "Configuración actual",
   "KeyboardMgrModalNewConfig": "Nueva configuración",
