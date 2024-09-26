@@ -9,6 +9,8 @@ import * as Components from './components';
 import * as CssOverrides from './css-overrides';
 import * as Events from './events';
 import * as JsClientEvents from './jsclient-event-listeners';
+import * as KeyboardShortcuts from './keyboard-shortcuts';
+import * as Logger from './logger';
 import * as Notifications from './notifications';
 import * as NotificationEvents from './notification-events';
 import * as PasteElements from './paste-elements';
@@ -17,7 +19,6 @@ import * as Strings from './strings';
 import * as TeamsFilters from './teams-filters';
 import * as SyncClientTokenUpdated from '../sdk-clients/sync/tokenUpdated';
 import * as TaskRouterReplaceCompleteTask from '../serverless/TaskRouter/CompleteTask';
-import * as Logger from './logger';
 import * as SendLogsToBrowserConsole from '../logger/sendLogsToBrowserConsole';
 // @ts-ignore
 // eslint-disable-next-line import/no-useless-path-segments
@@ -61,6 +62,7 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   PasteElements.init(flex);
   Reducers.init(manager);
   Strings.init(manager);
+  KeyboardShortcuts.init(flex, manager);
   Components.init(flex, manager);
   TeamsFilters.init(flex, manager);
 };
@@ -101,6 +103,10 @@ export const loadFeature = (flex: typeof Flex, manager: Flex.Manager, feature: F
 
     if (hook.jsClientHook) {
       JsClientEvents.addHook(flex, manager, name, hook);
+    }
+
+    if (hook.keyboardShortcutHook) {
+      KeyboardShortcuts.addHook(flex, manager, name, hook);
     }
 
     if (hook.loggerHook) {

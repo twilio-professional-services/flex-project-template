@@ -12,7 +12,7 @@
   "KeyboardMgrNoDefaultShortcuts": "Não há atalhos de teclado configurados. Por favor, redefina as configurações do seu teclado para habilitar a personalização de atalhos de teclado.",
   "KeyboardMgrNoCustomShortcuts": "Não há atalhos de teclado personalizados configurados. Por favor, redefina suas configurações de teclado para habilitar os atalhos de teclado personalizados.",
   "KeyboardMgrWarningMsg": "Ativar novamente atalhos de teclado",
-  "KeyboardMgrToastSuccess": "Ação do teclado {{actionName}} modificada com sucesso de {{oldShortcut}} para {{upperCase}}! Sua nova tecla de atalho é: Ctrl + Shift + {{upperCase}}.",
+  "KeyboardMgrToastSuccess": "Ação do teclado {{actionName}} modificada com sucesso de {{oldShortcut}} para {{upperCase}}! Sua nova tecla de atalho é: Ctrl + Shift + {{upperCase}}",
   "KeyboardMgrToastDelete": "O atalho de teclado denominado {{actionName}} foi excluído com sucesso.",
   "KeyboardMgrTooltipMsg": "Ctrl e Shift são os modificadores padrão que não podem ser alterados.",
   "KeyboardMgrModalTitle": "Modificar um atalho de teclado",

@@ -54,9 +54,6 @@ export enum StringTemplates {
   CustomShortcutNavigateToKeyboardShortcuts = 'KeyboardMgrCustomShortcutNavigateToKeyboardShortcuts',
   CustomShortcutNavigateToTeamsView = 'KeyboardMgrCustomShortcutNavigateToTeamsView',
   CustomShortcutNavigateToQueuesView = 'KeyboardMgrCustomShortcutNavigateToQueuesView',
-  CustomShortcutToggleCallRecording = 'KeyboardMgrCustomShortcutToggleCallRecording',
-  CustomShortcutPauseCallRecording = 'KeyboardMgrCustomShortcutPauseCallRecording',
-  CustomShortcutResumeCallRecording = 'KeyboardMgrCustomShortcutResumeCallRecording',
 }
 
 export const stringHook = () => ({
@@ -80,7 +77,7 @@ export const stringHook = () => ({
     [StringTemplates.ToasterDeleteNotification]:
       'Keyboard shortcut named {{actionName}} has been successfully deleted.',
     [StringTemplates.ToasterSuccessNotification]:
-      'Keyboard action {{actionName}} modified successfully from {{oldShortcut}} to {{upperCase}}! Your new keyboard shortcut is: Ctrl + Shift + {{upperCase}},',
+      'Keyboard action {{actionName}} modified successfully from {{oldShortcut}} to {{upperCase}}! Your new keyboard shortcut is: Ctrl + Shift + {{upperCase}}',
     [StringTemplates.ModalTitle]: 'Modify a keyboard shortcut',
     [StringTemplates.ModalCurrentConfig]: 'Current configuration',
     [StringTemplates.ModalNewConfig]: 'New configuration',
@@ -115,9 +112,6 @@ export const stringHook = () => ({
     [StringTemplates.CustomShortcutNavigateToKeyboardShortcuts]: 'Navigate to keyboard shortcuts',
     [StringTemplates.CustomShortcutNavigateToTeamsView]: 'Navigate to Teams View',
     [StringTemplates.CustomShortcutNavigateToQueuesView]: 'Navigate to Real-time Queues View',
-    [StringTemplates.CustomShortcutToggleCallRecording]: 'Toggle call recording pause/resume',
-    [StringTemplates.CustomShortcutPauseCallRecording]: 'Pause call recording',
-    [StringTemplates.CustomShortcutResumeCallRecording]: 'Resume call recording',
   },
   'es-ES': esES,
   'es-MX': esMX,
