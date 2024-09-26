@@ -14,7 +14,7 @@
   "KeyboardMgrNoDefaultShortcuts": "没有配置的键盘快捷方式。请重置键盘设置以启用键盘快捷方式自定义。",
   "KeyboardMgrTooltipMsg": "Ctrl 和 Shift 是默认的修饰符，无法更改。",
   "KeyboardMgrToastDelete": "成功删除了名为{{actionName}}的键盘快捷方式。",
-  "KeyboardMgrToastSuccess": "键盘操作{{actionName}}已成功从{{oldShortcut}}修改为{{upperCase}}！您的新键盘快捷键是：Ctrl + Shift + {{upperCase}}，",
+  "KeyboardMgrToastSuccess": "键盘操作{{actionName}}已成功从{{oldShortcut}}修改为{{upperCase}}！您的新键盘快捷键是：Ctrl + Shift + {{upperCase}}",
   "KeyboardMgrModalTitle": "修改键盘快捷键",
   "KeyboardMgrModalCurrentConfig": "当前配置",
   "KeyboardMgrModalHeaderCurrent": "当前快捷方式",

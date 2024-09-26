@@ -11,7 +11,7 @@ import { useToaster, Toaster } from '@twilio-paste/core/toast';
 
 import { StringTemplates } from '../../../flex-hooks/strings';
 import { writeToLocalStorage, readFromLocalStorage } from '../../../utils/LocalStorageUtil';
-import { resetKeyboardShortcutsUtil, disableKeyboardShortcutsUtil } from '../../../utils/KeyboardShortcutsUtil';
+import { resetShortcuts, disableAllShortcuts } from '../../../utils/KeyboardShortcutsUtil';
 import { deleteShortcuts, enableThrottling, removeAllShortcuts } from '../../../utils/constants';
 
 interface SettingsProps {
@@ -69,7 +69,7 @@ const Settings = ({
   };
 
   const removeAllShortcutsHandler = (): void => {
-    disableKeyboardShortcutsUtil();
+    disableAllShortcuts();
     setDisableShortcuts(true);
     setDisableAllSetting(false);
     toasterNotification('remove');
@@ -89,7 +89,7 @@ const Settings = ({
     setReset(true);
 
     toasterNotification('reset');
-    resetKeyboardShortcutsUtil();
+    resetShortcuts();
   };
 
   const setSettingStateFromLocalStorage = useCallback((): void => {
@@ -104,7 +104,7 @@ const Settings = ({
     if (localRemoveAllSetting === 'true') {
       setDisableAllSetting(false);
       setDisableShortcuts(true);
-      disableKeyboardShortcutsUtil();
+      disableAllShortcuts();
     }
   }, [
     localDeleteSetting,

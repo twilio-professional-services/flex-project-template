@@ -13,7 +13,7 @@
   "KeyboardMgrNoCustomShortcuts": "ไม่มีปุ่มลัดแป้นพิมพ์ที่กำหนดค่าไว้ โปรดรีเซ็ตการตั้งค่าแป้นพิมพ์เพื่อเปิดใช้งานปุ่มลัดแป้นพิมพ์ที่กำหนดเอง",
   "KeyboardMgrTooltipMsg": "Ctrl และ Shift เป็นตัวปรับแต่งเริ่มต้นที่ไม่สามารเปลี่ยนแปลได้",
   "KeyboardMgrWarningMsg": "เปิดใช้งานปุ่มลัดแป้นพิมพ์อีกครั้ง",
-  "KeyboardMgrToastSuccess": "การดำเนินการของแป้นพิมพ์ {{actionName}} ถูกแก้ไขสำเร็จจาก {{oldShortcut}} เป็น {{upperCase}}! ที่ลัดแป้นพิมพ์ใหม่ของคุณคือ: Ctrl + Shift + {{upperCase}},",
+  "KeyboardMgrToastSuccess": "การดำเนินการของแป้นพิมพ์ {{actionName}} ถูกแก้ไขสำเร็จจาก {{oldShortcut}} เป็น {{upperCase}}! ที่ลัดแป้นพิมพ์ใหม่ของคุณคือ: Ctrl + Shift + {{upperCase}}",
   "KeyboardMgrToastDelete": "ลบแป้นพิมพ์ลัดที่ชื่อ {{actionName}} เรียบร้อยแล้ว",
   "KeyboardMgrModalTitle": "แก้ไขแป้นพิมพ์ลัด",
   "KeyboardMgrModalCurrentConfig": "การตั้งค่าปัจจุบัน",
