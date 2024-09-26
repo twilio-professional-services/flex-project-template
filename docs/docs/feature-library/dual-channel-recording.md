@@ -49,7 +49,10 @@ You may also optionally specify task attributes and/or queues that should exclud
   ```
   "exclude_attributes": [{ "key":"direction", "value":"outbound" }]
   ```
-- To exclude recording tasks based on queue name or queue SID, set the `exclude_queues` configuration property to an array or queue names or SIDs.
+- To exclude recording tasks based on queue name or queue SID, set the `exclude_queues` configuration property to an array of queue names or SIDs. For example:
+  ```
+  "exclude_queues": ["Queue Name 1", "Queue Name 2"] // or ["WQxxx", "WQxxx2"]
+  ```
 
 ## how it works
 

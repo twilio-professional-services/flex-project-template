@@ -21,7 +21,10 @@ The `conditional-recording` feature has the following settings:
   ```
   "exclude_attributes": [{ "key":"direction", "value":"outbound" }]
   ```
-- `exclude_queues` - To exclude recording tasks based on queue name or queue SID, set this to an array or queue names or SIDs.
+- `exclude_queues` - To exclude recording tasks based on queue name or queue SID, set this to an array of queue names or SIDs. For example:
+  ```
+  "exclude_queues": ["Queue Name 1", "Queue Name 2"] // or ["WQxxx", "WQxxx2"]
+  ```
 
 ## how it works
 
