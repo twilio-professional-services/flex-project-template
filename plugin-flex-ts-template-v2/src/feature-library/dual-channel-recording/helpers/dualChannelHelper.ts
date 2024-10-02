@@ -1,4 +1,4 @@
-import { ConferenceParticipant, ITask, Manager, TaskHelper } from '@twilio/flex-ui';
+import { ConferenceParticipant, ITask, Manager } from '@twilio/flex-ui';
 
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
 import { FetchedRecording } from '../../../types/serverless/twilio-api';
@@ -22,25 +22,9 @@ export const canRecordTask = (task: ITask): boolean => {
   return true;
 };
 
-const addCallDataToTask = async (task: ITask, callSid: string | null, recording: FetchedRecording | null) => {
-  const { conference } = task;
-
+const addCallDataToTask = async (task: ITask, recording: FetchedRecording | null) => {
   let newAttributes = {} as any;
   let shouldUpdateTaskAttributes = false;
-
-  if (TaskHelper.isOutboundCallTask(task)) {
-    shouldUpdateTaskAttributes = true;
-    // Last Reviewed: 2021/02/01 (YYYY/MM/DD)
-    // Outbound calls initiated from Flex (via StartOutboundCall Action)
-    // do not include call_sid and conference metadata in task attributes
-    newAttributes.conference = { sid: conference?.conferenceSid };
-
-    if (callSid) {
-      // callSid will be undefined if the outbound call was ended before
-      // the called party answered
-      newAttributes.call_sid = callSid;
-    }
-  }
 
   if (recording) {
     const { dateUpdated, sid: reservationSid } = task;
@@ -240,20 +224,6 @@ const waitForActiveCall = async (task: ITask): Promise<string> =>
     }, maxWaitTimeMs);
   });
 
-export const addMissingCallDataIfNeeded = async (task: ITask) => {
-  if (!task) {
-    return;
-  }
-  const { attributes } = task;
-  const { conference } = attributes;
-
-  if (TaskHelper.isOutboundCallTask(task) && !conference) {
-    // Only worried about outbound calls since inbound calls automatically
-    // have the desired call and conference metadata
-    await addCallDataToTask(task, null, null);
-  }
-};
-
 const startRecording = async (task: ITask, callSid: string | undefined) => {
   if (!callSid) {
     logger.warn('[dual-channel-recording] Unable to determine call SID for recording');
@@ -262,7 +232,7 @@ const startRecording = async (task: ITask, callSid: string | undefined) => {
 
   try {
     const recording = await DualChannelService.startDualChannelRecording(callSid);
-    await addCallDataToTask(task, callSid, recording);
+    await addCallDataToTask(task, recording);
   } catch (error: any) {
     logger.error('[dual-channel-recording] Unable to start dual channel recording.', error);
   }
