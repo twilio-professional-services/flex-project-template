@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { TaskHelper, useFlexSelector, ITask, IconButton, templates } from '@twilio/flex-ui';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Flex } from '@twilio-paste/core/flex';
 import { Tooltip } from '@twilio-paste/core/tooltip';
 
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
-import { Actions } from '../../flex-hooks/states/SupervisorBargeCoach';
 import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
+import { syncUpdatesAgent } from '../../helpers/supervisorAlertHelper';
 // Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
 
@@ -16,8 +16,6 @@ type AgentAssistanceButtonProps = {
 };
 
 export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
-  const dispatch = useDispatch();
-
   const { agentAssistanceButton } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
 
   const agentWorkerSID = useFlexSelector((state) => state?.flex?.worker?.worker?.sid) || '';
@@ -26,34 +24,19 @@ export const AgentAssistanceButton = ({ task }: AgentAssistanceButtonProps) => {
 
   // On click we will be pulling the conference SID, toggling the agent assistance button respectively,
   // and updating the sync doc with the agent's assistance status (either adding or removing them)
-  const agentAssistanceClick = () => {
+  const agentAssistanceClick = async () => {
     const conference = task && task.conference;
     const conferenceSID = conference?.conferenceSid || '';
-    if (agentAssistanceButton) {
-      dispatch(
-        Actions.setBargeCoachStatus({
-          agentAssistanceButton: false,
-        }),
-      );
-      // Caching this to help with browser refresh recovery
-      localStorage.setItem('cacheAgentAssistState', 'false');
+    const newValue = !agentAssistanceButton;
+    const updateStatus = newValue ? 'add' : 'remove';
 
-      // Updating the Sync Doc to remove the agent from the assistance array
-      SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, agentFN, conferenceSID, selectedTaskSID, 'remove');
-    } else {
-      dispatch(
-        Actions.setBargeCoachStatus({
-          agentAssistanceButton: true,
-        }),
-      );
-
-      // Caching this if the browser is refreshed while the agent actively had agent assistance up
-      // We will use this to clear up the Sync Doc and the Agent Alert
-      localStorage.setItem('cacheAgentAssistState', 'true');
-
-      // Updating the Sync Doc to add the agent to the assistance array
-      SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, agentFN, conferenceSID, selectedTaskSID, 'add');
+    if (newValue) {
+      // Subscribe to updates if we turned on assistance
+      await syncUpdatesAgent();
     }
+
+    // Updating the Sync Doc to add/remove the agent from the assistance array
+    SyncDoc.initSyncDocAgentAssistance(agentWorkerSID, agentFN, conferenceSID, selectedTaskSID, updateStatus);
   };
 
   // Return the agent assistance button, disable if the call isn't live

@@ -6,44 +6,29 @@ import { Tooltip } from '@twilio-paste/core/tooltip';
 
 import { reduxNamespace } from '../../../../utils/state';
 import { AppState } from '../../../../types/manager';
-import { Actions } from '../../flex-hooks/states/SupervisorBargeCoach';
-import { alertSupervisorsCheck, syncUpdates } from '../../helpers/supervisorAlertHelper';
+import { setBargeCoachStatus } from '../../flex-hooks/states/SupervisorBargeCoachSlice';
+import { alertSupervisorsCheck } from '../../helpers/supervisorAlertHelper';
 import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 
 export const SupervisorAlertButton = () => {
   const dispatch = useDispatch();
 
-  const { enableAgentAssistanceAlerts, agentAssistanceSyncSubscribed } = useSelector(
-    (state: AppState) => state[reduxNamespace].supervisorBargeCoach,
-  );
-
-  const agentAssistanceAlertToggle = () => {
-    if (enableAgentAssistanceAlerts) {
-      dispatch(
-        Actions.setBargeCoachStatus({
-          enableAgentAssistanceAlerts: false,
-        }),
-      );
-      // If the supervisor disabled the agent assistance alerts, let's cache this
-      // to ensure it is set to false if a browser refresh happens
-      alertSupervisorsCheck();
-      localStorage.setItem('cacheAlerts', 'false');
-    } else {
-      dispatch(
-        Actions.setBargeCoachStatus({
-          enableAgentAssistanceAlerts: true,
-        }),
-      );
-      alertSupervisorsCheck();
-      localStorage.setItem('cacheAlerts', 'true');
-    }
-  };
+  const { enableAgentAssistanceAlerts } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
 
   useEffect(() => {
-    if (!agentAssistanceSyncSubscribed) {
-      syncUpdates();
-    }
-  });
+    alertSupervisorsCheck();
+    // Cache the value so it can be restored after a refresh
+    localStorage.setItem('cacheAlerts', `${enableAgentAssistanceAlerts}`);
+  }, [enableAgentAssistanceAlerts]);
+
+  const agentAssistanceAlertToggle = () => {
+    dispatch(
+      setBargeCoachStatus({
+        enableAgentAssistanceAlerts: !enableAgentAssistanceAlerts,
+      }),
+    );
+  };
+
   // Return the Supervisor Agent Assistance Toggle, this gives the supervisor
   // the option to enable or disable Agent Assistance Alerts
   return (
