@@ -1,7 +1,7 @@
 const { isString, omitBy, isNil, merge } = require('lodash');
 const axios = require('axios');
 
-const { executeWithRetry } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { executeWithRetry, getRegionUrl } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 
 /**
  * @param {object} parameters the parameters for the function
@@ -11,7 +11,7 @@ const { executeWithRetry } = require(Runtime.getFunctions()['common/helpers/func
  */
 exports.fetchUiAttributes = async function fetchUiAttributes(parameters) {
   return executeWithRetry(parameters.context, async () => {
-    const configUrl = 'https://flex-api.twilio.com/v1/Configuration';
+    const configUrl = `https://flex-api.${getRegionUrl()}/v1/Configuration`;
     const config = {
       auth: {
         username: process.env.ACCOUNT_SID,
@@ -40,7 +40,7 @@ exports.updateUiAttributes = async function updateUiAttributes(parameters) {
     throw new Error('Invalid parameters object passed. Parameters must contain attributesUpdate string');
 
   return executeWithRetry(parameters.context, async () => {
-    const configUrl = 'https://flex-api.twilio.com/v1/Configuration';
+    const configUrl = `https://flex-api.${getRegionUrl()}/v1/Configuration`;
     const config = {
       auth: {
         username: process.env.ACCOUNT_SID,

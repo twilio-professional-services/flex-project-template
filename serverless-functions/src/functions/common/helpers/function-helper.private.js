@@ -33,6 +33,14 @@ const prepareFunction = (context, event, callback, requiredParameters, handlerFn
 };
 
 /**
+ * @returns {string}
+ * @description Returns the API base URL for the given region when TWILIO_REGION is set.
+ */
+exports.getRegionUrl = () => {
+  return process.env.TWILIO_REGION ? `${process.env.TWILIO_REGION}.twilio.com` : 'twilio.com';
+};
+
+/**
  * @param {string} callingFunctionPath
  * @param {object} parameterObject
  * @param {Array} requiredKeysArray
@@ -43,7 +51,6 @@ const prepareFunction = (context, event, callback, requiredParameters, handlerFn
  * error handling will fallback to less useful messages
  * if an array of strings is provided instead of the key and purpose objects
  */
-
 exports.validateParameters = (callingFunctionPath, parameterObject, requiredKeysArray) => {
   let errorMessage = '';
   requiredKeysArray.forEach((data) => {
