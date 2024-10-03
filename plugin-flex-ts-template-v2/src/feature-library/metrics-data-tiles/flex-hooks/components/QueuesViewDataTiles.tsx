@@ -7,9 +7,7 @@ import ChannelSLATile from '../../custom-components/ChannelSLATile/ChannelSLATil
 import AllChannelsSLATile from '../../custom-components/AllChannelsSLATile/AllChannelsSLATile';
 import AgentActivityTile from '../../custom-components/AgentActivityTile/AgentActivityTile';
 import {
-  isActiveTasksEnabled,
-  isWaitingTasksEnabled,
-  isLongestWaitTimeEnabled,
+  isAllChannelsEnabled,
   isAgentsByActivityEnabled,
   getChannelsConfig,
   getChannelColors,
@@ -60,16 +58,15 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
     );
   }
 
-  if (!isActiveTasksEnabled()) {
-    flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('active-tasks-tile');
-  }
-  if (!isWaitingTasksEnabled()) {
-    flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('waiting-tasks-tile');
-  }
-  if (!isLongestWaitTimeEnabled()) {
-    flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('longest-wait-time-tile');
-  }
-  if (!isAgentsByActivityEnabled()) {
-    flex.QueuesStats.AggregatedQueuesDataTiles.Content.remove('agents-by-activity-chart-tile');
+  if (!isAllChannelsEnabled() || !isAgentsByActivityEnabled()) {
+    flex.QueuesStats.AggregatedQueuesDataTiles.defaultProps.dataTileFilter = (id) => {
+      if (id === 'agents-by-activity-chart-tile' && !isAgentsByActivityEnabled()) {
+        return false;
+      }
+      if (id === 'all' && !isAllChannelsEnabled()) {
+        return false;
+      }
+      return true;
+    };
   }
 };
