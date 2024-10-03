@@ -39,6 +39,6 @@
     "prompt": "^1.3.0",
     "semver": "^7.6.2",
     "shelljs": "^0.8.5",
-    "twilio-cli": "5.20.1"
+    "twilio-cli": "5.22.3"
   }
 }
