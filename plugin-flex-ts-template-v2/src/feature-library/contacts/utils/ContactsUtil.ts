@@ -19,7 +19,7 @@ import {
   isSharedDirectoryEnabled,
   isSharedDirectoryAgentEditable,
 } from '../config';
-import { getUserLanguage } from '../../../utils/configuration';
+import { getUserLanguage, getLoadedFeatures, getFeatureFlags } from '../../../utils/configuration';
 import SyncClient, { getAllSyncMapItems } from '../../../utils/sdk-clients/sync/SyncClient';
 import logger from '../../../utils/logger';
 
@@ -187,7 +187,14 @@ class ContactsUtil {
     }
   };
 
-  addContact = async (name: string, phoneNumber: string, notes: string, shared: boolean) => {
+  addContact = async (
+    name: string,
+    phoneNumber: string,
+    notes: string,
+    shared: boolean,
+    allowColdTransfer?: boolean,
+    allowWarmTransfer?: boolean,
+  ) => {
     if (!this.workerSid && !shared) {
       logger.error('[contacts] Error adding contact: No worker sid');
       return;
@@ -197,12 +204,16 @@ class ContactsUtil {
       return;
     }
     try {
-      const contact = {
+      const contact: Contact = {
         key: uuidv4(),
         name,
         phoneNumber,
         notes,
       };
+      if (shared) {
+        contact.allowColdTransfer = allowColdTransfer ?? true;
+        contact.allowWarmTransfer = allowWarmTransfer ?? true;
+      }
       const map = await SyncClient.map(`${CONTACTS_KEY}_${shared ? this.accountSid : this.workerSid}`);
       await map.set(contact.key, contact);
     } catch (error: any) {
@@ -243,6 +254,11 @@ class ContactsUtil {
       logger.error('[contacts] Error updating contact', error);
     }
   };
+
+  shouldShowTransferOptions = (shared: boolean) =>
+    shared &&
+    getLoadedFeatures().includes('custom-transfer-directory') &&
+    (getFeatureFlags()?.features?.custom_transfer_directory?.external_directory?.enabled || false);
 }
 
 const contactsUtil = new ContactsUtil();

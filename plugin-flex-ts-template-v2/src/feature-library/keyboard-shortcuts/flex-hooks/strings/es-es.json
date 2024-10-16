@@ -14,7 +14,7 @@
   "KeyboardMgrNoCustomShortcuts": "No hay atajos de teclado personalizados configurados. Por favor, restablece la configuración de tu teclado para habilitar los atajos de teclado personalizados.",
   "KeyboardMgrTooltipMsg": "Ctrl y Shift son los modificadores predeterminados que no se pueden cambiar.",
   "KeyboardMgrToastDelete": "El atajo de teclado llamado {{actionName}} se ha eliminado correctamente.",
-  "KeyboardMgrToastSuccess": "¡La acción del teclado {{actionName}} se modificó correctamente de {{oldShortcut}} a {{upperCase}}! Tu nuevo atajo de teclado es: Ctrl + Shift + {{upperCase}},",
+  "KeyboardMgrToastSuccess": "¡La acción del teclado {{actionName}} se modificó correctamente de {{oldShortcut}} a {{upperCase}}! Tu nuevo atajo de teclado es: Ctrl + Shift + {{upperCase}}",
   "KeyboardMgrModalNewConfig": "Nueva configuración",
   "KeyboardMgrModalHeaderAction": "Nombre de la acción",
   "KeyboardMgrModalCurrentConfig": "Configuración actual",
