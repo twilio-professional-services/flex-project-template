@@ -5,10 +5,6 @@ title: chat-to-video-escalation
 
 This feature shows how an agent can initiate a video room from a messaging conversation within Flex.
 
-:::caution Deprecated
-This feature uses Twilio Programmable Video, which has an announced End of Life date of December 5, 2024. Therefore, this feature should not be used as the basis for any new deployment. [More information is available here.](https://www.twilio.com/en-us/changelog/programmable-video-eol-notice)
-:::
-
 ---
 
 1. [Functionality Overview](#functionality-overview)
