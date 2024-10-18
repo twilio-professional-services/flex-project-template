@@ -1,11 +1,9 @@
 export default interface DataTilesConfig {
   enabled: boolean;
   queues_view_tiles: {
-    active_tasks_data_tile: boolean;
-    waiting_tasks_data_tile: boolean;
-    longest_wait_time_data_tile: boolean;
-    agents_by_activity_bar_chart: boolean;
     all_channels_data_tile: boolean;
+    all_channels_sla_data_tile: boolean;
+    agents_by_activity_bar_chart: boolean;
     enhanced_agent_by_activity_pie_chart: boolean;
   };
   teams_view_tiles: {

@@ -6,11 +6,12 @@ title: metrics-data-tiles
 ## Overview
 The Flex Real Time Queues view provides a few standard Data Tiles that aggregate the queue data at the contact center level:
 
+* Agents: Bar chart with the number of available, unavailable, and offline agents.
 * Active Tasks: The number of tasks that are currently being handled.
 * Waiting Tasks: The number of tasks that are waiting to be handled.
 * Longest Wait: The amount of time in seconds for the longest waiting task.
 
-These three Data Tiles are contained within the AggregatedDataTiles component at the top of the Queues View page. This rectangular box also contains the Bar Chart with the breakdown of the agents by status (Unavailable, Available, Offline)
+These Data Tiles are contained within the AggregatedDataTiles component at the top of the Queues View page.
 
 As you can see from [this example in our Flex documentation](https://www.twilio.com/docs/flex/developer/ui/queues-view-programmability#add-or-remove-individual-data-tiles), you can add custom DataTiles to display custom metrics and KPIs. 
 
@@ -58,9 +59,10 @@ This feature uses the list of Team names as configured in the common configurati
 
 This feature can be enabled via the `flex-config` attributes. Just set the `metrics_data_tiles` `enabled` flag to `true` and set up the desired configuration.
 
-* To enable specific data tiles on the Real-time Queues View set `_data_tile = true`
-* You can change the Channel colors are needed. 
-* The Enhanced Agent Activity tile replaces the native Bar Chart so if you enable it you can disable the Bar Chart.
+* To enable specific data tiles on the Real-time Queues View set the appropriate tile to `true`
+* You can change the Channel colors as needed.
+* The Enhanced Agent Activity tile replaces the native Bar Chart so if you enable it you can disable the Bar Chart by setting `"agents_by_activity_bar_chart": false`
+* The native All Channels tile may be redundant with the other tiles enabled, so you may disable this if you'd like by setting `"all_channels_data_tile": false`
 * Configure activities to match the names of the Activities as defined in TaskRouter. The Flex UI includes a [set of icons](https://www.twilio.com/docs/flex/developer/ui/v1/icons#default-icons)
  that are used to enhance the display of the individual activities.
 
@@ -73,11 +75,9 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
      "metrics_data_tiles": {
         "enabled": false,
         "queues_view_tiles": {
-          "active_tasks_data_tile": false,
-          "waiting_tasks_data_tile": false,
-          "longest_wait_time_data_tile": false,
+          "all_channels_data_tile": true,
+          "all_channels_sla_data_tile": false,
           "agents_by_activity_bar_chart": true,
-          "all_channels_data_tile": false,
           "enhanced_agent_by_activity_pie_chart": false
         },
         "teams_view_tiles": {

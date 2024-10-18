@@ -198,6 +198,9 @@ exports.handler = async (context, event, callback) => {
         // Voicemail option selected
         // We need to update the call with a new TwiML URL vs using twiml.redirect() since we are still in the waitUrl TwiML execution
         // and it's not possible to use the <Record> verb in here.
+        // First, cancel (update) the task with handy attributes for reporting, which we can't do later.
+        const task = await fetchTask(context, enqueuedTaskSid);
+        const cancelResult = await cancelTask(context, task, 'Opted to leave a voicemail');
         const result = await twilioExecute(context, (client) =>
           client.calls(CallSid).update({
             method: 'POST',
@@ -206,13 +209,15 @@ exports.handler = async (context, event, callback) => {
         );
         const { success, status } = result;
         if (success) {
-          //  Cancel (update) the task with handy attributes for reporting
-          const task = await fetchTask(context, enqueuedTaskSid);
-          await cancelTask(context, task, 'Opted to leave a voicemail');
           return callback(null, '');
         }
         console.error(`Failed to update call ${CallSid} with new TwiML. Status: ${status}`);
         twiml.say(options.sayOptions, options.messages.processingError);
+        if (cancelResult.success) {
+          // The task was canceled, so we have nothing to route now.
+          twiml.hangup();
+          return callback(null, twiml);
+        }
       }
 
       // Loop back to the start of the wait loop if the caller pressed any other key
