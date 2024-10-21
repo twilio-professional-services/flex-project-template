@@ -51,4 +51,4 @@ Content-Type: application/json
 
 ## how does it work?
 
-When enabled, this feature loads the phone numbers on the account using a serverless function, caches them locally, preserve the selected value against the worker attributes. When the [StartOutboundCall](https://assets.flex.twilio.com/docs/releases/flex-ui/latest/ui-actions/Actions#StartOutboundCall) action is invoked, we intercept the event before its processed and update the From number to use the selected value stored on the worker attributes.
+When enabled, this feature loads the phone numbers on the account using a serverless function, caches them locally, and preserves the selected value into the `selectedCallerId` worker attribute. When the [StartOutboundCall](https://assets.flex.twilio.com/docs/releases/flex-ui/latest/ui-actions/Actions#StartOutboundCall) action is invoked, we intercept the event before it is processed, and update the From number to use the selected value stored in the `selectedCallerId` worker attribute.
