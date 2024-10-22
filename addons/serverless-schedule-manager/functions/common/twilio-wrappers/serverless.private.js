@@ -2,6 +2,7 @@ const { isString, isObject, isNumber, isArray } = require('lodash');
 const FormData = require('form-data');
 const axios = require('axios');
 
+const { getRegionUrl } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
 const retryHandler = require(Runtime.getFunctions()['common/helpers/retry-handler'].path).retryHandler;
 
 /**
@@ -206,7 +207,7 @@ exports.uploadAsset = async (parameters) => {
     const serviceSid = context.SERVICE_SID;
 
     // set upload parameters
-    const uploadUrl = `https://serverless-upload.twilio.com/v1/Services/${serviceSid}/Assets/${assetSid}/Versions`;
+    const uploadUrl = `https://serverless-upload.${getRegionUrl()}/v1/Services/${serviceSid}/Assets/${assetSid}/Versions`;
 
     const form = new FormData();
     form.append('Path', assetPath);

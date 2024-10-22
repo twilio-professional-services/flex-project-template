@@ -1,7 +1,9 @@
 const { isString, isObject } = require('lodash');
 const axios = require('axios');
 
-const { executeWithRetry, twilioExecute } = require(Runtime.getFunctions()['common/helpers/function-helper'].path);
+const { executeWithRetry, twilioExecute, getRegionUrl } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
+].path);
 
 const INFLIGHT = 'inflight';
 const COMPLETED = 'completed';
@@ -107,7 +109,9 @@ exports.removeChannelSidFromTask = async function removeChannelSidFromTask(param
   if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
   if (!isString(taskSid)) throw new Error('Invalid parameters object passed. Parameters must contain taskSid string');
 
-  const taskContextURL = `https://taskrouter.twilio.com/v1/Workspaces/${process.env.TWILIO_FLEX_WORKSPACE_SID}/Tasks/${taskSid}`;
+  const taskContextURL = `https://taskrouter.${getRegionUrl()}/v1/Workspaces/${
+    process.env.TWILIO_FLEX_WORKSPACE_SID
+  }/Tasks/${taskSid}`;
   const config = {
     auth: {
       username: context.ACCOUNT_SID,
