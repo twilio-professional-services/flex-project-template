@@ -422,7 +422,7 @@
       "conditional_recording": {
         "enabled": false,
         "exclude_attributes": [],
-        "exclude_queues": [],
+        "exclude_queues": []
       }
     }
   }
