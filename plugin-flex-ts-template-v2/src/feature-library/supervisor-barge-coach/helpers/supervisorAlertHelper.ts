@@ -20,7 +20,7 @@ export const alertSupervisorsCheck = () => {
   // If enabled, show notifications for each agent requesting assistance
   // As a customization, this could be further filtered by team etc.
   if (enableAgentAssistanceAlerts) {
-    const agents = agentAssistanceArray?.filter((agent: any) => agent.agentFN !== '');
+    const agents = agentAssistanceArray?.filter((agent: any) => agent.agentFN !== '') ?? [];
     for (const agent of agents) {
       Flex.Notifications.showNotification(NotificationIds.AGENT_ASSISTANCE, agent);
     }
