@@ -3,7 +3,6 @@ const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(
 ].path);
 
 const requiredParameters = [
-  { key: 'workerSid', purpose: 'unique ID of the worker' },
   {
     key: 'workerChannelSid',
     purpose: 'unique ID of the workerChannelSid to update',
@@ -14,18 +13,18 @@ const requiredParameters = [
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
+    const { workerSid, workerChannelSid, capacity, available } = event;
     // Make sure that this user is allowed to perform this action
-    if (!(event.TokenResult.roles.includes('supervisor') || event.TokenResult.roles.includes('admin'))) {
+    if (workerSid && !(event.TokenResult.roles.includes('supervisor') || event.TokenResult.roles.includes('admin'))) {
       response.setStatusCode(403);
       response.setBody({ success: false, error: 'User does not have the permissions to perform this action.' });
       return callback(null, response);
     }
 
-    const { workerSid, workerChannelSid, capacity, available } = event;
     const result = await twilioExecute(context, (client) =>
       client.taskrouter.v1
         .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
-        .workers(workerSid)
+        .workers(workerSid ?? event.TokenResult.worker_sid)
         .workerChannels(workerChannelSid)
         .update({ capacity: Number(capacity), available: available === 'true' }),
     );
