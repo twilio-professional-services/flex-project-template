@@ -166,6 +166,12 @@ class TaskRouterService extends ApiService {
     return [];
   }
 
+  async updateCurrentWorkerChannel(workerChannelSid: string, capacity: number, available: boolean): Promise<boolean> {
+    const result = await this.#updateCurrentWorkerChannel(workerChannelSid, capacity, available);
+
+    return result.success;
+  }
+
   async updateWorkerChannel(
     workerSid: string,
     workerChannelSid: string,
@@ -258,6 +264,30 @@ class TaskRouterService extends ApiService {
         body: this.buildBody(encodedParams),
       },
     ).then((response): GetWorkerChannelsResponse => {
+      return response;
+    });
+  };
+
+  #updateCurrentWorkerChannel = async (
+    workerChannelSid: string,
+    capacity: number,
+    available: boolean,
+  ): Promise<UpdateWorkerChannelResponse> => {
+    const encodedParams: EncodedParams = {
+      Token: encodeURIComponent(this.manager.user.token),
+      workerChannelSid: encodeURIComponent(workerChannelSid),
+      capacity: encodeURIComponent(capacity),
+      available: encodeURIComponent(available),
+    };
+
+    return this.fetchJsonWithReject<UpdateWorkerChannelResponse>(
+      `${this.serverlessProtocol}://${this.serverlessDomain}/common/flex/taskrouter/update-current-worker-channel`,
+      {
+        method: 'post',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: this.buildBody(encodedParams),
+      },
+    ).then((response): UpdateWorkerChannelResponse => {
       return response;
     });
   };
