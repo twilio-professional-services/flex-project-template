@@ -18,6 +18,10 @@ export const actionHook = function preventWrapupForPendingTransfer(flex: typeof 
       return;
     }
 
+    if (!Flex.TaskHelper.isCBMTask(payload.task)) {
+      return;
+    }
+
     const state = manager.store.getState() as AppState;
     const index = (state[reduxNamespace].conversationTransfer as ConversationTransferState).pendingTransfers.findIndex(
       (sid) => sid === task.sid,
