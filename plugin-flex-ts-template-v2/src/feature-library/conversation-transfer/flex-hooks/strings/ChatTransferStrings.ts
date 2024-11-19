@@ -43,7 +43,7 @@ export const stringHook = () => ({
     [StringTemplates.ChatCancelParticipantInviteSuccess]: 'Participant invite canceled',
     [StringTemplates.ChatParticipantInviteOutstanding]:
       'Inviting participant failed. There is already an outstanding invite for the chat.',
-    [StringTemplates.TransferChat]: 'Transfer Chat',
+    [StringTemplates.TransferChat]: 'Transfer',
     [StringTemplates.Participants]: 'Participants',
     [StringTemplates.Agent]: 'Agent',
     [StringTemplates.Customer]: 'Customer',
@@ -51,7 +51,7 @@ export const stringHook = () => ({
     [StringTemplates.Remove]: 'Remove {{name}}',
     [StringTemplates.InvitedParticipants]: 'Invited Participants',
     [StringTemplates.CancelInvite]: 'Cancel invite to {{name}}',
-    [StringTemplates.LeaveChat]: 'Leave Chat',
+    [StringTemplates.LeaveChat]: 'Leave',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,
