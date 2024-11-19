@@ -26,6 +26,7 @@ export enum StringTemplates {
   InvitedParticipants = 'PSConvTransferInvitedParticipants',
   CancelInvite = 'PSConvTransferCancelInvite',
   LeaveChat = 'PSConvTransferLeaveChat',
+  TransferPendingError = 'PSConvTransferPendingError',
 }
 
 export const stringHook = () => ({
@@ -52,6 +53,7 @@ export const stringHook = () => ({
     [StringTemplates.InvitedParticipants]: 'Invited Participants',
     [StringTemplates.CancelInvite]: 'Cancel invite to {{name}}',
     [StringTemplates.LeaveChat]: 'Leave',
+    [StringTemplates.TransferPendingError]: 'Please wait a moment before attempting to leave the chat.',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,
