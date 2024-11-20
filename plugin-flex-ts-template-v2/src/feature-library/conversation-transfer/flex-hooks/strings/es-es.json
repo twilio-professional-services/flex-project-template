@@ -10,7 +10,7 @@
   "ChatCancelParticipantInviteFailed": "Fallo en la cancelación de invitación del participante",
   "ChatCancelParticipantInviteSuccess": "Invitación de participante cancelada",
   "ChatParticipantInviteOutstanding": "No se pudo invitar al participante. Ya hay una invitación pendiente para el chat.",
-  "PSConvTransferTransferChat": "Transferir Chat",
+  "PSConvTransferTransferChat": "Transferir",
   "PSConvTransferParticipants": "Participantes",
   "PSConvTransferAgent": "Agente",
   "PSConvTransferCustomer": "Cliente",
@@ -18,5 +18,5 @@
   "PSConvTransferRemove": "Eliminar {{name}}",
   "PSConvTransferInvitedParticipants": "Participantes Invitados",
   "PSConvTransferCancelInvite": "Cancelar invitación a {{name}}",
-  "PSConvTransferLeaveChat": "Salir del Chat"
+  "PSConvTransferLeaveChat": "Salir"
 }
