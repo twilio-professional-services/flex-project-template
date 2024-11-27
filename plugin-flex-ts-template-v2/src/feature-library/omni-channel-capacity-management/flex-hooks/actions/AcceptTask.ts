@@ -77,7 +77,7 @@ export const actionHook = function omniChannelChatCapacityManager(flex: typeof F
       }
 
       if (channelTasks.length < maxCapacity) {
-        TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, maxCapacity, true);
+        TaskRouterService.updateCurrentWorkerChannel(workerChannelSid, maxCapacity, true);
       }
     }
 
@@ -85,7 +85,7 @@ export const actionHook = function omniChannelChatCapacityManager(flex: typeof F
       // we're saturated
       // reduce capacity on channel to 1
       localStorage.setItem(STORAGE_KEY, currentChannelCapacity.toString());
-      TaskRouterService.updateWorkerChannel(workerSid, workerChannelSid, 1, true);
+      TaskRouterService.updateCurrentWorkerChannel(workerChannelSid, 1, true);
     }
   });
 };
