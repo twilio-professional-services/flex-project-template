@@ -11,7 +11,7 @@ on:
 # Note your actions must have read and write workflow permissions enabled
 # this script is intended for development and troubleshooting purposes
 #
-# terraform is only concered with resources in the definition and in its
+# terraform is only concerned with resources in the definition and in its
 # state.
 #
 # if the resource definition defines something that already exists
@@ -25,6 +25,7 @@ jobs:
       TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
       TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TWILIO_REGION: ${{ vars.TWILIO_REGION }}
       ENVIRONMENT: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
