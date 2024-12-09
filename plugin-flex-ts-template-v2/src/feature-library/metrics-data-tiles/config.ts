@@ -4,12 +4,10 @@ import DataTilesConfig from './types/ServiceConfiguration';
 const {
   enabled = false,
   queues_view_tiles = {
-    active_tasks_data_tile: false,
-    waiting_tasks_data_tile: false,
-    longest_wait_time_data_tile: false,
-    agents_by_activity_bar_chart: false,
-    all_channels_data_tile: false,
-    enhanced_agent_by_activity_pie_chart: true,
+    all_channels_data_tile: true,
+    all_channels_sla_data_tile: false,
+    agents_by_activity_bar_chart: true,
+    enhanced_agent_by_activity_pie_chart: false,
   },
   teams_view_tiles = {
     task_summary_tile: false,
@@ -63,14 +61,8 @@ export const isFeatureEnabled = () => {
   return enabled;
 };
 
-export const isActiveTasksEnabled = () => {
-  return queues_view_tiles.active_tasks_data_tile;
-};
-export const isWaitingTasksEnabled = () => {
-  return queues_view_tiles.waiting_tasks_data_tile;
-};
-export const isLongestWaitTimeEnabled = () => {
-  return queues_view_tiles.longest_wait_time_data_tile;
+export const isAllChannelsEnabled = () => {
+  return queues_view_tiles.all_channels_data_tile;
 };
 export const isAgentsByActivityEnabled = () => {
   return queues_view_tiles.agents_by_activity_bar_chart;
@@ -113,7 +105,7 @@ export const getTaskSummaryChannels = () => {
 };
 
 export const isAllChannels_SLAEnabled = () => {
-  return queues_view_tiles.all_channels_data_tile;
+  return queues_view_tiles.all_channels_sla_data_tile;
 };
 export const isEnhancedAgentsByActivityPieChartEnabled = () => {
   return queues_view_tiles.enhanced_agent_by_activity_pie_chart;

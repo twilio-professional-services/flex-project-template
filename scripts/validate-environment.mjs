@@ -12,7 +12,7 @@ const REQUIRED_ENV_VARS = ["ENVIRONMENT", "TWILIO_API_KEY", "TWILIO_API_SECRET",
 
 // As documented, we support currently-maintained versions of Flex UI 2.x only
 // This value should be incremented over time as we drop support for older versions
-const VALID_UI_VERSIONS = '>=2.4.0';
+const VALID_UI_VERSIONS = '>=2.5.0';
 
 const validateEnvVarsPresent = () => {
   let valid = true;
@@ -79,7 +79,7 @@ const validateAccountSid = (flexConfig) => {
 }
 
 const validateUiVersion = (flexConfig) => {
-  if (semver.intersects(flexConfig.ui_version.replace('.n', '.*'), VALID_UI_VERSIONS)) {
+  if (semver.intersects(flexConfig.ui_version.replace('.n', '.*').replace('.auto', '.*'), VALID_UI_VERSIONS)) {
     console.log(`✅ Flex UI version ${flexConfig.ui_version} is supported`);
     return;
   }

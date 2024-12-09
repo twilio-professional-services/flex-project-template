@@ -10,7 +10,7 @@
   "ChatCancelParticipantInviteFailed": "Erro ao cancelar convite de participante",
   "ChatCancelParticipantInviteSuccess": "Convite do participante cancelado",
   "ChatParticipantInviteOutstanding": "Convite de participante falhou. Já há um convite pendente para o chat.",
-  "PSConvTransferTransferChat": "Transferir Chat",
+  "PSConvTransferTransferChat": "Transferir",
   "PSConvTransferParticipants": "Participantes",
   "PSConvTransferAgent": "Agente",
   "PSConvTransferCustomer": "Cliente",
@@ -18,5 +18,5 @@
   "PSConvTransferRemove": "Remover {{name}}",
   "PSConvTransferInvitedParticipants": "Participantes convidados",
   "PSConvTransferCancelInvite": "Cancelar convite para {{name}}",
-  "PSConvTransferLeaveChat": "Sair do Chat"
+  "PSConvTransferLeaveChat": "Sair"
 }

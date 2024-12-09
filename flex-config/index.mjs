@@ -143,8 +143,7 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
     })
   } catch (error) {
     console.error("Error caught:", error);
-    console.log("Auth", error.config?.auth);
-    console.log("Data", error.response?.data);
+    process.exitCode = 1;
   }
 }
 
