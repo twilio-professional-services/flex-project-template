@@ -26,6 +26,7 @@ export enum StringTemplates {
   InvitedParticipants = 'PSConvTransferInvitedParticipants',
   CancelInvite = 'PSConvTransferCancelInvite',
   LeaveChat = 'PSConvTransferLeaveChat',
+  TransferPendingError = 'PSConvTransferPendingError',
 }
 
 export const stringHook = () => ({
@@ -43,7 +44,7 @@ export const stringHook = () => ({
     [StringTemplates.ChatCancelParticipantInviteSuccess]: 'Participant invite canceled',
     [StringTemplates.ChatParticipantInviteOutstanding]:
       'Inviting participant failed. There is already an outstanding invite for the chat.',
-    [StringTemplates.TransferChat]: 'Transfer Chat',
+    [StringTemplates.TransferChat]: 'Transfer',
     [StringTemplates.Participants]: 'Participants',
     [StringTemplates.Agent]: 'Agent',
     [StringTemplates.Customer]: 'Customer',
@@ -51,7 +52,8 @@ export const stringHook = () => ({
     [StringTemplates.Remove]: 'Remove {{name}}',
     [StringTemplates.InvitedParticipants]: 'Invited Participants',
     [StringTemplates.CancelInvite]: 'Cancel invite to {{name}}',
-    [StringTemplates.LeaveChat]: 'Leave Chat',
+    [StringTemplates.LeaveChat]: 'Leave',
+    [StringTemplates.TransferPendingError]: 'Please wait a moment before attempting to leave the chat.',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,
