@@ -6,6 +6,7 @@ import ChannelTaskCountTile from '../../custom-components/ChannelTaskCountTile/C
 import ChannelSLATile from '../../custom-components/ChannelSLATile/ChannelSLATile';
 import AllChannelsSLATile from '../../custom-components/AllChannelsSLATile/AllChannelsSLATile';
 import AgentActivityTile from '../../custom-components/AgentActivityTile/AgentActivityTile';
+import { validateUiVersion } from '../../../../utils/configuration';
 import {
   isAllChannelsEnabled,
   isAgentsByActivityEnabled,
@@ -58,7 +59,7 @@ export const componentHook = function addDataTiles(flex: typeof Flex) {
     );
   }
 
-  if (!isAllChannelsEnabled() || !isAgentsByActivityEnabled()) {
+  if ((!isAllChannelsEnabled() || !isAgentsByActivityEnabled()) && validateUiVersion('>= 2.8.0')) {
     flex.QueuesStats.AggregatedQueuesDataTiles.defaultProps.dataTileFilter = (id) => {
       if (id === 'agents-by-activity-chart-tile' && !isAgentsByActivityEnabled()) {
         return false;
