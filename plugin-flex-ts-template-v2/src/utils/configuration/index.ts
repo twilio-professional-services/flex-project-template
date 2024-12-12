@@ -88,6 +88,10 @@ export const getUserLanguage = () => {
     }
   }
 
+  if (!language && manager.localization?.localeTag) {
+    return manager.localization.localeTag;
+  }
+
   if (!language) {
     return defaultLanguage;
   }
