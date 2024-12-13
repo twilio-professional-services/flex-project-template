@@ -4,7 +4,7 @@ title: localization
 ---
 
 :::caution Native feature now available
-A new [native localization feature](https://www.twilio.com/docs/flex/end-user-guide/change-display-language) is available in Flex UI 2.10 and later. To use the native feature, navigate to Flex > Admin > Features > Beta, and enable the toggle for "Enable language selection". It will then be available after reloading Flex. The native feature has limited languages available, so the template feature remains available with support for additional languages.
+A new [native localization feature](https://www.twilio.com/docs/flex/end-user-guide/change-display-language) is available in Flex UI 2.10 and later. To use the native feature, navigate to Flex > Admin > Features > Beta, and enable the toggle for "Enable language selection". It will then be available after reloading Flex. The native feature has limited languages available, so the template feature remains available with support for additional languages, however both features cannot be enabled simultaneously.
 :::
 
 ## Feature summary
@@ -38,8 +38,7 @@ This feature replaces the Flex UI strings by appending new strings of the same n
 1. If the global `language` attribute in `flex-config` is set to `default` (which it is by default), and there is no language set on the worker, then the browser language is used if possible.
 2. If the global `language` attribute in `flex-config` is set to a specific language, and there is no language set on the worker, that language is used if supported.
 3. If a language is set on the worker, it is used regardless of the global or browser settings.
-4. If no language is set on the worker or in `flex-config`, and the user has selected a language using the native feature in Flex UI 2.10 or later, that language is used if supported.
-5. As a default fallback, `en-US` is used.
+4. As a default fallback, `en-US` is used.
 
 Languages are defined in the `languages` directory of the feature. Each language is contained within a JSON file that lists all of the translated system strings for that language. The `index.ts` file contains an array of languages, mapping the JSON translations to a display name and key value. To add a new language, add its corresponding JSON file, then add it to the array in `index.ts`.
 

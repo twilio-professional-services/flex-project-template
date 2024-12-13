@@ -73,11 +73,15 @@ export const getFeatureFlags = () => {
 
 /**
  * Returns the currently configured language, using the same order of
- * precedence as `getFeatureFlags`. If the configured value is `default`, the
- * browser's language will be returned. Otherwise, if no value is configured,
- * `en-US` will be returned.
+ * precedence as `getFeatureFlags` if native localization is disabled.
+ * If the configured value is `default`, the browser's language will be
+ * returned. Otherwise, if no value is configured, `en-US` will be returned.
  */
 export const getUserLanguage = () => {
+  if (getFlexFeatureFlag('localization-beta') && manager.localization?.localeTag) {
+    return manager.localization.localeTag;
+  }
+
   let { language } = getFeatureFlags();
 
   if (manager.workerClient) {
@@ -86,10 +90,6 @@ export const getUserLanguage = () => {
     if (workerAttrs.language) {
       language = workerAttrs.language;
     }
-  }
-
-  if (!language && manager.localization?.localeTag) {
-    return manager.localization.localeTag;
   }
 
   if (!language) {
