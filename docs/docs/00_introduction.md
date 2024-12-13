@@ -24,6 +24,8 @@ The template provides a means to manage all of the assets which make up a Flex s
 
 Furthermore, with the rich library of examples and conventions, developers can quickly see how to approach different problems on the platform by seeing working code that they can easily reverse engineer.
 
+If you are just looking to add common contact center functionality to Flex, we recommend using plugins from the [Flex Plugin Library](https://www.twilio.com/docs/flex/developer/plugins/plugin-library) instead if they fit your use case.
+
 ## How do I get started?
 
 Installing the template in your Twilio account is fast and easy. [Follow this step-by-step guide to install the template](/getting-started/install-template) in under 10 minutes.
