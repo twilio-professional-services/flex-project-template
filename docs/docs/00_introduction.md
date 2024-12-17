@@ -30,7 +30,7 @@ If you are just looking to add common contact center functionality to Flex, we r
 
 Using plugins from the Plugin Library reduces the custom code footprint and maintenance burden of your solution, however, they cannot be customized, and they cannot be deployed or configured via a CI/CD pipeline as the template can. They may also conflict with your custom code that modifies the same Flex actions or components. Depending on your use case, you may wish to use only the template, or only plugins from the Plugin Library, or a mix of both.
 
-If you plan to use plugins from the Plugin Library alongside this template, you should [remove the corresponding template feature(s)](https://twilio-professional-services.github.io/flex-project-template/building/feature-management/remove-features) to prevent conflicts.
+If you plan to use plugins from the Plugin Library alongside this template, you should [remove the corresponding template feature(s)](/building/feature-management/remove-features) to prevent conflicts.
 
 ## How do I get started?
 
