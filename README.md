@@ -22,7 +22,13 @@ The template provides a means to manage all of the assets which make up a Flex s
 
 Furthermore, with the rich library of examples and conventions, developers can quickly see how to approach different problems on the platform by seeing working code that they can easily reverse engineer.
 
-If you are just looking to add common contact center functionality to Flex, we recommend using plugins from the [Flex Plugin Library](https://www.twilio.com/docs/flex/developer/plugins/plugin-library) instead if they fit your use case.
+### Flex Plugin Library
+
+If you are just looking to add common contact center functionality to Flex, we recommend evaluating whether plugins from the [Flex Plugin Library](https://www.twilio.com/docs/flex/developer/plugins/plugin-library) fit your use case. These plugins are maintained and supported by Twilio, and many are derived from the most popular features included in the template.
+
+Using plugins from the Plugin Library reduces the custom code footprint and maintenance burden of your solution, however, they cannot be customized, and they cannot be deployed or configured via a CI/CD pipeline as the template can. They may also conflict with your custom code that modifies the same Flex actions or components. Depending on your use case, you may wish to use only the template, or only plugins from the Plugin Library, or a mix of both.
+
+If you plan to use plugins from the Plugin Library alongside this template, you should [remove the corresponding template feature(s)](https://twilio-professional-services.github.io/flex-project-template/building/feature-management/remove-features) to prevent conflicts.
 
 ## How do I get started?
 
