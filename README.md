@@ -24,11 +24,11 @@ Furthermore, with the rich library of examples and conventions, developers can q
 
 ### Flex Plugin Library
 
-If you are just looking to add common contact center functionality to Flex, we recommend evaluating whether plugins from the [Flex Plugin Library](https://www.twilio.com/docs/flex/developer/plugins/plugin-library) fit your use case. These plugins are maintained and supported by Twilio, and many are derived from the most popular features included in the template.
+If you are primarily looking to add common contact center functionality to Flex, we recommend starting with the plugins from the [Flex Plugin Library](https://www.twilio.com/docs/flex/developer/plugins/plugin-library) to support your use case. These plugins are maintained and supported by Twilio, and many are derived from the most popular features included in the template.
 
-Using plugins from the Plugin Library reduces the custom code footprint and maintenance burden of your solution, however, they cannot be customized, and they cannot be deployed or configured via a CI/CD pipeline as the template can. They may also conflict with your custom code that modifies the same Flex actions or components. Depending on your use case, you may wish to use only the template, or only plugins from the Plugin Library, or a mix of both.
+Using plugins from the Plugin Library reduces the custom code footprint and total cost of ownership of your solution. Please be aware they cannot be customized and must be deployed and configured manually via the Flex Admin user interface. In case you have already developed, or plan to develop, custom code that modifies Flex actions or components, it is necessary to validate that those modifications don’t conflict with the standard plugin(s) you are planning to deploy from the Plugin Library. Depending on your use case, you may wish to use only plugins from the Plugin Library, or only the template, or a mix of both.
 
-If you plan to use plugins from the Plugin Library alongside this template, you should [remove the corresponding template feature(s)](https://twilio-professional-services.github.io/flex-project-template/building/feature-management/remove-features) to prevent conflicts.
+If you plan to use plugins from the Plugin Library alongside this template, please [remove the corresponding template feature(s)](https://twilio-professional-services.github.io/flex-project-template/building/feature-management/remove-features) to prevent conflicts.
 
 ## How do I get started?
 
