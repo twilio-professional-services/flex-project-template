@@ -2,6 +2,9 @@
 sidebar_label: canned-responses
 title: canned-responses
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 The Canned Chat Responses feature helps demonstrate how Agents can select from a pre-determined list of chat responses from within the CRM panel or Message Input Actions within Flex. The canned responses are returned from a Twilio Serverless function, which is contained within the `../../../../serverless-functions/src/functions/features/canned-responses/flex/chat-responses.js` file.
 

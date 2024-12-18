@@ -2,6 +2,9 @@
 sidebar_label: supervisor-capacity
 title: supervisor-capacity
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 This feature implements a _Channel Capacity_ panel in the [Twilio Flex](https://www.twilio.com/flex) [Teams View](https://www.twilio.com/docs/flex/monitor-agent-activity). Supervisors may configure each worker's capacity per channel, as well as whether or not a worker is eligible to receive tasks for that channel.
 

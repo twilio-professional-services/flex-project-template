@@ -2,6 +2,9 @@
 sidebar_label: supervisor-barge-coach
 title: Supervisor Barge Coach Suite
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 This feature provides the ability for a supervisor to barge in to a call (i.e. join an active call with an agent) or coach an agent (i.e. talk only to the agent so the caller(s) are unable to hear you), all from the Teams view.
 

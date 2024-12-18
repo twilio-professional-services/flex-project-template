@@ -2,6 +2,9 @@
 sidebar_label: agent-automation
 title: agent-automation
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 This feature provides auto select, auto accept and auto wrap-up behavior for agent tasks. Wrap-up behavior can be optionally configured to allow agents to request extended wrap-up. Tasks qualify for a configuration set based on their channel and a set of required task and/or worker attributes. The first configuration set to match is the configuration set used.
 
