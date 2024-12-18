@@ -5,12 +5,6 @@ export interface ShortcutsObject {
   action: any;
 }
 
-export interface CustomShortcut {
-  key: string;
-  actionName: string;
-  throttle: number;
-}
-
 export interface ShortcutActions {
   [x: string]: () => void;
 }

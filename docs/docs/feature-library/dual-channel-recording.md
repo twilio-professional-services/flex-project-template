@@ -3,6 +3,12 @@ sidebar_label: dual-channel-recording
 title: dual-channel-recording
 ---
 
+:::info Native feature available
+Native dual-channel recording is now available and can be enabled via the Twilio Console. The first agent to join the call will be on the left channel, and the other participants on the right channel. See [the changelog entry](https://www.twilio.com/en-us/changelog/dual-channel-voice-conference-recordings) for more details, including restrictions and instructions to enable.
+
+This template feature will remain available for use cases that are not supported by the native feature. If you need the conditional recording functionality that this feature provides, you can use [the `conditional-recording` feature](/feature-library/conditional-recording) instead, which works with the native recording functionality.
+:::
+
 There are various ways to enable call recordings with Twilio Flex. Let's outline those methods to better understand when using this custom solution would be preferable.
 
 1. The simplest approach is to turn on "Call Recording" in [Flex Settings](https://www.twilio.com/console/flex/settings) on the Twilio Console. Enabling this setting records the conference and automatically updates the task attribute `conversations.segment_link` with the recording URL so it can be played back in Flex Insights.
@@ -30,6 +36,7 @@ There are various ways to enable call recordings with Twilio Flex. Let's outline
    - Cons:
      - Custom code is required, both on the front end and the backend (facilitated by this feature)
      - If it's desired to record the IVR messaging, that will not be included
+     - If the worker uses the "Join Call" button in Flex UI when multiple instances are open, and the worker call leg is the one being recorded, the recording will not restart when the new instance's call leg starts.
 
 ## setup and dependencies
 
@@ -42,7 +49,10 @@ You may also optionally specify task attributes and/or queues that should exclud
   ```
   "exclude_attributes": [{ "key":"direction", "value":"outbound" }]
   ```
-- To exclude recording tasks based on queue name or queue SID, set the `exclude_queues` configuration property to an array or queue names or SIDs.
+- To exclude recording tasks based on queue name or queue SID, set the `exclude_queues` configuration property to an array of queue names or SIDs. For example:
+  ```
+  "exclude_queues": ["Queue Name 1", "Queue Name 2"] // or ["WQxxx", "WQxxx2"]
+  ```
 
 ## how it works
 

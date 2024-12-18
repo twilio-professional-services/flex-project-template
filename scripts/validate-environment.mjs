@@ -5,12 +5,14 @@ import shell from 'shelljs';
 import { varNameMapping } from "./common/constants.mjs";
 import { isMatch } from "./common/fetch-cli.mjs";
 
+const regionUrl = process.env.TWILIO_REGION ? `${process.env.TWILIO_REGION}.twilio.com` : 'twilio.com';
+
 // The list of environment variables required for a successful deployment
 const REQUIRED_ENV_VARS = ["ENVIRONMENT", "TWILIO_API_KEY", "TWILIO_API_SECRET", "TWILIO_ACCOUNT_SID"];
 
 // As documented, we support currently-maintained versions of Flex UI 2.x only
 // This value should be incremented over time as we drop support for older versions
-const VALID_UI_VERSIONS = '>=2.4.0';
+const VALID_UI_VERSIONS = '>=2.5.0';
 
 const validateEnvVarsPresent = () => {
   let valid = true;
@@ -43,7 +45,7 @@ const validateEnvName = () => {
 
 const getFlexConfig = async () => {
   try {
-    const flexConfigResponse = await axios.get('https://flex-api.twilio.com/v1/Configuration', {
+    const flexConfigResponse = await axios.get(`https://flex-api.${regionUrl}/v1/Configuration`, {
       auth: {
         username: process.env.TWILIO_API_KEY,
         password: process.env.TWILIO_API_SECRET
@@ -77,7 +79,7 @@ const validateAccountSid = (flexConfig) => {
 }
 
 const validateUiVersion = (flexConfig) => {
-  if (semver.intersects(flexConfig.ui_version.replace('.n', '.*'), VALID_UI_VERSIONS)) {
+  if (semver.intersects(flexConfig.ui_version.replace('.n', '.*').replace('.auto', '.*'), VALID_UI_VERSIONS)) {
     console.log(`✅ Flex UI version ${flexConfig.ui_version} is supported`);
     return;
   }

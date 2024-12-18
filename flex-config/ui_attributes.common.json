@@ -1,15 +1,15 @@
 {
-  "sdkOptions": {
-    "voice": {
-      "allowIncomingWhileBusy": true
-    }
-  },
   "custom_data": {
     "serverless_functions_domain": "<YOUR_SERVERLESS_DOMAIN>",
     "common": {
       "log_level": "info",
       "audit_log_ttl": 1209600,
-      "teams": ["Blue Team", "Red Team", "Gold Team", "VIP Team"],
+      "teams": [
+        "Blue Team",
+        "Red Team",
+        "Gold Team",
+        "VIP Team"
+      ],
       "departments": [
         "General Management",
         "Marketing",
@@ -219,15 +219,7 @@
         },
         "external_directory": {
           "enabled": true,
-          "skipPhoneNumberValidation": false,
-          "directory": [
-            {
-              "cold_transfer_enabled": true,
-              "warm_transfer_enabled": true,
-              "label": "Sample Entry",
-              "number": "+10000000000"
-            }
-          ]
+          "skipPhoneNumberValidation": false
         }
       },
       "dispositions": {
@@ -248,7 +240,10 @@
         "per_queue": {
           "exampleQueueName": {
             "require_disposition": true,
-            "dispositions": ["Promotional Sale", "Renewal"],
+            "dispositions": [
+              "Promotional Sale",
+              "Renewal"
+            ],
             "text_attributes": [],
             "select_attributes": []
           }
@@ -298,11 +293,9 @@
       "metrics_data_tiles": {
         "enabled": false,
         "queues_view_tiles": {
-          "active_tasks_data_tile": false,
-          "waiting_tasks_data_tile": false,
-          "longest_wait_time_data_tile": false,
+          "all_channels_data_tile": true,
+          "all_channels_sla_data_tile": false,
           "agents_by_activity_bar_chart": true,
-          "all_channels_data_tile": false,
           "enhanced_agent_by_activity_pie_chart": false
         },
         "teams_view_tiles": {
@@ -425,6 +418,11 @@
       "force_conference_region": {
         "enabled": false,
         "region": ""
+      },
+      "conditional_recording": {
+        "enabled": false,
+        "exclude_attributes": [],
+        "exclude_queues": []
       }
     }
   }
