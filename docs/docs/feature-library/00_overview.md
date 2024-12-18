@@ -7,7 +7,7 @@ hide_table_of_contents: true
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 
-The **Flex Project Template** comes with a set of features enabled by default within the Flex configuration, along with additional features that can be enabled.
+The **Flex Project Template** comes with a set of features enabled by default within the Flex configuration, along with additional features that can be enabled. Features that are also available from the [Flex Plugin Library](https://www.twilio.com/docs/flex/developer/plugins/plugin-library) are marked in the "Library" column.
 
 <Tabs queryString="type">
 <TabItem value="default" label="Enabled by default" default>
