@@ -2,6 +2,9 @@
 sidebar_label: internal-call
 title: internal-call
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 This feature adds a new "Call Agent" and "Call Queue" section to the outbound dialpad allowing an agent to directly call another agent or to a queue. In this section, there is an autocomplete dropdown for both options where you can select the appropriate party you want to call.
 

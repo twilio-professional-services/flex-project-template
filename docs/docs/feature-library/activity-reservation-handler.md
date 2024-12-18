@@ -4,6 +4,9 @@ title: activity-reservation-handler
 ---
 import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 ## Overview
 
