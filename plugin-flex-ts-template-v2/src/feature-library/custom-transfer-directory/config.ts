@@ -69,8 +69,8 @@ export const shouldFetchInsightsData = (): boolean => {
 
 export const isCbmColdTransferEnabled = (): boolean => {
   return (
-    (isNativeDigitalXferEnabled() || getLoadedFeatures().includes('conversation-transfer')) &&
-    conversation_transfer_cold_transfer
+    isNativeDigitalXferEnabled() ||
+    (getLoadedFeatures().includes('conversation-transfer') && conversation_transfer_cold_transfer)
   );
 };
 
