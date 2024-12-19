@@ -1,4 +1,6 @@
-import { getFeatureFlags, getFlexFeatureFlag } from '../../utils/configuration';
+import { Manager } from '@twilio/flex-ui';
+
+import { getFeatureFlags } from '../../utils/configuration';
 import ConversationTransferConfiguration from './types/ServiceConfiguration';
 
 const {
@@ -7,10 +9,12 @@ const {
   multi_participant = false,
 } = (getFeatureFlags()?.features?.conversation_transfer as ConversationTransferConfiguration) || {};
 
-const nativeDigitalXferEnabled = getFlexFeatureFlag('new-transfer-experience');
+const isNativeDigitalXferEnabled = (): boolean => {
+  return Manager.getInstance().store.getState().flex.featureFlags?.transfersConfig?.enabled === true;
+};
 
 export const isFeatureEnabled = () => {
-  return enabled;
+  return enabled && !isNativeDigitalXferEnabled();
 };
 
 export const isColdTransferEnabled = () => {
@@ -19,8 +23,4 @@ export const isColdTransferEnabled = () => {
 
 export const isMultiParticipantEnabled = () => {
   return enabled && multi_participant;
-};
-
-export const isNativeDigitalXferEnabled = (): boolean => {
-  return nativeDigitalXferEnabled;
 };

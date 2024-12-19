@@ -104,7 +104,11 @@ const QueueDirectoryTab = (props: OwnProps) => {
 
   const onTransferClick = (entry: DirectoryEntry, transferOptions: TransferClickPayload) => {
     if (isNativeDigitalXferEnabled() && TaskHelper.isCBMTask(props.task) && transferOptions.mode !== 'WARM') {
-      const { flexInteractionSid: interactionSid, flexInteractionChannelSid: channelSid } = props.task.attributes;
+      const {
+        flexInteractionSid: interactionSid,
+        flexInteractionChannelSid: channelSid,
+        conversationSid,
+      } = props.task.attributes;
       (async () => {
         const participants = await props.task.getParticipants(channelSid);
         const agent = participants.find(
@@ -116,6 +120,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
           channelSid,
           fromSid: agent.participantSid,
           toSid: entry.address,
+          conversationSid,
         });
       })();
       return;

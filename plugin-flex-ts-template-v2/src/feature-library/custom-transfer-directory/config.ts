@@ -1,3 +1,5 @@
+import { Manager } from '@twilio/flex-ui';
+
 import { getFeatureFlags, getFlexFeatureFlag, getLoadedFeatures } from '../../utils/configuration';
 import { ExternalDirectoryEntry } from './types/DirectoryEntry';
 import CustomTransferDirectoryConfig from './types/ServiceConfiguration';
@@ -33,8 +35,6 @@ const {
 
 const nativeXwtEnabled = getFlexFeatureFlag('external-warm-transfers');
 
-const nativeDigitalXferEnabled = getFlexFeatureFlag('new-transfer-experience');
-
 export const isFeatureEnabled = (): boolean => {
   return enabled;
 };
@@ -69,7 +69,7 @@ export const shouldFetchInsightsData = (): boolean => {
 
 export const isCbmColdTransferEnabled = (): boolean => {
   return (
-    (nativeDigitalXferEnabled || getLoadedFeatures().includes('conversation-transfer')) &&
+    (isNativeDigitalXferEnabled() || getLoadedFeatures().includes('conversation-transfer')) &&
     conversation_transfer_cold_transfer
   );
 };
@@ -103,5 +103,5 @@ export const showOnlyAvailableWorkers = (): boolean => {
 };
 
 export const isNativeDigitalXferEnabled = (): boolean => {
-  return nativeDigitalXferEnabled;
+  return Manager.getInstance().store.getState().flex.featureFlags?.transfersConfig?.enabled === true;
 };
