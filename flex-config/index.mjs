@@ -8,6 +8,8 @@ import merge from 'lodash/merge.js';
 import { fillReplacementsForString } from "../scripts/common/fill-replacements.mjs";
 import printReplacements from "../scripts/common/print-replacements.mjs";
 
+const regionUrl = process.env.TWILIO_REGION ? `${process.env.TWILIO_REGION}.twilio.com` : 'twilio.com';
+
 async function exists (path) {  
   try {
     await fs.access(path)
@@ -141,15 +143,14 @@ async function deployConfigurationData({ auth, environment, overwrite }) {
     })
   } catch (error) {
     console.error("Error caught:", error);
-    console.log("Auth", error.config?.auth);
-    console.log("Data", error.response?.data);
+    process.exitCode = 1;
   }
 }
 
 async function getConfiguration({ auth }) {
   return axios({
     method: "get",
-    url: "https://flex-api.twilio.com/v1/Configuration",
+    url: `https://flex-api.${regionUrl}/v1/Configuration`,
     auth: {
       username: auth.apiKey,
       password: auth.apiSecret,
@@ -160,7 +161,7 @@ async function getConfiguration({ auth }) {
 async function setConfiguration({ auth, configurationChanges }) {
   return axios({
     method: "post",
-    url: "https://flex-api.twilio.com/v1/Configuration",
+    url: `https://flex-api.${regionUrl}/v1/Configuration`,
     auth: {
       username: auth.apiKey,
       password: auth.apiSecret,

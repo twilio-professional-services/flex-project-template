@@ -2,6 +2,9 @@
 sidebar_label: conference
 title: conference
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 When in a call, and the beta native external warm transfer functionality is not enabled, a "plus" icon is added to the call canvas where you can add an external number to the call.
 

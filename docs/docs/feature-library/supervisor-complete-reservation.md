@@ -2,6 +2,9 @@
 sidebar_label: supervisor-complete-reservation
 title: supervisor-complete-reservation
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 This feature provides the supervisor the ability to remotely complete an agents reservation that is in the wrapping status.
 

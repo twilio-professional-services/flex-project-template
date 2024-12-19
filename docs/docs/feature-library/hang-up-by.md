@@ -2,6 +2,9 @@
 sidebar_label: hang-up-by
 title: hang-up-by
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 This feature writes to the `conversations.hang_up_by` task attribute to allow reporting within Flex Insights on which party ended a call. This is accomplished by adding various Flex UI action and event listeners to deduce the reason for the conversation ending.
 

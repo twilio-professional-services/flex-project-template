@@ -8,6 +8,7 @@ This feature replaces the OOTB [CRMContainer](https://assets.flex.twilio.com/doc
 This feature provides the following functionality:
 - Extensible tabbed interface
   - Other features can register tabs via the `beforeLoadCRMContainerTabs` action
+  - Other features can select a specific tab via the `SelectCRMContainerTab` action
   - Tabs can receive task context, including if there is no task
 - Configurable IFrame allowing you to specify a URL to display, including task and worker attribute interpolation
   - Can optionally display an alternate URL when there are no tasks
@@ -78,3 +79,5 @@ export const actionHook = function addToEnhancedCRM(flex: typeof Flex, manager: 
 ```
 
 When the enhanced CRM component mounts, it adds a listener for `afterLoadCRMContainerTabs`, then invokes the `LoadCRMContainerTabs` action with the task in its payload. The `afterLoadCRMContainerTabs` action receives the components array in the payload, and renders those components. It immediately unregisters the listener to prevent receiving payloads for other tasks.
+
+To select a CRM tab programmatically, other features may invoke the `SelectCRMContainerTab` action, providing a `title` property in the action payload. The tab with the specified title will be selected if present.
