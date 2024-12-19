@@ -1,24 +1,23 @@
 import { useEffect, useState } from 'react';
 import { ITask } from '@twilio/flex-ui';
 
-import { initiateRecording } from '../helpers/dualChannelHelper';
+import { initiateRecording, getWorkerParticipant } from '../helpers/dualChannelHelper';
 
 interface OwnProps {
   task?: ITask;
 }
 
 const ParticipantMonitor = ({ task }: OwnProps) => {
-  const getAgentCallSid = () =>
-    task?.conference?.participants
-      .sort((a, b) => (b.mediaProperties?.sequenceNumber || 0) - (a.mediaProperties?.sequenceNumber || 0))
-      .find((p) => p.isCurrentWorker && p.status === 'joined')?.callSid;
+  const getAgentCallSid = (): string => {
+    if (!task?.conference?.participants) return '';
+    return getWorkerParticipant(task.conference.participants)?.callSid ?? '';
+  };
 
-  const [agentSid, setAgentSid] = useState(getAgentCallSid() ?? '');
+  const [agentSid, setAgentSid] = useState(getAgentCallSid());
   const [reservationSid, setReservationSid] = useState(task?.sid ?? '');
 
   useEffect(() => {
-    // stuff
-    const newAgentSid = getAgentCallSid() ?? '';
+    const newAgentSid = getAgentCallSid();
 
     if (newAgentSid && agentSid && newAgentSid !== agentSid && task?.sid === reservationSid) {
       // Agent participant SID changed.

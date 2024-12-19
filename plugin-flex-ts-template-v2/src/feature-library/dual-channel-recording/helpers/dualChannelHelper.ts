@@ -86,8 +86,6 @@ const addCallDataToTask = async (task: ITask, callSid: string | null, recording:
           ...newAttributes,
           reservation_attributes: {
             [reservationSid]: {
-              // TODO: Flex Insights player doesn't seem to properly switch recordings?
-              // Add title
               media: [...existingMedia, mediaObj],
             },
           },
@@ -120,11 +118,15 @@ const isTaskActive = (task: ITask) => {
   return manager.workerClient?.reservations.has(reservationSid);
 };
 
+export const getWorkerParticipant = (participants: ConferenceParticipant[]) => {
+  return participants
+    .sort((a, b) => (b.mediaProperties?.sequenceNumber || 0) - (a.mediaProperties?.sequenceNumber || 0))
+    .find((p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined');
+};
+
 const getParticipantToRecord = (channel: 'worker' | 'customer', participants: ConferenceParticipant[]) => {
   if (channel === 'worker') {
-    return participants
-      .sort((a, b) => (b.mediaProperties?.sequenceNumber || 0) - (a.mediaProperties?.sequenceNumber || 0))
-      .find((p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined');
+    return getWorkerParticipant(participants);
   }
 
   return participants.find((p) => p.participantType === 'customer');
