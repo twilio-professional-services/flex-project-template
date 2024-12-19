@@ -2,6 +2,9 @@
 sidebar_label: custom-transfer-directory
 title: custom-transfer-directory
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 This feature enables the replacement of the queue and worker transfer directories enabling the following behavior
 

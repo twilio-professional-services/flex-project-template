@@ -6,6 +6,9 @@ import Tabs from "@theme/Tabs";
 import TabItem from "@theme/TabItem";
 import Enabled from '/img/features/activity-skill-filter/feature-enabled.png';
 import Disabled from '/img/features/activity-skill-filter/feature-disabled.png';
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 ## Overview
 

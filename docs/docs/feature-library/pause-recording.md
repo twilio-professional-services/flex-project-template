@@ -2,6 +2,9 @@
 sidebar_label: pause-recording
 title: Pause & Resume Call Recording
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 This feature adds a Pause/Resume Recording button and keyboard shortcuts to the call canvas to allow the agent to temporarily pause the call recording before the customer provides sensitive information (such as credit card details, bank account, etc.) to the agent and to resume regular call recording afterwards.
 
