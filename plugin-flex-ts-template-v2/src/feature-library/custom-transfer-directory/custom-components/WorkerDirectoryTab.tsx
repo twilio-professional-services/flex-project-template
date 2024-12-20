@@ -66,7 +66,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
             cold_transfer_enabled: isColdTransferEnabled && worker.available,
             warm_transfer_enabled: isWarmTransferEnabled && worker.available,
             label: worker.attributes?.full_name ?? worker.name,
-            labelComponent: (
+            labelComponent: () => (
               <Stack orientation="vertical" spacing="space0">
                 <Text as="div" element="TRANSFER_DIR_COMMON_ROW_NAME">
                   {worker.attributes?.full_name ?? worker.name}
@@ -79,7 +79,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
                 </Stack>
               </Stack>
             ),
-            icon: (
+            icon: () => (
               <Avatar
                 size="sizeIcon60"
                 color="decorative10"

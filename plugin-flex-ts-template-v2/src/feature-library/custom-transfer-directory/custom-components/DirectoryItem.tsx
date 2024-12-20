@@ -36,7 +36,7 @@ const DirectoryItem = (props: DirectoryItemProps) => {
 
   const renderIcon = (): React.JSX.Element => {
     if (entry.icon) {
-      return entry.icon;
+      return entry.icon();
     }
 
     switch (entry.type) {
@@ -51,7 +51,9 @@ const DirectoryItem = (props: DirectoryItemProps) => {
 
   const renderLabel = (): React.JSX.Element => (
     <Box key={`directory-item-label-${entry.type}-${entry.key}`} element="TRANSFER_DIR_COMMON_ROW_LABEL">
-      {entry.labelComponent || (
+      {entry.labelComponent ? (
+        entry.labelComponent()
+      ) : (
         <Text as="div" className="Twilio" element="TRANSFER_DIR_COMMON_ROW_NAME">
           {entry.label}
         </Text>
