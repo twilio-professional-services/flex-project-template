@@ -89,6 +89,11 @@ const DirectoryTab = (props: OwnProps) => {
             );
           })
         )}
+        {filteredDirectory.length > getMaxItems() && (
+          <Alert variant="neutral">
+            <Template source={templates[StringTemplates.MoreItems]} />
+          </Alert>
+        )}
       </Flex>
     </Flex>
   );
