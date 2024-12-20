@@ -9,6 +9,7 @@ import DirectoryItem from './DirectoryItem';
 import SearchBox from './SearchBox';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 import { DirectoryEntry } from '../types/DirectoryEntry';
+import { getMaxItems } from '../config';
 
 export interface TransferClickPayload {
   mode: 'WARM' | 'COLD';
@@ -76,7 +77,8 @@ const DirectoryTab = (props: OwnProps) => {
             />
           </Alert>
         ) : (
-          Array.from(filteredDirectory).map((entry: DirectoryEntry) => {
+          Array.from(filteredDirectory).map((entry, index) => {
+            if (index >= getMaxItems()) return null;
             return (
               <DirectoryItem
                 task={props.task}

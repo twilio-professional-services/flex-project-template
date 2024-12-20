@@ -40,6 +40,7 @@ Enable the feature in the flex-config asset for your environment.
 ```javascript
 "custom_transfer_directory": {
   "enabled": true, // globally enable or disable the feature
+  "max_items": 50, // max number of items to show (search field allows accessing the remaining items)
   "worker" : {
     "enabled": true, // enable the custom worker tab
     "show_only_available_workers": false

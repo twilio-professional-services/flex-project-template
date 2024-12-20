@@ -4,6 +4,7 @@ import CustomTransferDirectoryConfig from './types/ServiceConfiguration';
 
 const {
   enabled = false,
+  max_items = 50,
   queue: queue_config,
   worker: worker_config,
   external_directory: external_directory_config,
@@ -35,6 +36,10 @@ const nativeXwtEnabled = getFlexFeatureFlag('external-warm-transfers');
 
 export const isFeatureEnabled = (): boolean => {
   return enabled;
+};
+
+export const getMaxItems = (): number => {
+  return max_items;
 };
 
 export const isCustomQueueTransferEnabled = (): boolean => {

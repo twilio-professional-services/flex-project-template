@@ -205,6 +205,7 @@
       },
       "custom_transfer_directory": {
         "enabled": true,
+        "max_items": 50,
         "worker": {
           "enabled": true,
           "show_only_available_workers": false
