@@ -36,6 +36,12 @@ class ConversationsHelper {
     }
     return false;
   };
+
+  getMyParticipant = async (task: Flex.ITask): Promise<any> => {
+    if (!task || !task.attributes?.flexInteractionChannelSid || !task?.workerSid) return null;
+    const participants = await task.getParticipants(task.attributes.flexInteractionChannelSid);
+    return participants.find((p: any) => p.type === 'agent' && task.workerSid === p.routingProperties?.workerSid);
+  };
 }
 const ConversationsHelperSingleton = new ConversationsHelper();
 export default ConversationsHelperSingleton;
