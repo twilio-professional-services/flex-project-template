@@ -227,6 +227,7 @@ module.exports = {
       },
     },
   ),
+  useFlexSelector: (callback) => callback(getMockedReduxState()),
   // Component wrappers
   withTaskContext: (WrappedComponent) => {
     return () => ({
