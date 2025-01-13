@@ -25,6 +25,7 @@ export enum StringTemplates {
   NA = 'PSDirectoryNA',
   CountryDisabled = 'PSDirectoryCountryDisabled',
   HighRiskSpecialNumberDisabled = 'PSDirectoryHighRiskSpecialNumberDisabled',
+  UpdateList = 'PSDirectoryUpdateList',
 }
 
 export const stringHook = () => ({
@@ -53,6 +54,7 @@ export const stringHook = () => ({
     [StringTemplates.CountryDisabled]: 'Dialing to this country has been disabled.',
     [StringTemplates.HighRiskSpecialNumberDisabled]:
       'This number is considered high-risk and dialing it has been disabled.',
+    [StringTemplates.UpdateList]: 'Update list',
   },
   'es-MX': esMX,
   'pt-BR': ptBR,

@@ -136,30 +136,6 @@ const QueueDirectoryTab = (props: OwnProps) => {
     // make sure all queues are loaded
     const insightQueues = await getAllSyncMapItems(queueMap.current);
 
-    // update the queue item
-    queueMap.current.on('itemUpdated', (updatedItem) => {
-      const {
-        item: { key, data },
-      } = updatedItem;
-
-      const queue = transferQueues.current.find((transferQueue) => transferQueue.sid === key);
-      if (queue && data) {
-        mapRealTimeDataToTransferQueueItem(queue, data as IRealTimeQueueData);
-      }
-
-      filterQueues();
-    });
-
-    // if a queue is added trigger a reload
-    queueMap.current.on('itemAdded', () => {
-      fetchSDKTaskQueues();
-    });
-
-    // if a queue is removed trigger a reload
-    queueMap.current.on('itemRemoved', () => {
-      fetchSDKTaskQueues();
-    });
-
     setInsightsQueues(insightQueues);
   };
 
@@ -243,13 +219,22 @@ const QueueDirectoryTab = (props: OwnProps) => {
     });
   };
 
-  // initial render
-  useEffect(() => {
-    // fetch the queues from the taskrouter sdk on initial render
+  const onReloadClick = () => {
+    setIsLoading(true);
+    fetchQueues();
+  };
+
+  const fetchQueues = () => {
+    // fetch the queues from the taskrouter sdk
     fetchSDKTaskQueues().catch(logger.error);
 
-    // fetch the queues from the insights client on initial render
+    // fetch the queues from the insights client
     fetchInsightsQueueData().catch(logger.error);
+  };
+
+  // initial render
+  useEffect(() => {
+    fetchQueues();
 
     return () => {
       if (queueMap.current) {
@@ -274,6 +259,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
       entries={filteredQueues}
       isLoading={isLoading}
       onTransferClick={onTransferQueueClick}
+      onReloadClick={onReloadClick}
       noEntriesMessage={templates[StringTemplates.NoQueuesAvailable]}
     />
   );

@@ -4,7 +4,7 @@ import CustomTransferDirectoryConfig from './types/ServiceConfiguration';
 
 const {
   enabled = false,
-  max_items = 50,
+  max_items = 200,
   queue: queue_config,
   worker: worker_config,
   external_directory: external_directory_config,

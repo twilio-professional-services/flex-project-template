@@ -35,13 +35,17 @@ const QueueDirectoryTab = (props: OwnProps) => {
     props.task && TaskHelper.isCBMTask(props.task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;
   const isColdTransferEnabled = props.task && TaskHelper.isCBMTask(props.task) ? isCbmColdTransferEnabled() : true;
 
+  const MaxWorkers = 15000;
+
   // async function to retrieve the workers from the tr sdk
   // this will trigger the useEffect for a fetchedWorkers update
   const fetchSDKWorkers = async () => {
     if (!workspaceClient) {
       return;
     }
-    setFetchedWorkers(Array.from((await workspaceClient.fetchWorkers()).values()) as unknown as Array<Worker>);
+    setFetchedWorkers(
+      Array.from((await workspaceClient.fetchWorkers({ MaxWorkers })).values()) as unknown as Array<Worker>,
+    );
   };
 
   // function to filter the generatedQueueList and trigger a re-render
