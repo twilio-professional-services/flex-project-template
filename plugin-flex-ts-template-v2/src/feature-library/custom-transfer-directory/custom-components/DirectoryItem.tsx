@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { TaskHelper, ITask, templates } from '@twilio/flex-ui';
+import React, { useState } from 'react';
+import { TaskHelper, ITask, styled, templates } from '@twilio/flex-ui';
 import { Box } from '@twilio-paste/core/box';
 import { ButtonGroup } from '@twilio-paste/core/button-group';
 import { Button } from '@twilio-paste/core/button';
-import { Flex } from '@twilio-paste/core/flex';
 import { Tooltip } from '@twilio-paste/core/tooltip';
 import { Text } from '@twilio-paste/core/text';
 import { AgentIcon } from '@twilio-paste/icons/esm/AgentIcon';
@@ -23,8 +22,17 @@ export interface DirectoryItemProps {
   onTransferClick: (options: any) => void;
 }
 
+const DirectoryItemContainer = styled('div')`
+  padding-inline: 0.5rem;
+  min-height: 40px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
+
 const DirectoryItem = (props: DirectoryItemProps) => {
   const { entry, task, onTransferClick } = props;
+  const [isHovered, setIsHovered] = useState(false);
 
   const onWarmTransferClick = () => {
     onTransferClick({ mode: 'WARM' });
@@ -36,7 +44,7 @@ const DirectoryItem = (props: DirectoryItemProps) => {
 
   const renderIcon = (): React.JSX.Element => {
     if (entry.icon) {
-      return entry.icon;
+      return entry.icon();
     }
 
     switch (entry.type) {
@@ -51,7 +59,9 @@ const DirectoryItem = (props: DirectoryItemProps) => {
 
   const renderLabel = (): React.JSX.Element => (
     <Box key={`directory-item-label-${entry.type}-${entry.key}`} element="TRANSFER_DIR_COMMON_ROW_LABEL">
-      {entry.labelComponent || (
+      {entry.labelComponent ? (
+        entry.labelComponent()
+      ) : (
         <Text as="div" className="Twilio" element="TRANSFER_DIR_COMMON_ROW_NAME">
           {entry.label}
         </Text>
@@ -60,16 +70,15 @@ const DirectoryItem = (props: DirectoryItemProps) => {
   );
 
   return (
-    <Flex
-      element="TRANSFER_DIR_COMMON_HORIZONTAL_ROW_CONTAINER"
-      vertical={false}
-      vAlignContent="center"
+    <DirectoryItemContainer
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       key={`directory-item-container-${entry.type}-${entry.key}`}
     >
       <Box key={`directory-item-icon-${entry.type}-${entry.key}`} element="TRANSFER_DIR_COMMON_ROW_ICON">
         {renderIcon()}
       </Box>
-      {entry.tooltip ? (
+      {isHovered && entry.tooltip ? (
         <Tooltip
           key={`directory-item-label-tooltip-${entry.type}-${entry.key}`}
           element="TRANSFER_DIR_COMMON_TOOLTIP"
@@ -81,75 +90,73 @@ const DirectoryItem = (props: DirectoryItemProps) => {
         renderLabel()
       )}
 
-      <ButtonGroup
-        element="TRANSFER_DIR_COMMON_ROW_BUTTONGROUP"
-        key={`directory-item-buttongroup-${entry.type}-${entry.key}`}
-        attached
-      >
-        {entry.warm_transfer_enabled ? (
-          <Tooltip
-            key={`directory-item-buttons-warm-transfer-tooltip-${entry.type}-${entry.key}`}
-            element="TRANSFER_DIR_COMMON_TOOLTIP"
-            text={templates[StringTemplates.WarmTransfer]()}
-          >
-            <Button
-              element="TRANSFER_DIR_COMMON_ROW_BUTTON"
-              key={`directory-item-warm-transfer-button-${entry.type}-${entry.key}`}
-              variant="secondary_icon"
-              size="circle"
-              onClick={onWarmTransferClick}
+      {isHovered && (
+        <ButtonGroup key={`directory-item-buttongroup-${entry.type}-${entry.key}`} attached>
+          {entry.warm_transfer_enabled ? (
+            <Tooltip
+              key={`directory-item-buttons-warm-transfer-tooltip-${entry.type}-${entry.key}`}
+              element="TRANSFER_DIR_COMMON_TOOLTIP"
+              text={templates[StringTemplates.WarmTransfer]()}
             >
-              {task && TaskHelper.isChatBasedTask(task) ? (
-                <ChatIcon
-                  key={`directory-item-warm-transfer-icon-${entry.type}-${entry.key}`}
-                  decorative={false}
-                  title=""
-                />
-              ) : (
-                <CallTransferIcon
-                  key={`directory-item-warm-transfer-icon-${entry.type}-${entry.key}`}
-                  decorative={false}
-                  title=""
-                />
-              )}
-            </Button>
-          </Tooltip>
-        ) : (
-          <div></div>
-        )}
-        {entry.cold_transfer_enabled ? (
-          <Tooltip
-            key={`directory-item-buttons-cold-transfer-tooltip-${entry.type}-${entry.key}`}
-            element="TRANSFER_DIR_COMMON_TOOLTIP"
-            text={templates[StringTemplates.ColdTransfer]()}
-          >
-            <Button
-              element="TRANSFER_DIR_COMMON_ROW_BUTTON"
-              key={`directory-item-warm-transfer-button-${entry.type}-${entry.key}`}
-              variant="secondary_icon"
-              size="circle"
-              onClick={onColdTransferClick}
+              <Button
+                element="TRANSFER_DIR_COMMON_ROW_BUTTON"
+                key={`directory-item-warm-transfer-button-${entry.type}-${entry.key}`}
+                variant="secondary_icon"
+                size="circle"
+                onClick={onWarmTransferClick}
+              >
+                {task && TaskHelper.isChatBasedTask(task) ? (
+                  <ChatIcon
+                    key={`directory-item-warm-transfer-icon-${entry.type}-${entry.key}`}
+                    decorative={false}
+                    title=""
+                  />
+                ) : (
+                  <CallTransferIcon
+                    key={`directory-item-warm-transfer-icon-${entry.type}-${entry.key}`}
+                    decorative={false}
+                    title=""
+                  />
+                )}
+              </Button>
+            </Tooltip>
+          ) : (
+            <div></div>
+          )}
+          {entry.cold_transfer_enabled ? (
+            <Tooltip
+              key={`directory-item-buttons-cold-transfer-tooltip-${entry.type}-${entry.key}`}
+              element="TRANSFER_DIR_COMMON_TOOLTIP"
+              text={templates[StringTemplates.ColdTransfer]()}
             >
-              {task && TaskHelper.isChatBasedTask(task) ? (
-                <SendIcon
-                  key={`directory-item-cold-transfer-icon-${entry.type}-${entry.key}`}
-                  decorative={false}
-                  title=""
-                />
-              ) : (
-                <CallOutgoingIcon
-                  key={`directory-item-cold-transfer-icon-${entry.type}-${entry.key}`}
-                  decorative={false}
-                  title=""
-                />
-              )}
-            </Button>
-          </Tooltip>
-        ) : (
-          <div></div>
-        )}
-      </ButtonGroup>
-    </Flex>
+              <Button
+                element="TRANSFER_DIR_COMMON_ROW_BUTTON"
+                key={`directory-item-warm-transfer-button-${entry.type}-${entry.key}`}
+                variant="secondary_icon"
+                size="circle"
+                onClick={onColdTransferClick}
+              >
+                {task && TaskHelper.isChatBasedTask(task) ? (
+                  <SendIcon
+                    key={`directory-item-cold-transfer-icon-${entry.type}-${entry.key}`}
+                    decorative={false}
+                    title=""
+                  />
+                ) : (
+                  <CallOutgoingIcon
+                    key={`directory-item-cold-transfer-icon-${entry.type}-${entry.key}`}
+                    decorative={false}
+                    title=""
+                  />
+                )}
+              </Button>
+            </Tooltip>
+          ) : (
+            <div></div>
+          )}
+        </ButtonGroup>
+      )}
+    </DirectoryItemContainer>
   );
 };
 

@@ -6,6 +6,7 @@ import CustomTransferDirectoryConfig from './types/ServiceConfiguration';
 
 const {
   enabled = false,
+  max_items = 200,
   queue: queue_config,
   worker: worker_config,
   external_directory: external_directory_config,
@@ -20,7 +21,11 @@ const {
   global_exclude_filter = '',
 } = queue_config || {};
 
-const { enabled: workerEnabled = false, show_only_available_workers = false } = worker_config || {};
+const {
+  enabled: workerEnabled = false,
+  show_only_available_workers = false,
+  max_taskrouter_workers = 15000,
+} = worker_config || {};
 
 const {
   enabled: externalDirectoryEnabled = false,
@@ -37,6 +42,10 @@ const nativeXwtEnabled = getFlexFeatureFlag('external-warm-transfers');
 
 export const isFeatureEnabled = (): boolean => {
   return enabled;
+};
+
+export const getMaxItems = (): number => {
+  return max_items;
 };
 
 export const isCustomQueueTransferEnabled = (): boolean => {
@@ -100,6 +109,10 @@ export const isCustomWorkerTransferEnabled = (): boolean => {
 
 export const showOnlyAvailableWorkers = (): boolean => {
   return show_only_available_workers;
+};
+
+export const getMaxTaskRouterWorkers = (): number => {
+  return max_taskrouter_workers;
 };
 
 export const isNativeDigitalXferEnabled = (): boolean => {

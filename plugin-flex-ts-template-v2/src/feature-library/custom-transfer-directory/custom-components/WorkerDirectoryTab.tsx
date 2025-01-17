@@ -11,6 +11,7 @@ import {
   showOnlyAvailableWorkers,
   isCbmColdTransferEnabled,
   isCbmWarmTransferEnabled,
+  getMaxTaskRouterWorkers,
   isNativeDigitalXferEnabled,
 } from '../config';
 import { DirectoryEntry } from '../types/DirectoryEntry';
@@ -28,7 +29,7 @@ export interface OwnProps {
   task: ITask;
 }
 
-const QueueDirectoryTab = (props: OwnProps) => {
+const WorkerDirectoryTab = (props: OwnProps) => {
   const [fetchedWorkers, setFetchedWorkers] = useState([] as Array<Worker>);
   const [filteredWorkers, setFilteredWorkers] = useState([] as Array<DirectoryEntry>);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,7 +48,11 @@ const QueueDirectoryTab = (props: OwnProps) => {
     if (!workspaceClient) {
       return;
     }
-    setFetchedWorkers(Array.from((await workspaceClient.fetchWorkers()).values()) as unknown as Array<Worker>);
+    setFetchedWorkers(
+      Array.from(
+        (await workspaceClient.fetchWorkers({ MaxWorkers: getMaxTaskRouterWorkers() })).values(),
+      ) as unknown as Array<Worker>,
+    );
   };
 
   // function to filter the generatedQueueList and trigger a re-render
@@ -72,7 +77,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
             cold_transfer_enabled: isColdTransferEnabled && worker.available,
             warm_transfer_enabled: isWarmTransferEnabled && worker.available,
             label: worker.attributes?.full_name ?? worker.name,
-            labelComponent: (
+            labelComponent: () => (
               <Stack orientation="vertical" spacing="space0">
                 <Text as="div" element="TRANSFER_DIR_COMMON_ROW_NAME">
                   {worker.attributes?.full_name ?? worker.name}
@@ -85,7 +90,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
                 </Stack>
               </Stack>
             ),
-            icon: (
+            icon: () => (
               <Avatar
                 size="sizeIcon60"
                 color="decorative10"
@@ -156,4 +161,4 @@ const QueueDirectoryTab = (props: OwnProps) => {
   );
 };
 
-export default withTaskContext(QueueDirectoryTab);
+export default withTaskContext(WorkerDirectoryTab);

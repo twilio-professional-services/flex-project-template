@@ -205,9 +205,11 @@
       },
       "custom_transfer_directory": {
         "enabled": true,
+        "max_items": 200,
         "worker": {
           "enabled": true,
-          "show_only_available_workers": false
+          "show_only_available_workers": false,
+          "max_taskrouter_workers": 15000
         },
         "queue": {
           "enabled": true,

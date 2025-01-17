@@ -60,15 +60,4 @@ export const pasteElementHook = {
       'box-shadow': 'none',
     },
   },
-  TRANSFER_DIR_COMMON_ROW_BUTTONGROUP: {
-    display: 'none',
-  },
-  TRANSFER_DIR_COMMON_HORIZONTAL_ROW_CONTAINER: {
-    paddingLeft: 'space30',
-    paddingRight: 'space30',
-    minHeight: '40px',
-    '&:hover span[data-paste-element="TRANSFER_DIR_COMMON_ROW_BUTTONGROUP"]': {
-      display: 'inline-flex',
-    },
-  },
 } as { [key: string]: any };
