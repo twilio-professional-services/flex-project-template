@@ -12,12 +12,14 @@ import {
   isCbmColdTransferEnabled,
   isCbmWarmTransferEnabled,
   getMaxTaskRouterWorkers,
+  isNativeDigitalXferEnabled,
 } from '../config';
 import { DirectoryEntry } from '../types/DirectoryEntry';
 import DirectoryTab from './DirectoryTab';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 import logger from '../../../utils/logger';
 import { getFlexFeatureFlag } from '../../../utils/configuration';
+import ConversationsHelper from '../../../utils/helpers/ConversationsHelper';
 
 export interface TransferClickPayload {
   mode: 'WARM' | 'COLD';
@@ -107,6 +109,25 @@ const QueueDirectoryTab = (props: OwnProps) => {
   };
 
   const onTransferClick = (entry: DirectoryEntry, transferOptions: TransferClickPayload) => {
+    if (isNativeDigitalXferEnabled() && TaskHelper.isCBMTask(props.task) && transferOptions.mode !== 'WARM') {
+      const {
+        flexInteractionSid: interactionSid,
+        flexInteractionChannelSid: channelSid,
+        conversationSid,
+      } = props.task.attributes;
+      (async () => {
+        const agent = await ConversationsHelper.getMyParticipant(props.task);
+        Actions.invokeAction('StartChannelTransfer', {
+          instanceSid: Manager.getInstance().serviceConfiguration.flex_instance_sid,
+          interactionSid,
+          channelSid,
+          fromSid: agent?.participantSid,
+          toSid: entry.address,
+          conversationSid,
+        });
+      })();
+      return;
+    }
     Actions.invokeAction('TransferTask', {
       task: props.task,
       targetSid: entry.address,

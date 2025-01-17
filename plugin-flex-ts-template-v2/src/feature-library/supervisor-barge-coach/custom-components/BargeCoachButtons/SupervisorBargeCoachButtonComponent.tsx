@@ -80,11 +80,20 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
     setIsLoading(true);
 
     switch (mode) {
-      case 'barge':
+      case 'barge': {
         // Barge-in will "unmute" their line if the are muted and disable coaching if enabled
-        await enterBargeMode(conferenceSid, participantSid);
+        const agentParticipant = conference?.participants.find(
+          (p) => p.participantType === 'worker' && monitoringTask?.workerSid === p.workerSid,
+        );
+        const agentSid = agentParticipant?.callSid;
+        if (!agentSid) {
+          setIsLoading(false);
+          return;
+        }
+        await enterBargeMode(conferenceSid, participantSid, agentSid);
         break;
-      case 'coaching':
+      }
+      case 'coaching': {
         // Coaching will "unmute" their line if the are muted and coach the specific agent using their call SID
         const agentParticipant = conference?.participants.find(
           (p) => p.participantType === 'worker' && monitoringTask?.workerSid === p.workerSid,
@@ -96,6 +105,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
         }
         await enterCoachMode(conferenceSid, participantSid, agentSid);
         break;
+      }
       case 'monitoring':
         // Mute their line and disable coaching
         await enterListenMode(conferenceSid, participantSid);
