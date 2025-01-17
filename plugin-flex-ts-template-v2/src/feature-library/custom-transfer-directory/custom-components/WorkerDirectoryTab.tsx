@@ -29,7 +29,7 @@ export interface OwnProps {
   task: ITask;
 }
 
-const QueueDirectoryTab = (props: OwnProps) => {
+const WorkerDirectoryTab = (props: OwnProps) => {
   const [fetchedWorkers, setFetchedWorkers] = useState([] as Array<Worker>);
   const [filteredWorkers, setFilteredWorkers] = useState([] as Array<DirectoryEntry>);
   const [isLoading, setIsLoading] = useState(true);
@@ -161,4 +161,4 @@ const QueueDirectoryTab = (props: OwnProps) => {
   );
 };
 
-export default withTaskContext(QueueDirectoryTab);
+export default withTaskContext(WorkerDirectoryTab);
