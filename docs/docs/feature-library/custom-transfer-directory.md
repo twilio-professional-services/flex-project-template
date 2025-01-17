@@ -43,7 +43,8 @@ Enable the feature in the flex-config asset for your environment.
   "max_items": 200, // max number of items to show (search field allows accessing the remaining items)
   "worker" : {
     "enabled": true, // enable the custom worker tab
-    "show_only_available_workers": false
+    "show_only_available_workers": false,
+    "max_taskrouter_workers": 15000 // the maximum "Registered Workers per Workspace" (Max-Named-Workers-Count) value in the TaskRouter Limits section of Twilio Console; 15000 for most accounts.
   },
   "queue" : {
     "enabled": true, // enable the custom queue tab

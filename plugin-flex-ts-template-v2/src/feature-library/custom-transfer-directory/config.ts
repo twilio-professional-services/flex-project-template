@@ -19,7 +19,11 @@ const {
   global_exclude_filter = '',
 } = queue_config || {};
 
-const { enabled: workerEnabled = false, show_only_available_workers = false } = worker_config || {};
+const {
+  enabled: workerEnabled = false,
+  show_only_available_workers = false,
+  max_taskrouter_workers = 15000,
+} = worker_config || {};
 
 const {
   enabled: externalDirectoryEnabled = false,
@@ -100,4 +104,8 @@ export const isCustomWorkerTransferEnabled = (): boolean => {
 
 export const showOnlyAvailableWorkers = (): boolean => {
   return show_only_available_workers;
+};
+
+export const getMaxTaskRouterWorkers = (): number => {
+  return max_taskrouter_workers;
 };

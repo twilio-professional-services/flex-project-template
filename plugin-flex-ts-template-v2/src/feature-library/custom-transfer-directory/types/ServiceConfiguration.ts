@@ -6,6 +6,7 @@ export default interface CustomTransferDirectoryConfig {
   worker: {
     enabled: boolean;
     show_only_available_workers: boolean;
+    max_taskrouter_workers: number;
   };
   queue: {
     enabled: boolean;

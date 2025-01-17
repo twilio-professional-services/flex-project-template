@@ -7,7 +7,12 @@ import { Avatar } from '@twilio-paste/core/avatar';
 import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { v4 as uuidv4 } from 'uuid';
 
-import { showOnlyAvailableWorkers, isCbmColdTransferEnabled, isCbmWarmTransferEnabled } from '../config';
+import {
+  showOnlyAvailableWorkers,
+  isCbmColdTransferEnabled,
+  isCbmWarmTransferEnabled,
+  getMaxTaskRouterWorkers,
+} from '../config';
 import { DirectoryEntry } from '../types/DirectoryEntry';
 import DirectoryTab from './DirectoryTab';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
@@ -35,8 +40,6 @@ const QueueDirectoryTab = (props: OwnProps) => {
     props.task && TaskHelper.isCBMTask(props.task) ? isCbmWarmTransferEnabled() : callWarmTransferEnabled;
   const isColdTransferEnabled = props.task && TaskHelper.isCBMTask(props.task) ? isCbmColdTransferEnabled() : true;
 
-  const MaxWorkers = 15000;
-
   // async function to retrieve the workers from the tr sdk
   // this will trigger the useEffect for a fetchedWorkers update
   const fetchSDKWorkers = async () => {
@@ -44,7 +47,9 @@ const QueueDirectoryTab = (props: OwnProps) => {
       return;
     }
     setFetchedWorkers(
-      Array.from((await workspaceClient.fetchWorkers({ MaxWorkers })).values()) as unknown as Array<Worker>,
+      Array.from(
+        (await workspaceClient.fetchWorkers({ MaxWorkers: getMaxTaskRouterWorkers() })).values(),
+      ) as unknown as Array<Worker>,
     );
   };
 
