@@ -7,12 +7,19 @@ import { Avatar } from '@twilio-paste/core/avatar';
 import { UserIcon } from '@twilio-paste/icons/esm/UserIcon';
 import { v4 as uuidv4 } from 'uuid';
 
-import { showOnlyAvailableWorkers, isCbmColdTransferEnabled, isCbmWarmTransferEnabled } from '../config';
+import {
+  showOnlyAvailableWorkers,
+  isCbmColdTransferEnabled,
+  isCbmWarmTransferEnabled,
+  getMaxTaskRouterWorkers,
+  isNativeDigitalXferEnabled,
+} from '../config';
 import { DirectoryEntry } from '../types/DirectoryEntry';
 import DirectoryTab from './DirectoryTab';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 import logger from '../../../utils/logger';
 import { getFlexFeatureFlag } from '../../../utils/configuration';
+import ConversationsHelper from '../../../utils/helpers/ConversationsHelper';
 
 export interface TransferClickPayload {
   mode: 'WARM' | 'COLD';
@@ -22,7 +29,7 @@ export interface OwnProps {
   task: ITask;
 }
 
-const QueueDirectoryTab = (props: OwnProps) => {
+const WorkerDirectoryTab = (props: OwnProps) => {
   const [fetchedWorkers, setFetchedWorkers] = useState([] as Array<Worker>);
   const [filteredWorkers, setFilteredWorkers] = useState([] as Array<DirectoryEntry>);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +48,11 @@ const QueueDirectoryTab = (props: OwnProps) => {
     if (!workspaceClient) {
       return;
     }
-    setFetchedWorkers(Array.from((await workspaceClient.fetchWorkers()).values()) as unknown as Array<Worker>);
+    setFetchedWorkers(
+      Array.from(
+        (await workspaceClient.fetchWorkers({ MaxWorkers: getMaxTaskRouterWorkers() })).values(),
+      ) as unknown as Array<Worker>,
+    );
   };
 
   // function to filter the generatedQueueList and trigger a re-render
@@ -66,7 +77,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
             cold_transfer_enabled: isColdTransferEnabled && worker.available,
             warm_transfer_enabled: isWarmTransferEnabled && worker.available,
             label: worker.attributes?.full_name ?? worker.name,
-            labelComponent: (
+            labelComponent: () => (
               <Stack orientation="vertical" spacing="space0">
                 <Text as="div" element="TRANSFER_DIR_COMMON_ROW_NAME">
                   {worker.attributes?.full_name ?? worker.name}
@@ -79,7 +90,7 @@ const QueueDirectoryTab = (props: OwnProps) => {
                 </Stack>
               </Stack>
             ),
-            icon: (
+            icon: () => (
               <Avatar
                 size="sizeIcon60"
                 color="decorative10"
@@ -98,6 +109,25 @@ const QueueDirectoryTab = (props: OwnProps) => {
   };
 
   const onTransferClick = (entry: DirectoryEntry, transferOptions: TransferClickPayload) => {
+    if (isNativeDigitalXferEnabled() && TaskHelper.isCBMTask(props.task) && transferOptions.mode !== 'WARM') {
+      const {
+        flexInteractionSid: interactionSid,
+        flexInteractionChannelSid: channelSid,
+        conversationSid,
+      } = props.task.attributes;
+      (async () => {
+        const agent = await ConversationsHelper.getMyParticipant(props.task);
+        Actions.invokeAction('StartChannelTransfer', {
+          instanceSid: Manager.getInstance().serviceConfiguration.flex_instance_sid,
+          interactionSid,
+          channelSid,
+          fromSid: agent?.participantSid,
+          toSid: entry.address,
+          conversationSid,
+        });
+      })();
+      return;
+    }
     Actions.invokeAction('TransferTask', {
       task: props.task,
       targetSid: entry.address,
@@ -131,4 +161,4 @@ const QueueDirectoryTab = (props: OwnProps) => {
   );
 };
 
-export default withTaskContext(QueueDirectoryTab);
+export default withTaskContext(WorkerDirectoryTab);

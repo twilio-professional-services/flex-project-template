@@ -60,8 +60,8 @@ export const enterListenMode = async (conferenceSid: string, participantSid?: st
   Manager.getInstance().store.dispatch(listen());
 };
 
-export const enterBargeMode = async (conferenceSid: string, participantSid: string) => {
-  await BargeCoachService.updateParticipantBargeCoach(conferenceSid, participantSid, '', false, false);
+export const enterBargeMode = async (conferenceSid: string, participantSid: string, agentCallSid: string) => {
+  await BargeCoachService.updateParticipantBargeCoach(conferenceSid, participantSid, agentCallSid, false, false);
   updateSyncDoc(conferenceSid, 'barge');
   Manager.getInstance().store.dispatch(barge());
 };

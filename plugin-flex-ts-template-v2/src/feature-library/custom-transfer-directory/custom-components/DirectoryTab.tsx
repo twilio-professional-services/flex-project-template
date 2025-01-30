@@ -1,7 +1,9 @@
 import { Alert } from '@twilio-paste/core/alert';
+import { Button } from '@twilio-paste/core/button';
 import { Flex } from '@twilio-paste/core/flex';
 import { Spinner } from '@twilio-paste/core/spinner';
-import { withTaskContext, ITask, Actions, Template, templates } from '@twilio/flex-ui';
+import { LoadingIcon } from '@twilio-paste/icons/esm/LoadingIcon';
+import { withTaskContext, ITask, Actions, styled, Template, templates } from '@twilio/flex-ui';
 import { useState, useRef, useEffect } from 'react';
 import debounce from 'lodash/debounce';
 
@@ -9,6 +11,7 @@ import DirectoryItem from './DirectoryItem';
 import SearchBox from './SearchBox';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 import { DirectoryEntry } from '../types/DirectoryEntry';
+import { getMaxItems } from '../config';
 
 export interface TransferClickPayload {
   mode: 'WARM' | 'COLD';
@@ -20,7 +23,17 @@ export interface OwnProps {
   isLoading: boolean;
   noEntriesMessage?: string;
   onTransferClick: (entry: DirectoryEntry, transferOptions: TransferClickPayload) => void;
+  onReloadClick?: () => void;
 }
+
+const SearchRow = styled('div')`
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+  padding: 1rem;
+  padding-top: 1.25rem;
+  width: 100%;
+`;
 
 const DirectoryTab = (props: OwnProps) => {
   const [filteredDirectory, setFilteredDirectory] = useState([] as Array<DirectoryEntry>);
@@ -58,7 +71,14 @@ const DirectoryTab = (props: OwnProps) => {
 
   return (
     <Flex key="external-directory-tab-list" vertical wrap={false} grow={1} shrink={1}>
-      <SearchBox key="key-tab-search-box" onInputChange={onQueueSearchInputChange} inputRef={searchInputRef} />
+      <SearchRow key="search-row">
+        <SearchBox key="key-tab-search-box" onInputChange={onQueueSearchInputChange} inputRef={searchInputRef} />
+        {props.onReloadClick && (
+          <Button variant="secondary" onClick={props.onReloadClick}>
+            <LoadingIcon decorative={false} title={templates[StringTemplates.UpdateList]()} />
+          </Button>
+        )}
+      </SearchRow>
       <Flex key="external-tab-results" vertical element="TRANSFER_DIR_COMMON_ROWS_CONTAINER">
         {props.isLoading && (
           <Flex hAlignContent="center">
@@ -76,7 +96,9 @@ const DirectoryTab = (props: OwnProps) => {
             />
           </Alert>
         ) : (
-          Array.from(filteredDirectory).map((entry: DirectoryEntry) => {
+          !props.isLoading &&
+          Array.from(filteredDirectory).map((entry, index) => {
+            if (index >= getMaxItems()) return null;
             return (
               <DirectoryItem
                 task={props.task}
@@ -86,6 +108,11 @@ const DirectoryTab = (props: OwnProps) => {
               />
             );
           })
+        )}
+        {filteredDirectory.length > getMaxItems() && (
+          <Alert variant="neutral">
+            <Template source={templates[StringTemplates.MoreItems]} />
+          </Alert>
         )}
       </Flex>
     </Flex>

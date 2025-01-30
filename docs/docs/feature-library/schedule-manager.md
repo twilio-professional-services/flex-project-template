@@ -2,6 +2,9 @@
 sidebar_label: schedule-manager
 title: Twilio Flex Schedule Manager
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 This solution provides a flexible, robust, and scalable way to manage open and closed hours for Twilio Flex applications.
 

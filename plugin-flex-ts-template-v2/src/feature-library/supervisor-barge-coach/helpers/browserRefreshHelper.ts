@@ -57,14 +57,4 @@ export const supervisorBrowserRefresh = async () => {
     SyncDoc.initSyncDocSupervisors(agentWorkerSID, '', myWorkerSID, '', '', 'remove');
     localStorage.removeItem('agentWorkerSID');
   }
-  // This is here if the Supervisor refreshes and has toggled alerts to false
-  // By default alerts set to true
-  const privateToggle = localStorage.getItem('privateToggle');
-  if (privateToggle === 'false') {
-    Flex.Manager.getInstance().store.dispatch(
-      setBargeCoachStatus({
-        coachingStatusPanel: false,
-      }),
-    );
-  }
 };

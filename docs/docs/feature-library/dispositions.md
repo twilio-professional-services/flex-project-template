@@ -2,6 +2,9 @@
 sidebar_label: dispositions
 title: Dispositions / wrap-up codes
 ---
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
 
 ## Overview
 

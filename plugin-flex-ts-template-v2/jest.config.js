@@ -7,4 +7,5 @@ module.exports = {
   coverageReporters: ['json', 'lcov', 'text', 'clover', 'cobertura'],
   globalSetup: '<rootDir>/globalSetupTests.js',
   setupFilesAfterEnv: ['<rootDir>/setupTests.js'],
+  transformIgnorePatterns: ['/node_modules/(?!@twilio-paste/icons/.*)'],
 };
