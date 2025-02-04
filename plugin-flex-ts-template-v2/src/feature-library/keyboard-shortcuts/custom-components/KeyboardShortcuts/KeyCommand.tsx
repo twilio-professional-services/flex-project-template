@@ -18,6 +18,7 @@ const KeyCommand = ({ keyCommand }: KeyCommandProps) => {
       fontFamily: 'TwilioSansMono, Courier, monospace',
       border: '2px solid #e4e4e4',
       boxShadow: '2px 2px 2px #e4e4e4',
+      color: '#121c2d',
     }),
   );
 
