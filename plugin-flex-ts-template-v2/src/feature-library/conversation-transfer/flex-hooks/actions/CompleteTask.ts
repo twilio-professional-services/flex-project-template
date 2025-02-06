@@ -5,7 +5,7 @@ import { FlexActionEvent, FlexAction } from '../../../../types/feature-loader';
 
 export const actionEvent = FlexActionEvent.before;
 export const actionName = FlexAction.CompleteTask;
-// invoke the custom chatTransferTask action if a cbm task otherwise carry on
+// invoke the custom LeaveChat action if a cbm task otherwise carry on
 export const actionHook = function handleConvTransferComplete(flex: typeof Flex, manager: Flex.Manager) {
   if (!isColdTransferEnabled() && !isMultiParticipantEnabled()) return;
 
