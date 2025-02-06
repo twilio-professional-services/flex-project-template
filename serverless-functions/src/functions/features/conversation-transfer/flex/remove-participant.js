@@ -13,19 +13,37 @@ const requiredParameters = [
     key: 'flexInteractionParticipantSid',
     purpose: 'UTxxx sid for interactions API',
   },
+  {
+    key: 'status',
+    purpose: 'closed or wrapup',
+  },
 ];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    const { flexInteractionSid, flexInteractionChannelSid, flexInteractionParticipantSid, conversationSid } = event;
+    const {
+      flexInteractionSid,
+      flexInteractionChannelSid,
+      flexInteractionParticipantSid,
+      conversationSid,
+      conversationParticipantSid,
+      status,
+    } = event;
 
     await twilioExecute(context, (client) =>
       client.flexApi.v1
         .interaction(flexInteractionSid)
         .channels(flexInteractionChannelSid)
         .participants(flexInteractionParticipantSid)
-        .update({ status: 'closed' }),
+        .update({ status }),
     );
+
+    // The participant isn't removed from the conversation when entering wrapup, so do that here
+    if (status === 'wrapup' && conversationParticipantSid) {
+      await twilioExecute(context, (client) =>
+        client.conversations.v1.conversations(conversationSid).participants(conversationParticipantSid).remove(),
+      );
+    }
 
     // After leaving, check how many participants are left in the conversation.
     // Why? There is a race condition where the agents may both leave at the same time, so both

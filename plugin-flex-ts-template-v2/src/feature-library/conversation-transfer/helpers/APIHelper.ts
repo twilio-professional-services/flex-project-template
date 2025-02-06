@@ -15,6 +15,8 @@ export interface RemoveParticipantRESTPayload {
   flexInteractionSid: string; // KDxxx sid for interactions API
   flexInteractionChannelSid: string; // UOxxx sid for interactions API
   flexInteractionParticipantSid: string; // UTxxx sid for interactions API for the transferring agent to remove
+  conversationParticipantSid: string; // MBxxx sid to remove on wrapup
+  status: string; // wrapup or closed
 }
 
 export interface TransferRESTPayload {
@@ -29,6 +31,7 @@ export interface TransferRESTPayload {
   flexInteractionSid: string; // KDxxx sid for inteactions API
   flexInteractionChannelSid: string; // UOxxx sid for interactions API
   removeFlexInteractionParticipantSid: string; // UTxxx sid for interactions API for the transferring agent to remove them from conversation
+  removeConversationParticipantSid: string; // MBxxx sid to remove on wrapup
   taskChannelUniqueName: string; // Task channel to use for the new task
 }
 
@@ -38,6 +41,14 @@ const _getMyParticipantSid = (participants: any): string => {
   );
 
   return myParticipant ? myParticipant.participantSid : '';
+};
+
+const _getMyConvParticipantSid = (participants: any): string => {
+  const myParticipant = participants.find(
+    (participant: any) => participant.mediaProperties?.identity === manager.conversationsClient?.user?.identity,
+  );
+
+  return myParticipant ? myParticipant.mediaProperties?.sid : '';
 };
 
 const _getAgentsWorkerSidArray = (participants: any) => {
@@ -79,29 +90,37 @@ export const buildRemoveMyPartiticipantAPIPayload = async (
   const participants = await task.getParticipants(flexInteractionChannelSid);
 
   const flexInteractionParticipantSid = _getMyParticipantSid(participants);
+  const conversationParticipantSid = _getMyConvParticipantSid(participants);
 
-  if (!flexInteractionParticipantSid) return null;
+  if (!flexInteractionParticipantSid || !conversationParticipantSid) return null;
 
   return {
     flexInteractionSid,
     flexInteractionChannelSid,
     flexInteractionParticipantSid,
     conversationSid,
+    conversationParticipantSid,
+    status: task.status === 'wrapping' ? 'closed' : 'wrapup',
   };
 };
 
-export const buildRemovePartiticipantAPIPayload = (task: ITask, flexInteractionParticipantSid: string) => {
+export const buildRemovePartiticipantAPIPayload = async (task: ITask, flexInteractionParticipantSid: string) => {
   if (!task || !TaskHelper.isCBMTask(task)) return null;
 
   const { flexInteractionSid = '', flexInteractionChannelSid = '', conversationSid = '' } = task.attributes;
 
-  if (!flexInteractionParticipantSid) return null;
+  const participants = await task.getParticipants(flexInteractionChannelSid);
+  const conversationParticipantSid = _getMyConvParticipantSid(participants);
+
+  if (!flexInteractionParticipantSid || !conversationParticipantSid) return null;
 
   return {
     flexInteractionSid,
     flexInteractionChannelSid,
     flexInteractionParticipantSid,
     conversationSid,
+    conversationParticipantSid,
+    status: task.status === 'wrapping' ? 'closed' : 'wrapup',
   };
 };
 
@@ -150,10 +169,12 @@ export const buildInviteParticipantAPIPayload = async (
   };
 
   let removeFlexInteractionParticipantSid = '';
+  let removeConversationParticipantSid = '';
   if (removeInvitingAgent) {
     removeFlexInteractionParticipantSid = _getMyParticipantSid(participants) || '';
+    removeConversationParticipantSid = _getMyConvParticipantSid(participants) || '';
 
-    if (!removeFlexInteractionParticipantSid) {
+    if (!removeFlexInteractionParticipantSid || !removeConversationParticipantSid) {
       logger.error(`[conversation-transfer] Transfer failed. Didn't find flexInteractionPartipantSid for ${task.sid}`);
       return null;
     }
@@ -171,6 +192,7 @@ export const buildInviteParticipantAPIPayload = async (
     flexInteractionSid,
     flexInteractionChannelSid,
     removeFlexInteractionParticipantSid,
+    removeConversationParticipantSid,
     taskChannelUniqueName,
   };
 };
@@ -199,6 +221,7 @@ class ChatTransferService extends ApiService {
       flexInteractionSid: encodeURIComponent(requestPayload.flexInteractionSid),
       flexInteractionChannelSid: encodeURIComponent(requestPayload.flexInteractionChannelSid),
       removeFlexInteractionParticipantSid: encodeURIComponent(requestPayload.removeFlexInteractionParticipantSid),
+      removeConversationParticipantSid: encodeURIComponent(requestPayload.removeConversationParticipantSid),
       taskChannelUniqueName: encodeURIComponent(requestPayload.taskChannelUniqueName),
     };
 
@@ -222,9 +245,11 @@ class ChatTransferService extends ApiService {
     const encodedParams: EncodedParams = {
       Token: encodeURIComponent(manager.user.token),
       conversationSid: encodeURIComponent(requestPayload.conversationSid),
+      conversationParticipantSid: encodeURIComponent(requestPayload.conversationParticipantSid),
       flexInteractionSid: encodeURIComponent(requestPayload.flexInteractionSid),
       flexInteractionChannelSid: encodeURIComponent(requestPayload.flexInteractionChannelSid),
       flexInteractionParticipantSid: encodeURIComponent(requestPayload.flexInteractionParticipantSid),
+      status: encodeURIComponent(requestPayload.status),
     };
 
     return this.fetchJsonWithReject<TransferRESTResponse>(

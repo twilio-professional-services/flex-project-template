@@ -90,6 +90,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       flexInteractionSid,
       flexInteractionChannelSid,
       removeFlexInteractionParticipantSid,
+      removeConversationParticipantSid,
       taskChannelUniqueName,
     } = event;
 
@@ -124,33 +125,42 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
           .interaction(flexInteractionSid)
           .channels(flexInteractionChannelSid)
           .participants(removeFlexInteractionParticipantSid)
-          .update({ status: 'closed' }),
+          .update({ status: 'wrapup' }),
       );
-    } else {
-      // Add invite to conversation attributes
-      const inviteTargetType = transferTargetSid.startsWith('WK') ? 'Worker' : 'Queue';
-      const conversation = await twilioExecute(context, (client) =>
-        client.conversations.v1.conversations(conversationSid).fetch(),
-      );
-      const currentAttributes = JSON.parse(conversation.data.attributes);
-      await twilioExecute(context, (client) =>
-        client.conversations.v1.conversations(conversationSid).update({
-          attributes: JSON.stringify({
-            ...currentAttributes,
-            invites: {
-              ...currentAttributes.invites,
-              [participantInvite.routing.properties.sid]: {
-                invitesTaskSid: participantInvite.routing.properties.sid,
-                targetSid: transferTargetSid,
-                timestampCreated: new Date(),
-                targetName: inviteTargetType === 'Queue' ? transferQueueName : transferWorkerName,
-                inviteTargetType,
-              },
-            },
-          }),
-        }),
-      );
+      if (removeConversationParticipantSid) {
+        // The participant isn't removed from the conversation when entering wrapup, so do that here
+        await twilioExecute(context, (client) =>
+          client.conversations.v1
+            .conversations(conversationSid)
+            .participants(removeConversationParticipantSid)
+            .remove(),
+        );
+      }
     }
+
+    // Add invite to conversation attributes
+    const inviteTargetType = transferTargetSid.startsWith('WK') ? 'Worker' : 'Queue';
+    const conversation = await twilioExecute(context, (client) =>
+      client.conversations.v1.conversations(conversationSid).fetch(),
+    );
+    const currentAttributes = JSON.parse(conversation.data.attributes);
+    await twilioExecute(context, (client) =>
+      client.conversations.v1.conversations(conversationSid).update({
+        attributes: JSON.stringify({
+          ...currentAttributes,
+          invites: {
+            ...currentAttributes.invites,
+            [participantInvite.routing.properties.sid]: {
+              invitesTaskSid: participantInvite.routing.properties.sid,
+              targetSid: transferTargetSid,
+              timestampCreated: new Date(),
+              targetName: inviteTargetType === 'Queue' ? transferQueueName : transferWorkerName,
+              inviteTargetType,
+            },
+          },
+        }),
+      }),
+    );
 
     response.setStatusCode(200);
     response.setBody({

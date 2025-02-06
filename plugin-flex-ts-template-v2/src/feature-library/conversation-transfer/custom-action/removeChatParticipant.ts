@@ -9,7 +9,7 @@ const handleRemoveChatParticipant = async (payload: RemoveChatParticipantActionP
   const { task, interactionParticipantSid } = payload;
   logger.debug(`[conversation-transfer] handleRemoveChatParticipant ${interactionParticipantSid}`, task);
 
-  const removePartcipantAPIPayload = buildRemovePartiticipantAPIPayload(task, interactionParticipantSid);
+  const removePartcipantAPIPayload = await buildRemovePartiticipantAPIPayload(task, interactionParticipantSid);
 
   if (!removePartcipantAPIPayload) {
     logger.error('[conversation-transfer] error building removePartcipantAPIPayload');
