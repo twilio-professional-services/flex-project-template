@@ -16,6 +16,12 @@ The workers skills array can be re-formatted and shown in an additional column i
 ### Highlight Tasks
 We can highlight tasks that have a long handle time by adding a colored border around the Task Card based on the task age. For example, if the task is older than 3 minutes (180 seconds) we can show a yellow border. And if the task age exceeds 5 minutes (300 seconds) we can show red border. This task highlighting may assist supervisors with observing how agents are performing, or if they are having challenges completing tasks within expected handling time ranges.  
 
+### Task Queue Name
+
+:::caution Deprecated
+The task queue name is displayed on the task card by default in Flex UI 2.11 and later, so this option is no longer needed in these versions.
+:::
+
 By default, the [SupervisorTaskCardHeader template string](https://www.twilio.com/docs/flex/developer/ui/v1/localization-and-templating#list-of-available-content-strings) displays the `{{task.defaultFrom}}` value which can be either the caller's phone number or the chat customer's name (identity).  This specific task detail may not be useful for Supervisors so we could change that template string to `{{task.queueName}}` to be able to see which queues the agent is working in. 
 
 ### Teams View Data Tiles
@@ -47,7 +53,7 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
       "highlight_handle_time": true,
       "handle_time_warning_threshold": 180,
       "handle_time_exceeded_threshold": 300,
-      "display_task_queue_name": true,
+      "display_task_queue_name": false,
       "columns": {
         "calls": true,
         "other_tasks": true,
