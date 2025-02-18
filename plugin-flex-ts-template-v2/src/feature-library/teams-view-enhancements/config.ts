@@ -6,7 +6,7 @@ const {
   highlight_handle_time = true,
   handle_time_warning_threshold = 180,
   handle_time_exceeded_threshold = 300,
-  display_task_queue_name = true,
+  display_task_queue_name = false,
 } = (getFeatureFlags()?.features?.teams_view_enhancements as TeamsViewEnhancementsConfig) || {};
 
 const {
