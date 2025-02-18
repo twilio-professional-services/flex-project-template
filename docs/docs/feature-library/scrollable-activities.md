@@ -4,6 +4,10 @@ title: scrollable-activities
 ---
 import ScrollableActivitiesScreenshot from '/img/features/scrollable-activities/scrollable-activities.gif';
 
+:::caution Deprecated
+This feature is no longer required with Flex UI 2.11 and later, as the activities menu is now scrollable by default.
+:::
+
 This feature will add a scrolling CSS config to the activities drop down. This is useful when a large number of activities have been created in the system.
 
 ## flex-user-experience

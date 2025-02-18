@@ -89,7 +89,7 @@
         "enable_call_queue": true
       },
       "scrollable_activities": {
-        "enabled": true
+        "enabled": false
       },
       "supervisor_barge_coach": {
         "enabled": true,
