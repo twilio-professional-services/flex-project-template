@@ -44,7 +44,7 @@ From the Teams view, supervisors will notice an _alert_ icon next to any agent t
 
 ![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-8.gif)
 
-If the supervisor alert toggle option is enabled, the supervisor can enable or disable receiving assistance alerts via a _bell_ button in the main header. If a supervisor has alerts toggled to enabled via this button, they will receive a notification any time an agent asks for assistance. If a supervisor has alerts disabled, it will suppress Agent Assistance specific notifications for them.
+If the supervisor alert toggle option is enabled, the supervisor can enable or disable receiving assistance alerts via a _help_ button in the main header. If a supervisor has alerts toggled to enabled via this button, they will receive a notification any time an agent asks for assistance. If a supervisor has alerts disabled, it will suppress Agent Assistance specific notifications for them.
 
 ![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-9.gif)
 
