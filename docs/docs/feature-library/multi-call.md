@@ -21,12 +21,17 @@ First, agents will need their capacity for the `voice` channel to be increased f
 
 Now that workers can accept multiple calls, if you want to route inbound calls to only workers not already on a call, we need to update the TaskRouter workflow(s) so that agents are not routed multiple calls from the queue. For each workflow filter, set the target worker expression to `worker.channel.voice.available_capacity_percentage == 100`. If you already have a target worker expression defined, you will need to combine the logic with `AND`.
 
-> **Warning**
-> Transfers to queues will not use the above configured worker expression. If workers in transfer queues do not all have their capacity set to 1, customize the queue transfer directory to instead transfer to workflows. Otherwise, transfers to queues may be assigned to workers already on calls.
+:::warning
+Transfers to queues will not use the above configured worker expression. If workers in transfer queues do not all have their capacity set to 1, customize the queue transfer directory to instead transfer to workflows. Otherwise, transfers to queues may be assigned to workers already on calls.
+:::
 
 ### Flex configuration
 
 In your flex-config file(s), all you need to do is enable the `multi_call` feature.
+
+:::tip
+If you wish to use this feature with outbound calling (for example, to allow a worker to receive an inbound call while already handling an outbound call), even though this feature can handle the scenario successfully, Flex will display an alert dialog to reject the incoming call or disconnect the outbound call. Please contact Twilio Support to enable a feature flag on your account to disable the multi call alert dialog.
+:::
 
 ## How it works
 
