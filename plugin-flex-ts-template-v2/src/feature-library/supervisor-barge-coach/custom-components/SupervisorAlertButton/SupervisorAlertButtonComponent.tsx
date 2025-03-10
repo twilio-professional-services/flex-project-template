@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { IconButton, templates } from '@twilio/flex-ui';
+import { IconButton, styled, templates } from '@twilio/flex-ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { Flex } from '@twilio-paste/core/flex';
 import { Tooltip } from '@twilio-paste/core/tooltip';
@@ -9,6 +9,17 @@ import { AppState } from '../../../../types/manager';
 import { setBargeCoachStatus } from '../../flex-hooks/states/SupervisorBargeCoachSlice';
 import { alertSupervisorsCheck } from '../../helpers/supervisorAlertHelper';
 import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
+
+interface ThemeOnlyProps {
+  theme?: any;
+}
+
+const AssistanceAlertIconButton = styled(IconButton)<ThemeOnlyProps>`
+  padding: ${({ theme }) => theme.tokens.spacings.space30};
+  :hover {
+    background-color: ${({ theme }) => theme.tokens.backgroundColors.colorBackgroundStronger};
+  }
+`;
 
 export const SupervisorAlertButton = () => {
   const dispatch = useDispatch();
@@ -41,11 +52,9 @@ export const SupervisorAlertButton = () => {
       placement="left"
     >
       <Flex vAlignContent="center">
-        <IconButton
-          icon={enableAgentAssistanceAlerts ? 'BellBold' : 'Bell'}
+        <AssistanceAlertIconButton
+          icon={enableAgentAssistanceAlerts ? 'HelpBold' : 'Help'}
           onClick={() => agentAssistanceAlertToggle()}
-          size="small"
-          style={{ backgroundColor: 'transparent' }}
         />
       </Flex>
     </Tooltip>
