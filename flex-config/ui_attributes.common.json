@@ -304,7 +304,8 @@
           "task_summary_tile": false,
           "team_activity_tile": false,
           "status_idle_color": "limegreen",
-          "status_busy_color": "royalblue"
+          "status_busy_color": "royalblue",
+          "status_idle_name": "Available"
         },
         "channels": {
           "Voice": {

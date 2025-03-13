@@ -11,6 +11,7 @@ export default interface DataTilesConfig {
     team_activity_tile: boolean;
     status_idle_color: string;
     status_busy_color: string;
+    status_idle_name: string;
   };
   channels: Channels;
   agent_activity_configuration: {

@@ -14,6 +14,7 @@ const {
     team_activity_tile: false,
     status_idle_color: 'limegreen',
     status_busy_color: 'royalblue',
+    status_idle_name: 'Available',
   },
   channels = {
     Voice: {
@@ -125,6 +126,9 @@ export const getIdleStatusColor = () => {
 };
 export const getBusyStatusColor = () => {
   return teams_view_tiles.status_busy_color;
+};
+export const getIdleStatusName = () => {
+  return teams_view_tiles.status_idle_name;
 };
 export const getTeams = () => {
   return teams;

@@ -84,7 +84,8 @@ Note: The Teams View can only display up to 200 agents, so the worker data avail
           "task_summary_tile": false,
           "team_activity_tile": false,
           "status_idle_color": "limegreen",
-          "status_busy_color": "royalblue"
+          "status_busy_color": "royalblue",
+          "status_idle_name": "Available"
         },
         "channels": {
           "Voice": {
