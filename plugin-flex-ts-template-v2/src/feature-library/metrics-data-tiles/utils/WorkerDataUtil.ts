@@ -1,17 +1,22 @@
 import { ITask, Manager } from '@twilio/flex-ui';
 
 import { TeamActivityCounts, TeamTaskCounts } from '../types';
+import { getIdleStatusName } from '../config';
 
 const _manager = Manager.getInstance();
 const workerActivities = _manager.store.getState().flex?.worker?.activities || new Map();
 
-const STATUS_AVAILABLE = 'Available';
+const STATUS_AVAILABLE = getIdleStatusName() ?? 'Available';
 const TASK_CHANNEL_VOICE = 'voice';
+
+// These strings are not used for display purposes
+const STRING_ALL = 'All';
+const STRING_OTHER = 'Other';
 
 export function getAgentStatusCounts(workers: any[] = [], teams: string[] = []) {
   const ac: TeamActivityCounts = {};
-  ac.All = { teamName: 'All', totalAgentCount: 0, activities: { Idle: 0, Busy: 0 } };
-  ac.Other = { teamName: 'Other', totalAgentCount: 0, activities: { Idle: 0, Busy: 0 } };
+  ac.All = { teamName: STRING_ALL, totalAgentCount: 0, activities: { Idle: 0, Busy: 0 } };
+  ac.Other = { teamName: STRING_OTHER, totalAgentCount: 0, activities: { Idle: 0, Busy: 0 } };
   // Init activity counts
   teams.forEach((team) => {
     ac[team] = { teamName: team, totalAgentCount: 0, activities: { Idle: 0, Busy: 0 } };
@@ -25,9 +30,9 @@ export function getAgentStatusCounts(workers: any[] = [], teams: string[] = []) 
   workers.forEach((wk) => {
     const workerStatus = wk.worker.activityName;
     const tasks = wk?.tasks || [];
-    const teamName: string = wk.worker?.attributes?.team_name || 'Other';
+    const teamName: string = wk.worker?.attributes?.team_name || STRING_OTHER;
     let tm = teamName;
-    if (!teams.includes(teamName)) tm = 'Other';
+    if (!teams.includes(teamName)) tm = STRING_OTHER;
     const count = ac[tm].activities[workerStatus] ? ac[tm].activities[workerStatus] : 0;
     ac[tm].activities[workerStatus] = count + 1;
     ac[tm].totalAgentCount += 1;
@@ -61,17 +66,17 @@ export function getAgentStatusCounts(workers: any[] = [], teams: string[] = []) 
 export function getTasksByTeamCounts(workers: any[] = [], teams: string[] = []) {
   const taskCounts: TeamTaskCounts = {};
   const initTasks = { voice_inbound: 0, voice_outbound: 0, sms: 0, chat: 0, video: 0 };
-  taskCounts.All = { teamName: 'All', totalTaskCount: 0, tasks: { ...initTasks } };
-  taskCounts.Other = { teamName: 'Other', totalTaskCount: 0, tasks: { ...initTasks } };
+  taskCounts.All = { teamName: STRING_ALL, totalTaskCount: 0, tasks: { ...initTasks } };
+  taskCounts.Other = { teamName: STRING_OTHER, totalTaskCount: 0, tasks: { ...initTasks } };
 
   // Init task counts
   teams.forEach((team) => {
     taskCounts[team] = { teamName: team, totalTaskCount: 0, tasks: { ...initTasks } };
   });
   workers.forEach((wk) => {
-    const teamName: string = wk.worker?.attributes?.team_name ? wk.worker.attributes.team_name : 'Other';
+    const teamName: string = wk.worker?.attributes?.team_name ? wk.worker.attributes.team_name : STRING_OTHER;
     let tm = teamName;
-    if (!teams.includes(teamName)) tm = 'Other';
+    if (!teams.includes(teamName)) tm = STRING_OTHER;
     let channel = '';
     const tasks = wk?.tasks || [];
     tasks.forEach((task: ITask) => {
