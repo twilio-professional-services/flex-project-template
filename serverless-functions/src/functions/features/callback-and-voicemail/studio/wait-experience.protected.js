@@ -10,6 +10,8 @@ const CallbackOperations = require(Runtime.getFunctions()['features/callback-and
 
 const options = {
   retainPlaceInQueue: true,
+  retainRouting: true,
+  allowAlternateCallbackNumber: true,
   sayOptions: { voice: 'Polly.Joanna' },
   holdMusicUrl: 'http://com.twilio.music.soft-rock.s3.amazonaws.com/_ghost_-_promo_2_sample_pack.mp3',
   messages: {
@@ -28,7 +30,7 @@ const options = {
     callbackForOtherNumber:
       'Please enter the phone number, starting with the country code. When you are finished, press the # sign.',
     callbackForOtherNumberConfirm1: 'You entered',
-    callbackForOtherNumberConfirm2: 'Press 1 to confirm or 2 to re-enter.',
+    callbackForOtherNumberConfirm2: 'To confirm, press 1. To re-enter, press 2.',
     recordVoicemailPrompt:
       'Please leave a message at the tone. When you are finished recording, you may hang up, or press the star key.',
     voicemailNotCaptured: "Sorry. We weren't able to capture your message.",
@@ -185,14 +187,23 @@ exports.handler = async (context, event, callback) => {
       // Redirect call to callback or voicemail logic.
       if (Digits === '1') {
         // Callback option selected
-        // Prompt the caller if they wish to use the number they called from, or another number.
-        const callbackOptionsGather = twiml.gather({
-          input: 'dtmf',
-          timeout: '5',
-          numDigits: 1,
-          action: `${baseUrl}?mode=handle-callback-choice&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}`,
-        });
-        callbackOptionsGather.say(options.sayOptions, options.messages.callbackChoice);
+        if (options.allowAlternateCallbackNumber) {
+          // Prompt the caller if they wish to use the number they called from, or another number.
+          const callbackOptionsGather = twiml.gather({
+            input: 'dtmf',
+            timeout: '5',
+            numDigits: 1,
+            action: `${baseUrl}?mode=handle-callback-choice&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}`,
+          });
+          callbackOptionsGather.say(options.sayOptions, options.messages.callbackChoice);
+        } else {
+          // Use the same number the caller called from
+          twiml.redirect(
+            `${baseUrl}?mode=submit-callback&CallSid=${CallSid}&enqueuedTaskSid=${enqueuedTaskSid}&to=${encodeURIComponent(
+              event.Caller,
+            )}`,
+          );
+        }
         return callback(null, twiml);
       } else if (Digits === '2') {
         // Voicemail option selected
@@ -304,14 +315,18 @@ exports.handler = async (context, event, callback) => {
       // Here you can optionally adjust callback parameters, such as a overriddenWorkflowSid
       const callbackParams = {
         context,
-        originalTask,
         numberToCall: event.to,
         numberToCallFrom: event.Called,
       };
 
-      if (options.retainPlaceInQueue && enqueuedTaskSid) {
+      if (options.retainRouting && originalTask) {
+        // Provide originalTask so that the workflow and attributes are copied to the callback
+        callbackParams.originalTask = originalTask;
+      }
+
+      if (options.retainPlaceInQueue && originalTask) {
         // Get the original task's start time to maintain queue ordering.
-        callbackParams.virtualStartTime = originalTask?.dateCreated;
+        callbackParams.virtualStartTime = originalTask.dateCreated;
       }
 
       await CallbackOperations.createCallbackTask(callbackParams);
@@ -348,13 +363,12 @@ exports.handler = async (context, event, callback) => {
 
     case 'submit-voicemail':
       // Submit the voicemail to TaskRouter (and/or to your backend if you have a voicemail handling solution)
-      const originalTaskForVm = await fetchTask(context, enqueuedTaskSid);
+      let originalTaskForVm;
 
       // Create the Voicemail task
       // Here you can optionally adjust voicemail parameters, such as a overriddenWorkflowSid
       const vmParams = {
         context,
-        originalTask: originalTaskForVm,
         numberToCall: event.callerNumber,
         numberToCallFrom: event.calledNumber,
         recordingSid: event.RecordingSid,
@@ -363,9 +377,19 @@ exports.handler = async (context, event, callback) => {
         transcriptText: event.TranscriptionText,
       };
 
-      if (options.retainPlaceInQueue && enqueuedTaskSid) {
+      if (enqueuedTaskSid && (options.retainRouting || options.retainPlaceInQueue)) {
+        // Options have been enabled which require us to fetch the task
+        originalTaskForVm = await fetchTask(context, enqueuedTaskSid);
+      }
+
+      if (options.retainRouting && originalTaskForVm) {
+        // Provide originalTask so that the workflow and attributes are copied to the voicemail
+        vmParams.originalTask = originalTaskForVm;
+      }
+
+      if (options.retainPlaceInQueue && originalTaskForVm) {
         // Get the original task's start time to maintain queue ordering.
-        vmParams.virtualStartTime = originalTaskForVm?.dateCreated;
+        vmParams.virtualStartTime = originalTaskForVm.dateCreated;
       }
 
       await CallbackOperations.createCallbackTask(vmParams);
