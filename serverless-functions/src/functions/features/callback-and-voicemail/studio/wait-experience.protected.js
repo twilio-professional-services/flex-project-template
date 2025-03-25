@@ -12,6 +12,7 @@ const options = {
   retainPlaceInQueue: true,
   retainRouting: true,
   allowAlternateCallbackNumber: true,
+  allowVoicemailOption: true,
   sayOptions: { voice: 'Polly.Joanna' },
   holdMusicUrl: 'http://com.twilio.music.soft-rock.s3.amazonaws.com/_ghost_-_promo_2_sample_pack.mp3',
   messages: {
@@ -113,7 +114,7 @@ exports.handler = async (context, event, callback) => {
   // Make relative hold music URLs absolute
   // <Play> does not support relative URLs
   if (!holdMusicUrl.startsWith('http://') && !holdMusicUrl.startsWith('https://')) {
-    holdMusicUrl = domain + holdMusicUrl;
+    holdMusicUrl = `https://${context.DOMAIN_NAME}/${holdMusicUrl}`;
   }
 
   const { Digits, CallSid, QueueSid, mode, enqueuedTaskSid, skipGreeting } = event;
@@ -205,7 +206,7 @@ exports.handler = async (context, event, callback) => {
           );
         }
         return callback(null, twiml);
-      } else if (Digits === '2') {
+      } else if (Digits === '2' && options.allowVoicemailOption) {
         // Voicemail option selected
         // We need to update the call with a new TwiML URL vs using twiml.redirect() since we are still in the waitUrl TwiML execution
         // and it's not possible to use the <Record> verb in here.
