@@ -32,6 +32,10 @@ There is also a supervisor monitor panel, which gives the supervisors the abilit
 
 ![Monitor panel demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-5.gif)
 
+You are also able to barge into a chat/conversation by clicking the Join button when monitoring a live conversation. Click Leave to remove yourself from the conversation. You are able to type within the Monitor Task Panel and both the customer and agent will see your responses.
+
+![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-10.gif)
+
 We've also included Agent Assistance into this plugin suite. This adds a button to the agent's call canvas to ask for assistance.
 
 ![Plugin Demo](/img/features/supervisor-barge-coach/Supervisor-Barge-Coach-Plugin-6.gif)

@@ -77,27 +77,27 @@ export const getUpdatedParticipantDetails = async (
 
   const participants: ParticipantDetails[] = [];
 
-  const intertactionParticipants: any[] = await getCBMParticipantsWrapper(task, flexInteractionChannelSid);
+  const interactionParticipants: any[] = await getCBMParticipantsWrapper(task, flexInteractionChannelSid);
 
-  if (!intertactionParticipants || !conversation?.participants) return participantDetails;
+  if (!interactionParticipants || !conversation?.participants) return participantDetails;
 
   const conversationParticipants = Array.from(conversation?.participants.values());
 
-  logger.debug('[conversation-transfer] getParticipantDetails', { conversationParticipants, intertactionParticipants });
+  logger.debug('[conversation-transfer] getParticipantDetails', { conversationParticipants, interactionParticipants });
 
   conversationParticipants.forEach((conversationParticipant) => {
-    const intertactionParticipant = intertactionParticipants.find(
+    const interactionParticipant = interactionParticipants.find(
       (participant) => participant.mediaProperties?.sid === conversationParticipant.source.sid,
     );
 
-    if (intertactionParticipant) {
+    if (interactionParticipant) {
       const friendlyName =
         conversationParticipant.friendlyName ||
-        intertactionParticipant.mediaProperties?.messagingBinding?.address ||
-        intertactionParticipant.mediaProperties?.identity;
-      const participantType = intertactionParticipant.type;
+        interactionParticipant.mediaProperties?.messagingBinding?.address ||
+        interactionParticipant.mediaProperties?.identity;
+      const participantType = interactionParticipant.type;
       const isMe = conversationParticipant.source.identity === myIdentity;
-      const interactionParticipantSid = intertactionParticipant.participantSid;
+      const interactionParticipantSid = interactionParticipant.participantSid;
       const conversationMemberSid = conversationParticipant.source.sid;
 
       participants.push({
@@ -105,6 +105,28 @@ export const getUpdatedParticipantDetails = async (
         participantType,
         isMe,
         interactionParticipantSid,
+        conversationMemberSid,
+      });
+    }
+  });
+
+  // Add only conversation participants to the array
+  conversationParticipants.forEach((conversationParticipant) => {
+    const existingParticipant = participants.find(
+      (participant) => participant.conversationMemberSid === conversationParticipant.source.sid,
+    );
+
+    if (!existingParticipant) {
+      const friendlyName = conversationParticipant.friendlyName || conversationParticipant.source.identity || 'null';
+      const participantType = 'supervisor';
+      const isMe = conversationParticipant.source.identity === myIdentity;
+      const conversationMemberSid = conversationParticipant.source.sid;
+
+      participants.push({
+        friendlyName,
+        participantType,
+        isMe,
+        interactionParticipantSid: 'null',
         conversationMemberSid,
       });
     }

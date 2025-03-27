@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Stack } from '@twilio-paste/core/stack';
 import { ConversationState, styled, Actions } from '@twilio/flex-ui';
 
-import { Participants } from './Participants.tsx/Participants';
+import { Participants } from './Participants/Participants';
 import { InvitedParticipants } from './InvitedParticipants/InvitedParticipants';
 import { InvitedParticipantDetails, ParticipantDetails } from '../../../../types/conversations/Participant';
 import { getUpdatedParticipantDetails, getUpdatedInvitedParticipantDetails } from './hooks';

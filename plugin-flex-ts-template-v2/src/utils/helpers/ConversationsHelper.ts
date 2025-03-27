@@ -12,11 +12,16 @@ class ConversationsHelper {
     // more than two participants or are there any active invites?
     const conversationState = Flex.StateHelper.getConversationStateForTask(task);
     let numBoundParticipants = 0;
+    let numSupervisorParticipants = 0;
     if (conversationState?.participants) {
       // Gather the count of participants that have a binding. These participants are not internal.
       // Therefore, we will use subtraction to consider only one bound participant as part of the total count.
       conversationState.participants.forEach((participant) => {
         if (!participant.source?.bindings) {
+          return;
+        }
+        if ((participant.source.attributes as any)?.isSupervisor) {
+          numSupervisorParticipants += 1;
           return;
         }
         for (const binding of Object.values(participant.source.bindings)) {
@@ -29,7 +34,10 @@ class ConversationsHelper {
     }
     if (
       conversationState &&
-      (conversationState.participants.size - (numBoundParticipants > 1 ? numBoundParticipants - 1 : 0) > 2 ||
+      (conversationState.participants.size -
+        numSupervisorParticipants -
+        (numBoundParticipants > 1 ? numBoundParticipants - 1 : 0) >
+        2 ||
         this.countOfOutstandingInvitesForConversation(conversationState))
     ) {
       return true;

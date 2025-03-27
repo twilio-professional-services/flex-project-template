@@ -57,4 +57,14 @@ export const supervisorBrowserRefresh = async () => {
     SyncDoc.initSyncDocSupervisors(agentWorkerSID, '', myWorkerSID, '', '', 'remove');
     localStorage.removeItem('agentWorkerSID');
   }
+  // This is here if the Supervisor refreshes and joined the chatBarge feature
+  const cacheChatBarge = localStorage.getItem('chatBarge');
+  if (cacheChatBarge) {
+    const chatBarge = JSON.parse(cacheChatBarge);
+    Flex.Manager.getInstance().store.dispatch(
+      setBargeCoachStatus({
+        chatBarge,
+      }),
+    );
+  }
 };
