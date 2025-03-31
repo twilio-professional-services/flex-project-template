@@ -111,6 +111,7 @@ export const getUpdatedParticipantDetails = async (
   });
 
   // Add only conversation participants to the array
+  // TODO: Can we merge this with above?
   conversationParticipants.forEach((conversationParticipant) => {
     const existingParticipant = participants.find(
       (participant) => participant.conversationMemberSid === conversationParticipant.source.sid,

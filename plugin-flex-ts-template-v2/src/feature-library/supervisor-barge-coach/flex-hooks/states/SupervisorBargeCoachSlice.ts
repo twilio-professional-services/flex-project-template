@@ -10,7 +10,7 @@ export interface SupervisorBargeCoachState {
   agentAssistanceButton: boolean;
   enableAgentAssistanceAlerts: boolean;
   agentAssistanceArray: Array<any>;
-  chatBarge: { [key: string]: boolean };
+  bargedConversations: string[];
 }
 
 const initialState = {
@@ -22,7 +22,7 @@ const initialState = {
   agentAssistanceButton: false,
   enableAgentAssistanceAlerts: true,
   agentAssistanceArray: [],
-  chatBarge: {},
+  bargedConversations: [],
 } as SupervisorBargeCoachState;
 
 const supervisorBargeCoachSlice = createSlice({
