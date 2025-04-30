@@ -87,10 +87,11 @@ class ParkInteractionService extends ApiService {
       ConversationSid: encodeURIComponent(ConversationSid),
       WebhookSid: encodeURIComponent(WebhookSid),
       RouteToSameWorker: encodeURIComponent(true),
+      Token: encodeURIComponent(this.manager.user.token),
     };
     try {
       return await this.fetchJsonWithReject<UnparkInteractionResponse>(
-        `${this.serverlessProtocol}://${this.serverlessDomain}/features/park-interaction/common/unpark-interaction`,
+        `${this.serverlessProtocol}://${this.serverlessDomain}/features/park-interaction/flex/unpark-interaction`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
