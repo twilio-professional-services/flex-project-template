@@ -204,6 +204,7 @@ exports.createTask = async function createTask(parameters) {
     const task = await client.taskrouter.v1
       .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
       .tasks.create(createParams);
+    delete task._version;
     return {
       ...task,
       attributes: JSON.parse(task.attributes),
