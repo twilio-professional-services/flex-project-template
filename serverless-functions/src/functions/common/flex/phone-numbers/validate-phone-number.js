@@ -15,27 +15,32 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     if (valid) {
       // Number is valid, check if we are allowed to dial it
-      const { data: permissionsResponse } = await twilioExecute(context, (client) =>
-        client.voice.v1.dialingPermissions.countries(lookupResponse.countryCode).fetch(),
+      const { data: countriesResponse } = await twilioExecute(context, (client) =>
+        client.voice.v1.dialingPermissions.countries.list({ countryCode: lookupResponse.callingCountryCode }),
       );
 
-      if (!permissionsResponse.lowRiskNumbersEnabled) {
-        valid = false;
-        invalidReason = 'COUNTRY_DISABLED';
-      } else if (!permissionsResponse.highRiskSpecialNumbersEnabled) {
-        // Check if this number is considered a high-risk special number
-        const { data: highRiskResponse } = await twilioExecute(context, (client) =>
-          client.voice.v1.dialingPermissions.countries(lookupResponse.countryCode).highriskSpecialPrefixes.list(),
-        );
-        const normalizedNumber = phoneNumber.replace('+', '');
-        const matchedPrefix = highRiskResponse?.filter((item) =>
-          normalizedNumber.startsWith(item.prefix.replace('+', '')),
-        );
-
-        if (matchedPrefix?.length) {
+      if (countriesResponse.length) {
+        if (!countriesResponse[0].lowRiskNumbersEnabled) {
           valid = false;
-          invalidReason = 'HIGH_RISK_SPECIAL_NUMBER_DISABLED';
+          invalidReason = 'COUNTRY_DISABLED';
+        } else if (!countriesResponse[0].highRiskSpecialNumbersEnabled) {
+          // Check if this number is considered a high-risk special number
+          const { data: highRiskResponse } = await twilioExecute(context, (client) =>
+            client.voice.v1.dialingPermissions.countries(countriesResponse[0].isoCode).highriskSpecialPrefixes.list(),
+          );
+          const normalizedNumber = phoneNumber.replace('+', '');
+          const matchedPrefix = highRiskResponse?.filter((item) =>
+            normalizedNumber.startsWith(item.prefix.replace('+', '')),
+          );
+
+          if (matchedPrefix?.length) {
+            valid = false;
+            invalidReason = 'HIGH_RISK_SPECIAL_NUMBER_DISABLED';
+          }
         }
+      } else {
+        valid = false;
+        invalidReason = 'COUNTRY_UNKNOWN';
       }
     } else {
       invalidReason = lookupResponse.validationErrors?.join(', ');
