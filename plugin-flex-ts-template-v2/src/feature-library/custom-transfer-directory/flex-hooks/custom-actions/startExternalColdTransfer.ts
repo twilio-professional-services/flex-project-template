@@ -40,6 +40,7 @@ export const registerStartExternalColdTransfer = async () => {
             let errors = validationCheck.invalidReason;
 
             errors = errors?.replace('COUNTRY_DISABLED', templates[StringTemplates.CountryDisabled]());
+            errors = errors?.replace('COUNTRY_UNKNOWN', templates[StringTemplates.CountryUnknown]());
             errors = errors?.replace(
               'HIGH_RISK_SPECIAL_NUMBER_DISABLED',
               templates[StringTemplates.HighRiskSpecialNumberDisabled](),

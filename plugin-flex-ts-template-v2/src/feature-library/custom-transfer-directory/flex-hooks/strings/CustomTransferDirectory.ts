@@ -24,6 +24,7 @@ export enum StringTemplates {
   QueueTooltip = 'PSDirectoryQueueTooltip',
   NA = 'PSDirectoryNA',
   CountryDisabled = 'PSDirectoryCountryDisabled',
+  CountryUnknown = 'PSDirectoryCountryUnknown',
   HighRiskSpecialNumberDisabled = 'PSDirectoryHighRiskSpecialNumberDisabled',
   UpdateList = 'PSDirectoryUpdateList',
 }
@@ -52,6 +53,7 @@ export const stringHook = () => ({
     [StringTemplates.QueueTooltip]: 'Agents: {{agentsAvailable}}, Tasks in queue: {{tasksInQueue}}',
     [StringTemplates.NA]: 'N/A',
     [StringTemplates.CountryDisabled]: 'Dialing to this country has been disabled.',
+    [StringTemplates.CountryUnknown]: 'Unable to determine dialing permissions for this number.',
     [StringTemplates.HighRiskSpecialNumberDisabled]:
       'This number is considered high-risk and dialing it has been disabled.',
     [StringTemplates.UpdateList]: 'Update list',

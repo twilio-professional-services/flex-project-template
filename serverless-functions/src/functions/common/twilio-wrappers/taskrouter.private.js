@@ -84,10 +84,12 @@ exports.completeTask = async function completeTask(parameters) {
 
   return twilioExecute(context, async (client) => {
     try {
-      return await client.taskrouter.v1
+      const task = await client.taskrouter.v1
         .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
         .tasks(taskSid)
         .update({ assignmentStatus: 'completed', reason });
+      delete task._version; // Remove object that can leak credentials
+      return { ...task, attributes: JSON.parse(task.attributes) };
     } catch (error) {
       // 20001 error code is returned when the task is not in an assigned state
       // this can happen if its not been assigned at all or its been already closed
@@ -204,6 +206,7 @@ exports.createTask = async function createTask(parameters) {
     const task = await client.taskrouter.v1
       .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
       .tasks.create(createParams);
+    delete task._version; // Remove object that can leak credentials
     return {
       ...task,
       attributes: JSON.parse(task.attributes),
@@ -278,6 +281,7 @@ exports.updateTask = async function updateTask(parameters) {
         .tasks(taskSid)
         .update(updateParams);
 
+      delete task._version; // Remove object that can leak credentials
       return {
         ...task,
         attributes: JSON.parse(task.attributes),
@@ -319,6 +323,7 @@ exports.fetchTask = async function fetchTask(parameters) {
     try {
       const task = await client.taskrouter.v1.workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID).tasks(taskSid).fetch();
 
+      delete task._version; // Remove object that can leak credentials
       return {
         ...task,
         attributes: JSON.parse(task.attributes),
