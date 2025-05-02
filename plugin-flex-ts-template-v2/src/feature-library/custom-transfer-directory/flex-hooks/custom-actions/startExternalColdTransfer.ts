@@ -25,28 +25,41 @@ export const registerStartExternalColdTransfer = async () => {
       }
 
       if (!shouldSkipPhoneNumberValidation()) {
-        const validationCheck = await PhoneNumberService.validatePhoneNumber(phoneNumber);
+        try {
+          const validationCheck = await PhoneNumberService.validatePhoneNumber(phoneNumber);
 
-        if (!validationCheck.success) {
-          Notifications.showNotification(CustomTransferDirectoryNotification.PhoneNumberFailedValidationCheckRequest);
-          return;
-        } else if (validationCheck.success && !validationCheck.valid) {
-          let errors = validationCheck.invalidReason;
+          if (!validationCheck.success) {
+            Notifications.showNotification(
+              CustomTransferDirectoryNotification.PhoneNumberFailedValidationCheckRequest,
+              {
+                phoneNumber,
+              },
+            );
+            return;
+          } else if (validationCheck.success && !validationCheck.valid) {
+            let errors = validationCheck.invalidReason;
 
-          errors = errors?.replace('COUNTRY_DISABLED', templates[StringTemplates.CountryDisabled]());
-          errors = errors?.replace('COUNTRY_UNKNOWN', templates[StringTemplates.CountryUnknown]());
-          errors = errors?.replace(
-            'HIGH_RISK_SPECIAL_NUMBER_DISABLED',
-            templates[StringTemplates.HighRiskSpecialNumberDisabled](),
-          );
+            errors = errors?.replace('COUNTRY_DISABLED', templates[StringTemplates.CountryDisabled]());
+            errors = errors?.replace('COUNTRY_UNKNOWN', templates[StringTemplates.CountryUnknown]());
+            errors = errors?.replace(
+              'HIGH_RISK_SPECIAL_NUMBER_DISABLED',
+              templates[StringTemplates.HighRiskSpecialNumberDisabled](),
+            );
 
-          Notifications.showNotification(
-            CustomTransferDirectoryNotification.PhoneNumberFailedValidationCheckWithErrors,
-            {
-              phoneNumber,
-              errors,
-            },
-          );
+            Notifications.showNotification(
+              CustomTransferDirectoryNotification.PhoneNumberFailedValidationCheckWithErrors,
+              {
+                phoneNumber,
+                errors,
+              },
+            );
+            return;
+          }
+        } catch (e: any) {
+          logger.error('[custom-transfer-directory] Unable to validate phone number', e);
+          Notifications.showNotification(CustomTransferDirectoryNotification.PhoneNumberFailedValidationCheckRequest, {
+            phoneNumber,
+          });
           return;
         }
       }
