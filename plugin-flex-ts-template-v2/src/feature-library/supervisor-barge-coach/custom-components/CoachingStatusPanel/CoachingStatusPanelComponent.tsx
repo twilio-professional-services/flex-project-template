@@ -1,5 +1,5 @@
 import React from 'react';
-import { Template, templates } from '@twilio/flex-ui';
+import { ITask, Template, templates } from '@twilio/flex-ui';
 import { useSelector } from 'react-redux';
 import { Flex } from '@twilio-paste/core/flex';
 import { Box } from '@twilio-paste/core/box';
@@ -10,15 +10,19 @@ import { reduxNamespace } from '../../../../utils/state';
 import { SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoachSlice';
 import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 
-export const CoachingStatusPanel = () => {
+type SupervisorBargeCoachProps = {
+  task?: ITask;
+};
+
+export const CoachingStatusPanel = ({ task }: SupervisorBargeCoachProps) => {
   const { supervisorArray } = useSelector(
     (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
   );
 
-  // If the supervisor array has value in it, that means someone is coaching
-  // We will map each of the supervisors that may be actively coaching
-  // Otherwise we will not display anything if no one is actively coaching
-  if (supervisorArray.length > 0) {
+  const filterSupervisors = (supervisor: any) => supervisor.conference === task?.conference?.conferenceSid;
+
+  // If the supervisor array has value in it for this conference, that means someone is coaching
+  if (supervisorArray.filter(filterSupervisors).length > 0) {
     return (
       <Flex hAlignContent="center" vertical padding="space40">
         <Box
@@ -30,9 +34,9 @@ export const CoachingStatusPanel = () => {
           padding="space40"
         >
           <Template source={templates[StringTemplates.AgentCoachedBy]} />
-          {supervisorArray.map((supervisorArray: { supervisor: string }) => (
+          {supervisorArray.filter(filterSupervisors).map((supervisor: any) => (
             <Text key={`${Math.random()}`} as="p" fontWeight="fontWeightMedium" color="colorTextSuccess">
-              {supervisorArray.supervisor}
+              {supervisor.supervisor}
             </Text>
           ))}
         </Box>
