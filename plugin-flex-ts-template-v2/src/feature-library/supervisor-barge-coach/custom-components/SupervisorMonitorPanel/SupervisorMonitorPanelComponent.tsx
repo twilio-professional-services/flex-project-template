@@ -31,6 +31,8 @@ export const SupervisorMonitorPanel = (props: SupervisorMonitorPanelProps) => {
     }
   };
 
+  const filterSupervisors = (supervisor: any) => supervisor.conference === props?.task?.conference?.conferenceSid;
+
   const syncUpdates = async (): Promise<any> => {
     const agentWorkerSID = props?.task?.workerSid;
     if (!agentWorkerSID) {
@@ -45,10 +47,10 @@ export const SupervisorMonitorPanel = (props: SupervisorMonitorPanelProps) => {
       if (doc.data.supervisors) {
         supervisorArray = [...doc.data.supervisors];
       }
-      setMonitoringSupervisors(supervisorArray);
+      setMonitoringSupervisors(supervisorArray.filter(filterSupervisors));
     });
 
-    setMonitoringSupervisors(doc?.data?.supervisors || []);
+    setMonitoringSupervisors(doc?.data?.supervisors?.filter(filterSupervisors) || []);
     return doc;
   };
 
