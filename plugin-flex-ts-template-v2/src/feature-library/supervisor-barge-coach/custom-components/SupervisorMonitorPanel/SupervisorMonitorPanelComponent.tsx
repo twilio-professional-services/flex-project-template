@@ -1,15 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFlexSelector, Template, templates, ITask } from '@twilio/flex-ui';
-import { useDispatch, useSelector } from 'react-redux';
 import { Flex } from '@twilio-paste/core/flex';
 import { Stack } from '@twilio-paste/core/stack';
 import { Text } from '@twilio-paste/core/text';
 
-import { AppState } from '../../../../types/manager';
-import { reduxNamespace } from '../../../../utils/state';
-import { setBargeCoachStatus, SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoachSlice';
 import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
-// Used for Sync Docs
 import { SyncDoc } from '../../utils/sync/Sync';
 
 type SupervisorMonitorPanelProps = {
@@ -19,11 +14,8 @@ type SupervisorMonitorPanelProps = {
 };
 
 export const SupervisorMonitorPanel = (props: SupervisorMonitorPanelProps) => {
-  const dispatch = useDispatch();
+  const [monitoringSupervisors, setMonitoringSupervisors] = useState([] as any[]);
 
-  const { monitorPanelArray } = useSelector(
-    (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
-  );
   const selectedTaskInSupervisorSid = useFlexSelector((state) => state?.flex?.view?.selectedTaskInSupervisorSid);
 
   const supervisorSwitch = (status: string, supervisor: string) => {
@@ -45,30 +37,18 @@ export const SupervisorMonitorPanel = (props: SupervisorMonitorPanelProps) => {
       return null;
     }
 
-    // Let's subscribe to the sync doc as an agent/worker and check
-    // if we are being coached, if we are, render that in the UI
-    // otherwise leave it blank
+    // Subscribe to the handling agent's Sync doc to enable real-time display of active supervisors
     const mySyncDoc = `syncDoc.${agentWorkerSID}`;
     const doc = await SyncDoc.getSyncDoc(mySyncDoc);
-    // We are subscribing to Sync Doc updates here and logging anytime that happens
     doc.on('updated', (_updatedDoc: string) => {
       let supervisorArray: any[] = [];
       if (doc.data.supervisors) {
         supervisorArray = [...doc.data.supervisors];
       }
-      // Set Supervisor's name that is coaching into props
-      dispatch(
-        setBargeCoachStatus({
-          monitorPanelArray: supervisorArray,
-        }),
-      );
+      setMonitoringSupervisors(supervisorArray);
     });
 
-    dispatch(
-      setBargeCoachStatus({
-        monitorPanelArray: doc?.data?.supervisors || [],
-      }),
-    );
+    setMonitoringSupervisors(doc?.data?.supervisors || []);
     return doc;
   };
 
@@ -88,8 +68,8 @@ export const SupervisorMonitorPanel = (props: SupervisorMonitorPanelProps) => {
     <Flex hAlignContent="center" vertical padding="space40">
       <Stack orientation="vertical" spacing="space30">
         <Template source={templates[StringTemplates.ActiveSupervisors]} />
-        {monitorPanelArray.length > 0 ? (
-          monitorPanelArray.map((supervisor: any) => (
+        {monitoringSupervisors.length > 0 ? (
+          monitoringSupervisors.map((supervisor: any) => (
             <Text key={`${Math.random()}`} as="p" fontWeight="fontWeightMedium" color="colorTextSuccess">
               {supervisorSwitch(supervisor.status, supervisor.supervisor)}
             </Text>
