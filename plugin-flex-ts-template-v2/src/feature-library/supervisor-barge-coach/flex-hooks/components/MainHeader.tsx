@@ -9,7 +9,7 @@ export const componentName = FlexComponent.MainHeader;
 export const componentHook = function addSupervisorAlert(flex: typeof Flex, manager: Flex.Manager) {
   const myWorkerRoles = manager.store.getState().flex?.worker?.worker?.attributes?.roles;
   // Update the role names if you wish to include this feature for more role types
-  if (myWorkerRoles.includes('supervisor') || myWorkerRoles.includes('admin')) {
+  if (myWorkerRoles?.includes('supervisor') || myWorkerRoles?.includes('admin')) {
     flex.MainHeader.Content.add(<CoachingStatusMonitor key="coaching-status-monitor" />);
 
     if (!isSupervisorAlertToggleEnabled()) return;
