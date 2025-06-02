@@ -31,7 +31,9 @@ export const SupervisorMonitorPanel = (props: SupervisorMonitorPanelProps) => {
     }
   };
 
-  const filterSupervisors = (supervisor: any) => supervisor.conference === props?.task?.conference?.conferenceSid;
+  const filterSupervisors = (supervisor: any) =>
+    supervisor.conference === props?.task?.conference?.conferenceSid ||
+    supervisor.conference === props?.task?.attributes?.conference?.sid;
 
   const syncUpdates = async (): Promise<any> => {
     const agentWorkerSID = props?.task?.workerSid;

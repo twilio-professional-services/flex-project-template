@@ -19,7 +19,9 @@ export const CoachingStatusPanel = ({ task }: SupervisorBargeCoachProps) => {
     (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
   );
 
-  const filterSupervisors = (supervisor: any) => supervisor.conference === task?.conference?.conferenceSid;
+  const filterSupervisors = (supervisor: any) =>
+    supervisor.conference === task?.conference?.conferenceSid ||
+    supervisor.conference === task?.attributes?.conference?.sid;
 
   // If the supervisor array has value in it for this conference, that means someone is coaching
   if (supervisorArray.filter(filterSupervisors).length > 0) {
