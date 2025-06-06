@@ -68,7 +68,7 @@ export const SupervisorBargeCoachButtons = ({ task }: SupervisorBargeCoachProps)
     }
 
     const conference = task && task.conference;
-    const conferenceSid = conference?.conferenceSid;
+    const conferenceSid = conference?.conferenceSid || task?.attributes?.conference?.sid;
     if (!conferenceSid) {
       return;
     }

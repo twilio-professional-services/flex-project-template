@@ -8,7 +8,7 @@ export const actionEvent = FlexActionEvent.after;
 export const actionHook = async function enableBargeCoachButtonsUponMonitor(flex: typeof Flex) {
   // Listening for supervisor to monitor the call to reset their muted/coaching states
   flex.Actions.addListener(`${actionEvent}${actionName}`, async (payload) => {
-    const conferenceSid = payload.task?.conference?.conferenceSid;
+    const conferenceSid = payload.task?.conference?.conferenceSid || payload?.task?.attributes?.conference?.sid;
     if (!conferenceSid) return;
     enterListenMode(conferenceSid);
   });

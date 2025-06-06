@@ -31,7 +31,7 @@ export const SupervisorPrivateToggle = ({ task }: SupervisorPrivateToggleProps) 
   // of the coachingStatusPanel along with updating the Sync Doc appropriately
   const togglePrivateMode = () => {
     const conference = task && task.conference;
-    const conferenceSID = conference?.conferenceSid || '';
+    const conferenceSID = conference?.conferenceSid || task?.attributes?.conference?.sid || '';
     const newValue = !privateMode;
 
     // Caching this to help with browser refresh recovery
