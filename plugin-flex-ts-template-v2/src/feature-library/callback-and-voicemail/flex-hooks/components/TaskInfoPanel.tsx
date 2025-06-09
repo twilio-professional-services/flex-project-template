@@ -6,7 +6,7 @@ import { FlexComponent } from '../../../../types/feature-loader/FlexComponent';
 
 export const componentName = FlexComponent.TaskInfoPanel;
 export const componentHook = function replaceViewForCallbackAndVoicemail(flex: typeof Flex, _manager: Flex.Manager) {
-  flex.TaskInfoPanel.Content.replace(
+  (flex.TaskInfoPanel.Content as any).replace(
     <CallbackAndVoicemail
       key="callback-component"
       allowRequeue={isAllowRequeueEnabled()}
@@ -14,7 +14,7 @@ export const componentHook = function replaceViewForCallbackAndVoicemail(flex: t
     />,
     {
       sortOrder: -1,
-      if: (props) => ['callback', 'voicemail'].includes(props.task.attributes.taskType),
+      if: (props: any) => ['callback', 'voicemail'].includes(props.task.attributes.taskType),
     },
   );
 };

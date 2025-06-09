@@ -1,9 +1,9 @@
 import * as Flex from '@twilio/flex-ui';
-import { combineReducers } from 'redux';
+import { combineReducers, Reducer, AnyAction } from 'redux';
 
 import { reduxNamespace } from '../state';
 
-let customReducers = {};
+let customReducers: Record<string, Reducer<any, AnyAction>> = {};
 
 export const init = (manager: Flex.Manager) => {
   if (!manager.store.addReducer) {
@@ -11,7 +11,11 @@ export const init = (manager: Flex.Manager) => {
     console.error(`You need FlexUI > 1.9.0 to use built-in redux; you are currently on ${Flex.VERSION}`);
     return;
   }
-  manager.store.addReducer(reduxNamespace, combineReducers(customReducers));
+
+  // Only add reducer if there are custom reducers to combine
+  if (Object.keys(customReducers).length > 0) {
+    manager.store.addReducer(reduxNamespace, combineReducers(customReducers));
+  }
 };
 
 export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: string, hook: any) => {
