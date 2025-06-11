@@ -49,3 +49,32 @@ const pauseCallRecording = () => {
 const resumeCallRecording = () => {
   Flex.Actions.invokeAction('ResumeCallRecording', { task: getCurrentTask() });
 };
+
+// Make sure keyboard shortcuts don't interfere with Ctrl+C
+const registerKeyboardShortcuts = (flex: typeof Flex, manager: Flex.Manager) => {
+  // Only register if the feature is enabled
+  if (!isFeatureEnabled()) return;
+
+  // Use a safer approach to register keyboard shortcuts
+  const keyboardShortcuts = [
+    {
+      key: 'p',
+      description: 'Pause/Resume call recording',
+      callback: pauseCallRecording,
+    },
+    {
+      key: 'r',
+      description: 'Toggle call recording',
+      callback: toggleCallRecording,
+    },
+  ];
+
+  keyboardShortcuts.forEach((shortcut) => {
+    flex.KeyboardShortcuts.registerShortcut(
+      shortcut.key,
+      shortcut.description,
+      shortcut.callback,
+      false // Don't prevent default behavior
+    );
+  });
+};

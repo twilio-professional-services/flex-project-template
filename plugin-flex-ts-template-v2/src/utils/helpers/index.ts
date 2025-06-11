@@ -1,3 +1,2 @@
-export { default as FlexHelper } from './FlexHelper';
-export { default as ConversationsHelper } from './ConversationsHelper';
-export { default as replaceStringAttributes } from './replaceStringAttributes';
+// Re-export the helpers from the correct location
+export { FlexHelper, replaceStringAttributes } from '../helpers';

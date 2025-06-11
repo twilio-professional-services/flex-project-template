@@ -105,10 +105,20 @@ export default function ActiveVideoRoom({}) {
     return () => clearInterval(shipStats);
   }, [room]);
 
-  // Disconnect from the Video room if browser tab is refreshed or closed
-  window.addEventListener("beforeunload", () => {
-    room?.disconnect();
-  });
+  // Use a safer approach for the beforeunload event
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      room?.disconnect();
+    };
+    
+    // Add event listener
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    
+    // Clean up
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [room]);
 
   return (
     <ActiveVideoRoomContainer>
