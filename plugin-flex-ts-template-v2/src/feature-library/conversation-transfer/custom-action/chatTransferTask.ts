@@ -4,7 +4,7 @@ import { TransferActionPayload } from '../types/ActionPayloads';
 import { NotificationIds } from '../flex-hooks/notifications/TransferResult';
 import ChatTransferService, { buildInviteParticipantAPIPayload } from '../helpers/APIHelper';
 import { isColdTransferEnabled, isMultiParticipantEnabled } from '../config';
-import { ConversationsHelper } from '../../../utils/helpers';
+import ConversationsHelper from '../../../utils/helpers/ConversationsHelper';
 import logger from '../../../utils/logger';
 import { addPendingTransfer, removePendingTransfer } from '../flex-hooks/states';
 
@@ -15,8 +15,9 @@ const handleChatTransferAction = async (payload: TransferActionPayload) => {
   manager.store.dispatch(addPendingTransfer(task.sid));
 
   const conversation = StateHelper.getConversationStateForTask(task);
+  const conversationsHelper = new ConversationsHelper();
 
-  if (conversation && ConversationsHelper.countOfOutstandingInvitesForConversation(conversation) !== 0) {
+  if (conversation && conversationsHelper.countOfOutstandingInvitesForConversation(conversation) !== 0) {
     Notifications.showNotification(NotificationIds.ChatCancelParticipantInviteFailedInviteOutstanding);
     manager.store.dispatch(removePendingTransfer(task.sid));
     return;

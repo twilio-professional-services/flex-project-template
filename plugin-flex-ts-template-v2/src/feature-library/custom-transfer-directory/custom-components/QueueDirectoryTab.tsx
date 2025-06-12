@@ -26,14 +26,14 @@ import {
   showRealTimeQueueData,
   isNativeDigitalXferEnabled,
 } from '../config';
+import { getFlexFeatureFlag } from '../../../utils/configuration';
 import { CustomTransferDirectoryNotification } from '../flex-hooks/notifications/CustomTransferDirectory';
 import { CustomWorkerAttributes } from '../../../types/task-router/Worker';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 import { DirectoryEntry } from '../types/DirectoryEntry';
 import DirectoryTab, { TransferClickPayload } from './DirectoryTab';
-import logger from '../../../utils/logger';
-import { getFlexFeatureFlag } from '../../../utils/configuration';
 import ConversationsHelper from '../../../utils/helpers/ConversationsHelper';
+import logger from '../../../utils/logger';
 
 export interface IRealTimeQueueData {
   total_tasks: number | null;
@@ -221,7 +221,8 @@ const QueueDirectoryTab = (props: OwnProps) => {
         conversationSid,
       } = props.task.attributes;
       (async () => {
-        const agent = await ConversationsHelper.getMyParticipant(props.task);
+        const conversationsHelper = new ConversationsHelper();
+        const agent = await conversationsHelper.getMyParticipant(props.task);
         Actions.invokeAction('StartChannelTransfer', {
           instanceSid: Manager.getInstance().serviceConfiguration.flex_instance_sid,
           interactionSid,

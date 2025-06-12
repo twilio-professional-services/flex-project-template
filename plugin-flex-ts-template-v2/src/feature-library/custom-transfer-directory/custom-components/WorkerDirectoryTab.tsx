@@ -14,11 +14,11 @@ import {
   getMaxTaskRouterWorkers,
   isNativeDigitalXferEnabled,
 } from '../config';
+import { getFlexFeatureFlag } from '../../../utils/configuration';
 import { DirectoryEntry } from '../types/DirectoryEntry';
 import DirectoryTab from './DirectoryTab';
 import { StringTemplates } from '../flex-hooks/strings/CustomTransferDirectory';
 import logger from '../../../utils/logger';
-import { getFlexFeatureFlag } from '../../../utils/configuration';
 import ConversationsHelper from '../../../utils/helpers/ConversationsHelper';
 
 export interface TransferClickPayload {
@@ -116,7 +116,8 @@ const WorkerDirectoryTab = (props: OwnProps) => {
         conversationSid,
       } = props.task.attributes;
       (async () => {
-        const agent = await ConversationsHelper.getMyParticipant(props.task);
+        const conversationsHelper = new ConversationsHelper();
+        const agent = await conversationsHelper.getMyParticipant(props.task);
         Actions.invokeAction('StartChannelTransfer', {
           instanceSid: Manager.getInstance().serviceConfiguration.flex_instance_sid,
           interactionSid,

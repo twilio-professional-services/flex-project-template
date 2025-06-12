@@ -223,7 +223,7 @@ export const replaceTemplateVariables = (template: string, task?: any): string =
   // and to ensure all occurrences are replaced in a single pass
   let result = template.replace(/\{\{task\.([^}]+)\}\}/g, (_full, attributePath) => {
     let value = task;
-    attributePath.split('.').forEach((part) => {
+    attributePath.split('.').forEach((part: string) => {
       value = value && typeof value === 'object' ? value[part] : '';
     });
     return value || '';

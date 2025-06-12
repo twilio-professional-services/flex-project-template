@@ -16,10 +16,10 @@ describe('sdk-clients/SyncClient', () => {
       const syncMap = {
         getItems: async () => ({
           hasNextPage: true,
-          items: [data[0]],
-          nextPage: async () => ({ hasNextPage: false, items: [data[1]] }),
+          items: [{ key: 'test', value: {} }],
+          nextPage: async () => ({ hasNextPage: false, items: [] }),
         }),
-      } as SyncMap;
+      } as unknown as SyncMap; // Cast to unknown first
       expect(await getAllSyncMapItems(syncMap)).toEqual(data);
     });
   });

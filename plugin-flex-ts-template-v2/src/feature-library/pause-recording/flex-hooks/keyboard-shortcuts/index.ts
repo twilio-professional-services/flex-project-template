@@ -1,6 +1,14 @@
 import * as Flex from '@twilio/flex-ui';
+import { isFeatureEnabled } from '../../config';
 
 import { StringTemplates } from '../strings/PauseRecording';
+
+interface KeyboardShortcut {
+  key: string;
+  description: string;
+  callback: () => void;
+  categories?: string[];
+}
 
 // Return an object of KeyboardShortcuts
 export const keyboardShortcutHook = () => ({
@@ -56,7 +64,7 @@ const registerKeyboardShortcuts = (flex: typeof Flex, manager: Flex.Manager) => 
   if (!isFeatureEnabled()) return;
 
   // Use a safer approach to register keyboard shortcuts
-  const keyboardShortcuts = [
+  const keyboardShortcuts: KeyboardShortcut[] = [
     {
       key: 'p',
       description: 'Pause/Resume call recording',
@@ -70,11 +78,19 @@ const registerKeyboardShortcuts = (flex: typeof Flex, manager: Flex.Manager) => 
   ];
 
   keyboardShortcuts.forEach((shortcut) => {
-    flex.KeyboardShortcuts.registerShortcut(
-      shortcut.key,
-      shortcut.description,
-      shortcut.callback,
-      false // Don't prevent default behavior
-    );
+    // Check if KeyboardShortcuts exists before using it
+    // Use any type to bypass TypeScript checking for the Flex API
+    const flexAny = flex as any;
+    if (flexAny.KeyboardShortcuts && typeof flexAny.KeyboardShortcuts.registerShortcut === 'function') {
+      flexAny.KeyboardShortcuts.registerShortcut(
+        shortcut.key,
+        shortcut.description,
+        shortcut.callback,
+        shortcut.categories
+      );
+    } else {
+      // Fallback for newer Flex versions that might have changed the API
+      console.warn('KeyboardShortcuts API not available in this Flex version');
+    }
   });
 };
