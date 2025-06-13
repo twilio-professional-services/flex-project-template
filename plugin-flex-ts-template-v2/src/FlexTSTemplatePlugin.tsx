@@ -2,6 +2,8 @@ import * as Flex from '@twilio/flex-ui';
 import { FlexPlugin } from '@twilio/flex-plugin';
 import React from 'react';
 
+import { initFeatures } from './utils/feature-loader';
+
 const PLUGIN_NAME = 'FlexTSTemplatePlugin';
 
 // Define interface for TaskAttributesDebug props
@@ -43,6 +45,9 @@ export default class FlexTSTemplatePlugin extends FlexPlugin {
   }
 
   init(flex: typeof Flex, manager: Flex.Manager) {
+    // Initialize all features from the feature library
+    initFeatures(flex, manager);
+    
     // Log environment info
     console.log('Flex environment:', {
       accountSid: manager.serviceConfiguration.account_sid,
