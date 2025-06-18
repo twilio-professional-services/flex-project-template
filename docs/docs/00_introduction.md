@@ -2,13 +2,12 @@
 sidebar_label: Introduction
 sidebar_position: 0
 slug: /
-title: "Flex Project Template"
+title: "Connie Documentation"
 ---
 
-<img src="img/logos/flex-text-lightmode.png#gh-light-mode-only" width="275" alt="Twilio Flex" />
-<img src="img/logos/flex-text-darkmode.png#gh-dark-mode-only" width="275" alt="Twilio Flex" />
+<img src="img/logos/connie-rtc-docs-logo.jpg" width="275" alt="ConnieRTC" />
 
-The _Flex Project Template_ is a starting point for Flex solutions of any size. It provides a methodology for managing all the key assets of a Twilio Flex solution:
+The _ConnieRTC Platform_ is a comprehensive Twilio Flex solution that provides advanced contact center capabilities. This documentation covers all the key components and features of the ConnieRTC platform:
 
 - It can be used for large projects or simple standalone features
 - Many of the most common features requested by Flex customers [are already packaged in the template](/feature-library/overview)

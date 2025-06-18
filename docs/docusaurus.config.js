@@ -5,9 +5,9 @@ const { github: lightCodeTheme, dracula: darkCodeTheme } = require("prism-react-
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "ConnieRTC Documentation",
+  title: "Connie Documentation",
   tagline: "Twilio Professional Services",
-  favicon: "img/logos/flex.png",
+  favicon: "img/logos/connie-rtc-icon.png",
 
   // Set the production url of your site here
   url: "https://ConnieML.github.io",
@@ -78,10 +78,10 @@ const config = {
       // Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
       navbar: {
-        title: "ConnieRTC Documentation",
+        title: "Connie Documentation",
         logo: {
-          alt: "Twilio Flex Logo",
-          src: "img/logos/flex.png",
+          alt: "Connie Logo",
+          src: "img/logos/connie-rtc-icon.png",
         },
         items: [
           {
@@ -95,15 +95,15 @@ const config = {
         style: "dark",
         links: [
           {
-            title: "Twilio Docs",
+            title: "Connie Links",
             items: [
               {
-                label: "Twilio Flex Docs",
-                href: "https://www.twilio.com/docs/flex",
+                label: "Learn More",
+                href: "https://connie.one",
               },
               {
-                label: "Flex Developer Docs",
-                href: "https://www.twilio.com/docs/flex/developer",
+                label: "Log In",
+                href: "https://portal.connie.team",
               },
             ],
           },
@@ -117,7 +117,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} Twilio, Inc.`,
+        copyright: `Copyright © ${new Date().getFullYear()} Connie Corp.`,
       },
       prism: {
         theme: lightCodeTheme,
