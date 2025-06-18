@@ -14,7 +14,7 @@ This feature allows the following configuration settings.
 | Setting | Description |
 | --------| ------------|
 | Api key | Your Datadog Account [client token](https://docs.datadoghq.com/account_management/api-app-keys/#client-tokens)
-| Log Level | The minimum log level to send to Datadog. See [Logging](/flex-project-template/building/template-utilities/logging) for more details.
+| Log Level | The minimum log level to send to Datadog. See [Logging](../building/template-utilities/logging) for more details.
 | Intake Region | The [Datadog Site](https://docs.datadoghq.com/getting_started/site/) for your account. Valid values are `us` | `us5` | `us3` | `eu`.
 | Flush Timeout | In milliseconds. Because we send logs to datadog over HTTP - we do not want to make an HTTP request for every log written. This feature will buffer log messages for the flush timeout before making a single HTTP request to Datadog with all buffered log messages. If there are no logs within the Flush timeout, there is no HTTP request to Datadog. |
 

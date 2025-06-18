@@ -5,20 +5,20 @@ const { github: lightCodeTheme, dracula: darkCodeTheme } = require("prism-react-
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Flex Project Template",
+  title: "ConnieRTC Documentation",
   tagline: "Twilio Professional Services",
   favicon: "img/logos/flex.png",
 
   // Set the production url of your site here
-  url: "https://twilio-professional-services.github.io",
+  url: "https://ConnieML.github.io",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: "/flex-project-template/",
+  baseUrl: "/connieRTC-flex/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: "twilio-professional-services", // Usually your GitHub org/user name.
-  projectName: "flex-project-template", // Usually your repo name.
+  organizationName: "ConnieML", // Usually your GitHub org/user name.
+  projectName: "connieRTC-flex", // Usually your repo name.
   trailingSlash: false,
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
@@ -78,14 +78,14 @@ const config = {
       // Replace with your project's social card
       image: "img/docusaurus-social-card.jpg",
       navbar: {
-        title: "Flex Project Template",
+        title: "ConnieRTC Documentation",
         logo: {
           alt: "Twilio Flex Logo",
           src: "img/logos/flex.png",
         },
         items: [
           {
-            href: "https://github.com/twilio-professional-services/flex-project-template",
+            href: "https://github.com/ConnieML/connieRTC-flex",
             label: "GitHub",
             position: "right",
           },
@@ -112,7 +112,7 @@ const config = {
             items: [
               {
                 label: "GitHub",
-                href: "https://github.com/twilio-professional-services/flex-project-template",
+                href: "https://github.com/ConnieML/connieRTC-flex",
               },
             ],
           },

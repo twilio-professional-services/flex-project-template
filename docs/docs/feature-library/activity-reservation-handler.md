@@ -28,14 +28,14 @@ This paradigm shift can be a difficult one for legacy contact centers to adopt w
 This feature aims to make such a shift easier by introducing a mechanism to automatically sync the agent Activity with the status of the work the agent is handling. This can aid with reporting strategies.
 
 ### other comments
-Given it is not desirable to select the system activities, the [agent skill filter](/flex-project-template/feature-library/activity-skill-filter) is a useful feature to enable in unison with this one.  This feature will allow you to effectively hide the system activities from view.
+Given it is not desirable to select the system activities, the [agent skill filter](./activity-skill-filter) is a useful feature to enable in unison with this one.  This feature will allow you to effectively hide the system activities from view.
 
 ## Known Issues
 
 ### issue one
 Flex places a limitation on changing Activity while a task is in a pending state.  In other words, if a task has been pushed to the agent but the agent has not accepted, then Flex can only change Activity to an offline Activity which will reject the task.
 
-As a result, while a pending task appears in an agents task list, toggling between tasks will not update the Activity.  For this reason it is recommended to use this feature along with an [agent automation](/flex-project-template/feature-library/agent-automation) to auto accept tasks.
+As a result, while a pending task appears in an agents task list, toggling between tasks will not update the Activity.  For this reason it is recommended to use this feature along with an [agent automation](./agent-automation) to auto accept tasks.
 
 ### issue two
 Flex allows supervisors to move the Activity of an agent from the Supervisor Teams View.  Doing so pushes an Activity update to the worker which triggers the event `workerActivityUpdated` on the agent's client, which in turn triggers a re-evaluation of the correct state to be in, again on the client side. This has two drawbacks:

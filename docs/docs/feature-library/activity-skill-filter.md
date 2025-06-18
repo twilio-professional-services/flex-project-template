@@ -35,7 +35,7 @@ On older Twilio Flex accounts a TaskRouter Activity of "Reserved" may be present
 
 ## Flex User Experience
 
-The following example images show the behavior of the Activity skill filter might behave when the system Activities from [activity reservation handler](/flex-project-template/feature-library/activity-reservation-handler) are hidden using non-existent skills and the `Offline` Activity is set to last position.  As can be seen, the other Activities are ordered alphabetically.
+The following example images show the behavior of the Activity skill filter might behave when the system Activities from [activity reservation handler](./activity-reservation-handler) are hidden using non-existent skills and the `Offline` Activity is set to last position.  As can be seen, the other Activities are ordered alphabetically.
 
 | With Feature   | Without Feature  |
 | -------------- | ---------------- | 
