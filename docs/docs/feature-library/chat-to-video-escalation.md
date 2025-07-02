@@ -11,11 +11,9 @@ This feature shows how an agent can initiate a video room from a messaging conve
    1. [Feature Structure](#feature-structure)
    1. [Technical Components](#technical-components)
    1. [Example Walkthrough](#example-walkthrough)
-   1. [Escalating Chat to Video](#escalating-chat-to-video)
-2. [Local Development](#local-development)
-3. [Changelog](#changelog)
-4. [Reference](#reference)
-5. [Disclaimer](#disclaimer)
+1. [Local Development](#local-development)
+1. [Reference](#reference)
+1. [Disclaimer](#disclaimer)
 
 ---
 
