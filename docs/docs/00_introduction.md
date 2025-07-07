@@ -7,32 +7,136 @@ title: "Connie Documentation"
 
 <img src="img/logos/connie-rtc-docs-logo.jpg" width="275" alt="ConnieRTC" />
 
-The _Connie Realtime Center (aka ConnieRTC) is a comprehensive digital communication and engagment solution that provides advanced contact center capabilities to local nonprofit organizations and other community based organizations that provide missioin critical programs and services to people in-need. This documentation covers all the key components and features of the ConnieRTC platform:
+The _Connie Realtime Center (aka ConnieRTC) is a comprehensive digital communication and engagment solution that provides advanced contact center capabilities to local nonprofit organizations and other community based organizations that provide missioin critical programs and services to people in-need. 
 
-- It can be used for large projects or simple standalone features
-- Many of the most common features requested by Flex customers [are already packaged in the template](/feature-library/overview)
-- Each feature is self-contained and easily removed if desired  
-- Features can be turned on and off using an [administration panel](/feature-library/admin-ui)
-- You can [deploy this solution and use it to build in just a few minutes](/getting-started/install-template) by providing your account SID, API key, and API secret.
+## Choose Your Path
 
-## Why use this template?
+Select your role to get started with the documentation that's right for you:
 
-The Twilio platform is a robust suite of tools that can be orchestrated together to create incredible custom solutions. The biggest challenge is how to automatically configure and orchestrate these different tools together from an single source of truth. This is the problem the template aims to resolve.
+<div style={{display: 'flex', gap: '20px', marginTop: '30px', marginBottom: '30px'}}>
+  <div style={{
+    border: '2px solid #4CAF50', 
+    borderRadius: '8px', 
+    padding: '20px', 
+    flex: 1,
+    textAlign: 'center',
+    backgroundColor: '#f8f9fa'
+  }}>
+    <h3>🏢 I'm a Connie End User</h3>
+    <p>I work for a nonprofit organization and want to deploy or use ConnieRTC</p>
+    <div style={{marginTop: '15px'}}>
+      <a href="/end-users/cbo-admins/getting-started" style={{
+        display: 'inline-block',
+        padding: '10px 20px',
+        backgroundColor: '#4CAF50',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '5px',
+        fontWeight: 'bold'
+      }}>
+        CBO Admins →
+      </a>
+    </div>
+    <div style={{marginTop: '10px'}}>
+      <a href="/end-users/supervisors/overview" style={{
+        display: 'inline-block',
+        padding: '8px 16px',
+        backgroundColor: '#2196F3',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '5px',
+        fontSize: '14px'
+      }}>
+        Supervisors →
+      </a>
+      <span style={{margin: '0 10px'}}>|</span>
+      <a href="/end-users/staff-agents/overview" style={{
+        display: 'inline-block',
+        padding: '8px 16px',
+        backgroundColor: '#2196F3',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '5px',
+        fontSize: '14px'
+      }}>
+        Staff Agents →
+      </a>
+    </div>
+  </div>
 
-The template provides a means to manage all of the assets which make up a Flex solution. This aggregates the work _Twilio Professional Services_ have done to show how different features can be robustly implemented on the Flex platform. It can take new Flex developers from 0 to 100 by putting them right in the position of developing feature enhancements instead of worrying about how to manage assets and dependencies on the platform.
+  <div style={{
+    border: '2px solid #FF9800', 
+    borderRadius: '8px', 
+    padding: '20px', 
+    flex: 1,
+    textAlign: 'center',
+    backgroundColor: '#f8f9fa'
+  }}>
+    <h3>👩‍💻 I'm a Connie Developer</h3>
+    <p>I want to contribute to ConnieRTC or customize it for my organization</p>
+    <div style={{marginTop: '15px'}}>
+      <a href="/developers/general/getting-started" style={{
+        display: 'inline-block',
+        padding: '10px 20px',
+        backgroundColor: '#FF9800',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '5px',
+        fontWeight: 'bold'
+      }}>
+        Get Started →
+      </a>
+    </div>
+    <div style={{marginTop: '10px'}}>
+      <a href="/developers/frontend/overview" style={{
+        display: 'inline-block',
+        padding: '8px 16px',
+        backgroundColor: '#9C27B0',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '5px',
+        fontSize: '14px'
+      }}>
+        Frontend →
+      </a>
+      <span style={{margin: '0 10px'}}>|</span>
+      <a href="/developers/backend/overview" style={{
+        display: 'inline-block',
+        padding: '8px 16px',
+        backgroundColor: '#9C27B0',
+        color: 'white',
+        textDecoration: 'none',
+        borderRadius: '5px',
+        fontSize: '14px'
+      }}>
+        Backend →
+      </a>
+    </div>
+  </div>
+</div>
 
-Furthermore, with the rich library of examples and conventions, developers can quickly see how to approach different problems on the platform by seeing working code that they can easily reverse engineer.
+## About ConnieRTC
 
-### Flex Plugin Library
+This documentation covers all the key components and features of the ConnieRTC platform:
 
-If you are primarily looking to add common contact center functionality to Flex, we recommend starting with the plugins from the [Flex Plugin Library](https://www.twilio.com/docs/flex/developer/plugins/plugin-library) to support your use case. These plugins are maintained and supported by Twilio, and many are derived from the most popular features included in the template.
+- **Scalable Solutions**: Can be used for large projects or simple standalone features
+- **Feature-Rich**: Many of the most common features requested by Flex customers [are already packaged in the template](/feature-library/overview)
+- **Modular Design**: Each feature is self-contained and easily removed if desired  
+- **Admin Control**: Features can be turned on and off using an [administration panel](/feature-library/admin-ui)
+- **Quick Deployment**: You can [deploy this solution and use it to build in just a few minutes](/getting-started/install-template) by providing your account SID, API key, and API secret
 
-Using plugins from the Plugin Library reduces the custom code footprint and total cost of ownership of your solution. Please be aware they cannot be customized and must be deployed and configured manually via the Flex Admin user interface. In case you have already developed, or plan to develop, custom code that modifies Flex actions or components, it is necessary to validate that those modifications don’t conflict with the standard plugin(s) you are planning to deploy from the Plugin Library. Depending on your use case, you may wish to use only plugins from the Plugin Library, or only the template, or a mix of both.
+## Why Choose ConnieRTC?
 
-If you plan to use plugins from the Plugin Library alongside this template, please [remove the corresponding template feature(s)](/building/feature-management/remove-features) to prevent conflicts.
+The Twilio platform is a robust suite of tools that can be orchestrated together to create incredible custom solutions. The biggest challenge is how to automatically configure and orchestrate these different tools together from a single source of truth. This is the problem ConnieRTC aims to resolve.
 
-## How do I get started?
+ConnieRTC provides a comprehensive solution specifically designed for **nonprofit organizations and community-based organizations** that need powerful, affordable communication tools to serve their communities better.
 
-Installing the template in your Twilio account is fast and easy. [Follow this step-by-step guide to install the template](/getting-started/install-template) in under 10 minutes.
+## Community & Support
 
-When you are ready to customize and extend your Flex solution with the template, [get started building with the template](/building/getting-started)!
+- **Community Forum**: Join our discussions for peer support
+- **Professional Services**: Get expert help for complex deployments
+- **Open Source**: Contribute to the platform and help other nonprofits
+
+---
+
+*Ready to get started? Choose your path above to dive into the documentation that's perfect for your role!*
