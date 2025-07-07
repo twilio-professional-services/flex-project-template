@@ -30,7 +30,7 @@ Comprehensive backend documentation is currently in development. This section wi
 
 While we're building dedicated backend docs, you can:
 - Explore the **[General Developer Guide](../general/getting-started)** for setup
-- Review the **[codebase structure](../general/architecture)** overview
+- Review the **codebase structure** overview (coming soon)
 - Join our **[Developer Discord](https://discord.gg/connie-dev)** for help
 
 ## Get Notified

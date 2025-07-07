@@ -29,12 +29,12 @@ Make sure you have:
 ### Option 1: Fully Automated Setup (Recommended)
 Perfect if you want to get up and running quickly with minimal technical knowledge.
 
-[**Start Automated Setup →**](./automated-setup)
+**Start Automated Setup →** (guide coming soon)
 
 ### Option 2: Manual Step-by-Step Setup
 Choose this if you want to understand each step or have specific customization needs.
 
-[**Start Manual Setup →**](./manual-setup)
+**Start Manual Setup →** (guide coming soon)
 
 ## What You'll Accomplish
 
@@ -46,10 +46,10 @@ By the end of this guide, you'll have:
 
 ## Next Steps
 
-1. **[Choose your setup method](#quick-start-options)** above
-2. **[Configure your customer database](./database-setup)** 
-3. **[Train your agents](./agent-training)**
-4. **[Go live with confidence](./going-live)**
+1. **Choose your setup method** above
+2. **Configure your customer database** (guide coming soon)
+3. **Train your agents** (guide coming soon)
+4. **Go live with confidence** (guide coming soon)
 
 ## Need Help?
 
