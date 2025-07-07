@@ -2,7 +2,7 @@
 sidebar_label: Introduction
 sidebar_position: 0
 slug: /
-title: "Connie Documentation"
+title: "ConnieRTC Documentation"
 ---
 
 <img src="img/logos/connie-rtc-docs-logo.jpg" width="275" alt="ConnieRTC" />
