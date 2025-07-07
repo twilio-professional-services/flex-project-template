@@ -25,7 +25,7 @@ Select your role to get started with the documentation that's right for you:
     <h3>🏢 I'm a Connie End User</h3>
     <p>I work for a nonprofit organization and want to deploy or use ConnieRTC</p>
     <div style={{marginTop: '15px'}}>
-      <a href="/end-users/cbo-admins/getting-started" style={{
+      <a href="/connieRTC-flex/end-users/cbo-admins/getting-started" style={{
         display: 'inline-block',
         padding: '10px 20px',
         backgroundColor: '#4CAF50',
@@ -38,7 +38,7 @@ Select your role to get started with the documentation that's right for you:
       </a>
     </div>
     <div style={{marginTop: '10px'}}>
-      <a href="/end-users/supervisors/overview" style={{
+      <a href="/connieRTC-flex/end-users/supervisors/overview" style={{
         display: 'inline-block',
         padding: '8px 16px',
         backgroundColor: '#2196F3',
@@ -50,7 +50,7 @@ Select your role to get started with the documentation that's right for you:
         Supervisors →
       </a>
       <span style={{margin: '0 10px'}}>|</span>
-      <a href="/end-users/staff-agents/overview" style={{
+      <a href="/connieRTC-flex/end-users/staff-agents/overview" style={{
         display: 'inline-block',
         padding: '8px 16px',
         backgroundColor: '#2196F3',
@@ -75,7 +75,7 @@ Select your role to get started with the documentation that's right for you:
     <h3>👩‍💻 I'm a Connie Developer</h3>
     <p>I want to contribute to ConnieRTC or customize it for my organization</p>
     <div style={{marginTop: '15px'}}>
-      <a href="/developers/general/getting-started" style={{
+      <a href="/connieRTC-flex/developers/general/getting-started" style={{
         display: 'inline-block',
         padding: '10px 20px',
         backgroundColor: '#FF9800',
@@ -88,7 +88,7 @@ Select your role to get started with the documentation that's right for you:
       </a>
     </div>
     <div style={{marginTop: '10px'}}>
-      <a href="/developers/frontend/overview" style={{
+      <a href="/connieRTC-flex/developers/frontend/overview" style={{
         display: 'inline-block',
         padding: '8px 16px',
         backgroundColor: '#9C27B0',
@@ -100,7 +100,7 @@ Select your role to get started with the documentation that's right for you:
         Frontend →
       </a>
       <span style={{margin: '0 10px'}}>|</span>
-      <a href="/developers/backend/overview" style={{
+      <a href="/connieRTC-flex/developers/backend/overview" style={{
         display: 'inline-block',
         padding: '8px 16px',
         backgroundColor: '#9C27B0',
