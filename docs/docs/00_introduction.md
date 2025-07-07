@@ -7,7 +7,7 @@ title: "Connie Documentation"
 
 <img src="img/logos/connie-rtc-docs-logo.jpg" width="275" alt="ConnieRTC" />
 
-The _ConnieRTC Platform_ is a comprehensive Twilio Flex solution that provides advanced contact center capabilities. This documentation covers all the key components and features of the ConnieRTC platform:
+The _Connie Realtime Center (aka ConnieRTC) is a comprehensive digital communication and engagment solution that provides advanced contact center capabilities to local nonprofit organizations and other community based organizations that provide missioin critical programs and services to people in-need. This documentation covers all the key components and features of the ConnieRTC platform:
 
 - It can be used for large projects or simple standalone features
 - Many of the most common features requested by Flex customers [are already packaged in the template](/feature-library/overview)
