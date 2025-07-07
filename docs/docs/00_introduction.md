@@ -7,7 +7,7 @@ title: "ConnieRTC Documentation"
 
 <img src="img/logos/connie-rtc-docs-logo.jpg" width="275" alt="ConnieRTC" />
 
-The _Connie Realtime Center (aka ConnieRTC) is a comprehensive digital communication and engagment solution that provides advanced contact center capabilities to local nonprofit organizations and other community based organizations that provide missioin critical programs and services to people in-need. 
+The _Connie Realtime Center (aka ConnieRTC) is a comprehensive digital communication and engagement solution that provides advanced contact center capabilities to local nonprofit organizations and other community based organizations that provide mission critical programs and services to people in-need. 
 
 ## Choose Your Path
 
