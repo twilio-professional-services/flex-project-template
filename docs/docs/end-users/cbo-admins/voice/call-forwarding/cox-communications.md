@@ -71,7 +71,7 @@ Configure when calls should be forwarded:
 ## Next Steps
 
 After setting up call forwarding:
-- [Configure voicemail in Connie](../voicemail/setup.md)
+- Configure voicemail in Connie (coming soon)
 - [Set up call routing rules](../../getting-started.md)
 - [Train your team on the new system](../../../staff-agents/overview.md)
 
@@ -80,7 +80,7 @@ After setting up call forwarding:
 If you encounter issues:
 1. Contact Cox Business Support: 1-800-COX-BIZ1
 2. Reach out to your Connie administrator
-3. Check the [Connie troubleshooting guide](../../../troubleshooting.md)
+3. Check the Connie troubleshooting guide (coming soon)
 
 ---
 
