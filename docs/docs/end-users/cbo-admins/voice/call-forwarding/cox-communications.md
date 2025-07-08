@@ -1,6 +1,6 @@
 ---
 sidebar_label: Cox Communications
-sidebar_position: 1
+sidebar_position: 2
 title: "Forward Cox Communications Business Phone to Connie"
 ---
 
