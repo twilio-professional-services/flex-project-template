@@ -33,11 +33,7 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
     'font-weight:bold',
   );
 
-  if (event === FlexEvent.pluginsInitialized) {
-    manager.events.addListener(event, () => {
-      hook.eventHook(flex, manager);
-    });
-  } else if (event === FlexEvent.tokenUpdated) {
+  if (event === FlexEvent.tokenUpdated) {
     manager.events.addListener(event, (tokenPayload) => {
       hook.eventHook(flex, manager, tokenPayload);
     });
@@ -52,6 +48,18 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
   } else if (event === FlexEvent.workerAttributesUpdated) {
     manager.events.addListener(event, (newAttributes: Record<string, any>) => {
       hook.eventHook(flex, manager, newAttributes);
+    });
+  } else if (event === FlexEvent.notesSubmitted) {
+    manager.events.addListener(event, (notes: any) => {
+      hook.eventHook(flex, manager, notes);
+    });
+  } else if (event === FlexEvent.selectedViewChanged) {
+    manager.events.addListener(event, (viewName: string) => {
+      hook.eventHook(flex, manager, viewName);
+    });
+  } else {
+    manager.events.addListener(event, () => {
+      hook.eventHook(flex, manager);
     });
   }
 };
