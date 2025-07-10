@@ -10,7 +10,7 @@ Time to complete: _~8 minutes_
 
 :::info INFO
 
-These steps require a [currently-maintained version of Flex UI 2.x](https://www.twilio.com/docs/flex/flex-ui-eol-reference) to be configured on your Flex account, and the TaskRouter workspace name to be the default "Flex Task Assignment".
+These steps require a [currently-maintained version of Flex UI 2.x](https://www.twilio.com/docs/flex/flex-ui-eol-reference) to be configured on your Flex account, and the TaskRouter workspace name to be the default "Flex Task Assignment". If you have already deployed plugins from the Flex Plugin Library, please [read this note first](/#flex-plugin-library).
 
 :::
 
