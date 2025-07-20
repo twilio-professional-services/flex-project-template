@@ -1,7 +1,7 @@
 ---
 title: Configuration
 ---
-import GithubOverrideConfig from '../../../static/img/guides/github-override-config.png';
+import GithubOverrideConfig from '../../../../static/img/guides/github-override-config.png';
 
 The template manages configuration in a few different ways:
 
