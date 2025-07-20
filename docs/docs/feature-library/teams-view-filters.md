@@ -83,7 +83,7 @@ The worker attribute `department_name` may be pushed into the worker object thro
 
 Ideally we would be able to get a unique lit of department_names from a lookup but there is no consistent way to do this without a backend solution. If building tooling in the solution to allow supervisors the ability to edit and apply department name, synchronizing these options should be a consideration.
 
-However, as a starting point, the department filter uses the departments defined within the [common configuration](/building/template-utilities/configuration#common-configuration), which can be modified to consist of your unique department names.
+However, as a starting point, the department filter uses the departments defined within the [common configuration](/developers/building/template-utilities/configuration#common-configuration), which can be modified to consist of your unique department names.
 
 The filter matches against the worker attribute `department_name`. The filter looks like the following:
 
@@ -103,7 +103,7 @@ The worker attribute `team_name` may be pushed into the worker object through SS
 
 Ideally we would be able to get a unique list of team names from a lookup, but there is no consistent way to do this without a backend solution. If building tooling in the solution to allow supervisors the ability to edit and apply team names, synchronizing these options should be a consideration.
 
-However, as a starting point, the team filter uses the teams defined within the [common configuration](/building/template-utilities/configuration#common-configuration), which can be modified to consist of your unique team names.
+However, as a starting point, the team filter uses the teams defined within the [common configuration](/developers/building/template-utilities/configuration#common-configuration), which can be modified to consist of your unique team names.
 
 The filter matches against the worker attribute `team_name`. The filter looks like the following:
 

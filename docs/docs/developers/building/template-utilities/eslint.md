@@ -16,4 +16,4 @@ Many linter issues can be fixed automatically. To do that, run this command:
 npm run lint:fix
 ```
 
-It can be useful to set up your text editor to integrate with ESLint so that you can see errors as you type. See [Developer Setup](/building/developer-setup) for details.
+It can be useful to set up your text editor to integrate with ESLint so that you can see errors as you type. See [Developer Setup](/developers/building/developer-setup) for details.

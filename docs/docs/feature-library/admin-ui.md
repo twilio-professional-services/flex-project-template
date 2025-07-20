@@ -25,7 +25,7 @@ This feature is enabled by default and requires no further configuration.
 
 If you are using an infrastructure-as-code deployment strategy, exposing a configuration interface outside of the code repository is undesirable. For such deployments, it is suggested to disable this feature, and set the `OVERWRITE_CONFIG=true` environment variable as part of the flex-config deployment (this is set up as an input variable on the `Deploy Flex` github actions script). This will result in the repository flex-config as the source of truth.
 
-By default, the admin UI saves [audit logs](../building/template-utilities/audit-logging) for all configuration changes. This can be disabled by setting `"enable_audit_logging": false` in your flex-config `ui_attributes` file's `admin_ui` section.
+By default, the admin UI saves [audit logs](../developers/building/template-utilities/audit-logging) for all configuration changes. This can be disabled by setting `"enable_audit_logging": false` in your flex-config `ui_attributes` file's `admin_ui` section.
 
 ## How does it work?
 

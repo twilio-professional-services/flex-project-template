@@ -13,7 +13,7 @@ This workflow encapsulates the logic for deploying the entire template. It can b
 1. Validates that the environment secrets and variables required for deployment are present and valid, and that the Flex account is configured properly
 1. Sets the `ENVIRONMENT` variable based on the selected environment
 1. Deploys all serverless services and add-ons
-   - As part of this process, the setup script executes in order to generate the environment file used by the deployment. See [serverless configuration](/building/template-utilities/configuration#serverless-configuration) for details on how this works.
+   - As part of this process, the setup script executes in order to generate the environment file used by the deployment. See [serverless configuration](/developers/building/template-utilities/configuration#serverless-configuration) for details on how this works.
    - To deploy add-ons, `npm run deploy-addons` is executed from the top level directory.
    - Within the serverless package(s), the `npm run deploy` command is executed to perform the deployment. This is performed after deploying add-ons.
 1. Deploys Terraform
@@ -73,7 +73,7 @@ This workflow builds and deploys the Docusaurus site to GitHub Pages if the repo
 Location: `.github/workflows/checks.yaml`
 
 This workflow executes whenever a pull request is opened. It performs two primary functions:
-1. Runs [ESLint](/building/template-utilities/eslint) and posts a comment with results indicating any warnings or errors
+1. Runs [ESLint](/developers/building/template-utilities/eslint) and posts a comment with results indicating any warnings or errors
 1. Executes `npm run test:ci` to run unit tests, and publishes the results
 
 :::tip Fork note

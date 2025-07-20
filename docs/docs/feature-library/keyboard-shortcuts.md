@@ -79,7 +79,7 @@ Twilio Flex comes with a list of default shortcuts which can be found [here](htt
 
 ### Custom keyboard shortcuts
 
-The following list of custom shortcuts are all custom values preconfigured as a part of this feature using a [keyboard-shortcuts Flex hook](/building/flex-hooks/keyboard-shortcuts).
+The following list of custom shortcuts are all custom values preconfigured as a part of this feature using a [keyboard-shortcuts Flex hook](/developers/building/flex-hooks/keyboard-shortcuts).
 
 | Action                            | Description                                                                                                                                                                                                                | Shortcut               |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |

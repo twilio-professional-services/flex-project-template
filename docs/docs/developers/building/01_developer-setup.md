@@ -19,7 +19,7 @@ To enable automatic formatting upon save:
 
 Now, when you open the `flex-project-template` directory in VSCode, you will have automatic issue highlighting and code formatting.
 
-You may also see ESLint errors and warnings from the command line, rather than from your editor. See [ESLint](/building/template-utilities/eslint) for details.
+You may also see ESLint errors and warnings from the command line, rather than from your editor. See [ESLint](/developers/building/template-utilities/eslint) for details.
 
 ## Serverless debugging
 

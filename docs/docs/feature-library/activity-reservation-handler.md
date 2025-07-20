@@ -69,7 +69,7 @@ The reason we cannot change the agent's state directly to the correct resolved s
 }
 ```
 
-This feature depends on a configured set of Activities for the different ACD states. After [enabling](/building/template-utilities/configuration#configuration-management) the feature the following configuration is required
+This feature depends on a configured set of Activities for the different ACD states. After [enabling](/developers/building/template-utilities/configuration#configuration-management) the feature the following configuration is required
 
 The following are the descriptions of the configuration objects and what they represent 
 
@@ -88,11 +88,11 @@ this object allows the administrator to customize which activity names to use fo
 
 #### terraform
 
-A terraform deploy will deploy the default Activities that are assigned. If you wish to change these you can [modify the terraform definitions](/building/template-utilities/terraform) to create the activities you wish to use and you can modify the feature configuration using your preferred [configuration management](/building/template-utilities/configuration) method.
+A terraform deploy will deploy the default Activities that are assigned. If you wish to change these you can [modify the terraform definitions](/developers/building/template-utilities/terraform) to create the activities you wish to use and you can modify the feature configuration using your preferred [configuration management](/developers/building/template-utilities/configuration) method.
 
 #### manual setup 
 
-If you are not using terraform you can create the activities manually in the [console](https://twilio.com/console).  You can then modify the feature configuration using your preferred [configuration management](/building/template-utilities/configuration) method.
+If you are not using terraform you can create the activities manually in the [console](https://twilio.com/console).  You can then modify the feature configuration using your preferred [configuration management](/developers/building/template-utilities/configuration) method.
 
 ## Custom Changes
 

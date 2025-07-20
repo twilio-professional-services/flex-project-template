@@ -26,7 +26,7 @@ There are some additional configuration properties you may change if desired:
 
 ## keyboard shortcuts
 
-Pause/resume recording keyboard shortcuts have been created using a [keyboard-shortcuts Flex hook](/building/flex-hooks/keyboard-shortcuts). These may be remapped using the `keyboard-shortcuts` feature. By default, the following keys are mapped:
+Pause/resume recording keyboard shortcuts have been created using a [keyboard-shortcuts Flex hook](/developers/building/flex-hooks/keyboard-shortcuts). These may be remapped using the `keyboard-shortcuts` feature. By default, the following keys are mapped:
 
 | Key | Full Command     | Action                                     |
 | --- | ---------------- | ------------------------------------------ |

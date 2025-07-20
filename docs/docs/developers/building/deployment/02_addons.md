@@ -2,7 +2,7 @@
 title: Add-ons
 ---
 
-When building a Twilio Flex solution, you may have additional supporting packages that need to be deployed, such as web apps or services. These can be managed and deployed with the template using the `addons` directory. Packages within this directory will be processed by [the setup script](/building/template-utilities/configuration#setup-script-reference), which populates missing environment variables and installs dependencies. Packages within this directory will also be automatically deployed using the included workflows.
+When building a Twilio Flex solution, you may have additional supporting packages that need to be deployed, such as web apps or services. These can be managed and deployed with the template using the `addons` directory. Packages within this directory will be processed by [the setup script](/developers/building/template-utilities/configuration#setup-script-reference), which populates missing environment variables and installs dependencies. Packages within this directory will also be automatically deployed using the included workflows.
 
 ## Included add-ons
 
@@ -29,7 +29,7 @@ Packages (which are sub-directories of the `addons` directory) must adhere to a 
 
 When the environment setup script is run, packages within the `addons` directory will be processed as follows:
 1. If a `.env` or `.env.<environment>` file exists, any placeholder variables will be replaced using the same logic as with other packages. If the file doesn't exist and a `.env.example` file exists, that file will first be copied to `.env` or `.env.<environment>`, depending if the script is run locally.
-   1. You should [take advantage of this](/building/template-utilities/configuration#influencing-the-automatic-configuration) for environment variables that are defined within your CI (such as GitHub Actions variables and secrets) or for populating entity SIDs from your Twilio account, which differ between accounts.
+   1. You should [take advantage of this](/developers/building/template-utilities/configuration#influencing-the-automatic-configuration) for environment variables that are defined within your CI (such as GitHub Actions variables and secrets) or for populating entity SIDs from your Twilio account, which differ between accounts.
 2. The package's dependencies will be installed via `npm install`. If a `postinstall` script is defined, that will also be executed.
 
 When performing a deployment, the `npm run deploy-addons` script is executed after the environment setup script. This will run `npm run deploy` from each package within the `addons` directory.

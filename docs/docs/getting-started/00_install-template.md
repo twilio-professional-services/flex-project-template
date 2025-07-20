@@ -15,7 +15,7 @@ These steps require a [currently-maintained version of Flex UI 2.x](https://www.
 :::
 
 1. [Create your own repository](https://github.com/twilio-professional-services/flex-project-template/generate) using the template.
-   - (Optional) After creating your repo, you may also want to [attach the history to your new repository](/building/merge-future-updates) to be able to later pull in future updates--this can also be done later.
+   - (Optional) After creating your repo, you may also want to [attach the history to your new repository](/developers/building/merge-future-updates) to be able to later pull in future updates--this can also be done later.
    
    - _NOTE_ If you are on the free GitHub tier, the repository will need to be public. If you are on the free tier and still want to use a private repo you will need to clone the deploy script to have dedicated secrets per environment
 2. [Create a Twilio API key and secret](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) for your account, which we will use in the next step.
@@ -110,7 +110,7 @@ Unchecking this means features mentioned in the resource descriptions above will
 
 7. Run the workflow.
    - This will deploy the assets to your environment with the default features enabled. See [Feature library Information](/feature-library/overview) for further details of whats enabled by default.
-   - Environment properties will be automatically populated based on the deployed Flex configuration, including service and workflow SIDs. See [this page](/building/template-utilities/configuration#influencing-the-automatic-configuration) for information on how to influence this configuration.
+   - Environment properties will be automatically populated based on the deployed Flex configuration, including service and workflow SIDs. See [this page](/developers/building/template-utilities/configuration#influencing-the-automatic-configuration) for information on how to influence this configuration.
  
 
 All done! Once the workflow successfully completes, the template has been installed.

@@ -2,7 +2,7 @@
 title: Overview
 ---
 
-The feature-library directory of the Flex plugin is intended to be a suite of typical features added to Flex that can accelerate the launch of a Flex project by showing developers "how-to". Features can easily be turned on or off via the [flex-config](/building/template-utilities/configuration) - or they can easily be removed completely by removing the feature directory or using the [remove-features](/building/feature-management/remove-features) script.
+The feature-library directory of the Flex plugin is intended to be a suite of typical features added to Flex that can accelerate the launch of a Flex project by showing developers "how-to". Features can easily be turned on or off via the [flex-config](/developers/building/template-utilities/configuration) - or they can easily be removed completely by removing the feature directory or using the [remove-features](/developers/building/feature-management/remove-features) script.
 
 Each feature in the feature library is self contained. Let's look at [caller-id](/feature-library/caller-id) as an example.
 

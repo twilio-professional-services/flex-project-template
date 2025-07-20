@@ -75,7 +75,7 @@ Select your role to get started with the documentation that's right for you:
     <h3>👩‍💻 I'm a Connie Developer</h3>
     <p>I want to contribute to ConnieRTC or customize it for my organization</p>
     <div style={{marginTop: '15px'}}>
-      <a href="/developers/general/getting-started" style={{
+      <a href="/developers/getting-started" style={{
         display: 'inline-block',
         padding: '10px 20px',
         backgroundColor: '#FF9800',

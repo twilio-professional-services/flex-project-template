@@ -49,4 +49,4 @@ npm start
 ```
 
 7. Push your changes to your repository - this is your new baseline
-8. You can follow the instructions for [local development setup](/getting-started/run-locally) and then [adding a feature](/building/feature-management/add-new-feature)
+8. You can follow the instructions for [local development setup](/getting-started/run-locally) and then [adding a feature](/developers/building/feature-management/add-new-feature)

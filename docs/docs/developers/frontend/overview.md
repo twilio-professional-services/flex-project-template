@@ -29,7 +29,7 @@ Comprehensive frontend documentation is currently in development. This section w
 ## Current Resources
 
 While we're building dedicated frontend docs, you can:
-- Explore the **[General Developer Guide](../general/getting-started)** for setup
+- Explore the **[General Developer Guide](../getting-started)** for setup
 - Review the **codebase structure** overview (coming soon)
 - Join our **[Developer Discord](https://discord.gg/connie-dev)** for help
 
