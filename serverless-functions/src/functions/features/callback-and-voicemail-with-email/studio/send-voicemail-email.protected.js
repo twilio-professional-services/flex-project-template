@@ -38,8 +38,10 @@ exports.handler = async function(context, event, callback) {
           }
           break;
         case 'MAILGUN_API_KEY':
-          if (!varValue.startsWith('key-')) {
-            invalidVars.push(`${varName} (should start with 'key-')`);
+          // Mailgun API keys can start with 'key-' (domain keys) or other prefixes (private keys)
+          // Just check that it's a reasonable length and not obviously invalid
+          if (varValue.length < 20) {
+            invalidVars.push(`${varName} (appears too short - should be at least 20 characters)`);
           }
           break;
         case 'ACCOUNT_SID':

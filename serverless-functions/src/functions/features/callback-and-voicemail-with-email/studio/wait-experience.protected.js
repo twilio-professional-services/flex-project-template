@@ -107,8 +107,16 @@ async function cancelTask(context, task, cancelReason) {
 }
 
 exports.handler = async (context, event, callback) => {
+  // DEBUG: Log all incoming parameters
+  console.log('=== WAIT-EXPERIENCE DEBUG START ===');
+  console.log('Event parameters:', JSON.stringify(event, null, 2));
+  console.log('Mode:', event.mode);
+  console.log('CallSid:', event.CallSid);
+  console.log('QueueSid:', event.QueueSid);
+  console.log('=== WAIT-EXPERIENCE DEBUG END ===');
+
   const twiml = new Twilio.twiml.VoiceResponse();
-  const baseUrl = `https://${context.DOMAIN_NAME}/features/callback-and-voicemail/studio/wait-experience`;
+  const baseUrl = `https://${context.DOMAIN_NAME}/features/callback-and-voicemail-with-email/studio/wait-experience`;
   let holdMusicUrl = options.holdMusicUrl;
 
   // Make relative hold music URLs absolute
