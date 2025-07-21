@@ -19,6 +19,18 @@ output "example_callback_flow_sid" {
 }
 # END FEATURE: callback-and-voicemail
 
+# FEATURE: callback-and-voicemail-with-email
+output "callback_with_email_workflow_sid" {
+  value = module.callback-and-voicemail-with-email.callback_with_email_workflow_sid
+  description = "Callback with email workflow SID"
+}
+
+output "example_callback_with_email_flow_sid" {
+  value = module.callback-and-voicemail-with-email.example_callback_with_email_flow_sid
+  description = "Example callback with email flow SID"
+}
+# END FEATURE: callback-and-voicemail-with-email
+
 # FEATURE: conversation-transfer
 output "chat_transfer_workflow_sid" {
   value = module.conversation-transfer.chat_transfer_workflow_sid

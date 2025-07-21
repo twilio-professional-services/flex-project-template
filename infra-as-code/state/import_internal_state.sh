@@ -63,6 +63,12 @@ importInternalState() {
 	echo "   - :white_check_mark: callback-and-voicemail resources" >>$GITHUB_STEP_SUMMARY
 # END FEATURE: callback-and-voicemail
 
+# FEATURE: callback-and-voicemail-with-email
+	import_resource "$workflows" "Template Example Callback With Email" "module.callback-and-voicemail-with-email.twilio_taskrouter_workspaces_workflows_v1.template_example_callback_with_email" "friendlyName"
+	import_resource "$flows" "Template Example Callback With Email Flow" "module.callback-and-voicemail-with-email.twilio_studio_flows_v2.template_example_callback_with_email_flow" "friendlyName" false
+	echo "   - :white_check_mark: callback-and-voicemail-with-email resources" >>$GITHUB_STEP_SUMMARY
+# END FEATURE: callback-and-voicemail-with-email
+
 # FEATURE: internal-call
 	import_resource "$workflows" "Template Example Internal Calls" "module.internal-call.twilio_taskrouter_workspaces_workflows_v1.template_example_internal_calls" "friendlyName"
 	import_resource "$queues" "Template Example Internal Calls" "module.internal-call.twilio_taskrouter_workspaces_task_queues_v1.template_example_internal_calls" "friendlyName"
