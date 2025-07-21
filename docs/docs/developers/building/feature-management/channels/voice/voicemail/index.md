@@ -1,14 +1,24 @@
 ---
-sidebar_label: Choose Your Email Provider
-sidebar_position: 1
-title: "Choose Your Email Provider"
+sidebar_label: Choose Email Provider
+sidebar_position: 2  
+title: "Choose Your Email Provider for Option C"
 ---
 
 import Link from '@docusaurus/Link';
 
 # Choose Your Email Provider
 
-Select your email service provider to set up automated email notifications for voicemails and other Connie features.
+If you've selected **Option C** (Callback + Voicemail + Email Notifications) from the [Implementation Guide](./voicemail-implementation-guide), you need to choose an email provider for sending voicemail notifications.
+
+## Supported Email Providers
+
+| Provider | Free Tier | Setup Complexity | Best For |
+|----------|-----------|------------------|----------|
+| **Mailgun** | 100 emails/day | Simple | Most organizations |
+| **SendGrid** | 100 emails/day | Simple | High deliverability needs |
+| **SMTP2GO** | 1,000 emails/month | Moderate | *Coming Soon* |
+
+Select your email service provider below:
 
 <div style={{
   display: 'flex',
@@ -18,7 +28,7 @@ Select your email service provider to set up automated email notifications for v
   margin: '40px 0'
 }}>
   <Link
-    to="/developers/building/feature-management/channels/voice/voicemail/mailgun-setup"
+    to="/developers/building/feature-management/channels/voice/voicemail/email-providers/mailgun-setup"
     style={{
       textDecoration: 'none',
       color: 'inherit',
@@ -58,7 +68,7 @@ Select your email service provider to set up automated email notifications for v
   </Link>
 
   <Link
-    to="/developers/building/feature-management/channels/voice/voicemail/sendgrid-setup"
+    to="/developers/building/feature-management/channels/voice/voicemail/email-providers/sendgrid-setup"
     style={{
       textDecoration: 'none',
       color: 'inherit',

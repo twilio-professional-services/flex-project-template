@@ -1,7 +1,7 @@
 ---
 sidebar_label: SendGrid Setup
-sidebar_position: 3
-title: "SendGrid Email Setup for Voicemail Notifications"
+sidebar_position: 2
+title: "SendGrid Email Integration Setup"
 ---
 
 # SendGrid Email Setup for Voicemail Notifications
