@@ -7,6 +7,10 @@ title: ring-notification
 
 The ring notification feature plays a ringtone sound for incoming tasks.
 
+:::caution Deprecated
+This feature has been replaced by the out-of-the-box ringtone feature in Flex UI 2.13 and later. To use the out-of-the-box feature, follow [the instructions from the Flex documentation](https://www.twilio.com/docs/flex/admin-guide/setup/default-ringtone).
+:::
+
 ---
 
 ## Business Details
