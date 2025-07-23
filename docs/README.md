@@ -1,6 +1,6 @@
 # Flex Project Template Documentation Site
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), in hopes of building better organized documentation around what the Flex Project Template is, how to get started with it, and how to build on top of it.
+This website is built using [Docusaurus](https://docusaurus.io/), in hopes of building better organized documentation around what the Flex Project Template is, how to get started with it, and how to build on top of it.
 
 For adding on to the documentation site, please see the [Adding Content](#adding-content--documentation) section.
 
