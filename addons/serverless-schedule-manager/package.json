@@ -14,7 +14,7 @@
   "dependencies": {
     "@twilio/runtime-handler": "2.0.0",
     "axios": "^1.9.0",
-    "form-data": "^4.0.0",
+    "form-data": "^4.0.4",
     "lodash": "^4.17.21",
     "luxon": "^3.0.1",
     "rrule": "^2.7.1",
