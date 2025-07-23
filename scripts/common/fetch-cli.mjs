@@ -152,6 +152,29 @@ export const fetchServerlessFunctions = (serviceSid) => {
   }, serviceSid);
 }
 
+export const fetchStudioFlows = () => {
+  fetchResources("studio-flow", "Studio flows", "api:studio:v2:flows:list", (fetched, wanted, wantedResources) => {
+    if (isMatch(wantedResources[wanted].name, fetched.friendlyName, false)) {
+      resultCache[wanted] = fetched.sid;
+      return true;
+    }
+  });
+}
+
+export const fetchTrQueues = (workspaceSid) => {
+  if (!workspaceSid) {
+    console.warn("TaskRouter workspace SID missing; unable to fetch task queues");
+    return;
+  }
+  fetchResources(`tr-queue`, `TaskRouter task queues`, `api:taskrouter:v1:workspaces:task-queues:list --workspace-sid=${workspaceSid}`, (fetched, wanted, wantedResources) => {
+    // only match the fallback if the specified name is not already found
+    if (isMatch(wantedResources[wanted].name, fetched.friendlyName, true) || (!resultCache[wanted] && isMatch(wantedResources[wanted].fallback, fetched.friendlyName, true))) {
+      resultCache[wanted] = fetched.sid;
+      return true;
+    }
+  }, workspaceSid);
+}
+
 export const fetchTrWorkflows = (workspaceSid) => {
   if (!workspaceSid) {
     console.warn("TaskRouter workspace SID missing; unable to fetch workflows");

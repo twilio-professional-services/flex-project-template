@@ -216,11 +216,11 @@ If the value is not found in the environment variables, the `scripts/config/mapp
 ```json title=mappings.json
 {
   "VARIABLE_NAME_HERE": {
-    "type": "tr-workflow", // Type of Twilio resource to fetch the value of: serverless-domain, serverless-service, serverless-environment, serverless-function, tr-workspace, tr-workflow, chat-service, or sync-service
+    "type": "tr-workflow", // Type of Twilio resource to fetch the value of: serverless-domain, serverless-service, serverless-environment, serverless-function, studio-flow, tr-queue, tr-workspace, tr-workflow, chat-service, or sync-service
     "name": "My Workflow", // Name of resource to find
     "localValue": "My Other Workflow", // Optionally override the name property with a different one when running locally
     "fallback": "/(Assign.*Anyone)/", // Optionally define a fallback in case the defined name is not found. Note that this regex format is allowed in any of these properties except 'type'.
-    "parent": "PARENT_VARIABLE_NAME_HERE" // Required for serverless-environment, serverless-function, and tr-workflow types. Indicates the variable representing this item's parent object (of type serverless-service or tr-workspace, depending on this item's type).
+    "parent": "PARENT_VARIABLE_NAME_HERE" // Required for serverless-environment, serverless-function, tr-queue, and tr-workflow types. Indicates the variable representing this item's parent object (of type serverless-service or tr-workspace, depending on this item's type).
   }
 }
 ```
