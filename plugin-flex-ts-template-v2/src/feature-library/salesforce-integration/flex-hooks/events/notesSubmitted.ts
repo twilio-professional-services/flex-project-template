@@ -5,7 +5,7 @@ import { setChannelNote } from '../states';
 import logger from '../../../../utils/logger';
 import { isCopilotNotesEnabled } from '../../config';
 
-//export const eventName = FlexEvent.notesSubmitted;
+export const eventName = FlexEvent.notesSubmitted;
 export const eventHook = async function collectCopilotNotes(flex: typeof Flex, manager: Flex.Manager, notes: any) {
   if (!isCopilotNotesEnabled()) {
     return;
