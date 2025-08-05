@@ -88,6 +88,12 @@ If agent copilot functionality is enabled, this feature will collect the notes s
 
 In order to correctly relate the activity log to another record, the `WhatId` or `WhoId` will be passed to `saveLog` based on the value of the task attribute `sfdcObjectId`. This attribute is set automatically by the click-to-dial functionality for outbound tasks, and is also set automatically by the screen pop functionality for inbound tasks when there is a single record match returned by Salesforce. If screen pop returned multiple matches, the user is presented with a dropdown menu in their task canvas, which sets the attribute when a record is selected. The `sfdcObjectType` attribute is used to store the type of object referenced by `sfdcObjectId`, which is then used to determine if the record ID should be passed as the `WhoId` (Contact or Lead) or the `WhatId` (everything else).
 
+:::info Multiple match results handling
+
+As described above, in order to determine the record to relate the activity log to, the user is presented with a dropdown list of records returned from the search results. However, it may be more desirable to instead integrate the selection within the Salesforce interface itself. One approach for achieving this is to use a Lightning Message Service (LMS) channel to publish a message that the Flex plugin can subscribe to and receive. Documentation for subscribing to an LMS channel via the Open CTI library [is available here](https://developer.salesforce.com/docs/atlas.en-us.api_cti.meta/api_cti/sforce_api_cti_methods_lms.htm).
+
+:::
+
 ### Click-to-dial
 
 **File: `utils/ClickToDial.ts`**
