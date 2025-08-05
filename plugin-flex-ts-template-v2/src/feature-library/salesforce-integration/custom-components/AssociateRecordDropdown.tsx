@@ -1,4 +1,4 @@
-import { ITask } from '@twilio/flex-ui';
+import { Actions, ITask } from '@twilio/flex-ui';
 import { useSelector } from 'react-redux';
 import { Flex } from '@twilio-paste/core/flex';
 import { Select, Option } from '@twilio-paste/core/select';
@@ -7,6 +7,7 @@ import AppState from '../../../types/manager/AppState';
 import { reduxNamespace } from '../../../utils/state';
 import { SalesforceIntegrationState } from '../flex-hooks/states';
 import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
+import logger from '../../../utils/logger';
 
 interface AssociateRecordDropdownProps {
   task?: ITask;
@@ -34,7 +35,20 @@ const AssociateRecordDropdown = ({ task }: AssociateRecordDropdownProps) => {
       return;
     }
 
-    await TaskRouterService.updateTaskAttributes(task.taskSid, { sfdcObjectId, sfdcObjectType: record.type });
+    const alreadyBlocked = Actions.findBlockedActions('CompleteTask', { task });
+    const shouldBlock = Object.keys(alreadyBlocked).length < 1;
+
+    if (shouldBlock) {
+      Actions.blockAction('CompleteTask', { task });
+    }
+    try {
+      await TaskRouterService.updateTaskAttributes(task.taskSid, { sfdcObjectId, sfdcObjectType: record.type });
+    } catch (error: any) {
+      logger.error('[salesforce-integration] Error updating task attributes with record', error);
+    }
+    if (shouldBlock) {
+      Actions.unblockAction('CompleteTask', { task });
+    }
   };
 
   return (
