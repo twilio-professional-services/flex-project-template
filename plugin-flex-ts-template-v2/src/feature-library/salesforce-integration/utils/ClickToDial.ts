@@ -1,7 +1,8 @@
-import { Actions, Manager, StateHelper } from '@twilio/flex-ui';
+import { Actions, Manager, Notifications, StateHelper } from '@twilio/flex-ui';
 
 import { getOpenCti } from './SfdcHelper';
 import logger from '../../../utils/logger';
+import { SalesforceIntegrationNotification } from '../flex-hooks/notifications';
 
 const handleClickToDial = async (response: any) => {
   logger.log('[salesforce-integration] Performing click-to-dial', response);
@@ -18,6 +19,7 @@ const handleClickToDial = async (response: any) => {
 
   // Check that the worker is not already on a call
   if (StateHelper.getCurrentPhoneCallState()) {
+    Notifications.showNotification(SalesforceIntegrationNotification.AlreadyOnPhone);
     logger.error('[salesforce-integration] Outbound call not made as user is already on a call');
     return;
   }
