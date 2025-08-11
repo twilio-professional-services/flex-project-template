@@ -2,11 +2,15 @@
 export enum StringTemplates {
   AssociationRequired = 'PSSalesforceAssociationRequired',
   AlreadyOnPhone = 'PSSalesforceAlreadyOnPhone',
+  IncomingTaskLabel = 'PSSalesforceIncomingTaskLabel',
+  TasksLabel = 'PSSalesforceTasksLabel',
 }
 
 export const stringHook = () => ({
   'en-US': {
     [StringTemplates.AssociationRequired]: 'Please select a Salesforce record to associate before completing the task.',
     [StringTemplates.AlreadyOnPhone]: 'You must end your current call before placing a new call.',
+    [StringTemplates.IncomingTaskLabel]: 'Incoming Task',
+    [StringTemplates.TasksLabel]: '{{numTasks}} {{#if singular}}Task{{else}}Tasks{{/if}}',
   },
 });

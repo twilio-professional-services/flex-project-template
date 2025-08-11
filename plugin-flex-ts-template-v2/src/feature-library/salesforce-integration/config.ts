@@ -9,6 +9,8 @@ const {
   hide_crm_container = false,
   prevent_popout_during_call = false,
   screen_pop = false,
+  show_panel_automatically = false,
+  utility_bar_status = false,
 } = (getFeatureFlags()?.features?.salesforce_integration as SalesforceIntegrationConfig) || {};
 
 export const isFeatureEnabled = () => {
@@ -37,4 +39,12 @@ export const isPreventPopoutEnabled = () => {
 
 export const isScreenPopEnabled = () => {
   return screen_pop;
+};
+
+export const isShowPanelAutomaticallyEnabled = () => {
+  return show_panel_automatically;
+};
+
+export const isUtilityBarStatusEnabled = () => {
+  return utility_bar_status;
 };

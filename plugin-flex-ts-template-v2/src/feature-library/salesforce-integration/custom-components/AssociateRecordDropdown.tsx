@@ -1,4 +1,5 @@
 import { Actions, ITask } from '@twilio/flex-ui';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Flex } from '@twilio-paste/core/flex';
 import { Select, Option } from '@twilio-paste/core/select';
@@ -14,6 +15,8 @@ interface AssociateRecordDropdownProps {
 }
 
 const AssociateRecordDropdown = ({ task }: AssociateRecordDropdownProps) => {
+  const [isSaving, setIsSaving] = useState(false);
+
   const { screenPopSearchResults } = useSelector(
     (state: AppState) => state[reduxNamespace].salesforceIntegration as SalesforceIntegrationState,
   );
@@ -42,9 +45,12 @@ const AssociateRecordDropdown = ({ task }: AssociateRecordDropdownProps) => {
       Actions.blockAction('CompleteTask', { task });
     }
     try {
+      setIsSaving(true);
       await TaskRouterService.updateTaskAttributes(task.taskSid, { sfdcObjectId, sfdcObjectType: record.type });
     } catch (error: any) {
       logger.error('[salesforce-integration] Error updating task attributes with record', error);
+    } finally {
+      setIsSaving(false);
     }
     if (shouldBlock) {
       Actions.unblockAction('CompleteTask', { task });
@@ -57,6 +63,7 @@ const AssociateRecordDropdown = ({ task }: AssociateRecordDropdownProps) => {
         id="associate-record-select"
         value={task.attributes.sfdcObjectId ?? 'placeholder'}
         onChange={recordSelected}
+        disabled={isSaving}
       >
         <Option disabled value="placeholder">
           Select a record to associate...

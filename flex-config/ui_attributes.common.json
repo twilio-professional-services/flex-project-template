@@ -434,7 +434,9 @@
         "copilot_notes": true,
         "hide_crm_container": true,
         "prevent_popout_during_call": true,
-        "screen_pop": true
+        "screen_pop": true,
+        "show_panel_automatically": true,
+        "utility_bar_status": true
       }
     }
   }

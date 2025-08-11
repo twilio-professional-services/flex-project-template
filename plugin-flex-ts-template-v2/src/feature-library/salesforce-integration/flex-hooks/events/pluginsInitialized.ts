@@ -5,7 +5,8 @@ import { FlexEvent } from '../../../../types/feature-loader';
 import { getSfdcBaseUrl, isSalesforce } from '../../utils/SfdcHelper';
 import { enableClickToDial } from '../../utils/ClickToDial';
 import logger from '../../../../utils/logger';
-import { isClickToDialEnabled, isHideCrmContainerEnabled } from '../../config';
+import { isClickToDialEnabled, isHideCrmContainerEnabled, isUtilityBarStatusEnabled } from '../../config';
+import { updateUtilityBar } from '../../utils/UtilityBarHelper';
 
 export const eventName = FlexEvent.pluginsInitialized;
 export const eventHook = async function loadOpenCti(flex: typeof Flex, manager: Flex.Manager) {
@@ -41,5 +42,16 @@ export const eventHook = async function loadOpenCti(flex: typeof Flex, manager: 
     enableClickToDial();
   } catch (error: any) {
     logger.error('[salesforce-integration] Error calling Open CTI enableClickToDial', error);
+  }
+
+  if (!isUtilityBarStatusEnabled()) {
+    return;
+  }
+
+  try {
+    const { activity, tasks } = manager.store.getState().flex.worker;
+    updateUtilityBar(activity, tasks);
+  } catch (error: any) {
+    logger.error('[salesforce-integration] Error calling Open CTI to update utility bar', error);
   }
 };

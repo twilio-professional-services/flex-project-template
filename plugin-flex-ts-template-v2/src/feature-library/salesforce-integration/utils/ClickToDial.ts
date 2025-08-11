@@ -3,6 +3,8 @@ import { Actions, Manager, Notifications, StateHelper } from '@twilio/flex-ui';
 import { getOpenCti } from './SfdcHelper';
 import logger from '../../../utils/logger';
 import { SalesforceIntegrationNotification } from '../flex-hooks/notifications';
+import { setSoftphonePanelVisibility } from './UtilityBarHelper';
+import { isShowPanelAutomaticallyEnabled } from '../config';
 
 const handleClickToDial = async (response: any) => {
   logger.log('[salesforce-integration] Performing click-to-dial', response);
@@ -17,22 +19,18 @@ const handleClickToDial = async (response: any) => {
     return;
   }
 
+  if (isShowPanelAutomaticallyEnabled()) {
+    // If the Flex softphone is not visible, make it so
+    // We do this here instead of relying on taskReceived so that the user can see any error notifications
+    setSoftphonePanelVisibility(true);
+  }
+
   // Check that the worker is not already on a call
   if (StateHelper.getCurrentPhoneCallState()) {
     Notifications.showNotification(SalesforceIntegrationNotification.AlreadyOnPhone);
     logger.error('[salesforce-integration] Outbound call not made as user is already on a call');
     return;
   }
-
-  // If the Flex softphone is not visible, make it so
-  getOpenCti().isSoftphonePanelVisible({
-    callback: (response: any) => {
-      if (response.success && !response.returnValue?.visible) {
-        // Engage!
-        getOpenCti().setSoftphonePanelVisibility({ visible: true });
-      }
-    },
-  });
 
   let sfdcObjectId = response.recordId;
   let sfdcObjectType = response.objectType;

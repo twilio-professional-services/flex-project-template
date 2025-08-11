@@ -17,7 +17,16 @@ Functionality included within this implementation:
 - UI enhancements
   - Disables the pop-out and pop-in buttons while on a call, to prevent accidental call hangups
   - Hides the CRM container when embedded
+  - Hides the Flex logo in the header to make room for additional buttons
+  - Opens the Flex panel automatically when click-to-dial is used or an inbound task is received
+  - Updates the utility bar item icon and label with the worker's current activity (if no tasks), incoming tasks, or the number of active tasks
   - When screen pop returns multiple records, a dropdown is added to the interface for the agent to select the appropriate record for activity logging
+
+---
+
+Example screenshot of handling an inbound call with UI enhancements and multiple screen pop results:
+
+![Salesforce integration screenshot](/img/features/salesforce-integration/salesforce-integration.png)
 
 ---
 
@@ -32,6 +41,7 @@ Flex includes a Salesforce integration out-of-the-box, however, it is not fully 
 This `salesforce-integration` feature aims to be used as a starting point for your own customized Salesforce integration. The feature offers largely the same baseline functionality of the out-of-box integration, as well as some critical usability enhancements:
 
 - Disables the pop-out and pop-in buttons while on a call, to prevent accidental call hangups
+- Interface enhancements that streamline the agent workflow
 - When screen pop returns multiple records, a dropdown is added to the interface for the agent to select the appropriate record for activity logging
 
 ### Configuration options
@@ -48,7 +58,9 @@ To enable the feature, under the `flex-config` attributes set the `salesforce_in
   "copilot_notes": true, // Adds agent copilot disposition and summary to activity records created by the feature
   "hide_crm_container": true, // Hides the Flex CRM container when embedded within Salesforce
   "prevent_popout_during_call": true, // Disables the pop-out or pop-in button while on a call, to prevent accidental hangups
-  "screen_pop": true // Enables search and screen pop of Salesforce records based on the inbound task attributes
+  "screen_pop": true, // Enables search and screen pop of Salesforce records based on the inbound task attributes
+  "show_panel_automatically": true, // Pops open Flex when a task is received or click-to-dial is performed
+  "utility_bar_status": true // Updates the utility bar item icon and label with the current activity (if no tasks), incoming task, or number of active tasks
 }
 ```
 

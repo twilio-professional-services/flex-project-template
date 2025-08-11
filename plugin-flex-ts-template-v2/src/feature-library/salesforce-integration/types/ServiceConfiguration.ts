@@ -6,4 +6,6 @@ export default interface SalesforceIntegrationConfig {
   hide_crm_container: boolean;
   prevent_popout_during_call: boolean;
   screen_pop: boolean;
+  show_panel_automatically: boolean;
+  utility_bar_status: boolean;
 }
