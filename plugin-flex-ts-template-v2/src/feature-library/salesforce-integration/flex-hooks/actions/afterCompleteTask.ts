@@ -27,7 +27,7 @@ export const actionHook = function saveCallLog(flex: typeof Flex) {
     }
 
     try {
-      logger.log('[salesforce-integration] Saving task log', task.taskSid);
+      logger.log(`[salesforce-integration] Saving task log for ${task.taskSid}`);
       saveLog(task, 'Completed', (response: any) => {
         if (response.success) {
           logger.log('[salesforce-integration] Saved task log', response.returnValue);
