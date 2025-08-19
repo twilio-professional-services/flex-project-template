@@ -6,7 +6,7 @@ import * as fetchCli from "./fetch-cli.mjs";
 
 const parseData = (data) => {
   let result = {};
-  for (const match of data.matchAll(new RegExp(`<${placeholderPrefix}_(.*)>`, 'g'))) {
+  for (const match of data.matchAll(new RegExp(`<${placeholderPrefix}_([^>\n\r]*)>`, 'g'))) {
     result[match[1]] = match[0];
   }
   return result;
@@ -94,6 +94,12 @@ const fillVar = (key, envVars, environment) => {
     break;
     case "serverless-function":
     fetchCli.fetchServerlessFunctions(envVars[parentKey]);
+    break;
+    case "studio-flow":
+    fetchCli.fetchStudioFlows();
+    break;
+    case "tr-queue":
+    fetchCli.fetchTrQueues(envVars[parentKey]);
     break;
     case "tr-workspace":
     fetchCli.fetchTrWorkspaces();
