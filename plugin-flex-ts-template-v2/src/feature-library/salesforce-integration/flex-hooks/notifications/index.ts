@@ -6,6 +6,7 @@ import { StringTemplates } from '../strings';
 export enum SalesforceIntegrationNotification {
   AssociationRequired = 'PSSalesforceAssociationRequired',
   AlreadyOnPhone = 'PSSalesforceAlreadyOnPhone',
+  UnableToCallOffline = 'PSSalesforceUnableToCallOffline',
 }
 
 // Return an array of Flex.Notification
@@ -21,5 +22,11 @@ export const notificationHook = () => [
     type: Flex.NotificationType.error,
     content: StringTemplates.AlreadyOnPhone,
     timeout: 3500,
+  },
+  {
+    id: SalesforceIntegrationNotification.UnableToCallOffline,
+    type: Flex.NotificationType.error,
+    content: StringTemplates.UnableToCallOffline,
+    timeout: 5000,
   },
 ];

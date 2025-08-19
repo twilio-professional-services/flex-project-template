@@ -64,7 +64,7 @@ export const updateUtilityBar = (activity: Activity, tasks: Map<string, ITask<Re
 
   // 2. Display alert for any pending tasks
   for (const task of tasks.values()) {
-    if (task.status === 'pending') {
+    if (task.status === 'pending' && task.attributes.direction !== 'outbound') {
       setSoftphoneItemIcon('alert');
       setSoftphoneItemLabel(templates[StringTemplates.IncomingTaskLabel]());
       return;

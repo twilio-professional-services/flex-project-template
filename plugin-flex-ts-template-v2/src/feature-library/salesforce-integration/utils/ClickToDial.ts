@@ -9,8 +9,10 @@ import { isShowPanelAutomaticallyEnabled } from '../config';
 const handleClickToDial = async (response: any) => {
   logger.log('[salesforce-integration] Performing click-to-dial', response);
 
+  const manager = Manager.getInstance();
+
   // Check that this is the active Flex session
-  const { singleSessionGuard } = Manager.getInstance().store.getState().flex.session;
+  const { singleSessionGuard } = manager.store.getState().flex.session;
   if (singleSessionGuard?.sessionInvalidated || singleSessionGuard?.otherSessionDetected) {
     logger.error(
       '[salesforce-integration] Outbound call not made as Flex session not valid per single session guard',
@@ -26,9 +28,21 @@ const handleClickToDial = async (response: any) => {
   }
 
   // Check that the worker is not already on a call
-  if (StateHelper.getCurrentPhoneCallState()) {
+  if (StateHelper.getCurrentPhoneCallState() || StateHelper.hasPendingCall()) {
+    Notifications.dismissNotificationById(SalesforceIntegrationNotification.AlreadyOnPhone);
     Notifications.showNotification(SalesforceIntegrationNotification.AlreadyOnPhone);
     logger.error('[salesforce-integration] Outbound call not made as user is already on a call');
+    return;
+  }
+
+  // Check that the worker is not offline
+  const workerActivity = manager.store.getState().flex.worker?.activity;
+  if (workerActivity?.sid === manager.serviceConfiguration.taskrouter_offline_activity_sid) {
+    Notifications.dismissNotificationById(SalesforceIntegrationNotification.UnableToCallOffline);
+    Notifications.showNotification(SalesforceIntegrationNotification.UnableToCallOffline, {
+      activity: workerActivity?.name,
+    });
+    logger.error('[salesforce-integration] Outbound call not made as user is in the offline activity');
     return;
   }
 
