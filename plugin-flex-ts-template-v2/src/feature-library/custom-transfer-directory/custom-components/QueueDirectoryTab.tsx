@@ -52,6 +52,7 @@ export interface TransferQueue extends IQueue, IRealTimeQueueData {}
 
 export interface OwnProps {
   task: ITask;
+  queues?: Array<IQueue>;
 }
 
 export interface MapItem {
@@ -93,16 +94,18 @@ const QueueDirectoryTab = (props: OwnProps) => {
   // async function to retrieve the task queues from the tr sdk
   // this will trigger the useEffect for a fetchedQueues update
   const fetchSDKTaskQueues = async () => {
-    if (workspaceClient)
-      setFetchedQueues(
-        Array.from(
-          (
-            await workspaceClient.fetchTaskQueues({
-              Ordering: 'DateUpdated:desc',
-            })
-          ).values(),
-        ) as unknown as Array<IQueue>,
-      );
+    if (!workspaceClient) {
+      return;
+    }
+    setFetchedQueues(
+      Array.from(
+        (
+          await workspaceClient.fetchTaskQueues({
+            Ordering: 'DateUpdated:desc',
+          })
+        ).values(),
+      ) as unknown as Array<IQueue>,
+    );
   };
 
   // async function to retrieve queues from the insights client with
@@ -246,8 +249,10 @@ const QueueDirectoryTab = (props: OwnProps) => {
   };
 
   const fetchQueues = () => {
-    // fetch the queues from the taskrouter sdk
-    fetchSDKTaskQueues().catch(logger.error);
+    if (!Array.isArray(props.queues)) {
+      // fetch the queues from the taskrouter sdk
+      fetchSDKTaskQueues().catch(logger.error);
+    }
 
     // fetch the queues from the insights client
     fetchInsightsQueueData().catch(logger.error);
@@ -263,6 +268,13 @@ const QueueDirectoryTab = (props: OwnProps) => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (Array.isArray(props.queues)) {
+      // If Flex UI already fetched queues, use it
+      setFetchedQueues(props.queues);
+    }
+  }, [props.queues]);
 
   // hook when fetchedQueues, insightsQueues are updated
   useEffect(() => {
