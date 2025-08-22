@@ -1,7 +1,8 @@
+import { ITask } from '@twilio/flex-ui';
+
 import { getFeatureFlags } from '../../utils/configuration';
 import RecordingStatusCallbackConfig from './types/ServiceConfiguration';
 import { replaceStringAttributes } from '../../utils/helpers';
-import { ITask } from '@twilio/flex-ui';
 
 const {
   enabled = false,
