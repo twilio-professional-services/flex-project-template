@@ -103,7 +103,7 @@ const WorkerDirectoryTab = (props: OwnProps) => {
             address: worker.sid,
             type: 'worker',
             key: uuidv4(),
-          }) as DirectoryEntry,
+          } as DirectoryEntry),
       );
 
     setFilteredWorkers(updatedWorkers);
