@@ -2,7 +2,7 @@
 	"commands": {},
 	"environments": {},
 	"projects": {},
-	"runtime": "node18" 	/* The version of Node.js to deploy the build to. */,
+	"runtime": "node22" 	/* The version of Node.js to deploy the build to. */,
 	// "assets": true 	/* Upload assets. Can be turned off with --no-assets */,
 	// "assetsFolder": null 	/* Specific folder name to be used for static assets */,
 	// "buildSid": null 	/* An existing Build SID to deploy to the new environment */,
