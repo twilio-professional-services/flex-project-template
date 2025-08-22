@@ -7,13 +7,18 @@ If you wish to modify the template in any way, you will need to set up your deve
 
 ## Prerequisites
 
-- you are running node v18 or above
-- twilio cli 5.22.0 or above is [installed](https://www.twilio.com/docs/twilio-cli/getting-started/install) (`twilio --version`)
-- twilio flex plugins 7.1.0 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli) (`twilio plugins`, `twilio plugins:install @twilio-labs/plugin-flex@latest`)
-- twilio serverless plugin 3.1.6 or above is [installed](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit) (`twilio plugins` `twilio plugins:install @twilio-labs/plugin-serverless@latest`)
-- `twilio profiles:list` has an active account set.
-- have the twilio auth token for your account ready (you can find this in the [Twilio Console](https://console.twilio.com/))
-- If you are running Windows, ensure you are using Git Bash to execute the commands when working with the template, rather than Command Prompt or PowerShell.
+- Node.js 22 or above is installed
+- Twilio CLI 6.1.0 or above is [installed](https://www.twilio.com/docs/twilio-cli/getting-started/install)
+  - To check your currently installed version, run `twilio --version`
+- Twilio CLI Flex plugin 7.1.2 or above is [installed](https://www.twilio.com/docs/flex/developer/plugins/cli/install#install-the-flex-plugins-cli)
+  - To check your currently installed version, run `twilio plugins`
+  - To install the latest version, run `twilio plugins:install @twilio-labs/plugin-flex@latest`
+- Twilio CLI serverless plugin 3.3.0 or above is [installed](https://www.twilio.com/docs/labs/serverless-toolkit/getting-started#install-the-twilio-serverless-toolkit)
+  - To check your currently installed version, run `twilio plugins`
+  - To install the latest version, run `twilio plugins:install @twilio-labs/plugin-serverless@latest`
+- `twilio profiles:list` has an active account set
+- Have the Twilio auth token for your account ready (you can find this in the [Twilio Console](https://console.twilio.com/))
+- If you are running Windows, ensure you are using Git Bash to execute the commands when working with the template, rather than `cmd` or PowerShell.
   - We also need to instruct `npm` to use Git Bash for executing scripts. To do so, run: `npm config set script-shell "C:\\Program Files\\git\\bin\\bash.exe"` (adjust as needed for the installed Git location)
 
 :::caution Feature Functionality
@@ -37,16 +42,16 @@ twilio profiles:list
 ```bash
 npm install
 ```
-5. follow the prompt and provide your auth token
+5. Follow the prompt and provide your auth token
 
-6. Run the serverless functions, Insights proxy, and plugin together locally by running the following at the top level of the checkout
+6. Run the serverless functions, Insights proxy, and plugin together locally by running the following at the top level of the repository
 
 ```bash
 npm start
 ```
 
 :::info Feature Limitation
-the admin panel is disabled by default when working locally. See the [admin panel docs](/feature-library/admin-ui) for more information
+The admin panel is disabled by default when working locally. See the [admin panel docs](/feature-library/admin-ui) for more information.
 :::
 
 :::caution Development Gotcha
