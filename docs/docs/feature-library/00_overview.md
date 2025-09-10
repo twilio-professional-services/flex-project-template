@@ -34,6 +34,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 | [Keyboard Shortcuts](keyboard-shortcuts)                           | _configure default and custom keyboard shortcuts for Flex_                                                                                                              |   |
 | [Park Interaction](park-interaction)                               | _provide agents the ability to park interactions, preserving conversation history_                                                                                      |   |
 | [Pause Recording](pause-recording)                                 | _provide agents the ability to temporarily pause and resume call recording_                                                                                             | ✅ |
+| [Recording Status Callback](recording-status-callback)             | _configure a url to notify of recording status_                                                                                             |   |
 | [Schedule Manager](schedule-manager)                               | _a flexible, robust, and scalable way to manage open and closed hours for Twilio Flex applications_                                                                     | ✅ |
 | [Supervisor Barge & Coach](supervisor-barge-coach)                 | _introduce advanced supervisor barge and coach features_                                                                                                                | ✅ |
 | [Supervisor Capacity](supervisor-capacity)                         | _allow supervisors to update worker capacity configuration within Flex_                                                                                                 | ✅ |
@@ -74,7 +75,7 @@ The **Flex Project Template** comes with a set of features enabled by default wi
 
 These features will require modification for usage in a production setting. They are intended to serve as starting points or examples to jump-start your use case.
 
-::: 
+:::
 
 | Feature                                              | Description                                                                                         |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
