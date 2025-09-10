@@ -6,7 +6,7 @@ import { TaskCardBox, TaskCardInnerBox } from './TaskCardWrapper.Styles';
 import { isHTHighlightEnabled, getHTWarningThreshold, getHTExceededThreshold } from '../../config';
 
 export const componentName = FlexComponent.TeamsView;
-export const componentHook = function addTaskCardWrapper(flex: typeof Flex, manager: Flex.Manager) {
+export const componentHook = function addTaskCardWrapper(flex: typeof Flex) {
   if (isHTHighlightEnabled()) {
     flex.Supervisor.TaskCard.Content.addWrapper((Original) => (originalProps) => {
       const now = new Date();
