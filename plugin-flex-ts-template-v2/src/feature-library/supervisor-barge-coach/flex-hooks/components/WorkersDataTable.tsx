@@ -9,7 +9,7 @@ export const componentHook = function addAgentAssistanceTeamsIcon(flex: typeof F
   if (!isAgentAssistanceEnabled()) return;
   flex.WorkersDataTable.Content.add(
     <Flex.ColumnDefinition
-      key="agent-hand-custom"
+      key="agent-assistance-icon-custom"
       header={''}
       style={{ width: '50px' }}
       content={(items: any) => (
