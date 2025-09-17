@@ -32,7 +32,7 @@ export const addHook = (flex: typeof Flex, manager: Flex.Manager, feature: strin
       break;
     case FlexJsClient.voiceClient:
       if (event === VoiceEvent.incoming) {
-        manager.voiceClient.on(VoiceEvent.incoming, (call) => {
+        manager.voiceClient?.on(VoiceEvent.incoming, (call) => {
           hook.jsClientHook(flex, manager, call);
         });
       }
