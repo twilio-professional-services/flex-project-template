@@ -7,6 +7,22 @@ import QueueDirectoryTab from '../../custom-components/QueueDirectoryTab';
 import ExternalDirectoryTab from '../../custom-components/ExternalDirectoryTab';
 import { StringTemplates } from '../strings/CustomTransferDirectory';
 
+const WorkersTab = (props: any) => {
+  return (
+    <Flex.Tab key="override-workers-transfer-directory" label={props.label}>
+      <WorkerDirectoryTab key="worker-directory-custom-workers-tab" workers={props.workers} />
+    </Flex.Tab>
+  );
+};
+
+const QueuesTab = (props: any) => {
+  return (
+    <Flex.Tab key="override-workers-transfer-directory" label={props.label}>
+      <QueueDirectoryTab key="worker-directory-custom-queue-tab" queues={props.queues} />
+    </Flex.Tab>
+  );
+};
+
 export const componentName = FlexComponent.WorkerDirectory;
 export const componentHook = function replaceQueueDirectory(flex: typeof Flex, manager: Flex.Manager) {
   if (isCustomWorkerTransferEnabled()) {
@@ -15,9 +31,7 @@ export const componentHook = function replaceQueueDirectory(flex: typeof Flex, m
 
     // Add new workers tab
     flex.WorkerDirectory.Tabs.Content.add(
-      <flex.Tab key="override-workers-transfer-directory" label={manager.strings.AgentPanelTitle}>
-        <WorkerDirectoryTab key="worker-directory-custom-workers-tab" />
-      </flex.Tab>,
+      <WorkersTab key="worker-directory-custom-workers-tab" label={manager.strings.AgentPanelTitle} />,
       {
         sortOrder: 0,
       },
@@ -30,9 +44,7 @@ export const componentHook = function replaceQueueDirectory(flex: typeof Flex, m
 
     // Add new Queues tab
     flex.WorkerDirectory.Tabs.Content.add(
-      <flex.Tab key="override-queue-transfer-directory" label={(manager.strings as any)[StringTemplates.Queues]}>
-        <QueueDirectoryTab key="worker-directory-custom-queue-tab" />
-      </flex.Tab>,
+      <QueuesTab key="override-queue-transfer-directory" label={(manager.strings as any)[StringTemplates.Queues]} />,
       {
         sortOrder: 1,
       },

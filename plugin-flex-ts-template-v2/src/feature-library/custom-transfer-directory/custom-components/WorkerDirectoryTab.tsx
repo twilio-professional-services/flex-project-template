@@ -27,6 +27,7 @@ export interface TransferClickPayload {
 
 export interface OwnProps {
   task: ITask;
+  workers?: Array<Worker>;
 }
 
 const WorkerDirectoryTab = (props: OwnProps) => {
@@ -137,9 +138,19 @@ const WorkerDirectoryTab = (props: OwnProps) => {
 
   // initial render
   useEffect(() => {
+    if (Array.isArray(props.workers)) {
+      return;
+    }
     // fetch the workers from the taskrouter sdk on initial render
     fetchSDKWorkers().catch(logger.error);
   }, []);
+
+  useEffect(() => {
+    if (Array.isArray(props.workers)) {
+      // If Flex UI already fetched workers, use it
+      setFetchedWorkers(props.workers);
+    }
+  }, [props.workers]);
 
   useEffect(() => {
     filterWorkers();
