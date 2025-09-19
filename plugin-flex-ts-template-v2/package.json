@@ -1,6 +1,6 @@
 {
   "name": "plugin-flex-ts-template-v2",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
@@ -37,7 +37,7 @@
   "devDependencies": {
     "@babel/preset-typescript": "^7.12.1",
     "@testing-library/react": "^12.1.5",
-    "@twilio/flex-plugin-scripts": "7.1.0",
+    "@twilio/flex-plugin-scripts": "^7.1.2",
     "@twilio/flex-ui": "^2.11.1",
     "@types/jest": "^27.5.2",
     "@types/luxon": "^3.1.0",
