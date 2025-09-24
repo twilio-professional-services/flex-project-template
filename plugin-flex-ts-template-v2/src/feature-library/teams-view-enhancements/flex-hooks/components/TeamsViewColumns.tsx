@@ -5,12 +5,9 @@ import { CustomWorkerAttributes } from '../../../../types/task-router/Worker';
 import { FlexComponent } from '../../../../types/feature-loader';
 import { StringTemplates } from '../strings';
 import {
-  isCallsColumnEnabled,
-  isOtherTasksColumnEnabled,
   isTeamColumnEnabled,
   isDepartmentColumnEnabled,
   isLocationColumnEnabled,
-  isAgentSkillsColumnEnabled,
   isActivityIconEnabled,
   getAgentActivityConfig,
 } from '../../config';
@@ -23,23 +20,13 @@ interface WorkerItem {
   };
 }
 const activityConfig = getAgentActivityConfig();
-const getSkills = (item: WorkerItem) => {
-  if (!item.worker?.attributes?.routing?.skills) {
-    return '-';
-  }
-  const skillsStr = item.worker.attributes.routing.skills.join(', ');
-  return skillsStr.length > 100 ? `${skillsStr.substring(0, 100)}...` : skillsStr;
-};
 
 export const componentName = FlexComponent.TaskCanvasHeader;
 export const componentHook = function addWorkersDataTableColumns(flex: typeof Flex, manager: Flex.Manager) {
-  if (!isCallsColumnEnabled()) flex.WorkersDataTable.Content.remove('calls');
-  if (!isOtherTasksColumnEnabled()) flex.WorkersDataTable.Content.remove('tasks');
-
   flex.WorkersDataTable.Content.add(
     <flex.ColumnDefinition
       style={{ width: 70 }}
-      key="Activity"
+      key="activity-icon-custom"
       header={(manager.strings as any)[StringTemplates.TeamsViewColumnActivity]}
       content={(item: WorkerItem) => (
         <AgentActivityIcon activityName={item.worker.activityName} activityConfig={activityConfig} />
@@ -49,7 +36,7 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
   );
   flex.WorkersDataTable.Content.add(
     <flex.ColumnDefinition
-      key="team"
+      key="team-custom"
       header={(manager.strings as any)[StringTemplates.TeamsViewColumnTeamName]}
       content={(item: WorkerItem) => item.worker.attributes.team_name}
     />,
@@ -57,7 +44,7 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
   );
   flex.WorkersDataTable.Content.add(
     <flex.ColumnDefinition
-      key="department"
+      key="department-custom"
       header={(manager.strings as any)[StringTemplates.TeamsViewColumnDepartment]}
       content={(item: WorkerItem) => item.worker.attributes.department_name}
     />,
@@ -65,18 +52,10 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
   );
   flex.WorkersDataTable.Content.add(
     <flex.ColumnDefinition
-      key="location"
+      key="location-custom"
       header={(manager.strings as any)[StringTemplates.TeamsViewColumnLocation]}
       content={(item: WorkerItem) => item.worker.attributes.location}
     />,
     { sortOrder: 6, if: () => isLocationColumnEnabled() },
-  );
-  flex.WorkersDataTable.Content.add(
-    <flex.ColumnDefinition
-      key="skills"
-      header={(manager.strings as any)[StringTemplates.TeamsViewColumnSkills]}
-      content={(item: WorkerItem) => getSkills(item)}
-    />,
-    { sortOrder: 7, if: () => isAgentSkillsColumnEnabled() },
   );
 };

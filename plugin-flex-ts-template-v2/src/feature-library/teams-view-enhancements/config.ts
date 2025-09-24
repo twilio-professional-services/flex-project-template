@@ -6,16 +6,12 @@ const {
   highlight_handle_time = true,
   handle_time_warning_threshold = 180,
   handle_time_exceeded_threshold = 300,
-  display_task_queue_name = false,
 } = (getFeatureFlags()?.features?.teams_view_enhancements as TeamsViewEnhancementsConfig) || {};
 
 const {
-  calls = true,
-  other_tasks = true,
   team = true,
   department = false,
   location = false,
-  agent_skills = true,
   activity_icon = false,
 } = getFeatureFlags().features?.teams_view_enhancements?.columns || {};
 
@@ -38,12 +34,6 @@ const { teams = [] } = getFeatureFlags().common || {};
 export const isFeatureEnabled = () => {
   return enabled;
 };
-export const isCallsColumnEnabled = () => {
-  return enabled && calls;
-};
-export const isOtherTasksColumnEnabled = () => {
-  return enabled && other_tasks;
-};
 export const isTeamColumnEnabled = () => {
   return enabled && team;
 };
@@ -52,9 +42,6 @@ export const isDepartmentColumnEnabled = () => {
 };
 export const isLocationColumnEnabled = () => {
   return enabled && location;
-};
-export const isAgentSkillsColumnEnabled = () => {
-  return enabled && agent_skills;
 };
 export const isActivityIconEnabled = () => {
   return enabled && activity_icon;
@@ -67,9 +54,6 @@ export const getHTWarningThreshold = () => {
 };
 export const getHTExceededThreshold = () => {
   return handle_time_exceeded_threshold;
-};
-export const isDisplayTaskQueueNameEnabled = () => {
-  return enabled && display_task_queue_name;
 };
 
 export const getTeams = () => {
