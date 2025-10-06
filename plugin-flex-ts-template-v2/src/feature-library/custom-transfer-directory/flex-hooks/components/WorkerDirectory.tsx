@@ -10,7 +10,11 @@ import { StringTemplates } from '../strings/CustomTransferDirectory';
 const WorkersTab = (props: any) => {
   return (
     <Flex.Tab key="override-workers-transfer-directory" label={props.label}>
-      <WorkerDirectoryTab key="worker-directory-custom-workers-tab" workers={props.workers} />
+      <WorkerDirectoryTab
+        key="worker-directory-custom-workers-tab"
+        workers={props.workers}
+        workersLoading={props.isWorkerLoading}
+      />
     </Flex.Tab>
   );
 };
@@ -18,7 +22,11 @@ const WorkersTab = (props: any) => {
 const QueuesTab = (props: any) => {
   return (
     <Flex.Tab key="override-workers-transfer-directory" label={props.label}>
-      <QueueDirectoryTab key="worker-directory-custom-queue-tab" queues={props.queues} />
+      <QueueDirectoryTab
+        key="worker-directory-custom-queue-tab"
+        queues={props.queues}
+        queuesLoading={props.isQueueLoading}
+      />
     </Flex.Tab>
   );
 };

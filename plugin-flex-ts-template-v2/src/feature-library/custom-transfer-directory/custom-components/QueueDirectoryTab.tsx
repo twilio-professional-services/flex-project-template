@@ -53,6 +53,7 @@ export interface TransferQueue extends IQueue, IRealTimeQueueData {}
 export interface OwnProps {
   task: ITask;
   queues?: Array<IQueue>;
+  queuesLoading?: boolean;
 }
 
 export interface MapItem {
@@ -286,6 +287,13 @@ const QueueDirectoryTab = (props: OwnProps) => {
       setIsLoading(false);
     }
   }, [filteredQueues]);
+
+  useEffect(() => {
+    if (typeof props.queuesLoading !== 'boolean') {
+      return;
+    }
+    setIsLoading(props.queuesLoading);
+  }, [props.queuesLoading]);
 
   return (
     <DirectoryTab
