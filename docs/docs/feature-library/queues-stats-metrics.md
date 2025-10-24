@@ -6,12 +6,20 @@ title: queues-stats-metrics
 ## Overview
 The Flex Real Time Queues view can be enhanced by adding columns with other queue metrics to the [Queues Data Table](https://www.twilio.com/docs/flex/developer/ui/queues-view-programmability#modify-the-queuesdatatable).
 
+This feature can be configured to add the following additional metrics columns:
+- Assigned
+  - The number of active tasks that are assigned
+- In wrap up
+  - The number of active tasks that are wrapping
+- Activity
+  - Displays the number of agents per activity, rather than per availability, unlike the out of box column
+
 Natively Flex displays the Active tasks count per queue. The Active task count is the sum of _Assigned_ Tasks and _Wrapping_ Tasks. Displaying these metrics separately may give Supervisors additional insight into how their agents are performing.
+
+You may also use this feature as a starting point to implement your own custom metrics.
 
 ## Setup
 This feature can be enabled via the `flex-config` attributes. Just set the `queues_stats_metrics` `enabled` flag to `true` and enable the new columns as needed.
-
-The `agent_activity_stats_column` shows a Data icon that can be clicked to pop-up a small window to display the agent count per activity for that queue.
 
 ```json
       "queues_stats_metrics": {
