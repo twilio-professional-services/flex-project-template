@@ -39,7 +39,7 @@ exports.coldTransfer = async function coldTransfer(parameters) {
       if (toParts.length > 1) {
         // We have params, split them out
         const paramParts = toParts[1].split('&');
-        let params = {};
+        const params = {};
         for (const param of paramParts) {
           const valueParts = param.split('=');
           if (!valueParts.length) {
@@ -48,11 +48,17 @@ exports.coldTransfer = async function coldTransfer(parameters) {
           params[valueParts[0]] = valueParts[1];
         }
         for (const paramName in params) {
-          paramsStr += `<Parameter name="${paramName}" value="${params[paramName]}"/>`
+          if (!Object.hasOwn(params, paramName)) {
+            continue;
+          }
+          paramsStr += `<Parameter name="${paramName}" value="${params[paramName]}"/>`;
         }
       }
       return client.calls(callSid).update({
-        twiml: `<Response><Dial${callerIdStr}><Application><ApplicationSid>${toParts[0].replace('app:', '')}</ApplicationSid>${paramsStr}</Application></Dial></Response>`,
+        twiml: `<Response><Dial${callerIdStr}><Application><ApplicationSid>${toParts[0].replace(
+          'app:',
+          '',
+        )}</ApplicationSid>${paramsStr}</Application></Dial></Response>`,
       });
     }
     return client.calls(callSid).update({
