@@ -24,7 +24,7 @@ export const registerStartExternalColdTransfer = async () => {
         return;
       }
 
-      if (!shouldSkipPhoneNumberValidation()) {
+      if (!shouldSkipPhoneNumberValidation() && !phoneNumber.startsWith('app:')) {
         try {
           const validationCheck = await PhoneNumberService.validatePhoneNumber(phoneNumber);
 
