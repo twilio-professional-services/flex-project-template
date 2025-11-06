@@ -2,6 +2,7 @@
 sidebar_label: conference
 title: conference
 ---
+import AppDialingEnabled from "./_app-dialing-enabled.md";
 import PluginLibraryFeature from "./_plugin-library-feature.md";
 
 <PluginLibraryFeature />
@@ -11,6 +12,8 @@ When in a call, and the beta native external warm transfer functionality is not 
 If the beta native external warm transfer functionality is enabled, this feature still adds the ability for a caller to hang up without ending the conference, as well as the ability to kick the customer participant.
 
 This feature is based on [the dialpad addon plugin](https://github.com/twilio-professional-services/flex-dialpad-addon-plugin).
+
+<AppDialingEnabled />
 
 ## flex-user-experience
 

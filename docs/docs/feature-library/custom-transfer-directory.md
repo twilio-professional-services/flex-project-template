@@ -2,6 +2,7 @@
 sidebar_label: custom-transfer-directory
 title: custom-transfer-directory
 ---
+import AppDialingEnabled from "./_app-dialing-enabled.md";
 import PluginLibraryFeature from "./_plugin-library-feature.md";
 
 <PluginLibraryFeature />
@@ -22,6 +23,8 @@ It also enables the addition of an external directory, enabling the following be
 
 - present a list of external transfer numbers from the `contacts` feature if enabled
   - validation checks performed on transfer numbers with notifications of any validation failures
+
+<AppDialingEnabled />
 
 ## flex-user-experience
 
