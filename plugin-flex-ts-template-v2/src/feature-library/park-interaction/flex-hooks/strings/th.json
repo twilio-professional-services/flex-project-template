@@ -1,0 +1,21 @@
+{
+  "PSParkSuccess": "การสนทนาถูกพักไว้",
+  "PSParkError": "เกิดข้อผิดพลาดขณะพยายามระงับการสนทนา: {{message}}",
+  "PSParkInteraction": "โต้ตอบโหมดสแตนด์บาย",
+  "PSParkWebhookError": "URL เว็บฮุคไม่ถูกต้อง การพักไม่รองรับเมื่อทำงานในโหมดสแตนด์บาย",
+  "PSParkNonCbmError": "การพักสามารถใช้ได้เฉพาะสำหรับงานการสื่อสารที่เป็นพื้นฐานของการสนทนาเท่านั้น",
+  "PSParkMultipleParticipantsError": "ไม่สามารถระงับการสนทนานี้ได้เนื่องจากมีผู้เข้าร่วมภายในหลายคน",
+  "PSParkedInteractions": "การโต้ตอบที่ถูกระงับ",
+  "PSUnparkSuccess": "การสนทนาถูกถอดการพักแล้ว",
+  "PSUnparkGenericError": "เกิดข้อผิดพลาดขณะพยายามถอดการพักการสนทนา: {{message}}",
+  "PSUnparkError": "ข้อผิดพลาดในขณะถอดการพัก การสนทนาถูกปิดหรือล้มเหลวแล้ว",
+  "PSChannel": "ช่องสื่อ",
+  "PSAddress": "ที่อยู่",
+  "PSCustomerName": "ชื่อลูกค้า",
+  "PSDateTimeParked": "วันที่และเวลาที่พัก",
+  "PSAction": "การดำเนินการ",
+  "PSResumeInteraction": "ดำเนินการสนทนาอีกครั้ง",
+  "PSNoItemsToList": "ไม่มีรายการที่จะแสดง",
+  "PSUnparkListError": "เกิดข้อผิดพลาดในการโหลดรายการสนทนาล่าสุด: {{message}}",
+  "PSUnparkDeleteItemError": "เกิดข้อผิดพลาดในการลบรายการแผนที่ที่ซิงค์: {{message}}"
+}

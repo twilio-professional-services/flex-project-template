@@ -1,10 +1,17 @@
 import * as Flex from '@twilio/flex-ui';
-import CapacityContainer from '../../custom-components/CapacityContainer';
-import { isFeatureEnabled } from '../..';
+import { ContentFragmentProps } from '@twilio/flex-ui';
 
-export function addCapacityToWorkerCanvas(flex: typeof Flex, manager: Flex.Manager) {
-  
-  if (!isFeatureEnabled()) return;
-  
-  flex.WorkerCanvas.Content.add(<CapacityContainer key="worker-capacity-container" />);
+import CapacityContainer from '../../custom-components/CapacityContainer';
+import { FlexComponent } from '../../../../types/feature-loader';
+import { StringTemplates } from '../strings';
+
+interface TabbedContentFragmentProps extends ContentFragmentProps {
+  tabTitle: string;
 }
+
+export const componentName = FlexComponent.WorkerCanvas;
+export const componentHook = function addCapacityToWorkerCanvas() {
+  Flex.WorkerCanvas.Content.add(<CapacityContainer key="worker-capacity-container" />, {
+    tabTitle: StringTemplates.Capacity,
+  } as TabbedContentFragmentProps);
+};

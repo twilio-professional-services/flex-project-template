@@ -1,75 +1,59 @@
 {
   "name": "plugin-flex-ts-template-v2",
-  "version": "9.0.42",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "test:watch": "jest --watch",
     "test:mychanges": "jest --onlyChanged",
-    "test:precommit": "jest",
+    "test": "jest",
     "test:ci": "jest --silent --ci --coverage --coverageReporters=cobertura --reporters=default --reporters=jest-junit --testResultsProcessor=jest-junit",
     "test:coverage": "jest --silent --coverage && http-server -c-1 ./coverage -o /lcov-report",
-    "lint": "eslint --ext js --ext ts --ext tsx ./src/*.*",
+    "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
+    "lint:report": "npm run lint -- --output-file eslint_report.json --format json",
     "build": "twilio flex:plugins:build",
-    "deploy": "twilio flex:plugins:deploy --version=${npm_package_version}",
-    "install-flex-plugin": "twilio plugins:install @twilio-labs/plugin-flex@6.0.2",
+    "deploy": "twilio flex:plugins:deploy --bypass-validation",
+    "install-flex-plugin": "twilio plugins:install @twilio-labs/plugin-flex@7.1.2",
     "release": "twilio flex:plugins:release --plugin ${npm_package_name}@${npm_package_version}",
     "start": "twilio flex:plugins:start",
     "twilio": "twilio"
   },
   "dependencies": {
+    "@emoji-mart/react": "1.1.1",
     "@twilio-paste/core": "^17.0.1",
-    "@twilio-paste/icons": "9.4.0",
-    "@twilio/flex-dev-utils": "^5.1.3",
-    "@twilio/flex-plugin-scripts": "6.0.3",
-    "@types/jest": "^26.0.20",
+    "@twilio-paste/icons": "^9.4.2",
+    "@twilio/flex-plugin": "7.1.2",
+    "emoji-mart": "5.5.2",
     "lodash": "^4.17.20",
     "luxon": "^3.1.1",
     "prop-types": "^15.7.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-select": "^5.5.0",
+    "react-minimal-pie-chart": "^8.4.0",
     "rrule": "^2.7.1",
-    "twilio-video": "^2.24.0",
-    "tzdata": "^1.0.35"
+    "semver": "^7.6.3",
+    "simple-audio-recorder": "^1.2.3"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@babel/plugin-proposal-private-methods": "^7.12.1",
     "@babel/preset-typescript": "^7.12.1",
-    "@twilio/flex-ui": "^2",
+    "@testing-library/react": "^12.1.5",
+    "@twilio/flex-plugin-scripts": "7.1.2",
+    "@twilio/flex-ui": "^2.14.0",
+    "@types/jest": "^27.5.2",
     "@types/luxon": "^3.1.0",
     "@types/react-redux": "^7.1.1",
-    "@types/uuid": "^8.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.18.0",
-    "@typescript-eslint/parser": "^5.0.0",
+    "@types/semver": "^7.5.8",
+    "@types/uuid": "^9.0.1",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0",
     "eslint": "^8.12.0",
     "eslint-config-twilio": "^2.0.0",
-    "jest": "^26.0.20",
-    "jest-fetch-mock": "3.0.3",
-    "jest-junit": "12.0.0",
+    "import-glob": "^1.5.0",
+    "jest": "^27.5.1",
+    "jest-fetch-mock": "^3.0.3",
+    "jest-junit": "^16.0.0",
     "react-test-renderer": "17.0.2",
-    "typescript": "^4"
-  },
-  "jest": {
-    "clearMocks": true,
-    "automock": false,
-    "testResultsProcessor": "jest-junit",
-    "reporters": [
-      "default",
-      "jest-junit"
-    ],
-    "coverageReporters": [
-      "json",
-      "lcov",
-      "text",
-      "clover",
-      "cobertura"
-    ],
-    "globalSetup": "<rootDir>/globalSetupTests.js",
-    "setupFilesAfterEnv": [
-      "<rootDir>/setupTests.js"
-    ]
+    "typescript": "^5"
   },
   "jest-junit": {
     "outputDirectory": "./test-results"

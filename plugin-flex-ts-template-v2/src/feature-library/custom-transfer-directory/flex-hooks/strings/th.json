@@ -1,0 +1,17 @@
+{
+  "PSFailedToLoadInsightsClient": "ไม่สามารถโหลดไคลเอนต์ Real Time Insights ได้ รายการคิวทั้งหมดถูกแสดง",
+  "PSFailedToLoadInsightsData": "ไม่สามารถโหลดข้อมูลแบบเรียลไทม์ได้ รายการคิวทั้งหมดถูกแสดง",
+  "PSXWTFeatureDependencyMissing": "ไดเรกทอรีถ่ายโอนที่กำหนดเองพร้อมกับการถ่ายโอนภายนอกถูกเปิดใช้งาน แต่ไม่มีคุณลักษณะ 'external warm transfer' แบบธรรมชาติหรือคุณสมบัติ 'conference' ของปลั๊กอินที่พวกเขาพึงพอใจถูกเปิดใช้งาน ดังนั้นการถ่ายโอนที่อบอุ่นภายนอกสำหรับการโทรเสียงจะถูกปิดใช้งาน",
+  "PSPhoneNumberFailedValidationCheckRequest": "การส่งคำขอตรวจสอบหมายเลขโทรศัพท์ '{{phoneNumber}}' ไม่สำเร็จ",
+  "PSPhoneNumberFailedValidationCheckWithErrors": "หมายเลขโทรศัพท์ '{{phoneNumber}}' ไม่ผ่านการตรวจสอบความถูกต้องด้วยข้อผิดพลาดต่อไปนี้: {{errors}}",
+  "PSErrorExecutingColdTransfer": "พยายามทำการโอนย้อนหลังขั้นต่ำ  {{message}} ผิดพลาด",
+  "PSDirectoryQueues": "คิว",
+  "PSDirectoryExternal": "ภายนอก",
+  "PSDirectorySearchDirectory": "ค้นหาไดเรกทอรี",
+  "PSDirectoryNoItemsFound": "ไม่พบรายการ",
+  "PSDirectoryColdTransfer": "โอนสายโดยไม่ต้องประสานกับเจ้าหน้าที่ (Cold Transfer)",
+  "PSDirectoryWarmTransfer": "การโอนย้ายอย่างอบอุ่น",
+  "PSDirectoryQueuesFiltered": "คิวอาจถูกกรองออกเนื่องจากขาดผู้ดูแลในคิวที่มีอยู่",
+  "PSDirectoryQueueTooltip": "ตัวแทน: {{agentsAvailable}}, งานในคิว: {{tasksInQueue}}",
+  "PSDirectoryNA": "N/A"
+}

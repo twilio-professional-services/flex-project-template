@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import { Actions, ITask, Manager, ConversationState, Notifications } from "@twilio/flex-ui";
-import { Flex, Button } from "@twilio-paste/core";
-import { VideoOnIcon } from "@twilio-paste/icons/esm/VideoOnIcon";
+import React, { useState } from 'react';
+import { Actions, ITask, ConversationState, Notifications, styled, IconButton, templates } from '@twilio/flex-ui';
 
-import { updateTaskAttributesForVideo } from "../../helpers/taskAttributes";
-import { getFeatureFlags } from '../../../../utils/configuration';
 import { ChatToVideoNotification } from '../../flex-hooks/notifications/ChatToVideo';
+import { StringTemplates } from '../../flex-hooks/strings/ChatToVideo';
+import ChatToVideoService from '../../utils/ChatToVideoService';
+import logger from '../../../../utils/logger';
 
 interface SwitchToVideoProps {
   task: ITask;
@@ -13,90 +12,59 @@ interface SwitchToVideoProps {
   conversation?: ConversationState.ConversationState;
 }
 
-const {
-  serverless_functions_domain = "",
-  serverless_functions_port = "",
-  serverless_functions_protocol = "",
-} = getFeatureFlags() || {};
+const IconContainer = styled.div`
+  margin: auto;
+  padding-right: 0.8em;
+`;
 
-const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({
-  task,
-  context,
-  conversation
-}) => {
+const SwitchToVideo: React.FunctionComponent<SwitchToVideoProps> = ({ task, conversation }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onClick = async () => {
     setIsLoading(true);
 
-    const taskSid = task.taskSid;
-    const channelSid = task.attributes.conversationSid;
+    const { taskSid } = task;
 
-    const body = {
-      Token:
-        Manager.getInstance().store.getState().flex.session.ssoTokenPayload
-          .token,
-    };
+    try {
+      const response = await ChatToVideoService.generateVideoCode(taskSid);
 
-    const options = {
-      method: "POST",
-      body: new URLSearchParams(body),
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      },
-    };
-    
-    let serverlessDomain = serverless_functions_domain;
-    let serverlessProtocol = "https";
-    
-    if (serverless_functions_port) {
-      serverlessDomain += ":" + serverless_functions_port;
-    }
-    
-    if (serverless_functions_protocol) {
-      serverlessProtocol = serverless_functions_protocol;
-    }
-
-    await fetch(
-      `${serverlessProtocol}://${serverlessDomain}/features/chat-to-video-escalation/generate-unique-code?taskSid=${taskSid}`,
-      options
-    )
-      .then((response) => response.json())
-      .then((response) => {
-        console.log("SwitchToVideo: unique link created:", response);
-        
-        if (!response.full_url) {
-          Notifications.showNotification(ChatToVideoNotification.FailedVideoLinkNotification);
-          return;
-        }
-        
-        return Actions.invokeAction("SendMessage", {
-          body: `Please join me using this unique video link: ${response.full_url}`,
-          conversation,
-          messageAttributes: {
-            hasVideo: true,
-            videoUrl: response.full_url,
-            uniqueCode: response.unique_code,
-          },
-        });
-      })
-      .finally(() => {
+      if (!response.roomName) {
+        Notifications.showNotification(ChatToVideoNotification.FailedVideoLinkNotification);
         setIsLoading(false);
-      });
+        return;
+      }
 
-    updateTaskAttributesForVideo(task, "created");
+      const url = ChatToVideoService.generateUrl('Customer', response.roomName);
+      logger.info(`[chat-to-video-escalation] unique link created: ${url}`);
+
+      await Actions.invokeAction('SendMessage', {
+        body: `${templates[StringTemplates.InviteMessage]()} ${url}`,
+        conversation,
+        messageAttributes: {
+          hasVideo: true,
+          videoUrl: url,
+          uniqueCode: response.roomName,
+        },
+      });
+    } catch (error: any) {
+      logger.error('[chat-to-video-escalation] error creating unique video link:', error);
+      Notifications.showNotification(ChatToVideoNotification.FailedVideoLinkNotification);
+    }
+
+    setIsLoading(false);
   };
 
   return (
-    <Flex padding="space10" marginTop="space30" marginLeft={"space30"}>
-      <Button
-        variant="primary"
-        onClick={async () => await onClick()}
-        loading={isLoading}
-      >
-        <VideoOnIcon decorative size="sizeIcon10" title="Switch to Video" />
-      </Button>
-    </Flex>
+    <IconContainer>
+      <IconButton
+        icon="Video"
+        key="chat-video-transfer-button"
+        disabled={isLoading}
+        onClick={onClick}
+        variant="secondary"
+        title={templates[StringTemplates.SwitchToVideo]()}
+      />
+    </IconContainer>
   );
 };
 

@@ -1,0 +1,21 @@
+{
+  "PSAdminTitle": "การตั้งค่าคุณลักษณะ",
+  "PSAdminConfigForTitle": "กำหนดค่าสำหรับ:",
+  "PSAdminConfigForMyself": "ตัวเอง",
+  "PSAdminConfigForEveryone": "ทุกคน",
+  "PSAdminEnabled": "เปิดใช้งาน",
+  "PSAdminDisabled": "ปิดการใช้งาน",
+  "PSAdminDocs": "เอกสาร",
+  "PSAdminRevertWorkerToGlobal": "ย้อนกลับไปยังการตั้งค่าทั่วโลก",
+  "PSAdminMoreSettings": "การตั้งค่าเพิ่มเติม",
+  "PSAdminNoMoreSettings": "คุณสมบัตินี้ไม่มีการตั้งค่าเพิ่มเติม",
+  "PSAdminFilterFeatures": "คุณสมบัติของตัวกรอง...",
+  "PSAdminModalSettingsTitle": "การตั้งค่า {{feature}}",
+  "PSAdminSaveError": "การบันทึกการเปลี่ยนแปลงเกิดข้อผิดพลาด โปรดลองอีกครั้ง",
+  "PSAdminSaveSuccess": "บันทึกการเปลี่ยนแปลงเรียบร้อยแล้ว โหลด Flex ใหม่เพื่อให้การเปลี่ยนแปลงมีผลถูกต้อง",
+  "PSAdminInvalidJson": "ป้อน JSON ที่ถูกต้องเพื่อบันทึก",
+  "PSAdminUpdatedModalTitle": "การตั้งค่าได้รับการอัปเดต",
+  "PSAdminUpdatedModalDesc": "ผู้ใช้คนอื่นได้ทำการอัปเดตการตั้งค่าโกลบอลแล้ว คลิกที่ \"รีโหลด\" เพื่อรีเฟรชหน้าต่างเพื่อดูการตั้งค่าที่อัปเดตแล้ว การบันทึกการตั้งค่าโกลบอลจะไม่สามารถทำได้จนกว่าหน้าต่างจะถูกรีโหลดใหม่",
+  "PSAdminUpdatedModalReload": "โหลดใหม่",
+  "PSAdminSaveDisabled": "การบันทึกการตั้งค่าทั่วโลกไม่สามารถทำได้จนกว่าจะโหลดมุมมองใหม่"
+}

@@ -1,29 +1,41 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()["common/helpers/prepare-function"].path);
-const PhoneNumberOpertions = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/phone-numbers"
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
 ].path);
 
 const requiredParameters = [];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    const result = await PhoneNumberOpertions.listPhoneNumbers({
-      context,
-      attempts: 0,
-    });
-    
-    const { success, phoneNumbers: fullPhoneNumberList, status } = result;
-    const phoneNumbers = fullPhoneNumberList
+    const fetchOutgoingCallerIds = event.IncludeOutgoing === 'true' || false;
+
+    const result = await twilioExecute(context, (client) => client.incomingPhoneNumbers.list());
+
+    const { data: fullPhoneNumberList } = result;
+    let phoneNumbers = fullPhoneNumberList
       ? fullPhoneNumberList.map((number) => {
           const { friendlyName, phoneNumber } = number;
           return { friendlyName, phoneNumber };
         })
       : null;
-    
-    response.setStatusCode(status);
-    response.setBody({ success, phoneNumbers });
-    callback(null, response);
+
+    if (fetchOutgoingCallerIds) {
+      const outgoingResult = await twilioExecute(context, (client) => client.outgoingCallerIds.list());
+
+      if (outgoingResult?.success) {
+        const { data: callerIds } = outgoingResult;
+        phoneNumbers = phoneNumbers.concat(
+          callerIds.map((number) => {
+            const { friendlyName, phoneNumber } = number;
+            return { friendlyName, phoneNumber };
+          }),
+        );
+      }
+    }
+
+    response.setStatusCode(result.status);
+    response.setBody({ phoneNumbers, ...extractStandardResponse(result) });
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

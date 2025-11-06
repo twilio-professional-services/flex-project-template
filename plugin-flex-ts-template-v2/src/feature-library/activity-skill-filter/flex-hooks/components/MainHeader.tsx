@@ -1,23 +1,35 @@
 import * as Flex from '@twilio/flex-ui';
-import ActivityWrapperComponent from '../../custom-components/activity-wrapper';
-import { NotificationIds } from '../notifications/ActivitySkillFilter';
-import { isFeatureEnabled, getRules } from '../..';
+import React, { useEffect } from 'react';
+import AppState from 'types/manager/AppState';
 
-export function replaceActivityComponent(flex: typeof Flex, manager: Flex.Manager) {
-  
-  if (!isFeatureEnabled()) return;
-  
+import { NotificationIds } from '../notifications/ActivitySkillFilter';
+import { getRules } from '../../config';
+import { FlexComponent } from '../../../../types/feature-loader';
+import ActivityWrapper from '../../custom-components/activity-wrapper';
+import AgentActivities from '../../utils/AgentActivities';
+import logger from '../../../../utils/logger';
+
+export const componentName = FlexComponent.MainHeader;
+export const componentHook = function wrapActivityComponent(flex: typeof Flex, _manager: Flex.Manager) {
   if (!getRules()) {
     Flex.Notifications.showNotification(NotificationIds.ActivitySkillRulesNotConfigured);
     return;
   }
-  
-  flex.MainHeader.Content.remove('activity');
-  flex.MainHeader.Content.add(
-    <ActivityWrapperComponent key="activity-wrapper" />,
-      {
-        sortOrder: 2,
-        align: 'end'
-      }
-  );
-}
+
+  flex.MainHeader.Content.addWrapper((OriginalComponent) => (originalProps) => {
+    const workerAttrs = Flex.useFlexSelector((state: AppState) => state.flex.worker.attributes);
+
+    useEffect(() => {
+      logger.debug('[activity-skill-filter] Worker attributes changed; updating filtered activities');
+    }, [workerAttrs]);
+
+    // NOTE: This will use a "hack" of sorts...
+    // Using css it will show/hide and change the order of the activities
+    // Mostly because there isn't a way to hook into the native component
+    return (
+      <ActivityWrapper activitiesConfig={AgentActivities.getCSSConfig()}>
+        <OriginalComponent {...originalProps} />
+      </ActivityWrapper>
+    );
+  });
+};

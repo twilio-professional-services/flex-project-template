@@ -1,19 +1,15 @@
-import * as Flex from "@twilio/flex-ui";
-import { SSOTokenPayload } from "@twilio/flex-ui/src/core/TokenStorage";
-import { FlexEvent } from "../../../../types/manager/FlexEvent";
-import { SecondDevice } from '../../helpers/MultiCallHelper';
-import { isFeatureEnabled } from '../..';
+import * as Flex from '@twilio/flex-ui';
+import { SSOTokenPayload } from '@twilio/flex-ui/src/core/TokenStorage';
 
-const tokenUpdatedHandler = (tokenPayload: SSOTokenPayload, flexEvent: FlexEvent) => {
-  if (!isFeatureEnabled() || !SecondDevice) return;
+import { MultiCallDevices } from '../../helpers/MultiCallHelper';
+import { FlexEvent } from '../../../../types/feature-loader';
+import logger from '../../../../utils/logger';
 
-  if (SecondDevice?.state === 'destroyed') {
-    return;
-  }
-  
-  SecondDevice?.updateToken(tokenPayload.token);
-  
-  console.log('MultiCall: Token updated');
+export const eventName = FlexEvent.tokenUpdated;
+export const eventHook = (flex: typeof Flex, manager: Flex.Manager, tokenPayload: SSOTokenPayload) => {
+  MultiCallDevices.forEach((device) => {
+    device.updateToken(tokenPayload.token);
+  });
+
+  logger.info('[multi-call] Token updated');
 };
-
-export default tokenUpdatedHandler;

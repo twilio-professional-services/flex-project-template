@@ -1,17 +1,15 @@
-const { prepareFlexFunction } = require(Runtime.getFunctions()["common/helpers/prepare-function"].path);
-const TaskRouterOperations = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/taskrouter"
+const { prepareFlexFunction, extractStandardResponse, twilioExecute } = require(Runtime.getFunctions()[
+  'common/helpers/function-helper'
 ].path);
 
 const requiredParameters = [];
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
   try {
-    const result = await TaskRouterOperations.getQueues({
-      context,
-      attempts: 0,
-    });
-    const { success, queues: fullQueueData, message, status } = result;
+    const result = await twilioExecute(context, (client) =>
+      client.taskrouter.v1.workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID).taskQueues.list({ limit: 1000 }),
+    );
+    const { data: fullQueueData, status } = result;
     const queues = fullQueueData
       ? fullQueueData.map((queue) => {
           const { targetWorkers, friendlyName, sid } = queue;
@@ -19,9 +17,9 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
         })
       : null;
     response.setStatusCode(status);
-    response.setBody({ success, queues, message });
-    callback(null, response);
+    response.setBody({ queues, ...extractStandardResponse(result) });
+    return callback(null, response);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 });

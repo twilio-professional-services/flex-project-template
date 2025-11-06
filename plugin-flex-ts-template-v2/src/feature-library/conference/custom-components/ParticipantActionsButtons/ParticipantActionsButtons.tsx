@@ -6,124 +6,107 @@ import {
   styled,
   ConferenceParticipant,
   ITask,
-  useFlexSelector
+  useFlexSelector,
+  templates,
 } from '@twilio/flex-ui';
-import { AppState } from '../../../../flex-hooks/states';
 
-const ActionsContainer = styled('div')`
-  min-width: 88px;
-  margin-top: 10px;
+import AppState from '../../../../types/manager/AppState';
+import { StringTemplates } from '../../flex-hooks/strings/Conference';
+
+interface ThemeOnlyProps {
+  theme?: any;
+}
+
+const ActionsContainer = styled('div')<ThemeOnlyProps>`
+  margin-top: ${(props) => props.theme.tokens.spacings.space40};
   button {
-      width: 36px;
-      height: 36px;
-      margin-left: 6px;
-      margin-right: 6px;
+    margin-left: ${(props) => props.theme.tokens.spacings.space20};
+    margin-right: ${(props) => props.theme.tokens.spacings.space20};
   }
 `;
 
-const ActionsContainerListItem = styled('div')`
-  min-width: 88px;
+const ActionsContainerListItem = styled('div')<ThemeOnlyProps>`
+  display: flex;
+  flex-grow: 0;
   button {
-    width: 32px;
-    height: 32px;
-    margin-left: 6px;
-    margin-right: 6px;
+    margin-left: ${(props) => props.theme.tokens.spacings.space30};
+    margin-right: ${(props) => props.theme.tokens.spacings.space30};
   }
 `;
 
 export interface OwnProps {
-  listMode?: boolean,
-  participant?: ConferenceParticipant,
-  task?: ITask
+  listMode?: boolean;
+  participant?: ConferenceParticipant;
+  task?: ITask;
 }
 
 const ParticipantActionsButtons = (props: OwnProps) => {
   const view = useFlexSelector((state: AppState) => state.flex.view);
-  const componentViewState = useFlexSelector((state: AppState) => state.flex.view.componentViewStates.customParticipants);
-  
+  const componentViewState = useFlexSelector(
+    (state: AppState) => state.flex.view.componentViewStates.customParticipants,
+  );
+
   const [isKickConfirmationVisible, setIsKickConfirmationVisible] = useState(false);
-  
-  useEffect(() => {
-    return () => {
-      const { participant } = props;
-      if (participant && participant.status === 'recently_left') {
-        let newViewState: {[index: string]:any} = {};
-        
-        if (componentViewState) {
-          newViewState = {
-            ...componentViewState
-          };
-        }
-        
-        if (participant.callSid && newViewState[participant.callSid]) {
-          delete newViewState[participant.callSid];
-        }
-        
-        Actions.invokeAction('SetComponentState', {
-          name: 'customParticipants',
-          state: newViewState
-        });
-      }
-    }
-  }, [])
-  
+
   useEffect(() => {
     const { participant } = props;
-    if (!participant || !participant.callSid) return;
-    
-    let newViewState: {[index: string]:any} = {};
-    
-    if (componentViewState) {
-      newViewState = {
-        ...componentViewState
+    if (!participant?.callSid) return;
+
+    const newViewState: { [index: string]: any } = {};
+
+    if (
+      isKickConfirmationVisible ||
+      (componentViewState &&
+        componentViewState[participant.callSid] &&
+        componentViewState[participant.callSid].showKickConfirmation !== isKickConfirmationVisible)
+    ) {
+      newViewState[participant.callSid] = {
+        showKickConfirmation: isKickConfirmationVisible,
       };
+    } else {
+      return;
     }
-    
-    newViewState[participant.callSid] = {
-      showKickConfirmation: isKickConfirmationVisible
-    };
-    
+
     Actions.invokeAction('SetComponentState', {
       name: 'customParticipants',
-      state: newViewState
+      state: newViewState,
     });
-    
-  }, [isKickConfirmationVisible])
-  
+  }, [isKickConfirmationVisible]);
+
   const showKickConfirmation = () => setIsKickConfirmationVisible(true);
-  
+
   const hideKickConfirmation = () => setIsKickConfirmationVisible(false);
-  
+
   const onHoldParticipantClick = () => {
     const { participant, task } = props;
-    
+
     if (!participant) return;
-    
+
     const { callSid, workerSid } = participant;
-    let participantType = participant.participantType;
-    
+    const { participantType } = participant;
+
     Actions.invokeAction(participant.onHold ? 'UnholdParticipant' : 'HoldParticipant', {
       participantType,
       task,
-      targetSid: participantType === 'worker' ? workerSid : callSid
+      targetSid: participantType === 'worker' ? workerSid : callSid,
     });
   };
-  
+
   const onKickParticipantConfirmClick = () => {
     const { participant, task } = props;
-    
+
     if (!participant) return;
-    
+
     const { callSid, workerSid } = participant;
     const { participantType } = participant;
     Actions.invokeAction('KickParticipant', {
       participantType,
       task,
-      targetSid: participantType === 'worker' ? workerSid : callSid
+      targetSid: participantType === 'worker' ? workerSid : callSid,
     });
     hideKickConfirmation();
   };
-  
+
   const renderKickConfirmation = () => {
     return (
       <>
@@ -131,30 +114,33 @@ const ParticipantActionsButtons = (props: OwnProps) => {
           icon="Accept"
           className="ParticipantCanvas-AcceptAction"
           onClick={onKickParticipantConfirmClick}
-          variant='secondary'
+          variant="secondary"
+          title={templates.CallParticipantStatusKickConfirmation()}
         />
         <IconButton
           icon="Close"
           className="ParticipantCanvas-DeclineAction"
           onClick={hideKickConfirmation}
-          variant='secondary'
+          variant="secondary"
+          title={templates.CallParticipantStatusKickCancellation()}
         />
       </>
     );
-  }
-  
+  };
+
   const renderActions = () => {
     const { participant, task } = props;
-    
-    if (!participant || !task) return;
-  
+
+    if (!participant || !task) return <></>;
+
     const holdParticipantTooltip = participant.onHold
-      ? 'Unhold Participant' : 'Hold Participant';
-    const kickParticipantTooltip = 'Remove Participant';
-  
+      ? templates[StringTemplates.UnholdParticipant]()
+      : templates[StringTemplates.HoldParticipant]();
+    const kickParticipantTooltip = templates[StringTemplates.RemoveParticipant]();
+
     const holdIcon = 'Hold';
     const unholdIcon = 'HoldOff';
-  
+
     return (
       <>
         <IconButton
@@ -162,40 +148,32 @@ const ParticipantActionsButtons = (props: OwnProps) => {
           className="ParticipantCanvas-HoldButton"
           disabled={!TaskHelper.canHold(task) || participant.status !== 'joined'}
           onClick={onHoldParticipantClick}
-          variant='secondary'
+          variant="secondary"
           title={holdParticipantTooltip}
         />
         <IconButton
           icon="Hangup"
           className="ParticipantCanvas-HangupButton"
           onClick={showKickConfirmation}
-          variant='destructive'
+          variant="destructive"
           title={kickParticipantTooltip}
         />
       </>
     );
-  }
-  
-  if (view.activeView != 'teams') {
-    return props.listMode === true
-    ? (
+  };
+
+  if (view.activeView !== 'teams') {
+    return props.listMode === true ? (
       <ActionsContainerListItem className="ParticipantCanvas-Actions">
-        {isKickConfirmationVisible
-          ? renderKickConfirmation()
-          : renderActions()
-        }
+        {isKickConfirmationVisible ? renderKickConfirmation() : renderActions()}
       </ActionsContainerListItem>
     ) : (
       <ActionsContainer className="ParticipantCanvas-Actions">
-        {isKickConfirmationVisible
-          ? renderKickConfirmation()
-          : renderActions()
-        }
+        {isKickConfirmationVisible ? renderKickConfirmation() : renderActions()}
       </ActionsContainer>
     );
-  } else {
-    return (null);
   }
-}
+  return null;
+};
 
 export default ParticipantActionsButtons;

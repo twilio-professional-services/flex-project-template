@@ -1,5 +1,7 @@
-import { WorkerAttributes } from '@twilio/flex-ui';
 import { EventEmitter } from 'events';
+
+import { WorkerAttributes } from '@twilio/flex-ui';
+
 import Activity from './Activity';
 import Reservation from './Reservation';
 import Channel from './Channel';
@@ -28,11 +30,17 @@ export interface CustomWorkerAttributes extends WorkerAttributes {
   image_url: string;
   roles: ['admin' | 'supervisor' | 'agent'];
 
+  // used for selecting language
+  language?: string;
+
   // used to override name seen on webchat
   public_identity: string;
 
-  //caller-id feature
+  // caller-id feature
   selectedCallerId: string;
+
+  // custom-transfer-directory feature
+  enforcedQueueFilter?: string;
 
   // Flex insights references the following elements
   email: string;
@@ -43,4 +51,7 @@ export interface CustomWorkerAttributes extends WorkerAttributes {
   team_name?: string;
   department_id?: string;
   department_name?: string;
+
+  // configuration
+  config_overrides?: any;
 }

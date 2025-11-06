@@ -1,0 +1,21 @@
+{
+  "PSParkSuccess": "La conversación está en espera.",
+  "PSParkError": "Se produjo un error al intentar poner la conversación en espera: {{message}}",
+  "PSParkInteraction": "Conversación en espera",
+  "PSParkNonCbmError": "Poner la conversación en espera solo está disponible para tareas de mensajería basadas en conversaciones.",
+  "PSParkWebhookError": "URL de webhook no válida. Poner la conversación en espera no es compatible cuando se ejecuta localmente.",
+  "PSParkMultipleParticipantsError": "Esta conversación no se puede poner en espera porque hay múltiples participantes internos.",
+  "PSParkedInteractions": "Interacciones en Espera",
+  "PSUnparkSuccess": "La conversación ha sido recuperada con éxito.",
+  "PSUnparkGenericError": "Se produjo un error al intentar recuperar la conversación: {{message}}",
+  "PSUnparkError": "Error al recuperar la conversación; esta ya está cerrada o ha fallado.",
+  "PSChannel": "Canal",
+  "PSAddress": "Dirección",
+  "PSCustomerName": "Nombre del Cliente",
+  "PSDateTimeParked": "Fecha/Hora Puesto en Espera",
+  "PSAction": "Acción",
+  "PSResumeInteraction": "Recuperar Conversación",
+  "PSNoItemsToList": "No hay elementos para listar",
+  "PSUnparkListError": "Error al cargar la lista de interacciones recientes: {{message}}",
+  "PSUnparkDeleteItemError": "Error al borrar sync map item: {{message}}"
+}

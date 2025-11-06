@@ -1,0 +1,17 @@
+{
+  "PSFailedToLoadInsightsClient": "No se pudo cargar el cliente de información en tiempo real. Se listan todas las colas.",
+  "PSFailedToLoadInsightsData": "No se pueden cargar los datos de análisis en tiempo real. Se muestran todas las colas.",
+  "PSXWTFeatureDependencyMissing": "El directorio de transferencia personalizado con transferencia externa está habilitado, pero ni la función nativa de 'transferencia externa cálida' ni la propia función de 'conferencia' del plugin están habilitadas en las que depende. Como resultado, las transferencias externas cálidas para llamadas de voz estarán deshabilitadas.",
+  "PSPhoneNumberFailedValidationCheckRequest": "No se pudo realizar correctamente la solicitud de verificación de validación para el número de teléfono '{{phoneNumber}}'",
+  "PSPhoneNumberFailedValidationCheckWithErrors": "El número de teléfono '{{phoneNumber}}' no pasó la validación con los siguientes errores: {{errors}}",
+  "PSErrorExecutingColdTransfer": "Error al intentar realizar una transferencia fría, {{message}}",
+  "PSDirectoryQueues": "Colas",
+  "PSDirectoryExternal": "Externo",
+  "PSDirectorySearchDirectory": "Búsqueda de directorio",
+  "PSDirectoryNoItemsFound": "No se encontraron elementos.",
+  "PSDirectoryColdTransfer": "Transferencia Fría",
+  "PSDirectoryWarmTransfer": "Transferencia cálida",
+  "PSDirectoryQueuesFiltered": "Las colas pueden ser filtradas debido a la falta de trabajadores disponibles en las colas.",
+  "PSDirectoryQueueTooltip": "Agentes: {{agentsAvailable}}, tareas en cola: {{tasksInQueue}}",
+  "PSDirectoryNA": "No aplicable"
+}

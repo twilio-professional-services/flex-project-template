@@ -1,7 +1,11 @@
-import { FilterDefinition } from "@twilio/flex-ui";
-import SelectFilter from "../custom-components/SelectFilter";
-import SelectFilterLabel from "../custom-components/SelectFilterLabel";
-import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService'
+import { FilterDefinition, Manager } from '@twilio/flex-ui';
+import sortBy from 'lodash/sortBy';
+
+import SelectFilter from '../custom-components/SelectFilter';
+import SelectFilterLabel from '../custom-components/SelectFilterLabel';
+import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
+import { StringTemplates } from '../flex-hooks/strings/TeamViewQueueFilter';
+import logger from '../../../utils/logger';
 
 /* 
     this filter only works when a supporting backend solution is keeping
@@ -10,23 +14,31 @@ import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterSe
 */
 
 export const queueWorkerDataFilter = async () => {
-  
-  const queueOptions = await TaskRouterService.getQueues();
-  const options = queueOptions? queueOptions.map((queue: any) => ({
-    value: queue.sid,
-    label: queue.friendlyName,
-    default: false
-  })) : [];
+  let queueOptions;
+
+  try {
+    queueOptions = await TaskRouterService.getQueues();
+  } catch (error: any) {
+    logger.error('[teams-view-filters] Unable to get queues', error);
+  }
+
+  const options = queueOptions
+    ? queueOptions.map((queue: any) => ({
+        value: queue.sid,
+        label: queue.friendlyName,
+        default: false,
+      }))
+    : [];
 
   return {
     id: 'data.attributes.queues',
-    title: 'Queue Eligibility',
+    title: (Manager.getInstance().strings as any)[StringTemplates.QueueEligibility],
     fieldName: 'queues',
     customStructure: {
       label: <SelectFilterLabel />,
-      field: <SelectFilter IsMulti={true}/>,
+      field: <SelectFilter IsMulti={true} />,
     },
-    options: options,
-    condition: 'IN'
+    options: sortBy(options, ['label']),
+    condition: 'IN',
   } as FilterDefinition;
-}
+};

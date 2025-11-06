@@ -1,0 +1,44 @@
+{
+  "task_routing": {
+    "filters": [
+      {
+        "filter_friendly_name": "Assign to Agent",
+        "expression": "targetWorker != null AND callToQueue == null",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_INTERNAL}",
+            "expression": "task.targetWorker == worker.contact_uri",
+            "priority": 1000
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Assign to Queue - Everyone",
+        "expression": "callToQueue == 'Template Example Everyone'",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_EVERYONE}"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Assign To Queue - Sales",
+        "expression": "callToQueue == 'Template Example Sales'",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_TEMPLATE_EXAMPLE_SALES}"
+          }
+        ]
+      },
+      {
+        "filter_friendly_name": "Assign To Queue - Support",
+        "expression": "callToQueue == 'Template Example Support'",
+        "targets": [
+          {
+            "queue": "${QUEUE_SID_TEMPLATE_EXAMPLE_SUPPORT}"
+          }
+        ]
+      }
+    ]
+  }
+}

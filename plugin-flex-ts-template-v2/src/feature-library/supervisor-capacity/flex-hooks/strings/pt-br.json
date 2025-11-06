@@ -1,0 +1,8 @@
+{
+  "PSSupervisorCapacity": "Capacidade",
+  "PSSupervisorCapacityChannelCapacity": "Capacidade do canal",
+  "PSSupervisorCapacityMissingConfiguration": "Configuração ausente. Por favor, notifique o administrador do sistema.",
+  "PSSupervisorCapacityNoChannels": "Nenhum canal disponível.",
+  "PSSupervisorCapacityLoading": "Carregando...",
+  "PSSupervisorCapacityRestorePreviousValue": "Restaurar valor anterior"
+}

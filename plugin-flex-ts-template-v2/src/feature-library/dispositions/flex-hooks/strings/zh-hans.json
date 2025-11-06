@@ -1,0 +1,8 @@
+{
+  "PSDispositionRequired": "完成此任务前必须先处置。",
+  "PSDispositionTab": "处置",
+  "PSSelectDispositionTitle": "选择处置方式",
+  "PSSelectDispositionHelpText": "完成此任务后，所选的处置将被保存。",
+  "PSNotesTitle": "笔记",
+  "PSNotesCharactersRemaining": "{{characters}}个字符剩余"
+}

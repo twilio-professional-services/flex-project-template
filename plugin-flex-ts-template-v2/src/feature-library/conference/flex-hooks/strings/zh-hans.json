@@ -1,0 +1,12 @@
+{
+  "PSConferenceFailedHangupNotification": "挂断呼叫失败：在挂断呼叫时，未能将所有参与者取消保持。如果此问题仍然存在，请在离开呼叫之前手动取消保持参与者。",
+  "PSExternalWarmTransferInvalidPhoneNumber": "无法添加参与者。 {{message}}",
+  "PSConferenceAddConferenceParticipant": "添加会议参与者",
+  "PSConferencePhoneNumber": "电话号码",
+  "PSConferencePhoneNumberError": "输入要添加到电话会议的电话号码。",
+  "PSConferenceDial": "拨号",
+  "PSConferenceHoldParticipant": "保持参与者",
+  "PSConferenceUnholdParticipant": "恢复参与者",
+  "PSConferenceRemoveParticipant": "删除参与者",
+  "PSConferenceUnknown": "未知"
+}

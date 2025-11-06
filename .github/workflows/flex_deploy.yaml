@@ -1,0 +1,242 @@
+name: Deploy Flex
+
+# Within this file, FEATURE and END FEATURE blocks are used only by the remove-features script.
+
+on:
+  # To run this workflow via automated triggers, see the .github/examples directory.
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      deploy_terraform:
+        required: true
+        type: boolean
+      overwrite_config:
+        required: true
+        type: boolean
+    secrets:
+      TWILIO_ACCOUNT_SID:
+        required: true
+      TWILIO_API_KEY:
+        required: true
+      TWILIO_API_SECRET:
+        required: true
+      TF_ENCRYPTION_KEY:
+        required: true
+
+  # Enables running this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: environment
+        description: "Environment to use for deployment"
+      deploy_terraform:
+        required: true
+        type: boolean
+        default: false
+        description: Deploy Terraform?
+      initial_release:
+        required: true
+        type: boolean
+        description: Is this the first release to the environment?
+        default: false
+      overwrite_config:
+        required: true
+        type: boolean
+        default: false
+        description: Overwrite config set by Admin UI Panel?
+
+concurrency:
+  group: flex-deploy-${{ inputs.environment || github.event.inputs.environment }}
+
+jobs:
+  validate-environment:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
+      - name: install npm
+        id: initial-env
+        run: |
+          npm install --ignore-scripts
+      - name: validate environment
+        run: npm run -s validate-environment >> $GITHUB_STEP_SUMMARY
+
+  # When performing an initial release
+  # the serverless backend needs an initial deploy so
+  # the domain name can be pulled in for the terraform deploy
+  perform-initial-serverless-release:
+    needs:
+      - validate-environment
+    if: |
+      (inputs.initial_release == true &&
+       inputs.deploy_terraform == true)
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
+      - name: install top-level packages
+        run: |
+          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
+          npm install --ignore-scripts
+          npm run install-serverless-plugin
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm run postinstall -- --skip-plugin >> $GITHUB_STEP_SUMMARY
+      - name: deploy addons
+        run: |
+          npm run deploy-addons
+      - name: deploy serverless
+        working-directory: serverless-functions
+        run: |
+          npm run deploy
+
+  deploy-terraform:
+    needs:
+      - perform-initial-serverless-release
+      - validate-environment
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') &&
+      inputs.deploy_terraform == true
+    uses: ./.github/workflows/terraform_deploy.yaml
+    with:
+      environment: ${{ inputs.environment }}
+    secrets:
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TF_ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
+
+  deploy-packages:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
+    needs:
+      - deploy-terraform
+      - validate-environment
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
+      - name: install npm and apply missing environment variables
+        id: initial-env
+        run: |
+          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm install --ignore-scripts
+          npm run install-serverless-plugin
+          npm run postinstall -- --skip-plugin >> $GITHUB_STEP_SUMMARY
+      - name: deploy addons
+        run: |
+          npm run deploy-addons
+      - name: deploy serverless
+        working-directory: serverless-functions
+        run: |
+          npm run deploy
+
+  deploy-flex-config:
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled')
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    env:
+      ENVIRONMENT: ${{ inputs.environment }}
+      OVERWRITE_CONFIG: ${{ inputs.initial_release == true || inputs.overwrite_config == true }}
+    needs:
+      - deploy-packages
+      - validate-environment
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
+      - name: install root npm
+        run: |
+          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
+          echo " - Overwrite Config: ${{ env.OVERWRITE_CONFIG }}"  >> $GITHUB_STEP_SUMMARY
+          echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
+          npm install --ignore-scripts
+          npm run postinstall -- --packages=flex-config >> $GITHUB_STEP_SUMMARY
+      - name: deploy flex config
+        working-directory: flex-config
+        run: |
+          npm run deploy >> $GITHUB_STEP_SUMMARY
+
+  deploy-release-plugin:
+    needs:
+      - validate-environment
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    env:
+      PLUGIN_FOLDER: plugin-flex-ts-template-v2
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: set github environment variables
+        env:
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          VARS_CONTEXT: ${{ toJson(vars) }}
+        run: scripts/github-set-env.sh
+      - name: install twilio cli
+        run: npm install --ignore-scripts
+      - name: deploy and release flex-plugin
+        run: |
+          echo "### Job summary" >> $GITHUB_STEP_SUMMARY
+          echo " - Environment: ${{ inputs.environment }}"  >> $GITHUB_STEP_SUMMARY
+          echo " - Plugin Folder: ${{ env.PLUGIN_FOLDER }}"  >> $GITHUB_STEP_SUMMARY
+          cd $PLUGIN_FOLDER
+          npm install
+          npm run install-flex-plugin
+          npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
+          npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"

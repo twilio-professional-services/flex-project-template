@@ -1,0 +1,11 @@
+{
+  "PSDispositionRequired": "Se requiere una disposición antes de que pueda completar esta tarea.",
+  "PSDispositionTab": "Disposición",
+  "PSSelectDispositionTitle": "Seleccione una disposición",
+  "PSSelectDispositionHelpText": "La disposición seleccionada se guardará cuando complete esta tarea.",
+  "PSNotesTitle": "Notas",
+  "PSNotesCharactersRemaining": "{{characters}} caracteres restantes",
+  "PSChooseAnOption": "Elige una opcion",
+  "PSChooseOptions": "Elija una o más opciones",
+  "PSAttributeRequired": "Seleccione una opción o ingrese un valor para todos los campos obligatorios."
+}

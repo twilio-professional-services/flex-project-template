@@ -1,15 +1,9 @@
-import { getFeatureFlags } from '../../utils/configuration';
+import { FeatureDefinition } from '../../types/feature-loader';
+import { isFeatureEnabled } from './config';
+// @ts-ignore
+import hooks from './flex-hooks/**/*.*';
 
-const { enabled = false, filter_teams_view = false, rules } = getFeatureFlags()?.features?.activity_skill_filter || {};
-
-export const isFeatureEnabled = () => {
-  return enabled;
-};
-
-export const isFilterTeamsViewEnabled = () => {
-  return enabled && filter_teams_view;
-};
-
-export const getRules = () => {
-  return rules;
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: 'activity-skill-filter', hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

@@ -1,0 +1,6 @@
+{
+  "PSCallerIdLoading": "กำลังโหลดหมายเลขโทรศัพท์...",
+  "PSCallerIdLoadingFailed": "ไม่สามารถโหลดหมายเลขโทรศัพท์ได้",
+  "PSCallerIdChoose": "เลือก ไอดีผู้โทรเข้า",
+  "PSCallerId": "ไอดีผู้โทรเข้า"
+}

@@ -1,11 +1,9 @@
-import { getFeatureFlags } from '../../utils/configuration';
+import { isFeatureEnabled } from './config';
+import { FeatureDefinition } from '../../types/feature-loader';
+// @ts-ignore
+import hooks from './flex-hooks/**/*.*';
 
-const { enabled = false, serverless_domain } = getFeatureFlags()?.features?.schedule_manager || {};
-
-export const isFeatureEnabled = () => {
-  return enabled;
-};
-
-export const getServerlessDomain = () => {
-  return serverless_domain;
+export const register = (): FeatureDefinition => {
+  if (!isFeatureEnabled()) return {};
+  return { name: 'schedule-manager', hooks: typeof hooks === 'undefined' ? [] : hooks };
 };

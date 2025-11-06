@@ -1,0 +1,17 @@
+{
+  "PSFailedToLoadInsightsClient": "Falha ao carregar o módulo de insights em tempo real. Todas as filas estão listadas.",
+  "PSFailedToLoadInsightsData": "Incapaz de carregar dados de insights em tempo real. Todas as filas foram listadas.",
+  "PSXWTFeatureDependencyMissing": "O diretório de transferência personalizada com transferência externa está habilitado, mas nem a funcionalidade nativa de 'transferência assistida' nem a funcionalidade 'conferência' do plugin estão habilitadas, nas quais ele depende. Como resultado, as transferências externas assistidas para chamadas de voz serão desativadas.",
+  "PSPhoneNumberFailedValidationCheckRequest": "Falha ao fazer a verificação de validação para o número de telefone '{{phoneNumber}}'",
+  "PSPhoneNumberFailedValidationCheckWithErrors": "O número de telefone '{{phoneNumber}}' falhou na validação com os seguintes erros: {{errors}}",
+  "PSErrorExecutingColdTransfer": "Erro ao tentar realizar transferência direta, {{message}}",
+  "PSDirectoryQueues": "Filas",
+  "PSDirectoryExternal": "Externo",
+  "PSDirectorySearchDirectory": "Buscar no Diretório",
+  "PSDirectoryNoItemsFound": "Nenhum item encontrado.",
+  "PSDirectoryColdTransfer": "Transferência Direta",
+  "PSDirectoryWarmTransfer": "Transferência Assistida",
+  "PSDirectoryQueuesFiltered": "Algumas filas podem ser ocultadas por falta de agentes disponíveis nas filas.",
+  "PSDirectoryQueueTooltip": "Agentes: {{agentsAvailable}}, Tarefas na fila: {{tasksInQueue}}",
+  "PSDirectoryNA": "N/A"
+}

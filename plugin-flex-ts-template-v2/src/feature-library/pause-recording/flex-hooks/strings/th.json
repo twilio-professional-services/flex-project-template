@@ -1,0 +1,9 @@
+{
+  "PSRecordingPaused": "การบันทึกการโทรถูกระงับไว้ โปรดจำไว้ว่าจะต้องดำเนินการต่อการบันทึกการโทรเมื่อเหมาะสม",
+  "PSRecordingPausedLabel": "การบันทึกการโทรหยุดชั่วคราว",
+  "PSResumeRecording": "บันทึกการโทรถูกดำเนินต่อแล้ว",
+  "PSPauseRecordingFailed": "ไม่สามารถหยุดการบันทึกการโทรได้ โปรดลองอีกครั้ง",
+  "PSResumeRecordingFailed": "การต่อบันทึกการโทรล้มเหลว โปรดลองอีกครั้ง",
+  "PSPauseRecordingTooltip": "หยุดการบันทึกเสียง",
+  "PSResumeRecordingTooltip": "บันทึกการบันทึกเสียง"
+}

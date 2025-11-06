@@ -1,0 +1,138 @@
+{
+  "description": "Example flow that checks open hours",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
+        {
+          "event": "incomingMessage"
+        },
+        {
+          "next": "check_schedule",
+          "event": "incomingCall"
+        },
+        {
+          "event": "incomingConversationMessage"
+        },
+        {
+          "event": "incomingRequest"
+        },
+        {
+          "event": "incomingParent"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": -10
+        }
+      }
+    },
+    {
+      "name": "check_schedule",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "is_open",
+          "event": "success"
+        },
+        {
+          "next": "send_to_flex",
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "service_sid": "${SCHEDULE_MANAGER_SID}",
+        "environment_sid": "${SCHEDULE_MANAGER_ENV_SID}",
+        "offset": {
+          "x": 40,
+          "y": 170
+        },
+        "function_sid": "${FUNCTION_CHECK_SCHEDULE_SID}",
+        "parameters": [
+          {
+            "value": "Example",
+            "key": "name"
+          }
+        ],
+        "url": "https://${SCHEDULE_MANAGER_DOMAIN}/check-schedule"
+      }
+    },
+    {
+      "name": "is_open",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "say_closed",
+          "event": "noMatch"
+        },
+        {
+          "next": "send_to_flex",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to true",
+              "arguments": [
+                "{{widgets.check_schedule.parsed.isOpen}}"
+              ],
+              "type": "equal_to",
+              "value": "true"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.check_schedule.parsed.isOpen}}",
+        "offset": {
+          "x": 40,
+          "y": 480
+        }
+      }
+    },
+    {
+      "name": "say_closed",
+      "type": "say-play",
+      "transitions": [
+        {
+          "event": "audioComplete"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 40,
+          "y": 710
+        },
+        "loop": 1,
+        "say": "{% case widgets.check_schedule.parsed.closedReason  %}\n\n{% when 'manual' %}\n\nWe are currently closed due to unforseen circumstances. Please call back later.\n\n{% when 'holiday' %}\n\nWe are currently closed due to the holiday. Please call back during our normal business hours.\n\n{% else %}\n\nWe are currently closed. Please call back during our normal business hours.\n\n{% endcase %}\n\nThank you for calling and have a great day."
+      }
+    },
+    {
+      "name": "send_to_flex",
+      "type": "send-to-flex",
+      "transitions": [
+        {
+          "event": "callComplete"
+        },
+        {
+          "event": "failedToEnqueue"
+        },
+        {
+          "event": "callFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 420,
+          "y": 710
+        },
+        "workflow": "${WORKFLOW_SID}",
+        "channel": "${VOICE_CHANNEL_SID}"
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
+}

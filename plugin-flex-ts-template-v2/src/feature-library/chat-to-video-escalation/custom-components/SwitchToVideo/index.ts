@@ -1,4 +1,5 @@
-import SwitchToVideo from "./SwitchToVideo";
-import { withTaskContext } from "@twilio/flex-ui";
+import { withTaskContext } from '@twilio/flex-ui';
+
+import SwitchToVideo from './SwitchToVideo';
 
 export default withTaskContext(SwitchToVideo);

@@ -1,0 +1,21 @@
+{
+  "PSAdminTitle": "Configurações de Recursos",
+  "PSAdminConfigForTitle": "Configurar para:",
+  "PSAdminConfigForMyself": "Eu mesmo",
+  "PSAdminConfigForEveryone": "Todos",
+  "PSAdminEnabled": "Ativado",
+  "PSAdminDisabled": "Desativado",
+  "PSAdminDocs": "Documentos",
+  "PSAdminRevertWorkerToGlobal": "Reverter para configuração global",
+  "PSAdminMoreSettings": "Mais configurações",
+  "PSAdminNoMoreSettings": "Esta funcionalidade não possui configurações adicionais",
+  "PSAdminFilterFeatures": "Recursos de filtro...",
+  "PSAdminModalSettingsTitle": "Configurações de {{feature}}",
+  "PSAdminSaveError": "Houve um erro ao salvar as alterações. Por favor, tente novamente.",
+  "PSAdminSaveSuccess": "Mudanças salvas com sucesso. Recarregue o Flex para que as mudanças tenham efeito.",
+  "PSAdminInvalidJson": "Digite um JSON válido para salvar.",
+  "PSAdminUpdatedModalTitle": "Configurações atualizadas",
+  "PSAdminUpdatedModalDesc": "Outro usuário atualizou as configurações globais. Clique em 'Recarregar' para atualizar a visualização com as configurações atualizadas. Salvar as configurações globais não estará disponível até que a visualização seja recarregada.",
+  "PSAdminUpdatedModalReload": "Recarregar",
+  "PSAdminSaveDisabled": "A configuração global não pode ser salva até que a visualização seja recarregada."
+}

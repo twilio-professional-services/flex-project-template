@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Manager } from "@twilio/flex-ui";
-import {
-  Flex,
-  MenuButton,
-  MenuGroup,
-  useMenuState,
-  Menu,
-  MenuItem,
-  useToaster,
-  Toaster,
-} from "@twilio-paste/core";
-import { VolumeOnIcon } from "@twilio-paste/icons/esm/VolumeOnIcon";
-import { AgentIcon } from "@twilio-paste/icons/esm/AgentIcon";
-import { SecondDevice } from "../../../multi-call/helpers/MultiCallHelper";
-import { isFeatureEnabled as isMultiCallEnabled } from '../../../multi-call';
+import React, { useState, useEffect } from 'react';
+import { Manager, templates } from '@twilio/flex-ui';
+import { Device } from '@twilio/voice-sdk';
+import { Flex } from '@twilio-paste/core/flex';
+import { MenuButton, MenuGroup, useMenuState, Menu, MenuItem } from '@twilio-paste/core/menu';
+import { useToaster, Toaster } from '@twilio-paste/core/toast';
+import { MicrophoneOnIcon } from '@twilio-paste/icons/esm/MicrophoneOnIcon';
+import { VolumeOnIcon } from '@twilio-paste/icons/esm/VolumeOnIcon';
+import { AgentIcon } from '@twilio-paste/icons/esm/AgentIcon';
+
+import { isInputSelectEnabled } from '../../config';
+import { MultiCallDevices } from '../../../multi-call/helpers/MultiCallHelper';
+import { isFeatureEnabled as isMultiCallEnabled } from '../../../multi-call/config';
+import { StringTemplates } from '../../flex-hooks/strings';
 
 const DeviceManager: React.FunctionComponent = () => {
   const menu = useMenuState();
@@ -26,86 +24,94 @@ const DeviceManager: React.FunctionComponent = () => {
     });
   }
 
-  const selectedDevice = (selectedDevice: MediaDeviceInfo) => {
-    try {
-      let { voiceClient } = Manager.getInstance();
-
+  const setSelectedDevice = (selectedDevice: MediaDeviceInfo, voiceClient: Device) => {
+    if (selectedDevice.kind === 'audiooutput') {
       voiceClient?.audio?.speakerDevices.set(selectedDevice.deviceId);
+    } else {
+      voiceClient?.audio?.setInputDevice(selectedDevice.deviceId);
+    }
 
+    // If user-selected inputs are disabled, automatically select the corresponding input device, if present.
+    if (!isInputSelectEnabled()) {
       devices?.forEach((device: MediaDeviceInfo) => {
-        if (
-          device.groupId === selectedDevice.groupId &&
-          device.kind === "audioinput"
-        ) {
+        if (device.groupId === selectedDevice.groupId && device.kind === 'audioinput') {
           voiceClient?.audio?.setInputDevice(device.deviceId);
         }
       });
-      
-      // set SecondDevice options if multi-call feature is enabled
+    }
+  };
+
+  const selectedDevice = (selectedDevice: MediaDeviceInfo) => {
+    try {
+      const { voiceClient } = Manager.getInstance();
+
+      setSelectedDevice(selectedDevice, voiceClient);
+
+      // set device options for multi-call feature if enabled
       if (isMultiCallEnabled()) {
-        SecondDevice?.audio?.speakerDevices.set(selectedDevice.deviceId);
-        
-        devices?.forEach((device: MediaDeviceInfo) => {
-          if (
-            device.groupId === selectedDevice.groupId &&
-            device.kind === "audioinput"
-          ) {
-            SecondDevice?.audio?.setInputDevice(device.deviceId);
-          }
+        MultiCallDevices.forEach((device) => {
+          setSelectedDevice(selectedDevice, device);
         });
       }
 
       menu.hide();
 
       toaster.push({
-        message: `Set ${selectedDevice.label} as your audio device.`,
-        variant: "success",
+        message: templates[StringTemplates.SetDeviceSuccess]({ selectedDevice: selectedDevice.label }),
+        variant: 'success',
         dismissAfter: 3000,
       });
     } catch (e) {
       toaster.push({
-        message: `There was an error attempting to set ${selectedDevice.label} as your audio device.`,
-        variant: "error",
+        message: templates[StringTemplates.SetDeviceError]({ selectedDevice: selectedDevice.label }),
+        variant: 'error',
       });
     }
   };
 
   useEffect(() => {
     refreshDevices();
-    navigator.mediaDevices.addEventListener("devicechange", refreshDevices);
+    navigator.mediaDevices.addEventListener('devicechange', refreshDevices);
 
     return function cleanup() {
-      navigator.mediaDevices.removeEventListener(
-        "devicechange",
-        refreshDevices
-      );
+      navigator.mediaDevices.removeEventListener('devicechange', refreshDevices);
     };
   }, []);
 
   if (devices) {
     return (
-      <Flex
-        hAlignContent="center"
-        vAlignContent={"center"}
-      >
-        <MenuButton {...menu} variant="reset" element={menu.visible ? "DEVICE_MGR_BUTTON_OPEN" : "DEVICE_MGR_BUTTON"}>
-          <AgentIcon decorative />
+      <Flex hAlignContent="center" vAlignContent={'center'}>
+        <MenuButton {...menu} variant="reset" element={menu.visible ? 'DEVICE_MGR_BUTTON_OPEN' : 'DEVICE_MGR_BUTTON'}>
+          <AgentIcon decorative={false} title={templates[StringTemplates.SelectAudioDevice]()} />
         </MenuButton>
         <Menu {...menu} aria-label="Actions">
           <MenuGroup
-            label="Select an Audio Device"
+            label={
+              isInputSelectEnabled()
+                ? templates[StringTemplates.SelectOutputDevice]()
+                : templates[StringTemplates.SelectAudioDevice]()
+            }
             icon={<VolumeOnIcon decorative />}
           >
-            {devices.map((device) => {
-              if (device.kind == "audiooutput") {
-                return (
+            {devices
+              .filter((device) => device.kind === 'audiooutput')
+              .map((device) => (
+                <MenuItem {...menu} onClick={() => selectedDevice(device)} key={device.deviceId}>
+                  {device.label}
+                </MenuItem>
+              ))}
+          </MenuGroup>
+          {isInputSelectEnabled() && (
+            <MenuGroup label={templates[StringTemplates.SelectInputDevice]()} icon={<MicrophoneOnIcon decorative />}>
+              {devices
+                .filter((device) => device.kind === 'audioinput')
+                .map((device) => (
                   <MenuItem {...menu} onClick={() => selectedDevice(device)} key={device.deviceId}>
                     {device.label}
                   </MenuItem>
-                );
-              }
-            })}
-          </MenuGroup>
+                ))}
+            </MenuGroup>
+          )}
         </Menu>
         <Toaster {...toaster} />
       </Flex>

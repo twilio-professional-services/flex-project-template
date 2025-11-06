@@ -1,0 +1,12 @@
+{
+  "PSConferenceFailedHangupNotification": "ยกเลิกการโทรที่ถูกทอดทิ้ง: ไม่สามารถเอาผู้ร่วมทั้งหมดออกจากการถือค้างขณะวางสายได้ หากปัญหายังคงอยู่โปรดลองยกเลิกการถือค้างของผู้ร่วมทีละคนก่อนออกจากการโทร",
+  "PSExternalWarmTransferInvalidPhoneNumber": "ไม่สามารถเพิ่มผู้เข้าร่วมได้ {{message}}",
+  "PSConferenceAddConferenceParticipant": "เพิ่มผู้เข้าร่วมการประชุม",
+  "PSConferencePhoneNumber": "หมายเลขโทรศัพท์",
+  "PSConferencePhoneNumberError": "กรุณาใส่หมายเลขโทรศัพท์เพื่อเพิ่มในการประชุม",
+  "PSConferenceDial": "โทร",
+  "PSConferenceHoldParticipant": "ถือผู้เข้าร่วม",
+  "PSConferenceUnholdParticipant": "ยกเลิกการพักผู้เข้าร่วม",
+  "PSConferenceRemoveParticipant": "ลบผู้เข้าร่วม",
+  "PSConferenceUnknown": "ไม่รู้จัก"
+}

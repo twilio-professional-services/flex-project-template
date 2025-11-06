@@ -24,6 +24,24 @@ export interface FetchedWorker {
   workspaceSid: string;
 }
 
+export interface FetchedReservation {
+  accounSid: string;
+  dateCreated: Date;
+  dateUpdated: Date;
+  links: {
+    task: string;
+    worker: string;
+    workspace: string;
+  };
+  reservationStatus: string;
+  sid: string;
+  taskSid: string;
+  url: string;
+  workerName: string;
+  workerSid: string;
+  workspaceSid: string;
+}
+
 export interface FetchedTask {
   accountSid: string;
   addons: string;
@@ -39,7 +57,7 @@ export interface FetchedTask {
     workspace: string;
   };
   priority: number;
-  reason: string|null;
+  reason: string | null;
   sid: string;
   taskChannelSid: string;
   taskChannelUniqueName: string;

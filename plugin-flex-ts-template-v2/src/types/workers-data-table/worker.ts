@@ -1,4 +1,4 @@
-import { CustomWorkerAttributes } from '../task-router/Worker'
+import { CustomWorkerAttributes } from '../task-router/Worker';
 
 export default interface Worker {
   activityDuration: string;

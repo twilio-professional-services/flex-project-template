@@ -1,3 +1,3 @@
-import SelectFilter from './SelectFilter';
+import SelectFilterComponent from './SelectFilter';
 
-export default SelectFilter;
+export default SelectFilterComponent;

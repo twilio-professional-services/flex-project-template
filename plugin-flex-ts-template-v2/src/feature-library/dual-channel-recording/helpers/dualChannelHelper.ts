@@ -1,14 +1,31 @@
-import { ConferenceParticipant, ITask, Manager, TaskHelper } from "@twilio/flex-ui";
-import TaskRouterService from "../../../utils/serverless/TaskRouter/TaskRouterService";
-import { FetchedRecording } from "../../../types/serverless/twilio-api";
-import { getChannelToRecord } from '..';
+import { ConferenceParticipant, ITask, Manager, TaskHelper } from '@twilio/flex-ui';
+
+import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
+import { FetchedRecording } from '../../../types/serverless/twilio-api';
+import { getChannelToRecord, getExcludedAttributes, getExcludedQueues } from '../config';
+import DualChannelService from './DualChannelService';
+import logger from '../../../utils/logger';
 
 const manager = Manager.getInstance();
 
-export const addCallDataToTask = async (task: ITask, callSid: string | null, recording: FetchedRecording | null) => {
-  const { attributes, conference } = task;
+export const canRecordTask = (task: ITask): boolean => {
+  if (getExcludedQueues().findIndex((queue) => queue === task.queueName || queue === task.queueSid) >= 0) {
+    return false;
+  }
 
-  let newAttributes = { ...attributes };
+  for (const attribute of getExcludedAttributes()) {
+    if (task.attributes[attribute.key] === attribute.value) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+const addCallDataToTask = async (task: ITask, callSid: string | null, recording: FetchedRecording | null) => {
+  const { conference } = task;
+
+  let newAttributes = {} as any;
   let shouldUpdateTaskAttributes = false;
 
   if (TaskHelper.isOutboundCallTask(task)) {
@@ -28,7 +45,6 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
   if (recording) {
     const { dateUpdated, sid: reservationSid } = task;
     shouldUpdateTaskAttributes = true;
-    const conversations = attributes.conversations || {};
 
     const state = manager.store.getState();
     const flexState = state && state.flex;
@@ -38,8 +54,6 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
     const { sid: recordingSid } = recording;
     const twilioApiBase = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}`;
     const recordingUrl = `${twilioApiBase}/Recordings/${recordingSid}`;
-
-    const reservationAttributes = attributes.reservation_attributes || {};
 
     // Using one second before task updated time to workaround a Flex Insights
     // bug if the recording start time is after the reservation.accepted event
@@ -60,26 +74,30 @@ export const addCallDataToTask = async (task: ITask, callSid: string | null, rec
     switch (getChannelToRecord()) {
       case 'worker':
         newAttributes = {
-          ...attributes,
+          ...newAttributes,
           reservation_attributes: {
-            ...reservationAttributes,
             [reservationSid]: {
               media: [mediaObj],
-            }
+            },
           },
         };
         break;
       case 'customer':
         newAttributes.conversations = {
-          ...conversations,
           media: [mediaObj],
         };
+        break;
+      default:
         break;
     }
   }
 
   if (shouldUpdateTaskAttributes) {
-    await TaskRouterService.updateTaskAttributes(task.taskSid, newAttributes);
+    try {
+      await TaskRouterService.updateTaskAttributes(task.taskSid, newAttributes);
+    } catch (error: any) {
+      logger.error('[dual-channel-recording] Error updating task attributes', error);
+    }
   }
 };
 
@@ -87,12 +105,19 @@ const isTaskActive = (task: ITask) => {
   const { sid: reservationSid, taskStatus } = task;
   if (taskStatus === 'canceled') {
     return false;
-  } else {
-    return manager.workerClient?.reservations.has(reservationSid);
   }
+  return manager.workerClient?.reservations.has(reservationSid);
 };
 
-export const waitForConferenceParticipants = (task: ITask): Promise<ConferenceParticipant[]> =>
+const getParticipantToRecord = (channel: 'worker' | 'customer', participants: ConferenceParticipant[]) => {
+  if (channel === 'worker') {
+    return participants.find((p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined');
+  }
+
+  return participants.find((p) => p.participantType === 'customer');
+};
+
+const waitForConferenceParticipants = async (task: ITask): Promise<ConferenceParticipant[]> =>
   new Promise((resolve) => {
     const waitTimeMs = 100;
     // For outbound calls, the customer participant doesn't join the conference
@@ -102,7 +127,7 @@ export const waitForConferenceParticipants = (task: ITask): Promise<ConferencePa
       const { conference } = task;
 
       if (!isTaskActive(task)) {
-        console.debug('Call canceled, clearing waitForConferenceInterval');
+        logger.debug('[dual-channel-recording] Call canceled, clearing waitForConferenceInterval');
         if (waitForConferenceInterval) {
           clearInterval(waitForConferenceInterval);
           waitForConferenceInterval = null;
@@ -112,22 +137,39 @@ export const waitForConferenceParticipants = (task: ITask): Promise<ConferencePa
       if (conference === undefined) {
         return;
       }
-      const { participants } = conference;
+      let { participants } = conference;
       if (Array.isArray(participants) && participants.length < 2) {
         return;
       }
-      const worker = participants.find(
-        (p) => p.participantType === 'worker' && p.isCurrentWorker
-      );
-      const customer = participants.find(
-        (p) => p.participantType === 'customer'
-      );
 
-      if (!worker || !customer) {
+      const participantToRecord = getParticipantToRecord(getChannelToRecord(), participants);
+
+      if (!participantToRecord) {
         return;
       }
 
-      console.debug('Worker and customer participants joined conference');
+      if (!participantToRecord?.callSid) {
+        logger.debug('[dual-channel-recording] Looking for call SID');
+        // Flex sometimes does not provide callSid in task conference participants, check if it is in the Redux store instead
+        const storeConference = manager.store.getState().flex.conferences.states.get(task.taskSid);
+
+        if (!storeConference || !storeConference.source) {
+          return;
+        }
+
+        participants = storeConference.source.participants;
+
+        const storeParticipant = getParticipantToRecord(getChannelToRecord(), participants);
+
+        if (!storeParticipant?.callSid) {
+          logger.info(
+            `[dual-channel-recording] ${getChannelToRecord()} participants joined conference, waiting for call SID`,
+          );
+          return;
+        }
+      }
+
+      logger.debug(`[dual-channel-recording] ${getChannelToRecord()} participants joined conference`);
       if (waitForConferenceInterval) {
         clearInterval(waitForConferenceInterval);
         waitForConferenceInterval = null;
@@ -138,12 +180,12 @@ export const waitForConferenceParticipants = (task: ITask): Promise<ConferencePa
 
     setTimeout(() => {
       if (waitForConferenceInterval) {
-        console.debug(
-          `Customer participant didn't show up within ${
+        logger.info(
+          `[dual-channel-recording] ${getChannelToRecord()} participant didn't show up within ${
             maxWaitTimeMs / 1000
-          } seconds`
+          } seconds`,
         );
-        
+
         if (waitForConferenceInterval) {
           clearInterval(waitForConferenceInterval);
           waitForConferenceInterval = null;
@@ -153,57 +195,55 @@ export const waitForConferenceParticipants = (task: ITask): Promise<ConferencePa
       }
     }, maxWaitTimeMs);
   });
-  
-  export const waitForActiveCall = (task: ITask): Promise<string> =>
-    new Promise((resolve) => {
-      const waitTimeMs = 100;
-      // For internal calls, there is no conference, so we only have the active call to work with.
-      // Wait here for the call to establish.
-      const maxWaitTimeMs = 60000;
-      let waitForCallInterval: null | NodeJS.Timeout = setInterval(async () => {
-  
-        if (!isTaskActive(task)) {
-          console.debug('Call canceled, clearing waitForCallInterval');
-          if (waitForCallInterval) {
-            clearInterval(waitForCallInterval);
-            waitForCallInterval = null;
-          }
-          return;
-        }
-        
-        const activeCall = manager.store.getState().flex.phone.activeCall;
-        
-        if (!activeCall) {
-          return;
-        }
-  
+
+const waitForActiveCall = async (task: ITask): Promise<string> =>
+  new Promise((resolve) => {
+    const waitTimeMs = 100;
+    // For internal calls, there is no conference, so we only have the active call to work with.
+    // Wait here for the call to establish.
+    const maxWaitTimeMs = 60000;
+    let waitForCallInterval: null | NodeJS.Timeout = setInterval(async () => {
+      if (!isTaskActive(task)) {
+        logger.debug('[dual-channel-recording] Call canceled, clearing waitForCallInterval');
         if (waitForCallInterval) {
           clearInterval(waitForCallInterval);
           waitForCallInterval = null;
         }
-  
-        resolve(activeCall.parameters.CallSid);
-      }, waitTimeMs);
-  
-      setTimeout(() => {
+        return;
+      }
+
+      const { activeCall } = manager.store.getState().flex.phone;
+
+      if (!activeCall) {
+        return;
+      }
+
+      if (waitForCallInterval) {
+        clearInterval(waitForCallInterval);
+        waitForCallInterval = null;
+      }
+
+      resolve(activeCall.parameters.CallSid);
+    }, waitTimeMs);
+
+    setTimeout(() => {
+      if (waitForCallInterval) {
+        logger.info(`[dual-channel-recording] Call didn't activate within ${maxWaitTimeMs / 1000} seconds`);
+
         if (waitForCallInterval) {
-          console.debug(
-            `Call didn't activate within ${
-              maxWaitTimeMs / 1000
-            } seconds`
-          );
-          
-          if (waitForCallInterval) {
-            clearInterval(waitForCallInterval);
-            waitForCallInterval = null;
-          }
-  
-          resolve('');
+          clearInterval(waitForCallInterval);
+          waitForCallInterval = null;
         }
-      }, maxWaitTimeMs);
-    });
+
+        resolve('');
+      }
+    }, maxWaitTimeMs);
+  });
 
 export const addMissingCallDataIfNeeded = async (task: ITask) => {
+  if (!task) {
+    return;
+  }
   const { attributes } = task;
   const { conference } = attributes;
 
@@ -212,4 +252,62 @@ export const addMissingCallDataIfNeeded = async (task: ITask) => {
     // have the desired call and conference metadata
     await addCallDataToTask(task, null, null);
   }
+};
+
+const startRecording = async (task: ITask, callSid: string | undefined) => {
+  if (!callSid) {
+    logger.warn('[dual-channel-recording] Unable to determine call SID for recording');
+    return;
+  }
+
+  try {
+    const recording = await DualChannelService.startDualChannelRecording(callSid);
+    await addCallDataToTask(task, callSid, recording);
+  } catch (error: any) {
+    logger.error('[dual-channel-recording] Unable to start dual channel recording.', error);
+  }
+};
+
+export const recordInternalCall = async (task: ITask) => {
+  // internal call - always record based on call SID, as conference state is unknown by Flex
+  // Record only the outbound leg to prevent duplicate recordings
+  logger.debug('[dual-channel-recording] Waiting for internal call to begin');
+  const callSid = await waitForActiveCall(task);
+  logger.info(`[dual-channel-recording] Recorded internal call: ${callSid}`);
+
+  await startRecording(task, callSid);
+};
+
+export const recordExternalCall = async (task: ITask) => {
+  // We want to wait for all participants (customer and worker) to join the
+  // conference before we start the recording
+  logger.debug('[dual-channel-recording] Waiting for customer and worker to join the conference');
+  const participants = await waitForConferenceParticipants(task);
+
+  let participantLeg;
+  switch (getChannelToRecord()) {
+    case 'customer': {
+      participantLeg = participants.find((p) => p.participantType === 'customer');
+      break;
+    }
+    case 'worker': {
+      participantLeg = participants.find(
+        (p) => p.participantType === 'worker' && p.isCurrentWorker && p.status === 'joined',
+      );
+      break;
+    }
+    default:
+      break;
+  }
+
+  logger.info('[dual-channel-recording] Recorded Participant: ', participantLeg);
+
+  if (!participantLeg) {
+    logger.warn('[dual-channel-recording] No customer or worker participant. Not starting the call recording');
+    return;
+  }
+
+  const { callSid } = participantLeg;
+
+  await startRecording(task, callSid);
 };

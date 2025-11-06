@@ -1,112 +1,87 @@
-import * as React from 'react';
-import { useFlexSelector } from '@twilio/flex-ui';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
-import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
-import { Flex, Stack, Box, Text } from "@twilio-paste/core";
+import React, { useEffect, useState } from 'react';
+import { useFlexSelector, Template, templates, ITask } from '@twilio/flex-ui';
+import { Flex } from '@twilio-paste/core/flex';
+import { Stack } from '@twilio-paste/core/stack';
+import { Text } from '@twilio-paste/core/text';
 
-// Used for Sync Docs
-import { SyncDoc } from '../../utils/sync/Sync'
+import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
+import { SyncDoc } from '../../utils/sync/Sync';
 
 type SupervisorMonitorPanelProps = {
-  icon: string,
-  uniqueName: string
-}
+  icon: string;
+  uniqueName: string;
+  task?: ITask;
+};
 
-export const SupervisorMonitorPanel = ({}: SupervisorMonitorPanelProps) => {
-  const dispatch = useDispatch();
+export const SupervisorMonitorPanel = (props: SupervisorMonitorPanelProps) => {
+  const [monitoringSupervisors, setMonitoringSupervisors] = useState([] as any[]);
 
-  let {
-    supervisorArray,
-    syncSubscribed
-  } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
- 
-  const agentWorkerSID = useFlexSelector(state => state?.flex?.supervisor?.stickyWorker?.worker?.sid);
- 
- const supervisorsArray = () => {
-    
-    return (
-      supervisorArray.map(supervisorArray => (
-        <tr key={supervisorArray.supervisorSID}>
-          <td>{supervisorArray.supervisor}</td>
-          <td style={{ "color": 'green' }}>&nbsp;{supervisorArray.status}</td>
-        </tr>
-      ))
-    )
- }
- const syncUpdates = () => {
+  const selectedTaskInSupervisorSid = useFlexSelector((state) => state?.flex?.view?.selectedTaskInSupervisorSid);
 
-  if (agentWorkerSID != null && syncSubscribed != true) {
+  const supervisorSwitch = (status: string, supervisor: string) => {
+    switch (status) {
+      case 'barge':
+        return templates[StringTemplates.PanelBarge]({ supervisor });
+      case 'coaching':
+        return templates[StringTemplates.PanelCoaching]({ supervisor });
+      case 'monitoring':
+        return templates[StringTemplates.PanelMonitoring]({ supervisor });
+      default:
+        return null;
+    }
+  };
 
-    // Let's subscribe to the sync doc as an agent/worker and check
-    // if we are being coached, if we are, render that in the UI
-    // otherwise leave it blank
+  const filterSupervisors = (supervisor: any) =>
+    supervisor.conference === props?.task?.conference?.conferenceSid ||
+    supervisor.conference === props?.task?.attributes?.conference?.sid;
+
+  const syncUpdates = async (): Promise<any> => {
+    const agentWorkerSID = props?.task?.workerSid;
+    if (!agentWorkerSID) {
+      return null;
+    }
+
+    // Subscribe to the handling agent's Sync doc to enable real-time display of active supervisors
     const mySyncDoc = `syncDoc.${agentWorkerSID}`;
-    SyncDoc.getSyncDoc(mySyncDoc)
-    .then(doc => {
-      // We are subscribing to Sync Doc updates here and logging anytime that happens
-      doc.on("updated", (updatedDoc: string) => {
-        if (doc.data.supervisors != null) {
-          supervisorArray = [...doc.data.supervisors];
-        } else {
-          supervisorArray = [];
-        }
-
-        // Set Supervisor's name that is coaching into props
-        dispatch(Actions.setBargeCoachStatus({ 
-          supervisorArray: supervisorArray
-        }));
-      })
+    const doc = await SyncDoc.getSyncDoc(mySyncDoc);
+    doc.on('updated', (_updatedDoc: string) => {
+      let supervisorArray: any[] = [];
+      if (doc.data.supervisors) {
+        supervisorArray = [...doc.data.supervisors];
+      }
+      setMonitoringSupervisors(supervisorArray.filter(filterSupervisors));
     });
-    dispatch(Actions.setBargeCoachStatus({ 
-      syncSubscribed: true,
-    }));
-  }
-    
-   return;
- }
 
-  syncUpdates();
-  
-  if (supervisorArray.length != 0) {
-    return (
-      <>
-        <Flex hAlignContent="center" vertical>
-          <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-            <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-              Active Supervisors:
-              <Box>
-                <ol>
-                  <Text
-                  as="p"
-                  fontWeight="fontWeightMedium"
-                  fontSize="fontSize30"
-                  marginBottom="space40"
-                  color="colorTextSuccess"
-                  >
-                    {supervisorsArray()}
-                  </Text>
-                </ol>
-              </Box>
-            </Box>
-          </Stack>
-        </Flex>
-      </>
-    );
-  } else {
-    return (
-      <>
-        <Flex hAlignContent="center" vertical>
-          <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-            <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-              Active Supervisors:
-              <Box>
-                None
-              </Box>
-            </Box>
-          </Stack>
-        </Flex>
-      </>
-    );
-  }
-}
+    setMonitoringSupervisors(doc?.data?.supervisors?.filter(filterSupervisors) || []);
+    return doc;
+  };
+
+  useEffect(() => {
+    let doc: any = null;
+    (async () => {
+      doc = await syncUpdates();
+    })();
+
+    return () => {
+      // Ensure we unsubscribe from the current doc whenever the selected task changes
+      doc?.close();
+    };
+  }, [selectedTaskInSupervisorSid]);
+
+  return (
+    <Flex hAlignContent="center" vertical padding="space40">
+      <Stack orientation="vertical" spacing="space30">
+        <Template source={templates[StringTemplates.ActiveSupervisors]} />
+        {monitoringSupervisors.length > 0 ? (
+          monitoringSupervisors.map((supervisor: any) => (
+            <Text key={`${Math.random()}`} as="p" fontWeight="fontWeightMedium" color="colorTextSuccess">
+              {supervisorSwitch(supervisor.status, supervisor.supervisor)}
+            </Text>
+          ))
+        ) : (
+          <Template source={templates[StringTemplates.None]} />
+        )}
+      </Stack>
+    </Flex>
+  );
+};

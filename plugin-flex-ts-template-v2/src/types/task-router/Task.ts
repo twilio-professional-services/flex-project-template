@@ -1,9 +1,13 @@
+import { EventEmitter } from 'events';
+
 import IncomingTransfer from './IncomingTransfer';
 import OutgoingTransfer from './OutgoingTransfer';
 
 // https://twilio.github.io/twilio-taskrouter.js/Task.html
 
-export default interface Task {
+export type TaskAssignmentStatus = 'reserved' | 'assigned' | 'canceled' | 'wrapping' | 'completed' | 'transferring';
+
+export default interface Task extends EventEmitter {
   addOns: any;
   age: number;
   attributes: TaskAttributes;
@@ -18,7 +22,7 @@ export default interface Task {
   reservationSid: string;
   routingTarget: null;
   sid: string;
-  status: 'reserved' | 'assigned' | 'canceled' | 'wrapping' | 'completed' | 'transferring';
+  status: TaskAssignmentStatus;
   taskChannelSid: string;
   taskChannelUniqueName: string;
   timeout: number;
@@ -52,7 +56,7 @@ export interface TaskAttributes {
     transcriptSid?: string;
     transcriptText?: string;
     isDeleted?: boolean;
-  },
+  };
 
   // Flex Insights typically referenced elements
   conversations?: {
@@ -60,6 +64,7 @@ export interface TaskAttributes {
     destination?: string;
     hang_up_by?: string;
     outcome?: string;
+    content?: string;
     conversation_attribute_1?: string;
     conversation_attribute_2?: string;
     conversation_attribute_3?: string;
@@ -124,4 +129,3 @@ export interface TaskAttributes {
   type: string;
   outbound_to?: string;
 }
-

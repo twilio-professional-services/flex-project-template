@@ -1,3 +1,3 @@
-import ActivityWrapperComponent from './ActivityWrapperComponent';
+import ActivityWrapper from './ActivityWrapper';
 
-export default ActivityWrapperComponent;
+export default ActivityWrapper;

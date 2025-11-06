@@ -8,28 +8,22 @@ const FilterContainer = styled('div')`
 
 export type OwnProps = {
   currentValue?: string;
-  handleChange?: (newValue: Array<any> | string) => {};
+  handleChange?: (newValue: Array<any> | string) => unknown;
   fieldName?: string;
-}
+};
 
 export const FreeTextFilter = (props: OwnProps) => {
-  
   const _handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    
+
     if (props.handleChange) {
       props.handleChange(e.target.value);
     }
   };
-  
+
   return (
     <FilterContainer>
-      <Input
-        type="text"
-        onChange={_handleChange}
-        name={props.fieldName}
-        value={props.currentValue ?? ''}
-      />
+      <Input type="text" onChange={_handleChange} name={props.fieldName} value={props.currentValue ?? ''} />
     </FilterContainer>
   );
 };

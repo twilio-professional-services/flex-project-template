@@ -1,102 +1,49 @@
 import React from 'react';
-import { useFlexSelector } from '@twilio/flex-ui';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppState, reduxNamespace } from '../../../../flex-hooks/states'
-import { Actions } from "../../flex-hooks/states/SupervisorBargeCoach"
-import { Flex, Stack, Box, Text } from "@twilio-paste/core";
+import { ITask, Template, templates } from '@twilio/flex-ui';
+import { useSelector } from 'react-redux';
+import { Flex } from '@twilio-paste/core/flex';
+import { Box } from '@twilio-paste/core/box';
+import { Text } from '@twilio-paste/core/text';
 
-// Import to get Sync Doc updates
-import { SyncDoc } from '../../utils/sync/Sync'
+import { AppState } from '../../../../types/manager';
+import { reduxNamespace } from '../../../../utils/state';
+import { SupervisorBargeCoachState } from '../../flex-hooks/states/SupervisorBargeCoachSlice';
+import { StringTemplates } from '../../flex-hooks/strings/BargeCoachAssist';
 
-type CoachingStatusPanelProps = {
-}
+type SupervisorBargeCoachProps = {
+  task?: ITask;
+};
 
-export const CoachingStatusPanel = ({}: CoachingStatusPanelProps) => {
-  const dispatch = useDispatch();
+export const CoachingStatusPanel = ({ task }: SupervisorBargeCoachProps) => {
+  const { supervisorArray } = useSelector(
+    (state: AppState) => state[reduxNamespace].supervisorBargeCoach as SupervisorBargeCoachState,
+  );
 
-  let {
-    supervisorArray,
-    syncSubscribed
-  } = useSelector((state: AppState) => state[reduxNamespace].supervisorBargeCoach);
- 
-  const myWorkerSID = useFlexSelector(state => state?.flex?.worker?.worker?.sid);
+  const filterSupervisors = (supervisor: any) =>
+    supervisor.conference === task?.conference?.conferenceSid ||
+    supervisor.conference === task?.attributes?.conference?.sid;
 
-  const syncUpdates = () => {
-    if (syncSubscribed != true) {
-      // Let's subscribe to the sync doc as an agent/work and check
-      // if we are being coached, if we are, render that in the UI
-      // otherwise leave it blank
-      const mySyncDoc = `syncDoc.${myWorkerSID}`;
-      
-      SyncDoc.getSyncDoc(mySyncDoc)
-      .then(doc => {
-        // We are subscribing to Sync Doc updates here and logging anytime that happens
-        doc.on("updated", (updatedDoc: string) => {
-          if (doc.data.supervisors != null) {
-            supervisorArray = [...doc.data.supervisors];
-            // Current verion of this feature will only show the Agent they are being coached
-            // This could be updated by removing the below logic and including Monitoring and Joined (barged)
-            for(let i = 0; i < supervisorArray.length; i++){ 
-                                    
-              if (supervisorArray[i].status == "is Monitoring" || supervisorArray[i].status == "has Joined") { 
-                  supervisorArray.splice(i, 1); 
-                  i--; 
-              }
-            }
-          } else {
-            supervisorArray = [];
-          }
-  
-          // Set Supervisor's name that is coaching into props
-          dispatch(Actions.setBargeCoachStatus({ 
-            supervisorArray: supervisorArray
-          }));
-        })
-      });
-      dispatch(Actions.setBargeCoachStatus({ 
-        syncSubscribed: true,
-      }));
-    }
-
-    return;
-  }
-  
-  syncUpdates();
-
-  // If the supervisor array has value in it, that means someone is coaching
-  // We will map each of the supervisors that may be actively coaching
-  // Otherwise we will not display anything if no one is actively coaching
-  if (supervisorArray.length != 0) {
-
+  // If the supervisor array has value in it for this conference, that means someone is coaching
+  if (supervisorArray.filter(filterSupervisors).length > 0) {
     return (
-      <>
-        <Flex hAlignContent="center" vertical>
-          <Stack orientation="horizontal" spacing="space30" element="COACH_STATUS_PANEL_BOX">
-            <Box backgroundColor="colorBackgroundPrimaryWeakest" padding="space40">
-              You are being Coached by: 
-              <Box>
-                <ol>
-                  <Text
-                  as="p"
-                  fontWeight="fontWeightMedium"
-                  fontSize="fontSize30"
-                  marginBottom="space40"
-                  color="colorTextSuccess"
-                  >
-                    {supervisorArray.map((supervisorArray: { supervisor: {} }) => (
-                        <li key={`${Math.random()}`}>{supervisorArray.supervisor}</li>
-                    ))}
-                  </Text>
-                </ol>
-              </Box>
-            </Box>
-          </Stack>
-        </Flex>
-      </>
-      );
-  } else {
-    return (
-      <></>
+      <Flex hAlignContent="center" vertical padding="space40">
+        <Box
+          backgroundColor="colorBackgroundPrimaryWeakest"
+          borderColor="colorBorderPrimaryWeaker"
+          borderRadius="borderRadius30"
+          borderStyle="solid"
+          borderWidth="borderWidth10"
+          padding="space40"
+        >
+          <Template source={templates[StringTemplates.AgentCoachedBy]} />
+          {supervisorArray.filter(filterSupervisors).map((supervisor: any) => (
+            <Text key={`${Math.random()}`} as="p" fontWeight="fontWeightMedium" color="colorTextSuccess">
+              {supervisor.supervisor}
+            </Text>
+          ))}
+        </Box>
+      </Flex>
     );
   }
-}
+  return <></>;
+};

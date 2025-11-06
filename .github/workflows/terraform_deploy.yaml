@@ -1,0 +1,61 @@
+name: Deploy Terraform
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+    secrets:
+      TWILIO_ACCOUNT_SID:
+        required: true
+      TWILIO_API_KEY:
+        required: true
+      TWILIO_API_SECRET:
+        required: true
+      TF_ENCRYPTION_KEY:
+        required: true
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: environment
+        description: "Environment to use for deployment"
+
+jobs:
+  terraform_deploy:
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    name: Terraform
+    env:
+      ENCRYPTION_KEY: ${{ secrets.TF_ENCRYPTION_KEY }}
+      TF_STATE_FILES: ".terraform.lock.hcl|terraform.tfstate"
+      TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
+      TWILIO_API_KEY: ${{ secrets.TWILIO_API_KEY }}
+      TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
+      TWILIO_REGION: ${{ vars.TWILIO_REGION }}
+      ENVIRONMENT: ${{ inputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: install Twilio CLI
+        run: |
+          npm install --ignore-scripts
+          npm run install-serverless-plugin
+      - name: Pull Terraform State
+        id: pull-state
+        working-directory: ./infra-as-code/state
+        run: |
+          ./pull_state.sh
+      - name: Import Internal State
+        run: |
+          ./import_internal_state.sh
+        if: steps.pull-state.outputs.JOB_FAILED == 'false'
+        working-directory: ./infra-as-code/state
+        id: import_internal_state
+      - name: Export State
+        run: |
+          ./push_state.sh
+        working-directory: ./infra-as-code/state
+        if: steps.import_internal_state.outputs.JOB_FAILED == 'false'

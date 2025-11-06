@@ -1,0 +1,21 @@
+{
+  "PSBargeCoachAgentAssistanceTriggered": "{{agentFN}} กำลังขอความช่วยเห",
+  "PSBargeCoachAssistanceRequired": "ต้องการความช่วยเห",
+  "PSBargeCoachTurnOffAssistance": "ปิดการช่วยเห",
+  "PSBargeCoachAgentSeekingAssistance": "เจ้าหน้าที่ต้องการความช่",
+  "PSBargeCoachBarge": "เข้ามาแทร",
+  "PSBargeCoachAskForAssistance": "ขอความช่วยเหล",
+  "PSBargeCoachCoach": "เปิดโหมดโค้ช",
+  "PSBargeCoachAgentCoachedBy": "คุณกำลังได้รับการฝึกฝนจาก:",
+  "PSBargeCoachAssistanceAlertsEnabled": "เปิดใช้งานการแจ้งเตือนความช่วยเหลือของเอเจต์",
+  "PSBargeCoachAssistanceAlertsDisabled": "การแจ้งเตือนการช่วยเหลือของเอเย่นต์ถูกปิดการใช้งาน",
+  "PSBargeCoachActiveSupervisors": "ผู้ดูแลที่ใช้งานอยู่:",
+  "PSBargeCoachNone": "ไม่มี",
+  "PSBargeCoachDisablePrivacy": "ปิดโหมดส่วนตัว",
+  "PSBargeCoachEnablePrivacy": "เปิดใช้โหมดส่วนตัว",
+  "PSBargeCoachPrivacyOn": "ความเป็นส่วนตัว: เปิด",
+  "PSBargeCoachPrivacyOff": "ความเป็นส่วนตัว: ปิด",
+  "PSBargeCoachMonitorPanelBarge": "{{supervisor}} เข้าร่วมแล้ว",
+  "PSBargeCoachMonitorPanelCoaching": "{{supervisor}} กำลังฝึกสอน",
+  "PSBargeCoachMonitorPanelMonitoring": "{{supervisor}} กำลังตรวจสอบ"
+}

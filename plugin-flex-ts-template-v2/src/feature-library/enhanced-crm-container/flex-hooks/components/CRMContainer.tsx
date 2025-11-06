@@ -1,14 +1,11 @@
 import * as Flex from '@twilio/flex-ui';
 
-import IFrameCRMContainer from '../../custom-components/IFrameCRMContainer';
-import { isFeatureEnabled } from '../..';
+import TabbedCRMContainer from '../../custom-components/TabbedCRMContainer';
+import { FlexComponent } from '../../../../types/feature-loader';
 
-export function replaceAndSetCustomCRMContainer(flex: typeof Flex, manager: Flex.Manager) {
-
-  if(!isFeatureEnabled()) return;
-  
-  const baseUrl = 'https://www.bing.com';
-  Flex.CRMContainer.Content.replace(<IFrameCRMContainer key="custom-crm-container" baseUrl={baseUrl} />, {
+export const componentName = FlexComponent.CRMContainer;
+export const componentHook = function replaceAndSetCustomCRMContainer(flex: typeof Flex, _manager: Flex.Manager) {
+  flex.CRMContainer.Content.replace(<TabbedCRMContainer key="custom-crm-container" />, {
     sortOrder: 1,
-  })
-}
+  });
+};

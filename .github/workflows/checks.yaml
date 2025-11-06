@@ -1,0 +1,85 @@
+name: Checks
+
+# Within this file, FEATURE and END FEATURE blocks are used only by the remove-features script.
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    branches:
+      - main
+    paths:
+      - 'plugin-flex-ts-template-v2/**'
+      - 'serverless-functions/**'
+      - 'addons/**'
+  # Enable running this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install packages
+        run: |
+          npm install --ignore-scripts
+          npm run postinstall -- --skip-env
+      - name: Run eslint
+        run: npm run lint:report
+        continue-on-error: true
+      - name: Annotate Code Linting Results
+        id: annotate
+        uses: ataylorme/eslint-annotate-action@v3
+        with:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          report-json: "eslint_report.json"
+      - name: Comment on error
+        uses: mshick/add-pr-comment@v2
+        if: always() && steps.annotate.outputs.errorCount > 0
+        with:
+          message: |
+            ${{steps.annotate.outputs.summary}}
+            :rotating_light: Errors must be resolved before merging, and have been annotated in the "Files changed" tab. Run `npm run lint` if you would like to see results locally.
+      - name: Comment on warning
+        uses: mshick/add-pr-comment@v2
+        if: always() && steps.annotate.outputs.errorCount < 1 && steps.annotate.outputs.warningCount > 0
+        with:
+          message: |
+            ${{steps.annotate.outputs.summary}}
+            :warning: Merging is still possible with these warnings, but please fix them if possible! Annotations are available in the "Files changed" tab. Run `npm run lint` if you would like to see results locally.
+      - name: Comment on no issues
+        uses: mshick/add-pr-comment@v2
+        if: always() && steps.annotate.outputs.errorCount < 1 && steps.annotate.outputs.warningCount < 1
+        with:
+          message: |
+            ${{steps.annotate.outputs.summary}}
+            :white_check_mark: No issues found!
+  test-plugin-v2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install packages
+        working-directory: ./plugin-flex-ts-template-v2
+        run: npm install
+      - name: Run tests
+        working-directory: ./plugin-flex-ts-template-v2
+        run: npm run test:ci
+      - name: Publish test results
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+          report_paths: './plugin-flex-ts-template-v2/test-results/junit.xml'

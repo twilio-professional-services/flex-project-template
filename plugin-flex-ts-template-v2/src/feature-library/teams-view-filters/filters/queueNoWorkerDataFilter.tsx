@@ -1,7 +1,11 @@
-import { FilterDefinition } from "@twilio/flex-ui";
-import SelectFilter from "../custom-components/SelectFilter";
-import SelectFilterLabel from "../custom-components/SelectFilterLabel";
-import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService'
+import { FilterDefinition, Manager } from '@twilio/flex-ui';
+import sortBy from 'lodash/sortBy';
+
+import SelectFilter from '../custom-components/SelectFilter';
+import SelectFilterLabel from '../custom-components/SelectFilterLabel';
+import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterService';
+import { StringTemplates } from '../flex-hooks/strings/TeamViewQueueFilter';
+import logger from '../../../utils/logger';
 
 /* 
     this filter works by injecting a temporary placeholder into the filters
@@ -16,28 +20,36 @@ import TaskRouterService from '../../../utils/serverless/TaskRouter/TaskRouterSe
     expressions will result in a notification to the user and the filter
     will be ignored.
 
-    furthermore the expression can onlyuse the following qualifiers
+    furthermore the expression can only use the following qualifiers
       HAS|==|EQ|!=|CONTAINS|IN|NOT IN
 */
 
 export const queueNoWorkerDataFilter = async () => {
-  
-  const queueOptions = await TaskRouterService.getQueues();
-  const options = queueOptions? queueOptions.map((queue: any) => ({
-    value: queue.friendlyName,
-    label: queue.friendlyName,
-    default: false
-  })) : [];
+  let queueOptions;
+
+  try {
+    queueOptions = await TaskRouterService.getQueues();
+  } catch (error: any) {
+    logger.error('[teams-view-filters] Unable to get queues', error);
+  }
+
+  const options = queueOptions
+    ? queueOptions.map((queue: any) => ({
+        value: queue.friendlyName,
+        label: queue.friendlyName,
+        default: false,
+      }))
+    : [];
 
   return {
     id: 'queue-replacement',
-    title: 'Queue Eligibility',
+    title: (Manager.getInstance().strings as any)[StringTemplates.QueueEligibility],
     fieldName: 'queue',
     customStructure: {
       label: <SelectFilterLabel />,
-      field: <SelectFilter IsMulti={false}/>,
+      field: <SelectFilter IsMulti={false} />,
     },
-    options: options,
-    condition: 'IN'
+    options: sortBy(options, ['label']),
+    condition: 'IN',
   } as FilterDefinition;
-}
+};

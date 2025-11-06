@@ -1,21 +1,19 @@
 var appConfig = {
   pluginService: {
     enabled: true,
-    url: "/plugins",
+    url: '/plugins',
+  },
+  insights: {
+    analyticsUrl: 'http://localhost:8081',
   },
   ytica: false,
-  logLevel: "info",
+  logLevel: 'info',
   showSupervisorDesktopView: true,
   custom_data: {
-    serverless_functions_protocol: "http",
-    serverless_functions_port: "3001",
-    serverless_functions_domain: "localhost",
-    features: {
-      caller_id: {
-        enabled: true
-      }
-    }
+    serverless_functions_protocol: 'http',
+    serverless_functions_port: '3001',
+    serverless_functions_domain: 'localhost',
+    common: {},
+    features: {},
   },
 };
-
-

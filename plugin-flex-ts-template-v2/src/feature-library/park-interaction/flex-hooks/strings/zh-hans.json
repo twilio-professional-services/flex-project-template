@@ -1,0 +1,21 @@
+{
+  "PSParkSuccess": "对话已成功搁置。",
+  "PSParkError": "尝试搁置对话时发生错误：{{message}}",
+  "PSParkInteraction": "搁置互动",
+  "PSParkWebhookError": "无效的 Webhook URL。本地运行时不支持搁置对话。",
+  "PSParkNonCbmError": "仅基于对话的消息传递任务可用于搁置。",
+  "PSParkMultipleParticipantsError": "由于存在多个内部参与者，无法搁置此对话。",
+  "PSParkedInteractions": "暂停互动",
+  "PSUnparkSuccess": "对话已成功取消搁置。",
+  "PSUnparkGenericError": "尝试取消搁置对话时发生错误：{{message}}",
+  "PSUnparkError": "取消搁置时出现错误，对话已关闭或失败。",
+  "PSChannel": "渠道",
+  "PSAddress": "地址",
+  "PSCustomerName": "客户名称",
+  "PSDateTimeParked": "搁置日期和时间",
+  "PSAction": "操作",
+  "PSResumeInteraction": "恢复互动",
+  "PSNoItemsToList": "无可列示项目",
+  "PSUnparkListError": "加载最近互动列表时发生错误：{{message}}",
+  "PSUnparkDeleteItemError": "删除同步地图项目时出错：{{message}}"
+}

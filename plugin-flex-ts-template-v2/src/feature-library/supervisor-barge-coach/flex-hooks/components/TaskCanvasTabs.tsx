@@ -1,17 +1,15 @@
 import * as Flex from '@twilio/flex-ui';
+
 import SupervisorMonitorPanel from '../../custom-components/SupervisorMonitorPanel';
-import { SyncDoc } from '../../utils/sync/Sync';
-import { isSupervisorMonitorPanelEnabled } from '../..';
+import { isSupervisorMonitorPanelEnabled } from '../../config';
+import { FlexComponent } from '../../../../types/feature-loader';
 
-export function addSupervisorMonitorPanel(flex: typeof Flex, manager: Flex.Manager) {
+export const componentName = FlexComponent.TaskCanvasTabs;
+export const componentHook = function addSupervisorMonitorPanel(flex: typeof Flex, _manager: Flex.Manager) {
+  if (!isSupervisorMonitorPanelEnabled()) return;
 
-  if(!isSupervisorMonitorPanelEnabled()) return;
-
-  flex.Supervisor.TaskCanvasTabs.Content.add(<SupervisorMonitorPanel uniqueName="Supervisors Engaged" icon="AgentsBold"  key="supervisoronitorpanel" />);
-  
-  // If myWorkerSID exists, clear the Agent Sync Doc to account for the refresh
-  const myWorkerSID = localStorage.getItem('myWorkerSID');
-  if(myWorkerSID != null) {
-    SyncDoc.clearSyncDoc(myWorkerSID);
-  }
-}
+  flex.Supervisor.TaskCanvasTabs.Content.add(
+    <SupervisorMonitorPanel uniqueName="Supervisors Engaged" icon="AgentsBold" key="SupervisorMonitorPanel" />,
+    { if: (props) => props.channelDefinition.capabilities.has('Call') },
+  );
+};

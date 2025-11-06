@@ -1,0 +1,32 @@
+module.exports = {
+  root: true,
+  extends: ['twilio'],
+  ignorePatterns: ['/node_modules', '/src/assets', '*.test.js'],
+  rules: {
+    camelcase: 'off',
+    complexity: 'off',
+    'import/extensions': 'off',
+    'import/no-extraneous-dependencies': 'off',
+    'import/no-mutable-exports': 'off',
+    'import/no-unresolved': 'off',
+    'import/no-unused-modules': 'off',
+    'multiline-comment-style': 'off',
+    'no-alert': 'off',
+    'no-console': 'off',
+    'no-multi-str': 'off',
+    'no-use-before-define': 'off',
+    'no-nested-ternary': 'off',
+    'prefer-destructuring': 'off',
+    'prefer-named-capture-group': 'off',
+    'prefer-promise-reject-errors': 'off',
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+      },
+    ],
+    'sonarjs/cognitive-complexity': 'off',
+    'sonarjs/no-identical-functions': 'off',
+    'sonarjs/no-duplicate-string': 'off',
+  },
+};

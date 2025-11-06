@@ -1,0 +1,192 @@
+import shell from "shelljs";
+import { promises as fs } from 'fs';
+
+import { serverlessSrc, flexConfigDir, infraAsCodeDir, terraformDir } from './common/constants.mjs';
+import getPluginDirs from "./common/get-plugin.mjs";
+
+const { featureDirectory } = getPluginDirs();
+
+const featureRegionReferences = [
+  {
+    filename: `${infraAsCodeDir}/state/import_internal_state.sh`,
+    features: ["remove-all", "activity-reservation-handler", "callback-and-voicemail", "conversation-transfer", "internal-call", "park-interaction", "schedule-manager" ]
+  },
+  {
+    filename: `${terraformDir}/environments/default/example.tfvars`,
+    features: [ "callback-and-voicemail", "schedule-manager" ],
+  },
+  {
+    filename: `${terraformDir}/environments/default/main.tf`,
+    features: [ "remove-all", "activity-reservation-handler", "callback-and-voicemail", "conversation-transfer", "internal-call", "park-interaction", "schedule-manager" ],
+  },
+  {
+    filename: `${terraformDir}/environments/default/outputs.tf`,
+    features: [ "remove-all", "callback-and-voicemail", "conversation-transfer", "internal-call", "park-interaction", "schedule-manager" ],
+  },
+  {
+    filename: `${terraformDir}/environments/default/template_examples.tf`,
+    features: [ "remove-all" ],
+  },
+  {
+    filename: `${terraformDir}/environments/default/variables.tf`,
+    features: [ "callback-and-voicemail", "schedule-manager" ],
+  }
+];
+
+const flexConfigRemovals = [
+  `${flexConfigDir}/ui_attributes.common.json`,
+  `${flexConfigDir}/ui_attributes.example.json`,
+];
+
+let keepFeatures = [];
+let removeFeatures = [];
+let keepMode = true;
+
+const shouldRemoveFeature = (featureDirName) => {
+  return keepMode ? !keepFeatures.includes(featureDirName) : removeFeatures.includes(featureDirName);
+}
+
+const shouldKeepFeature = (featureDirName) => {
+  return keepMode ? keepFeatures.includes(featureDirName) : !removeFeatures.includes(featureDirName);
+}
+
+const performFeatureRegionRemoval = async () => {
+  shell.echo("Removing features from GitHub Actions workflows...");
+
+  if(keepMode && keepFeatures.length > 0){
+    keepFeatures.push("remove-all")
+  }
+  
+  await Promise.all(featureRegionReferences.map(async (reference) => {
+    try {
+      const originalData = await fs.readFile(reference.filename, "utf8");
+      let newData = originalData;
+      
+      for (const feature of reference.features) {
+        if (shouldKeepFeature(feature)) {
+          continue;
+        }
+        
+        const startString = `# FEATURE: ${feature}`;
+        const endString = `# END FEATURE: ${feature}`;
+        let startIndex = newData.indexOf(startString);
+        let endIndex = newData.indexOf(endString, startIndex);
+        
+        while (startIndex >= 0 && endIndex >= 0) {
+          // Remove the section from the beginning of the start string to the end of the end string (plus trailing line break)
+          newData = newData.substring(0, startIndex) + newData.substring(endIndex + endString.length + 1);
+          
+          // find the next occurrence!
+          startIndex = newData.indexOf(startString);
+          endIndex = newData.indexOf(endString, startIndex);
+        }
+      }
+      
+      await fs.writeFile(reference.filename, newData, 'utf8');
+      shell.echo(`Updated ${reference.filename}`);
+    } catch (error) {
+      shell.echo(`Failed to update ${reference.filename}: ${error}`);
+    }
+  }));
+}
+
+const performFlexConfigRemovals = async () => {
+  shell.echo("Removing features from flex-config...");
+  try {
+    for (const configFile of flexConfigRemovals) {
+      try {
+        const originalData = await fs.readFile(configFile, "utf8");
+        let jsonData = JSON.parse(originalData);
+        for (const key of Object.keys(jsonData?.custom_data?.features)) {
+          // The config name for a feature uses underscores instead of hyphens
+          const featureDirName = key.replace(/_/g, '-');
+          if (shouldRemoveFeature(featureDirName)) {
+            delete jsonData.custom_data.features[key];
+          }
+        }
+        await fs.writeFile(configFile, JSON.stringify(jsonData, null, 2), 'utf8');
+        shell.echo(`Updated ${configFile}`);
+     } catch (error) {
+      shell.echo(`Failed to update ${configFile}: ${error}`);
+     }
+    }
+  } catch (error) {
+    shell.echo(`Failed to update config files: ${error}`);
+  }
+}
+
+const performDirectoryRemovals = (baseDir) => {
+  try {
+    const featureDirs = shell.ls(baseDir);
+    
+    for (const feature of featureDirs) {
+      if (shouldRemoveFeature(feature)) {
+        shell.rm('-rf', `${baseDir}/${feature}`);
+        shell.echo(`Removed ${baseDir}/${feature}`);
+      }
+    }
+  } catch (error) {
+    shell.echo(`Failed to remove directory: ${error}`);
+  }
+}
+
+const performRemovals = async () => {
+  await performFeatureRegionRemoval();
+  
+  await performFlexConfigRemovals();
+  
+  shell.echo(`Removing plugin features from ${featureDirectory}...`);
+  performDirectoryRemovals(featureDirectory);
+  
+  shell.echo(
+    `Removing serverless functions and assets feature folders from ${serverlessSrc}...`
+  );
+  performDirectoryRemovals(`${serverlessSrc}/functions/features`);
+  performDirectoryRemovals(`${serverlessSrc}/assets/features`);
+  
+  if (shouldRemoveFeature("schedule-manager")) {
+    shell.echo(
+      `Deleting schedule-manager serverless package addons/serverless-schedule-manager...`
+    );
+    shell.rm("-rf", `addons/serverless-schedule-manager`);
+  }
+  
+  if (shouldRemoveFeature("chat-to-video-escalation")) {
+    shell.echo(
+      `Deleting addons/twilio-video-demo-app...`
+    );
+    shell.rm("-rf", `addons/twilio-video-demo-app`);
+  }
+  
+  shell.echo(
+    `Removing feature-specific Terraform modules`
+  );
+  performDirectoryRemovals(`${terraformDir}/modules`);
+  
+  shell.echo("Done!");
+}
+
+const parseArgs = (args) => {
+  // node scripts/remove-features.js
+  if (args.length < 3) {
+    // no features specified to remove or incorrect args format
+    shell.echo("Removing all features...");
+    return;
+  }
+  
+  // node scripts/remove-features.js feat1 feat2 featX
+  if (args.length > 2 && args[2] !== "except") {
+    // removing specific feature(s)
+    removeFeatures = args.slice(2);
+    keepMode = false;
+    shell.echo(`Removing features ${removeFeatures.join(", ")}...`);
+    return;
+  }
+  
+  // node scripts/remove-features.js except feat1 feat2 featX
+  keepFeatures = args.slice(3);
+  shell.echo(`Removing all features except ${keepFeatures.join(", ")}...`);
+}
+
+parseArgs(process.argv);
+performRemovals();

@@ -1,16 +1,21 @@
+import { templates } from '@twilio/flex-ui';
+
+import { StringTemplates } from '../../flex-hooks/strings/TeamViewQueueFilter';
+
 export type OwnProps = {
   currentValue?: string[];
-}
+  activeOption?: any;
+};
 
 export const SelectFilterLabel = (props: OwnProps) => {
-  let label = 'Any';
+  let label = templates.FilterItemAny();
   if (props.currentValue && props.currentValue.length === 1) {
-    label = `${props.currentValue[0]} only`;
+    label = templates[StringTemplates.FilterOnly]({ selected: props.activeOption?.label ?? props.currentValue[0] });
   }
   if (props.currentValue && props.currentValue.length > 1) {
-    label = `${props.currentValue.length} selected`;
+    label = templates.FilterItemAmountSelected({ amount: props.currentValue.length });
   }
-  return (<>{label}</>);
+  return <>{label}</>;
 };
 
 export default SelectFilterLabel;
