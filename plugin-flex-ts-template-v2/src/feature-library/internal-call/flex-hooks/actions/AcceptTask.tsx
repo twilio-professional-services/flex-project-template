@@ -13,7 +13,7 @@ export const actionHook = function handleInternalAcceptTask(flex: typeof Flex, _
 
     payload.conferenceOptions = {
       endConferenceOnCustomerExit: false,
-      endConferenceOnExit: true
+      endConferenceOnExit: true,
     };
   });
 };

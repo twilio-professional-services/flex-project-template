@@ -1,15 +1,12 @@
-import { ITask, Manager, WorkerAttributes, IQueue } from '@twilio/flex-ui';
-import { Worker as InstantQueryWorker } from '../../../types/sync/InstantQuery';
-import { UIAttributes } from "../../../types/manager/ServiceConfiguration";
+import { ITask, Manager, WorkerAttributes, IQueue, TaskHelper } from '@twilio/flex-ui';
 
-const { custom_data } = Manager.getInstance().configuration as UIAttributes;
-const { call_target } = custom_data?.features?.internal_call || {};
+import { Worker as InstantQueryWorker } from '../../../types/sync/InstantQuery';
+import { getCallTarget } from '../config';
 
 export const isInternalCall = (task: ITask) => task.attributes.client_call === true;
 
 export const makeInternalCall = (manager: Manager, selectedWorker: InstantQueryWorker) => {
-  const { workflow_sid, queue_sid, caller_id } =
-    manager.serviceConfiguration.outbound_call_flows.default;
+  const { workflow_sid, queue_sid, caller_id } = manager.serviceConfiguration.outbound_call_flows.default;
 
   if (!manager.workerClient) {
     return;
@@ -22,13 +19,13 @@ export const makeInternalCall = (manager: Manager, selectedWorker: InstantQueryW
   const {
     attributes: { full_name },
     friendly_name,
-    worker_sid
+    worker_sid,
   } = selectedWorker;
 
-  manager.workerClient.createTask(call_target, caller_id, workflow_sid, queue_sid, {
+  manager.workerClient.createTask(getCallTarget(), caller_id, workflow_sid, queue_sid, {
     attributes: {
       to: full_name || friendly_name,
-      name: "Internal Call",
+      name: 'Internal Call',
       fromName: fromFullName || fromName,
       targetWorker: from_uri,
       targetWorkerSid: worker_sid,
@@ -64,39 +61,34 @@ export const makeInternalCallToQueue = (manager: Manager, selectedQueue: IQueue)
   });
 };
 
-export const waitForTransfer = (task: ITask): Promise<boolean> =>
-new Promise((resolve) => {
-  const waitTimeMs = 100;
-  // Wait until the task is in a transferrable state.
-  const maxWaitTimeMs = 60000;
-  let waitForTransferInterval: null | NodeJS.Timeout = setInterval(async () => {
-    
-    if (!TaskHelper.canTransfer(task)) {
-      return;
-    }
+export const waitForTransfer = async (task: ITask): Promise<boolean> =>
+  new Promise((resolve) => {
+    const waitTimeMs = 100;
+    // Wait until the task is in a transferrable state.
+    const maxWaitTimeMs = 60000;
+    let waitForTransferInterval: null | NodeJS.Timeout = setInterval(async () => {
+      if (!TaskHelper.canTransfer(task) || task.status !== 'accepted') {
+        return;
+      }
 
-    if (waitForTransferInterval) {
-      clearInterval(waitForTransferInterval);
-      waitForTransferInterval = null;
-    }
-
-    resolve(true);
-  }, waitTimeMs);
-
-  setTimeout(() => {
-    if (waitForTransferInterval) {
-      console.debug(
-        `Task didn't become transferrable within ${
-          maxWaitTimeMs / 1000
-        } seconds`
-      );
-      
       if (waitForTransferInterval) {
         clearInterval(waitForTransferInterval);
         waitForTransferInterval = null;
       }
 
-      resolve(false);
-    }
-  }, maxWaitTimeMs);
-});
+      resolve(true);
+    }, waitTimeMs);
+
+    setTimeout(() => {
+      if (waitForTransferInterval) {
+        console.debug(`Task didn't become transferrable within ${maxWaitTimeMs / 1000} seconds`);
+
+        if (waitForTransferInterval) {
+          clearInterval(waitForTransferInterval);
+          waitForTransferInterval = null;
+        }
+
+        resolve(false);
+      }
+    }, maxWaitTimeMs);
+  });
