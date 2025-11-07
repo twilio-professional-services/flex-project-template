@@ -2,6 +2,7 @@
 sidebar_label: contacts
 title: Contacts
 ---
+import AppDialingEnabled from "./_app-dialing-enabled.md";
 
 ## Overview
 
@@ -12,6 +13,8 @@ This feature adds a contacts directory to Flex. The contacts directory consists 
 - Shared contacts are contacts which are visible to all workers. By default, only workers with the admin or supervisor role can add, modify, or delete shared contacts. However, these can be optionally made editable for agents as well.
 
 Contacts can be viewed, managed, and dialed using the contacts view added to Flex. In addition, a "Call Contact" section is added to the outbound dialer panel, allowing easy dialing of contacts from any view. Also, if the `custom-transfer-directory` feature is enabled, contacts are available in the transfer panel for cold or warm transfer, and shared contacts can be configured to disable cold and/or warm transfer capability.
+
+<AppDialingEnabled />
 
 ## User experience
 
