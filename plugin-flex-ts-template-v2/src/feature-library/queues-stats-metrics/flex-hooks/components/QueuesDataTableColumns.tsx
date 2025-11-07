@@ -28,6 +28,9 @@ export const componentHook = function addQueuesDataTableColumns(flex: typeof Fle
           const assignedTasks = queue.tasks_by_status?.assigned || 0;
           return <span>{assignedTasks}</span>;
         }}
+        sortingFn={(a: WorkerQueue, b: WorkerQueue) =>
+          (a.tasks_by_status?.assigned || 0) > (b.tasks_by_status?.assigned || 0) ? 1 : -1
+        }
         {...props}
       />,
       { sortOrder: 0 },
@@ -47,6 +50,9 @@ export const componentHook = function addQueuesDataTableColumns(flex: typeof Fle
           const wrappingTasks = queue.tasks_by_status?.wrapping || 0;
           return <span>{wrappingTasks}</span>;
         }}
+        sortingFn={(a: WorkerQueue, b: WorkerQueue) =>
+          (a.tasks_by_status?.wrapping || 0) > (b.tasks_by_status?.wrapping || 0) ? 1 : -1
+        }
         {...props}
       />,
       { sortOrder: 0 },
@@ -63,7 +69,7 @@ export const componentHook = function addQueuesDataTableColumns(flex: typeof Fle
         header={(manager.strings as any)[StringTemplates.AgentActivityHeader]}
         subHeader={manager.strings.QueuesStatsSubHeaderNow}
         content={(queue: WorkerQueue) => {
-          return <QueueActivityStats queueName={queue.friendly_name} activityStats={queue.activity_statistics} />;
+          return <QueueActivityStats activityStats={queue.activity_statistics} />;
         }}
         {...props}
       />,
