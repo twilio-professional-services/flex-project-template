@@ -4,6 +4,6 @@ output "internal_call_workflow_sid" {
 }
 
 output "internal_call_application_sid" {
-  value = twilio_api_accounts_applications.internal_calls.sid
+  value = twilio_api_accounts_applications.internal_call.sid
   description = "Internal call application SID"
 }

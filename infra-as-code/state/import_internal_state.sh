@@ -42,6 +42,7 @@ importInternalState() {
 	channels=$(npx twilio api:taskrouter:v1:workspaces:task-channels:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 	activities=$(npx twilio api:taskrouter:v1:workspaces:activities:list --workspace-sid "$TF_WORKSPACE_SID" --no-limit -o json)
 	flows=$(npx twilio api:studio:v2:flows:list --no-limit -o json)
+	apps=$(npx twilio api:core:applications:list --no-limit -o json)
 
 # FEATURE: remove-all
 	import_resource "$workflows" "Template Example Assign to Anyone" "twilio_taskrouter_workspaces_workflows_v1.template_example_assign_to_anyone" "friendlyName"
@@ -66,6 +67,7 @@ importInternalState() {
 # FEATURE: internal-call
 	import_resource "$workflows" "Template Example Internal Calls" "module.internal-call.twilio_taskrouter_workspaces_workflows_v1.template_example_internal_calls" "friendlyName"
 	import_resource "$queues" "Template Example Internal Calls" "module.internal-call.twilio_taskrouter_workspaces_task_queues_v1.template_example_internal_calls" "friendlyName"
+	import_resource "$apps" "Internal Call" "module.internal-call.twilio_api_accounts_applications.internal_call" "friendlyName"
 	echo "   - :white_check_mark: internal-call resources" >>$GITHUB_STEP_SUMMARY
 # END FEATURE: internal-call
 
