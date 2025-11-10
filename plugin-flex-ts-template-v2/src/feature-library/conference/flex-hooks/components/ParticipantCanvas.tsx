@@ -5,7 +5,6 @@ import ParticipantActionsButtons from '../../custom-components/ParticipantAction
 import ParticipantName from '../../custom-components/ParticipantName';
 import ParticipantStatus from '../../custom-components/ParticipantStatus';
 import ParticipantStatusContainer from '../../custom-components/ParticipantStatusContainer';
-import { isInternalCall } from '../../../internal-call/helpers/internalCall';
 import { isConferenceEnabledWithoutNativeXWT } from '../../config';
 import { FlexComponent } from '../../../../types/feature-loader';
 
@@ -16,7 +15,7 @@ export const componentHook = function addConferenceToParticipantCanvas(flex: typ
     // if the add button is disabled, only the customer participant needs replacement buttons
     if (!isConferenceEnabledWithoutNativeXWT() && props.participant.participantType !== 'customer') return false;
 
-    return props.participant.participantType !== 'transfer' && !isInternalCall(props.task);
+    return props.participant.participantType !== 'transfer';
   };
 
   flex.ParticipantCanvas.Content.remove('actions', { if: replaceButtons });

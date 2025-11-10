@@ -48,6 +48,7 @@ module "internal-call" {
   everyone_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_everyone.sid
   example_sales_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_sales.sid
   example_support_queue_sid = twilio_taskrouter_workspaces_task_queues_v1.template_example_support.sid
+  serverless_domain = var.SERVERLESS_DOMAIN
 }
 # END FEATURE: internal-call
 

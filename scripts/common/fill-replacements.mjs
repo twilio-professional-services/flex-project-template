@@ -113,6 +113,9 @@ const fillVar = (key, envVars, environment) => {
     case "chat-service":
     fetchCli.fetchChatServices();
     break;
+    case "twiml-app":
+    fetchCli.fetchTwimlApps();
+    break;
     default:
     console.warn(`Unknown placeholder variable type: ${varNameMapping[key].type}`);
     break;

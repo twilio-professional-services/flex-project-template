@@ -1,94 +1,58 @@
-import { ITask, Manager, WorkerAttributes, IQueue, TaskHelper } from '@twilio/flex-ui';
+import { Manager, WorkerAttributes, IQueue, Actions } from '@twilio/flex-ui';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Worker as InstantQueryWorker } from '../../../types/sync/InstantQuery';
-import { getCallTarget } from '../config';
+import { getApplicationSid, getOutboundQueueSid } from '../config';
 
-export const isInternalCall = (task: ITask) => task.attributes.client_call === true;
-
-export const makeInternalCall = (manager: Manager, selectedWorker: InstantQueryWorker) => {
-  const { workflow_sid, queue_sid, caller_id } = manager.serviceConfiguration.outbound_call_flows.default;
-
+export const makeInternalCall = async (manager: Manager, selectedWorker: InstantQueryWorker) => {
   if (!manager.workerClient) {
     return;
   }
 
   const { name: fromName } = manager.workerClient;
-
-  const { contact_uri: from_uri, full_name: fromFullName } = manager.workerClient.attributes as WorkerAttributes;
-
+  const { full_name: fromFullName } = manager.workerClient.attributes as WorkerAttributes;
   const {
     attributes: { full_name },
     friendly_name,
     worker_sid,
   } = selectedWorker;
+  const conversation_id = uuidv4();
+  const from = fromFullName || fromName;
 
-  manager.workerClient.createTask(getCallTarget(), caller_id, workflow_sid, queue_sid, {
-    attributes: {
-      to: full_name || friendly_name,
-      name: 'Internal Call',
-      fromName: fromFullName || fromName,
-      targetWorker: from_uri,
-      targetWorkerSid: worker_sid,
-      autoAnswer: 'true',
-      client_call: true,
+  Actions.invokeAction('StartOutboundCall', {
+    destination: `app:${getApplicationSid()}?worker_sid=${worker_sid}&from=${from}&conversation_id=${conversation_id}`,
+    queueSid: getOutboundQueueSid(),
+    taskAttributes: {
+      name: full_name || friendly_name,
+      internal_outbound_to: full_name || friendly_name,
+      conversations: {
+        conversation_id,
+      },
     },
-    taskChannelUniqueName: 'voice',
   });
 };
 
 export const makeInternalCallToQueue = (manager: Manager, selectedQueue: IQueue) => {
-  const { workflow_sid, queue_sid } = manager.serviceConfiguration.outbound_call_flows.default;
-
   if (!manager.workerClient) {
     return;
   }
 
   const { name: fromName } = manager.workerClient;
+  const { full_name: fromFullName } = manager.workerClient.attributes as WorkerAttributes;
+  const conversation_id = uuidv4();
+  const from = fromFullName || fromName;
 
-  const { contact_uri: from_uri, full_name: fromFullName } = manager.workerClient.attributes as WorkerAttributes;
-
-  manager.workerClient.createTask(selectedQueue.name, from_uri, workflow_sid, queue_sid, {
-    attributes: {
-      to: `queue:${selectedQueue.name}`,
-      callToQueue: selectedQueue.name,
-      direction: 'outbound',
-      fromName: fromFullName || fromName,
-      targetWorker: from_uri,
-      autoAnswer: 'true',
-      client_call: true,
+  Actions.invokeAction('StartOutboundCall', {
+    destination: `app:${getApplicationSid()}?callToQueue=${
+      selectedQueue.name
+    }&from=${from}&conversation_id=${conversation_id}`,
+    queueSid: getOutboundQueueSid(),
+    taskAttributes: {
+      name: selectedQueue.name,
+      internal_outbound_to: selectedQueue.name,
+      conversations: {
+        conversation_id,
+      },
     },
-    taskChannelUniqueName: 'voice',
   });
 };
-
-export const waitForTransfer = async (task: ITask): Promise<boolean> =>
-  new Promise((resolve) => {
-    const waitTimeMs = 100;
-    // Wait until the task is in a transferrable state.
-    const maxWaitTimeMs = 60000;
-    let waitForTransferInterval: null | NodeJS.Timeout = setInterval(async () => {
-      if (!TaskHelper.canTransfer(task) || task.status !== 'accepted') {
-        return;
-      }
-
-      if (waitForTransferInterval) {
-        clearInterval(waitForTransferInterval);
-        waitForTransferInterval = null;
-      }
-
-      resolve(true);
-    }, waitTimeMs);
-
-    setTimeout(() => {
-      if (waitForTransferInterval) {
-        console.debug(`Task didn't become transferrable within ${maxWaitTimeMs / 1000} seconds`);
-
-        if (waitForTransferInterval) {
-          clearInterval(waitForTransferInterval);
-          waitForTransferInterval = null;
-        }
-
-        resolve(false);
-      }
-    }, maxWaitTimeMs);
-  });

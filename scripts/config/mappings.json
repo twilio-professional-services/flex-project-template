@@ -62,5 +62,15 @@
     "type": "tr-workflow",
     "name": "/Internal Call/",
     "parent": "TWILIO_FLEX_WORKSPACE_SID"
+  },
+  "INTERNAL_CALL_APPLICATION_SID": {
+    "type": "twiml-app",
+    "name": "Internal Call"
+  },
+  "INTERNAL_CALL_QUEUE_SID": {
+    "type": "tr-queue",
+    "name": "/Internal Call/",
+    "fallback": "Everyone",
+    "parent": "TWILIO_FLEX_WORKSPACE_SID"
   }
 }
