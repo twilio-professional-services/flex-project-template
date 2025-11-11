@@ -67,7 +67,7 @@ importInternalState() {
 # FEATURE: internal-call
 	import_resource "$workflows" "Template Example Internal Calls" "module.internal-call.twilio_taskrouter_workspaces_workflows_v1.template_example_internal_calls" "friendlyName"
 	import_resource "$queues" "Template Example Internal Calls" "module.internal-call.twilio_taskrouter_workspaces_task_queues_v1.template_example_internal_calls" "friendlyName"
-	import_resource "$apps" "Internal Call" "module.internal-call.twilio_api_accounts_applications.internal_call" "friendlyName"
+	import_resource "$apps" "Internal Call" "module.internal-call.twilio_api_accounts_applications.internal_call" "friendlyName" false
 	echo "   - :white_check_mark: internal-call resources" >>$GITHUB_STEP_SUMMARY
 # END FEATURE: internal-call
 
