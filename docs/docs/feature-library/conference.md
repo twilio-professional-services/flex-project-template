@@ -10,8 +10,6 @@ When in a call, and the beta native external warm transfer functionality is not 
 
 If the beta native external warm transfer functionality is enabled, this feature still adds the ability for a caller to hang up without ending the conference, as well as the ability to kick the customer participant.
 
-This feature is based on [the dialpad addon plugin](https://github.com/twilio-professional-services/flex-dialpad-addon-plugin).
-
 ## flex-user-experience
 
 ![Conference demo](/img/features/conference/conference.gif)
@@ -27,7 +25,7 @@ Within your `ui_attributes` file, the `conference` feature has 3 settings you ma
 
 ### Outbound Call Configuration
 
-When conferencing in an external party, the default outbound call settings are used for caller ID. If this has not yet been configured, you will encounter errors. This can be updated in the Twilio Console > Flex > Manage > Voice, or by using the Flex Configuration API:
+When conferencing in an external party, the default outbound call settings are used for caller ID. If this has not yet been configured, you will encounter errors. This can be updated in the [Twilio Console > Flex > Channel management > Voice](https://console.twilio.com/us1/develop/flex/channels/voice), or by using the Flex Configuration API:
 
 ```
 POST https://flex-api.twilio.com/v1/Configuration
