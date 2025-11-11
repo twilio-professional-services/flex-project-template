@@ -24,7 +24,9 @@ export const registerStartExternalColdTransfer = async () => {
         return;
       }
 
-      if (!shouldSkipPhoneNumberValidation()) {
+      // Validate phone numbers if not disabled. We cannot validate application SIDs as they
+      // may be from another account.
+      if (!shouldSkipPhoneNumberValidation() && !phoneNumber.startsWith('app:')) {
         try {
           const validationCheck = await PhoneNumberService.validatePhoneNumber(phoneNumber);
 

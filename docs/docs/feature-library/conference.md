@@ -2,6 +2,7 @@
 sidebar_label: conference
 title: conference
 ---
+import AppDialingEnabled from "./_app-dialing-enabled.md";
 import PluginLibraryFeature from "./_plugin-library-feature.md";
 
 <PluginLibraryFeature />
@@ -9,6 +10,8 @@ import PluginLibraryFeature from "./_plugin-library-feature.md";
 When in a call, and the beta native external warm transfer functionality is not enabled, a "plus" icon is added to the call canvas where you can add an external number to the call.
 
 If the beta native external warm transfer functionality is enabled, this feature still adds the ability for a caller to hang up without ending the conference, as well as the ability to kick the customer participant.
+
+<AppDialingEnabled />
 
 ## flex-user-experience
 

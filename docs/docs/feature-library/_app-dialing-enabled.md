@@ -1,0 +1,3 @@
+:::tip Application dialing enabled
+You may also use this feature to dial [TwiML apps](https://console.twilio.com/?frameUrl=/console/voice/twiml/apps) in addition to standard phone numbers. This allows you to dial webhooks, Studio flows, and other Twilio accounts without incurring PSTN fees, while also passing context in the form of parameters. To perform an application dial, use the format `app:APxxxxx`, where `APxxxxx` is your application SID. You may pass parameters as well, using the format `app:APxxxxx?param1=value1&param2=value2`.
+:::
