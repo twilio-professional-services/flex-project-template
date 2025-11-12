@@ -84,3 +84,5 @@ Within your `ui_attributes` file, the `internal-call` feature has settings you m
 ## How does it work?
 
 After selecting the appropriate party (agent/queue) and clicking the call button, the `StartOutboundCall` action is invoked to place a call to the TwiML app configured for this feature, with the target party (queue or worker SID) passed as a parameter to the app. The TwiML app will then invoke the `enqueue` serverless function, which returns TwiML to enqueue the call with the configured TaskRouter workflow. Depending on whether an agent or queue is being called, there will be a `worker_sid` or a `callToQueue` attribute added to the task, which is used by the workflow to route the task appropriately.
+
+For each internal call, two tasks (and two conferences) will be generated--one for the outbound leg, and one for the inbound leg. A `conversation_id` attribute is generated and set to the same value on both tasks so that [Flex Insights links these two tasks as one conversation](https://www.twilio.com/docs/flex/developer/insights/enhance-integration#link-tasks-to-a-conversation).
