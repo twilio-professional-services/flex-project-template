@@ -148,7 +148,9 @@ const WorkerDirectoryTab = (props: OwnProps) => {
   useEffect(() => {
     if (Array.isArray(props.workers)) {
       // If Flex UI already fetched workers, use it
-      setFetchedWorkers(props.workers);
+      // We need to use the source object to get the necessary properties
+      const formattedWorkers = props.workers?.map((item: any) => item._source || item);
+      setFetchedWorkers(formattedWorkers);
     }
   }, [props.workers]);
 
