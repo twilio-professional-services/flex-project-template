@@ -22,8 +22,8 @@ const QueueActivityStats = (props: ComponentProps) => {
       </PopoverButton>
       <Popover aria-label="Popover">
         {activityStats.map((ac: ActivityStatistic) => {
-          if (ac.workers > 0) return <Text as="p">{`${ac.friendly_name}: ${ac.workers}`}</Text>;
-          return <Text as="span" />;
+          if (ac.workers > 0) return <Text as="p" key={ac.sid}>{`${ac.friendly_name}: ${ac.workers}`}</Text>;
+          return <Text as="span" key={ac.sid} />;
         })}
       </Popover>
     </PopoverContainer>
