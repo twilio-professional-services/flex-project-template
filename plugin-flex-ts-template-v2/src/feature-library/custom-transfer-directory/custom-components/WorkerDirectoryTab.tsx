@@ -28,6 +28,7 @@ export interface TransferClickPayload {
 export interface OwnProps {
   task: ITask;
   workers?: Array<Worker>;
+  workersLoading?: boolean;
 }
 
 const WorkerDirectoryTab = (props: OwnProps) => {
@@ -163,6 +164,13 @@ const WorkerDirectoryTab = (props: OwnProps) => {
       setIsLoading(false);
     }
   }, [filteredWorkers]);
+
+  useEffect(() => {
+    if (typeof props.workersLoading !== 'boolean') {
+      return;
+    }
+    setIsLoading(props.workersLoading);
+  }, [props.workersLoading]);
 
   return (
     <DirectoryTab
