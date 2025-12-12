@@ -3,12 +3,12 @@
     "filters": [
       {
         "filter_friendly_name": "Assign to Agent",
-        "expression": "targetWorker != null AND callToQueue == null",
+        "expression": "worker_sid != null AND callToQueue == null",
         "targets": [
           {
             "queue": "${QUEUE_SID_INTERNAL}",
-            "expression": "task.targetWorker == worker.contact_uri",
-            "priority": 1000
+            "priority": 1000,
+            "known_worker_sid": "task.worker_sid"
           }
         ]
       },
