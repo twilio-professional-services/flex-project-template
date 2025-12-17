@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Actions, ITask } from '@twilio/flex-ui';
 import { Flex } from '@twilio-paste/core/flex';
 import { Tabs, TabList, Tab, TabPanels, TabPanel, useTabState } from '@twilio-paste/core/tabs';
+import { Stack } from '@twilio-paste/core/stack';
 
 export interface Props {
   thisTask?: ITask; // task assigned to component
@@ -19,6 +20,12 @@ interface SelectCRMContainerTabPayload {
 
 interface CRMComponent {
   title: string;
+  component: React.ComponentType;
+  order?: number;
+  accessoryComponents?: CRMAccessoryComponent[];
+}
+
+interface CRMAccessoryComponent {
   component: React.ComponentType;
   order?: number;
 }
@@ -76,7 +83,22 @@ export const TabbedCRMTask = ({ thisTask, task }: Props) => {
       <Tabs state={tabState} element="CRM_TABS">
         <TabList aria-label="CRM tabs" element="CRM_TAB_LIST">
           {customComponents &&
-            customComponents.map((component) => <Tab key={`crm-tab-${component.title}`}>{component.title}</Tab>)}
+            customComponents.map((component) => (
+              <Tab key={`crm-tab-${component.title}`} id={`crm-tab-${component.title}`}>
+                {tabState.selectedId === `crm-tab-${component.title}` && component.accessoryComponents?.length ? (
+                  <Stack orientation="horizontal" spacing="space30">
+                    {component.title}
+                    <Stack orientation="horizontal" spacing="space30" element="CRM_TAB_ACCESSORY_STACK">
+                      {component.accessoryComponents
+                        .sort((a, b) => (a.order ?? 999) - (b.order ?? 999))
+                        .map((accessoryComponent) => accessoryComponent.component)}
+                    </Stack>
+                  </Stack>
+                ) : (
+                  component.title
+                )}
+              </Tab>
+            ))}
         </TabList>
         <TabPanels element="CRM_TAB_PANELS">
           {customComponents &&
