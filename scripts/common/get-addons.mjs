@@ -4,7 +4,7 @@ import { addonsDir } from "./constants.mjs";
 
 export default () => {
   try {
-    return [ ...shell.ls('-d', `${addonsDir}/*/`).map((pkg) => pkg.slice(0, -1)) ];
+    return [ ...shell.ls('-d', `${addonsDir}/*/`).map((pkg) => pkg.replace(/\/\s*$/, "")) ];
   } catch (error) {
     console.error(`Unable to fetch addons`, error);
     return [];
