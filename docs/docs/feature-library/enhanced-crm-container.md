@@ -72,6 +72,7 @@ export const actionHook = function addToEnhancedCRM(flex: typeof Flex, manager: 
         title: 'My Custom CRM Tab',
         order: 0, // optionally define preferred tab order, defaults to 999 if not present
         component: <MyCRMTab task={payload.task} key="my-crm-tab" />,
+        accessoryComponents: [], // optionally define components that should appear within the tab label itself when selected. Array items are objects with `component` and optionally `order` props.
       },
     ];
   });
