@@ -19,6 +19,7 @@ const {
   enforce_queue_filter_from_worker_object = false,
   enforce_global_exclude_filter = false,
   global_exclude_filter = '',
+  global_exclude_filters = [],
 } = queue_config || {};
 
 const {
@@ -70,6 +71,10 @@ export const shouldEnforceGlobalFilter = (): boolean => {
 
 export const getGlobalFilter = (): string => {
   return global_exclude_filter;
+};
+
+export const getGlobalFilters = (): string[] => {
+  return global_exclude_filters;
 };
 
 export const shouldFetchInsightsData = (): boolean => {
