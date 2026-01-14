@@ -422,6 +422,13 @@
         "enabled": false,
         "exclude_attributes": [],
         "exclude_queues": []
+      },
+      "recording_status_callback": {
+        "enabled": false,
+        "callback_url": "",
+        "notify_absent": false,
+        "notify_completed": true,
+        "notify_inprogress": false
       }
     }
   }
