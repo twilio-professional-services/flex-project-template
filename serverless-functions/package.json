@@ -13,7 +13,7 @@
   "dependencies": {
     "@twilio/runtime-handler": "2.0.1",
     "axios": "^1.12.1",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "randomstring": "^1.3.0",
     "twilio": "^5.8.0",
     "twilio-flex-token-validator": "^1.5.6"
