@@ -18,7 +18,7 @@
     "@reduxjs/toolkit": "^1.9.1",
     "@twilio-paste/core": "^20.11.0",
     "@twilio-paste/icons": "^12.4.0",
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "emoji-picker-react": "^4.4.7",
     "env-cmd": "^10.1.0",
     "eslint-config-next": "^13.5.6",
