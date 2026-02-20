@@ -1,5 +1,3 @@
-import { PasteCustomCSS } from '@twilio-paste/customization';
-
 export const pasteElementHook = {
   CRM_TAB_PANEL: {
     overflowY: 'scroll',
@@ -22,8 +20,12 @@ export const pasteElementHook = {
   CRM_TAB_LIST_CHILD: {
     marginBottom: 'space0',
   },
+  CRM_TAB_ACCESSORY_STACK: {
+    marginTop: '-0.75rem',
+    marginBottom: '-0.75rem',
+  },
   CRM_FLEX: {
     alignItems: 'stretch',
     overflow: 'auto',
   },
-} as { [key: string]: PasteCustomCSS };
+} as { [key: string]: any };
