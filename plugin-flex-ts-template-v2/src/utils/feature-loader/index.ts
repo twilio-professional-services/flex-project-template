@@ -18,7 +18,8 @@ import * as Reducers from './reducers';
 import * as Strings from './strings';
 import * as TeamsFilters from './teams-filters';
 import * as SyncClientTokenUpdated from '../sdk-clients/sync/tokenUpdated';
-import * as TaskRouterReplaceCompleteTask from '../serverless/TaskRouter/CompleteTask';
+import * as AcceptTaskHandleAppSid from '../system-hooks/AcceptTask';
+import * as TaskRouterReplaceCompleteTask from '../system-hooks/CompleteTask';
 import * as SendLogsToBrowserConsole from '../logger/sendLogsToBrowserConsole';
 // @ts-ignore
 // eslint-disable-next-line import/no-useless-path-segments
@@ -52,6 +53,12 @@ export const initFeatures = (flex: typeof Flex, manager: Flex.Manager) => {
   setLoadedFeaturesPopulated(true);
 
   // Register built-in hooks
+  Actions.addHook(
+    flex,
+    manager,
+    'built-in handler for accepting calls from an Application SID',
+    AcceptTaskHandleAppSid,
+  );
   Actions.addHook(flex, manager, 'built-in TaskRouterService', TaskRouterReplaceCompleteTask);
   Events.addHook(flex, manager, 'built-in Sync client', SyncClientTokenUpdated);
   Logger.addHook(flex, manager, 'built-in logger to browser console', SendLogsToBrowserConsole);

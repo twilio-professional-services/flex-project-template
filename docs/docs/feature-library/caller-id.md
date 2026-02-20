@@ -31,7 +31,7 @@ There is an optional configuration property (`include_outgoing_only_numbers`) co
 
 ### Outbound Call Configuration
 
-The Flex Dialpad must be enabled in order to be able to place outbound calls from within Flex. If this has not yet been configured, you will not be able to use this feature. This can be enabled in the Twilio Console > Flex > Manage > Voice, or by using the Flex Configuration API:
+The Flex Dialpad must be enabled in order to be able to place outbound calls from within Flex. If this has not yet been configured, you will not be able to use this feature. This can be enabled in the [Twilio Console > Flex > Channel management > Voice](https://console.twilio.com/us1/develop/flex/channels/voice), or by using the Flex Configuration API:
 
 ```
 POST https://flex-api.twilio.com/v1/Configuration
