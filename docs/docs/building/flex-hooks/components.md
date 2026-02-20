@@ -38,6 +38,7 @@ enum FlexComponent {
   QueueStats = 'QueueStats',
   SideNav = 'SideNav',
   SupervisorTaskCanvasHeader = 'SupervisorTaskCanvasHeader',
+  TaskCanvas = 'TaskCanvas',
   TaskCanvasHeader = 'TaskCanvasHeader',
   TaskCanvasTabs = 'TaskCanvasTabs',
   TaskCard = 'TaskCard',
