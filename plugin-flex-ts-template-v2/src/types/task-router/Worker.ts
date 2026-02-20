@@ -41,6 +41,7 @@ export interface CustomWorkerAttributes extends WorkerAttributes {
 
   // custom-transfer-directory feature
   enforcedQueueFilter?: string;
+  enforcedQueueFilters?: string[];
 
   // Flex insights references the following elements
   email: string;
