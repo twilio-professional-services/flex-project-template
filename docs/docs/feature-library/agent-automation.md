@@ -44,6 +44,45 @@ To enable the `Agent Automation` feature, under the `flex-config` attributes set
 },
 ```
 
+### Advanced Attribute Matching
+
+The attribute matching system supports two advanced features:
+
+#### 1. Nested Attributes
+
+You can match against nested attributes using dot notation in the `key` field:
+
+```json
+"required_attributes": [
+  {"key": "conversations.outcome", "value": "resolved"},
+  {"key": "customer.profile.tier", "value": "premium"}
+]
+```
+
+This allows you to match against deeply nested properties in task or worker attributes.
+
+#### 2. Array Matching
+
+If an attribute value is an array, the matcher will check if the configured value exists anywhere in that array:
+
+```json
+"required_worker_attributes": [
+  {"key": "skills", "value": "spanish"}
+]
+```
+
+In this example, if a worker has `"skills": ["english", "spanish", "french"]`, the configuration will match because "spanish" is present in the array.
+
+You can also combine nested attributes with array matching:
+
+```json
+"required_attributes": [
+  {"key": "customer.languages", "value": "spanish"}
+]
+```
+
+This would match a task where the customer languages array includes "spanish".
+
 ## how does it work?
 
 When enabled, this feature listens for taskReceived events and evaluates whether the tasks matches any configuration sets, and if so executes SelectTask & AcceptTask action as configured. This feature also listens for taskWrapup events, evaluates if there is a matching task configuration with auto-wrapup enabled, then sets a timeout per the task configuration that triggers a CompleteTask action. In addition, the `TaskCanvasHeader` is modified to show the remaining wrap-up time instead of the elapsed time.

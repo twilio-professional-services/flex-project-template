@@ -57,6 +57,35 @@ You may also optionally specify task attributes and/or queues that should exclud
   "exclude_queues": ["Queue Name 1", "Queue Name 2"] // or ["WQxxx", "WQxxx2"]
   ```
 
+### Advanced Attribute Matching
+
+The attribute matching system supports two advanced features:
+
+#### Nested Attributes
+You can exclude recording based on nested attributes using dot notation:
+```json
+"exclude_attributes": [
+  { "key": "customer.vip", "value": "true" },
+  { "key": "conversations.sentiment", "value": "sensitive" }
+]
+```
+
+#### Array Matching
+If an attribute value is an array, the matcher will check if the configured value exists anywhere in that array:
+```json
+"exclude_attributes": [
+  { "key": "tags", "value": "do-not-record" }
+]
+```
+This would exclude recording for any task where the `tags` array contains "do-not-record", even if it has other values like `"tags": ["urgent", "do-not-record", "escalated"]`.
+
+You can also combine nested attributes with array matching:
+```json
+"exclude_attributes": [
+  { "key": "customer.preferences.privacy", "value": "no-recording" }
+]
+```
+
 ## how it works
 
 Whenever an inbound or outbound call task is accepted, a serverless function is called to start a recording with `recordingChannels` set to `dual`. The customer call SID or the worker call SID will be used for the recording based on the value of the `channel` configuration property.

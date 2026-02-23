@@ -26,6 +26,35 @@ The `conditional-recording` feature has the following settings:
   "exclude_queues": ["Queue Name 1", "Queue Name 2"] // or ["WQxxx", "WQxxx2"]
   ```
 
+### Advanced Attribute Matching
+
+The attribute matching system supports two advanced features:
+
+#### Nested Attributes
+You can exclude recording based on nested attributes using dot notation:
+```json
+"exclude_attributes": [
+  { "key": "customer.vip", "value": "true" },
+  { "key": "conversations.sentiment", "value": "sensitive" }
+]
+```
+
+#### Array Matching
+If an attribute value is an array, the matcher will check if the configured value exists anywhere in that array:
+```json
+"exclude_attributes": [
+  { "key": "tags", "value": "do-not-record" }
+]
+```
+This would exclude recording for any task where the `tags` array contains "do-not-record", even if it has other values like `"tags": ["urgent", "do-not-record", "escalated"]`.
+
+You can also combine nested attributes with array matching:
+```json
+"exclude_attributes": [
+  { "key": "customer.preferences.privacy", "value": "no-recording" }
+]
+```
+
 ## how it works
 
 Before an inbound or outbound call task is accepted, the task is evaluated based on the defined attributes and/or queues to exclude from recording. The `payload.conferenceOptions.conferenceRecord` flag is set to `true` or `false` depending on the outcome of this evaluation. If this flag is set to `true`, then TaskRouter will initiate the conference recording immediately upon conference start.
