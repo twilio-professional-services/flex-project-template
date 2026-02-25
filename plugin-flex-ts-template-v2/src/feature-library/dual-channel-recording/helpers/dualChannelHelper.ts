@@ -5,6 +5,7 @@ import { FetchedRecording } from '../../../types/serverless/twilio-api';
 import { getChannelToRecord, getExcludedAttributes, getExcludedQueues } from '../config';
 import DualChannelService from './DualChannelService';
 import logger from '../../../utils/logger';
+import { matchesAttribute } from '../../../utils/helpers';
 
 const manager = Manager.getInstance();
 
@@ -14,7 +15,7 @@ export const canRecordTask = (task: ITask): boolean => {
   }
 
   for (const attribute of getExcludedAttributes()) {
-    if (task.attributes[attribute.key] === attribute.value) {
+    if (matchesAttribute(task.attributes, attribute.key, attribute.value)) {
       return false;
     }
   }
