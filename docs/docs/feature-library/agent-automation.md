@@ -8,19 +8,19 @@ import PluginLibraryFeature from "./_plugin-library-feature.md";
 
 This feature provides auto select, auto accept and auto wrap-up behavior for agent tasks. Wrap-up behavior can be optionally configured to allow agents to request extended wrap-up. Tasks qualify for a configuration set based on their channel and a set of required task and/or worker attributes. The first configuration set to match is the configuration set used.
 
-## known issues
+## Known issues
 
 As this is a front end implementation of operations, closing the browser will void the automated behavior. For this reason, it is advised to also use the `supervisor-complete-reservation` feature in unison with this one, which allows supervisors to force complete any reservations that have fallen into this state.
 
 A preferred solution to auto wrap-up would require a backend handler to move the state of the task after the given timeout.
 
-## flex-user-experience
+## Flex user experience
 
 An auto selected, auto accepted chat task with an auto wrap-up after 5 seconds, with the agent demonstrating the extended wrap-up option (set to extend by 10 seconds). This also demo also shows the `activity-reservation-handler` and `dispositions` features to demonstrate a more complete agent workflow.
 
 ![agent automation screen recording](/img/features/agent-automation/agent-automation.gif)
 
-## setup and dependencies
+## Setup and dependencies
 
 There are no additional dependencies for setup beyond ensuring the flag is enabled within the `flex-config` attributes.
 
@@ -44,11 +44,11 @@ To enable the `Agent Automation` feature, under the `flex-config` attributes set
 },
 ```
 
-### Advanced Attribute Matching
+### Attribute matching
 
 The attribute matching system supports two advanced features:
 
-#### 1. Nested Attributes
+#### Nested Attributes
 
 You can match against nested attributes using dot notation in the `key` field:
 
@@ -61,29 +61,19 @@ You can match against nested attributes using dot notation in the `key` field:
 
 This allows you to match against deeply nested properties in task or worker attributes.
 
-#### 2. Array Matching
+#### Array Matching
 
 If an attribute value is an array, the matcher will check if the configured value exists anywhere in that array:
 
 ```json
 "required_worker_attributes": [
-  {"key": "skills", "value": "spanish"}
+  {"key": "routing.skills", "value": "spanish"}
 ]
 ```
 
-In this example, if a worker has `"skills": ["english", "spanish", "french"]`, the configuration will match because "spanish" is present in the array.
+In this example, if a worker has `"routing": {"skills": ["english", "spanish", "french"]}`, the configuration will match because "spanish" is present in the array.
 
-You can also combine nested attributes with array matching:
-
-```json
-"required_attributes": [
-  {"key": "customer.languages", "value": "spanish"}
-]
-```
-
-This would match a task where the customer languages array includes "spanish".
-
-## how does it work?
+## How it works
 
 When enabled, this feature listens for taskReceived events and evaluates whether the tasks matches any configuration sets, and if so executes SelectTask & AcceptTask action as configured. This feature also listens for taskWrapup events, evaluates if there is a matching task configuration with auto-wrapup enabled, then sets a timeout per the task configuration that triggers a CompleteTask action. In addition, the `TaskCanvasHeader` is modified to show the remaining wrap-up time instead of the elapsed time.
 

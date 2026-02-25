@@ -41,25 +41,25 @@ There are various ways to enable call recordings with Twilio Flex. Let's outline
      - If it's desired to record the IVR messaging, that will not be included
      - If the worker uses the "Join Call" button in Flex UI when multiple instances are open, and the worker call leg is the one being recorded, the recording will not restart when the new instance's call leg starts.
 
-## setup and dependencies
+## Setup and dependencies
 
 The feature is enabled via flex-config asset for your environment. There is also a `channel` configuration property to choose which perspective should be recorded--the customer perspective or the worker perspective. For example, if the customer is on hold and `channel` is set to `customer`, the recording will contain hold music. If `channel` is set to `worker`, the recording will not contain hold music and the worker will be heard instead.
 
 If enabling the dual channel recording feature - you should also **disable** the call recording flag in the Flex Configuration within Twilio Console > Flex > Manage > Voice.
 
-You may also optionally specify task attributes and/or queues that should exclude a task from being recorded by the dual-channel recording feature:
-- To exclude recording tasks based on the task attributes present, set the `exclude_attributes` configuration property to an array of key/value pair objects. For example, to prevent recording outbound calls:
-  ```
-  "exclude_attributes": [{ "key":"direction", "value":"outbound" }]
-  ```
-- To exclude recording tasks based on queue name or queue SID, set the `exclude_queues` configuration property to an array of queue names or SIDs. For example:
-  ```
-  "exclude_queues": ["Queue Name 1", "Queue Name 2"] // or ["WQxxx", "WQxxx2"]
-  ```
+You may also optionally specify task attributes and/or queues that should exclude a task from being recorded by the dual-channel recording feature. To exclude recording tasks based on queue name or queue SID, set the `exclude_queues` configuration property to an array of queue names or SIDs. For example:
+```json
+"exclude_queues": ["Queue Name 1", "Queue Name 2"] // or ["WQxxx", "WQyyy"]
+```
 
-### Advanced Attribute Matching
+### Attribute matching
 
-The attribute matching system supports two advanced features:
+To exclude recording tasks based on the task attributes present, set the `exclude_attributes` configuration property to an array of key/value pair objects. For example, to prevent recording outbound calls:
+```json
+"exclude_attributes": [{ "key": "direction", "value": "outbound" }]
+```
+
+The attribute matching system also supports two advanced features:
 
 #### Nested Attributes
 You can exclude recording based on nested attributes using dot notation:
@@ -73,19 +73,10 @@ You can exclude recording based on nested attributes using dot notation:
 #### Array Matching
 If an attribute value is an array, the matcher will check if the configured value exists anywhere in that array:
 ```json
-"exclude_attributes": [
-  { "key": "tags", "value": "do-not-record" }
-]
+"exclude_attributes": [{ "key": "tags", "value": "do-not-record" }]
 ```
 This would exclude recording for any task where the `tags` array contains "do-not-record", even if it has other values like `"tags": ["urgent", "do-not-record", "escalated"]`.
 
-You can also combine nested attributes with array matching:
-```json
-"exclude_attributes": [
-  { "key": "customer.preferences.privacy", "value": "no-recording" }
-]
-```
-
-## how it works
+## How it works
 
 Whenever an inbound or outbound call task is accepted, a serverless function is called to start a recording with `recordingChannels` set to `dual`. The customer call SID or the worker call SID will be used for the recording based on the value of the `channel` configuration property.

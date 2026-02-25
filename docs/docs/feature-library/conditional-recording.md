@@ -11,24 +11,24 @@ However, for regulatory compliance purposes, some implementations may need to pr
 The `conditional-recording` feature works with the native call recording functionality. It is not applicable in conjunction with [the template's `dual-channel-recording` feature](/feature-library/dual-channel-recording), which has its own conditional recording functionality.
 :::
 
-## setup and dependencies
+## Setup and dependencies
 
 If you are enabling the conditional recording feature, you must also **enable** the call recording flag within Twilio Console > Flex > Manage > Voice, otherwise recordings will not be accessible via Flex Insights.
 
 The `conditional-recording` feature has the following settings:
 - `enabled` - Set to `true` to enable the feature
 - `exclude_attributes` - To exclude recording tasks based on the task attributes present, set this to an array of key/value pair objects. For example, to prevent recording outbound calls:
-  ```
+  ```json
   "exclude_attributes": [{ "key":"direction", "value":"outbound" }]
   ```
 - `exclude_queues` - To exclude recording tasks based on queue name or queue SID, set this to an array of queue names or SIDs. For example:
-  ```
-  "exclude_queues": ["Queue Name 1", "Queue Name 2"] // or ["WQxxx", "WQxxx2"]
+  ```json
+  "exclude_queues": ["Queue Name 1", "Queue Name 2"] // or ["WQxxx", "WQyyy"]
   ```
 
-### Advanced Attribute Matching
+### Attribute matching
 
-The attribute matching system supports two advanced features:
+The attribute matching system also supports two advanced features:
 
 #### Nested Attributes
 You can exclude recording based on nested attributes using dot notation:
@@ -42,19 +42,10 @@ You can exclude recording based on nested attributes using dot notation:
 #### Array Matching
 If an attribute value is an array, the matcher will check if the configured value exists anywhere in that array:
 ```json
-"exclude_attributes": [
-  { "key": "tags", "value": "do-not-record" }
-]
+"exclude_attributes": [{ "key": "tags", "value": "do-not-record" }]
 ```
 This would exclude recording for any task where the `tags` array contains "do-not-record", even if it has other values like `"tags": ["urgent", "do-not-record", "escalated"]`.
 
-You can also combine nested attributes with array matching:
-```json
-"exclude_attributes": [
-  { "key": "customer.preferences.privacy", "value": "no-recording" }
-]
-```
-
-## how it works
+## How it works
 
 Before an inbound or outbound call task is accepted, the task is evaluated based on the defined attributes and/or queues to exclude from recording. The `payload.conferenceOptions.conferenceRecord` flag is set to `true` or `false` depending on the outcome of this evaluation. If this flag is set to `true`, then TaskRouter will initiate the conference recording immediately upon conference start.
