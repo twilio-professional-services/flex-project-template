@@ -44,6 +44,16 @@ When retrieving voicemail, the `fetch-voicemail` function is invoked. This fetch
 
 Once you've set the flag for the feature in flex-config, and all of that is deployed, you now have a functioning callback and voicemail feature! Now you just need to create some callbacks and/or voicemails via Studio or TwiML.
 
+### Voicemail Configuration Options
+
+The following configuration options are available in your `ui_attributes` file under the `callback_and_voicemail` feature:
+
+- **`allow_voicemail_download`** (boolean, default: `true`) - Controls whether agents can download voicemail recordings from the audio player. When set to `false`, the download option is removed from the audio controls.
+
+:::caution Security Note
+Disabling the download option provides a basic deterrent but is not a comprehensive security solution. Agents with technical knowledge could still use browser developer tools to access and download the audio file. For organizations requiring stricter controls, consider deploying browser policies that restrict or disable developer tools on agent workstations.
+:::
+
 ### Creating a Callback Task Using the _create-callback_ Function
 
 Creating a callback involves creating a task with at a minimum a number to callback and a number to call from. If you deployed the template with the `Deploy Terraform?` option selected, a Studio flow called `Template Example Callback Flow` has already been created for you, which you can hook up to a phone number in the Twilio Console. Otherwise, a sample setup is shown here in a Studio flow where a number has been wired up to immediately create a callback and hang up.
