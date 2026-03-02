@@ -71,8 +71,8 @@ jobs:
       - name: install npm
         id: initial-env
         run: |
-          npm install twilio-cli --no-save
           npm install --ignore-scripts
+          npm install twilio-cli --no-save
       - name: validate environment
         run: npm run -s validate-environment >> $GITHUB_STEP_SUMMARY
 
@@ -104,8 +104,8 @@ jobs:
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
-          npm install twilio-cli --no-save
           npm install --ignore-scripts
+          npm install twilio-cli --no-save
           npm run install-serverless-plugin
           echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
           npm run postinstall -- --skip-plugin >> $GITHUB_STEP_SUMMARY
@@ -164,8 +164,8 @@ jobs:
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
-          npm install twilio-cli --no-save
           npm install --ignore-scripts
+          npm install twilio-cli --no-save
           npm run install-serverless-plugin
           npm run postinstall -- --skip-plugin >> $GITHUB_STEP_SUMMARY
       - name: deploy addons
@@ -206,8 +206,8 @@ jobs:
           echo " - Environment: ${{ env.ENVIRONMENT }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Overwrite Config: ${{ env.OVERWRITE_CONFIG }}"  >> $GITHUB_STEP_SUMMARY
           echo "### Configuration output"  >> $GITHUB_STEP_SUMMARY
-          npm install twilio-cli --no-save
           npm install --ignore-scripts
+          npm install twilio-cli --no-save
           npm run postinstall -- --packages=flex-config >> $GITHUB_STEP_SUMMARY
       - name: deploy flex config
         working-directory: flex-config
@@ -233,14 +233,15 @@ jobs:
           VARS_CONTEXT: ${{ toJson(vars) }}
         run: scripts/github-set-env.sh
       - name: install twilio cli
-        run: npm install --ignore-scripts
+        run: |
+          npm install --ignore-scripts
+          npm install twilio-cli --no-save
       - name: deploy and release flex-plugin
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ inputs.environment }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Plugin Folder: ${{ env.PLUGIN_FOLDER }}"  >> $GITHUB_STEP_SUMMARY
           cd $PLUGIN_FOLDER
-          npm install twilio-cli --no-save
           npm install
           npm run install-flex-plugin
           npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
