@@ -233,12 +233,12 @@ jobs:
       - name: install twilio cli
         run: npm install twilio-cli --no-save
       - name: deploy and release flex-plugin
+        working-directory: ${{ env.PLUGIN_FOLDER }}
         run: |
           echo "### Job summary" >> $GITHUB_STEP_SUMMARY
           echo " - Environment: ${{ inputs.environment }}"  >> $GITHUB_STEP_SUMMARY
           echo " - Plugin Folder: ${{ env.PLUGIN_FOLDER }}"  >> $GITHUB_STEP_SUMMARY
-          cd $PLUGIN_FOLDER
           npm install
-          npm run install-flex-plugin
+          npm run install-cli-flex-plugin
           npm run deploy -- --changelog="Deploy from CI/CD for commit ${{ github.sha }}"
           npm run release -- --name="Release from CI/CD for commit ${{ github.sha }}" --description="Release from CI/CD for commit ${{ github.sha }}"
