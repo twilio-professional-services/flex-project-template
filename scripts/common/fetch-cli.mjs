@@ -13,11 +13,16 @@ export const setAccount = (account) => {
     throw new Error('TWILIO_ACCOUNT_SID environment variable is required');
   }
 
+  const options = {
+    autoRetry: true,
+    maxRetries: 3,
+  }
+
   // Prefer API key/secret over auth token
   if (account.apiKey && account.apiSecret) {
-    twilioClient = twilio(account.apiKey, account.apiSecret, { accountSid: account.accountSid });
+    twilioClient = twilio(account.apiKey, account.apiSecret, { accountSid: account.accountSid, ...options });
   } else if (authToken) {
-    twilioClient = twilio(account.accountSid, account.authToken);
+    twilioClient = twilio(account.accountSid, account.authToken, options);
   } else {
     throw new Error('Either TWILIO_API_KEY/TWILIO_API_SECRET or TWILIO_AUTH_TOKEN must be provided');
   }
