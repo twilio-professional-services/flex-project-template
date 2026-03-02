@@ -10,4 +10,4 @@ tfstate_sid=$(npx twilio serverless:list services --properties sid,unique_name |
 echo "TF State SID is $tfstate_sid"
 echo "TF State service name is $tfstate_service_name"
 
-twilio api:serverless:v1:services:remove --sid $tfstate_sid
+npx twilio api:serverless:v1:services:remove --sid $tfstate_sid
