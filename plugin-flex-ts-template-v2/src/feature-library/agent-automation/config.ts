@@ -2,6 +2,7 @@ import { ITask, Manager } from '@twilio/flex-ui';
 
 import AgentAutomationConfig, { TaskQualificationConfig } from './types/ServiceConfiguration';
 import { getFeatureFlags } from '../../utils/configuration';
+import { matchesAttribute } from '../../utils/helpers';
 
 const { enabled = false, configuration = [] } =
   (getFeatureFlags()?.features?.agent_automation as AgentAutomationConfig) || {};
@@ -20,12 +21,15 @@ export const getMatchingTaskConfiguration = (task: ITask): TaskQualificationConf
     let matched_config = true;
     if (config.channel === channel) {
       config.required_attributes?.forEach((required_attribute) => {
-        if (attributes[required_attribute.key] !== required_attribute.value) {
+        if (!matchesAttribute(attributes, required_attribute.key, required_attribute.value)) {
           matched_config = false;
         }
       });
       config.required_worker_attributes?.forEach((required_worker_attribute) => {
-        if (!workerAttributes || workerAttributes[required_worker_attribute.key] !== required_worker_attribute.value) {
+        if (
+          !workerAttributes ||
+          !matchesAttribute(workerAttributes, required_worker_attribute.key, required_worker_attribute.value)
+        ) {
           matched_config = false;
         }
       });
