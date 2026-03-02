@@ -32,8 +32,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: install Twilio CLI
         run: |
-          npm install -g twilio-cli
-          twilio plugins:install @twilio-labs/plugin-serverless
+          npm install twilio-cli --no-save
+          npm run install-serverless-plugin
       - id: delete_terraform_state
         working-directory: ./infra-as-code/state
         run: |
