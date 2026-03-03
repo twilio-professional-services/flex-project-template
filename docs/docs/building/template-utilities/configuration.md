@@ -211,7 +211,7 @@ If you need to add (or modify existing) environment variables that are secrets o
 
 When the setup script runs, it finds strings matching the pattern `<YOUR_VARIABLE_NAME_HERE>` in each config file it is parsing. For each variable name found this way (in our example here, the variable name is `VARIABLE_NAME_HERE`), the script will first check for an existing environment variable with that name, and use it if present. All secrets and variables configured in the GitHub environment are made available to the script as environment variables.
 
-If the value is not found in the environment variables, the `scripts/config/mappings.json` file is consulted to map that variable to a value (such as a SID or serverless domain) using name-matched results from the Twilio CLI. The format of this file is as follows:
+If the value is not found in the environment variables, the `scripts/config/mappings.json` file is consulted to map that variable to a value (such as a SID or serverless domain) using name-matched results from the Twilio API. The format of this file is as follows:
 
 ```json title=mappings.json
 {
