@@ -109,7 +109,7 @@ The in-queue logic is designed to maintain the initial task's workflow, attribut
 
 The following configuration options are available in your `ui_attributes` file under the `callback_and_voicemail` feature:
 
-- **`allow_voicemail_download`** (boolean, default: `true`) - Controls whether agents can download voicemail recordings from the audio player. When set to `false`, the download option is removed from the audio controls.
+- **`allow_voicemail_download`** (boolean, default: `true`) - Controls whether agents can download voicemail recordings from the audio player. When set to `false`, the download option is removed from the audio controls in [browsers supporting the `controlslist` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/audio#browser_compatibility).
 
 :::caution Security Note
 Disabling the download option provides a basic deterrent but is not a comprehensive security solution. Agents with technical knowledge could still use browser developer tools to access and download the audio file. For organizations requiring stricter controls, consider deploying browser policies that restrict or disable developer tools on agent workstations.
