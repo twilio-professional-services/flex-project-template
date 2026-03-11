@@ -7,6 +7,12 @@ const userLanguage = getUserLanguage();
 let customStrings = {};
 let systemStrings = {};
 
+// For testing: reset internal state
+export const resetState = () => {
+  customStrings = {};
+  systemStrings = {};
+};
+
 export const init = (manager: Flex.Manager) => {
   manager.strings = {
     // -v- Add custom strings here -v-'
