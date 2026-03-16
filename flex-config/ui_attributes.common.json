@@ -86,7 +86,9 @@
       "internal_call": {
         "enabled": true,
         "enable_call_agent": true,
-        "enable_call_queue": true
+        "enable_call_queue": true,
+        "application_sid": "<YOUR_INTERNAL_CALL_APPLICATION_SID>",
+        "outbound_queue_sid": "<YOUR_INTERNAL_CALL_QUEUE_SID>"
       },
       "scrollable_activities": {
         "enabled": false

@@ -216,4 +216,13 @@ export const fetchChatServices = () => {
   });
 }
 
+export const fetchTwimlApps = () => {
+  fetchResources("twiml-app", "TwiML Apps", "api:core:applications:list", (fetched, wanted, wantedResources) => {
+    if (isMatch(wantedResources[wanted].name, fetched.friendlyName, false)) {
+      resultCache[wanted] = fetched.sid;
+      return true;
+    }
+  });
+}
+
 export const getFetchedVars = () => resultCache;
