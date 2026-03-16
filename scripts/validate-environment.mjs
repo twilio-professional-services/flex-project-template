@@ -1,6 +1,6 @@
 import axios from 'axios';
 import semver from 'semver';
-import shell from 'shelljs';
+import twilio from 'twilio';
 
 import { varNameMapping } from "./common/constants.mjs";
 import { isMatch } from "./common/fetch-cli.mjs";
@@ -88,49 +88,47 @@ const validateUiVersion = (flexConfig) => {
   process.exitCode = 1;
 }
 
-const validateTaskRouterWorkspace = (flexConfig) => {
-  const workspaceResultsRaw = shell.exec(`twilio api:taskrouter:v1:workspaces:fetch --sid=${flexConfig.taskrouter_workspace_sid} -o json`, {silent: true});
-  
-  if (workspaceResultsRaw.code !== 0 || !workspaceResultsRaw.stdout) {
-    console.log('❌ Error: Unable to retrieve the configured TaskRouter workspace');
-    process.exitCode = 1;
-    return;
-  }
-  
+const validateTaskRouterWorkspace = async (flexConfig) => {
   try {
-    const workspaceResults = JSON.parse(workspaceResultsRaw.stdout);
-    
-    if (workspaceResults.length < 1) {
-      console.log('❌ Error: No results for the configured TaskRouter workspace SID');
+    const client = twilio(
+      process.env.TWILIO_API_KEY,
+      process.env.TWILIO_API_SECRET,
+      { accountSid: process.env.TWILIO_ACCOUNT_SID }
+    );
+
+    const workspace = await client.taskrouter.v1
+      .workspaces(flexConfig.taskrouter_workspace_sid)
+      .fetch();
+
+    if (!workspace) {
+      console.log('❌ Error: Unable to retrieve the configured TaskRouter workspace');
       process.exitCode = 1;
       return;
     }
-    
-    const workspace = workspaceResults[0];
-    
+
     if (isMatch(varNameMapping.TWILIO_FLEX_WORKSPACE_SID.name, workspace.friendlyName)) {
       console.log(`✅ Flex TaskRouter workspace is named '${workspace.friendlyName}'`);
       return;
     }
-    
+
     console.log(`❌ Error: Flex TaskRouter workspace name is '${workspace.friendlyName}'. Please rename the workspace to the expected value, '${varNameMapping.TWILIO_FLEX_WORKSPACE_SID.name}'.`);
     process.exitCode = 1;
   } catch (error) {
-    console.log(`❌ Error: Unable to parse Twilio CLI output from TaskRouter workspace fetch: ${error}`);
+    console.log(`❌ Error: Unable to fetch TaskRouter workspace: ${error.message}`);
     process.exitCode = 1;
   }
 }
 
 const validateFlexConfig = async () => {
   const flexConfig = await getFlexConfig();
-  
+
   if (!flexConfig) {
     return;
   }
-  
+
   validateAccountSid(flexConfig);
   validateUiVersion(flexConfig);
-  validateTaskRouterWorkspace(flexConfig);
+  await validateTaskRouterWorkspace(flexConfig);
 }
 
 if (validateEnvVarsPresent()) {

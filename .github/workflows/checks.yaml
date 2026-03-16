@@ -66,6 +66,8 @@ jobs:
             :white_check_mark: No issues found!
   test-plugin-v2:
     runs-on: ubuntu-latest
+    env:
+      PLUGIN_FOLDER: plugin-flex-ts-template-v2
     steps:
       - uses: actions/checkout@v4
       - name: setup node.js
@@ -73,13 +75,13 @@ jobs:
         with:
           node-version: '20'
       - name: Install packages
-        working-directory: ./plugin-flex-ts-template-v2
+        working-directory: ${{ env.PLUGIN_FOLDER }}
         run: npm install
       - name: Run tests
-        working-directory: ./plugin-flex-ts-template-v2
+        working-directory: ${{ env.PLUGIN_FOLDER }}
         run: npm run test:ci
       - name: Publish test results
         uses: mikepenz/action-junit-report@v4
         if: always()
         with:
-          report_paths: './plugin-flex-ts-template-v2/test-results/junit.xml'
+          report_paths: './${{ env.PLUGIN_FOLDER }}/test-results/junit.xml'
