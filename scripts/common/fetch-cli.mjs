@@ -56,7 +56,7 @@ export const isMatch = (searchValue, valueToCheck, allowFuzz) => {
     return false;
   }
   
-  if (searchValue.startsWith('/') && searchValue.startsWith('/') && searchValue.length > 2) {
+  if (searchValue.startsWith('/') && searchValue.endsWith('/') && searchValue.length > 2) {
     return new RegExp(searchValue.slice(1, searchValue.length - 1)).test(valueToCheck);
   }
   
