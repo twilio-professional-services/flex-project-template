@@ -433,6 +433,12 @@
         "screen_pop": true,
         "show_panel_automatically": true,
         "utility_bar_status": true
+      },
+      "adress_book": {
+        "enabled": false
+      },
+      "customer_display": {
+        "enabled": false
       }
     }
   }
