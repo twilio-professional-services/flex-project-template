@@ -12,6 +12,7 @@ import Paginator from './Paginator';
 
 const AddressBookView: React.FC = () => {
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ const AddressBookView: React.FC = () => {
         }
 
         setContacts(loadedContacts);
+        setFilteredContacts(loadedContacts);
         setCurrentPage(1); // Reset to first page after loading
       } catch (err) {
         console.error('Error loading contacts:', err);
@@ -43,27 +45,35 @@ const AddressBookView: React.FC = () => {
     loadContacts();
   }, []);
 
-  // Calculate pagination
-  const totalPages = Math.ceil(contacts.length / PAGE_SIZE);
+  // Filter contacts based on search query
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredContacts(contacts);
+    } else {
+      const query = searchQuery.toLowerCase();
+      const filtered = contacts.filter((contact) => {
+        return (
+          contact.name.toLowerCase().includes(query) ||
+          contact.phoneNumber.toLowerCase().includes(query) ||
+          contact.company.toLowerCase().includes(query)
+        );
+      });
+      setFilteredContacts(filtered);
+    }
+
+    // Reset to first page when search results change
+    setCurrentPage(1);
+  }, [searchQuery, contacts]);
+
+  // Calculate pagination based on filtered results
+  const totalPages = Math.ceil(filteredContacts.length / PAGE_SIZE);
   const startIndex = (currentPage - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;
-  const currentPageContacts = contacts.slice(startIndex, endIndex);
-
-  // Handle phone click
-  const handlePhoneClick = (phoneNumber: string, contactName: string) => {
-    console.log(`Dialing contact: ${phoneNumber}`);
-  };
+  const currentPageContacts = filteredContacts.slice(startIndex, endIndex);
 
   // Handle page change
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-  };
-
-  // Handle search input change
-  const handleSearchChange = (value: string) => {
-    setSearchQuery(value);
-    // Reset to first page when search changes (filtering logic deferred)
-    setCurrentPage(1);
   };
 
   return (
@@ -93,11 +103,28 @@ const AddressBookView: React.FC = () => {
 
       {!loading && !error && (
         <>
-          <SearchBar value={searchQuery} onChange={handleSearchChange} />
-          <ContactTable contacts={currentPageContacts} onPhoneClick={handlePhoneClick} />
-          <Box marginTop="space20">
-            <Paginator currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-          </Box>
+          <SearchBar value={searchQuery} onChange={setSearchQuery} />
+
+          {currentPageContacts.length === 0 && filteredContacts.length === 0 && searchQuery.trim() ? (
+            <Box
+              backgroundColor="colorBackgroundNeutralWeakest"
+              borderColor="colorBorderNeutral"
+              borderWidth="borderWidth10"
+              borderStyle="solid"
+              padding="space20"
+              marginBottom="space20"
+              textAlign="center"
+            >
+              <p>No contacts found matching "{searchQuery}"</p>
+            </Box>
+          ) : (
+            <>
+              <ContactTable contacts={currentPageContacts} />
+              <Box marginTop="space20">
+                <Paginator currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+              </Box>
+            </>
+          )}
         </>
       )}
     </Box>
