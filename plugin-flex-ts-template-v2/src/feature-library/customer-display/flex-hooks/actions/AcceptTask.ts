@@ -1,11 +1,13 @@
 /**
  * Customer Display - Accept Task Action Hook
- * Listens to task acceptance events
+ * Listens to task acceptance events and stores task in Redux state
  */
 
 import { Actions } from '@twilio/flex-ui';
+import { setCurrentTask } from '../state';
+import * as Flex from '@twilio/flex-ui';
 
-export const actionHook = function registerAcceptTaskListener() {
+export const actionHook = function registerAcceptTaskListener(flex: typeof Flex, manager: Flex.Manager) {
   Actions.addListener('afterAcceptTask', (payload) => {
     try {
       const task = payload.task;
@@ -15,7 +17,10 @@ export const actionHook = function registerAcceptTaskListener() {
         channel: task.channelType,
       });
 
-      // Extract phone for customer display fetch
+      // Dispatch task to Redux state
+      manager.store.dispatch(setCurrentTask(task));
+
+      // Extract phone for logging
       const phoneNumber = task.attributes?.from || task.attributes?.callerPhone || task.attributes?.phoneNumber;
 
       if (phoneNumber) {
