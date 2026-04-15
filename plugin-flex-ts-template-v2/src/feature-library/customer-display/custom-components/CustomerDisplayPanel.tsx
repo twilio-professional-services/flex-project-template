@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { ITask } from '@twilio/flex-ui';
 import { Box, Button, Heading, Paragraph, Spinner } from '@twilio-paste/core';
 import { styled } from '@twilio-paste/styling-library';
 import { CustomerData } from '../types';
 import { CustomerDisplayService } from '../utils/CustomerDisplayService';
+import { reduxNamespace } from '../../../utils/state';
 
-interface Props {
-  task?: ITask;
-}
+interface Props {}
 
 interface CustomerDisplayState {
   data: CustomerData | null;
@@ -69,7 +69,10 @@ const SuccessBox = styled(Box)`
   border-radius: 4px;
 `;
 
-const CustomerDisplayPanel: React.FC<Props> = ({ task }) => {
+const CustomerDisplayPanel: React.FC<Props> = () => {
+  // Read current task from Redux state
+  const currentTask = useSelector((state: any) => state[reduxNamespace]?.customerDisplay?.currentTask as ITask | null);
+
   const [state, setState] = useState<CustomerDisplayState>({
     data: null,
     loading: false,
@@ -77,8 +80,10 @@ const CustomerDisplayPanel: React.FC<Props> = ({ task }) => {
     noRecordFound: false,
   });
 
+  const previousTaskSidRef = React.useRef<string | null>(null);
+
   const fetchCustomerData = async () => {
-    if (!task?.attributes) {
+    if (!currentTask?.attributes) {
       console.warn('[customer-display] Task or task attributes missing');
       return;
     }
@@ -86,7 +91,8 @@ const CustomerDisplayPanel: React.FC<Props> = ({ task }) => {
     // Extract phone number from task attributes
     // The field might be 'from', 'callerPhone', 'phoneNumber', etc.
     // Defaulting to 'from' which is common in Flex
-    const phoneNumber = task.attributes.from || task.attributes.callerPhone || task.attributes.phoneNumber;
+    const phoneNumber =
+      currentTask.attributes.from || currentTask.attributes.callerPhone || currentTask.attributes.phoneNumber;
 
     if (!phoneNumber) {
       console.warn('[customer-display] Phone number not found in task attributes');
@@ -130,17 +136,18 @@ const CustomerDisplayPanel: React.FC<Props> = ({ task }) => {
     }
   };
 
-  // Fetch customer data when task changes
+  // Fetch customer data when task changes (based on taskSid)
   useEffect(() => {
-    if (task?.taskSid) {
+    if (currentTask?.taskSid && previousTaskSidRef.current !== currentTask.taskSid) {
+      previousTaskSidRef.current = currentTask.taskSid;
       fetchCustomerData();
     }
-  }, [task?.taskSid, task?.attributes]);
+  }, [currentTask?.taskSid]);
 
   const { data, loading, error, noRecordFound } = state;
 
-  // Only show if we have a task
-  if (!task) {
+  // Only show if we have a current task from Redux state
+  if (!currentTask) {
     return null;
   }
 
