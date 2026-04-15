@@ -28,7 +28,9 @@ const AddressBookView: React.FC = () => {
         const loadedContacts = await loadAndParseCSV();
 
         if (loadedContacts.length === 0) {
-          setError('Failed to load contacts. The CSV file may be unavailable.');
+          setContacts(loadedContacts);
+          setFilteredContacts(loadedContacts);
+          setCurrentPage(1);
         }
 
         setContacts(loadedContacts);
