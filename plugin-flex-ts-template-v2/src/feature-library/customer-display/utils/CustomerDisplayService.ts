@@ -15,7 +15,7 @@ export class CustomerDisplayService {
     try {
       console.log('[customer-display] Fetching customer details for phone:', phoneNumber);
 
-      const response = await fetch('https://hello-7937.twil.io/sf-customer-details', {
+      const response = await fetch('https://hello-messaging-4461-6yaplh.twil.io/sf-customer-details', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
