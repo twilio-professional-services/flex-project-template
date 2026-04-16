@@ -1,6 +1,7 @@
 import * as Flex from '@twilio/flex-ui';
 
 import TaskAttributes from '../../custom-components/TaskAttributes';
+import LatestTask from '../../custom-components/TaskDetails';
 import { FlexComponent } from '../../../../types/feature-loader';
 import { isEnabledForAgents } from '../../config';
 
@@ -12,6 +13,10 @@ export const componentHook = function addAttributesToTaskInfoPanel(flex: typeof 
   flex.TaskInfoPanel.Content.add(<TaskAttributes key="task-attributes" />, {
     sortOrder: 1000,
   });
+  flex.TaskListContainer.Content.add(<LatestTask key="latest-task" />, {
+    sortOrder: -1,
+  });
+
   flex.Supervisor.TaskInfoPanel.Content.add(<TaskAttributes key="task-attributes-supervisor" />, {
     sortOrder: 1000,
   });
