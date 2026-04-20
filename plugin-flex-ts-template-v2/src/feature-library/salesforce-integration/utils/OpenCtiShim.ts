@@ -1,6 +1,8 @@
 import logger from '../../../utils/logger';
 import { getSfdcBaseUrl } from './SfdcHelper';
 
+export type OpenCtiCallback = (response: any) => void;
+
 // This class is intended as a drop-in replacement for Open CTI, so that existing plugin integration logic can run as-is after Salesforce removes Open CTI support.
 class OpenCtiShim {
   CALL_TYPE = {
@@ -20,11 +22,11 @@ class OpenCtiShim {
     URL: 'url',
   };
 
-  clickToDialListener?: (response: any) => void;
+  clickToDialListener?: OpenCtiCallback;
 
-  getUtilityVisibleListener?: (response: any) => void;
+  getUtilityVisibleListener?: OpenCtiCallback;
 
-  searchResultsListeners: Map<string, (response: any) => void> = new Map();
+  searchResultsListeners: Map<string, OpenCtiCallback> = new Map();
 
   init() {
     window.addEventListener('message', async (event) => {
@@ -82,16 +84,16 @@ class OpenCtiShim {
     });
   }
 
-  disableClickToDial(params: { callback: (response: any) => { success: boolean } }) {
+  disableClickToDial(params: { callback: OpenCtiCallback }) {
     // Do nothing other than return success
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
 
-  enableClickToDial(params: { callback: (response: any) => { success: boolean } }) {
+  enableClickToDial(params: { callback: OpenCtiCallback }) {
     // Do nothing other than return success
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
@@ -100,7 +102,7 @@ class OpenCtiShim {
     this.clickToDialListener = params?.listener;
   }
 
-  saveLog(params: { value: any; callback: (response: any) => void }) {
+  saveLog(params: { value: any; callback: OpenCtiCallback }) {
     window.parent.postMessage(
       {
         type: 'activityLog',
@@ -109,12 +111,12 @@ class OpenCtiShim {
       getSfdcBaseUrl(),
     );
 
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
 
-  screenPop(params: { params: any; callback: (response: any) => void }) {
+  screenPop(params: { params: any; callback: OpenCtiCallback }) {
     window.parent.postMessage(
       {
         type: 'screenPop',
@@ -125,17 +127,23 @@ class OpenCtiShim {
       getSfdcBaseUrl(),
     );
 
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
 
-  searchAndScreenPop(params: { searchParams: string; reservationSid: string; callback: (response: any) => void }) {
+  searchAndScreenPop(params: {
+    searchParams: string;
+    defaultFieldValues: any;
+    callType: string;
+    deferred: boolean;
+    callback: OpenCtiCallback;
+  }) {
     let id;
     while (!id || this.searchResultsListeners.has(id)) {
       id = Math.round(Math.random() * 1000).toString();
     }
-    this.searchResultsListeners.set(id, params?.callback);
+    this.searchResultsListeners.set(id, params.callback);
     window.parent.postMessage(
       {
         type: 'screenPop',
@@ -148,7 +156,7 @@ class OpenCtiShim {
     );
   }
 
-  setSoftphoneItemIcon(params: { key: string; callback: (response: any) => void }) {
+  setSoftphoneItemIcon(params: { key: string; callback: OpenCtiCallback }) {
     window.parent.postMessage(
       {
         type: 'setUtilityIcon',
@@ -159,12 +167,12 @@ class OpenCtiShim {
       getSfdcBaseUrl(),
     );
 
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
 
-  setSoftphoneItemLabel(params: { label: string; callback: (response: any) => void }) {
+  setSoftphoneItemLabel(params: { label: string; callback: OpenCtiCallback }) {
     window.parent.postMessage(
       {
         type: 'setUtilityLabel',
@@ -175,12 +183,12 @@ class OpenCtiShim {
       getSfdcBaseUrl(),
     );
 
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
 
-  setSoftphonePanelHeight(params: { heightPX: number; callback: (response: any) => void }) {
+  setSoftphonePanelHeight(params: { heightPX: number; callback: OpenCtiCallback }) {
     window.parent.postMessage(
       {
         type: 'setPanelHeight',
@@ -191,12 +199,12 @@ class OpenCtiShim {
       getSfdcBaseUrl(),
     );
 
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
 
-  setSoftphonePanelIcon(params: { key: string; callback: (response: any) => void }) {
+  setSoftphonePanelIcon(params: { key: string; callback: OpenCtiCallback }) {
     window.parent.postMessage(
       {
         type: 'setPanelIcon',
@@ -207,12 +215,12 @@ class OpenCtiShim {
       getSfdcBaseUrl(),
     );
 
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
 
-  setSoftphonePanelLabel(params: { label: string; callback: (response: any) => void }) {
+  setSoftphonePanelLabel(params: { label: string; callback: OpenCtiCallback }) {
     window.parent.postMessage(
       {
         type: 'setPanelLabel',
@@ -223,12 +231,12 @@ class OpenCtiShim {
       getSfdcBaseUrl(),
     );
 
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
 
-  setSoftphonePanelWidth(params: { widthPX: number; callback: (response: any) => void }) {
+  setSoftphonePanelWidth(params: { widthPX: number; callback: OpenCtiCallback }) {
     window.parent.postMessage(
       {
         type: 'setPanelWidth',
@@ -239,13 +247,13 @@ class OpenCtiShim {
       getSfdcBaseUrl(),
     );
 
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
 
-  isSoftphonePanelVisible(params: { callback: (response: any) => void }) {
-    this.getUtilityVisibleListener = params?.callback;
+  isSoftphonePanelVisible(params: { callback: OpenCtiCallback }) {
+    this.getUtilityVisibleListener = params.callback;
     window.parent.postMessage(
       {
         type: 'getUtilityVisible',
@@ -254,18 +262,18 @@ class OpenCtiShim {
     );
   }
 
-  setSoftphonePanelVisibility(params: { visible: string; callback: (response: any) => void }) {
+  setSoftphonePanelVisibility(params: { visible: string; callback: OpenCtiCallback }) {
     window.parent.postMessage(
       {
         type: 'setUtilityVisible',
         data: {
-          visible: params?.visible,
+          visible: params.visible,
         },
       },
       getSfdcBaseUrl(),
     );
 
-    params?.callback({
+    params.callback({
       success: true,
     });
   }
@@ -307,7 +315,7 @@ class OpenCtiShim {
   }
 
   // Console Integration Toolkit functions below
-  setCustomConsoleComponentPopoutable(enabled: boolean, callback: (response: any) => void) {
+  setCustomConsoleComponentPopoutable(enabled: boolean, callback: OpenCtiCallback) {
     window.parent.postMessage(
       {
         type: 'setPopoutable',
