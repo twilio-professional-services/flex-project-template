@@ -432,7 +432,8 @@
         "prevent_popout_during_call": true,
         "screen_pop": true,
         "show_panel_automatically": true,
-        "utility_bar_status": true
+        "utility_bar_status": true,
+        "custom_cti": false
       }
     }
   }
