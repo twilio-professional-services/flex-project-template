@@ -98,7 +98,7 @@ class OpenCtiShim {
     });
   }
 
-  onClickToDial(params: { listener: (response: any) => void }) {
+  onClickToDial(params: { listener: OpenCtiCallback }) {
     this.clickToDialListener = params?.listener;
   }
 
