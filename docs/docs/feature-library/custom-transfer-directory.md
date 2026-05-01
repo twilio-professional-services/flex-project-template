@@ -53,9 +53,9 @@ Enable the feature in the flex-config asset for your environment.
     "enabled": true, // enable the custom queue tab
     "show_only_queues_with_available_workers": true,
     "show_real_time_data" : true, // tool tip for queues will show real time data instead of queue name
-    "enforce_queue_filter_from_worker_object": true, // when true, if `worker.attributes.enforcedQueueFilter` is present, it will be enforced, otherwise ignored
-    "enforce_global_exclude_filter": false, // when true global_exclude_filter will be applied to exclude any queues matching the filter
-    "global_exclude_filter": "SYSTEM" // EXAMPLE to exclude queues containing the word SYSTEM
+    "enforce_queue_filter_from_worker_object": true, // when true, if `worker.attributes.enforcedQueueFilters` is present, it will be enforced, otherwise ignored
+    "enforce_global_exclude_filter": false, // when true, global_exclude_filters will be applied to exclude any queues matching the filters
+    "global_exclude_filters": ["SYSTEM", "Internal Call"] // EXAMPLE to exclude queues containing the strings SYSTEM or Internal Call
   },
   "external_directory": {
     "enabled": true, // enable the external directory tab for voice calls
@@ -66,11 +66,11 @@ Enable the feature in the flex-config asset for your environment.
 
 NOTE: warm transfer for external directory entries is only available if either the 'conference' feature is also enabled OR Flex's native warm transfer feature is enabled (currently in beta). If neither of these are enabled, a notification will be posted at login informing the user that warm transfers will not be available.
 
-Example worker attribute setting for when the `enforce_queue_filter_from_worker_object` setting is enabled:
+Example worker attribute setting for when the `enforce_queue_filter_from_worker_object` setting is enabled, which operates as an "allow list" of queues, rather than as an "exclude list":
 
 ```javascript
 worker.attributes : {
-  enforcedQueueFilter : "TEAM A" // example filter that will include only queues with TEAM A in the name
+  enforcedQueueFilters : ["TEAM A", "TEAM B"] // example filter that will include only queues with TEAM A or TEAM B in the name
 }
 ```
 
