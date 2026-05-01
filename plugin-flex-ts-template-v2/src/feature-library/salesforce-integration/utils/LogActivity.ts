@@ -19,7 +19,7 @@ export const saveLog = (task: ITask, event: string, callback: any) => {
   const isVoice = TaskHelper.isCallTask(task);
   const { direction } = task.attributes;
   const callType = direction === 'outbound' ? getOpenCti().CALL_TYPE.OUTBOUND : getOpenCti().CALL_TYPE.INBOUND;
-  
+
   // Retrieve the disposition from Redux in case TR hasn't sent the update event yet.
   const dispositionsState = state[reduxNamespace].dispositions;
   const taskDisposition = dispositionsState?.tasks[task.taskSid];
