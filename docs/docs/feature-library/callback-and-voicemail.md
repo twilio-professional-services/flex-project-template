@@ -104,3 +104,13 @@ The in-queue logic is designed to maintain the initial task's workflow, attribut
 - **Cancelling the ongoing call task programmatically also prevents the call task reaching an agent when the customer has already committed to leaving a voicemail (or requesting a callback)**. We leave this task cancellation until the very last possible moment - to maximize the opportunity for an agent to answer.
 - **It is essential to lookup and retain the task SID of the ongoing call task immediately - so that we can cancel it later and make changes to its reporting attributes as mentioned above.** Our implementation (see _getPendingTaskByCallSid()_) immediately retrieves the top 20 most recent `pending` or `reserved` (i.e. not-yet-accepted) tasks on the provided `workflowSid`, and finds the one with the matching `call_sid` attribute. Since this lookup occurs immediately on entering our configured `waitUrl` TwiML application - milliseconds after the associated task is created - this approach works very reliably and has been extensively load tested (100% success over a 1000 call test at a rate of 30 calls per second).
 - **If for some reason the _wait-experience_ logic fails to find the task for the ongoing call's call SID, it will fail gracefully** by informing the customer that the callback and voicemail capability is currently unavailable.
+
+### Voicemail Configuration Options
+
+The following configuration options are available in your `ui_attributes` file under the `callback_and_voicemail` feature:
+
+- **`allow_voicemail_download`** (boolean, default: `true`) - Controls whether agents can download voicemail recordings from the audio player. When set to `false`, the download option is removed from the audio controls in [browsers supporting the `controlslist` attribute](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/audio#browser_compatibility).
+
+:::caution Security Note
+Disabling the download option provides a basic deterrent but is not a comprehensive security solution. Agents with technical knowledge could still use browser developer tools to access and download the audio file. For organizations requiring stricter controls, consider deploying browser policies that restrict or disable developer tools on agent workstations.
+:::
