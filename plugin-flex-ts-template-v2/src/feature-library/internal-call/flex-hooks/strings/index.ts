@@ -25,3 +25,17 @@ export const stringHook = () => ({
   'zh-Hans': zhHans,
   'es-ES': esES,
 });
+
+const outboundString = {
+  TaskLineOutboundCallHeader:
+    '{{#if task.attributes.internal_outbound_to}}{{task.attributes.internal_outbound_to}}{{else}}{{task.formattedAttributes.outbound_to}}{{/if}}',
+};
+
+export const systemStringHook = () => ({
+  'en-US': outboundString,
+  'es-ES': outboundString,
+  'es-MX': outboundString,
+  'pt-BR': outboundString,
+  th: outboundString,
+  'zh-Hans': outboundString,
+});

@@ -25,3 +25,9 @@ resource "twilio_taskrouter_workspaces_workflows_v1" "template_example_internal_
     "QUEUE_SID_TEMPLATE_EXAMPLE_SUPPORT" = var.example_support_queue_sid
   })
 }
+
+resource "twilio_api_accounts_applications" "internal_call" {
+  friendly_name  = "Internal Call"
+  voice_url = "https://${var.serverless_domain}/features/internal-call/common/enqueue"
+  voice_method = "POST"
+}

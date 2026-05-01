@@ -31,6 +31,10 @@ output "internal_call_workflow_sid" {
   value = module.internal-call.internal_call_workflow_sid
   description = "Internal call workflow SID"
 }
+output "internal_call_application_sid" {
+  value = module.internal-call.internal_call_application_sid
+  description = "Internal call application SID"
+}
 # END FEATURE: internal-call
 
 # FEATURE: park-interaction

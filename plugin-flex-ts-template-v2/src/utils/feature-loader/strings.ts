@@ -62,6 +62,16 @@ export const addSystemHook = (flex: typeof Flex, manager: Flex.Manager, feature:
     return;
   }
 
+  if (feature === 'localization') {
+    // The localization feature is a special case--it overrides all system strings, and we do not want its strings to override other features' system strings
+    hookStrings = Object.keys(hookStrings)
+      .filter((key) => !systemStrings.hasOwnProperty(key))
+      .reduce((strings: any, key) => {
+        strings[key] = (hookStrings as any)[key];
+        return strings;
+      }, {});
+  }
+
   systemStrings = {
     ...systemStrings,
     ...hookStrings,

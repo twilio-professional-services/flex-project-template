@@ -54,7 +54,9 @@ export default (allReplacements) => {
     if (!varNameMapping[key] || !(
       varNameMapping[key].type == "tr-workspace" || 
       varNameMapping[key].type == "sync-service" || 
-      varNameMapping[key].type == "chat-service"
+      varNameMapping[key].type == "chat-service" || 
+      varNameMapping[key].type == "studio-flow" || 
+      varNameMapping[key].type == "twiml-app"
     )) {
       continue;
     }
@@ -70,13 +72,16 @@ export default (allReplacements) => {
   }
   printHeader = true;
   for (const key in allReplacements) {
-    if (!varNameMapping[key] || varNameMapping[key].type != "tr-workflow") {
+    if (!varNameMapping[key] || !(
+        varNameMapping[key].type == "tr-workflow" || 
+        varNameMapping[key].type == "tr-queue"
+      )) {
       continue;
     }
     
     if (printHeader) {
       console.log("");
-      console.log("---- WORKFLOW SIDS -----------------------------------------");
+      console.log("---- TASKROUTER SIDS ---------------------------------------");
       printHeader = false;
     }
     
