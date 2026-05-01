@@ -11,6 +11,7 @@ const {
   screen_pop = false,
   show_panel_automatically = false,
   utility_bar_status = false,
+  custom_cti = false,
 } = (getFeatureFlags()?.features?.salesforce_integration as SalesforceIntegrationConfig) || {};
 
 export const isFeatureEnabled = () => {
@@ -47,4 +48,8 @@ export const isShowPanelAutomaticallyEnabled = () => {
 
 export const isUtilityBarStatusEnabled = () => {
   return utility_bar_status;
+};
+
+export const isCustomCtiEnabled = () => {
+  return custom_cti;
 };

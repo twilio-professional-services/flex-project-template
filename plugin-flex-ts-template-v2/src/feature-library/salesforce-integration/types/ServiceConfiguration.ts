@@ -8,4 +8,5 @@ export default interface SalesforceIntegrationConfig {
   screen_pop: boolean;
   show_panel_automatically: boolean;
   utility_bar_status: boolean;
+  custom_cti: boolean;
 }
