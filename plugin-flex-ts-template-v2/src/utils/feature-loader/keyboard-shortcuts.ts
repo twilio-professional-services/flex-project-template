@@ -3,6 +3,11 @@ import { KeyboardShortcuts } from '@twilio/flex-ui/src/KeyboardShortcuts';
 
 let keyboardShortcuts = {} as KeyboardShortcuts;
 
+// For testing: reset internal state
+export const resetState = () => {
+  keyboardShortcuts = {} as KeyboardShortcuts;
+};
+
 export const init = (flex: typeof Flex, manager: Flex.Manager) => {
   // Fetch manager strings after string hooks have executed
   for (const [, value] of Object.entries(keyboardShortcuts)) {
