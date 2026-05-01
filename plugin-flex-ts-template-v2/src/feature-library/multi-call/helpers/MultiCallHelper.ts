@@ -121,6 +121,14 @@ export const handleUnhold = (payload: any) => {
 
 const updateCallState = (manager: Manager, endedCall: Call, device?: Device) => {
   if (MultiCallCalls.length < 1) {
+    if (device) {
+      // The call that ended was not the Flex device, and no other calls are in progress, so the state needs to be updated.
+      try {
+        manager.store.dispatch({ type: 'PHONE_REMOVE_CALL' });
+      } catch (error: any) {
+        logger.error('[multi-call] Unable to update phone state', error);
+      }
+    }
     return;
   }
   if (device && manager.store.getState().flex?.phone?.activeCall?.parameters.CallSid !== endedCall.parameters.CallSid) {
