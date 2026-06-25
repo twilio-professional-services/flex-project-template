@@ -3,6 +3,11 @@ import merge from 'lodash/merge';
 
 let overrides = {};
 
+// For testing: reset internal state
+export const resetState = () => {
+  overrides = {};
+};
+
 export const init = (manager: Flex.Manager) => {
   manager.updateConfig({
     theme: {

@@ -5,6 +5,11 @@ import { reduxNamespace } from '../state';
 
 let customReducers = {};
 
+// For testing: reset internal state
+export const resetState = () => {
+  customReducers = {};
+};
+
 export const init = (manager: Flex.Manager) => {
   if (!manager.store.addReducer) {
     // tslint: disable-next-line
