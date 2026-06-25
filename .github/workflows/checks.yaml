@@ -19,7 +19,7 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-large
     permissions:
       checks: write
       contents: write
@@ -65,7 +65,7 @@ jobs:
             ${{steps.annotate.outputs.summary}}
             :white_check_mark: No issues found!
   test-plugin-v2:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-large
     env:
       PLUGIN_FOLDER: plugin-flex-ts-template-v2
     steps:
