@@ -53,7 +53,7 @@ concurrency:
 
 jobs:
   validate-environment:
-    runs-on: ubuntu-latest-large
+    runs-on: ubuntu-24.04
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
