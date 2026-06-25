@@ -53,7 +53,7 @@ concurrency:
 
 jobs:
   validate-environment:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-large
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
@@ -84,7 +84,7 @@ jobs:
     if: |
       (inputs.initial_release == true &&
        inputs.deploy_terraform == true)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-large
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
@@ -138,7 +138,7 @@ jobs:
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-large
     environment: ${{ inputs.environment }}
     env:
       ENVIRONMENT: ${{ inputs.environment }}
@@ -179,7 +179,7 @@ jobs:
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled')
     environment: ${{ inputs.environment }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-large
     env:
       ENVIRONMENT: ${{ inputs.environment }}
       OVERWRITE_CONFIG: ${{ inputs.initial_release == true || inputs.overwrite_config == true }}
@@ -213,7 +213,7 @@ jobs:
   deploy-release-plugin:
     needs:
       - validate-environment
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-large
     environment: ${{ inputs.environment }}
     env:
       PLUGIN_FOLDER: plugin-flex-ts-template-v2
