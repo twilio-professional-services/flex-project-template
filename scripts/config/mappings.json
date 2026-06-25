@@ -37,7 +37,7 @@
   },
   "TWILIO_FLEX_WORKSPACE_SID": {
     "type": "tr-workspace",
-    "name": "Flex Task Assignment"
+    "name": "/Flex Task Assignment/"
   },
   "TWILIO_FLEX_SYNC_SID": {
     "type": "sync-service",

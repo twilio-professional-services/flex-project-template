@@ -49,23 +49,25 @@ class AgentActivities {
     // for the CSS injection, we a loop through the activities and find the related
     // eligible activities entry to determine if its visible and what order it should
     // appear in.
-    return Array.from(activities.values()).reduce((results, activity, idx) => {
-      // default the cssConfig to hide this element
-      const cssConfig: ActivityCssConfig = { idx, display: 'none', order: idx };
+    return Array.from(activities.values())
+      .filter((a) => a.name !== 'Reserved') // Flex hides the "Reserved" activity from the menu by default
+      .reduce((results, activity, idx) => {
+        // default the cssConfig to hide this element
+        const cssConfig: ActivityCssConfig = { idx, display: 'none', order: idx };
 
-      const visible = eligibleActivities.find((eligibleActivity) => eligibleActivity.name === activity.name);
-      const order = eligibleActivities.findIndex((eligibleActivity) => eligibleActivity.name === activity.name);
+        const visible = eligibleActivities.find((eligibleActivity) => eligibleActivity.name === activity.name);
+        const order = eligibleActivities.findIndex((eligibleActivity) => eligibleActivity.name === activity.name);
 
-      if (visible) {
-        // show the activity
-        cssConfig.display = 'flex';
-      }
+        if (visible) {
+          // show the activity
+          cssConfig.display = 'flex';
+        }
 
-      cssConfig.order = order;
+        cssConfig.order = order;
 
-      // return the element with all previous results into one array
-      return [...results, cssConfig];
-    }, [] as Array<ActivityCssConfig>);
+        // return the element with all previous results into one array
+        return [...results, cssConfig];
+      }, [] as Array<ActivityCssConfig>);
   }
 
   // This will also include the worker's current activity even if it is not an allowed one, so that the menu can render the current state correctly

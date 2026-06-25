@@ -422,6 +422,17 @@
         "enabled": false,
         "exclude_attributes": [],
         "exclude_queues": []
+      },
+      "salesforce_integration": {
+        "enabled": false,
+        "activity_logging": true,
+        "click_to_dial": true,
+        "copilot_notes": true,
+        "hide_crm_container": true,
+        "prevent_popout_during_call": true,
+        "screen_pop": true,
+        "show_panel_automatically": true,
+        "utility_bar_status": true
       }
     }
   }
