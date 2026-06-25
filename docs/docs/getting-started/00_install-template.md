@@ -29,9 +29,10 @@ These steps require a [currently-maintained version of Flex UI 2.x](https://www.
    - your environment secrets should look something like this (TF_ENCRYPTION_KEY can be a repo or environment secret)
    ![image](/img/guides/github-secrets.png)
 
-4. Log in to Flex, open the admin panel, and validate Flex UI 2.x is the configured version.
-5. _Optionally_ navigate to the Flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/channels/voice) (this is required for some features)
-6. Navigate over to GitHub actions of your repository and select the `Deploy Flex` action script, _select the environment_ you want to deploy, and check the boxes for
+4. In your GitHub organization settings, provision an Ubuntu runner named `ubuntu-latest-large`. Alternatively, you may modify the workflows to use another runner type such as `ubuntu-24.04`.
+5. Log in to Twilio Console, navigate to the Flex section, and validate that [a currently-maintained version of Flex UI 2.x](https://www.twilio.com/docs/flex/flex-ui-eol-reference) is the configured version.
+6. _Optionally_ navigate to the Flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/channels/voice) (this is required for some features)
+7. Navigate over to GitHub actions of your repository and select the `Deploy Flex` action script, _select the environment_ you want to deploy, and check the boxes for
    - `Is this the first release to the environment?`
    - `Deploy Terraform?`  (as *cautioned* below)
 
