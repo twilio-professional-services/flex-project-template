@@ -37,8 +37,8 @@ jobs:
       TWILIO_REGION: ${{ vars.TWILIO_REGION }}
       ENVIRONMENT: ${{ inputs.environment }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
       - name: install Twilio CLI
         run: npm run install-cli-serverless-plugin
       - name: Pull Terraform State
