@@ -16,8 +16,11 @@ These steps require a [currently-maintained version of Flex UI 2.x](https://www.
 
 1. [Create your own repository](https://github.com/twilio-professional-services/flex-project-template/generate) using the template.
    - (Optional) After creating your repo, you may also want to [attach the history to your new repository](/building/merge-future-updates) to be able to later pull in future updates--this can also be done later.
-   
-   - _NOTE_ If you are on the free GitHub tier, the repository will need to be public. If you are on the free tier and still want to use a private repo you will need to clone the deploy script to have dedicated secrets per environment
+
+:::tip Note
+If you are on the free GitHub tier, the repository will need to be public. If you are on the free tier and still want to use a private repo you will need to clone the deploy script to have dedicated secrets per environment.
+:::
+
 2. [Create a Twilio API key and secret](https://www.twilio.com/docs/glossary/what-is-an-api-key#how-can-i-create-api-keys) for your account, which we will use in the next step.
 3. In GitHub, navigate to the repository you created in step 1, click the Settings tab -> Environments -> "New Environment"
    - For the environment name, do not include spaces or other special characters except hyphens and underscores
@@ -29,7 +32,12 @@ These steps require a [currently-maintained version of Flex UI 2.x](https://www.
    - your environment secrets should look something like this (TF_ENCRYPTION_KEY can be a repo or environment secret)
    ![image](/img/guides/github-secrets.png)
 
-4. In your GitHub organization settings, provision an Ubuntu runner named `ubuntu-latest-large`. Alternatively, you may modify the workflows to use another runner type such as `ubuntu-24.04`.
+4. In your GitHub organization settings, provision an Ubuntu 24.04 runner named `flex-deploy`. Alternatively, you may modify the workflows to use a standard shared runner type such as `ubuntu-24.04`.
+
+:::tip Note
+Twilio recommends always using runners provisioned within your organization, as opposed to using the standard shared runners, to reduce your exposure to supply chain attacks. Running deploy scripts on a compromised runner could expose your Twilio account credentials to a malicious actor.
+:::
+
 5. Log in to Twilio Console, navigate to the Flex section, and validate that [a currently-maintained version of Flex UI 2.x](https://www.twilio.com/docs/flex/flex-ui-eol-reference) is the configured version.
 6. _Optionally_ navigate to the Flex console and enable the [Flex dialpad](https://console.twilio.com/us1/develop/flex/channels/voice) (this is required for some features)
 7. Navigate over to GitHub actions of your repository and select the `Deploy Flex` action script, _select the environment_ you want to deploy, and check the boxes for
