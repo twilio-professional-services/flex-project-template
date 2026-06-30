@@ -27,7 +27,7 @@ jobs:
       TWILIO_API_SECRET: ${{ secrets.TWILIO_API_SECRET }}
       TWILIO_REGION: ${{ vars.TWILIO_REGION }}
       ENVIRONMENT: ${{ inputs.environment }}
-    runs-on: ubuntu-latest-large
+    runs-on: flex-deploy
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
       - name: install Twilio CLI
