@@ -2,6 +2,11 @@ import * as Flex from '@twilio/flex-ui';
 
 const componentHooks = [] as any[];
 
+// For testing: reset internal state
+export const resetState = () => {
+  componentHooks.length = 0;
+};
+
 export const init = (flex: typeof Flex, manager: Flex.Manager) => {
   for (const hook of componentHooks) {
     hook.componentHook(flex, manager);
