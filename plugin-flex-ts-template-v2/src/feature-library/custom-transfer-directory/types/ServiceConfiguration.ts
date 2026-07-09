@@ -15,6 +15,7 @@ export default interface CustomTransferDirectoryConfig {
     enforce_queue_filter_from_worker_object: boolean;
     enforce_global_exclude_filter: boolean;
     global_exclude_filter: string;
+    global_exclude_filters: string[];
   };
   external_directory: {
     enabled: boolean;

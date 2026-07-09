@@ -20,6 +20,7 @@ import {
   shouldFetchInsightsData,
   enforceQueueFilterFromWorker,
   getGlobalFilter,
+  getGlobalFilters,
   shouldEnforceGlobalFilter,
   isCbmColdTransferEnabled,
   isCbmWarmTransferEnabled,
@@ -194,22 +195,39 @@ const QueueDirectoryTab = (props: OwnProps) => {
           // or queues where meta data is not available
           return queue.total_available_workers === null || queue.total_available_workers > 0;
         }
-        return queue;
+        return true;
       })
       .filter((queue) => {
+        if (!enforceQueueFilterFromWorker()) return true;
         const attributes = workerClient?.attributes as CustomWorkerAttributes;
+        // If an array of filters is present and populated, use it first
+        if (attributes?.enforcedQueueFilters?.length) {
+          const queueName = queue.name.toLocaleLowerCase();
+          return attributes.enforcedQueueFilters.some((filter: string) =>
+            queueName.includes(filter.toLocaleLowerCase()),
+          );
+        }
+        // Fall back to using the singular filter property if present
         const enforcedQueueFilter = attributes?.enforcedQueueFilter?.toLocaleLowerCase();
-        if (enforceQueueFilterFromWorker() && enforcedQueueFilter) {
+        if (enforcedQueueFilter) {
           return queue.name.toLocaleLowerCase().includes(enforcedQueueFilter);
         }
-        return queue;
+        return true;
       })
       .filter((queue) => {
+        if (!shouldEnforceGlobalFilter()) return true;
+        // If an array of filters is present and populated, use it first
+        const enforcedGlobalFilters = getGlobalFilters();
+        if (enforcedGlobalFilters.length) {
+          const queueName = queue.name.toLocaleLowerCase();
+          return !enforcedGlobalFilters.some((filter: string) => queueName.includes(filter.toLocaleLowerCase()));
+        }
+        // Fall back to using the singular filter if present
         const enforcedQueueFilter = getGlobalFilter().toLocaleLowerCase();
-        if (shouldEnforceGlobalFilter() && enforcedQueueFilter) {
+        if (enforcedQueueFilter) {
           return !queue.name.toLocaleLowerCase().includes(enforcedQueueFilter);
         }
-        return queue;
+        return true;
       })
       .sort((a: TransferQueue, b: TransferQueue) => (a.name > b.name ? 1 : -1))
       .map(queueToEntry);
