@@ -9,6 +9,7 @@ import {
   isDepartmentColumnEnabled,
   isLocationColumnEnabled,
   isActivityIconEnabled,
+  isAgentSkillsEnabled,
   getAgentActivityConfig,
 } from '../../config';
 import AgentActivityIcon from './AgentActivityIcon/AgentActivityIcon';
@@ -57,5 +58,16 @@ export const componentHook = function addWorkersDataTableColumns(flex: typeof Fl
       content={(item: WorkerItem) => item.worker.attributes.location}
     />,
     { sortOrder: 6, if: () => isLocationColumnEnabled() },
+  );
+  flex.WorkersDataTable.Content.add(
+    <flex.ColumnDefinition
+      key="agent-skills-custom"
+      header="Skills"
+      content={(item: WorkerItem) => {
+        const skills: string[] = (item.worker.attributes as any).routing?.skills ?? [];
+        return skills.length > 0 ? skills.join(', ') : '—';
+      }}
+    />,
+    { sortOrder: 7, if: () => isAgentSkillsEnabled() },
   );
 };

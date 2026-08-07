@@ -279,7 +279,8 @@
           "team": false,
           "department": false,
           "location": false,
-          "activity_icon": false
+          "activity_icon": false,
+          "agent_skills": false
         }
       },
       "ring_notification": {

@@ -13,6 +13,7 @@ const {
   department = false,
   location = false,
   activity_icon = false,
+  agent_skills = false,
 } = getFeatureFlags().features?.teams_view_enhancements?.columns || {};
 
 const {
@@ -45,6 +46,9 @@ export const isLocationColumnEnabled = () => {
 };
 export const isActivityIconEnabled = () => {
   return enabled && activity_icon;
+};
+export const isAgentSkillsEnabled = () => {
+  return enabled && agent_skills;
 };
 export const isHTHighlightEnabled = () => {
   return enabled && highlight_handle_time;
