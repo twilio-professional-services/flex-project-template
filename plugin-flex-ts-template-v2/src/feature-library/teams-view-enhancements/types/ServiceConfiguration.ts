@@ -8,5 +8,6 @@ export default interface TeamsViewEnhancementsConfig {
     department: boolean;
     location: boolean;
     activity_icon: boolean;
+    agent_skills: boolean;
   };
 }
