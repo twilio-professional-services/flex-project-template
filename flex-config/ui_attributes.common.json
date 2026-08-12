@@ -199,6 +199,10 @@
       "keyboard_shortcuts": {
         "enabled": true
       },
+      "automatic_end_chat_message": {
+        "enabled": false,
+        "message": "Sua solicitação foi concluída pelo nosso time de Operação!\n\nSempre que precisar de uma orientação, informação ou apoio no dia a dia, é só me enviar uma mensagem 🙂"
+      },
       "custom_hold_music": {
         "enabled": false,
         "url": ""
