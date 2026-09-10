@@ -1,0 +1,88 @@
+---
+sidebar_label: mass-worker-update
+title: Mass Worker Update
+---
+
+import PluginLibraryFeature from "./_plugin-library-feature.md";
+
+<PluginLibraryFeature />
+
+An admin-only screen that lets a supervisor bulk-add and bulk-remove TaskRouter skills across a filtered set of workers. Available under a new item in the Flex side navigation for users with the `admin` role.
+
+## Disclaimer
+
+**This software is to be considered "sample code", a Type B Deliverable, and is delivered "as-is" to the user. Twilio bears no responsibility to support the use or implementation of this software.**
+
+## Known limitations — read this first
+
+- **15-second Twilio Function runtime.** The mass update loop runs inside a Twilio Serverless Function, which has a hard 15-second execution cap. Depending on Sync round-trip latency you can expect roughly **≤100 workers per run**. The `max_workers_per_run` config value enforces a client-side guard against this — the UI refuses to run a batch that exceeds it.
+- **Planned migration off Twilio Functions.** This feature is intended to be lifted onto an external long-running compute environment (Cloud Run, Lambda with longer timeout, etc.). The Sync-Document coordination protocol (see below) is designed to move unchanged — only the serverless function shell needs to be swapped.
+- **In-flight cancel is best-effort.** Cancel writes to the shared Sync Document; the loop re-reads the doc **before** each worker update. If Cancel arrives while a worker update is in flight, that worker completes and the loop exits on the next iteration.
+- **No rollback.** Workers that were updated before a Cancel (or a mid-run failure or timeout) keep their new skills. There is no automatic revert.
+- **Sequential execution.** v1 updates one worker at a time and relies on the existing `twilioExecute` retry-with-backoff. Concurrency is an intentional deferred optimization for the external-runtime port.
+
+## How it works
+
+The screen has two sections and one lock:
+
+1. **Identify workers.** Choose up to one team, one department, and one skill; workers must match ALL selected filters (AND logic). Click **Identify workers** to run a TaskRouter `workers.list` server-side using a `targetWorkersExpression` such as `team_name == "Blue Team" AND department_name == "Sales" AND routing.skills HAS "spanish"`. The matching workers are shown in a preview table with their current skills.
+2. **Choose skills to add and remove.** Two side-by-side checkbox groups populated from the hosted TaskRouter workspace skills (`Manager.getInstance().serviceConfiguration.taskrouter_skills`, deployed from `flex-config/taskrouter_skills.json`). Skills not selected in either list stay untouched on each worker. Add and remove are mutually exclusive per skill.
+3. **Confirm.** The plugin POSTs to `/features/mass-worker-update/flex/execute-update`. The serverless function seeds a shared Sync Document, then loops through the workers: `check cancel flag → update worker → increment progress → heartbeat`. All admins on the screen subscribe to the doc, so a Progress modal appears with live progress and a Cancel button.
+
+### The shared Sync Document
+
+Uniquely-named (`mass_worker_update_state` by default), stored in the account's Flex Sync service. Its payload:
+
+```json
+{
+  "inProgress": true,
+  "startedBy": "WKxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "startedAt": 1751212345678,
+  "total": 42,
+  "processed": 27,
+  "cancelled": false,
+  "heartbeatAt": 1751212349012,
+  "error": null
+}
+```
+
+Any admin can:
+
+- **Watch progress.** The plugin subscribes to `updated` events on the doc.
+- **Cancel.** The plugin writes `{ ...current, cancelled: true }` directly to the doc. The next iteration of the loop sees the flag and bails.
+- **Reset stale state.** If the function times out mid-loop the doc will be stuck at `inProgress: true`. When `heartbeatAt` is older than `stale_heartbeat_ms` (default 20s) the modal switches to a **Reset** affordance that hits `POST /reset-state`, an admin-only endpoint that forces `inProgress: false`.
+
+### Portability
+
+Nothing about the coordination is Twilio-Functions-specific. To move the loop to Cloud Run / Lambda / your own worker:
+
+1. Replace the HTTP handler shell in `execute-update.js`.
+2. Replace the `Runtime.getFunctions()` requires with your own module imports.
+3. Keep the Twilio Node SDK calls (`client.taskrouter.v1.workspaces(...).workers.list()`, `.workers(sid).update()`) and the `client.sync.services(...).documents(...)` calls verbatim.
+
+The Sync Document unique name, schema, and heartbeat/cancel semantics are the migration contract. The Flex plugin never changes.
+
+## Installation
+
+If you have performed [the recommended steps to deploy the template](/getting-started/install-template), or followed the steps to [deploy from your local machine](/building/deployment/local-deployment), the mass-worker-update feature has already been deployed for you.
+
+## Configuration
+
+Feature settings live in `flex-config/ui_attributes.common.json` under `custom_data.features.mass_worker_update`:
+
+| Field | Default | Purpose |
+| --- | --- | --- |
+| `enabled` | `false` | Toggles the entire feature (SideNav link and view) on or off. |
+| `sync_doc_name` | `mass_worker_update_state` | Unique name of the shared Sync Document. One per environment. |
+| `stale_heartbeat_ms` | `20000` | If `inProgress` is true but `heartbeatAt` is older than this, the modal shows Reset instead of Cancel. Bump this if you regularly see false-positive Stale states. |
+| `max_workers_per_run` | `100` | Client-side guard against the 15s Function timeout. The UI blocks Confirm if the identified worker count exceeds this. |
+
+## Endpoints
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| POST | `/features/mass-worker-update/flex/identify-workers` | Runs `workers.list` with the built `targetWorkersExpression` and returns a preview array. Admin-only. |
+| POST | `/features/mass-worker-update/flex/execute-update` | Seeds the Sync Document and runs the loop. Admin-only. |
+| POST | `/features/mass-worker-update/flex/reset-state` | Force-clears the Sync Document (used when the heartbeat is stale). Admin-only. |
+
+There is **no** dedicated cancel endpoint — Cancel is a direct Sync Document write from the browser. This keeps the cancel path identical when the loop later runs on external compute.

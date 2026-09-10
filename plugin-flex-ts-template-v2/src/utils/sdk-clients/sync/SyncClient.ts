@@ -1,5 +1,5 @@
 import * as Flex from '@twilio/flex-ui';
-import { SyncClient, SyncMap, SyncMapItem } from 'twilio-sync';
+import { SyncClient, SyncDocument, SyncMap, SyncMapItem } from 'twilio-sync';
 import { Paginator } from 'twilio-sync/lib/paginator';
 
 import logger from '../../logger';
@@ -58,5 +58,41 @@ export const unsubscribe = async (stream: any) => {
     stream?.close();
   } catch (error: any) {
     logger.error('[SyncClient] Unable to unsubscribe from Sync stream', error);
+  }
+};
+
+export const getOrCreateDocument = async (uniqueName: string): Promise<SyncDocument | null> => {
+  try {
+    return await client.document(uniqueName);
+  } catch (error: any) {
+    logger.error('[SyncClient] Unable to open Sync document', error);
+    return null;
+  }
+};
+
+export const subscribeDocument = async (
+  uniqueName: string,
+  onUpdate: (data: any) => void,
+): Promise<SyncDocument | null> => {
+  try {
+    const doc = await client.document(uniqueName);
+    doc.on('updated', (event: any) => {
+      // twilio-sync fires either { data } or a wider event object depending on
+      // SDK version; be defensive and hand callers the payload either way.
+      const next = event && 'data' in event ? event.data : doc.data;
+      onUpdate(next);
+    });
+    return doc;
+  } catch (error: any) {
+    logger.error('[SyncClient] Unable to subscribe to Sync document', error);
+    return null;
+  }
+};
+
+export const updateDocument = async (doc: SyncDocument, data: any): Promise<void> => {
+  try {
+    await doc.update(data);
+  } catch (error: any) {
+    logger.error('[SyncClient] Unable to update Sync document', error);
   }
 };

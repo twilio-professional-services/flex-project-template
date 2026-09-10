@@ -373,3 +373,60 @@ exports.getTasks = async function getTasks(parameters) {
     }));
   });
 };
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.targetWorkersExpression a TaskQueue-style expression
+ *   (e.g. `team_name == "Blue Team" AND routing.skills HAS "spanish"`) used to
+ *   filter the workers server-side.
+ * @param {number} [parameters.limit=1000] maximum number of workers to return
+ * @returns {object} { success, status, data: Worker[] } with parsed attributes
+ * @description lists Workers in the Flex Workspace matching the provided
+ *   targetWorkersExpression. Used by the mass-worker-update feature to preview
+ *   and enumerate affected workers.
+ */
+exports.listWorkers = async function listWorkers(parameters) {
+  const { context, targetWorkersExpression, limit = 1000 } = parameters;
+
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(targetWorkersExpression))
+    throw new Error('Invalid parameters object passed. Parameters must contain targetWorkersExpression string');
+
+  return twilioExecute(context, async (client) => {
+    const workers = await client.taskrouter.v1
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .workers.list({ targetWorkersExpression, limit });
+
+    return workers.map((worker) => ({
+      sid: worker.sid,
+      friendlyName: worker.friendlyName,
+      attributes: JSON.parse(worker.attributes),
+    }));
+  });
+};
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.workerSid worker SID to update
+ * @param {string} parameters.attributes JSON string containing the FULL
+ *   replacement attributes object. Unlike `updateWorkerAttributes` this does not
+ *   re-fetch or merge — the caller is responsible for producing the final
+ *   attributes payload. Used inside the mass-worker-update loop to avoid a
+ *   second fetch per worker (attributes are already known from listWorkers).
+ * @returns {object} { success, status, data: Worker }
+ */
+exports.updateWorker = async function updateWorker(parameters) {
+  const { context, workerSid, attributes } = parameters;
+
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(workerSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain workerSid string');
+  if (!isString(attributes))
+    throw new Error('Invalid parameters object passed. Parameters must contain attributes JSON string');
+
+  return twilioExecute(context, (client) =>
+    client.taskrouter.v1.workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID).workers(workerSid).update({ attributes }),
+  );
+};
