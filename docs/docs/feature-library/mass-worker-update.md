@@ -3,11 +3,14 @@ sidebar_label: mass-worker-update
 title: Mass Worker Update
 ---
 
-import PluginLibraryFeature from "./_plugin-library-feature.md";
-
-<PluginLibraryFeature />
 
 An admin-only screen that lets a supervisor bulk-add and bulk-remove TaskRouter skills across a filtered set of workers. Available under a new item in the Flex side navigation for users with the `admin` role.
+
+## Flex User Experience
+
+![Mass worker update demo](/img/features/mass-worker-update/mass-worker-update.gif)
+
+The screen has two panes: an admin picks one team, department, and/or skill to identify the affected workers, previews the list, then chooses skills to add and skills to remove — including numeric levels for any skill configured with a min/max ranking. Hitting **Confirm** starts a batched update loop; a lock modal shows live progress and a Cancel button that any admin currently viewing the screen can hit.
 
 ## Disclaimer
 
@@ -15,8 +18,7 @@ An admin-only screen that lets a supervisor bulk-add and bulk-remove TaskRouter 
 
 ## Known limitations — read this first
 
-- **15-second Twilio Function runtime.** The mass update loop runs inside a Twilio Serverless Function, which has a hard 15-second execution cap. Depending on Sync round-trip latency you can expect roughly **≤100 workers per run**. The `max_workers_per_run` config value enforces a client-side guard against this — the UI refuses to run a batch that exceeds it.
-- **Planned migration off Twilio Functions.** This feature is intended to be lifted onto an external long-running compute environment (Cloud Run, Lambda with longer timeout, etc.). The Sync-Document coordination protocol (see below) is designed to move unchanged — only the serverless function shell needs to be swapped.
+
 - **In-flight cancel is best-effort.** Cancel writes to the shared Sync Document; the loop re-reads the doc **before dispatching each batch**. A cancel that arrives while a batch is in flight is picked up on the next iteration — every worker in the currently in-flight batch will complete its update first. Latency is therefore bounded by `batch_size` × per-worker update time.
 - **No rollback.** Workers that were updated before a Cancel (or a mid-run failure or timeout) keep their new skills. There is no automatic revert.
 - **Concurrency is bounded.** The loop dispatches workers in concurrent batches sized by the `batch_size` config value (clamped to `[1, 25]`, default `5`). A value of `1` restores fully sequential behavior. `Promise.allSettled` observes every update in a batch; if any fail, the loop finishes that batch and aborts, matching the pre-batching abort-on-failure policy at batch granularity.
