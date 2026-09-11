@@ -59,15 +59,27 @@ exports.mergeSkills = (currentRouting = {}, add = [], remove = []) => {
  *   configured with min/max in the hosted `taskrouter_skills`.
  * @param {string[]} params.removeSkills skills to remove (removes level too)
  * @param {string} params.startedBy worker SID that initiated the run
+ * @param {string|null} [params.startedByName] friendly `full_name` of the
+ *   initiating worker, if it was successfully looked up. Null when the worker
+ *   fetch failed or the field was missing from the JSON.
  * @returns {object} { cancelled, processed, total, error }
  */
-exports.runMassUpdate = async ({ context, uniqueName, workers, addSkills, removeSkills, startedBy }) => {
+exports.runMassUpdate = async ({
+  context,
+  uniqueName,
+  workers,
+  addSkills,
+  removeSkills,
+  startedBy,
+  startedByName = null,
+}) => {
   const total = workers.length;
   const startedAt = Date.now();
 
   await SyncDoc.writeState(context, uniqueName, {
     inProgress: true,
     startedBy,
+    startedByName,
     startedAt,
     total,
     processed: 0,
@@ -144,6 +156,7 @@ exports.runMassUpdate = async ({ context, uniqueName, workers, addSkills, remove
   await SyncDoc.writeState(context, uniqueName, {
     inProgress: false,
     startedBy,
+    startedByName,
     startedAt,
     total,
     processed,

@@ -8,6 +8,7 @@ import { MassUpdateState } from '../types/mass-worker-update';
 const DEFAULT_STATE: MassUpdateState = {
   inProgress: false,
   startedBy: null,
+  startedByName: null,
   startedAt: null,
   total: 0,
   processed: 0,

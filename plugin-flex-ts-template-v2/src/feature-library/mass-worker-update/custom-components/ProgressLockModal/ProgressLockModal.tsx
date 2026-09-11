@@ -37,9 +37,17 @@ const ProgressLockModal: React.FC<Props> = ({ state, isStale, isCancelling, isRe
         processed: state.processed,
         total: state.total,
       });
-  const startedBy = state.startedBy
-    ? format(strings[StringTemplates.PROGRESS_STARTED_BY], { startedBy: state.startedBy })
-    : '';
+  // Prefer the initiator's `full_name` (looked up server-side from the worker
+  // record). Fall back to the raw SID with a small note when the name lookup
+  // failed or the attribute wasn't present.
+  let startedBy = '';
+  if (state.startedByName) {
+    startedBy = format(strings[StringTemplates.PROGRESS_STARTED_BY], { startedBy: state.startedByName });
+  } else if (state.startedBy) {
+    startedBy = format(strings[StringTemplates.PROGRESS_STARTED_BY_UNKNOWN_NAME], {
+      startedBy: state.startedBy,
+    });
+  }
 
   // Empty handler on Modal onDismiss — the modal is a hard lock on this screen
   // by design. Users can navigate away via the SideNav, which unmounts the

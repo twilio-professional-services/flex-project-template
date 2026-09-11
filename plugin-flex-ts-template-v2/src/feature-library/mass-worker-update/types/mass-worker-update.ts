@@ -59,7 +59,14 @@ export interface ExecuteResponse {
 
 export interface MassUpdateState {
   inProgress: boolean;
+  /** Worker SID of the admin that started the run. */
   startedBy: string | null;
+  /**
+   * `attributes.full_name` from the starter's worker record; null when the
+   * lookup failed or the field wasn't present on the worker JSON. The modal
+   * prefers this over the raw SID.
+   */
+  startedByName: string | null;
   startedAt: number | null;
   total: number;
   processed: number;

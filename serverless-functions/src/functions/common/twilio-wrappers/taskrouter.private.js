@@ -430,3 +430,33 @@ exports.updateWorker = async function updateWorker(parameters) {
     client.taskrouter.v1.workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID).workers(workerSid).update({ attributes }),
   );
 };
+
+/**
+ * @param {object} parameters the parameters for the function
+ * @param {object} parameters.context the context from calling lambda function
+ * @param {string} parameters.workerSid worker SID to fetch
+ * @returns {object} { success, status, data: { sid, friendlyName, attributes } }
+ *   where `attributes` is the parsed JSON object.
+ * @description fetches a single Worker and returns it with attributes parsed
+ *   for the caller. Used by mass-worker-update to look up the initiating
+ *   admin's `full_name`.
+ */
+exports.fetchWorker = async function fetchWorker(parameters) {
+  const { context, workerSid } = parameters;
+
+  if (!isObject(context)) throw new Error('Invalid parameters object passed. Parameters must contain context object');
+  if (!isString(workerSid))
+    throw new Error('Invalid parameters object passed. Parameters must contain workerSid string');
+
+  return twilioExecute(context, async (client) => {
+    const worker = await client.taskrouter.v1
+      .workspaces(process.env.TWILIO_FLEX_WORKSPACE_SID)
+      .workers(workerSid)
+      .fetch();
+    return {
+      sid: worker.sid,
+      friendlyName: worker.friendlyName,
+      attributes: JSON.parse(worker.attributes),
+    };
+  });
+};

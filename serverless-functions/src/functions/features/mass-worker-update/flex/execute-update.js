@@ -120,6 +120,27 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
 
     const startedBy = event.TokenResult.worker_sid || event.TokenResult.identity || 'unknown';
 
+    // Best-effort lookup of the initiating admin's `attributes.full_name` so
+    // the progress modal can show a readable name instead of the raw SID.
+    // Non-fatal on failure — the modal will fall back to the SID with a note.
+    let startedByName = null;
+    if (event.TokenResult.worker_sid) {
+      try {
+        const fetched = await TaskRouterOperations.fetchWorker({
+          context,
+          workerSid: event.TokenResult.worker_sid,
+        });
+        if (fetched.success) {
+          const attrs = fetched.data?.attributes;
+          if (attrs && typeof attrs.full_name === 'string' && attrs.full_name.length > 0) {
+            startedByName = attrs.full_name;
+          }
+        }
+      } catch (nameError) {
+        console.warn(`mass-worker-update: could not resolve initiator name — ${nameError.message}`);
+      }
+    }
+
     const result = await runMassUpdate({
       context,
       uniqueName,
@@ -127,6 +148,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       addSkills,
       removeSkills,
       startedBy,
+      startedByName,
     });
 
     response.setStatusCode(200);

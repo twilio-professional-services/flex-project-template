@@ -9,6 +9,7 @@ const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sy
 exports.defaultState = () => ({
   inProgress: false,
   startedBy: null,
+  startedByName: null,
   startedAt: null,
   total: 0,
   processed: 0,
