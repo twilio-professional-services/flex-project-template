@@ -2,19 +2,41 @@ const TaskRouterOperations = require(Runtime.getFunctions()['common/twilio-wrapp
 const SyncDoc = require(Runtime.getFunctions()['features/mass-worker-update/common/sync-doc-helpers'].path);
 
 /**
- * Computes the next `routing.skills` array for a worker given the requested
- * add/remove sets. Existing skills not mentioned in either set stay untouched.
- * De-duplicates via a Set.
- * @param {string[]} current
- * @param {string[]} add
+ * Computes the next `routing.skills` array AND the next `routing.levels` object
+ * for a worker given the requested add/remove sets. Existing skills not
+ * mentioned in either set stay untouched; levels for skills being removed are
+ * dropped alongside them. Levels supplied on `add` entries overwrite any prior
+ * level for that skill (TaskRouter skills configured with `min`/`max` support
+ * a numeric ranking stored under `routing.levels[skillName]`).
+ *
+ * @param {{skills?: string[], levels?: Object<string, number>}} currentRouting
+ * @param {Array<{name: string, level?: number}>} add
  * @param {string[]} remove
- * @returns {string[]}
+ * @returns {{skills: string[], levels: Object<string, number>}}
  */
-exports.mergeSkills = (current = [], add = [], remove = []) => {
+exports.mergeSkills = (currentRouting = {}, add = [], remove = []) => {
   const removeSet = new Set(remove);
-  const next = new Set((current || []).filter((s) => !removeSet.has(s)));
-  (add || []).forEach((s) => next.add(s));
-  return Array.from(next);
+  const currentSkills = Array.isArray(currentRouting.skills) ? currentRouting.skills : [];
+  const currentLevels = currentRouting.levels && typeof currentRouting.levels === 'object' ? currentRouting.levels : {};
+
+  const nextSkillsSet = new Set(currentSkills.filter((s) => !removeSet.has(s)));
+  const nextLevels = {};
+  for (const [name, level] of Object.entries(currentLevels)) {
+    if (!removeSet.has(name)) nextLevels[name] = level;
+  }
+
+  for (const entry of add || []) {
+    if (!entry || typeof entry.name !== 'string') continue;
+    nextSkillsSet.add(entry.name);
+    if (typeof entry.level === 'number' && Number.isFinite(entry.level)) {
+      nextLevels[entry.name] = entry.level;
+    }
+  }
+
+  return {
+    skills: Array.from(nextSkillsSet),
+    levels: nextLevels,
+  };
 };
 
 /**
@@ -32,8 +54,10 @@ exports.mergeSkills = (current = [], add = [], remove = []) => {
  * @param {object} params.context Twilio Function context
  * @param {string} params.uniqueName the Sync Document unique name
  * @param {Array<{sid,friendlyName,attributes}>} params.workers workers to update
- * @param {string[]} params.addSkills skills to add (union)
- * @param {string[]} params.removeSkills skills to remove
+ * @param {Array<{name: string, level?: number}>} params.addSkills skills to
+ *   add (union). Optional `level` populates `routing.levels[name]` for skills
+ *   configured with min/max in the hosted `taskrouter_skills`.
+ * @param {string[]} params.removeSkills skills to remove (removes level too)
  * @param {string} params.startedBy worker SID that initiated the run
  * @returns {object} { cancelled, processed, total, error }
  */
@@ -71,12 +95,13 @@ exports.runMassUpdate = async ({ context, uniqueName, workers, addSkills, remove
     }
 
     const currentRouting = (worker.attributes && worker.attributes.routing) || {};
-    const nextSkills = exports.mergeSkills(currentRouting.skills, addSkills, removeSkills);
+    const { skills: nextSkills, levels: nextLevels } = exports.mergeSkills(currentRouting, addSkills, removeSkills);
     const nextAttributes = {
       ...worker.attributes,
       routing: {
         ...currentRouting,
         skills: nextSkills,
+        levels: nextLevels,
       },
     };
 

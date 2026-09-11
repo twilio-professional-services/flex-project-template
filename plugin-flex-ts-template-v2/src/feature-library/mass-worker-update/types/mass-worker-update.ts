@@ -4,6 +4,27 @@ export interface TargetSelection {
   skill?: string;
 }
 
+/**
+ * Metadata for one skill as configured in the hosted Flex `taskrouter_skills`
+ * list. When both `minimum` and `maximum` are numeric, the skill supports a
+ * numeric level ranking that gets stored under `worker.attributes.routing.levels`.
+ */
+export interface SkillDefinition {
+  name: string;
+  minimum: number | null;
+  maximum: number | null;
+  multivalue: boolean;
+}
+
+/**
+ * One skill to add. `level` is only meaningful when the skill's definition has
+ * both a min and a max — otherwise it's ignored server-side.
+ */
+export interface AddSkillMutation {
+  name: string;
+  level?: number;
+}
+
 export interface WorkerRow {
   sid: string;
   friendlyName: string;
@@ -24,7 +45,7 @@ export interface ExecuteRequest {
   team?: string;
   department?: string;
   skill?: string;
-  addSkills: string[];
+  addSkills: AddSkillMutation[];
   removeSkills: string[];
 }
 

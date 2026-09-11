@@ -27,6 +27,8 @@ The screen has two sections and one lock:
 
 1. **Identify workers.** Choose up to one team, one department, and one skill; workers must match ALL selected filters (AND logic). Click **Identify workers** to run a TaskRouter `workers.list` server-side using a `targetWorkersExpression` such as `team_name == "Blue Team" AND department_name == "Sales" AND routing.skills HAS "spanish"`. The matching workers are shown in a preview table with their current skills.
 2. **Choose skills to add and remove.** Two side-by-side checkbox groups populated from the hosted TaskRouter workspace skills (`Manager.getInstance().serviceConfiguration.taskrouter_skills`, deployed from `flex-config/taskrouter_skills.json`). Skills not selected in either list stay untouched on each worker. Add and remove are mutually exclusive per skill.
+
+   **Skill levels.** When a skill's definition has both `minimum` and `maximum` set, the add-side checkbox renders a numeric input next to it, constrained to that range and defaulting to the minimum. Selecting a leveled skill writes the entry to `worker.attributes.routing.levels[skillName]`; removing the skill drops the level entry alongside it. Skills without min/max are added as plain names with no level entry.
 3. **Confirm.** The plugin POSTs to `/features/mass-worker-update/flex/execute-update`. The serverless function seeds a shared Sync Document, then loops through the workers: `check cancel flag → update worker → increment progress → heartbeat`. All admins on the screen subscribe to the doc, so a Progress modal appears with live progress and a Cancel button.
 
 ### The shared Sync Document

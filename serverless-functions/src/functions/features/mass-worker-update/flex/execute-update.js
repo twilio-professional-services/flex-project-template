@@ -11,7 +11,7 @@ const { runMassUpdate } = require(Runtime.getFunctions()['features/mass-worker-u
 
 const requiredParameters = [{ key: 'uniqueName', purpose: 'the Sync Document uniqueName that holds shared run state' }];
 
-const parseSkills = (raw) => {
+const asArray = (raw) => {
   if (!raw) return [];
   if (Array.isArray(raw)) return raw;
   try {
@@ -20,6 +20,37 @@ const parseSkills = (raw) => {
   } catch {
     return [];
   }
+};
+
+/**
+ * Normalizes the addSkills payload. Accepts either `[{name, level?}]` (the
+ * shape produced by the plugin's SkillMutationPicker) or plain `[string]` for
+ * backwards compatibility. Entries without a valid name are dropped.
+ */
+const parseAddSkills = (raw) => {
+  return asArray(raw)
+    .map((entry) => {
+      if (typeof entry === 'string') return { name: entry };
+      if (entry && typeof entry.name === 'string') {
+        const out = { name: entry.name };
+        if (typeof entry.level === 'number' && Number.isFinite(entry.level)) {
+          out.level = entry.level;
+        }
+        return out;
+      }
+      return null;
+    })
+    .filter(Boolean);
+};
+
+const parseRemoveSkills = (raw) => {
+  return asArray(raw)
+    .map((entry) => {
+      if (typeof entry === 'string') return entry;
+      if (entry && typeof entry.name === 'string') return entry.name;
+      return null;
+    })
+    .filter((name) => typeof name === 'string' && name.length > 0);
 };
 
 exports.handler = prepareFlexFunction(requiredParameters, async (context, event, callback, response, handleError) => {
@@ -31,8 +62,8 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
     }
 
     const { uniqueName, team, department, skill } = event;
-    const addSkills = parseSkills(event.addSkills);
-    const removeSkills = parseSkills(event.removeSkills);
+    const addSkills = parseAddSkills(event.addSkills);
+    const removeSkills = parseRemoveSkills(event.removeSkills);
 
     if (addSkills.length === 0 && removeSkills.length === 0) {
       response.setStatusCode(400);

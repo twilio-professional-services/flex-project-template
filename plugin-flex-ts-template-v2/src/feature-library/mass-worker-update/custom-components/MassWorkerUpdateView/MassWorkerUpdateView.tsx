@@ -13,7 +13,7 @@ import { NotificationIds } from '../../flex-hooks/notifications/MassWorkerUpdate
 import { getSyncDocName, getMaxWorkersPerRun } from '../../config';
 import { useMassUpdateState } from '../../hooks/useMassUpdateState';
 import MassWorkerUpdateService from '../../utils/MassWorkerUpdateService';
-import { TargetSelection, WorkerRow } from '../../types/mass-worker-update';
+import { AddSkillMutation, TargetSelection, WorkerRow } from '../../types/mass-worker-update';
 import TargetSelector from '../TargetSelector/TargetSelector';
 import WorkerPreviewTable from '../WorkerPreviewTable/WorkerPreviewTable';
 import SkillMutationPicker from '../SkillMutationPicker/SkillMutationPicker';
@@ -35,7 +35,7 @@ const MassWorkerUpdateView: React.FC = () => {
   const [preview, setPreview] = useState<WorkerRow[] | null>(null);
   const [isIdentifying, setIsIdentifying] = useState(false);
   const [identifyError, setIdentifyError] = useState<string | null>(null);
-  const [addSkills, setAddSkills] = useState<string[]>([]);
+  const [addSkills, setAddSkills] = useState<AddSkillMutation[]>([]);
   const [removeSkills, setRemoveSkills] = useState<string[]>([]);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [isExecuting, setIsExecuting] = useState(false);

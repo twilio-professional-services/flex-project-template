@@ -1,7 +1,7 @@
 import { Manager } from '@twilio/flex-ui';
 
 import { isFeatureEnabled, getStaleHeartbeatMs } from '../config';
-import { MassUpdateState, TargetSelection } from '../types/mass-worker-update';
+import { MassUpdateState, SkillDefinition, TargetSelection } from '../types/mass-worker-update';
 
 export const canShowMassWorkerUpdate = (manager: Manager): boolean => {
   const { roles } = manager.user;
@@ -36,8 +36,25 @@ export const getDepartments = (): string[] => {
   return Array.isArray(common?.departments) ? common.departments : [];
 };
 
-export const getWorkspaceSkillNames = (): string[] => {
+export const getWorkspaceSkills = (): SkillDefinition[] => {
   const skills = (Manager.getInstance().serviceConfiguration as any)?.taskrouter_skills;
   if (!Array.isArray(skills)) return [];
-  return skills.map((skill: any) => skill?.name).filter((name: any): name is string => typeof name === 'string');
+  return skills
+    .filter((skill: any) => skill && typeof skill.name === 'string')
+    .map((skill: any) => ({
+      name: skill.name,
+      // `minimum` and `maximum` may be null when the skill has no ranking.
+      minimum: typeof skill.minimum === 'number' ? skill.minimum : null,
+      maximum: typeof skill.maximum === 'number' ? skill.maximum : null,
+      multivalue: Boolean(skill.multivalue),
+    }));
 };
+
+export const getWorkspaceSkillNames = (): string[] => getWorkspaceSkills().map((skill) => skill.name);
+
+/**
+ * A skill has a numeric level ranking iff both `minimum` and `maximum` are
+ * configured in the hosted Flex `taskrouter_skills` list.
+ */
+export const skillHasLevel = (skill: SkillDefinition): boolean =>
+  typeof skill.minimum === 'number' && typeof skill.maximum === 'number';
