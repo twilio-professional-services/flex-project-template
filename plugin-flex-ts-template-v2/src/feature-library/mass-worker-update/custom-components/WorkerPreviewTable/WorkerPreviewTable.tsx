@@ -22,8 +22,18 @@ const WorkerPreviewTable: React.FC<Props> = ({ workers }) => {
     );
   }
 
+  // Height is dictated by the surrounding flex layout (`SectionContent` in the
+  // view). We just fill it and let the parent handle scroll — that keeps the
+  // table growing/shrinking with the available real estate.
   return (
-    <Box maxHeight="320px" overflow="auto" borderStyle="solid" borderColor="colorBorder" borderWidth="borderWidth10">
+    <Box
+      flexGrow={1}
+      minHeight="size0"
+      overflow="auto"
+      borderStyle="solid"
+      borderColor="colorBorder"
+      borderWidth="borderWidth10"
+    >
       <Table>
         <THead>
           <Tr>

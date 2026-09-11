@@ -18,7 +18,7 @@ import TargetSelector from '../TargetSelector/TargetSelector';
 import WorkerPreviewTable from '../WorkerPreviewTable/WorkerPreviewTable';
 import SkillMutationPicker from '../SkillMutationPicker/SkillMutationPicker';
 import ProgressLockModal from '../ProgressLockModal/ProgressLockModal';
-import { MassWorkerUpdateWrapper, SectionHeader } from './MassWorkerUpdateView.styles';
+import { MassWorkerUpdateWrapper, Section, SectionContent, SectionHeader } from './MassWorkerUpdateView.styles';
 
 const format = (template: string, values: Record<string, string | number>): string =>
   Object.keys(values).reduce(
@@ -157,14 +157,12 @@ const MassWorkerUpdateView: React.FC = () => {
         </Text>
       </Alert>
 
-      <Box>
+      <Section>
         <Heading as="h2" variant="heading20">
           {strings[StringTemplates.SECTION_IDENTIFY]}
         </Heading>
         <Text as="p">{strings[StringTemplates.SECTION_IDENTIFY_TEXT]}</Text>
-        <Box paddingY="space50">
-          <TargetSelector selection={selection} onChange={setSelection} disabled={state.inProgress} />
-        </Box>
+        <TargetSelector selection={selection} onChange={setSelection} disabled={state.inProgress} />
         <Stack orientation="horizontal" spacing="space40">
           <Button variant="primary" onClick={identify} disabled={!canIdentify} loading={isIdentifying}>
             {strings[StringTemplates.IDENTIFY_BUTTON]}
@@ -176,32 +174,28 @@ const MassWorkerUpdateView: React.FC = () => {
           )}
         </Stack>
         {identifyError && (
-          <Box paddingTop="space40">
-            <Alert variant="error">
-              <Text as="p">{identifyError}</Text>
-            </Alert>
-          </Box>
+          <Alert variant="error">
+            <Text as="p">{identifyError}</Text>
+          </Alert>
         )}
         {preview && overLimit && (
-          <Box paddingTop="space40">
-            <Alert variant="error">
-              <Text as="p">{overLimitText}</Text>
-            </Alert>
-          </Box>
+          <Alert variant="error">
+            <Text as="p">{overLimitText}</Text>
+          </Alert>
         )}
         {preview && (
-          <Box paddingTop="space40">
+          <SectionContent>
             <WorkerPreviewTable workers={preview} />
-          </Box>
+          </SectionContent>
         )}
-      </Box>
+      </Section>
 
-      <Box opacity={preview && !overLimit ? 1 : 0.5}>
+      <Section dimmed={!preview || overLimit}>
         <Heading as="h2" variant="heading20">
           {strings[StringTemplates.SECTION_MUTATE]}
         </Heading>
         <Text as="p">{strings[StringTemplates.SECTION_MUTATE_TEXT]}</Text>
-        <Box paddingY="space50">
+        <SectionContent>
           <SkillMutationPicker
             addSkills={addSkills}
             removeSkills={removeSkills}
@@ -211,11 +205,13 @@ const MassWorkerUpdateView: React.FC = () => {
               setRemoveSkills(nextRemove);
             }}
           />
+        </SectionContent>
+        <Box>
+          <Button variant="primary" onClick={() => setIsConfirmOpen(true)} disabled={!canConfirm} loading={isExecuting}>
+            {strings[StringTemplates.CONFIRM_BUTTON]}
+          </Button>
         </Box>
-        <Button variant="primary" onClick={() => setIsConfirmOpen(true)} disabled={!canConfirm} loading={isExecuting}>
-          {strings[StringTemplates.CONFIRM_BUTTON]}
-        </Button>
-      </Box>
+      </Section>
 
       <Modal
         isOpen={isConfirmOpen}

@@ -89,9 +89,13 @@ const SkillMutationPicker: React.FC<Props> = ({ addSkills, removeSkills, disable
     );
   }
 
+  // Two columns side-by-side on wide viewports, stacked on narrow ones. Each
+  // column can shrink below its content width; the parent scroll container
+  // (`SectionContent` in the view) handles overflow when the checkbox list
+  // is longer than the available height.
   return (
-    <Stack orientation="horizontal" spacing="space80">
-      <Box>
+    <Box display="flex" flexWrap="wrap" columnGap="space80" rowGap="space70">
+      <Box flexGrow={1} flexShrink={1} flexBasis="260px" minWidth="220px">
         <CheckboxGroup name="mwu-add-skills" legend={strings[StringTemplates.SKILLS_TO_ADD]} disabled={disabled}>
           {skills.map((skill) => {
             const currentAdd = findAdd(skill.name);
@@ -133,7 +137,7 @@ const SkillMutationPicker: React.FC<Props> = ({ addSkills, removeSkills, disable
           })}
         </CheckboxGroup>
       </Box>
-      <Box>
+      <Box flexGrow={1} flexShrink={1} flexBasis="260px" minWidth="220px">
         <CheckboxGroup name="mwu-remove-skills" legend={strings[StringTemplates.SKILLS_TO_REMOVE]} disabled={disabled}>
           {skills.map((skill) => (
             <Checkbox
@@ -148,7 +152,7 @@ const SkillMutationPicker: React.FC<Props> = ({ addSkills, removeSkills, disable
           ))}
         </CheckboxGroup>
       </Box>
-    </Stack>
+    </Box>
   );
 };
 

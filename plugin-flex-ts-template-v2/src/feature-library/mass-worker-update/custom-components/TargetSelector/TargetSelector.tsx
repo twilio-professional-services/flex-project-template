@@ -3,7 +3,6 @@ import { Manager } from '@twilio/flex-ui';
 import { Box } from '@twilio-paste/core/box';
 import { Label } from '@twilio-paste/core/label';
 import { Select, Option } from '@twilio-paste/core/select';
-import { Stack } from '@twilio-paste/core/stack';
 
 import { StringTemplates } from '../../flex-hooks/strings/MassWorkerUpdate';
 import { TargetSelection } from '../../types/mass-worker-update';
@@ -28,9 +27,21 @@ const TargetSelector: React.FC<Props> = ({ selection, disabled, onChange }) => {
     onChange({ ...selection, [field]: value });
   };
 
+  // Wrapping flex row: three selects share the row on wide viewports and
+  // stack when the total width can no longer fit them. Each field is bounded
+  // by `minWidth` (so the select stays legible) and `maxWidth` (so a single
+  // select doesn't stretch across the whole row when it's alone on a line).
+  const fieldStyle = {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: '200px' as const,
+    minWidth: '180px' as const,
+    maxWidth: '260px' as const,
+  };
+
   return (
-    <Stack orientation="horizontal" spacing="space60">
-      <Box width="240px">
+    <Box display="flex" flexWrap="wrap" columnGap="space60" rowGap="space40">
+      <Box {...fieldStyle}>
         <Label htmlFor="mwu-team">{strings[StringTemplates.FILTER_TEAM]}</Label>
         <Select id="mwu-team" value={selection.team ?? NONE_VALUE} onChange={handleChange('team')} disabled={disabled}>
           <Option value={NONE_VALUE}>{strings[StringTemplates.NONE]}</Option>
@@ -41,7 +52,7 @@ const TargetSelector: React.FC<Props> = ({ selection, disabled, onChange }) => {
           ))}
         </Select>
       </Box>
-      <Box width="240px">
+      <Box {...fieldStyle}>
         <Label htmlFor="mwu-department">{strings[StringTemplates.FILTER_DEPARTMENT]}</Label>
         <Select
           id="mwu-department"
@@ -57,7 +68,7 @@ const TargetSelector: React.FC<Props> = ({ selection, disabled, onChange }) => {
           ))}
         </Select>
       </Box>
-      <Box width="240px">
+      <Box {...fieldStyle}>
         <Label htmlFor="mwu-skill">{strings[StringTemplates.FILTER_SKILL]}</Label>
         <Select
           id="mwu-skill"
@@ -73,7 +84,7 @@ const TargetSelector: React.FC<Props> = ({ selection, disabled, onChange }) => {
           ))}
         </Select>
       </Box>
-    </Stack>
+    </Box>
   );
 };
 
