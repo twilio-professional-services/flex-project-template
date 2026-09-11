@@ -40,15 +40,63 @@ exports.mergeSkills = (currentRouting = {}, add = [], remove = []) => {
 };
 
 /**
- * Runs the mass-worker-update loop. This function is intentionally structured
- * so it can be lifted onto external compute (Cloud Run / Lambda) unchanged —
- * all coordination state lives in the shared Sync Document, nothing is held
- * in local memory between iterations.
+ * Chunks `arr` into groups of at most `size`. Preserves order.
+ */
+const chunk = (arr, size) => {
+  const out = [];
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  return out;
+};
+
+/**
+ * Applies the requested skill mutations to a single worker via TaskRouter.
+ * Returns { ok: true, sid } on success or throws with the worker sid attached
+ * so the caller (Promise.allSettled) can attribute the failure. Kept private
+ * — callers should invoke `runMassUpdate` which drives batches.
+ */
+const applyOneWorkerUpdate = async ({ context, worker, addSkills, removeSkills }) => {
+  const currentRouting = (worker.attributes && worker.attributes.routing) || {};
+  const { skills: nextSkills, levels: nextLevels } = exports.mergeSkills(currentRouting, addSkills, removeSkills);
+  const nextAttributes = {
+    ...worker.attributes,
+    routing: {
+      ...currentRouting,
+      skills: nextSkills,
+      levels: nextLevels,
+    },
+  };
+  const updateResult = await TaskRouterOperations.updateWorker({
+    context,
+    workerSid: worker.sid,
+    attributes: JSON.stringify(nextAttributes),
+  });
+  if (!updateResult.success) {
+    const err = new Error(`Failed to update worker ${worker.sid} (status ${updateResult.status})`);
+    err.workerSid = worker.sid;
+    err.status = updateResult.status;
+    throw err;
+  }
+  return { ok: true, sid: worker.sid };
+};
+
+/**
+ * Runs the mass-worker-update loop. Workers are updated in concurrent batches
+ * of `batchSize` via `Promise.allSettled`. This function is intentionally
+ * structured so it can be lifted onto external compute (Cloud Run / Lambda)
+ * unchanged — all coordination state lives in the shared Sync Document,
+ * nothing survives in local memory between batches.
  *
- * Cancel semantics: on each iteration we re-read the doc BEFORE the worker
- * update. If `cancelled` is true, we break, mark the doc as `inProgress: false`
- * with `error: 'cancelled'`, and return. Workers already updated are not
- * rolled back.
+ * Cancel semantics: the Sync doc is re-read BEFORE each batch dispatch. When
+ * `cancelled` is true, no further batches are dispatched, but any batch
+ * already in flight is allowed to finish (its results are counted into
+ * `processed`) before the loop exits. Workers already updated are not rolled
+ * back. Cancel latency is therefore "next batch," not "next worker" — a
+ * bounded regression when batchSize > 1.
+ *
+ * Failure policy: `Promise.allSettled` observes every result within a batch.
+ * If ANY promise rejects, the loop finishes that batch, writes the failure
+ * into the Sync doc, and aborts (matches the pre-batching abort-on-failure
+ * behavior at batch granularity).
  *
  * @param {object} params
  * @param {object} params.context Twilio Function context
@@ -60,8 +108,9 @@ exports.mergeSkills = (currentRouting = {}, add = [], remove = []) => {
  * @param {string[]} params.removeSkills skills to remove (removes level too)
  * @param {string} params.startedBy worker SID that initiated the run
  * @param {string|null} [params.startedByName] friendly `full_name` of the
- *   initiating worker, if it was successfully looked up. Null when the worker
- *   fetch failed or the field was missing from the JSON.
+ *   initiating worker, if it was successfully looked up.
+ * @param {number} [params.batchSize=1] concurrency per batch. 1 restores the
+ *   fully sequential behavior. Assumed pre-clamped by the caller.
  * @returns {object} { cancelled, processed, total, error }
  */
 exports.runMassUpdate = async ({
@@ -72,9 +121,11 @@ exports.runMassUpdate = async ({
   removeSkills,
   startedBy,
   startedByName = null,
+  batchSize = 1,
 }) => {
   const total = workers.length;
   const startedAt = Date.now();
+  const effectiveBatchSize = Math.max(1, Math.floor(batchSize));
 
   await SyncDoc.writeState(context, uniqueName, {
     inProgress: true,
@@ -89,11 +140,12 @@ exports.runMassUpdate = async ({
   });
 
   let processed = 0;
+  const batches = chunk(workers, effectiveBatchSize);
 
-  for (const worker of workers) {
-    // Re-read the doc before every update so a cancel from the UI is respected
-    // on the next iteration. Any in-flight worker update completes before we
-    // check again — this is documented as an intentional behavior.
+  for (const batch of batches) {
+    // Cancel check happens BEFORE dispatching the batch. A cancel arriving
+    // while a batch is in flight is picked up on the next iteration — all
+    // workers in the in-flight batch will complete their updates first.
     const current = await SyncDoc.fetchState(context, uniqueName);
     if (current?.cancelled) {
       await SyncDoc.writeState(context, uniqueName, {
@@ -106,46 +158,40 @@ exports.runMassUpdate = async ({
       return { cancelled: true, processed, total, error: 'cancelled' };
     }
 
-    const currentRouting = (worker.attributes && worker.attributes.routing) || {};
-    const { skills: nextSkills, levels: nextLevels } = exports.mergeSkills(currentRouting, addSkills, removeSkills);
-    const nextAttributes = {
-      ...worker.attributes,
-      routing: {
-        ...currentRouting,
-        skills: nextSkills,
-        levels: nextLevels,
-      },
-    };
+    const results = await Promise.allSettled(
+      batch.map((worker) => applyOneWorkerUpdate({ context, worker, addSkills, removeSkills })),
+    );
 
-    const updateResult = await TaskRouterOperations.updateWorker({
-      context,
-      workerSid: worker.sid,
-      attributes: JSON.stringify(nextAttributes),
-    });
+    const succeeded = results.filter((r) => r.status === 'fulfilled').length;
+    const failures = results.filter((r) => r.status === 'rejected');
+    processed += succeeded;
 
-    if (!updateResult.success) {
-      // Persist the failure into the shared doc so admins see it, then abort.
-      // Workers processed before this point remain updated.
+    if (failures.length > 0) {
+      const firstError = failures[0].reason;
+      // Log every failure in the batch so operators can see the full picture
+      // in the Twilio Function logs even though only the first is surfaced
+      // in the Sync doc.
+      for (const failure of failures) {
+        console.error(`mass-worker-update: batch failure — ${failure.reason?.message ?? failure.reason}`);
+      }
       await SyncDoc.writeState(context, uniqueName, {
         ...current,
         inProgress: false,
         processed,
         heartbeatAt: Date.now(),
-        error: `Failed to update worker ${worker.sid} (status ${updateResult.status})`,
+        error: firstError?.message ?? `Failed to update ${failures.length} worker(s) in batch`,
       });
       return {
         cancelled: false,
         processed,
         total,
-        error: `Failed to update worker ${worker.sid}`,
+        error: firstError?.message ?? 'Batch update failure',
       };
     }
 
-    processed += 1;
-
-    // Heartbeat + progress on every successful iteration. If the function times
-    // out before writing this, the frontend detects the stale heartbeat and
-    // surfaces a Reset affordance.
+    // One progress/heartbeat write per batch — if the Function times out
+    // during a batch, the frontend detects the stale heartbeat and surfaces
+    // the Reset affordance.
     await SyncDoc.writeState(context, uniqueName, {
       ...current,
       processed,

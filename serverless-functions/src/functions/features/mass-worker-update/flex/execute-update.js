@@ -11,6 +11,22 @@ const { runMassUpdate } = require(Runtime.getFunctions()['features/mass-worker-u
 
 const requiredParameters = [{ key: 'uniqueName', purpose: 'the Sync Document uniqueName that holds shared run state' }];
 
+const DEFAULT_BATCH_SIZE = 5;
+const MIN_BATCH_SIZE = 1;
+const MAX_BATCH_SIZE = 25;
+
+/**
+ * Clamps the client-supplied batch size into the sane range. The plugin
+ * also clamps client-side, so this is defense in depth against direct API
+ * callers or malformed payloads.
+ */
+const clampBatchSize = (raw) => {
+  const parsed = Number(raw);
+  if (!Number.isFinite(parsed)) return DEFAULT_BATCH_SIZE;
+  const rounded = Math.floor(parsed);
+  return Math.min(MAX_BATCH_SIZE, Math.max(MIN_BATCH_SIZE, rounded));
+};
+
 const asArray = (raw) => {
   if (!raw) return [];
   if (Array.isArray(raw)) return raw;
@@ -149,6 +165,7 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       removeSkills,
       startedBy,
       startedByName,
+      batchSize: clampBatchSize(event.batchSize),
     });
 
     response.setStatusCode(200);

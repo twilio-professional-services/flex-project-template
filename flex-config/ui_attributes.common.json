@@ -154,7 +154,8 @@
         "enabled": true,
         "sync_doc_name": "mass_worker_update_state",
         "stale_heartbeat_ms": 20000,
-        "max_workers_per_run": 100
+        "max_workers_per_run": 100,
+        "batch_size": 25
       },
       "multi_call": {
         "enabled": false

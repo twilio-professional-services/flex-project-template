@@ -15,9 +15,9 @@ class MassWorkerUpdateService extends ApiService {
     }
   }
 
-  async executeUpdate(request: ExecuteRequest, uniqueName: string): Promise<ExecuteResponse | null> {
+  async executeUpdate(request: ExecuteRequest, uniqueName: string, batchSize: number): Promise<ExecuteResponse | null> {
     try {
-      return await this.#executeUpdate(request, uniqueName);
+      return await this.#executeUpdate(request, uniqueName, batchSize);
     } catch (error: any) {
       logger.error('[mass-worker-update] executeUpdate failed', error);
       return null;
@@ -54,11 +54,12 @@ class MassWorkerUpdateService extends ApiService {
     );
   };
 
-  #executeUpdate = async (request: ExecuteRequest, uniqueName: string): Promise<ExecuteResponse> => {
+  #executeUpdate = async (request: ExecuteRequest, uniqueName: string, batchSize: number): Promise<ExecuteResponse> => {
     const manager = Flex.Manager.getInstance();
     const payload = {
       Token: manager.user.token,
       uniqueName,
+      batchSize,
       team: request.team,
       department: request.department,
       skill: request.skill,

@@ -10,7 +10,7 @@ import { Text } from '@twilio-paste/core/text';
 
 import { StringTemplates } from '../../flex-hooks/strings/MassWorkerUpdate';
 import { NotificationIds } from '../../flex-hooks/notifications/MassWorkerUpdate';
-import { getSyncDocName, getMaxWorkersPerRun } from '../../config';
+import { getBatchSize, getSyncDocName, getMaxWorkersPerRun } from '../../config';
 import { useMassUpdateState } from '../../hooks/useMassUpdateState';
 import MassWorkerUpdateService from '../../utils/MassWorkerUpdateService';
 import { AddSkillMutation, TargetSelection, WorkerRow } from '../../types/mass-worker-update';
@@ -77,6 +77,7 @@ const MassWorkerUpdateView: React.FC = () => {
       const result = await MassWorkerUpdateService.executeUpdate(
         { ...selection, addSkills, removeSkills },
         syncDocName,
+        getBatchSize(),
       );
       if (!result || !result.success) {
         if (result?.cancelled) {
@@ -144,8 +145,15 @@ const MassWorkerUpdateView: React.FC = () => {
 
       <Alert variant="warning">
         <Text as="p">
-          <strong>Known limitation:</strong> Updates larger than <strong>{maxWorkersPerRun}</strong> workers are blocked
-          client-side. You can update this limit in the admin panel
+          <strong>KNOWN LIMITATIONS</strong>
+        </Text>
+        <Text as="p">
+          - Updates larger than <strong>{maxWorkersPerRun}</strong> workers are blocked client-side. You can update this
+          limit in the admin panel.
+        </Text>
+        <Text as="p">
+          - If the batch size is too large you may see failures, try lowering the batch size in the admin panel. There
+          is a hard limit on the batch size of 25, even if it has been configured to a higher value.
         </Text>
       </Alert>
 

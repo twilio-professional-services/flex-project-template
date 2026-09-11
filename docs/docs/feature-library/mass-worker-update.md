@@ -17,9 +17,9 @@ An admin-only screen that lets a supervisor bulk-add and bulk-remove TaskRouter 
 
 - **15-second Twilio Function runtime.** The mass update loop runs inside a Twilio Serverless Function, which has a hard 15-second execution cap. Depending on Sync round-trip latency you can expect roughly **≤100 workers per run**. The `max_workers_per_run` config value enforces a client-side guard against this — the UI refuses to run a batch that exceeds it.
 - **Planned migration off Twilio Functions.** This feature is intended to be lifted onto an external long-running compute environment (Cloud Run, Lambda with longer timeout, etc.). The Sync-Document coordination protocol (see below) is designed to move unchanged — only the serverless function shell needs to be swapped.
-- **In-flight cancel is best-effort.** Cancel writes to the shared Sync Document; the loop re-reads the doc **before** each worker update. If Cancel arrives while a worker update is in flight, that worker completes and the loop exits on the next iteration.
+- **In-flight cancel is best-effort.** Cancel writes to the shared Sync Document; the loop re-reads the doc **before dispatching each batch**. A cancel that arrives while a batch is in flight is picked up on the next iteration — every worker in the currently in-flight batch will complete its update first. Latency is therefore bounded by `batch_size` × per-worker update time.
 - **No rollback.** Workers that were updated before a Cancel (or a mid-run failure or timeout) keep their new skills. There is no automatic revert.
-- **Sequential execution.** v1 updates one worker at a time and relies on the existing `twilioExecute` retry-with-backoff. Concurrency is an intentional deferred optimization for the external-runtime port.
+- **Concurrency is bounded.** The loop dispatches workers in concurrent batches sized by the `batch_size` config value (clamped to `[1, 25]`, default `5`). A value of `1` restores fully sequential behavior. `Promise.allSettled` observes every update in a batch; if any fail, the loop finishes that batch and aborts, matching the pre-batching abort-on-failure policy at batch granularity.
 
 ## How it works
 
@@ -78,6 +78,7 @@ Feature settings live in `flex-config/ui_attributes.common.json` under `custom_d
 | `sync_doc_name` | `mass_worker_update_state` | Unique name of the shared Sync Document. One per environment. |
 | `stale_heartbeat_ms` | `20000` | If `inProgress` is true but `heartbeatAt` is older than this, the modal shows Reset instead of Cancel. Bump this if you regularly see false-positive Stale states. |
 | `max_workers_per_run` | `100` | Client-side guard against the 15s Function timeout. The UI blocks Confirm if the identified worker count exceeds this. |
+| `batch_size` | `5` | How many worker updates the serverless loop fires concurrently via `Promise.allSettled`. Clamped to `[1, 25]` on both sides. `1` = fully sequential. Larger values cut wall-time but coarsen cancel latency (cancel takes effect at the next batch boundary, not the next worker). |
 
 ## Endpoints
 
