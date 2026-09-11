@@ -144,9 +144,8 @@ const MassWorkerUpdateView: React.FC = () => {
 
       <Alert variant="warning">
         <Text as="p">
-          <strong>Known limitation:</strong> the mass worker update runs on a Twilio Function with a 15-second maximum
-          runtime. Updates larger than <strong>{maxWorkersPerRun}</strong> workers are blocked client-side. This feature
-          is planned to migrate to an external long-running compute runtime.
+          <strong>Known limitation:</strong> Updates larger than <strong>{maxWorkersPerRun}</strong> workers are blocked
+          client-side. You can update this limit in the admin panel
         </Text>
       </Alert>
 
