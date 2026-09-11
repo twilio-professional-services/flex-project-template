@@ -8,10 +8,47 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
 
-/** Names for created dummy workers: dummy_001 .. dummy_100. */
-export const TOTAL_DUMMY_WORKERS = 100;
-export const DUMMY_NAME_RE = /^dummy_\d{3}$/;
-export const dummyName = (n) => `dummy_${String(n).padStart(3, "0")}`;
+/**
+ * Default worker count when the CLI doesn't override it.
+ */
+export const DEFAULT_DUMMY_COUNT = 100;
+
+/**
+ * Matches any dummy worker friendlyName produced by this script — both the
+ * current form (`dummy_worker_N...`, any digit count) and the earlier form
+ * (`dummy_NNN`) so a delete run cleans up leftover workers from either
+ * version. This regex is the ONLY safeguard for the delete script — keep it
+ * strict.
+ */
+export const DUMMY_NAME_RE = /^dummy_(?:worker_)?\d+$/;
+
+/**
+ * Zero-padded worker name at the width needed for the requested `count` so
+ * that names sort lexically. Example: count=1000 → `dummy_worker_0001`.
+ */
+export const dummyName = (n, count) => {
+  const width = Math.max(3, String(Math.max(1, count)).length);
+  return `dummy_worker_${String(n).padStart(width, "0")}`;
+};
+
+/**
+ * Parses the `count` argv value (positional first arg or `--count=N`).
+ * Returns DEFAULT_DUMMY_COUNT when nothing is provided; throws on invalid
+ * input so the CLI fails loudly instead of silently creating nothing.
+ */
+export const parseCount = (argv) => {
+  const flag = argv.find((arg) => arg.startsWith("--count="))?.split("=")[1];
+  const positional = argv.find((arg) => !arg.startsWith("--"));
+  const raw = flag ?? positional;
+  if (raw === undefined) return DEFAULT_DUMMY_COUNT;
+  const parsed = Number(raw);
+  if (!Number.isInteger(parsed) || parsed < 1) {
+    throw new Error(
+      `Invalid worker count: ${raw}. Pass a positive integer, e.g. \`npm run create-dummy-workers -- 250\`.`,
+    );
+  }
+  return parsed;
+};
 
 /**
  * Parses a .env file into a { KEY: VALUE } object. Supports `#` comments,
@@ -102,14 +139,33 @@ export const resolveWorkspaceSid = async (client, envWorkspaceSid) => {
 };
 
 /**
- * Reads the teams list from flex-config/ui_attributes.common.json.
+ * Reads the teams, departments, and skills lists that will be spread across
+ * the created dummy workers. Each may be empty — the create script treats
+ * missing categories by simply not setting that attribute on the worker.
+ *
+ * - Teams and departments come from `flex-config/ui_attributes.common.json`
+ *   under `custom_data.common`.
+ * - Skills come from `flex-config/taskrouter_skills.json`.
  */
-export const loadTeams = () => {
-  const configPath = path.join(REPO_ROOT, "flex-config", "ui_attributes.common.json");
-  const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
-  const teams = config?.custom_data?.common?.teams;
-  if (!Array.isArray(teams) || teams.length === 0) {
-    throw new Error("No teams found under custom_data.common.teams in flex-config/ui_attributes.common.json.");
+export const loadDummyAttributes = () => {
+  const uiPath = path.join(REPO_ROOT, "flex-config", "ui_attributes.common.json");
+  const uiConfig = JSON.parse(fs.readFileSync(uiPath, "utf8"));
+  const common = uiConfig?.custom_data?.common ?? {};
+  const teams = Array.isArray(common.teams) ? common.teams.filter((s) => typeof s === "string") : [];
+  const departments = Array.isArray(common.departments)
+    ? common.departments.filter((s) => typeof s === "string")
+    : [];
+
+  const skillsPath = path.join(REPO_ROOT, "flex-config", "taskrouter_skills.json");
+  let skills = [];
+  if (fs.existsSync(skillsPath)) {
+    const skillsJson = JSON.parse(fs.readFileSync(skillsPath, "utf8"));
+    if (Array.isArray(skillsJson)) {
+      skills = skillsJson
+        .map((entry) => (entry && typeof entry.name === "string" ? entry.name : null))
+        .filter(Boolean);
+    }
   }
-  return teams;
+
+  return { teams, departments, skills };
 };

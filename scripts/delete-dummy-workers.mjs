@@ -6,20 +6,23 @@ import {
 } from "./common/dummy-workers.mjs";
 
 /**
- * Deletes every TaskRouter Worker whose friendlyName matches the strict
- * pattern `dummy_NNN` (three-digit zero-padded). Non-matching workers are
- * never touched — the regex is the only safeguard, so it is intentionally
- * exact. Uses credentials from flex-config/.env (falling back to
- * serverless-functions/.env for any missing values).
+ * Deletes every TaskRouter Worker whose friendlyName matches the dummy-worker
+ * pattern — either `dummy_worker_NNNN` (current form, any digit count) or
+ * `dummy_NNN` (legacy form). Non-matching workers are never touched — the
+ * regex is the only safeguard. Uses credentials from flex-config/.env
+ * (falling back to serverless-functions/.env for any missing values).
  */
 const main = async () => {
   const credentials = loadCredentials();
   const client = buildTwilioClient(credentials);
   const workspaceSid = await resolveWorkspaceSid(client, credentials.workspaceSid);
 
+  // `limit` here is the SDK's implicit page-through cap; the Twilio Node SDK
+  // will paginate under the hood. Set high so even large dummy runs return in
+  // a single call.
   const allWorkers = await client.taskrouter.v1
     .workspaces(workspaceSid)
-    .workers.list({ limit: 1000 });
+    .workers.list({ limit: 100000 });
   const targets = allWorkers.filter((w) => DUMMY_NAME_RE.test(w.friendlyName));
 
   console.log(

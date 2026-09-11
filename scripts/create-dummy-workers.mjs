@@ -1,62 +1,78 @@
 import {
   DUMMY_NAME_RE,
-  TOTAL_DUMMY_WORKERS,
   buildTwilioClient,
   dummyName,
   loadCredentials,
-  loadTeams,
+  loadDummyAttributes,
+  parseCount,
   resolveWorkspaceSid,
 } from "./common/dummy-workers.mjs";
 
 /**
- * Creates 100 workers named dummy_001..dummy_100 in the Flex TaskRouter
- * workspace. Teams from flex-config/ui_attributes.common.json are assigned
- * round-robin. Uses credentials from flex-config/.env (falling back to
- * serverless-functions/.env for any missing values).
+ * Creates N dummy workers (default 100) named
+ * `dummy_worker_<zero-padded-index>` in the Flex TaskRouter workspace, using
+ * credentials from flex-config/.env (falling back to serverless-functions/.env
+ * for any missing values).
  *
- * Idempotent-ish: if a worker with the target friendlyName already exists,
- * the script logs and skips it rather than failing.
+ * Count is taken from the first CLI arg or `--count=N`:
+ *   npm run create-dummy-workers -- 1000
+ *   npm run create-dummy-workers -- --count=250
+ *
+ * The available teams, departments, and skills from `flex-config` are spread
+ * independently across the created workers (round-robin). Any category with no
+ * entries is simply omitted from the worker's attributes.
+ *
+ * Idempotent-ish: existing dummy workers with the target friendlyName are
+ * skipped rather than causing a failure.
  */
 const main = async () => {
+  const count = parseCount(process.argv.slice(2));
+  const { teams, departments, skills } = loadDummyAttributes();
   const credentials = loadCredentials();
   const client = buildTwilioClient(credentials);
   const workspaceSid = await resolveWorkspaceSid(client, credentials.workspaceSid);
-  const teams = loadTeams();
 
   console.log(
-    `Creating ${TOTAL_DUMMY_WORKERS} dummy workers across ${teams.length} team(s): ${teams.join(", ")}`,
+    `Creating ${count} dummy worker(s). teams=${teams.length} departments=${departments.length} skills=${skills.length}`,
   );
+  if (teams.length === 0) console.log("  → no teams defined; workers will have no team_name");
+  if (departments.length === 0) console.log("  → no departments defined; workers will have no department_name");
+  if (skills.length === 0) console.log("  → no skills defined; workers will have empty routing.skills");
 
-  // Fetch existing dummy workers up-front so we can skip duplicates without
-  // a create-then-error round-trip for each one.
   const existing = await client.taskrouter.v1
     .workspaces(workspaceSid)
-    .workers.list({ limit: 1000 });
+    .workers.list({ limit: Math.max(1000, count * 2) });
   const existingDummyNames = new Set(
     existing.map((w) => w.friendlyName).filter((name) => DUMMY_NAME_RE.test(name)),
   );
+
+  const pick = (list, index) => (list.length === 0 ? undefined : list[index % list.length]);
 
   let created = 0;
   let skipped = 0;
   let failed = 0;
 
-  for (let i = 1; i <= TOTAL_DUMMY_WORKERS; i += 1) {
-    const friendlyName = dummyName(i);
+  for (let i = 1; i <= count; i += 1) {
+    const friendlyName = dummyName(i, count);
     if (existingDummyNames.has(friendlyName)) {
       console.log(`skip  ${friendlyName} — already exists`);
       skipped += 1;
       continue;
     }
 
-    const team = teams[(i - 1) % teams.length];
+    const team = pick(teams, i - 1);
+    const department = pick(departments, i - 1);
+    const skill = pick(skills, i - 1);
+
     const attributes = {
-      full_name: `Dummy ${String(i).padStart(3, "0")}`,
+      full_name: `Dummy Worker ${i}`,
       contact_uri: `client:${friendlyName}`,
       email: `${friendlyName}@example.invalid`,
       roles: ["agent"],
-      team_name: team,
-      routing: { skills: [] },
+      routing: { skills: skill ? [skill] : [] },
     };
+    if (team) attributes.team_name = team;
+    if (department) attributes.department_name = department;
 
     try {
       const worker = await client.taskrouter.v1.workspaces(workspaceSid).workers.create({
@@ -64,14 +80,17 @@ const main = async () => {
         attributes: JSON.stringify(attributes),
       });
       created += 1;
-      console.log(`ok    ${friendlyName} (${worker.sid}) team=${team}`);
+      const bits = [team && `team=${team}`, department && `dept=${department}`, skill && `skill=${skill}`]
+        .filter(Boolean)
+        .join(" ");
+      console.log(`ok    ${friendlyName} (${worker.sid})${bits ? "  " + bits : ""}`);
     } catch (error) {
       failed += 1;
       console.error(`fail  ${friendlyName} — ${error.message}`);
     }
   }
 
-  console.log(`\nDone. created=${created}  skipped=${skipped}  failed=${failed}  target=${TOTAL_DUMMY_WORKERS}`);
+  console.log(`\nDone. created=${created}  skipped=${skipped}  failed=${failed}  target=${count}`);
   if (failed > 0) process.exit(1);
 };
 
