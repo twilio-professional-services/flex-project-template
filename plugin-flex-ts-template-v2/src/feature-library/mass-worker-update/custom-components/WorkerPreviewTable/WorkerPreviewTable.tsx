@@ -27,7 +27,8 @@ const WorkerPreviewTable: React.FC<Props> = ({ workers }) => {
       <Table>
         <THead>
           <Tr>
-            <Th>{strings[StringTemplates.COLUMN_NAME]}</Th>
+            <Th>{strings[StringTemplates.COLUMN_USERNAME]}</Th>
+            <Th>{strings[StringTemplates.COLUMN_FULL_NAME]}</Th>
             <Th>{strings[StringTemplates.COLUMN_SID]}</Th>
             <Th>{strings[StringTemplates.COLUMN_TEAM]}</Th>
             <Th>{strings[StringTemplates.COLUMN_DEPARTMENT]}</Th>
@@ -38,6 +39,7 @@ const WorkerPreviewTable: React.FC<Props> = ({ workers }) => {
           {workers.map((worker) => (
             <Tr key={worker.sid}>
               <Td>{worker.friendlyName}</Td>
+              <Td>{worker.fullName || '—'}</Td>
               <Td>
                 <Text as="span" fontFamily="fontFamilyCode" fontSize="fontSize20">
                   {worker.sid}

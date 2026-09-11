@@ -28,6 +28,9 @@ export interface AddSkillMutation {
 export interface WorkerRow {
   sid: string;
   friendlyName: string;
+  /** `attributes.full_name` from the worker record; null when the field
+   *  was missing or not a string. Rendered as an em-dash in the UI. */
+  fullName: string | null;
   teamName: string | null;
   departmentName: string | null;
   skills: string[];

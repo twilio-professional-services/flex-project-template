@@ -33,13 +33,20 @@ exports.handler = prepareFlexFunction(requiredParameters, async (context, event,
       limit: limit ? Number(limit) : 1000,
     });
 
-    const workers = (result.data || []).map((worker) => ({
-      sid: worker.sid,
-      friendlyName: worker.friendlyName,
-      teamName: worker.attributes?.team_name || null,
-      departmentName: worker.attributes?.department_name || null,
-      skills: worker.attributes?.routing?.skills || [],
-    }));
+    const workers = (result.data || []).map((worker) => {
+      const fullName =
+        typeof worker.attributes?.full_name === 'string' && worker.attributes.full_name.length > 0
+          ? worker.attributes.full_name
+          : null;
+      return {
+        sid: worker.sid,
+        friendlyName: worker.friendlyName,
+        fullName,
+        teamName: worker.attributes?.team_name || null,
+        departmentName: worker.attributes?.department_name || null,
+        skills: worker.attributes?.routing?.skills || [],
+      };
+    });
 
     response.setStatusCode(result.status);
     response.setBody({
