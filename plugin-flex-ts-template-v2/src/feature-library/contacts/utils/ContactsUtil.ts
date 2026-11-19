@@ -165,7 +165,7 @@ class ContactsUtil {
     }
     try {
       const map = await SyncClient.map(`${CONTACTS_RECENT_KEY}_${this.workerSid}`);
-      await map.set(contact.taskSid, contact, { ttl: getRecentDaysToKeep() * 86400 });
+      await map.set(contact.taskSid, contact as any, { ttl: getRecentDaysToKeep() * 86400 });
       if (!this.isRecentsInitialized) {
         this.initRecents();
       }
@@ -215,7 +215,7 @@ class ContactsUtil {
         contact.allowWarmTransfer = allowWarmTransfer ?? true;
       }
       const map = await SyncClient.map(`${CONTACTS_KEY}_${shared ? this.accountSid : this.workerSid}`);
-      await map.set(contact.key, contact);
+      await map.set(contact.key, contact as any);
     } catch (error: any) {
       logger.error('[contacts] Error adding contact', error);
     }
@@ -249,7 +249,7 @@ class ContactsUtil {
     }
     try {
       const map = await SyncClient.map(`${CONTACTS_KEY}_${shared ? this.accountSid : this.workerSid}`);
-      await map.set(contact.key, contact);
+      await map.set(contact.key, contact as any);
     } catch (error: any) {
       logger.error('[contacts] Error updating contact', error);
     }

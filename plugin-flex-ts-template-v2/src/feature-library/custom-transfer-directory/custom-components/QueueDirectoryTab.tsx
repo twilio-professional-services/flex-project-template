@@ -128,10 +128,10 @@ const QueueDirectoryTab = (props: OwnProps) => {
     }
 
     // get real time stats map
-    queueMap.current = await insightsClient.map({
+    queueMap.current = (await insightsClient.map({
       id: 'realtime_statistics_v1',
       mode: 'open_existing',
-    });
+    })) as any;
 
     if (!queueMap.current) {
       Notifications.showNotification(CustomTransferDirectoryNotification.FailedLoadingInsightsData);

@@ -19,7 +19,7 @@ describe('sdk-clients/SyncClient', () => {
           items: [data[0]],
           nextPage: async () => ({ hasNextPage: false, items: [data[1]] }),
         }),
-      } as SyncMap;
+      } as any;
       expect(await getAllSyncMapItems(syncMap)).toEqual(data);
     });
   });
