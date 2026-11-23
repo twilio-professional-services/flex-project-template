@@ -57,7 +57,8 @@
         "enabled": true,
         "allow_requeue": true,
         "max_attempts": 3,
-        "auto_select_task": true
+        "auto_select_task": true,
+        "allow_voicemail_download": true
       },
       "caller_id": {
         "enabled": true,

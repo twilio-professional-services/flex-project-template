@@ -17,6 +17,7 @@ import { reduxNamespace } from '../../../../utils/state';
 import { Actions, CallbackAndVoicemailState } from '../../flex-hooks/states/CallbackAndVoicemail';
 import { StringTemplates } from '../../flex-hooks/strings/Callback';
 import CallbackService, { FetchVoicemailResponse } from '../../utils/callback/CallbackService';
+import { isAllowVoicemailDownload } from '../../config';
 
 type CallbackAndVoicemailProps = {
   task: ITask;
@@ -122,7 +123,11 @@ export const CallbackAndVoicemail = ({ task, allowRequeue, maxAttempts }: Callba
               <Template source={templates[StringTemplates.VoicemailRecording]} />
             </Heading>
             {voicemail ? (
-              <audio src={`data:${voicemail.type};base64,${voicemail.recording}`} controls />
+              <audio
+                src={`data:${voicemail.type};base64,${voicemail.recording}`}
+                controls
+                controlsList={isAllowVoicemailDownload() ? undefined : 'nodownload'}
+              />
             ) : voicemailError ? (
               <Stack orientation="horizontal" spacing="space30">
                 <HelpText variant="error" marginTop="space0">

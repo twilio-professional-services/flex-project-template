@@ -6,6 +6,7 @@ const {
   allow_requeue = false,
   max_attempts = 1,
   auto_select_task = false,
+  allow_voicemail_download = true,
 } = (getFeatureFlags()?.features?.callback_and_voicemail as CallbackAndVoicemailConfig) || {};
 
 export const isFeatureEnabled = () => {
@@ -22,4 +23,8 @@ export const isAutoSelectTaskEnabled = () => {
 
 export const getMaxAttempts = () => {
   return max_attempts;
+};
+
+export const isAllowVoicemailDownload = () => {
+  return allow_voicemail_download;
 };
