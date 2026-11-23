@@ -4,6 +4,12 @@ const teamsFilterHooks = [] as any[];
 
 let customFilters = [] as Array<Flex.FilterDefinition>;
 
+// For testing: reset internal state
+export const resetState = () => {
+  teamsFilterHooks.length = 0;
+  customFilters = [];
+};
+
 export const init = async (flex: typeof Flex, manager: Flex.Manager) => {
   for (const hook of teamsFilterHooks) {
     // Returns array of filter definitions to register
