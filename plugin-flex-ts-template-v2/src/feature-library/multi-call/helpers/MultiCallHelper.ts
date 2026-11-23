@@ -16,6 +16,7 @@ const createNewDevice = (manager: Manager): Device => {
     codecPreferences: customDeviceOptions?.codecPreferences as Call.Codec[] | undefined,
     appName: 'flex-ui',
     appVersion: FlexVersion,
+    edge: manager.voiceClient.edge ?? customDeviceOptions?.edge,
   };
 
   if (!deviceOptions.codecPreferences) {
