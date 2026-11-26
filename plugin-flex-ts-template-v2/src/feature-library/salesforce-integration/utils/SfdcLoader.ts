@@ -1,5 +1,7 @@
 import { getConsole, getOpenCti, getSfdcBaseUrl, isSalesforce } from './SfdcHelper';
+import { init } from './OpenCtiShim';
 import logger from '../../../utils/logger';
+import { isCustomCtiEnabled } from '../config';
 
 export const loadScript = async (url: string) =>
   new Promise((resolve, reject) => {
@@ -31,12 +33,17 @@ export const initializeSalesforceAPIs = async () => {
 
   // We only need to load Open CTI if another plugin has not done so already
   if (!getOpenCti()) {
-    logger.log('[salesforce-integration] Loading Open CTI API...');
-    const sfOpenCTIScriptUrl = `${sfdcBaseUrl}/support/api/52.0/lightning/opencti_min.js`;
-    await loadScript(sfOpenCTIScriptUrl);
+    if (isCustomCtiEnabled()) {
+      logger.log('[salesforce-integration] Loading custom CTI API...');
+      init();
+    } else {
+      logger.log('[salesforce-integration] Loading Open CTI API...');
+      const sfOpenCTIScriptUrl = `${sfdcBaseUrl}/support/api/52.0/lightning/opencti_min.js`;
+      await loadScript(sfOpenCTIScriptUrl);
+    }
   }
 
-  // We only need to load console APIs if another plugin has not done so already
+  // We only need to load console APIs if another plugin (or custom CTI) has not done so already
   if (!getConsole()) {
     logger.log('[salesforce-integration] Loading Console Integration API...');
     const sfConsoleAPIScriptUrl = `${sfdcBaseUrl}/support/console/52.0/integration.js`;

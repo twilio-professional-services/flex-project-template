@@ -12,22 +12,28 @@ export const saveLog = (task: ITask, event: string, callback: any) => {
     return;
   }
 
+  const manager = Manager.getInstance();
+  const state = manager.store.getState() as AppState;
   const { channelType } = task;
   const channelName = channelType === 'web' ? 'chat' : channelType;
   const isVoice = TaskHelper.isCallTask(task);
   const { direction } = task.attributes;
   const callType = direction === 'outbound' ? getOpenCti().CALL_TYPE.OUTBOUND : getOpenCti().CALL_TYPE.INBOUND;
 
+  // Retrieve the disposition from Redux in case TR hasn't sent the update event yet.
+  const dispositionsState = state[reduxNamespace].dispositions;
+  const taskDisposition = dispositionsState?.tasks[task.taskSid];
+
   const value = {
     entityApiName: 'Task',
     ActivityDate: task.dateUpdated,
     CallType: callType,
-    Description: task.attributes.conversations?.content ?? '',
+    Description: task.attributes.conversations?.content ?? taskDisposition?.notes ?? '',
     Status: 'Completed',
     Subject: `[${event}] ${callType} ${channelName} at ${task.dateUpdated}`,
     Type: callType,
     CallObject: task.attributes.conference?.participants?.worker ?? '',
-    CallDisposition: task.attributes.conversations?.outcome ?? '',
+    CallDisposition: task.attributes.conversations?.outcome ?? taskDisposition?.disposition ?? '',
     TaskSubtype: isVoice ? 'Call' : 'Task',
   } as any;
 
@@ -49,8 +55,6 @@ export const saveLog = (task: ITask, event: string, callback: any) => {
   }
 
   if (isCopilotNotesEnabled()) {
-    const manager = Manager.getInstance();
-    const state = manager.store.getState() as AppState;
     const { channelNotes } = state[reduxNamespace].salesforceIntegration;
     const channelSid = task.conference?.source?.channel?.sid;
 
